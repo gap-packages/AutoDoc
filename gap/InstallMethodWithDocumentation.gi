@@ -1,6 +1,6 @@
 #############################################################################
 ##
-##  InstallHomalgMethod.gi                            ToolsForHomalg package
+##  InstallMethodWithDocumentation.gi         AutomaticDocumentation package
 ##
 ##  Copyright 2007-2012, Mohamed Barakat, University of Kaiserslautern
 ##                       Sebastian Gutsche, RWTH-Aachen University
@@ -11,22 +11,120 @@
 #############################################################################
 
 ##
-InstallValue( HOMALG_DOCUMENTATION,
+InstallValue( AUTOMATIC_DOCUMENTATION,
               rec(
                 enable_documentation := false,
                 documentation_stream := false,
-                documentation_headers := false,
+                documentation_headers := rec( ),
+                documentation_headers_main_file := false;
+                path_to_xmlfiles := "";
+                default_chapter := "";
                 random_value := 10^10
               )
               
 );
 
 ##
+## Call this with the name of the chapter without whitespaces. THEY MUST BE UNDERSCORES! IMPORTANT! UNDERSCORES!
+InstallGlobalFunction( CreateNewChapterXMLFile,
+                       
+  function( chapter_name )
+    local filename, filestream, name_chapter;
+    
+    if IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_name ) then
+        
+        Error( "tried to produce a chapter twice, something went wrong\n" );
+        
+        return false;
+        
+    fi;
+    
+    AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_name := rec( sections := rec( ) );
+    
+    filename := Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, chapter_name, ".xml" );
+    
+    filestream := OutputTextFile( filename, false );
+    
+    AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_name.main_filestream := filestream;
+    
+    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, Concatenation( "<#Include SYSTEM \"", filename, "\">" ); );
+    
+    AppendTo( filestream, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
+    
+    AppendTo( filestream, "<!--\n This is an automatically generated file. \n -->\n" );
+    
+    AppendTo( filestream, Concatenation( [ "<Chapter Label=\"", chapter_name, "_automatically_generated_documentation_parts\">\n" ] ) );
+    
+    name_chapter := ReplacedString( chapter_name, "_", " " );
+    
+    AppendTo( filestream, Concatenation( [ "<Heading>", name_chapter, "</Heading>\n" ] ) );
+    
+    return true;
+    
+end );
+## ToDo: Close all chapters.
+
+##
+## Call this with a chapter name and a section name
+InstallGlobalFunction( CreateNewSectionXMLFile,
+                       
+  function( chapter_name, section_name )
+    local filestream;
+    
+    if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_name ) then
+        
+        CreateNewChapterXMLFile( chapter_name );
+        
+    fi;
+    
+    if IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_name.section_name ) then
+        
+        Error( "tried to create the same section stream twice, something went wrong\n" );
+        
+        return false;
+        
+    fi;
+    
+    filename := Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, chapter_name, "Section", section_name, ".xml" );
+    
+    filestream := OutputTextFile( filename, false );
+    
+    AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_name.sections.section_name := filestream;
+    
+    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_name.main_filestream, Concatenation( "<#Include SYSTEM \"", filename, "\">" ); );
+    
+    AppendTo( filestream, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
+    
+    AppendTo( filestream, "<!--\n This is an automatically generated file. \n -->\n" );
+    
+    AppendTo( filestream, Concatenation( [ "<Section Label=\"", section_name, "_automatically_generated_documentation_parts\">\n" ] ) );
+    
+    name_chapter := ReplacedString( section_name, "_", " " );
+    
+    AppendTo( filestream, Concatenation( [ "<Heading>", section_name, "</Heading>\n" ] ) );
+    
+    return true;
+    
+end );
+
+##
 ## Gets three strings. Initialises everything.
 InstallGlobalFunction( CreateAutomaticDocumentation,
 
-  function( package_name, name_documentation_file, name_xml_file )
-    local dependencies;
+  function( arg )
+    local package_name, name_documentation_file, path_to_xmlfiles, chapters, dependencies, chapter_record, section_stream;
+    
+    package_name := arg[ 1 ];
+    
+    docfile := arg[ 2 ];
+    
+    path_to_xmlfiles := arg[ 3 ];
+    
+    AUTOMATIC_DOCUMENTATION.default_chapter := [ [ Concatenation( package_name, "_automatic_generated_documentation" ),
+                                                  Concatenation( package_name, "_automatic_generated_documentation_functions" )
+                                               ] ];
+    
+    AUTOMATIC_DOCUMENTATION.path_to_xmlfiles := path_to_xmlfiles;
     
     ## First of all, make shure $package_name is the only package to be loaded:
     dependencies := PackageInfo( package_name )[ 1 ].Dependencies;
@@ -37,37 +135,41 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     ## Now loading $package_name only loads ONE package.
     
     ## Initialising the filestreams.
-    HOMALG_DOCUMENTATION.enable_documentation := true;
+    AUTOMATIC_DOCUMENTATION.enable_documentation := true;
     
-    HOMALG_DOCUMENTATION.documentation_stream := OutputTextFile( name_documentation_file, false );
+    AUTOMATIC_DOCUMENTATION.documentation_stream := OutputTextFile( name_documentation_file, false );
     
-    HOMALG_DOCUMENTATION.documentation_headers := OutputTextFile( name_xml_file, false );
+    AUTOMATIC_DOCUMENTATION.documentation_headers_main_file := OutputTextFile( "AutomaticDocumentationMainFile", false );
     
     ## Creating a header for the xml file.
-    AppendTo( HOMALG_DOCUMENTATION.documentation_headers, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
+    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
     
-    AppendTo( HOMALG_DOCUMENTATION.documentation_headers, "<!--\n This is an automatically generated file. \n -->\n" );
-    
-    AppendTo( HOMALG_DOCUMENTATION.documentation_headers, Concatenation( [ "<Chapter Label=\"", package_name, "_automatically_generated_documentation_parts\">\n" ] ) );
-    
-    AppendTo( HOMALG_DOCUMENTATION.documentation_headers, Concatenation( [ "<Heading>", package_name, " automatic documentation part</Heading>\n" ] ) );
-    
-    ## Seems that we need a section :/
-    AppendTo( HOMALG_DOCUMENTATION.documentation_headers, Concatenation( [ "<Section Label=\"", package_name, "_automatically_generated_documentated_functions\">\n" ] ) );
-    
-    AppendTo( HOMALG_DOCUMENTATION.documentation_headers, Concatenation( [ "<Heading>", package_name, " automatic documentated declarations and functions</Heading>\n" ] ) );
+    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, "<!--\n This is an automatically generated file. \n -->\n" );
     
     ## Magic!
     LoadPackage( package_name );
     
     ## Close header file and streams
-    AppendTo( HOMALG_DOCUMENTATION.documentation_headers, "</Section>" );
     
-    AppendTo( HOMALG_DOCUMENTATION.documentation_headers, "</Chapter>" );
+    for chapter_record in AUTOMATIC_DOCUMENTATION.documentation_headers do
+        
+        AppendTo( chapter_record.main_filestream, "</Chapter>" );
+        
+        CloseStream( chapter_record.main_filestream );
+        
+        for section_stream in chapter_record.sections do
+            
+            AppendTo( section_stream, "</Section" );
+            
+            CloseStream( section_stream );
+            
+        od;
+        
+    od;
     
     CloseStream( HOMALG_DOCUMENTATION.documentation_stream );
     
-    CloseStream( HOMALG_DOCUMENTATION.documentation_headers );
+    CloseStream( HOMALG_DOCUMENTATION.documentation_headers_main_file );
     
     return true;
 
@@ -75,7 +177,7 @@ end );
 
 ##
 ## Call this with arguments name, tester, description, arguments. The last one is optional
-InstallGlobalFunction( HomalgDeclareCategory,
+InstallGlobalFunction( DeclareCategoryWithDocumentation,
 
   function( arg )
     local name, tester, description, arguments,
@@ -149,7 +251,7 @@ end );
 
 ##
 ## Call this with arguments name, list of tester, return value, description, arguments as list or string. The last one is optional
-InstallGlobalFunction( HomalgDeclareOperation,
+InstallGlobalFunction( DeclareOperationWithDocumentation,
 
   function( arg )
     local name, tester, description, return_value, arguments,
@@ -241,7 +343,7 @@ end );
 
 ##
 ## Call this with arguments name, tester, return value, description, arguments. The last one is optional
-InstallGlobalFunction( HomalgDeclareAttribute,
+InstallGlobalFunction( DeclareAttributeWithDocumentation,
 
   function( arg )
     local name, tester, description, return_value, arguments,
@@ -317,7 +419,7 @@ end );
 
 ##
 ## Call this with arguments name, tester, description, arguments. The last one is optional
-InstallGlobalFunction( HomalgDeclareProperty,
+InstallGlobalFunction( DeclarePropertyWithDocumentation,
 
   function( arg )
     local name, tester, description, arguments,

@@ -1,6 +1,6 @@
 #############################################################################
 ##
-##  InstallHomalgMethod.gd                            ToolsForHomalg package
+##  InstallMethodWithDocumentation.gd         AutomaticDocumentation package
 ##
 ##  Copyright 2007-2012, Mohamed Barakat, University of Kaiserslautern
 ##                       Sebastian Gutsche, RWTH-Aachen University
@@ -14,10 +14,14 @@ DeclareGlobalVariable( "HOMALG_DOCUMENTATION" );
 
 DeclareGlobalFunction( "CreateAutomaticDocumentation" );
 
-DeclareGlobalFunction( "HomalgDeclareCategory" );
+DeclareGlobalVariable( "CreateNewChapterXMLFile" );
 
-DeclareGlobalFunction( "HomalgDeclareOperation" );
+DeclareGlobalVariable( "CreateNewSectionXMLFile" );
 
-DeclareGlobalFunction( "HomalgDeclareAttribute" );
+DeclareGlobalFunction( "DeclareCategoryWithDocumentation" );
 
-DeclareGlobalFunction( "HomalgDeclareProperty" );
+DeclareGlobalFunction( "DeclareOperationWithDocumentation" );
+
+DeclareGlobalFunction( "DeclareAttributeWithDocumentation" );
+
+DeclareGlobalFunction( "DeclarePropertyWithDocumentation" );
