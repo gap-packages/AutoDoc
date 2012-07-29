@@ -18,10 +18,39 @@ InstallValue( AUTOMATIC_DOCUMENTATION,
                 documentation_headers := rec( ),
                 documentation_headers_main_file := false,
                 path_to_xmlfiles := "",
-                default_chapter := "",
+                default_chapter := rec( ),
                 random_value := 10^10
               )
            );
+
+##
+InstallGlobalFunction( CreateDefaultChapterData,
+                       
+  function( package_name )
+    local chapter_name, default_chapter_record, list_of_types, i;
+    
+    if not IsString( package_name ) then
+        
+        Error( "CreateDefaultChapterData must be called with a possible package name\n" );
+        
+    fi;
+    
+    chapter_name := Concatenation( package_name, "_automatic_generated_documentation" );
+    
+    default_chapter_record := AUTOMATIC_DOCUMENTATION.default_chapter;
+    
+    list_of_types := [ "categories", "methods", "attributes", "properties", "global_functions", "global_variables" ];
+    
+    for i in list_of_types do
+        
+        default_chapter_record.(i) := [ chapter_name,
+                                        Concatenation( package_name, "_automatic_generated_documentation_of_", i ) ];
+        
+    od;
+    
+    return true;
+    
+end );
 
 ##
 ## Call this with the name of the chapter without whitespaces. THEY MUST BE UNDERSCORES! IMPORTANT! UNDERSCORES!
@@ -119,9 +148,7 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     
     path_to_xmlfiles := arg[ 3 ];
     
-    AUTOMATIC_DOCUMENTATION.default_chapter := [ Concatenation( package_name, "_automatic_generated_documentation" ),
-                                                  Concatenation( package_name, "_automatic_generated_documentation_functions" )
-                                               ];
+    CreateDefaultChapterData( package_name );
     
     AUTOMATIC_DOCUMENTATION.path_to_xmlfiles := path_to_xmlfiles;
     
@@ -184,7 +211,7 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
     
     if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 then
         
-        Error( "the method HomalgDeclareCategory must be called with 3, 4 or 5 arguments\n" );
+        Error( "the method DeclareCategoryWithDocumentation must be called with 3, 4 or 5 arguments\n" );
         
         return false;
         
@@ -204,7 +231,7 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
                 
                 arguments := arg[ 4 ];
                 
-                chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter;
+                chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.categories;
                 
             elif IsList( arg[ 4 ] ) and not IsString( arg[ 4 ] ) then
                 
@@ -228,7 +255,7 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
             
             arguments := "arg";
             
-            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter;
+            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.categories;
             
         fi;
         
@@ -290,7 +317,7 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
     
     if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
         
-        Error( "the method HomalgDeclareOperation must be called with 4, 5, or 6 arguments\n" );
+        Error( "the method DeclareOperationWithDocumentation must be called with 4, 5, or 6 arguments\n" );
         
         return false;
         
@@ -312,7 +339,7 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
                 
                 arguments :=  arg[ 5 ];
                 
-                chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter;
+                chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.methods;
                 
             elif IsList( arg[ 5 ] ) and not IsString( arg[ 5 ] ) then
                 
@@ -336,7 +363,7 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
             
             arguments := JoinStringsWithSeparator( arguments );
             
-            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter;
+            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.methods;
             
         fi;
         
@@ -404,7 +431,7 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
     
     if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
         
-        Error( "the method HomalgDeclareAttribute must be called with 4 or 5 arguments\n" );
+        Error( "the method DeclareAttributeWithDocumentation must be called with 4 or 5 arguments\n" );
         
         return false;
         
@@ -440,7 +467,7 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
                 
                 arguments :=  arg[ 5 ];
                 
-                chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter;
+                chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.attributes;
                 
             elif IsList( arg[ 5 ] ) and not IsString( arg[ 5 ] ) then
                 
@@ -460,7 +487,7 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
             
             arguments := "arg";
             
-            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter;
+            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.attributes;
             
         fi;
       
@@ -522,7 +549,7 @@ InstallGlobalFunction( DeclarePropertyWithDocumentation,
     
     if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 then
         
-        Error( "the method HomalgDeclareProperty must be called with 3, 4, or 5 arguments\n" );
+        Error( "the method DeclarePropertyWithDocumentation must be called with 3, 4, or 5 arguments\n" );
         
         return false;
         
@@ -542,7 +569,7 @@ InstallGlobalFunction( DeclarePropertyWithDocumentation,
                 
                 arguments := arg[ 4 ];
                 
-                chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter;
+                chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.properties;
                 
             elif IsList( arg[ 4 ] ) and not IsString( arg[ 4 ] ) then
                 
@@ -566,7 +593,7 @@ InstallGlobalFunction( DeclarePropertyWithDocumentation,
             
             arguments := "arg";
             
-            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter;
+            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.properties;
             
         fi;
         
@@ -613,6 +640,157 @@ InstallGlobalFunction( DeclarePropertyWithDocumentation,
     fi;
     
     DeclareProperty( name, tester );
+    
+    return true;
+    
+end );
+
+##
+## Call this with arguments name, return value, description, arguments as string, chapter and section as a list of two strings. The last two are optional
+InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
+
+  function( arg )
+    local name, description, return_value, arguments, chapter_info,
+          label_rand_hash, doc_stream;
+    
+    if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 then
+        
+        Error( "the method DeclareGlobalFunctionWithDocumentation must be called with 3, 4, or 5 arguments\n" );
+        
+        return false;
+        
+    fi;
+    
+    name := arg[ 1 ];
+    
+    if AUTOMATIC_DOCUMENTATION.enable_documentation then
+        
+        description := arg[ 2 ];
+        
+        return_value := arg[ 3 ];
+        
+        if Length( arg ) = 4 then
+            
+            if IsString( arg[ 4 ] ) then
+                
+                arguments :=  arg[ 4 ];
+                
+                chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.global_functions;
+                
+            elif IsList( arg[ 4 ] ) and not IsString( arg[ 4 ] ) then
+                
+                chapter_info := arg[ 4 ];
+                
+                arguments := "args";
+                
+            fi;
+            
+        elif Length( arg ) = 5 then
+            
+            arguments := arg[ 4 ];
+            
+            chapter_info := arg[ 5 ];
+            
+        else
+            
+            arguments := "args";
+            
+            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.global_functions;
+            
+        fi;
+        
+        label_rand_hash := Concatenation( [ name, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
+        
+        doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
+        
+        AppendTo( doc_stream, Concatenation( [ "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" ] ) );
+        AppendTo( doc_stream, "##  <ManSection>\n" );
+        AppendTo( doc_stream, Concatenation( [ "##    <Func Arg=\"", arguments, "\" Name=\"", name, "\"/>\n" ] ) );
+        AppendTo( doc_stream, Concatenation( [ "##    <Returns>", return_value, "</Returns>\n" ] ) );
+        AppendTo( doc_stream, "##    <Description>\n" );
+        AppendTo( doc_stream, Concatenation( [ "##      ", description, "\n" ] ) );
+        AppendTo( doc_stream, "##    </Description>\n" );
+        AppendTo( doc_stream, "##  </ManSection>\n" );
+        AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
+        AppendTo( doc_stream, "##\n\n" );
+        
+        if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]) ) 
+           or not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]) ) then
+            
+            CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
+            
+        fi;
+        
+        AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
+                  Concatenation( [ "<#Include Label=\"", label_rand_hash, "\">\n" ] ) );
+        
+    fi;
+    
+    DeclareGlobalFunction( name );
+    
+    return true;
+    
+end );
+
+##
+## Call this with arguments name, description, chapter and section as a list of two strings. The last one is optional
+InstallGlobalFunction( DeclareGlobalVariableWithDocumentation,
+
+  function( arg )
+    local name, description, chapter_info,
+          label_rand_hash, doc_stream;
+    
+    if Length( arg ) <> 2 and Length( arg ) <> 3 then
+        
+        Error( "the method DeclareGlobalVariableWithDocumentation must be called with 2 or 3 arguments\n" );
+        
+        return false;
+        
+    fi;
+    
+    name := arg[ 1 ];
+    
+    if AUTOMATIC_DOCUMENTATION.enable_documentation then
+        
+        description := arg[ 2 ];
+        
+        if Length( arg ) = 3 then
+            
+            chapter_info := arg[ 3 ];
+            
+        else
+            
+            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.global_variables;
+            
+        fi;
+        
+        label_rand_hash := Concatenation( [ name, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
+        
+        doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
+        
+        AppendTo( doc_stream, Concatenation( [ "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" ] ) );
+        AppendTo( doc_stream, "##  <ManSection>\n" );
+        AppendTo( doc_stream, Concatenation( [ "##    <Var Name=\"", name, "\"/>\n" ] ) );
+        AppendTo( doc_stream, "##    <Description>\n" );
+        AppendTo( doc_stream, Concatenation( [ "##      ", description, "\n" ] ) );
+        AppendTo( doc_stream, "##    </Description>\n" );
+        AppendTo( doc_stream, "##  </ManSection>\n" );
+        AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
+        AppendTo( doc_stream, "##\n\n" );
+        
+        if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]) ) 
+           or not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]) ) then
+            
+            CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
+            
+        fi;
+        
+        AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
+                  Concatenation( [ "<#Include Label=\"", label_rand_hash, "\">\n" ] ) );
+        
+    fi;
+    
+    DeclareGlobalVariable( name );
     
     return true;
     
