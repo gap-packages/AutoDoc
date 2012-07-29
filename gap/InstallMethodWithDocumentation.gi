@@ -16,13 +16,12 @@ InstallValue( AUTOMATIC_DOCUMENTATION,
                 enable_documentation := false,
                 documentation_stream := false,
                 documentation_headers := rec( ),
-                documentation_headers_main_file := false;
-                path_to_xmlfiles := "";
-                default_chapter := "";
+                documentation_headers_main_file := false,
+                path_to_xmlfiles := "",
+                default_chapter := "",
                 random_value := 10^10
               )
-              
-);
+           );
 
 ##
 ## Call this with the name of the chapter without whitespaces. THEY MUST BE UNDERSCORES! IMPORTANT! UNDERSCORES!
@@ -39,15 +38,15 @@ InstallGlobalFunction( CreateNewChapterXMLFile,
         
     fi;
     
-    AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_name := rec( sections := rec( ) );
+    AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name) := rec( sections := rec( ) );
     
-    filename := Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, chapter_name, ".xml" );
+    filename := Concatenation( chapter_name, ".xml" );
     
-    filestream := OutputTextFile( filename, false );
+    filestream := OutputTextFile( Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename ), false );
     
-    AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_name.main_filestream := filestream;
+    AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).main_filestream := filestream;
     
-    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, Concatenation( "<#Include SYSTEM \"", filename, "\">" ); );
+    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, Concatenation( "<#Include SYSTEM \"", filename, "\">" ) );
     
     AppendTo( filestream, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
     
@@ -69,15 +68,15 @@ end );
 InstallGlobalFunction( CreateNewSectionXMLFile,
                        
   function( chapter_name, section_name )
-    local filestream;
+    local filename, filestream, name_chapter;
     
-    if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_name ) then
+    if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name) ) then
         
         CreateNewChapterXMLFile( chapter_name );
         
     fi;
     
-    if IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_name.section_name ) then
+    if IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).sections.(section_name) ) then
         
         Error( "tried to create the same section stream twice, something went wrong\n" );
         
@@ -85,13 +84,13 @@ InstallGlobalFunction( CreateNewSectionXMLFile,
         
     fi;
     
-    filename := Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, chapter_name, "Section", section_name, ".xml" );
+    filename := Concatenation( chapter_name, "Section", section_name, ".xml" );
     
-    filestream := OutputTextFile( filename, false );
+    filestream := OutputTextFile( Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename ), false );
     
-    AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_name.sections.section_name := filestream;
+    AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).sections.(section_name) := filestream;
     
-    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_name.main_filestream, Concatenation( "<#Include SYSTEM \"", filename, "\">" ); );
+    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).main_filestream, Concatenation( "<#Include SYSTEM \"", filename, "\">" ) );
     
     AppendTo( filestream, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
     
@@ -101,7 +100,7 @@ InstallGlobalFunction( CreateNewSectionXMLFile,
     
     name_chapter := ReplacedString( section_name, "_", " " );
     
-    AppendTo( filestream, Concatenation( [ "<Heading>", section_name, "</Heading>\n" ] ) );
+    AppendTo( filestream, Concatenation( [ "<Heading>", name_chapter, "</Heading>\n" ] ) );
     
     return true;
     
@@ -116,13 +115,13 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     
     package_name := arg[ 1 ];
     
-    docfile := arg[ 2 ];
+    name_documentation_file := arg[ 2 ];
     
     path_to_xmlfiles := arg[ 3 ];
     
-    AUTOMATIC_DOCUMENTATION.default_chapter := [ [ Concatenation( package_name, "_automatic_generated_documentation" ),
+    AUTOMATIC_DOCUMENTATION.default_chapter := [ Concatenation( package_name, "_automatic_generated_documentation" ),
                                                   Concatenation( package_name, "_automatic_generated_documentation_functions" )
-                                               ] ];
+                                               ];
     
     AUTOMATIC_DOCUMENTATION.path_to_xmlfiles := path_to_xmlfiles;
     
@@ -139,7 +138,7 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     
     AUTOMATIC_DOCUMENTATION.documentation_stream := OutputTextFile( name_documentation_file, false );
     
-    AUTOMATIC_DOCUMENTATION.documentation_headers_main_file := OutputTextFile( "AutomaticDocumentationMainFile", false );
+    AUTOMATIC_DOCUMENTATION.documentation_headers_main_file := OutputTextFile( Concatenation( path_to_xmlfiles, "AutomaticDocumentationMainFile.xml" ), false );
     
     ## Creating a header for the xml file.
     AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
@@ -151,25 +150,25 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     
     ## Close header file and streams
     
-    for chapter_record in AUTOMATIC_DOCUMENTATION.documentation_headers do
+    for chapter_record in RecNames(AUTOMATIC_DOCUMENTATION.documentation_headers) do
         
-        AppendTo( chapter_record.main_filestream, "</Chapter>" );
+        AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record).main_filestream, "</Chapter>" );
         
-        CloseStream( chapter_record.main_filestream );
+        CloseStream( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record).main_filestream );
         
-        for section_stream in chapter_record.sections do
+        for section_stream in RecNames( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record).sections ) do
             
-            AppendTo( section_stream, "</Section" );
+            AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record).sections.(section_stream), "</Section>" );
             
-            CloseStream( section_stream );
+            CloseStream( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record).sections.(section_stream) );
             
         od;
         
     od;
     
-    CloseStream( HOMALG_DOCUMENTATION.documentation_stream );
+    CloseStream( AUTOMATIC_DOCUMENTATION.documentation_stream );
     
-    CloseStream( HOMALG_DOCUMENTATION.documentation_headers_main_file );
+    CloseStream( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file );
     
     return true;
 
@@ -205,6 +204,8 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
                 
                 arguments := arg[ 4 ];
                 
+                chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter;
+                
             elif IsList( arg[ 4 ] ) and not IsString( arg[ 4 ] ) then
                 
                 chapter_info := arg[ 4 ];
@@ -233,29 +234,19 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
         
         tester_names := ShallowCopy( NamesFilter( tester ) );
         
-        i := 2;
-        
-        tester_names := List( tester, i -> ShallowCopy( NamesFilter( i ) ) );
-        
         for j in [ 1 .. Length( tester_names ) ] do
-            
-            for i in [ 1 .. Length( tester_names[ j ] ) ] do
+
+            if IsMatchingSublist( tester_names[ j ], "Tester(" ) then
                 
-                if IsMatchingSublist( tester_names[ j ][ i ], "Tester(" ) then
-                    
-                    Remove( tester_names[ j ], i );
-                    
-                fi;
+                Remove( tester_names, j );
                 
-            od;
-            
-            tester_names[ j ] := JoinStringsWithSeparator( tester_names[ j ], " and " );
+            fi;
             
         od;
         
         tester_names := JoinStringsWithSeparator( tester_names, " and " );
         
-        label_rand_hash := Concatenation( [ name, String( Random( 0, HOMALG_DOCUMENTATION.random_value ) ) ] );
+        label_rand_hash := Concatenation( [ name, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
         doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
@@ -271,13 +262,14 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
         AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
         AppendTo( doc_stream, "##\n\n" );
         
-        if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_info[ 1 ].chapter_info[ 2 ] ) then
+        if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]) ) 
+           or not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]) ) then
             
             CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
             
         fi;
         
-        AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_info[ 1 ].chapter_info[ 2 ],
+        AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
                   Concatenation( [ "<#Include Label=\"", label_rand_hash, "\">\n" ] ) );
         
     fi;
@@ -293,12 +285,12 @@ end );
 InstallGlobalFunction( DeclareOperationWithDocumentation,
 
   function( arg )
-    local name, tester, description, return_value, arguments,
+    local name, tester, description, return_value, arguments, chapter_info,
           tester_names, i, j, label_rand_hash, doc_stream;
     
-    if Length( arg ) <> 4 and Length( arg ) <> 5 then
+    if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
         
-        Error( "the method HomalgDeclareOperation must be called with 4 or 5 arguments\n" );
+        Error( "the method HomalgDeclareOperation must be called with 4, 5, or 6 arguments\n" );
         
         return false;
         
@@ -308,31 +300,45 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
     
     tester := arg[ 2 ];
     
-    description := arg[ 3 ];
-    
-    return_value := arg[ 4 ];
-    
-    if Length( arg ) = 5 then
+    if AUTOMATIC_DOCUMENTATION.enable_documentation then
         
-        if IsList( arg[ 5 ] ) and not IsString( arg[ 5 ] ) then
+        description := arg[ 3 ];
+        
+        return_value := arg[ 4 ];
+        
+        if Length( arg ) = 5 then
             
-            arguments := JoinStringsWithSeparator( arg[ 5 ] );
+            if IsString( arg[ 5 ] ) then
+                
+                arguments :=  arg[ 5 ];
+                
+                chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter;
+                
+            elif IsList( arg[ 5 ] ) and not IsString( arg[ 5 ] ) then
+                
+                chapter_info := arg[ 5 ];
+                
+                arguments := List( [ 1 .. Length( tester ) ], i -> Concatenation( [ "arg", String( i ) ] ) );
+                
+                arguments := JoinStringsWithSeparator( arguments );
+                
+            fi;
             
-        elif IsString( arg[ 5 ] ) then
+        elif Length( arg ) = 6 then
             
             arguments := arg[ 5 ];
             
+            chapter_info := arg[ 6 ];
+            
+        else
+            
+            arguments := List( [ 1 .. Length( tester ) ], i -> Concatenation( [ "arg", String( i ) ] ) );
+            
+            arguments := JoinStringsWithSeparator( arguments );
+            
+            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter;
+            
         fi;
-        
-    else
-        
-        arguments := List( [ 1 .. Length( tester ) ], i -> Concatenation( [ "arg", String( i ) ] ) );
-        
-        arguments := JoinStringsWithSeparator( arguments );
-        
-    fi;
-    
-    if HOMALG_DOCUMENTATION.enable_documentation then
         
         tester_names := List( tester, i -> ShallowCopy( NamesFilter( i ) ) );
         
@@ -354,9 +360,9 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
         
         tester_names := JoinStringsWithSeparator( tester_names, ", " );
         
-        label_rand_hash := Concatenation( [ name, String( Random( 0, HOMALG_DOCUMENTATION.random_value ) ) ] );
+        label_rand_hash := Concatenation( [ name, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
-        doc_stream := HOMALG_DOCUMENTATION.documentation_stream;
+        doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
         AppendTo( doc_stream, Concatenation( [ "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" ] ) );
         AppendTo( doc_stream, "##  <ManSection>\n" );
@@ -370,7 +376,15 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
         AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
         AppendTo( doc_stream, "##\n\n" );
         
-        AppendTo( HOMALG_DOCUMENTATION.documentation_headers, Concatenation( [ "<#Include Label=\"", label_rand_hash, "\">\n" ] ) );
+        if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]) ) 
+           or not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]) ) then
+            
+            CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
+            
+        fi;
+        
+        AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
+                  Concatenation( [ "<#Include Label=\"", label_rand_hash, "\">\n" ] ) );
         
     fi;
     
@@ -385,10 +399,10 @@ end );
 InstallGlobalFunction( DeclareAttributeWithDocumentation,
 
   function( arg )
-    local name, tester, description, return_value, arguments,
-          tester_names, i, label_rand_hash, doc_stream;
+    local name, tester, description, return_value, arguments, chapter_info,
+          tester_names, i, j, label_rand_hash, doc_stream;
     
-    if Length( arg ) <> 4 and Length( arg ) <> 5 then
+    if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
         
         Error( "the method HomalgDeclareAttribute must be called with 4 or 5 arguments\n" );
         
@@ -414,25 +428,59 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
         
     fi;
     
-    if HOMALG_DOCUMENTATION.enable_documentation then
+    if AUTOMATIC_DOCUMENTATION.enable_documentation then
         
+        description := arg[ 3 ];
+        
+        return_value := arg[ 4 ];
+        
+        if Length( arg ) = 5 then
+            
+            if IsString( arg[ 5 ] ) then
+                
+                arguments :=  arg[ 5 ];
+                
+                chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter;
+                
+            elif IsList( arg[ 5 ] ) and not IsString( arg[ 5 ] ) then
+                
+                chapter_info := arg[ 5 ];
+                
+                arguments := "arg";
+                
+            fi;
+            
+        elif Length( arg ) = 6 then
+            
+            arguments := arg[ 5 ];
+            
+            chapter_info := arg[ 6 ];
+            
+        else
+            
+            arguments := "arg";
+            
+            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter;
+            
+        fi;
+      
         tester_names := ShallowCopy( NamesFilter( tester ) );
         
-        i := 2;
-        
-        while i <= Length( tester_names ) do
-            
-            Remove( tester_names, i );
-            
-            i := i + 2;
+        for j in [ 1 .. Length( tester_names ) ] do
+
+            if IsMatchingSublist( tester_names[ j ], "Tester(" ) then
+                
+                Remove( tester_names, j );
+                
+            fi;
             
         od;
         
         tester_names := JoinStringsWithSeparator( tester_names, " and " );
         
-        label_rand_hash := Concatenation( [ name, String( Random( 0, HOMALG_DOCUMENTATION.random_value ) ) ] );
+        label_rand_hash := Concatenation( [ name, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
-        doc_stream := HOMALG_DOCUMENTATION.documentation_stream;
+        doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
         AppendTo( doc_stream, Concatenation( [ "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" ] ) );
         AppendTo( doc_stream, "##  <ManSection>\n" );
@@ -446,7 +494,15 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
         AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
         AppendTo( doc_stream, "##\n\n" );
         
-        AppendTo( HOMALG_DOCUMENTATION.documentation_headers, Concatenation( [ "<#Include Label=\"", label_rand_hash, "\">\n" ] ) );
+        if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]) ) 
+           or not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]) ) then
+            
+            CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
+            
+        fi;
+        
+        AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
+                  Concatenation( [ "<#Include Label=\"", label_rand_hash, "\">\n" ] ) );
         
     fi;
     
@@ -461,12 +517,12 @@ end );
 InstallGlobalFunction( DeclarePropertyWithDocumentation,
 
   function( arg )
-    local name, tester, description, arguments,
-          tester_names, i, label_rand_hash, doc_stream;
+    local name, tester, description, arguments, chapter_info,
+          tester_names, i, j, label_rand_hash, doc_stream;
     
-    if Length( arg ) <> 3 and Length( arg ) <> 4 then
+    if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 then
         
-        Error( "the method HomalgDeclareProperty must be called with 3 or 4 arguments\n" );
+        Error( "the method HomalgDeclareProperty must be called with 3, 4, or 5 arguments\n" );
         
         return false;
         
@@ -476,37 +532,61 @@ InstallGlobalFunction( DeclarePropertyWithDocumentation,
     
     tester := arg[ 2 ];
     
-    description := arg[ 3 ];
-    
-    if Length( arg ) = 4 then
+    if AUTOMATIC_DOCUMENTATION.enable_documentation then
         
-        arguments := arg[ 4 ];
+        description := arg[ 3 ];
         
-    else
-        
-        arguments := "arg";
-        
-    fi;
-    
-    if HOMALG_DOCUMENTATION.enable_documentation then
+        if Length( arg ) = 4 then
+            
+            if IsString( arg[ 4 ] ) then
+                
+                arguments := arg[ 4 ];
+                
+                chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter;
+                
+            elif IsList( arg[ 4 ] ) and not IsString( arg[ 4 ] ) then
+                
+                chapter_info := arg[ 4 ];
+                
+                arguments := "arg";
+                
+            else
+                
+                Error( "the 4th argument is unrecognized" );
+                
+            fi;
+            
+        elif Length( arg ) = 5 then
+            
+            arguments := arg[ 4 ];
+            
+            chapter_info := arg[ 5 ];
+            
+        else
+            
+            arguments := "arg";
+            
+            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter;
+            
+        fi;
         
         tester_names := ShallowCopy( NamesFilter( tester ) );
         
-        i := 2;
-        
-        while i <= Length( tester_names ) do
-            
-            Remove( tester_names, i );
-            
-            i := i + 2;
+        for j in [ 1 .. Length( tester_names ) ] do
+
+            if IsMatchingSublist( tester_names[ j ], "Tester(" ) then
+                
+                Remove( tester_names, j );
+                
+            fi;
             
         od;
         
         tester_names := JoinStringsWithSeparator( tester_names, " and " );
         
-        label_rand_hash := Concatenation( [ name, String( Random( 0, HOMALG_DOCUMENTATION.random_value ) ) ] );
+        label_rand_hash := Concatenation( [ name, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
-        doc_stream := HOMALG_DOCUMENTATION.documentation_stream;
+        doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
         AppendTo( doc_stream, Concatenation( [ "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" ] ) );
         AppendTo( doc_stream, "##  <ManSection>\n" );
@@ -520,7 +600,15 @@ InstallGlobalFunction( DeclarePropertyWithDocumentation,
         AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
         AppendTo( doc_stream, "##\n\n" );
         
-        AppendTo( HOMALG_DOCUMENTATION.documentation_headers, Concatenation( [ "<#Include Label=\"", label_rand_hash, "\">\n" ] ) );
+        if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]) ) 
+           or not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]) ) then
+            
+            CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
+            
+        fi;
+        
+        AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
+                  Concatenation( [ "<#Include Label=\"", label_rand_hash, "\">\n" ] ) );
         
     fi;
     

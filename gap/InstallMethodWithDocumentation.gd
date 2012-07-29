@@ -10,13 +10,13 @@
 ##
 #############################################################################
 
-DeclareGlobalVariable( "HOMALG_DOCUMENTATION" );
+DeclareGlobalVariable( "AUTOMATIC_DOCUMENTATION" );
 
 DeclareGlobalFunction( "CreateAutomaticDocumentation" );
 
-DeclareGlobalVariable( "CreateNewChapterXMLFile" );
+DeclareGlobalFunction( "CreateNewChapterXMLFile" );
 
-DeclareGlobalVariable( "CreateNewSectionXMLFile" );
+DeclareGlobalFunction( "CreateNewSectionXMLFile" );
 
 DeclareGlobalFunction( "DeclareCategoryWithDocumentation" );
 

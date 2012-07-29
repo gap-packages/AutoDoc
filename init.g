@@ -11,4 +11,4 @@
 #############################################################################
 
 
-ReadPackage( "AutomaticDocumentation", "gap/InstallHomalgMethodWithDocumentation.gd" );
+ReadPackage( "AutomaticDocumentation", "gap/InstallMethodWithDocumentation.gd" );
