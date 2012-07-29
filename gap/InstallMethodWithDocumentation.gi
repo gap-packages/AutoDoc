@@ -180,12 +180,12 @@ end );
 InstallGlobalFunction( DeclareCategoryWithDocumentation,
 
   function( arg )
-    local name, tester, description, arguments,
-          tester_names, i, label_rand_hash, doc_stream;
+    local name, tester, description, arguments, chapter_info,
+          tester_names, i, j, label_rand_hash, doc_stream;
     
-    if Length( arg ) <> 3 and Length( arg ) <> 4 then
+    if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 then
         
-        Error( "the method HomalgDeclareCategory must be called with 3 or 4 arguments\n" );
+        Error( "the method HomalgDeclareCategory must be called with 3, 4 or 5 arguments\n" );
         
         return false;
         
@@ -195,29 +195,61 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
     
     tester := arg[ 2 ];
     
-    description := arg[ 3 ];
-    
-    if Length( arg ) = 5 then
+    if AUTOMATIC_DOCUMENTATION.enable_documentation then
         
-        arguments := arg[ 5 ];
+        description := arg[ 3 ];
         
-    else
-        
-        arguments := "arg";
-        
-    fi;
-    
-    if HOMALG_DOCUMENTATION.enable_documentation then
+        if Length( arg ) = 4 then
+            
+            if IsString( arg[ 4 ] ) then
+                
+                arguments := arg[ 4 ];
+                
+            elif IsList( arg[ 4 ] ) and not IsString( arg[ 4 ] ) then
+                
+                chapter_info := arg[ 4 ];
+                
+                arguments := "arg";
+                
+            else
+                
+                Error( "the 4th argument is unrecognized" );
+                
+            fi;
+            
+        elif Length( arg ) = 5 then
+            
+            arguments := arg[ 4 ];
+            
+            chapter_info := arg[ 5 ];
+            
+        else
+            
+            arguments := "arg";
+            
+            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter;
+            
+        fi;
         
         tester_names := ShallowCopy( NamesFilter( tester ) );
         
         i := 2;
         
-        while i <= Length( tester_names ) do
+        tester_names := List( tester, i -> ShallowCopy( NamesFilter( i ) ) );
+        
+        for j in [ 1 .. Length( tester_names ) ] do
             
-            Remove( tester_names, i );
+            for i in [ 1 .. Length( tester_names[ j ] ) ] do
+                
+                if IsMatchingSublist( tester_names[ j ][ i ], "Tester(" ) then
+                    
+                    Remove( tester_names[ j ], i );
+                    
+                fi;
+                
+            od;
             
-            i := i + 2;
+            tester_names[ j ] := JoinStringsWithSeparator( tester_names[ j ], " and " );
             
         od;
         
@@ -225,7 +257,7 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
         
         label_rand_hash := Concatenation( [ name, String( Random( 0, HOMALG_DOCUMENTATION.random_value ) ) ] );
         
-        doc_stream := HOMALG_DOCUMENTATION.documentation_stream;
+        doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
         AppendTo( doc_stream, Concatenation( [ "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" ] ) );
         AppendTo( doc_stream, "##  <ManSection>\n" );
@@ -239,7 +271,14 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
         AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
         AppendTo( doc_stream, "##\n\n" );
         
-        AppendTo( HOMALG_DOCUMENTATION.documentation_headers, Concatenation( [ "<#Include Label=\"", label_rand_hash, "\">\n" ] ) );
+        if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_info[ 1 ].chapter_info[ 2 ] ) then
+            
+            CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
+            
+        fi;
+        
+        AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_info[ 1 ].chapter_info[ 2 ],
+                  Concatenation( [ "<#Include Label=\"", label_rand_hash, "\">\n" ] ) );
         
     fi;
     
