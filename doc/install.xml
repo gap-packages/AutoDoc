@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+
+  install.xml            AutomaticDocumentation package documentation           Mohamed Barakat
+
+         Copyright (C) 2007-2009, Mohamed Barakat, RWTH-Aachen
+
+This is the chapter of the documentation describing the installation.
+
+-->
+
+<Chapter Label="main_functions">
+<Heading>The main functions in the &AutomaticDocumentation; Package</Heading>
+
+<Section Label="functions">
+<Heading>The functions</Heading>
+
+<#Include Label="AUTOMATIC_DOCUMENTATION">
+<#Include Label="CreateAutomaticDocumentation">
+<#Include Label="DeclareCategoryWithDocumentation">
+<#Include Label="DeclareOperationWithDocumentation">
+<#Include Label="DeclareAttributeWithDocumentation">
+<#Include Label="DeclarePropertyWithDocumentation">
+<#Include Label="DeclareGlobalFunctionWithDocumentation">
+<#Include Label="DeclareGlobalVariableWithDocumentation">
+  
+
+<!-- ############################################################ -->
+</Section>
+</Chapter>

@@ -124,7 +124,7 @@ DeclareGlobalFunction( "DeclarePropertyWithDocumentation" );
 
 ##  <#GAPDoc Label="DeclareGlobalFunctionWithDocumentation">
 ##  <ManSection>
-##    <Func Arg="name, description, return_value [ arguments ], [ chapter_and_section ]" Name="DeclareOperationWithDocumentation"/>
+##    <Func Arg="name, description, return_value [ arguments ], [ chapter_and_section ]" Name="DeclareGlobalFunctionWithDocumentation"/>
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares a global function like DeclareGlobalFunction( <A>name</A> ) would do. The description string is added to the documentation
