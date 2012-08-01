@@ -12,3 +12,6 @@
 
 
 ReadPackage( "AutomaticDocumentation", "gap/InstallMethodWithDocumentation.gd" );
+
+## We REALLY need to stop supporting GAP 4.4.12
+ReadPackage( "AutomaticDocumentation", "gap/InstallMethodWithDocumentation.gi" );

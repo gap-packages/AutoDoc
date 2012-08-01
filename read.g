@@ -9,4 +9,4 @@
 ##
 #############################################################################
 
-ReadPackage( "AutomaticDocumentation", "gap/InstallMethodWithDocumentation.gi" );
+#ReadPackage( "AutomaticDocumentation", "gap/InstallMethodWithDocumentation.gi" );
