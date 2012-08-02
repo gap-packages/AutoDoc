@@ -53,6 +53,69 @@ InstallGlobalFunction( CreateDefaultChapterData,
 end );
 
 ##
+InstallGlobalFunction( CreateTitlePage,
+                       
+  function( package_name )
+    local filestream, package_info, author_records;
+    
+    filestream := OutputTextFile( Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, "title.xml" ), false );
+    
+    AppendTo( filestream, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
+    
+    AppendTo( filestream, "<!--\n This is an automatically generated file. \n -->\n" );
+    
+    AppendTo( filestream, "<TitlePage>\n" );
+    
+    AppendTo( filestream, Concatenation( "<Title>&", package_name, ";</Title>\n" );
+    
+    package_info := PackageInfo( package_name )[ 1 ];
+    
+    AppendTo( filestream, Concatenation( "<Subtitle>", ReplacedString( package_info.Subtitle, "GAP", "&GAP;" ), "</Subtitle>" );
+    
+    AppendTo( filestream, "<TitleComment>(<E>this manual is still under construction</E>)\n" );
+    AppendTo( filestream, "<Br/><Br/>\n" );
+    AppendTo( filestream, "This manual is best viewed as an <B>HTML</B> document.\n" );
+    AppendTo( filestream, "An <B>offline</B> version should be included in the documentation\n" );
+    AppendTo( filestream, "subfolder of the package.\n" );
+    AppendTo( filestream, "<Br/><Br/>\n" );
+    AppendTo( filestream, "</TitleComment>\n" );
+    
+    AppendTo( filestream, "<Version>Version <#Include SYSTEM \"../VERSION\"></Version>\n" );
+    
+    for author_records in package_info.Persons do
+        
+        if author_records.IsAuthor then
+            
+            AppendTo( filestream, Concatenation( "<Author>", Concatenation( author_records.FirstName, " ", author_records.LastName ), "<Alt Only=\"LaTeX\"><Br/></Alt>\n" ) );
+            AppendTo( filestream, Concatenation( "<Address>", author_records.PostalAddress, "</Address>\n" );
+            AppendTo( filestream, Concatenation( "<Email>", author_records.Email, "</Email>\n" );
+            AppendTo( filestream, Concatenation( "<Homepage>", author_records.WWWHome, "</Homepage>\n" );
+            AppendTo( filestream, "</Author>\n" );
+            
+        fi;
+        
+    od;
+    
+    AppendTo( filestream, Concatenation( "<Date>", package_info.Date, "</Date>\n" );
+    
+    AppendTo( filestream, "<Copyright>\n" );
+    AppendTo( filestream, "This package may be distributed under the terms and conditions of the\n" );
+    AppendTo( filestream, "GNU Public License Version 2.\n" );
+    AppendTo( filestream, "</Copyright>\n" );
+    
+    AppendTo( filestream, "<Acknowledgements>\n" );
+    
+    AppendTo( filestream, "</Acknowledgements>\n" );
+    
+    AppendTo( filestream, "</TitlePage>\n" );
+    
+    CloseStream( filestream );
+    
+    return true;
+    
+end );
+
+##
 ## Call this with the name of the chapter without whitespaces. THEY MUST BE UNDERSCORES! IMPORTANT! UNDERSCORES!
 InstallGlobalFunction( CreateNewChapterXMLFile,
                        
@@ -61,9 +124,7 @@ InstallGlobalFunction( CreateNewChapterXMLFile,
     
     if IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_name ) then
         
-        Error( "tried to produce a chapter twice, something went wrong\n" );
-        
-        return false;
+        return true;
         
     fi;
     
@@ -107,9 +168,7 @@ InstallGlobalFunction( CreateNewSectionXMLFile,
     
     if IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).sections.(section_name) ) then
         
-        Error( "tried to create the same section stream twice, something went wrong\n" );
-        
-        return false;
+        return true;
         
     fi;
     
@@ -140,7 +199,7 @@ end );
 InstallGlobalFunction( CreateAutomaticDocumentation,
 
   function( arg )
-    local package_name, name_documentation_file, path_to_xmlfiles, chapters, dependencies, chapter_record, section_stream;
+    local package_name, name_documentation_file, path_to_xmlfiles, introduction_list, dependencies, intro, chapter_record, section_stream;
     
     package_name := arg[ 1 ];
     
@@ -171,6 +230,30 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
     
     AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, "<!--\n This is an automatically generated file. \n -->\n" );
+    
+    if Length( arg ) = 4 then
+        
+        for intro in arg[ 4 ] do
+        
+        if Length( intro ) = 2 then
+            
+            CreateNewChapterXMLFile( intro[ 1 ] );
+            
+            AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(intro[ 1 ]).main_filestream, intro[ 2 ] );
+            
+        elif Length( intro ) = 3 then
+            
+            CreateNewSectionXMLFile( intro[ 1 ], intro[ 2 ] );
+            
+            AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(intro[ 1 ]).sections.(intro[ 2 ]), intro[ 3 ] );
+            
+        else
+            
+            Error( "wrong format of introduction string list\n" );
+            
+        fi;
+        
+    fi;
     
     ## Magic!
     LoadPackage( package_name );
