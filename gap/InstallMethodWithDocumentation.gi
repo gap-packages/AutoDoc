@@ -66,11 +66,11 @@ InstallGlobalFunction( CreateTitlePage,
     
     AppendTo( filestream, "<TitlePage>\n" );
     
-    AppendTo( filestream, Concatenation( "<Title>&", package_name, ";</Title>\n" );
+    AppendTo( filestream, Concatenation( "<Title>&", package_name, ";</Title>\n" ) );
     
     package_info := PackageInfo( package_name )[ 1 ];
     
-    AppendTo( filestream, Concatenation( "<Subtitle>", ReplacedString( package_info.Subtitle, "GAP", "&GAP;" ), "</Subtitle>" );
+    AppendTo( filestream, Concatenation( "<Subtitle>", ReplacedString( package_info.Subtitle, "GAP", "&GAP;" ), "</Subtitle>" ) );
     
     AppendTo( filestream, "<TitleComment>(<E>this manual is still under construction</E>)\n" );
     AppendTo( filestream, "<Br/><Br/>\n" );
@@ -86,17 +86,17 @@ InstallGlobalFunction( CreateTitlePage,
         
         if author_records.IsAuthor then
             
-            AppendTo( filestream, Concatenation( "<Author>", Concatenation( author_records.FirstName, " ", author_records.LastName ), "<Alt Only=\"LaTeX\"><Br/></Alt>\n" ) );
-            AppendTo( filestream, Concatenation( "<Address>", author_records.PostalAddress, "</Address>\n" );
-            AppendTo( filestream, Concatenation( "<Email>", author_records.Email, "</Email>\n" );
-            AppendTo( filestream, Concatenation( "<Homepage>", author_records.WWWHome, "</Homepage>\n" );
+            AppendTo( filestream, Concatenation( "<Author>", Concatenation( author_records.FirstNames, " ", author_records.LastName ), "<Alt Only=\"LaTeX\"><Br/></Alt>\n" ) );
+            AppendTo( filestream, Concatenation( "<Address>", author_records.PostalAddress, "</Address>\n" ) );
+            AppendTo( filestream, Concatenation( "<Email>", author_records.Email, "</Email>\n" ) );
+            AppendTo( filestream, Concatenation( "<Homepage>", author_records.WWWHome, "</Homepage>\n" ) );
             AppendTo( filestream, "</Author>\n" );
             
         fi;
         
     od;
     
-    AppendTo( filestream, Concatenation( "<Date>", package_info.Date, "</Date>\n" );
+    AppendTo( filestream, Concatenation( "<Date>", package_info.Date, "</Date>\n" ) );
     
     AppendTo( filestream, "<Copyright>\n" );
     AppendTo( filestream, "This package may be distributed under the terms and conditions of the\n" );
@@ -108,6 +108,73 @@ InstallGlobalFunction( CreateTitlePage,
     AppendTo( filestream, "</Acknowledgements>\n" );
     
     AppendTo( filestream, "</TitlePage>\n" );
+    
+    CloseStream( filestream );
+    
+    return true;
+    
+end );
+
+##
+## Call this with the packagename. It creates a simple main file. Call it with package name and maybe a list of entities.
+
+InstallGlobalFunction( CreateMainPage,
+                       
+  function( arg )
+    local package_name, entities, filestream, i;
+    
+    package_name := arg[ 1 ];
+    
+    if Length( arg ) = 2 then
+        
+        entities := arg[ 2 ];
+        
+    elif Length( arg ) = 1 then
+        
+        entities := [ "GAP4", "Maple", "Mathematica", "Singular", "Plural", "Sage", "python", "cython", 
+                      "C", "MAGMA", "Macaulay2", "IO", "homalg", "ResidueClassRingForHomalg", "LIRNG", "LIMAP",
+                      "LIMAT", "COLEM", "LIMOD", "LIMOR", "LICPX", "ExamplesForHomalg", "alexander", "Gauss",
+                      "GaussForHomalg", "HomalgToCAS", "IO_ForHomalg", "MapleForHomalg", "RingsForHomalg",
+                      "LessGenerators", "Yoneda", "Sheaves", "SCO", "LocalizeRingForHomalg", "GAPDoc", "AutomaticDocumentation",
+                      package_name ];
+        
+    else
+        
+        Error( "Wrong number of arguments\n" );
+        
+    fi;
+    
+    filestream := OutputTextFile( Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, package_name, ".xml" ), false );
+    
+    AppendTo( filestream, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n" );
+    
+    AppendTo( filestream, "<!--\n This is an automatically generated file. \n -->\n" );
+    
+    AppendTo( filestream, "<!DOCTYPE Book SYSTEM \"gapdoc.dtd\"\n[\n" );
+    
+    AppendTo( filestream, "<!ENTITY see '<Alt Only=\"LaTeX\">$\to$</Alt><Alt Not=\"LaTeX\">--&gt;</Alt>'>\n" );
+    
+    for i in entities do
+        
+        AppendTo( filestream, Concatenation( "<!ENTITY ", i, " '<Package>", i, "</Package>'>\n" ) );
+        
+    od;
+    
+    AppendTo( filestream, "]\n>\n" );
+    
+    AppendTo( filestream, Concatenation( "<Book Name=\"", package_name, "\">\n" ) );
+    
+    AppendTo( filestream, "<#Include SYSTEM \"title.xml\">\n" );
+    
+    AppendTo( filestream, "<TableOfContents/>\n" );
+    
+    AppendTo( filestream, "<Body>\ņ" );
+    
+    AppendTo( filestream, Concatenation( "<Index>&", package_name, ";</Index>\n" ) );
+    
+    AppendTo( filestream, "<#Include SYSTEM \"AutomaticDocumentationMainFile.xml\">\n" );
+    
+    AppendTo( filestream, "</Body>\n<TheIndex/>\n</Book>" );
     
     CloseStream( filestream );
     
@@ -199,13 +266,15 @@ end );
 InstallGlobalFunction( CreateAutomaticDocumentation,
 
   function( arg )
-    local package_name, name_documentation_file, path_to_xmlfiles, introduction_list, dependencies, intro, chapter_record, section_stream;
+    local package_name, name_documentation_file, path_to_xmlfiles, create_full_docu, introduction_list, entities, dependencies, intro, chapter_record, section_stream;
     
     package_name := arg[ 1 ];
     
     name_documentation_file := arg[ 2 ];
     
     path_to_xmlfiles := arg[ 3 ];
+    
+    create_full_docu := arg[ 4 ];
     
     CreateDefaultChapterData( package_name );
     
@@ -231,25 +300,41 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     
     AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, "<!--\n This is an automatically generated file. \n -->\n" );
     
-    if Length( arg ) = 4 then
+    if Length( arg ) = 5 then
         
-        for intro in arg[ 4 ] do
+        if Length( arg[ 5 ] ) > 0 then
+            
+            if IsString( arg[ 5 ][ 1 ] ) then
+                
+                entities := arg[ 5 ];
+                
+            elif IsList( arg[ 5 ][ 1 ] ) and not IsString( arg[ 5 ][ 1 ] ) then
+                
+                introduction_list := arg[ 5 ];
+                
+            fi;
+            
+        fi;
         
-        if Length( intro ) = 2 then
+    elif Length( arg ) = 6 then
+        
+        introduction_list := arg[ 5 ];
+        
+        entities := arg[ 6 ];
+        
+    fi;
+    
+    if create_full_docu then
+        
+        CreateTitlePage( package_name );
+        
+        if IsBound( entities ) then
             
-            CreateNewChapterXMLFile( intro[ 1 ] );
-            
-            AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(intro[ 1 ]).main_filestream, intro[ 2 ] );
-            
-        elif Length( intro ) = 3 then
-            
-            CreateNewSectionXMLFile( intro[ 1 ], intro[ 2 ] );
-            
-            AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(intro[ 1 ]).sections.(intro[ 2 ]), intro[ 3 ] );
+            CreateMainPage( package_name, entities );
             
         else
             
-            Error( "wrong format of introduction string list\n" );
+            CreateMainPage( package_name );
             
         fi;
         
