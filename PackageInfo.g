@@ -47,7 +47,7 @@ Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1
 ##  directory containing the package (in our "example" probably:
 ##  example/init.g, ...    or  example-1.3/init.g, ...  )
 # 
-ArchiveURL := "http://www.github.com/sebasguts/AutomaticDocumentation/",
+ArchiveURL := Concatenation( "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutomaticDocumentation/AutomaticDocumentation-", ~.Version ),
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
