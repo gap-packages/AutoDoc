@@ -1,8 +1,8 @@
-all: doc test
+all: doc
 
 doc: doc/manual.six
 
-doc/manual.six: makedoc.g maketest.g ListOfDocFiles.g \
+doc/manual.six: makedoc.g ListOfDocFiles.g \
 		PackageInfo.g \
 		doc/AutomaticDocumentation.bib doc/*.xml doc/*.css \
 		gap/*.gd gap/*.gi examples/*.g
@@ -11,11 +11,8 @@ doc/manual.six: makedoc.g maketest.g ListOfDocFiles.g \
 clean:
 	(cd doc ; ./clean)
 
-test:	doc
-	gap maketest.g
-
-archive: test
-	(mkdir -p ../tar; cd ..; tar czvf tar/AutomaticDocumentation.tar.gz --exclude ".DS_Store" --exclude "*~" AutomaticDocumentation/doc/*.* AutomaticDocumentation/doc/clean AutomaticDocumentation/gap/*.{gi,gd} AutomaticDocumentation/{CHANGES,PackageInfo.g,README,VERSION,init.g,read.g,makedoc.g,makefile,maketest.g,ListOfDocFiles.g} AutomaticDocumentation/examples/*.g)
+archive: doc
+	(mkdir -p ../tar; cd ..; tar czvf tar/AutomaticDocumentation.tar.gz --exclude ".DS_Store" --exclude "*~" AutomaticDocumentation/doc/*.* AutomaticDocumentation/doc/clean AutomaticDocumentation/gap/*.{gi,gd} AutomaticDocumentation/{CHANGES,PackageInfo.g,README,VERSION,init.g,read.g,makedoc.g,makefile,ListOfDocFiles.g} AutomaticDocumentation/examples/*.g)
 
 WEBPOS=public_html
 WEBPOS_FINAL=~/public_html/gap_packages/AutomaticDocumentation
