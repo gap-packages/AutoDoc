@@ -129,6 +129,8 @@ InstallGlobalFunction( CreateMainPage,
         
         entities := arg[ 2 ];
         
+        Add( entities, package_name );
+        
     elif Length( arg ) = 1 then
         
         entities := [ "GAP4", "Maple", "Mathematica", "Singular", "Plural", "Sage", "python", "cython", 
