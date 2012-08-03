@@ -170,7 +170,7 @@ InstallGlobalFunction( CreateMainPage,
     
     AppendTo( filestream, "<TableOfContents/>\n" );
     
-    AppendTo( filestream, "<Body>\ņ" );
+    AppendTo( filestream, "<Body>\n" );
     
     AppendTo( filestream, Concatenation( "<Index>&", package_name, ";</Index>\n" ) );
     
