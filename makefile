@@ -18,7 +18,7 @@ archive: test
 	(mkdir -p ../tar; cd ..; tar czvf tar/AutomaticDocumentation.tar.gz --exclude ".DS_Store" --exclude "*~" AutomaticDocumentation/doc/*.* AutomaticDocumentation/doc/clean AutomaticDocumentation/gap/*.{gi,gd} AutomaticDocumentation/{CHANGES,PackageInfo.g,README,VERSION,init.g,read.g,makedoc.g,makefile,maketest.g,ListOfDocFiles.g} AutomaticDocumentation/examples/*.g)
 
 WEBPOS=public_html
-WEBPOS_FINAL=~/Sites/homalg-project/AutomaticDocumentation
+WEBPOS_FINAL=~/public_html/gap_packages/AutomaticDocumentation
 
 towww: archive
 	echo '<?xml version="1.0" encoding="UTF-8"?>' >${WEBPOS}.version
