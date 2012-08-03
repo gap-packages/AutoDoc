@@ -7,10 +7,10 @@
 bin
 change.log
 VERSION
+doc/manual.six
 doc/*.pdf
 doc/*.html
 doc/*.txt
-doc/*.six
 doc/*Bib.xml
 doc/*Bib.xml.bib
 doc/*.aux

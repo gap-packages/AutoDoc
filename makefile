@@ -5,14 +5,14 @@ doc: doc/manual.six
 doc/manual.six: makedoc.g ListOfDocFiles.g \
 		PackageInfo.g \
 		doc/AutomaticDocumentation.bib doc/*.xml doc/*.css \
-		gap/*.gd gap/*.gi examples/*.g
+		gap/*.gd gap/*.gi
 	        gap makedoc.g
 
 clean:
 	(cd doc ; ./clean)
 
 archive: doc
-	(mkdir -p ../tar; cd ..; tar czvf tar/AutomaticDocumentation.tar.gz --exclude ".DS_Store" --exclude "*~" AutomaticDocumentation/doc/*.* AutomaticDocumentation/doc/clean AutomaticDocumentation/gap/*.{gi,gd} AutomaticDocumentation/{CHANGES,PackageInfo.g,README,VERSION,init.g,read.g,makedoc.g,makefile,ListOfDocFiles.g} AutomaticDocumentation/examples/*.g)
+	(mkdir -p ../tar; cd ..; tar czvf tar/AutomaticDocumentation.tar.gz --exclude ".DS_Store" --exclude "*~" AutomaticDocumentation/doc/*.* AutomaticDocumentation/doc/clean AutomaticDocumentation/gap/*.{gi,gd} AutomaticDocumentation/{CHANGES,PackageInfo.g,README,VERSION,init.g,read.g,makedoc.g,makefile,ListOfDocFiles.g})
 
 WEBPOS=public_html
 WEBPOS_FINAL=~/public_html/gap_packages/AutomaticDocumentation
