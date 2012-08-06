@@ -1,0 +1,15 @@
+#############################################################################
+##
+##  AutomaticDocumentation package
+##
+##  Copyright 2012,
+##                       Sebastian Gutsche, RWTH-Aachen University
+##                  
+##
+##  A package to help creating a GAPDoc documentation.
+##
+#############################################################################
+
+This package is supposed to help creating documentations for GAPpackages.
+It makes it possible to create documentation without writing .xml. It is not in any way a
+substitution for GAPDoc, but needs it to compile it's output.

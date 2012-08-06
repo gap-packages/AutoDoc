@@ -28,7 +28,7 @@ Subtitle := "Tools for generating automatic GAPDoc documentations",
 ##  you must provide a new version number even after small changes.
 Version := Maximum( [
 ## this line prevents merge conflicts
-  "2012.08.03", ## Sebas' version
+  "2012.08.06", ## Sebas' version
 ] ),
 ##  Please adjust also the VERSION file in the package directory when
 ##  changing this.
@@ -171,9 +171,9 @@ Status := "deposited",
 ##  and updating of the package in the GAP distribution.
 #
 README_URL := 
-  "",
+  "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutomaticDocumentation/README.AutomaticDocumentation",
 PackageInfoURL := 
-   "",
+   "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutomaticDocumentation/PackageInfo.g",
 
 ##  Here you  must provide a short abstract explaining the package content 
 ##  in HTML format (used on the package overview Web page) and an URL 
@@ -192,7 +192,7 @@ PackageInfoURL :=
 #
 AbstractHTML := 
   "",
-PackageWWWHome := "",
+PackageWWWHome := "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutomaticDocumentation",
 #               
 ##  Here is the information on the help books of the package, used for
 ##  loading into GAP's online help and maybe for an online copy of the 
@@ -225,8 +225,6 @@ PackageDoc := rec(
   # use same as in GAP            
   BookName  := "AutomaticDocumentation",
   # format/extension can be one of .zoo, .tar.gz, .tar.bz2, -win.zip
-  Archive := 
-    "http://www.github.com/sebasguts/AutomaticDocumentation.git",
   ArchiveURLSubset := ["doc"],
   HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
