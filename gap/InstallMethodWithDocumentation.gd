@@ -1,6 +1,6 @@
 #############################################################################
 ##
-##  InstallMethodWithDocumentation.gd         AutomaticDocumentation package
+##  InstallMethodWithDocumentation.gd         AutoDoc package
 ##
 ##  Copyright 2007-2012, Mohamed Barakat, University of Kaiserslautern
 ##                       Sebastian Gutsche, RWTH-Aachen University
@@ -23,9 +23,9 @@
 DeclareGlobalVariable( "AUTOMATIC_DOCUMENTATION" );
 
 
-##  <#GAPDoc Label="CreateAutomaticDocumentation">
+##  <#GAPDoc Label="CreateAutoDoc">
 ##  <ManSection>
-##    <Func Arg="package_name, documentation_file, path_to_xml_file,create_full_docu[,section_intros]" Name="CreateAutomaticDocumentation"/>
+##    <Func Arg="package_name, documentation_file, path_to_xml_file,create_full_docu[,section_intros]" Name="CreateAutoDoc"/>
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This is the main method of the package. After loading the package, run it with the name of the pacckage
@@ -33,7 +33,7 @@ DeclareGlobalVariable( "AUTOMATIC_DOCUMENTATION" );
 ##      Make sure you have included this file as source if you run your GAPDoc documentation creating script.
 ##      The third argument is a path to the directory where it can store the GAPDoc XML files. The path MUST end with a slash. 
 ##      It will produce several files out of the
-##      Declare*WithDocumentation declarations you have used in your package <A>package_name</A>, and one named AutomaticDocumentationMainFile.xml,
+##      Declare*WithDocumentation declarations you have used in your package <A>package_name</A>, and one named AutoDocMainFile.xml,
 ##      which you can simply include to your documentation.
 ##      <A>create_full_docu</A> can either be true or false. If true, a full documentation with title file is created. The only thing left
 ##      for you to do is run GAPDoc and provide a bibliography.
@@ -75,7 +75,7 @@ DeclareGlobalFunction( "CreateNewSectionXMLFile" );
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares a category, like DeclareCategory( <A>name</A>, <A>filter</A> ) would do. The description string is added to the documentation
-##      if CreateAutomaticDocumentation is called. <A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.
+##      if CreateAutoDoc is called. <A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.
 ##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this category
 ##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
 ##      the header of the chapter or the section.
@@ -91,7 +91,7 @@ DeclareGlobalFunction( "DeclareCategoryWithDocumentation" );
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares a operation, like DeclareOperation( <A>name</A>, <A>list_of_filters</A> ) would do. The description string is added to the documentation
-##      if CreateAutomaticDocumentation is called. <A>return_value</A> is a string displayed as the return value of the method. It is not optional.
+##      if CreateAutoDoc is called. <A>return_value</A> is a string displayed as the return value of the method. It is not optional.
 ##      <A>arguments</A> is an optional string which is displayed in the documentation as attributes of the operation.
 ##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this method
 ##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
@@ -108,7 +108,7 @@ DeclareGlobalFunction( "DeclareOperationWithDocumentation" );
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares an attribute, like DeclareAttribute( <A>name</A>, <A>filter</A> ) would do. The description string is added to the documentation
-##      if CreateAutomaticDocumentation is called. <A>return_value</A> is a string displayed as the return value of the attribute. It is not optional.
+##      if CreateAutoDoc is called. <A>return_value</A> is a string displayed as the return value of the attribute. It is not optional.
 ##      <A>argument</A> is an optional string which is displayed in the documentation as attribute of the attribute.
 ##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this attribute
 ##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
@@ -125,7 +125,7 @@ DeclareGlobalFunction( "DeclareAttributeWithDocumentation" );
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares a property, like DeclareProperty( <A>name</A>, <A>filter</A> ) would do. The description string is added to the documentation
-##      if CreateAutomaticDocumentation is called. <A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.
+##      if CreateAutoDoc is called. <A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.
 ##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this property
 ##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
 ##      the header of the chapter or the section.
@@ -141,7 +141,7 @@ DeclareGlobalFunction( "DeclarePropertyWithDocumentation" );
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares a global function like DeclareGlobalFunction( <A>name</A> ) would do. The description string is added to the documentation
-##      if CreateAutomaticDocumentation is called. <A>return_value</A> is a string displayed as the return value of the function. It is not optional.
+##      if CreateAutoDoc is called. <A>return_value</A> is a string displayed as the return value of the function. It is not optional.
 ##      <A>arguments</A> is an optional string which is displayed in the documentation as attributes of the operation.
 ##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this function
 ##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
@@ -158,7 +158,7 @@ DeclareGlobalFunction( "DeclareGlobalFunctionWithDocumentation" );
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares a global variable like DeclareGlobalVariable( <A>name</A> ) would do. The description string is added to the documentation
-##      if CreateAutomaticDocumentation is called.
+##      if CreateAutoDoc is called.
 ##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this variable
 ##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
 ##      the header of the chapter or the section.

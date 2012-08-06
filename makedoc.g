@@ -8,15 +8,15 @@ LoadPackage( "GAPDoc" );
 
 SetGapDocLaTeXOptions( "utf8" );
 
-bib := ParseBibFiles( "doc/AutomaticDocumentation.bib" );
-WriteBibXMLextFile( "doc/AutomaticDocumentationBib.xml", bib );
+bib := ParseBibFiles( "doc/AutoDoc.bib" );
+WriteBibXMLextFile( "doc/AutoDocBib.xml", bib );
 
 Read( "ListOfDocFiles.g" );
 
-PrintTo( "VERSION", PackageInfo( "AutomaticDocumentation" )[1].Version );
+PrintTo( "VERSION", PackageInfo( "AutoDoc" )[1].Version );
 
-MakeGAPDocDoc( "doc", "AutomaticDocumentation", list, "AutomaticDocumentation" );
+MakeGAPDocDoc( "doc", "AutoDoc", list, "AutoDoc" );
 
-GAPDocManualLab( "AutomaticDocumentation" );
+GAPDocManualLab( "AutoDoc" );
 
 quit;

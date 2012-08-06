@@ -2,7 +2,7 @@
 
 <!-- 
 
-  title.xml             AutomaticDocumentation package documentation
+  title.xml             AutoDoc package documentation
 
          Copyright (C) 2007-2012, Sebastian Gutsche, RWTH-Aachen
 
@@ -22,7 +22,7 @@
     
     <Br/><Br/>
     
-    <URL>http://www.github.com/sebasguts/AutomaticDocumentation</URL>
+    <URL>http://www.github.com/sebasguts/AutoDoc</URL>
   </TitleComment>
   <Version>Version <#Include SYSTEM "../VERSION"></Version>
   <Author>Sebastian Gutsche<Alt Only="LaTeX"><Br/></Alt>

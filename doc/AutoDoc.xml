@@ -38,19 +38,19 @@
 	  <!ENTITY SCO "<Package>SCO</Package>">
 	  <!ENTITY LocalizeRingForHomalg "<Package>LocalizeRingForHomalg</Package>">
 	  <!ENTITY GAPDoc "<Package>GAPDoc</Package>">
-    <!ENTITY AutomaticDocumentation "<Package>AutomaticDocumentation</Package>">
+    <!ENTITY AutoDoc "<Package>AutoDoc</Package>">
 	  ]
 	  >
 
 <!--
 
-  AutomaticDocumentation.xml          AutomaticDocumentation package documentation              Mohamed Barakat
+  AutoDoc.xml          AutoDoc package documentation              Mohamed Barakat
 
   Copyright (C) 2007-2009, Mohamed Barakat, RWTH-Aachen University
 
 -->
 
-<Book Name="AutomaticDocumentation">
+<Book Name="AutoDoc">
 
 <#Include SYSTEM "title.xml">
 
@@ -60,7 +60,7 @@
 <!--  chapters of the book  -->
 <Body>
 
-<Index>&AutomaticDocumentation;</Index>
+<Index>&AutoDoc;</Index>
 
 <#Include SYSTEM "intro.xml">
 <#Include SYSTEM "install.xml">

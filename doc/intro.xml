@@ -2,7 +2,7 @@
 
 <!-- 
 
-  intro.xml            AutomaticDocumentation package documentation            Mohamed Barakat
+  intro.xml            AutoDoc package documentation            Mohamed Barakat
 
          Copyright (C) 2007-2009, Mohamed Barakat, RWTH-Aachen
 
@@ -14,8 +14,8 @@ behind the package.
 <Chapter Label="intro">
 <Heading>Introduction</Heading>
 
-<Section Label="AutomaticDocumentation_exp">
-<Heading>What is the idea of the &AutomaticDocumentation; package?</Heading>
+<Section Label="AutoDoc_exp">
+<Heading>What is the idea of the &AutoDoc; package?</Heading>
 
 This package is supposed to help creating documentations for &GAP; packages.
 It makes it possible to create documentation without writing .xml. It is not in any way a

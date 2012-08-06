@@ -1,12 +1,12 @@
 #############################################################################
 ##
-##  read.g                                    AutomaticDocumentation package
+##  read.g                                    AutoDoc package
 ##
 ##  Copyright 2007-2012, Mohamed Barakat, University of Kaiserslautern
 ##                       Sebastian Gutsche, RWTH-Aachen University
 ##
-##  Reading the implementation of the AutomaticDocumentation package.
+##  Reading the implementation of the AutoDoc package.
 ##
 #############################################################################
 
-#ReadPackage( "AutomaticDocumentation", "gap/InstallMethodWithDocumentation.gi" );
+#ReadPackage( "AutoDoc", "gap/InstallMethodWithDocumentation.gi" );

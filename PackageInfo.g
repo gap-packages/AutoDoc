@@ -17,7 +17,7 @@ SetPackageInfo( rec(
 
 ##  This is case sensitive, use your preferred spelling.
 #
-PackageName := "AutomaticDocumentation",
+PackageName := "AutoDoc",
 
 ##  This may be used by a default banner or on a Web page, should fit on
 ##  one line.
@@ -47,7 +47,7 @@ Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1
 ##  directory containing the package (in our "example" probably:
 ##  example/init.g, ...    or  example-1.3/init.g, ...  )
 # 
-ArchiveURL := Concatenation( "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutomaticDocumentation/AutomaticDocumentation-", ~.Version ),
+ArchiveURL := Concatenation( "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutoDoc/AutoDoc-", ~.Version ),
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -171,9 +171,9 @@ Status := "deposited",
 ##  and updating of the package in the GAP distribution.
 #
 README_URL := 
-  "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutomaticDocumentation/README.AutomaticDocumentation",
+  "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutoDoc/README.AutoDoc",
 PackageInfoURL := 
-   "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutomaticDocumentation/PackageInfo.g",
+   "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutoDoc/PackageInfo.g",
 
 ##  Here you  must provide a short abstract explaining the package content 
 ##  in HTML format (used on the package overview Web page) and an URL 
@@ -192,7 +192,7 @@ PackageInfoURL :=
 #
 AbstractHTML := 
   "",
-PackageWWWHome := "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutomaticDocumentation",
+PackageWWWHome := "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutoDoc",
 #               
 ##  Here is the information on the help books of the package, used for
 ##  loading into GAP's online help and maybe for an online copy of the 
@@ -223,7 +223,7 @@ PackageWWWHome := "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/Automat
 # in case of several help books give a list of such records here:
 PackageDoc := rec(
   # use same as in GAP            
-  BookName  := "AutomaticDocumentation",
+  BookName  := "AutoDoc",
   # format/extension can be one of .zoo, .tar.gz, .tar.bz2, -win.zip
   ArchiveURLSubset := ["doc"],
   HTMLStart := "doc/chap0.html",
@@ -282,12 +282,12 @@ AvailabilityTest := function()
 ##  when it is not shown. *optional* (note the ~-syntax in this example)
 BannerString := Concatenation( 
   "----------------------------------------------------------------\n",
-  "Loading  AutomaticDocumentation ", ~.Version, "\n",
+  "Loading  AutoDoc ", ~.Version, "\n",
   "by ", ~.Persons[1].FirstNames, " ", ~.Persons[1].LastName,
         " (", ~.Persons[1].WWWHome, ")\n",
   "Type:\n",
-  "  ?AutomaticDocumentation:        ## for the contents of the manual\n",
-  "  ?AutomaticDocumentation:x       ## for chapter/section/topic x\n",
+  "  ?AutoDoc:        ## for the contents of the manual\n",
+  "  ?AutoDoc:x       ## for chapter/section/topic x\n",
   "----------------------------------------------------------------\n" ),
 
 ##  Suggest here if the package should be *automatically loaded* when GAP is 

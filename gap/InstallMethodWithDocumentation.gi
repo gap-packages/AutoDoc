@@ -1,6 +1,6 @@
 #############################################################################
 ##
-##  InstallMethodWithDocumentation.gi         AutomaticDocumentation package
+##  InstallMethodWithDocumentation.gi         AutoDoc package
 ##
 ##  Copyright 2007-2012, Mohamed Barakat, University of Kaiserslautern
 ##                       Sebastian Gutsche, RWTH-Aachen University
@@ -137,7 +137,7 @@ InstallGlobalFunction( CreateMainPage,
                       "C", "MAGMA", "Macaulay2", "IO", "homalg", "ResidueClassRingForHomalg", "LIRNG", "LIMAP",
                       "LIMAT", "COLEM", "LIMOD", "LIMOR", "LICPX", "ExamplesForHomalg", "alexander", "Gauss",
                       "GaussForHomalg", "HomalgToCAS", "IO_ForHomalg", "MapleForHomalg", "RingsForHomalg",
-                      "LessGenerators", "Yoneda", "Sheaves", "SCO", "LocalizeRingForHomalg", "GAPDoc", "AutomaticDocumentation",
+                      "LessGenerators", "Yoneda", "Sheaves", "SCO", "LocalizeRingForHomalg", "GAPDoc", "AutoDoc",
                       package_name ];
         
     else
@@ -174,7 +174,7 @@ InstallGlobalFunction( CreateMainPage,
     
     AppendTo( filestream, Concatenation( "<Index>&", package_name, ";</Index>\n" ) );
     
-    AppendTo( filestream, "<#Include SYSTEM \"AutomaticDocumentationMainFile.xml\">\n" );
+    AppendTo( filestream, "<#Include SYSTEM \"AutoDocMainFile.xml\">\n" );
     
     AppendTo( filestream, "</Body>\n<TheIndex/>\n</Book>" );
     
@@ -295,7 +295,7 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     
     AUTOMATIC_DOCUMENTATION.documentation_stream := OutputTextFile( name_documentation_file, false );
     
-    AUTOMATIC_DOCUMENTATION.documentation_headers_main_file := OutputTextFile( Concatenation( path_to_xmlfiles, "AutomaticDocumentationMainFile.xml" ), false );
+    AUTOMATIC_DOCUMENTATION.documentation_headers_main_file := OutputTextFile( Concatenation( path_to_xmlfiles, "AutoDocMainFile.xml" ), false );
     
     ## Creating a header for the xml file.
     AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
