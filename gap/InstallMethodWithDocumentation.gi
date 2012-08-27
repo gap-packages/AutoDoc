@@ -467,7 +467,15 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
             
         od;
         
-        tester_names := JoinStringsWithSeparator( tester_names, " and " );
+        if Length( tester_names ) = 0 then
+            
+            tester_names := "IsObject";
+            
+        else
+            
+            tester_names := JoinStringsWithSeparator( tester_names, " and " );
+            
+        fi;
         
         label_rand_hash := Concatenation( [ name, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
@@ -577,9 +585,24 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
                 
             od;
             
-            tester_names[ j ] := JoinStringsWithSeparator( tester_names[ j ], " and " );
+            
+            if Length( tester_names[ j ] ) = 0 then
+                
+                tester_names[ j ] := "IsObject";
+                
+            else
+                
+                tester_names[ j ] := JoinStringsWithSeparator( tester_names[ j ], " and " );
+                
+            fi;
             
         od;
+        
+        if Length( return_value ) = 0 then
+            
+            return_value := "Nothing";
+            
+        fi;
         
         tester_names := JoinStringsWithSeparator( tester_names, ", " );
         
@@ -699,7 +722,21 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
             
         od;
         
-        tester_names := JoinStringsWithSeparator( tester_names, " and " );
+        if Length( tester_names ) = 0 then
+            
+            tester_names := "IsObject";
+            
+        else
+            
+            tester_names := JoinStringsWithSeparator( tester_names, " and " );
+            
+        fi;
+        
+        if Length( return_value ) = 0 then
+            
+            return_value := "Nothing";
+            
+        fi;
         
         label_rand_hash := Concatenation( [ name, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
@@ -805,7 +842,15 @@ InstallGlobalFunction( DeclarePropertyWithDocumentation,
             
         od;
         
-        tester_names := JoinStringsWithSeparator( tester_names, " and " );
+        if Length( tester_names ) = 0 then
+            
+            tester_names := "IsObject";
+            
+        else
+            
+            tester_names := JoinStringsWithSeparator( tester_names, " and " );
+            
+        fi;
         
         label_rand_hash := Concatenation( [ name, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
@@ -892,6 +937,12 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
             arguments := "args";
             
             chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.global_functions;
+            
+        fi;
+        
+        if Length( return_value ) = 0 then
+            
+            return_value := "Nothing";
             
         fi;
         
