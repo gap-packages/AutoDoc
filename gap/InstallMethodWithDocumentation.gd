@@ -75,7 +75,9 @@ DeclareGlobalFunction( "CreateNewSectionXMLFile" );
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares a category, like DeclareCategory( <A>name</A>, <A>filter</A> ) would do. The description string is added to the documentation
-##      if CreateAutoDoc is called. <A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.
+##      if CreateAutoDoc is called. It
+##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
+##      <A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.
 ##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this category
 ##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
 ##      the header of the chapter or the section.
@@ -91,7 +93,9 @@ DeclareGlobalFunction( "DeclareCategoryWithDocumentation" );
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares a operation, like DeclareOperation( <A>name</A>, <A>list_of_filters</A> ) would do. The description string is added to the documentation
-##      if CreateAutoDoc is called. <A>return_value</A> is a string displayed as the return value of the method. It is not optional.
+##      if CreateAutoDoc is called. It
+##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
+##      <A>return_value</A> is a string displayed as the return value of the method. It is not optional.
 ##      <A>arguments</A> is an optional string which is displayed in the documentation as attributes of the operation.
 ##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this method
 ##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
@@ -108,7 +112,9 @@ DeclareGlobalFunction( "DeclareOperationWithDocumentation" );
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares an attribute, like DeclareAttribute( <A>name</A>, <A>filter</A> ) would do. The description string is added to the documentation
-##      if CreateAutoDoc is called. <A>return_value</A> is a string displayed as the return value of the attribute. It is not optional.
+##      if CreateAutoDoc is called. It
+##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
+##      <A>return_value</A> is a string displayed as the return value of the attribute. It is not optional.
 ##      <A>argument</A> is an optional string which is displayed in the documentation as attribute of the attribute.
 ##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this attribute
 ##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
@@ -125,7 +131,9 @@ DeclareGlobalFunction( "DeclareAttributeWithDocumentation" );
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares a property, like DeclareProperty( <A>name</A>, <A>filter</A> ) would do. The description string is added to the documentation
-##      if CreateAutoDoc is called. <A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.
+##      if CreateAutoDoc is called. It
+##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
+##      <A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.
 ##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this property
 ##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
 ##      the header of the chapter or the section.
@@ -141,7 +149,9 @@ DeclareGlobalFunction( "DeclarePropertyWithDocumentation" );
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares a global function like DeclareGlobalFunction( <A>name</A> ) would do. The description string is added to the documentation
-##      if CreateAutoDoc is called. <A>return_value</A> is a string displayed as the return value of the function. It is not optional.
+##      if CreateAutoDoc is called. It
+##      can either be a string or a list of strings. 
+##      Lists will be concatenated with a space between them.<A>return_value</A> is a string displayed as the return value of the function. It is not optional.
 ##      <A>arguments</A> is an optional string which is displayed in the documentation as attributes of the operation.
 ##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this function
 ##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
@@ -158,7 +168,8 @@ DeclareGlobalFunction( "DeclareGlobalFunctionWithDocumentation" );
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares a global variable like DeclareGlobalVariable( <A>name</A> ) would do. The description string is added to the documentation
-##      if CreateAutoDoc is called.
+##      if CreateAutoDoc is called. It
+##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
 ##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this variable
 ##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
 ##      the header of the chapter or the section.

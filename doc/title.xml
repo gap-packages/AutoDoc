@@ -22,7 +22,7 @@
     
     <Br/><Br/>
     
-    <URL>http://www.github.com/sebasguts/AutoDoc</URL>
+    <URL>http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutoDoc</URL>
   </TitleComment>
   <Version>Version <#Include SYSTEM "../VERSION"></Version>
   <Author>Sebastian Gutsche<Alt Only="LaTeX"><Br/></Alt>
@@ -36,7 +36,7 @@
     <Email>sebastian.gutsche@rwth-aachen.de</Email>
     <Homepage>http://wwwb.math.rwth-aachen.de/~gutsche/</Homepage>
   </Author>
-  <Date>July 2012</Date>
+  <Date>September 2012</Date>
   
   <Copyright>
     &copyright; 2012 by Sebastian Gutsche<P/>

@@ -268,7 +268,8 @@ end );
 InstallGlobalFunction( CreateAutomaticDocumentation,
 
   function( arg )
-    local package_name, name_documentation_file, path_to_xmlfiles, create_full_docu, introduction_list, entities, dependencies, intro, chapter_record, section_stream;
+    local package_name, name_documentation_file, path_to_xmlfiles, create_full_docu, introduction_list, entities, 
+          dependencies, intro, chapter_record, section_stream, intro_string;
     
     package_name := arg[ 1 ];
     
@@ -350,11 +351,27 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
                 
                 CreateNewChapterXMLFile( intro[ 1 ] );
                 
+                intro_string := intro[ 2 ];
+                
+                if not IsString( intro_string ) then
+                    
+                    intro_string := JoinStringsWithSeparator( intro_string, " " );
+                    
+                fi;
+                
                 AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(intro[ 1 ]).main_filestream, intro[ 2 ] );
                 
             elif Length( intro ) = 3 then
                 
                 CreateNewSectionXMLFile( intro[ 1 ], intro[ 2 ] );
+                
+                intro_string := intro[ 3 ];
+                
+                if not IsString( intro_string ) then
+                    
+                    intro_string := JoinStringsWithSeparator( intro_string, " " );
+                    
+                fi;
                 
                 AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(intro[ 1 ]).sections.(intro[ 2 ]), intro[ 3 ] );
                 
@@ -420,6 +437,12 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
     if AUTOMATIC_DOCUMENTATION.enable_documentation then
         
         description := arg[ 3 ];
+        
+        if not IsString( description ) then
+            
+            description := JoinStringsWithSeparator( description, " " );
+            
+        fi;
         
         if Length( arg ) = 4 then
             
@@ -534,6 +557,12 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
     if AUTOMATIC_DOCUMENTATION.enable_documentation then
         
         description := arg[ 3 ];
+        
+        if not IsString( description ) then
+            
+            description := JoinStringsWithSeparator( description, " " );
+            
+        fi;
         
         return_value := arg[ 4 ];
         
@@ -660,8 +689,6 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
     
     tester := arg[ 2 ];
     
-    description := arg[ 3 ];
-    
     return_value := arg[ 4 ];
     
     if Length( arg ) = 5 then
@@ -677,6 +704,12 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
     if AUTOMATIC_DOCUMENTATION.enable_documentation then
         
         description := arg[ 3 ];
+        
+        if not IsString( description ) then
+            
+            description := JoinStringsWithSeparator( description, " " );
+            
+        fi;
         
         return_value := arg[ 4 ];
         
@@ -796,6 +829,12 @@ InstallGlobalFunction( DeclarePropertyWithDocumentation,
         
         description := arg[ 3 ];
         
+        if not IsString( description ) then
+            
+            description := JoinStringsWithSeparator( description, " " );
+            
+        fi;
+        
         if Length( arg ) = 4 then
             
             if IsString( arg[ 4 ] ) then
@@ -908,6 +947,12 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
         
         description := arg[ 2 ];
         
+        if not IsString( description ) then
+            
+            description := JoinStringsWithSeparator( description, " " );
+            
+        fi;
+        
         return_value := arg[ 3 ];
         
         if Length( arg ) = 4 then
@@ -1000,6 +1045,12 @@ InstallGlobalFunction( DeclareGlobalVariableWithDocumentation,
     if AUTOMATIC_DOCUMENTATION.enable_documentation then
         
         description := arg[ 2 ];
+        
+        if not IsString( description ) then
+            
+            description := JoinStringsWithSeparator( description, " " );
+            
+        fi;
         
         if Length( arg ) = 3 then
             
