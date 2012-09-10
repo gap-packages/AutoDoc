@@ -28,7 +28,7 @@ Subtitle := "Tools for generating automatic GAPDoc documentations",
 ##  you must provide a new version number even after small changes.
 Version := Maximum( [
 ## this line prevents merge conflicts
-  "2012.08.06", ## Sebas' version
+  "2012.09.09", ## Sebas' version
 ] ),
 ##  Please adjust also the VERSION file in the package directory when
 ##  changing this.
