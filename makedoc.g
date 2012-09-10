@@ -19,4 +19,4 @@ MakeGAPDocDoc( "doc", "AutoDoc", list, "AutoDoc" );
 
 GAPDocManualLab( "AutoDoc" );
 
-quit;
+QUIT;
