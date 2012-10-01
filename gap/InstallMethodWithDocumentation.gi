@@ -506,10 +506,9 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
         
         AppendTo( doc_stream, Concatenation( [ "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" ] ) );
         AppendTo( doc_stream, "##  <ManSection>\n" );
-        AppendTo( doc_stream, Concatenation( [ "##    <Filt Type=\"Category\" Arg=\"", arguments, "\" Name=\"", name, "\"/>\n" ] ) );
+        AppendTo( doc_stream, Concatenation( [ "##    <Filt Type=\"Category\" Arg=\"", arguments, "\" Name=\"", name, "\" Label=\"for ", tester_names, "\" />\n" ] ) );
         AppendTo( doc_stream, "##    <Returns><C>true</C> or <C>false</C></Returns>\n" );
         AppendTo( doc_stream, "##    <Description>\n" );
-        AppendTo( doc_stream, Concatenation( [ "##      Filters for arguments are: ", tester_names, "<Br/>\n" ] ) );
         AppendTo( doc_stream, Concatenation( [ "##      ", description, "\n" ] ) );
         AppendTo( doc_stream, "##    </Description>\n" );
         AppendTo( doc_stream, "##  </ManSection>\n" );
@@ -641,10 +640,9 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
         
         AppendTo( doc_stream, Concatenation( [ "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" ] ) );
         AppendTo( doc_stream, "##  <ManSection>\n" );
-        AppendTo( doc_stream, Concatenation( [ "##    <Oper Arg=\"", arguments, "\" Name=\"", name, "\"/>\n" ] ) );
+        AppendTo( doc_stream, Concatenation( [ "##    <Oper Arg=\"", arguments, "\" Name=\"", name, "\" Label=\"for ", tester_names, "\"/>\n" ] ) );
         AppendTo( doc_stream, Concatenation( [ "##    <Returns>", return_value, "</Returns>\n" ] ) );
         AppendTo( doc_stream, "##    <Description>\n" );
-        AppendTo( doc_stream, Concatenation( [ "##      Filters for arguments are: ", tester_names, "<Br/>\n" ] ) );
         AppendTo( doc_stream, Concatenation( [ "##      ", description, "\n" ] ) );
         AppendTo( doc_stream, "##    </Description>\n" );
         AppendTo( doc_stream, "##  </ManSection>\n" );
@@ -777,10 +775,9 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
         
         AppendTo( doc_stream, Concatenation( [ "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" ] ) );
         AppendTo( doc_stream, "##  <ManSection>\n" );
-        AppendTo( doc_stream, Concatenation( [ "##    <Attr Arg=\"", arguments, "\" Name=\"", name, "\"/>\n" ] ) );
+        AppendTo( doc_stream, Concatenation( [ "##    <Attr Arg=\"", arguments, "\" Name=\"", name, "\" Label=\"for ", tester_names, "\"/>\n" ] ) );
         AppendTo( doc_stream, Concatenation( [ "##    <Returns>", return_value, "</Returns>\n" ] ) );
         AppendTo( doc_stream, "##    <Description>\n" );
-        AppendTo( doc_stream, Concatenation( [ "##      Filters for arguments are: ", tester_names, "<Br/>\n" ] ) );
         AppendTo( doc_stream, Concatenation( [ "##      ", description, "\n" ] ) );
         AppendTo( doc_stream, "##    </Description>\n" );
         AppendTo( doc_stream, "##  </ManSection>\n" );
@@ -897,10 +894,9 @@ InstallGlobalFunction( DeclarePropertyWithDocumentation,
         
         AppendTo( doc_stream, Concatenation( [ "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" ] ) );
         AppendTo( doc_stream, "##  <ManSection>\n" );
-        AppendTo( doc_stream, Concatenation( [ "##    <Prop Arg=\"", arguments, "\" Name=\"", name, "\"/>\n" ] ) );
+        AppendTo( doc_stream, Concatenation( [ "##    <Prop Arg=\"", arguments, "\" Name=\"", name, "\" Label=\"for ", tester_names, "\"/>\n" ] ) );
         AppendTo( doc_stream, "##    <Returns><C>true</C> or <C>false</C></Returns>\n" );
         AppendTo( doc_stream, "##    <Description>\n" );
-        AppendTo( doc_stream, Concatenation( [ "##      Filters for arguments are: ", tester_names, "<Br/>\n" ] ) );
         AppendTo( doc_stream, Concatenation( [ "##      ", description, "\n" ] ) );
         AppendTo( doc_stream, "##    </Description>\n" );
         AppendTo( doc_stream, "##  </ManSection>\n" );
