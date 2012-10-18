@@ -16,3 +16,8 @@ ExamplesForHomalg/: 6b6da9c test GetRidOfRowsAndColumnsWithUnits in SimplerEquiv
 
 Versions:
  2012.05.31
+
+Gauss/: ba1d5ef comply with the new GAPDoc testing methods
+
+Versions:
+ 2012.04.23
