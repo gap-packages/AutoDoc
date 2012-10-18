@@ -21,3 +21,8 @@ Gauss/: ba1d5ef comply with the new GAPDoc testing methods
 
 Versions:
  2012.04.23
+
+GaussForHomalg/: cda8c46 Merge branch 'master' of git+ssh://bob.math.rwth-aachen.de/home/barakat/software/repos.git/GaussForHomalg
+
+Versions:
+ 2012.09.21
