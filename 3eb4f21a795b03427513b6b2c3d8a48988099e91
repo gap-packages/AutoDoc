@@ -11,3 +11,8 @@ D-Modules/: 05f0bdb declared and installed AssociatedOrderGradedRing and Associa
 
 Versions:
  2012.02.29
+
+ExamplesForHomalg/: 6b6da9c test GetRidOfRowsAndColumnsWithUnits in SimplerEquivalentMatrix.g
+
+Versions:
+ 2012.05.31
