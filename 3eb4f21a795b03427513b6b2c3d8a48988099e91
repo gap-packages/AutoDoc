@@ -59,3 +59,9 @@ IO_ForHomalg/: e10c0aa comply with the new GAPDoc testing methods
 
 Versions:
  2012.09.21
+
+LocalizeRingForHomalg/: eee7ff5 added example file NonRationalPoint.g
+
+Versions:
+2011.04.26 which is Markus' version
+2012.06.27 which is Mohamed's version
