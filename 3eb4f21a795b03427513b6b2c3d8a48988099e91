@@ -6,3 +6,8 @@ AutoDoc/: 3eb4f21 modified gitignore.
 
 Versions:
 2012.10.01 which is Sebas' version
+
+D-Modules/: 05f0bdb declared and installed AssociatedOrderGradedRing and AssociatedOrderGradedModule
+
+Versions:
+ 2012.02.29
