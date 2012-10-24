@@ -59,3 +59,8 @@ HomalgToCAS/: 719e1fb Necessary changes in PackageInfo.g
 
 Versions:
  2012.10.17
+
+IO_ForHomalg/: 7e955e0 Necessary changes in PackageInfo.g
+
+Versions:
+ 2012.10.17
