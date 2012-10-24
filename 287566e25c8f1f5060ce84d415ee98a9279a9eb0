@@ -6,3 +6,8 @@ AutoDoc/: 287566e Added a part that shortens the defining string.
 
 Versions:
 2012.10.01 which is Sebas' version
+
+Conley/: 1efe699 cannot compare rationals with floats
+
+Versions:
+ 2012.10.23
