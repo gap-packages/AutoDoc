@@ -26,3 +26,8 @@ Gauss/: 834efaa Removed entry in PackageInfo.g
 
 Versions:
  2012.10.17
+
+GaussForHomalg/: 5293b08 Necessary changes in PackageInfo
+
+Versions:
+ 2012.10.17
