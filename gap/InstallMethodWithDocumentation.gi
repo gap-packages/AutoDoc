@@ -247,7 +247,7 @@ InstallGlobalFunction( CreateNewSectionXMLFile,
     
     AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).sections.(section_name) := filestream;
     
-    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).main_filestream, Concatenation( "<#Include SYSTEM \"", filename, "\">" ) );
+    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).main_filestream, Concatenation( "<#Include SYSTEM \"", filename, "\">\n" ) );
     
     AppendTo( filestream, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
     
@@ -500,7 +500,7 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
             
         fi;
         
-        label_rand_hash := Concatenation( [ name{ [ 1 .. 30 ] }, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
+        label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) - 4 ) ] }, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
         doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
@@ -634,7 +634,7 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
         
         tester_names := JoinStringsWithSeparator( tester_names, ", " );
         
-        label_rand_hash := Concatenation( [ name{ [ 1 .. 30 ] }, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
+        label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) - 4 ) ] }, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
         doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
@@ -769,7 +769,7 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
             
         fi;
         
-        label_rand_hash := Concatenation( [ name{ [ 1 .. 30 ] }, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
+        label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) - 4 ) ] }, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
         doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
@@ -888,7 +888,7 @@ InstallGlobalFunction( DeclarePropertyWithDocumentation,
             
         fi;
         
-        label_rand_hash := Concatenation( [ name{ [ 1 .. 30 ] }, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
+        label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) - 4 ) ] }, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
         doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
@@ -987,7 +987,7 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
             
         fi;
         
-        label_rand_hash := Concatenation( [ name{ [ 1 .. 30 ] }, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
+        label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) - 4 ) ] }, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
         doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
@@ -1058,7 +1058,7 @@ InstallGlobalFunction( DeclareGlobalVariableWithDocumentation,
             
         fi;
         
-        label_rand_hash := Concatenation( [ name{ [ 1 .. 30 ] }, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
+        label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) - 4 ) ] }, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
         doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
