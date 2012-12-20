@@ -16,3 +16,8 @@ D-Modules/: 05f0bdb declared and installed AssociatedOrderGradedRing and Associa
 
 Versions:
  2012.02.29
+
+ExamplesForHomalg/: 81371c7 W  PackageDoc.Archive is withdrawn, use PackageDoc.ArchiveURLSubset instead
+
+Versions:
+ 2012.10.23
