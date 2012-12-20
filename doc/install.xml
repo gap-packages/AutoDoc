@@ -19,11 +19,14 @@ This is the chapter of the documentation describing the installation.
 <#Include Label="AUTOMATIC_DOCUMENTATION">
 <#Include Label="CreateAutoDoc">
 <#Include Label="DeclareCategoryWithDocumentation">
+<#Include Label="DeclareRepresentationWithDocumentation">
 <#Include Label="DeclareOperationWithDocumentation">
+<#Include Label="InstallMethodWithDocumentation">
 <#Include Label="DeclareAttributeWithDocumentation">
 <#Include Label="DeclarePropertyWithDocumentation">
 <#Include Label="DeclareGlobalFunctionWithDocumentation">
 <#Include Label="DeclareGlobalVariableWithDocumentation">
+
   
 
 <!-- ############################################################ -->
