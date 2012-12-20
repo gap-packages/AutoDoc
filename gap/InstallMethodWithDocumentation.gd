@@ -190,7 +190,7 @@ DeclareGlobalFunction( "DeclarePropertyWithDocumentation" );
 ##      This method declares a global function like DeclareGlobalFunction( <A>name</A> ) would do. The description string is added to the documentation
 ##      if CreateAutoDoc is called. It
 ##      can either be a string or a list of strings. 
-##      Lists will be concatenated with a space between them.<A>return_value</A> is a string displayed as the return value of the function. It is not optional.
+##      Lists will be concatenated with a space between them. <A>return_value</A> is a string displayed as the return value of the function. It is not optional.
 ##      <A>arguments</A> is an optional string which is displayed in the documentation as attributes of the operation.
 ##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this function
 ##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
