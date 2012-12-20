@@ -31,3 +31,11 @@ GaussForHomalg/: 8b7cf72 updated manual.css
 
 Versions:
  2012.10.22
+
+GradedModules/: 6d10922 Fixed a bug in tate resolution.
+
+Versions:
+2012.10.22 which is Markus' version
+2012.10.26 which is Mohamed's version
+2011.05.05 which is Sebastian's version
+2012.11.23 which is Sebas' version
