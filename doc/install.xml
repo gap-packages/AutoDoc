@@ -17,7 +17,7 @@ This is the chapter of the documentation describing the installation.
 <Heading>The functions</Heading>
 
 <#Include Label="AUTOMATIC_DOCUMENTATION">
-<#Include Label="CreateAutoDoc">
+<#Include Label="CreateAutomaticDocumentation">
 <#Include Label="DeclareCategoryWithDocumentation">
 <#Include Label="DeclareRepresentationWithDocumentation">
 <#Include Label="DeclareOperationWithDocumentation">

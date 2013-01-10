@@ -23,9 +23,9 @@
 DeclareGlobalVariable( "AUTOMATIC_DOCUMENTATION" );
 
 
-##  <#GAPDoc Label="CreateAutoDoc">
+##  <#GAPDoc Label="CreateAutomaticDocumentation">
 ##  <ManSection>
-##    <Func Arg="package_name, documentation_file, path_to_xml_file,create_full_docu[,section_intros]" Name="CreateAutoDoc"/>
+##    <Func Arg="package_name, documentation_file, path_to_xml_file,create_full_docu[,section_intros]" Name="CreateAutomaticDocumentation"/>
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This is the main method of the package. After loading the package, run it with the name of the pacckage

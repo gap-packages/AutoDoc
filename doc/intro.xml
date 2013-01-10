@@ -20,7 +20,15 @@ behind the package.
 This package is supposed to help creating documentations for &GAP; packages.
 It makes it possible to create documentation without writing .xml. It is not in any way a
 substitution for GAPDoc, but needs it to compile it's output.
-
+</Section>
+ <Section Label="HowToAutoDoc">
+   <Heading> How to use AutoDoc </Heading>
+To use AutoDoc to create your documentations, just use the *WithDocumentation methods to
+install your methods with documentations. When you want to create the documentation,
+use the CreateAutomaticDocumentation method to create the documentation xml files.
+After that, you need to process them with GAPDoc to get the usual documentation.
+The Package ToolsForHomalg is completely documented with AutoDoc, so you can
+find a example for the usage there.
 </Section>
 
 <!-- ############################################################ -->
