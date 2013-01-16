@@ -82,3 +82,11 @@ Versions:
 2011.09.12 which is Markus' version
 2012.10.25 which is Mohamed's version
 2012.10.17 which is Sebas' version
+
+Modules/: d0f8153 HomalgCategory now sets A!.do_not_cache_values_of_functors := true for internal rings
+
+Versions:
+2012.10.27 which is Mohamed's version
+2012.10.22 which is Markus' version
+2011.07.20 which is Florian's version
+2012.10.17 which is Sebas' version
