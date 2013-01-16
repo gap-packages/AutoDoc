@@ -99,3 +99,9 @@ Versions:
 2012.10.25 which is Mohamed's version
 2011.12.13 which is Andreas's version
 2012.12.11 which is Sebas' version
+
+Sheaves/: d32f2d3 make Divisor for IsHomalgRingElement an attribute
+
+Versions:
+2011.08.21 which is Markus' version
+2012.09.22 which is Mohamed's version
