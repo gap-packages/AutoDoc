@@ -137,6 +137,22 @@ Persons := [
     Place         := "Aachen",
     Institution   := "RWTH Aachen University"
   ),
+  rec( LastName := "Horn",
+       FirstNames := "Max",
+       IsAuthor := true,
+       IsMaintainer := true,
+       Email := "max@quendi.de",
+       WWWHome := "http://www.quendi.de/math.php",
+       PostalAddress := Concatenation(
+               "AG Algebra\n",
+               "Mathematisches Institut\n",
+               "JLU Gießen\n",
+               "Arndtstrasse 2\n",
+               "D-35392 Gießen\n",
+               "Germany" ),
+       Place := "Gießen",
+       Institution := "Justus-Liebig-Universität Gießen"
+     ),
 # provide such a record for each author and/or maintainer ...
   
 ],
@@ -285,6 +301,8 @@ BannerString := Concatenation(
   "Loading  AutoDoc ", ~.Version, "\n",
   "by ", ~.Persons[1].FirstNames, " ", ~.Persons[1].LastName,
         " (", ~.Persons[1].WWWHome, ")\n",
+  "   ", ~.Persons[2].FirstNames, " ", ~.Persons[2].LastName,
+        " (", ~.Persons[2].WWWHome, ")\n",
   "Type:\n",
   "  ?AutoDoc:        ## for the contents of the manual\n",
   "  ?AutoDoc:x       ## for chapter/section/topic x\n",
