@@ -105,3 +105,7 @@ Sheaves/: d32f2d3 make Divisor for IsHomalgRingElement an attribute
 Versions:
 2011.08.21 which is Markus' version
 2012.09.22 which is Mohamed's version
+
+test_suite/: a8cf244 comply with GAP4.5
+
+Versions:
