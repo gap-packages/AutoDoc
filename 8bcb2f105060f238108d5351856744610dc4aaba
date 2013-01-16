@@ -47,3 +47,10 @@ Versions:
 2012.10.25 which is Mohamed's version
 2011.05.05 which is Sebastian's version
 2012.06.15 which is Sebas' version
+
+homalg/: f4a45a8 W  PackageDoc.Archive is withdrawn, use PackageDoc.ArchiveURLSubset instead
+
+Versions:
+2012.10.28 which is Mohamed's version
+2012.09.17 which is Markus' version
+2012.03.29 which is Sebas' version
