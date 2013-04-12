@@ -56,58 +56,103 @@ end );
 InstallGlobalFunction( CreateTitlePage,
                        
   function( package_name )
-    local filestream, package_info, author_records;
+    local filestream, indent, package_info, titlepage, author_records, tmp, lines, Out;
     
     filestream := OutputTextFile( Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, "title.xml" ), false );
+    indent := 0;
+    Out := function(arg)
+        local s;
+        s := ListWithIdenticalEntries( indent * 2, ' ');
+        Append( s,  Concatenation( arg ) );
+        AppendTo( filestream, s );
+    end;
     
-    AppendTo( filestream, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
+    Out( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
     
-    AppendTo( filestream, "<!--\n This is an automatically generated file. \n -->\n" );
+    Out( "<!--\n This is an automatically generated file. \n -->\n" );
+
+    Out( "<TitlePage>\n" );
     
-    AppendTo( filestream, "<TitlePage>\n" );
+    indent := indent + 1;
     
-    AppendTo( filestream, Concatenation( "<Title>&", package_name, ";</Title>\n" ) );
+    Out( "<Title>&", package_name, ";</Title>\n" );
     
     package_info := PackageInfo( package_name )[ 1 ];
     
-    AppendTo( filestream, Concatenation( "<Subtitle>", ReplacedString( package_info.Subtitle, "GAP", "&GAP;" ), "</Subtitle>" ) );
+    if IsBound(package_info.AutoDoc) and IsBound(package_info.AutoDoc.TitlePage) then
+        titlepage := StructuralCopy(package_info.AutoDoc.TitlePage);
+    else
+        titlepage := rec();
+    fi;
+
+    if IsBound(titlepage.Subtitle) then
+        tmp := titlepage.Subtitle;
+        Unbind( titlepage.Subtitle );
+    else
+        tmp := ReplacedString( package_info.Subtitle, "GAP", "&GAP;" );
+    fi;
+    Out( "<Subtitle>", tmp, "</Subtitle>\n" );
     
-    AppendTo( filestream, "<TitleComment>(<E>this manual is still under construction</E>)\n" );
-    AppendTo( filestream, "<Br/><Br/>\n" );
-    AppendTo( filestream, "This manual is best viewed as an <B>HTML</B> document.\n" );
-    AppendTo( filestream, "An <B>offline</B> version should be included in the documentation\n" );
-    AppendTo( filestream, "subfolder of the package.\n" );
-    AppendTo( filestream, "<Br/><Br/>\n" );
-    AppendTo( filestream, "</TitleComment>\n" );
+    Out( "<TitleComment>(<E>this manual is still under construction</E>)\n" );
+    indent := indent + 1;
+    Out( "<Br/><Br/>\n" );
+    Out( "This manual is best viewed as an <B>HTML</B> document.\n" );
+    Out( "An <B>offline</B> version should be included in the documentation\n" );
+    Out( "subfolder of the package.\n" );
+    Out( "<Br/><Br/>\n" );
+    indent := indent - 1;
+    Out( "</TitleComment>\n" );
     
-    AppendTo( filestream, "<Version>Version <#Include SYSTEM \"../VERSION\"></Version>\n" );
+    Out( "<Version>Version <#Include SYSTEM \"../VERSION\"></Version>\n" );
     
     for author_records in package_info.Persons do
         
         if author_records.IsAuthor then
             
-            AppendTo( filestream, Concatenation( "<Author>", Concatenation( author_records.FirstNames, " ", author_records.LastName ), "<Alt Only=\"LaTeX\"><Br/></Alt>\n" ) );
-            AppendTo( filestream, Concatenation( "<Address>", author_records.PostalAddress, "</Address>\n" ) );
-            AppendTo( filestream, Concatenation( "<Email>", author_records.Email, "</Email>\n" ) );
-            AppendTo( filestream, Concatenation( "<Homepage>", author_records.WWWHome, "</Homepage>\n" ) );
-            AppendTo( filestream, "</Author>\n" );
+            Out( "<Author>", Concatenation(
+                   author_records.FirstNames, " ", author_records.LastName ), "<Alt Only=\"LaTeX\"><Br/></Alt>\n" );
+            indent := indent + 1;
+
+            # TODO: Properly indent strings containing newlines
+            Out( "<Address>\n" );
+            indent := indent + 1;
+            lines := SplitString( author_records.PostalAddress, "\n" );
+            for tmp in lines do
+               Out( tmp, "<Br/>\n" );
+            od;
+            #Out( author_records.PostalAddress, "\n" );
+            indent := indent - 1;
+            Out( "</Address>\n" );
+            Out( "<Email>", author_records.Email, "</Email>\n" );
+            Out( "<Homepage>", author_records.WWWHome, "</Homepage>\n" );
+            indent := indent - 1;
+
+            Out( "</Author>\n" );
             
         fi;
         
     od;
     
-    AppendTo( filestream, Concatenation( "<Date>", package_info.Date, "</Date>\n" ) );
-    
-    AppendTo( filestream, "<Copyright>\n" );
-    AppendTo( filestream, "This package may be distributed under the terms and conditions of the\n" );
-    AppendTo( filestream, "GNU Public License Version 2.\n" );
-    AppendTo( filestream, "</Copyright>\n" );
-    
-    AppendTo( filestream, "<Acknowledgements>\n" );
-    
-    AppendTo( filestream, "</Acknowledgements>\n" );
-    
-    AppendTo( filestream, "</TitlePage>\n" );
+    Out( Concatenation( "<Date>", package_info.Date, "</Date>\n" ) );
+
+    Out( "<Copyright>\n" );
+    if IsBound(titlepage.Copyright) then
+        tmp := titlepage.Copyright;
+        Unbind( titlepage.Copyright );
+    else
+        Out( "This package may be distributed under the terms and conditions of the\n" );
+        Out( "GNU Public License Version 2.\n" );
+    fi;
+    Out( "</Copyright>\n" );
+
+    for tmp in RecNames(titlepage) do
+        Out( "<", tmp, ">\n" );
+        Out( titlepage.(tmp) );
+        Out( "</", tmp, ">\n" );
+    od;
+
+    indent := indent - 1;
+    Out( "</TitlePage>\n" );
     
     CloseStream( filestream );
     
@@ -438,9 +483,15 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
         
         description := arg[ 3 ];
         
-        if not IsString( description ) then
+        if IsString( description ) then
             
-            description := JoinStringsWithSeparator( description, " " );
+            description := [ description ];
+            
+        fi;
+        
+        if not ForAll( description, IsString ) then
+            
+            Error( "third argument must be a string or a list of strings" );
             
         fi;
         
@@ -509,7 +560,13 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
         AppendTo( doc_stream, Concatenation( [ "##    <Filt Type=\"Category\" Arg=\"", arguments, "\" Name=\"", name, "\" Label=\"for ", tester_names, "\" />\n" ] ) );
         AppendTo( doc_stream, "##    <Returns><C>true</C> or <C>false</C></Returns>\n" );
         AppendTo( doc_stream, "##    <Description>\n" );
-        AppendTo( doc_stream, Concatenation( [ "##      ", description, "\n" ] ) );
+        
+        for i in description do
+            
+            AppendTo( doc_stream, Concatenation( [ "##      ", i, "\n" ] ) );
+            
+        od;
+        
         AppendTo( doc_stream, "##    </Description>\n" );
         AppendTo( doc_stream, "##  </ManSection>\n" );
         AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
@@ -559,9 +616,15 @@ InstallGlobalFunction( DeclareRepresentationWithDocumentation,
         
         description := arg[ 4 ];
         
-        if not IsString( description ) then
+        if IsString( description ) then
             
-            description := JoinStringsWithSeparator( description, " " );
+            description := [ description ];
+            
+        fi;
+        
+        if not ForAll( description, IsString ) then
+            
+            Error( "4th argument must be a string or a list of strings" );
             
         fi;
         
@@ -630,7 +693,13 @@ InstallGlobalFunction( DeclareRepresentationWithDocumentation,
         AppendTo( doc_stream, Concatenation( [ "##    <Filt Type=\"Representation\" Arg=\"", arguments, "\" Name=\"", name, "\" Label=\"for ", tester_names, "\" />\n" ] ) );
         AppendTo( doc_stream, "##    <Returns><C>true</C> or <C>false</C></Returns>\n" );
         AppendTo( doc_stream, "##    <Description>\n" );
-        AppendTo( doc_stream, Concatenation( [ "##      ", description, "\n" ] ) );
+        
+        for i in description do
+            
+            AppendTo( doc_stream, Concatenation( [ "##      ", i, "\n" ] ) );
+            
+        od;
+        
         AppendTo( doc_stream, "##    </Description>\n" );
         AppendTo( doc_stream, "##  </ManSection>\n" );
         AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
@@ -678,9 +747,15 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
         
         description := arg[ 3 ];
         
-        if not IsString( description ) then
+        if IsString( description ) then
             
-            description := JoinStringsWithSeparator( description, " " );
+            description := [ description ];
+            
+        fi;
+        
+        if not ForAll( description, IsString ) then
+            
+            Error( "third argument must be a string or a list of strings" );
             
         fi;
         
@@ -764,7 +839,13 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
         AppendTo( doc_stream, Concatenation( [ "##    <Oper Arg=\"", arguments, "\" Name=\"", name, "\" Label=\"for ", tester_names, "\"/>\n" ] ) );
         AppendTo( doc_stream, Concatenation( [ "##    <Returns>", return_value, "</Returns>\n" ] ) );
         AppendTo( doc_stream, "##    <Description>\n" );
-        AppendTo( doc_stream, Concatenation( [ "##      ", description, "\n" ] ) );
+        
+        for i in description do
+            
+            AppendTo( doc_stream, Concatenation( [ "##      ", i, "\n" ] ) );
+            
+        od;
+        
         AppendTo( doc_stream, "##    </Description>\n" );
         AppendTo( doc_stream, "##  </ManSection>\n" );
         AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
@@ -821,9 +902,15 @@ InstallGlobalFunction( InstallMethodWithDocumentation,
         
         description := arg[ 5 ];
         
-        if not IsString( description ) then
+        if IsString( description ) then
             
-            description := JoinStringsWithSeparator( description, " " );
+            description := [ description ];
+            
+        fi;
+        
+        if not ForAll( description, IsString ) then
+            
+            Error( "5th argument must be a string or a list of strings" );
             
         fi;
         
@@ -907,7 +994,13 @@ InstallGlobalFunction( InstallMethodWithDocumentation,
         AppendTo( doc_stream, Concatenation( [ "##    <Meth Arg=\"", arguments, "\" Name=\"", name, "\" Label=\"", short_descr, ", for ", tester_names, "\"/>\n" ] ) );
         AppendTo( doc_stream, Concatenation( [ "##    <Returns>", return_value, "</Returns>\n" ] ) );
         AppendTo( doc_stream, "##    <Description>\n" );
-        AppendTo( doc_stream, Concatenation( [ "##      ", description, "\n" ] ) );
+        
+        for i in description do
+            
+            AppendTo( doc_stream, Concatenation( [ "##      ", i, "\n" ] ) );
+            
+        od;
+        
         AppendTo( doc_stream, "##    </Description>\n" );
         AppendTo( doc_stream, "##  </ManSection>\n" );
         AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
@@ -965,9 +1058,15 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
         
         description := arg[ 3 ];
         
-        if not IsString( description ) then
+        if IsString( description ) then
             
-            description := JoinStringsWithSeparator( description, " " );
+            description := [ description ];
+            
+        fi;
+        
+        if not ForAll( description, IsString ) then
+            
+            Error( "third argument must be a string or a list of strings" );
             
         fi;
         
@@ -1040,7 +1139,13 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
         AppendTo( doc_stream, Concatenation( [ "##    <Attr Arg=\"", arguments, "\" Name=\"", name, "\" Label=\"for ", tester_names, "\"/>\n" ] ) );
         AppendTo( doc_stream, Concatenation( [ "##    <Returns>", return_value, "</Returns>\n" ] ) );
         AppendTo( doc_stream, "##    <Description>\n" );
-        AppendTo( doc_stream, Concatenation( [ "##      ", description, "\n" ] ) );
+        
+        for i in description do
+            
+            AppendTo( doc_stream, Concatenation( [ "##      ", i, "\n" ] ) );
+            
+        od;
+        
         AppendTo( doc_stream, "##    </Description>\n" );
         AppendTo( doc_stream, "##  </ManSection>\n" );
         AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
@@ -1088,9 +1193,15 @@ InstallGlobalFunction( DeclarePropertyWithDocumentation,
         
         description := arg[ 3 ];
         
-        if not IsString( description ) then
+        if IsString( description ) then
             
-            description := JoinStringsWithSeparator( description, " " );
+            description := [ description ];
+            
+        fi;
+        
+        if not ForAll( description, IsString ) then
+            
+            Error( "third argument must be a string or a list of strings" );
             
         fi;
         
@@ -1159,7 +1270,13 @@ InstallGlobalFunction( DeclarePropertyWithDocumentation,
         AppendTo( doc_stream, Concatenation( [ "##    <Prop Arg=\"", arguments, "\" Name=\"", name, "\" Label=\"for ", tester_names, "\"/>\n" ] ) );
         AppendTo( doc_stream, "##    <Returns><C>true</C> or <C>false</C></Returns>\n" );
         AppendTo( doc_stream, "##    <Description>\n" );
-        AppendTo( doc_stream, Concatenation( [ "##      ", description, "\n" ] ) );
+        
+        for i in description do
+            
+            AppendTo( doc_stream, Concatenation( [ "##      ", i, "\n" ] ) );
+            
+        od;
+        
         AppendTo( doc_stream, "##    </Description>\n" );
         AppendTo( doc_stream, "##  </ManSection>\n" );
         AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
@@ -1189,7 +1306,7 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
 
   function( arg )
     local name, description, return_value, arguments, chapter_info,
-          label_rand_hash, doc_stream;
+          label_rand_hash, doc_stream, i;
     
     if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 then
         
@@ -1205,9 +1322,15 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
         
         description := arg[ 2 ];
         
-        if not IsString( description ) then
+        if IsString( description ) then
             
-            description := JoinStringsWithSeparator( description, " " );
+            description := [ description ];
+            
+        fi;
+        
+        if not ForAll( description, IsString ) then
+            
+            Error( "second argument must be a string or a list of strings" );
             
         fi;
         
@@ -1258,7 +1381,13 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
         AppendTo( doc_stream, Concatenation( [ "##    <Func Arg=\"", arguments, "\" Name=\"", name, "\"/>\n" ] ) );
         AppendTo( doc_stream, Concatenation( [ "##    <Returns>", return_value, "</Returns>\n" ] ) );
         AppendTo( doc_stream, "##    <Description>\n" );
-        AppendTo( doc_stream, Concatenation( [ "##      ", description, "\n" ] ) );
+        
+        for i in description do
+            
+            AppendTo( doc_stream, Concatenation( [ "##      ", i, "\n" ] ) );
+            
+        od;
+        
         AppendTo( doc_stream, "##    </Description>\n" );
         AppendTo( doc_stream, "##  </ManSection>\n" );
         AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
@@ -1288,7 +1417,7 @@ InstallGlobalFunction( DeclareGlobalVariableWithDocumentation,
 
   function( arg )
     local name, description, chapter_info,
-          label_rand_hash, doc_stream;
+          label_rand_hash, doc_stream, i;
     
     if Length( arg ) <> 2 and Length( arg ) <> 3 then
         
@@ -1304,9 +1433,15 @@ InstallGlobalFunction( DeclareGlobalVariableWithDocumentation,
         
         description := arg[ 2 ];
         
-        if not IsString( description ) then
+        if IsString( description ) then
             
-            description := JoinStringsWithSeparator( description, " " );
+            description := [ description ];
+            
+        fi;
+        
+        if not ForAll( description, IsString ) then
+            
+            Error( "second argument must be a string or a list of strings" );
             
         fi;
         
@@ -1328,7 +1463,13 @@ InstallGlobalFunction( DeclareGlobalVariableWithDocumentation,
         AppendTo( doc_stream, "##  <ManSection>\n" );
         AppendTo( doc_stream, Concatenation( [ "##    <Var Name=\"", name, "\"/>\n" ] ) );
         AppendTo( doc_stream, "##    <Description>\n" );
-        AppendTo( doc_stream, Concatenation( [ "##      ", description, "\n" ] ) );
+        
+        for i in description do
+            
+            AppendTo( doc_stream, Concatenation( [ "##      ", i, "\n" ] ) );
+            
+        od;
+        
         AppendTo( doc_stream, "##    </Description>\n" );
         AppendTo( doc_stream, "##  </ManSection>\n" );
         AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
