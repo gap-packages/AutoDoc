@@ -92,7 +92,7 @@ DeclareGlobalFunction( "DeclareCategoryWithDocumentation" );
 ##    <Func Arg="name, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ]" Name="DeclareOperationWithDocumentation"/>
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
-##      This method declares a operation, like DeclareOperation( <A>name</A>, <A>list_of_filters</A> ) would do. The description string is added to the documentation
+##      This method declares an operation, like DeclareOperation( <A>name</A>, <A>list_of_filters</A> ) would do. The description string is added to the documentation
 ##      if CreateAutoDoc is called. It
 ##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
 ##      <A>return_value</A> is a string displayed as the return value of the method. It is not optional.
@@ -108,10 +108,10 @@ DeclareGlobalFunction( "DeclareOperationWithDocumentation" );
 
 ##  <#GAPDoc Label="InstallMethodWithDocumentation">
 ##  <ManSection>
-##    <Func Arg="name, short_descr, list_of_filters, func, description, return_value [ arguments ], [ chapter_and_section ]" Name="InstallMethodWithDocumentation"/>
+##    <Func Arg="name, short_descr, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], func" Name="InstallMethodWithDocumentation"/>
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
-##      This method declares a operation, like InstallMethod( <A>name</A>, <A>short_descr</A>, <A>list_of_filters</A>, <A>func</A> ) would do. 
+##      This method installs a method, like InstallMethod( <A>name</A>, <A>short_descr</A>, <A>list_of_filters</A>, <A>func</A> ) would do. 
 ##      The description string is added to the documentation
 ##      if CreateAutoDoc is called. It
 ##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
@@ -128,7 +128,7 @@ DeclareGlobalFunction( "InstallMethodWithDocumentation" );
 
 ##  <#GAPDoc Label="DeclareRepresentationWithDocumentation">
 ##  <ManSection>
-##    <Func Arg="name, filter, list_of_req_entries, description, [ arguments ], [ chapter_and_section ]" Name="DeclareRepresentationWithDocumentation"/>
+##    <Func Arg="name, filter, list_of_req_entries, description, [ arguments ], [ chapter_and_section ], function" Name="DeclareRepresentationWithDocumentation"/>
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares a representation, like DeclareRepresentation( <A>name</A>, <A>filter</A>, <A>list_of_req_entries</A> ) 

@@ -870,8 +870,8 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
 end );
 
 ##
-## Call this with arguments function name, short description, list of tester, function, return value, description, arguments as list or string, and
-## chapter and section info. The last one is optional
+## Call this with arguments function name, short description, list of tester, return value, description, arguments as list or string,
+## chapter and section info, and function. 6 and 7 are optional
 InstallGlobalFunction( InstallMethodWithDocumentation,
 
   function( arg )
@@ -892,7 +892,7 @@ InstallGlobalFunction( InstallMethodWithDocumentation,
     
     tester := arg[ 3 ];
     
-    func := arg[ 4 ];
+    func := arg[ Length( arg ) ];
     
     InstallMethod( name, short_descr, tester, func );
     
@@ -900,7 +900,7 @@ InstallGlobalFunction( InstallMethodWithDocumentation,
         
         name := NameFunction( name );
         
-        description := arg[ 5 ];
+        description := arg[ 4 ];
         
         if IsString( description ) then
             
@@ -914,19 +914,19 @@ InstallGlobalFunction( InstallMethodWithDocumentation,
             
         fi;
         
-        return_value := arg[ 6 ];
+        return_value := arg[ 5 ];
         
         if Length( arg ) = 7 then
             
-            if IsString( arg[ 7 ] ) then
+            if IsString( arg[ 6 ] ) then
                 
-                arguments :=  arg[ 7 ];
+                arguments :=  arg[ 6 ];
                 
                 chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.methods;
                 
-            elif IsList( arg[ 7 ] ) and not IsString( arg[ 7 ] ) then
+            elif IsList( arg[ 6 ] ) and not IsString( arg[ 6 ] ) then
                 
-                chapter_info := arg[ 7 ];
+                chapter_info := arg[ 6 ];
                 
                 arguments := List( [ 1 .. Length( tester ) ], i -> Concatenation( [ "arg", String( i ) ] ) );
                 
@@ -936,9 +936,9 @@ InstallGlobalFunction( InstallMethodWithDocumentation,
             
         elif Length( arg ) = 8 then
             
-            arguments := arg[ 7 ];
+            arguments := arg[ 6 ];
             
-            chapter_info := arg[ 8 ];
+            chapter_info := arg[ 7 ];
             
         else
             
