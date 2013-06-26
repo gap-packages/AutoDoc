@@ -13,5 +13,7 @@
 
 ReadPackage( "AutoDoc", "gap/InstallMethodWithDocumentation.gd" );
 
+ReadPackage( "AutoDoc", "gap/CreateDocumentationEntries.gd" );
+
 ## We REALLY need to stop supporting GAP 4.4.12
 ReadPackage( "AutoDoc", "gap/InstallMethodWithDocumentation.gi" );

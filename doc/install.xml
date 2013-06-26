@@ -14,7 +14,7 @@ This is the chapter of the documentation describing the installation.
 <Heading>The main functions in the &AutoDoc; Package</Heading>
 
 <Section Label="functions">
-<Heading>The functions</Heading>
+<Heading>The install functions</Heading>
 
 <#Include Label="AUTOMATIC_DOCUMENTATION">
 <#Include Label="CreateAutomaticDocumentation">
@@ -27,6 +27,16 @@ This is the chapter of the documentation describing the installation.
 <#Include Label="DeclareGlobalFunctionWithDocumentation">
 <#Include Label="DeclareGlobalVariableWithDocumentation">
 
+</Section>
+
+ 
+<Section Label="non_install_functions">
+<Heading>Create documentation entries</Heading>
+
+<#Include Label="CreateDocEntryForCategory">
+<#Include Label="CreateDocEntryForRepresentation">
+<#Include Label="CreateDocEntryForOperation">
+<#Include Label="CreateDocEntryForAttribute">
   
 
 <!-- ############################################################ -->
