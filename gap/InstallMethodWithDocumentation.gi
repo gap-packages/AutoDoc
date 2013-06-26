@@ -537,6 +537,57 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
 end );
 
 ##
+## Call this with arguments name, tester, return value, description, arguments. The last one is optional
+InstallGlobalFunction( DeclareAttributeWithDocumentation,
+
+  function( arg )
+    local name, tester;
+    
+    if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
+        
+        Error( "the method DeclareAttributeWithDocumentation must be called with 4 or 5 arguments\n" );
+        
+        return false;
+        
+    fi;
+    
+    name := arg[ 1 ];
+    
+    tester := arg[ 2 ];
+    
+    DeclareAttribute( name, tester );
+    
+    return CallFuncList( CreateDocEntryForAttribute, arg );
+    
+end );
+
+##
+## Call this with arguments name, tester, description, arguments. The last one is optional
+InstallGlobalFunction( DeclarePropertyWithDocumentation,
+
+  function( arg )
+    local name, tester, description, arguments, chapter_info,
+          tester_names, i, j, label_rand_hash, doc_stream;
+    
+    if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 then
+        
+        Error( "the method DeclarePropertyWithDocumentation must be called with 3, 4, or 5 arguments\n" );
+        
+        return false;
+        
+    fi;
+    
+    name := arg[ 1 ];
+    
+    tester := arg[ 2 ];
+    
+    DeclareProperty( name, tester );
+    
+    return CallFuncList( CreateDocEntryForProperty, arg );
+    
+end );
+
+##
 ## Call this with arguments function name, short description, list of tester, return value, description, arguments as list or string,
 ## chapter and section info, and function. 6 and 7 are optional
 InstallGlobalFunction( InstallMethodWithDocumentation,
@@ -690,57 +741,6 @@ InstallGlobalFunction( InstallMethodWithDocumentation,
 end );
 
 ##
-## Call this with arguments name, tester, return value, description, arguments. The last one is optional
-InstallGlobalFunction( DeclareAttributeWithDocumentation,
-
-  function( arg )
-    local name, tester;
-    
-    if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
-        
-        Error( "the method DeclareAttributeWithDocumentation must be called with 4 or 5 arguments\n" );
-        
-        return false;
-        
-    fi;
-    
-    name := arg[ 1 ];
-    
-    tester := arg[ 2 ];
-    
-    DeclareAttribute( name, tester );
-    
-    return CallFuncList( CreateDocEntryForAttribute, arg );
-    
-end );
-
-##
-## Call this with arguments name, tester, description, arguments. The last one is optional
-InstallGlobalFunction( DeclarePropertyWithDocumentation,
-
-  function( arg )
-    local name, tester, description, arguments, chapter_info,
-          tester_names, i, j, label_rand_hash, doc_stream;
-    
-    if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 then
-        
-        Error( "the method DeclarePropertyWithDocumentation must be called with 3, 4, or 5 arguments\n" );
-        
-        return false;
-        
-    fi;
-    
-    name := arg[ 1 ];
-    
-    tester := arg[ 2 ];
-    
-    DeclareProperty( name, tester );
-    
-    return CallFuncList( CreateDocEntryForProperty, arg );
-    
-end );
-
-##
 ## Call this with arguments name, return value, description, arguments as string, chapter and section as a list of two strings. The last two are optional
 InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
 
@@ -816,22 +816,7 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
         
         doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
-        AppendTo( doc_stream, "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" );
-        AppendTo( doc_stream, "##  <ManSection>\n" );
-        AppendTo( doc_stream, "##    <Func Arg=\"", arguments, "\" Name=\"", name, "\"/>\n" );
-        AppendTo( doc_stream, "##    <Returns>", return_value, "</Returns>\n" );
-        AppendTo( doc_stream, "##    <Description>\n" );
-        
-        for i in description do
-            
-            AppendTo( doc_stream, "##      ", i, "\n" );
-            
-        od;
-        
-        AppendTo( doc_stream, "##    </Description>\n" );
-        AppendTo( doc_stream, "##  </ManSection>\n" );
-        AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
-        AppendTo( doc_stream, "##\n\n" );
+        AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Func", arguments, name, "", return_value, description );
         
         if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]) ) 
            or not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]) ) then

@@ -104,22 +104,7 @@ InstallGlobalFunction( CreateDocEntryForCategory,
         
         doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
-        AppendTo( doc_stream, "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" );
-        AppendTo( doc_stream, "##  <ManSection>\n" );
-        AppendTo( doc_stream, "##    <Filt Type=\"Category\" Arg=\"", arguments, "\" Name=\"", name, "\" Label=\"for ", tester_names, "\" />\n" );
-        AppendTo( doc_stream, "##    <Returns><C>true</C> or <C>false</C></Returns>\n" );
-        AppendTo( doc_stream, "##    <Description>\n" );
-        
-        for i in description do
-            
-            AppendTo( doc_stream, "##      ", i, "\n" );
-            
-        od;
-        
-        AppendTo( doc_stream, "##    </Description>\n" );
-        AppendTo( doc_stream, "##  </ManSection>\n" );
-        AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
-        AppendTo( doc_stream, "##\n\n" );
+        AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Filt", arguments, name, tester_names, "<C>true</C> or <C>false</C>", description );
         
         if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]) ) 
            or not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]) ) then
@@ -235,22 +220,7 @@ InstallGlobalFunction( CreateDocEntryForRepresentation,
         
         doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
-        AppendTo( doc_stream, "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" );
-        AppendTo( doc_stream, "##  <ManSection>\n" );
-        AppendTo( doc_stream, "##    <Filt Type=\"Representation\" Arg=\"", arguments, "\" Name=\"", name, "\" Label=\"for ", tester_names, "\" />\n" );
-        AppendTo( doc_stream, "##    <Returns><C>true</C> or <C>false</C></Returns>\n" );
-        AppendTo( doc_stream, "##    <Description>\n" );
-        
-        for i in description do
-            
-            AppendTo( doc_stream, "##      ", i, "\n" );
-            
-        od;
-        
-        AppendTo( doc_stream, "##    </Description>\n" );
-        AppendTo( doc_stream, "##  </ManSection>\n" );
-        AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
-        AppendTo( doc_stream, "##\n\n" );
+        AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Filt", arguments, name, tester_names, "<C>true</C> or <C>false</C>", description );
         
         if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]) ) 
            or not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]) ) then
@@ -378,22 +348,7 @@ InstallGlobalFunction( CreateDocEntryForOperation,
         
         doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
-        AppendTo( doc_stream, "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" );
-        AppendTo( doc_stream, "##  <ManSection>\n" );
-        AppendTo( doc_stream, "##    <Oper Arg=\"", arguments, "\" Name=\"", name, "\" Label=\"for ", tester_names, "\"/>\n" );
-        AppendTo( doc_stream, "##    <Returns>", return_value, "</Returns>\n" );
-        AppendTo( doc_stream, "##    <Description>\n" );
-        
-        for i in description do
-            
-            AppendTo( doc_stream, "##      ", i, "\n" );
-            
-        od;
-        
-        AppendTo( doc_stream, "##    </Description>\n" );
-        AppendTo( doc_stream, "##  </ManSection>\n" );
-        AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
-        AppendTo( doc_stream, "##\n\n" );
+        AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Oper", arguments, name, tester_names, return_value, description );
         
         if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]) ) 
            or not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]) ) then
@@ -523,22 +478,7 @@ InstallGlobalFunction( CreateDocEntryForAttribute,
         
         doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
-        AppendTo( doc_stream, "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" );
-        AppendTo( doc_stream, "##  <ManSection>\n" );
-        AppendTo( doc_stream, "##    <Attr Arg=\"", arguments, "\" Name=\"", name, "\" Label=\"for ", tester_names, "\"/>\n" );
-        AppendTo( doc_stream, "##    <Returns>", return_value, "</Returns>\n" );
-        AppendTo( doc_stream, "##    <Description>\n" );
-        
-        for i in description do
-            
-            AppendTo( doc_stream, Concatenation( [ "##      ", i, "\n" ] ) );
-            
-        od;
-        
-        AppendTo( doc_stream, "##    </Description>\n" );
-        AppendTo( doc_stream, "##  </ManSection>\n" );
-        AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
-        AppendTo( doc_stream, "##\n\n" );
+        AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Attr", arguments, name, tester_names, return_value, description );
         
         if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]) ) 
            or not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]) ) then
@@ -650,22 +590,7 @@ InstallGlobalFunction( CreateDocEntryForProperty,
         
         doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
-        AppendTo( doc_stream, "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" );
-        AppendTo( doc_stream, "##  <ManSection>\n" );
-        AppendTo( doc_stream, "##    <Prop Arg=\"", arguments, "\" Name=\"", name, "\" Label=\"for ", tester_names, "\"/>\n" );
-        AppendTo( doc_stream, "##    <Returns><C>true</C> or <C>false</C></Returns>\n" );
-        AppendTo( doc_stream, "##    <Description>\n" );
-        
-        for i in description do
-            
-            AppendTo( doc_stream, Concatenation( [ "##      ", i, "\n" ] ) );
-            
-        od;
-        
-        AppendTo( doc_stream, "##    </Description>\n" );
-        AppendTo( doc_stream, "##  </ManSection>\n" );
-        AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
-        AppendTo( doc_stream, "##\n\n" );
+        AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Prop", arguments, name, tester_names, "<C>true</C> or <C>false</C>", description );
         
         if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]) ) 
            or not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]) ) then
