@@ -71,7 +71,7 @@ DeclareGlobalFunction( "CreateNewSectionXMLFile" );
 
 ##  <#GAPDoc Label="DeclareCategoryWithDocumentation">
 ##  <ManSection>
-##    <Func Arg="name, filter, description, [ arguments ], [ chapter_and_section ]" Name="DeclareCategoryWithDocumentation"/>
+##    <Func Arg="name, filter, description, [ arguments ], [ chapter_and_section ], [ groupname ]" Name="DeclareCategoryWithDocumentation"/>
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares a category, like DeclareCategory( <A>name</A>, <A>filter</A> ) would do. The description string is added to the documentation
@@ -89,7 +89,7 @@ DeclareGlobalFunction( "DeclareCategoryWithDocumentation" );
 
 ##  <#GAPDoc Label="DeclareOperationWithDocumentation">
 ##  <ManSection>
-##    <Func Arg="name, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ]" Name="DeclareOperationWithDocumentation"/>
+##    <Func Arg="name, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], [ groupname ]" Name="DeclareOperationWithDocumentation"/>
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares an operation, like DeclareOperation( <A>name</A>, <A>list_of_filters</A> ) would do. The description string is added to the documentation
@@ -128,7 +128,7 @@ DeclareGlobalFunction( "InstallMethodWithDocumentation" );
 
 ##  <#GAPDoc Label="DeclareRepresentationWithDocumentation">
 ##  <ManSection>
-##    <Func Arg="name, filter, list_of_req_entries, description, [ arguments ], [ chapter_and_section ], function" Name="DeclareRepresentationWithDocumentation"/>
+##    <Func Arg="name, filter, list_of_req_entries, description, [ arguments ], [ chapter_and_section ], [ groupname ]" Name="DeclareRepresentationWithDocumentation"/>
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares a representation, like DeclareRepresentation( <A>name</A>, <A>filter</A>, <A>list_of_req_entries</A> ) 
@@ -138,7 +138,9 @@ DeclareGlobalFunction( "InstallMethodWithDocumentation" );
 ##      <A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.
 ##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this category
 ##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
-##      the header of the chapter or the section.
+##      the header of the chapter or the section. <A>groupname</A> can be a list containing two strings. The first one must be GROUP, the second
+##      can be an arbitrary group name. Documentation entries with the same group will be displayed in one documentation entry, their descriptions
+##      will be concatenated.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
@@ -147,7 +149,7 @@ DeclareGlobalFunction( "DeclareRepresentationWithDocumentation" );
 
 ##  <#GAPDoc Label="DeclareAttributeWithDocumentation">
 ##  <ManSection>
-##    <Func Arg="name, filter, description, return_value [ argument ], [ chapter_and_section ]" Name="DeclareAttributeWithDocumentation"/>
+##    <Func Arg="name, filter, description, return_value [ argument ], [ chapter_and_section ], [ groupname ]" Name="DeclareAttributeWithDocumentation"/>
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares an attribute, like DeclareAttribute( <A>name</A>, <A>filter</A> ) would do. The description string is added to the documentation
@@ -157,7 +159,9 @@ DeclareGlobalFunction( "DeclareRepresentationWithDocumentation" );
 ##      <A>argument</A> is an optional string which is displayed in the documentation as attribute of the attribute.
 ##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this attribute
 ##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
-##      the header of the chapter or the section.
+##      the header of the chapter or the section. <A>groupname</A> can be a list containing two strings. The first one must be GROUP, the second
+##      can be an arbitrary group name. Documentation entries with the same group will be displayed in one documentation entry, their descriptions
+##      will be concatenated.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
@@ -166,7 +170,7 @@ DeclareGlobalFunction( "DeclareAttributeWithDocumentation" );
 
 ##  <#GAPDoc Label="DeclarePropertyWithDocumentation">
 ##  <ManSection>
-##    <Func Arg="name, filter, description, [ arguments ], [ chapter_and_section ]" Name="DeclarePropertyWithDocumentation"/>
+##    <Func Arg="name, filter, description, [ arguments ], [ chapter_and_section ], [ groupname ]" Name="DeclarePropertyWithDocumentation"/>
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares a property, like DeclareProperty( <A>name</A>, <A>filter</A> ) would do. The description string is added to the documentation
@@ -175,7 +179,9 @@ DeclareGlobalFunction( "DeclareAttributeWithDocumentation" );
 ##      <A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.
 ##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this property
 ##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
-##      the header of the chapter or the section.
+##      the header of the chapter or the section. <A>groupname</A> can be a list containing two strings. The first one must be GROUP, the second
+##      can be an arbitrary group name. Documentation entries with the same group will be displayed in one documentation entry, their descriptions
+##      will be concatenated.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
@@ -184,7 +190,7 @@ DeclareGlobalFunction( "DeclarePropertyWithDocumentation" );
 
 ##  <#GAPDoc Label="DeclareGlobalFunctionWithDocumentation">
 ##  <ManSection>
-##    <Func Arg="name, description, return_value [ arguments ], [ chapter_and_section ]" Name="DeclareGlobalFunctionWithDocumentation"/>
+##    <Func Arg="name, description, return_value [ arguments ], [ chapter_and_section ], [ groupname ]" Name="DeclareGlobalFunctionWithDocumentation"/>
 ##    <Returns><C>true</C></Returns>
 ##    <Description>
 ##      This method declares a global function like DeclareGlobalFunction( <A>name</A> ) would do. The description string is added to the documentation
@@ -194,7 +200,9 @@ DeclareGlobalFunction( "DeclarePropertyWithDocumentation" );
 ##      <A>arguments</A> is an optional string which is displayed in the documentation as attributes of the operation.
 ##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this function
 ##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
-##      the header of the chapter or the section.
+##      the header of the chapter or the section. <A>groupname</A> can be a list containing two strings. The first one must be GROUP, the second
+##      can be an arbitrary group name. Documentation entries with the same group will be displayed in one documentation entry, their descriptions
+##      will be concatenated.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>

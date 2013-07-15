@@ -19,7 +19,8 @@ InstallValue( AUTOMATIC_DOCUMENTATION,
                 documentation_headers_main_file := false,
                 path_to_xmlfiles := "",
                 default_chapter := rec( ),
-                random_value := 10^10
+                random_value := 10^10,
+                grouped_items := rec( ),
               )
            );
 
@@ -314,7 +315,7 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
 
   function( arg )
     local package_name, name_documentation_file, path_to_xmlfiles, create_full_docu, introduction_list, entities, 
-          dependencies, intro, chapter_record, section_stream, intro_string;
+          dependencies, intro, chapter_record, section_stream, intro_string, group_names, current_group;
     
     package_name := arg[ 1 ];
     
@@ -433,6 +434,16 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     ## Magic!
     LoadPackage( package_name );
     
+    ## Write out the groups
+    
+    for group_names in RecNames( AUTOMATIC_DOCUMENTATION.grouped_items ) do
+        
+        current_group := AUTOMATIC_DOCUMENTATION.grouped_items.(group_names);
+        
+        AutoDoc_WriteGroupedEntry( AUTOMATIC_DOCUMENTATION.documentation_stream, current_group.label_rand_hash, current_group.elements, current_group.return_value, current_group.description );
+        
+    od;
+    
     ## Close header file and streams
     
     for chapter_record in RecNames(AUTOMATIC_DOCUMENTATION.documentation_headers) do
@@ -466,7 +477,7 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
   function( arg )
     local name, tester;
     
-    if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 then
+    if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
         
         Error( "the method DeclareCategoryWithDocumentation must be called with 3, 4 or 5 arguments\n" );
         
@@ -491,7 +502,7 @@ InstallGlobalFunction( DeclareRepresentationWithDocumentation,
   function( arg )
     local name, tester, req_entries;
     
-    if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
+    if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 and Length( arg ) <> 7 then
         
         Error( "the method DeclareCategoryWithDocumentation must be called with 4, 5 or 6 arguments\n" );
         
@@ -518,7 +529,7 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
   function( arg )
     local name, tester;
     
-    if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
+    if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 and Length( arg ) <> 7 then
         
         Error( "the method DeclareOperationWithDocumentation must be called with 4, 5, or 6 arguments\n" );
         
@@ -543,7 +554,7 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
   function( arg )
     local name, tester;
     
-    if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
+    if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 and Length( arg ) <> 7 then
         
         Error( "the method DeclareAttributeWithDocumentation must be called with 4 or 5 arguments\n" );
         
@@ -569,7 +580,7 @@ InstallGlobalFunction( DeclarePropertyWithDocumentation,
     local name, tester, description, arguments, chapter_info,
           tester_names, i, j, label_rand_hash, doc_stream;
     
-    if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 then
+    if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
         
         Error( "the method DeclarePropertyWithDocumentation must be called with 3, 4, or 5 arguments\n" );
         
@@ -746,9 +757,9 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
 
   function( arg )
     local name, description, return_value, arguments, chapter_info,
-          label_rand_hash, doc_stream, i;
+          label_rand_hash, doc_stream, i, grouping, is_grouped;
     
-    if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 then
+    if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
         
         Error( "the method DeclareGlobalFunctionWithDocumentation must be called with 3, 4, or 5 arguments\n" );
         
@@ -759,6 +770,26 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
     name := arg[ 1 ];
     
     if AUTOMATIC_DOCUMENTATION.enable_documentation then
+        
+        grouping := arg[ Length( arg ) ];
+        
+        if IsList( grouping ) and Length( grouping ) = 2 and grouping[ 1 ] = "GROUP" then
+            
+            is_grouped := true;
+            
+            if not IsString( grouping[ 2 ] ) then
+                
+                Error( "group name must be a string." );
+                
+            fi;
+            
+            arg := arg{[ 1 .. Length( arg ) - 1 ]};
+            
+        else
+            
+            is_grouped := false;
+            
+        fi;
         
         description := arg[ 2 ];
         
@@ -814,19 +845,40 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
         
         label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] }, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
-        doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
-        
-        AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Func", arguments, name, "", return_value, description );
-        
-        if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]) ) 
-           or not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]) ) then
+        if is_grouped and not IsBound( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping[ 2 ]) ) then
             
-            CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
+            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping[ 2 ]) := rec( elements := [ ],
+                                                                          description := [ ],
+                                                                          label_rand_hash := label_rand_hash,
+                                                                          chapter_info := chapter_info,
+                                                                          return_value := "",
+                                                                         );
+            
+            AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
+                      "<#Include Label=\"", label_rand_hash, "\">\n" );
+            
+        elif not is_grouped then
+            
+            AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
+                      "<#Include Label=\"", label_rand_hash, "\">\n" );
             
         fi;
         
-        AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
-                  "<#Include Label=\"", label_rand_hash, "\">\n" );
+        if is_grouped then
+            
+            Add( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping[ 2 ]).elements, [ "Func", arguments, name, "" ] ); ## Empty string might cause problems.
+            
+            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping[ 2 ]).description := Concatenation( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping[ 2 ]).description, description );
+            
+            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping[ 2 ]).return_value := return_value;
+            
+        else
+            
+            doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
+            
+            AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Func", arguments, name, "", return_value, description );
+            
+        fi;
         
     fi;
     
@@ -844,7 +896,7 @@ InstallGlobalFunction( DeclareGlobalVariableWithDocumentation,
     local name, description, chapter_info,
           label_rand_hash, doc_stream, i;
     
-    if Length( arg ) <> 2 and Length( arg ) <> 3 then
+    if Length( arg ) <> 2 and Length( arg ) <> 3 and Length( arg ) <> 4 then
         
         Error( "the method DeclareGlobalVariableWithDocumentation must be called with 2 or 3 arguments\n" );
         

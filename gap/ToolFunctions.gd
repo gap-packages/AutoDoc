@@ -10,3 +10,5 @@
 #############################################################################
 
 DeclareGlobalFunction( "AutoDoc_WriteEntry" );
+
+DeclareGlobalFunction( "AutoDoc_WriteGroupedEntry" );
