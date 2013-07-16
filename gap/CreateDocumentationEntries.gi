@@ -14,7 +14,7 @@ InstallGlobalFunction( CreateDocEntryForCategory,
                        
   function( arg )
     local name, tester, description, arguments, chapter_info,
-          tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped, option_record;
+          tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped, option_record, label_list;
     
     if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
         
@@ -130,17 +130,16 @@ InstallGlobalFunction( CreateDocEntryForCategory,
             
         fi;
         
+        label_list := [ ];
+        
         if IsBound( option_record.label ) and IsString( option_record.label ) then
             
-            label_rand_hash := option_record.label;
-            
-        else
-            
-            label_rand_hash := Concatenation( 
-            [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] },
-              String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
+            label_list := [ option_record.label ];
             
         fi;
+        
+        label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] },
+                                          String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
         if is_grouped and not IsBound( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping) ) then
             
@@ -149,6 +148,7 @@ InstallGlobalFunction( CreateDocEntryForCategory,
                                                                           label_rand_hash := label_rand_hash,
                                                                           chapter_info := chapter_info,
                                                                           return_value := "",
+                                                                          label_list := label_list,
                                                                          );
             
             CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
@@ -173,11 +173,13 @@ InstallGlobalFunction( CreateDocEntryForCategory,
             
             AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).return_value := "<C>true</C> or <C>false</C>";
             
+            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).label_list := Concatenation( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).label_list, label_list );
+            
         else
             
             doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
             
-            AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Filt", arguments, name, tester_names, "<C>true</C> or <C>false</C>", description );
+            AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Filt", arguments, name, tester_names, "<C>true</C> or <C>false</C>", description, label_list );
             
         fi;
         
@@ -193,7 +195,7 @@ InstallGlobalFunction( CreateDocEntryForRepresentation,
 
   function( arg )
     local name, tester, req_entries, description, arguments, chapter_info,
-          tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped, option_record;
+          tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped, option_record, label_list;
     
     if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 and Length( arg ) <> 7 then
         
@@ -311,17 +313,16 @@ InstallGlobalFunction( CreateDocEntryForRepresentation,
             
         fi;
         
+        label_list := [ ];
+        
         if IsBound( option_record.label ) and IsString( option_record.label ) then
             
-            label_rand_hash := option_record.label;
-            
-        else
-            
-            label_rand_hash := Concatenation( 
-            [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] },
-              String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
+            label_list := [ option_record.label ];
             
         fi;
+        
+        label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] },
+                                          String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
         if is_grouped and not IsBound( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping) ) then
             
@@ -330,6 +331,7 @@ InstallGlobalFunction( CreateDocEntryForRepresentation,
                                                                           label_rand_hash := label_rand_hash,
                                                                           chapter_info := chapter_info,
                                                                           return_value := "",
+                                                                          label_list := label_list,
                                                                          );
             
             CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
@@ -355,11 +357,13 @@ InstallGlobalFunction( CreateDocEntryForRepresentation,
             
             AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).return_value := "<C>true</C> or <C>false</C>";
             
+            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).label_list := Concatenation( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).label_list, label_list );
+            
         else
             
             doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
             
-            AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Filt", arguments, name, tester_names, "<C>true</C> or <C>false</C>", description );
+            AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Filt", arguments, name, tester_names, "<C>true</C> or <C>false</C>", description, label_list );
             
         fi;
         
@@ -374,7 +378,7 @@ InstallGlobalFunction( CreateDocEntryForOperation,
 
   function( arg )
     local name, tester, description, return_value, arguments, chapter_info,
-          tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped, option_record;
+          tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped, option_record, label_list;
     
     if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 and Length( arg ) <> 7 then
         
@@ -505,17 +509,16 @@ InstallGlobalFunction( CreateDocEntryForOperation,
         
         tester_names := JoinStringsWithSeparator( tester_names, ", " );
         
+        label_list := [ ];
+        
         if IsBound( option_record.label ) and IsString( option_record.label ) then
             
-            label_rand_hash := option_record.label;
-            
-        else
-            
-            label_rand_hash := Concatenation( 
-            [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] },
-              String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
+            label_list := [ option_record.label ];
             
         fi;
+        
+        label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] },
+                                          String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
         if is_grouped and not IsBound( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping) ) then
             
@@ -524,6 +527,7 @@ InstallGlobalFunction( CreateDocEntryForOperation,
                                                                           label_rand_hash := label_rand_hash,
                                                                           chapter_info := chapter_info,
                                                                           return_value := "",
+                                                                          label_list := label_list,
                                                                          );
             
             CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
@@ -548,11 +552,13 @@ InstallGlobalFunction( CreateDocEntryForOperation,
             
             AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).return_value := return_value;
             
+            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).label_list := Concatenation( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).label_list, label_list );
+            
         else
             
             doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
             
-            AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Oper", arguments, name, tester_names, return_value, description );
+            AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Oper", arguments, name, tester_names, return_value, description, label_list );
         
         fi;
         
@@ -568,7 +574,7 @@ InstallGlobalFunction( CreateDocEntryForAttribute,
 
   function( arg )
     local name, tester, description, return_value, arguments, chapter_info,
-          tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped, option_record;
+          tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped, option_record, label_list;
     
     if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 and Length( arg ) <> 7 then
         
@@ -700,17 +706,16 @@ InstallGlobalFunction( CreateDocEntryForAttribute,
             
         fi;
         
+        label_list := [ ];
+        
         if IsBound( option_record.label ) and IsString( option_record.label ) then
             
-            label_rand_hash := option_record.label;
-            
-        else
-            
-            label_rand_hash := Concatenation( 
-            [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] },
-              String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
+            label_list := [ option_record.label ];
             
         fi;
+        
+        label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] },
+                                          String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
         if is_grouped and not IsBound( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping) ) then
             
@@ -719,6 +724,7 @@ InstallGlobalFunction( CreateDocEntryForAttribute,
                                                                           label_rand_hash := label_rand_hash,
                                                                           chapter_info := chapter_info,
                                                                           return_value := "",
+                                                                          label_list := label_list,
                                                                          );
             
             CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
@@ -743,11 +749,13 @@ InstallGlobalFunction( CreateDocEntryForAttribute,
             
             AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).return_value := return_value;
             
+            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).label_list := Concatenation( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).label_list, label_list );
+            
         else
             
             doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
             
-            AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Attr", arguments, name, tester_names, return_value, description );
+            AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Attr", arguments, name, tester_names, return_value, description, label_list );
         
         fi;
         
@@ -757,11 +765,12 @@ InstallGlobalFunction( CreateDocEntryForAttribute,
     
 end );
 
+##
 InstallGlobalFunction( CreateDocEntryForProperty,
 
   function( arg )
     local name, tester, description, arguments, chapter_info,
-          tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped, option_record;
+          tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped, option_record, label_list;
     
     if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 7 then
         
@@ -877,17 +886,16 @@ InstallGlobalFunction( CreateDocEntryForProperty,
             
         fi;
         
+        label_list := [ ];
+        
         if IsBound( option_record.label ) and IsString( option_record.label ) then
             
-            label_rand_hash := option_record.label;
-            
-        else
-            
-            label_rand_hash := Concatenation( 
-            [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] },
-              String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
+            label_list := [ option_record.label ];
             
         fi;
+        
+        label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] },
+                                          String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
         if is_grouped and not IsBound( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping) ) then
             
@@ -896,6 +904,7 @@ InstallGlobalFunction( CreateDocEntryForProperty,
                                                                           label_rand_hash := label_rand_hash,
                                                                           chapter_info := chapter_info,
                                                                           return_value := "",
+                                                                          label_list := label_list,
                                                                          );
             
             CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
@@ -920,11 +929,13 @@ InstallGlobalFunction( CreateDocEntryForProperty,
             
             AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).return_value := "<C>true</C> or <C>false</C>";
             
+            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).label_list := Concatenation( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).label_list, label_list );
+            
         else
             
             doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
             
-            AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Prop", arguments, name, tester_names, "<C>true</C> or <C>false</C>", description );
+            AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Prop", arguments, name, tester_names, "<C>true</C> or <C>false</C>", description, label_list );
             
         fi;
         
