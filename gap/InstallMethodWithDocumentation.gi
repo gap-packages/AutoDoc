@@ -735,12 +735,7 @@ InstallGlobalFunction( InstallMethodWithDocumentation,
         AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
         AppendTo( doc_stream, "##\n\n" );
         
-        if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]) ) 
-           or not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]) ) then
-            
-            CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
-            
-        fi;
+        CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
         
         AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
                   "<#Include Label=\"", label_rand_hash, "\">\n" );
@@ -757,7 +752,7 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
 
   function( arg )
     local name, description, return_value, arguments, chapter_info,
-          label_rand_hash, doc_stream, i, grouping, is_grouped;
+          label_rand_hash, doc_stream, i, grouping, is_grouped, option_record;
     
     if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
         
@@ -771,19 +766,29 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
     
     if AUTOMATIC_DOCUMENTATION.enable_documentation then
         
-        grouping := arg[ Length( arg ) ];
+        option_record := arg[ Length( arg ) ];
         
-        if IsList( grouping ) and Length( grouping ) = 2 and grouping[ 1 ] = "GROUP" then
+        if not IsRecord( option_record ) then
+            
+            option_record := rec( );
+            
+        else
+            
+            arg := arg{[ 1 .. Length( arg ) - 1 ]};
+            
+        fi;
+        
+        if IsBound( option_record.group ) then
             
             is_grouped := true;
             
-            if not IsString( grouping[ 2 ] ) then
+            grouping := option_record.group;
+            
+            if not IsString( grouping ) then
                 
                 Error( "group name must be a string." );
                 
             fi;
-            
-            arg := arg{[ 1 .. Length( arg ) - 1 ]};
             
         else
             
@@ -843,21 +848,33 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
             
         fi;
         
-        label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] }, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
-        
-        if is_grouped and not IsBound( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping[ 2 ]) ) then
+        if IsBound( option_record.label ) and IsString( option_record.label ) then
             
-            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping[ 2 ]) := rec( elements := [ ],
+            label_rand_hash := option_record.label;
+            
+        else
+            
+            label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] }, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
+            
+        fi;
+        
+        if is_grouped and not IsBound( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping) ) then
+            
+            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping) := rec( elements := [ ],
                                                                           description := [ ],
                                                                           label_rand_hash := label_rand_hash,
                                                                           chapter_info := chapter_info,
                                                                           return_value := "",
                                                                          );
             
+            CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
+            
             AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
                       "<#Include Label=\"", label_rand_hash, "\">\n" );
             
         elif not is_grouped then
+            
+            CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
             
             AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
                       "<#Include Label=\"", label_rand_hash, "\">\n" );
@@ -866,11 +883,11 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
         
         if is_grouped then
             
-            Add( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping[ 2 ]).elements, [ "Func", arguments, name, "" ] ); ## Empty string might cause problems.
+            Add( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).elements, [ "Func", arguments, name, "" ] ); ## Empty string might cause problems.
             
-            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping[ 2 ]).description := Concatenation( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping[ 2 ]).description, description );
+            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).description := Concatenation( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).description, description );
             
-            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping[ 2 ]).return_value := return_value;
+            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).return_value := return_value;
             
         else
             
