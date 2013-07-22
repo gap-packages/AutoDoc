@@ -60,6 +60,9 @@ InstallGlobalFunction( CreateTitlePage,
     local filestream, indent, package_info, titlepage, author_records, tmp, lines, Out;
     
     filestream := OutputTextFile( Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, "title.xml" ), false );
+    
+    SetPrintFormattingStatus( filestream, false );
+    
     indent := 0;
     Out := function(arg)
         local s;
@@ -194,6 +197,8 @@ InstallGlobalFunction( CreateMainPage,
     
     filestream := OutputTextFile( Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, package_name, ".xml" ), false );
     
+    SetPrintFormattingStatus( filestream, false );
+    
     AppendTo( filestream, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n" );
     
     AppendTo( filestream, "<!--\n This is an automatically generated file. \n -->\n" );
@@ -249,6 +254,8 @@ InstallGlobalFunction( CreateNewChapterXMLFile,
     
     filestream := OutputTextFile( Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename ), false );
     
+    SetPrintFormattingStatus( filestream, false );
+    
     AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).main_filestream := filestream;
     
     AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, Concatenation( "<#Include SYSTEM \"", filename, "\">" ) );
@@ -290,6 +297,8 @@ InstallGlobalFunction( CreateNewSectionXMLFile,
     filename := Concatenation( chapter_name, "Section", section_name, ".xml" );
     
     filestream := OutputTextFile( Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename ), false );
+    
+    SetPrintFormattingStatus( filestream, false );
     
     AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).sections.(section_name) := filestream;
     
@@ -342,7 +351,11 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     
     AUTOMATIC_DOCUMENTATION.documentation_stream := OutputTextFile( name_documentation_file, false );
     
+    SetPrintFormattingStatus( AUTOMATIC_DOCUMENTATION.documentation_stream, false );
+    
     AUTOMATIC_DOCUMENTATION.documentation_headers_main_file := OutputTextFile( Concatenation( path_to_xmlfiles, "AutoDocMainFile.xml" ), false );
+    
+    SetPrintFormattingStatus( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, false );
     
     ## Creating a header for the xml file.
     AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
