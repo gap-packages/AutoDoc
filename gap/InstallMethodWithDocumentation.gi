@@ -418,7 +418,7 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
                     
                 fi;
                 
-                AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(intro[ 1 ]).main_filestream, intro[ 2 ] );
+                AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(intro[ 1 ]).main_filestream, intro_string );
                 
             elif Length( intro ) = 3 then
                 
@@ -432,7 +432,7 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
                     
                 fi;
                 
-                AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(intro[ 1 ]).sections.(intro[ 2 ]), intro[ 3 ] );
+                AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(intro[ 1 ]).sections.(intro[ 2 ]), intro_string );
                 
             else
                 

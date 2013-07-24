@@ -26,3 +26,7 @@ doc/*.toc
 doc/*.out
 doc/manual.lab
 *.DS_Store
+PackageInfo.checksum
+doc/Basic.xml
+doc/ToolsForHomalg.bin
+removecommentspackageinfo.sh
