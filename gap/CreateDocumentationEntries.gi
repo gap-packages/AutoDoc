@@ -130,6 +130,12 @@ InstallGlobalFunction( CreateDocEntryForCategory,
             
         fi;
         
+        if IsBound( option_record.function_label ) and IsString( option_record.function_label ) then
+            
+            tester_names := option_record.function_label;
+            
+        fi;
+        
         label_list := [ ];
         
         if IsBound( option_record.label ) and IsString( option_record.label ) then
@@ -310,6 +316,12 @@ InstallGlobalFunction( CreateDocEntryForRepresentation,
         else
             
             tester_names := JoinStringsWithSeparator( tester_names, " and " );
+            
+        fi;
+        
+        if IsBound( option_record.function_label ) and IsString( option_record.function_label ) then
+            
+            tester_names := option_record.function_label;
             
         fi;
         
@@ -509,6 +521,12 @@ InstallGlobalFunction( CreateDocEntryForOperation,
         
         tester_names := JoinStringsWithSeparator( tester_names, ", " );
         
+        if IsBound( option_record.function_label ) and IsString( option_record.function_label ) then
+            
+            tester_names := option_record.function_label;
+            
+        fi;
+        
         label_list := [ ];
         
         if IsBound( option_record.label ) and IsString( option_record.label ) then
@@ -700,6 +718,12 @@ InstallGlobalFunction( CreateDocEntryForAttribute,
             
         fi;
         
+        if IsBound( option_record.function_label ) and IsString( option_record.function_label ) then
+            
+            tester_names := option_record.function_label;
+            
+        fi;
+        
         if Length( return_value ) = 0 then
             
             return_value := "Nothing";
@@ -883,6 +907,12 @@ InstallGlobalFunction( CreateDocEntryForProperty,
         else
             
             tester_names := JoinStringsWithSeparator( tester_names, " and " );
+            
+        fi;
+        
+        if IsBound( option_record.function_label ) and IsString( option_record.function_label ) then
+            
+            tester_names := option_record.function_label;
             
         fi;
         

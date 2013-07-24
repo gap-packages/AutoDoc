@@ -24,7 +24,9 @@
 ##      the header of the chapter or the section. <A>option_record</A> can be a record with some options. The entry <A>group</A> must be a
 ##      string and will group functions with the same name together in the documentation. Their description will be concatenated, chapter and section info
 ##      of the first element in the group will be used. <A>label</A> will be the label of the element in the documentation. If you want to make a
-##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful.
+##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful. <A>function_label</A> allows
+##      to set the label of the function manually. Normally, they would be the name of the testers of that attribute, for example for IsInt,IsList. This
+##      manual setting can be done for reference purposes.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
@@ -44,7 +46,9 @@ DeclareGlobalFunction( "CreateDocEntryForCategory" );
 ##      the header of the chapter or the section. <A>option_record</A> can be a record with some options. The entry <A>group</A> must be a
 ##      string and will group functions with the same name together in the documentation. Their description will be concatenated, chapter and section info
 ##      of the first element in the group will be used. <A>label</A> will be the label of the element in the documentation. If you want to make a
-##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful.
+##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful. <A>function_label</A> allows
+##      to set the label of the function manually. Normally, they would be the name of the testers of that attribute, for example for IsInt,IsList. This
+##      manual setting can be done for reference purposes.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
@@ -66,7 +70,9 @@ DeclareGlobalFunction( "CreateDocEntryForRepresentation" );
 ##      the header of the chapter or the section. <A>option_record</A> can be a record with some options. The entry <A>group</A> must be a
 ##      string and will group functions with the same name together in the documentation. Their description will be concatenated, chapter and section info
 ##      of the first element in the group will be used. <A>label</A> will be the label of the element in the documentation. If you want to make a
-##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful.
+##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful. <A>function_label</A> allows
+##      to set the label of the function manually. Normally, they would be the name of the testers of that attribute, for example for IsInt,IsList. This
+##      manual setting can be done for reference purposes.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
@@ -88,7 +94,9 @@ DeclareGlobalFunction( "CreateDocEntryForOperation" );
 ##      the header of the chapter or the section. <A>option_record</A> can be a record with some options. The entry <A>group</A> must be a
 ##      string and will group functions with the same name together in the documentation. Their description will be concatenated, chapter and section info
 ##      of the first element in the group will be used. <A>label</A> will be the label of the element in the documentation. If you want to make a
-##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful.
+##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful. <A>function_label</A> allows
+##      to set the label of the function manually. Normally, they would be the name of the testers of that attribute, for example for IsInt,IsList. This
+##      manual setting can be done for reference purposes.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
@@ -109,7 +117,9 @@ DeclareGlobalFunction( "CreateDocEntryForAttribute" );
 ##      the header of the chapter or the section. <A>option_record</A> can be a record with some options. The entry <A>group</A> must be a
 ##      string and will group functions with the same name together in the documentation. Their description will be concatenated, chapter and section info
 ##      of the first element in the group will be used. <A>label</A> will be the label of the element in the documentation. If you want to make a
-##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful.
+##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful. <A>function_label</A> allows
+##      to set the label of the function manually. Normally, they would be the name of the testers of that attribute, for example for IsInt,IsList. This
+##      manual setting can be done for reference purposes.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>

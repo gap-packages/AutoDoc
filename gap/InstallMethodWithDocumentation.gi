@@ -765,7 +765,7 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
 
   function( arg )
     local name, description, return_value, arguments, chapter_info,
-          label_rand_hash, doc_stream, i, grouping, is_grouped, option_record, label_list;
+          label_rand_hash, doc_stream, i, grouping, is_grouped, option_record, label_list, label_name;
     
     if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
         
@@ -869,6 +869,14 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
             
         fi;
         
+        label_name := "";
+        
+        if IsBound( option_record.function_label ) and IsString( option_record.function_label ) then
+            
+            label_name := option_record.function_label;
+            
+        fi;
+        
         label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] },
                                           String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
         
@@ -898,7 +906,7 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
         
         if is_grouped then
             
-            Add( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).elements, [ "Func", arguments, name, "" ] ); ## Empty string might cause problems.
+            Add( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).elements, [ "Func", arguments, name, label_name ] ); ## Empty string might cause problems.
             
             AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).description := Concatenation( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).description, description );
             
@@ -910,7 +918,7 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
             
             doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
             
-            AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Func", arguments, name, "", return_value, description, label_list );
+            AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Func", arguments, name, label_name, return_value, description, label_list );
             
         fi;
         
