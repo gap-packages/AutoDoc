@@ -38,7 +38,7 @@ InstallGlobalFunction( CreateDocEntryForCategory,
             
         else
             
-            arg := arg{[ 1 .. Length( arg ) - 1 ]};
+            Remove( arg );
             
         fi;
         
@@ -227,7 +227,7 @@ InstallGlobalFunction( CreateDocEntryForRepresentation,
             
         else
             
-            arg := arg{[ 1 .. Length( arg ) - 1 ]};
+            Remove( arg );
             
         fi;
         
@@ -414,7 +414,7 @@ InstallGlobalFunction( CreateDocEntryForOperation,
             
         else
             
-            arg := arg{[ 1 .. Length( arg ) - 1 ]};
+            Remove( arg );
             
         fi;
         
@@ -628,7 +628,7 @@ InstallGlobalFunction( CreateDocEntryForAttribute,
             
         else
             
-            arg := arg{[ 1 .. Length( arg ) - 1 ]};
+            Remove( arg );
             
         fi;
         
@@ -818,7 +818,7 @@ InstallGlobalFunction( CreateDocEntryForProperty,
             
         else
             
-            arg := arg{[ 1 .. Length( arg ) - 1 ]};
+            Remove( arg );
             
         fi;
         

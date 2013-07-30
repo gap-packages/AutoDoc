@@ -787,7 +787,7 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
             
         else
             
-            arg := arg{[ 1 .. Length( arg ) - 1 ]};
+            Remove( arg );
             
         fi;
         
