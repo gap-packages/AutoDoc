@@ -490,9 +490,9 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
   function( arg )
     local name, tester;
     
-    if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
+    if not Length( arg ) in [ 3 .. 6 ] then
         
-        Error( "the method DeclareCategoryWithDocumentation must be called with 3, 4 or 5 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -515,9 +515,9 @@ InstallGlobalFunction( DeclareRepresentationWithDocumentation,
   function( arg )
     local name, tester, req_entries;
     
-    if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 and Length( arg ) <> 7 then
+    if not Length( arg ) in [ 4 .. 7 ] then
         
-        Error( "the method DeclareCategoryWithDocumentation must be called with 4, 5 or 6 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -542,9 +542,9 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
   function( arg )
     local name, tester;
     
-    if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 and Length( arg ) <> 7 then
+    if not Length( arg ) in [ 4 .. 7 ] then
         
-        Error( "the method DeclareOperationWithDocumentation must be called with 4, 5, or 6 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -567,9 +567,9 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
   function( arg )
     local name, tester;
     
-    if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 and Length( arg ) <> 7 then
+    if not Length( arg ) in [ 4 .. 7 ] then
         
-        Error( "the method DeclareAttributeWithDocumentation must be called with 4 or 5 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -593,9 +593,9 @@ InstallGlobalFunction( DeclarePropertyWithDocumentation,
     local name, tester, description, arguments, chapter_info,
           tester_names, i, j, label_rand_hash, doc_stream;
     
-    if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
+    if not Length( arg ) in [ 3 .. 6 ] then
         
-        Error( "the method DeclarePropertyWithDocumentation must be called with 3, 4, or 5 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -620,9 +620,9 @@ InstallGlobalFunction( InstallMethodWithDocumentation,
     local name, short_descr, func, tester, description, return_value, arguments, chapter_info,
           tester_names, i, j, label_rand_hash, doc_stream;
     
-    if Length( arg ) <> 6 and Length( arg ) <> 7 and Length( arg ) <> 8 then
+    if not Length( arg ) in [ 6 .. 8 ] then
         
-        Error( "the method InstallMethodWithDocumentation must be called with 6, 7, or 8 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -767,9 +767,9 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
     local name, description, return_value, arguments, chapter_info,
           label_rand_hash, doc_stream, i, grouping, is_grouped, option_record, label_list, label_name;
     
-    if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
+    if not Length( arg ) in [ 3 .. 6 ] then
         
-        Error( "the method DeclareGlobalFunctionWithDocumentation must be called with 3, 4, or 5 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -787,7 +787,7 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
             
         else
             
-            arg := arg{[ 1 .. Length( arg ) - 1 ]};
+            Remove( arg );
             
         fi;
         
@@ -938,9 +938,9 @@ InstallGlobalFunction( DeclareGlobalVariableWithDocumentation,
     local name, description, chapter_info,
           label_rand_hash, doc_stream, i;
     
-    if Length( arg ) <> 2 and Length( arg ) <> 3 and Length( arg ) <> 4 then
+    if not Length( arg ) in [ 2 .. 4 ] then
         
-        Error( "the method DeclareGlobalVariableWithDocumentation must be called with 2 or 3 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
