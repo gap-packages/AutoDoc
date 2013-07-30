@@ -9,6 +9,8 @@ Subtitle := "Tools for generating automatic GAPDoc documentations",
 
 Version := Maximum( [
   "2013.07.25", ## Sebas' version
+##This line prevents merge conflicts
+  "2013.07.30", ## Max' version
 ] ),
 
 Date := ~.Version{[ 1 .. 10 ]},
