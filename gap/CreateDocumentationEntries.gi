@@ -18,7 +18,7 @@ InstallGlobalFunction( CreateDocEntryForCategory,
     
     if not Length( arg ) in [ 3 .. 6 ] then
         
-        Error( "the method CreateDocEntryForCategory must be called with 3, 4, 5 or 6 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -205,7 +205,7 @@ InstallGlobalFunction( CreateDocEntryForRepresentation,
     
     if not Length( arg ) in [ 4 .. 7 ] then
         
-        Error( "the method DeclareCategoryWithDocumentation must be called with 4, 5, 6 or 7 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -394,7 +394,7 @@ InstallGlobalFunction( CreateDocEntryForOperation,
     
     if not Length( arg ) in [ 4 .. 7 ] then
         
-        Error( "the method CreateDocEntryForOperation must be called with 4, 5, 6 or 7 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -596,7 +596,7 @@ InstallGlobalFunction( CreateDocEntryForAttribute,
     
     if not Length( arg ) in [ 4 .. 7 ] then
         
-        Error( "the method CreateDocEntryWithAttribute must be called with 4, 5, 6 or 7 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -798,7 +798,7 @@ InstallGlobalFunction( CreateDocEntryForProperty,
     
     if not Length( arg ) in [ 3, 4, 5, 7 ] then
         
-        Error( "the method CreateDocEntryWithProperty must be called with 3, 4, 5 or 7 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         

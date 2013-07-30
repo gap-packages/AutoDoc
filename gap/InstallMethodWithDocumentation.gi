@@ -492,7 +492,7 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
     
     if not Length( arg ) in [ 3 .. 6 ] then
         
-        Error( "the method DeclareCategoryWithDocumentation must be called with 3, 4, 5 or 6 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -517,7 +517,7 @@ InstallGlobalFunction( DeclareRepresentationWithDocumentation,
     
     if not Length( arg ) in [ 4 .. 7 ] then
         
-        Error( "the method DeclareCategoryWithDocumentation must be called with 4, 5, 6 or 7 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -544,7 +544,7 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
     
     if not Length( arg ) in [ 4 .. 7 ] then
         
-        Error( "the method DeclareOperationWithDocumentation must be called with 4, 5, 6 or 7 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -569,7 +569,7 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
     
     if not Length( arg ) in [ 4 .. 7 ] then
         
-        Error( "the method DeclareAttributeWithDocumentation must be called with 4, 5, 6 or 7 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -595,7 +595,7 @@ InstallGlobalFunction( DeclarePropertyWithDocumentation,
     
     if not Length( arg ) in [ 3 .. 6 ] then
         
-        Error( "the method DeclarePropertyWithDocumentation must be called with 3, 4, 5, or 6 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -622,7 +622,7 @@ InstallGlobalFunction( InstallMethodWithDocumentation,
     
     if not Length( arg ) in [ 6 .. 8 ] then
         
-        Error( "the method InstallMethodWithDocumentation must be called with 6, 7, or 8 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -769,7 +769,7 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
     
     if not Length( arg ) in [ 3 .. 6 ] then
         
-        Error( "the method DeclareGlobalFunctionWithDocumentation must be called with 3, 4, 5, or 6 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
@@ -940,7 +940,7 @@ InstallGlobalFunction( DeclareGlobalVariableWithDocumentation,
     
     if not Length( arg ) in [ 2 .. 4 ] then
         
-        Error( "the method DeclareGlobalVariableWithDocumentation must be called with 2, 3 or 4 arguments\n" );
+        Error( "wrong number of arguments\n" );
         
         return false;
         
