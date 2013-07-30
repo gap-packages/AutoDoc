@@ -796,7 +796,7 @@ InstallGlobalFunction( CreateDocEntryForProperty,
     local name, tester, description, arguments, chapter_info,
           tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped, option_record, label_list;
     
-    if not Length( arg ) in [ 3, 4, 5, 7 ] then
+    if not Length( arg ) in [ 3 .. 6 ] then
         
         Error( "wrong number of arguments\n" );
         
