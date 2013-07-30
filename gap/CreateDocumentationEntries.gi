@@ -16,9 +16,9 @@ InstallGlobalFunction( CreateDocEntryForCategory,
     local name, tester, description, arguments, chapter_info,
           tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped, option_record, label_list;
     
-    if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 then
+    if not Length( arg ) in [ 3 .. 6 ] then
         
-        Error( "the method CreateDocEntryForCategory must be called with 3, 4 or 5 arguments\n" );
+        Error( "the method CreateDocEntryForCategory must be called with 3, 4, 5 or 6 arguments\n" );
         
         return false;
         
@@ -203,9 +203,9 @@ InstallGlobalFunction( CreateDocEntryForRepresentation,
     local name, tester, req_entries, description, arguments, chapter_info,
           tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped, option_record, label_list;
     
-    if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 and Length( arg ) <> 7 then
+    if not Length( arg ) in [ 4 .. 7 ] then
         
-        Error( "the method DeclareCategoryWithDocumentation must be called with 4, 5 or 6 arguments\n" );
+        Error( "the method DeclareCategoryWithDocumentation must be called with 4, 5, 6 or 7 arguments\n" );
         
         return false;
         
@@ -392,9 +392,9 @@ InstallGlobalFunction( CreateDocEntryForOperation,
     local name, tester, description, return_value, arguments, chapter_info,
           tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped, option_record, label_list;
     
-    if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 and Length( arg ) <> 7 then
+    if not Length( arg ) in [ 4 .. 7 ] then
         
-        Error( "the method CreateDocEntryForOperation must be called with 4, 5, or 6 arguments\n" );
+        Error( "the method CreateDocEntryForOperation must be called with 4, 5, 6 or 7 arguments\n" );
         
         return false;
         
@@ -594,9 +594,9 @@ InstallGlobalFunction( CreateDocEntryForAttribute,
     local name, tester, description, return_value, arguments, chapter_info,
           tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped, option_record, label_list;
     
-    if Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 6 and Length( arg ) <> 7 then
+    if not Length( arg ) in [ 4 .. 7 ] then
         
-        Error( "the method CreateDocEntryWithAttribute must be called with 4 or 5 arguments\n" );
+        Error( "the method CreateDocEntryWithAttribute must be called with 4, 5, 6 or 7 arguments\n" );
         
         return false;
         
@@ -796,9 +796,9 @@ InstallGlobalFunction( CreateDocEntryForProperty,
     local name, tester, description, arguments, chapter_info,
           tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped, option_record, label_list;
     
-    if Length( arg ) <> 3 and Length( arg ) <> 4 and Length( arg ) <> 5 and Length( arg ) <> 7 then
+    if not Length( arg ) in [ 3, 4, 5, 7 ] then
         
-        Error( "the method CreateDocEntryWithProperty must be called with 3, 4, or 5 arguments\n" );
+        Error( "the method CreateDocEntryWithProperty must be called with 3, 4, 5 or 7 arguments\n" );
         
         return false;
         
