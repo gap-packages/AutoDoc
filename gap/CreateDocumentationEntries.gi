@@ -13,7 +13,7 @@
 InstallGlobalFunction( CreateDocEntryForCategory,
                        
   function( arg )
-    local name_list, argument_rec, i;
+    local argument_rec;
     
     if not AUTOMATIC_DOCUMENTATION.enable_documentation then
         
@@ -35,19 +35,8 @@ InstallGlobalFunction( CreateDocEntryForCategory,
                          return_value := "<C>true</C> or <C>false</C>",
                          type := "Filt",
                          doc_stream_type := "categories",
+                         optional_arguments := arg{ [ 4 .. Length( arg ) ] },
                        );
-    
-    name_list := [ "first", "second", "third" ];
-    
-    if Length( arg ) > 3 then
-        
-        for i in [ 4 .. Length( arg ) ] do
-            
-            argument_rec.( Concatenation( name_list[ i - 3 ], "_optional_argument" ) ) := arg[ i ];
-            
-        od;
-        
-    fi;
     
     AutoDoc_CreateCompleteEntry( argument_rec );
     
@@ -60,7 +49,7 @@ end );
 InstallGlobalFunction( CreateDocEntryForRepresentation,
 
   function( arg )
-    local name_list, argument_rec, i;
+    local argument_rec;
     
     if not AUTOMATIC_DOCUMENTATION.enable_documentation then
         
@@ -82,19 +71,8 @@ InstallGlobalFunction( CreateDocEntryForRepresentation,
                          return_value := "<C>true</C> or <C>false</C>",
                          type := "Filt",
                          doc_stream_type := "categories",
+                         optional_arguments := arg{ [ 5 .. Length( arg ) ] },
                        );
-    
-    name_list := [ "first", "second", "third" ];
-    
-    if Length( arg ) > 4 then
-        
-        for i in [ 5 .. Length( arg ) ] do
-            
-            argument_rec.( Concatenation( name_list[ i - 4 ], "_optional_argument" ) ) := arg[ i ];
-            
-        od;
-        
-    fi;
     
     AutoDoc_CreateCompleteEntry( argument_rec );
     
@@ -106,7 +84,7 @@ end );
 InstallGlobalFunction( CreateDocEntryForOperation,
 
   function( arg )
-    local name_list, argument_rec, i;
+    local argument_rec;
     
     if not AUTOMATIC_DOCUMENTATION.enable_documentation then
         
@@ -128,19 +106,8 @@ InstallGlobalFunction( CreateDocEntryForOperation,
                          return_value := arg[ 4 ],
                          type := "Oper",
                          doc_stream_type := "methods",
+                         optional_arguments := arg{ [ 5 .. Length( arg ) ] },
                        );
-    
-    name_list := [ "first", "second", "third" ];
-    
-    if Length( arg ) > 4 then
-        
-        for i in [ 5 .. Length( arg ) ] do
-            
-            argument_rec.( Concatenation( name_list[ i - 4 ], "_optional_argument" ) ) := arg[ i ];
-            
-        od;
-        
-    fi;
     
     AutoDoc_CreateCompleteEntry( argument_rec );
     
@@ -153,7 +120,7 @@ end );
 InstallGlobalFunction( CreateDocEntryForAttribute,
 
   function( arg )
-    local name_list, argument_rec, i;
+    local argument_rec;
     
     if not AUTOMATIC_DOCUMENTATION.enable_documentation then
         
@@ -175,19 +142,8 @@ InstallGlobalFunction( CreateDocEntryForAttribute,
                          return_value := arg[ 4 ],
                          type := "Attr",
                          doc_stream_type := "attributes",
+                         optional_arguments := arg{ [ 5 .. Length( arg ) ] },
                        );
-    
-    name_list := [ "first", "second", "third" ];
-    
-    if Length( arg ) > 4 then
-        
-        for i in [ 5 .. Length( arg ) ] do
-            
-            argument_rec.( Concatenation( name_list[ i - 4 ], "_optional_argument" ) ) := arg[ i ];
-            
-        od;
-        
-    fi;
     
     AutoDoc_CreateCompleteEntry( argument_rec );
     
@@ -199,7 +155,7 @@ end );
 InstallGlobalFunction( CreateDocEntryForProperty,
 
   function( arg )
-    local name_list, argument_rec, i;
+    local argument_rec;
     
     if not AUTOMATIC_DOCUMENTATION.enable_documentation then
         
@@ -221,19 +177,8 @@ InstallGlobalFunction( CreateDocEntryForProperty,
                          return_value := "<C>true</C> or <C>false</C>",
                          type := "Prop",
                          doc_stream_type := "properties",
+                         optional_arguments := arg{ [ 4 .. Length( arg ) ] },
                        );
-    
-    name_list := [ "first", "second", "third" ];
-    
-    if Length( arg ) > 3 then
-        
-        for i in [ 4 .. Length( arg ) ] do
-            
-            argument_rec.( Concatenation( name_list[ i - 3 ], "_optional_argument" ) ) := arg[ i ];
-            
-        od;
-        
-    fi;
     
     AutoDoc_CreateCompleteEntry( argument_rec );
     
@@ -245,7 +190,7 @@ end );
 InstallGlobalFunction( CreateDocEntryForGlobalFunction,
                        
   function( arg )
-    local name_list, argument_rec, i;
+    local argument_rec;
     
     if not AUTOMATIC_DOCUMENTATION.enable_documentation then
         
@@ -267,19 +212,8 @@ InstallGlobalFunction( CreateDocEntryForGlobalFunction,
                          return_value := arg[ 3 ],
                          type := "Func",
                          doc_stream_type := "global_functions",
+                         optional_arguments := arg{ [ 4 .. Length( arg ) ] },
                        );
-    
-    name_list := [ "first", "second", "third" ];
-    
-    if Length( arg ) > 3 then
-        
-        for i in [ 4 .. Length( arg ) ] do
-            
-            argument_rec.( Concatenation( name_list[ i - 3 ], "_optional_argument" ) ) := arg[ i ];
-            
-        od;
-        
-    fi;
     
     AutoDoc_CreateCompleteEntry( argument_rec );
     
@@ -291,7 +225,7 @@ end );
 InstallGlobalFunction( CreateDocEntryForGlobalVariable,
                        
   function( arg )
-    local name_list, argument_rec, i;
+    local argument_rec;
     
     if not AUTOMATIC_DOCUMENTATION.enable_documentation then
         
@@ -313,19 +247,8 @@ InstallGlobalFunction( CreateDocEntryForGlobalVariable,
                          return_value := fail,
                          type := "Var",
                          doc_stream_type := "global_variables",
+                         optional_arguments := arg{ [ 3 .. Length( arg ) ] },
                        );
-    
-    name_list := [ "first", "second", "third" ];
-    
-    if Length( arg ) > 2 then
-        
-        for i in [ 3 .. Length( arg ) ] do
-            
-            argument_rec.( Concatenation( name_list[ i - 2 ], "_optional_argument" ) ) := arg[ i ];
-            
-        od;
-        
-    fi;
     
     AutoDoc_CreateCompleteEntry( argument_rec );
     
@@ -337,7 +260,7 @@ end );
 InstallGlobalFunction( CreateDocEntryForInstallMethod,
                        
   function( arg )
-    local argument_rec, i, name_list;
+    local argument_rec;
     
     if not AUTOMATIC_DOCUMENTATION.enable_documentation then
         
@@ -350,21 +273,10 @@ InstallGlobalFunction( CreateDocEntryForInstallMethod,
                          description := arg[ 4 ],
                          return_value := arg[ 5 ],
                          type := "Meth",
-                         doc_stream_type := "methods" );
-    
-    if Length( arg ) > 6 then
-        
-        name_list := [ "first", "second", "third" ];
-        
-        arg := arg{ [ 6 .. Length( arg ) - 1 ] };
-        
-        for i in [ 1 .. Length( arg ) ] do
-            
-            argument_rec.( Concatenation( name_list[ i ], "_optional_argument" ) ) := arg[ i ];
-            
-        od;
-        
-    fi;
+                         doc_stream_type := "methods",
+                         # Ignore the last argument, which is the function being installed
+                         optional_arguments := arg{ [ 6 .. Length( arg ) - 1 ] },
+                       );
     
     AutoDoc_CreateCompleteEntry( argument_rec );
     
