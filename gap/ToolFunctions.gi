@@ -14,8 +14,8 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
                        
   function( argument_record )
     local name, tester, description, return_value, arguments, chapter_info,
-          tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped, option_record, label_list, first_opt_arg,
-          second_opt_arg, third_opt_arg, current_rec_entry;
+          tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped,
+          option_record, label_list, current_rec_entry;
     
     if not AUTOMATIC_DOCUMENTATION.enable_documentation then
         
@@ -116,17 +116,7 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
     
     return_value := argument_record.return_value;
     
-    for i in [ "first", "second", "third" ] do
-        
-        current_rec_entry := Concatenation( i, "_optional_argument" );
-        
-        if not IsBound( argument_record.( current_rec_entry ) ) then
-            
-            continue;
-            
-        fi;
-        
-        current_rec_entry := argument_record.( current_rec_entry );
+    for current_rec_entry in argument_record.optional_arguments do
         
         ##Check for option record
         if IsRecord( current_rec_entry ) then
