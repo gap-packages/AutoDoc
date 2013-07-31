@@ -490,14 +490,6 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
   function( arg )
     local name, tester;
     
-    if not Length( arg ) in [ 3 .. 6 ] then
-        
-        Error( "wrong number of arguments\n" );
-        
-        return false;
-        
-    fi;
-    
     name := arg[ 1 ];
     
     tester := arg[ 2 ];
@@ -514,14 +506,6 @@ InstallGlobalFunction( DeclareRepresentationWithDocumentation,
 
   function( arg )
     local name, tester, req_entries;
-    
-    if not Length( arg ) in [ 4 .. 7 ] then
-        
-        Error( "wrong number of arguments\n" );
-        
-        return false;
-        
-    fi;
     
     name := arg[ 1 ];
     
@@ -542,14 +526,6 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
   function( arg )
     local name, tester;
     
-    if not Length( arg ) in [ 4 .. 7 ] then
-        
-        Error( "wrong number of arguments\n" );
-        
-        return false;
-        
-    fi;
-    
     name := arg[ 1 ];
     
     tester := arg[ 2 ];
@@ -566,14 +542,6 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
 
   function( arg )
     local name, tester;
-    
-    if not Length( arg ) in [ 4 .. 7 ] then
-        
-        Error( "wrong number of arguments\n" );
-        
-        return false;
-        
-    fi;
     
     name := arg[ 1 ];
     
@@ -592,14 +560,6 @@ InstallGlobalFunction( DeclarePropertyWithDocumentation,
   function( arg )
     local name, tester;
     
-    if not Length( arg ) in [ 3 .. 6 ] then
-        
-        Error( "wrong number of arguments\n" );
-        
-        return false;
-        
-    fi;
-    
     name := arg[ 1 ];
     
     tester := arg[ 2 ];
@@ -617,14 +577,6 @@ InstallGlobalFunction( InstallMethodWithDocumentation,
 
   function( arg )
     local name, short_descr, tester, func;
-    
-    if not Length( arg ) in [ 6 .. 9 ] then
-        
-        Error( "wrong number of arguments\n" );
-        
-        return false;
-        
-    fi;
     
     name := arg[ 1 ];
     
@@ -649,14 +601,6 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
   function( arg )
     local name;
     
-    if not Length( arg ) in [ 3 .. 6 ] then
-        
-        Error( "wrong number of arguments\n" );
-        
-        return false;
-        
-    fi;
-    
     name := arg[ 1 ];
     
     DeclareGlobalFunction( name );
@@ -673,14 +617,6 @@ InstallGlobalFunction( DeclareGlobalVariableWithDocumentation,
 
   function( arg )
     local name;
-    
-    if not Length( arg ) in [ 2 .. 5 ] then
-        
-        Error( "wrong number of arguments\n" );
-        
-        return false;
-        
-    fi;
     
     name := arg[ 1 ];
     
