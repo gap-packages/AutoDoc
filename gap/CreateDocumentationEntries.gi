@@ -15,12 +15,6 @@ InstallGlobalFunction( CreateDocEntryForCategory,
   function( arg )
     local argument_rec;
     
-    if not AUTOMATIC_DOCUMENTATION.enable_documentation then
-        
-        return true;
-        
-    fi;
-    
     if not Length( arg ) in [ 3 .. 6 ] then
         
         Error( "wrong number of arguments\n" );
@@ -51,12 +45,6 @@ InstallGlobalFunction( CreateDocEntryForRepresentation,
   function( arg )
     local argument_rec;
     
-    if not AUTOMATIC_DOCUMENTATION.enable_documentation then
-        
-        return true;
-        
-    fi;
-    
     if not Length( arg ) in [ 4 .. 7 ] then
         
         Error( "wrong number of arguments\n" );
@@ -85,12 +73,6 @@ InstallGlobalFunction( CreateDocEntryForOperation,
 
   function( arg )
     local argument_rec;
-    
-    if not AUTOMATIC_DOCUMENTATION.enable_documentation then
-        
-        return true;
-        
-    fi;
     
     if not Length( arg ) in [ 4 .. 7 ] then
         
@@ -122,12 +104,6 @@ InstallGlobalFunction( CreateDocEntryForAttribute,
   function( arg )
     local argument_rec;
     
-    if not AUTOMATIC_DOCUMENTATION.enable_documentation then
-        
-        return true;
-        
-    fi;
-    
     if not Length( arg ) in [ 4 .. 7 ] then
         
         Error( "wrong number of arguments\n" );
@@ -156,12 +132,6 @@ InstallGlobalFunction( CreateDocEntryForProperty,
 
   function( arg )
     local argument_rec;
-    
-    if not AUTOMATIC_DOCUMENTATION.enable_documentation then
-        
-        return true;
-        
-    fi;
     
     if not Length( arg ) in [ 3 .. 6 ] then
         
@@ -192,12 +162,6 @@ InstallGlobalFunction( CreateDocEntryForGlobalFunction,
   function( arg )
     local argument_rec;
     
-    if not AUTOMATIC_DOCUMENTATION.enable_documentation then
-        
-        return true;
-        
-    fi;
-    
     if not Length( arg ) in [ 3 .. 6 ] then
         
         Error( "wrong number of arguments\n" );
@@ -227,12 +191,6 @@ InstallGlobalFunction( CreateDocEntryForGlobalVariable,
   function( arg )
     local argument_rec;
     
-    if not AUTOMATIC_DOCUMENTATION.enable_documentation then
-        
-        return true;
-        
-    fi;
-    
     if not Length( arg ) in [ 2 .. 5 ] then
         
         Error( "wrong number of arguments\n" );
@@ -261,12 +219,6 @@ InstallGlobalFunction( CreateDocEntryForInstallMethod,
                        
   function( arg )
     local argument_rec;
-    
-    if not AUTOMATIC_DOCUMENTATION.enable_documentation then
-        
-        return true;
-        
-    fi;
     
     argument_rec := rec( name := NameFunction( arg[ 1 ] ),
                          tester := arg[ 3 ],
