@@ -15,7 +15,7 @@ Read( "ListOfDocFiles.g" );
 
 PrintTo( "VERSION", PackageInfo( "AutoDoc" )[1].Version );
 
-MakeGAPDocDoc( "doc", "AutoDoc", list, "AutoDoc" );
+MakeGAPDocDoc( "doc", "AutoDoc", list, "AutoDoc", "MathJax" );
 
 CopyHTMLStyleFiles("doc");
 
