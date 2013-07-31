@@ -207,7 +207,7 @@ InstallGlobalFunction( CreateDocEntryForProperty,
         
     fi;
     
-    if not Length( arg ) in [ 4 .. 7 ] then
+    if not Length( arg ) in [ 3 .. 6 ] then
         
         Error( "wrong number of arguments\n" );
         
@@ -308,7 +308,7 @@ InstallGlobalFunction( CreateDocEntryForGlobalVariable,
     fi;
     
     argument_rec := rec( name := arg[ 1 ],
-                         tester := [ ],
+                         tester := fail,
                          description := arg[ 2 ],
                          return_value := fail,
                          type := "Var",
@@ -350,7 +350,7 @@ InstallGlobalFunction( CreateDocEntryForInstallMethod,
                          description := arg[ 4 ],
                          return_value := arg[ 5 ],
                          type := "Meth",
-                         doc_stream_type := "operations" );
+                         doc_stream_type := "methods" );
     
     if Length( arg ) > 6 then
         

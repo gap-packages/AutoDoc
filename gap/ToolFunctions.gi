@@ -47,48 +47,56 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
     
     tester := argument_record.tester;
     
-    if not IsList( tester ) then
+    if tester <> fail then
         
-        tester := [ tester ];
-        
-    fi;
-    
-    if IsString( tester ) then
-        
-        tester_names := tester;
-        
-    else
-        
-        tester_names := List( tester, i -> ShallowCopy( NamesFilter( i ) ) );
-        
-        for j in [ 1 .. Length( tester_names ) ] do
+        if not IsList( tester ) then
             
-            for i in [ 1 .. Length( tester_names[ j ] ) ] do
+            tester := [ tester ];
+            
+        fi;
+        
+        if IsString( tester ) then
+            
+            tester_names := tester;
+            
+        else
+            
+            tester_names := List( tester, i -> ShallowCopy( NamesFilter( i ) ) );
+            
+            for j in [ 1 .. Length( tester_names ) ] do
                 
-                if IsMatchingSublist( tester_names[ j ][ i ], "Tester(" ) then
+                for i in [ 1 .. Length( tester_names[ j ] ) ] do
                     
-                    Remove( tester_names[ j ], i );
+                    if IsMatchingSublist( tester_names[ j ][ i ], "Tester(" ) then
+                        
+                        Remove( tester_names[ j ], i );
+                        
+                    fi;
+                    
+                od;
+                
+                
+                if Length( tester_names[ j ] ) = 0 then
+                    
+                    tester_names[ j ] := "IsObject";
+                    
+                else
+                    
+                    tester_names[ j ] := JoinStringsWithSeparator( tester_names[ j ], " and " );
                     
                 fi;
                 
             od;
             
+            tester_names := JoinStringsWithSeparator( tester_names, ", " );
             
-            if Length( tester_names[ j ] ) = 0 then
-                
-                tester_names[ j ] := "IsObject";
-                
-            else
-                
-                tester_names[ j ] := JoinStringsWithSeparator( tester_names[ j ], " and " );
-                
-            fi;
+            tester_names := Concatenation( "for ", tester_names );
             
-        od;
+        fi;
         
-        tester_names := JoinStringsWithSeparator( tester_names, ", " );
+    else
         
-        tester_names := Concatenation( "for ", tester_names );
+        tester_names := fail;
         
     fi;
     
@@ -165,6 +173,12 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
         
     fi;
     
+    if argument_record.type = "Var" then
+        
+        arguments := fail;
+        
+    fi;
+    
     if not IsBound( arguments ) then
         
         if IsBound( tester ) then
@@ -178,12 +192,6 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
             arguments := "";
             
         fi;
-        
-    fi;
-    
-    if argument_record.type = "Var" then
-        
-        arguments := fail;
         
     fi;
     
@@ -232,7 +240,7 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
     fi;
     
     label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] },
-                                          String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
+                                          String( Random( GlobalMersenneTwister, 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
     
     if is_grouped and not IsBound( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping) ) then
         
@@ -338,7 +346,7 @@ InstallGlobalFunction( AutoDoc_WriteGroupedEntry,
         
          AppendTo( doc_stream, "##    <", i[ 1 ], " " );
         
-        if i[ 2 ] <> fail then
+        if i[ 2 ] <> fail and i[ 1 ] <> "Var" then
             AppendTo( doc_stream, "Arg=\"", i[ 2 ], "\" " );
         fi;
         
