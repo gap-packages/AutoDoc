@@ -126,3 +126,9 @@ DeclareGlobalFunction( "CreateDocEntryForAttribute" );
 ##
 DeclareGlobalFunction( "CreateDocEntryForProperty" );
 
+DeclareGlobalFunction( "CreateDocEntryForGlobalFunction" );
+
+DeclareGlobalFunction( "CreateDocEntryForGlobalVariable" );
+
+DeclareGlobalFunction( "CreateDocEntryForInstallMethod" );
+

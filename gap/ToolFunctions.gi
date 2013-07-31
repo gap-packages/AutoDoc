@@ -47,6 +47,12 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
     
     tester := argument_record.tester;
     
+    if not IsList( tester ) then
+        
+        tester := [ tester ];
+        
+    fi;
+    
     if IsString( tester ) then
         
         tester_names := tester;
@@ -112,7 +118,7 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
             
         fi;
         
-        current_rec_entry := argument_record( current_rec_entry );
+        current_rec_entry := argument_record.( current_rec_entry );
         
         ##Check for option record
         if IsRecord( current_rec_entry ) then
@@ -124,7 +130,7 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
         fi;
         
         ##Check for chapter info
-        if IsList( current_rec_entry ) and Length( current_rec_entry ) and ForAll( current_rec_entry, IsString ) then
+        if IsList( current_rec_entry ) and Length( current_rec_entry ) = 2 and ForAll( current_rec_entry, IsString ) then
             
             chapter_info := current_rec_entry;
             
@@ -155,7 +161,7 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
             
         fi;
         
-        chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.(argument_record.doc_stream_type);
+        chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.( argument_record.doc_stream_type );
         
     fi;
     
@@ -163,13 +169,21 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
         
         if IsBound( tester ) then
             
-            arguments := List( [ 1 .. Length( tester ) ], i -> Concatenation( [ "arg", String( i ) ] ) );
+            arguments := List( [ 1 .. Length( tester ) ], i -> Concatenation( "arg", String( i ) ) );
+            
+            arguments := JoinStringsWithSeparator( arguments, "," );
             
         else
             
-            arguments := fail;
+            arguments := "";
             
         fi;
+        
+    fi;
+    
+    if argument_record.type = "Var" then
+        
+        arguments := fail;
         
     fi;
     
@@ -278,14 +292,14 @@ InstallGlobalFunction( AutoDoc_WriteEntry,
     AppendTo( doc_stream, ">\n" );
     AppendTo( doc_stream, "##    <", type );
     
-    if arguments <> "" then
-        AppendTo( doc_stream, " Arg=\"", arguments, "\" " );
+    if arguments <> fail then
+        AppendTo( doc_stream, " Arg=\"", arguments, "\"" );
     fi;
     
-    AppendTo( doc_stream, "Name=\"", name, "\" " );
+    AppendTo( doc_stream, " Name=\"", name, "\"" );
     
     if tester_names <> fail then
-        AppendTo( doc_stream, "Label=\"", tester_names, "\"" );
+        AppendTo( doc_stream, " Label=\"", tester_names, "\"" );
     fi;
     
     AppendTo( doc_stream, "/>\n" );
@@ -322,10 +336,10 @@ InstallGlobalFunction( AutoDoc_WriteGroupedEntry,
     
     for i in list_of_type_arg_name_testernames do
         
-         AppendTo( doc_stream, "##    <", i[ 1 ] );
+         AppendTo( doc_stream, "##    <", i[ 1 ], " " );
         
-        if i[ 2 ] <> "" then
-            AppendTo( doc_stream, " Arg=\"", i[ 2 ], "\" " );
+        if i[ 2 ] <> fail then
+            AppendTo( doc_stream, "Arg=\"", i[ 2 ], "\" " );
         fi;
         
         AppendTo( doc_stream, "Name=\"", i[ 3 ], "\" " );

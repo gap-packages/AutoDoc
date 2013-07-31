@@ -617,10 +617,9 @@ end );
 InstallGlobalFunction( InstallMethodWithDocumentation,
 
   function( arg )
-    local name, short_descr, func, tester, description, return_value, arguments, chapter_info,
-          tester_names, i, j, label_rand_hash, doc_stream;
+    local name, short_descr, func, tester;
     
-    if not Length( arg ) in [ 6 .. 8 ] then
+    if not Length( arg ) in [ 6 .. 9 ] then
         
         Error( "wrong number of arguments\n" );
         
@@ -638,122 +637,7 @@ InstallGlobalFunction( InstallMethodWithDocumentation,
     
     InstallMethod( name, short_descr, tester, func );
     
-    if AUTOMATIC_DOCUMENTATION.enable_documentation then
-        
-        name := NameFunction( name );
-        
-        description := arg[ 4 ];
-        
-        if IsString( description ) then
-            
-            description := [ description ];
-            
-        fi;
-        
-        if not ForAll( description, IsString ) then
-            
-            Error( "5th argument must be a string or a list of strings" );
-            
-        fi;
-        
-        return_value := arg[ 5 ];
-        
-        if Length( arg ) = 7 then
-            
-            if IsString( arg[ 6 ] ) then
-                
-                arguments :=  arg[ 6 ];
-                
-                chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.methods;
-                
-            elif IsList( arg[ 6 ] ) and not IsString( arg[ 6 ] ) then
-                
-                chapter_info := arg[ 6 ];
-                
-                arguments := List( [ 1 .. Length( tester ) ], i -> Concatenation( [ "arg", String( i ) ] ) );
-                
-                arguments := JoinStringsWithSeparator( arguments );
-                
-            fi;
-            
-        elif Length( arg ) = 8 then
-            
-            arguments := arg[ 6 ];
-            
-            chapter_info := arg[ 7 ];
-            
-        else
-            
-            arguments := List( [ 1 .. Length( tester ) ], i -> Concatenation( [ "arg", String( i ) ] ) );
-            
-            arguments := JoinStringsWithSeparator( arguments );
-            
-            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.methods;
-            
-        fi;
-        
-        tester_names := List( tester, i -> ShallowCopy( NamesFilter( i ) ) );
-        
-        for j in [ 1 .. Length( tester_names ) ] do
-            
-            for i in [ 1 .. Length( tester_names[ j ] ) ] do
-                
-                if IsMatchingSublist( tester_names[ j ][ i ], "Tester(" ) then
-                    
-                    Remove( tester_names[ j ], i );
-                    
-                fi;
-                
-            od;
-            
-            
-            if Length( tester_names[ j ] ) = 0 then
-                
-                tester_names[ j ] := "IsObject";
-                
-            else
-                
-                tester_names[ j ] := JoinStringsWithSeparator( tester_names[ j ], " and " );
-                
-            fi;
-            
-        od;
-        
-        if Length( return_value ) = 0 then
-            
-            return_value := "Nothing";
-            
-        fi;
-        
-        tester_names := JoinStringsWithSeparator( tester_names, ", " );
-        
-        label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] }, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
-        
-        doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
-        
-        AppendTo( doc_stream, "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" );
-        AppendTo( doc_stream, "##  <ManSection>\n" );
-        AppendTo( doc_stream, "##    <Meth Arg=\"", arguments, "\" Name=\"", name, "\" Label=\"", short_descr, ", for ", tester_names, "\"/>\n" );
-        AppendTo( doc_stream, "##    <Returns>", return_value, "</Returns>\n" );
-        AppendTo( doc_stream, "##    <Description>\n" );
-        
-        for i in description do
-            
-            AppendTo( doc_stream, "##      ", i, "\n" );
-            
-        od;
-        
-        AppendTo( doc_stream, "##    </Description>\n" );
-        AppendTo( doc_stream, "##  </ManSection>\n" );
-        AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
-        AppendTo( doc_stream, "##\n\n" );
-        
-        CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
-        
-        AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
-                  "<#Include Label=\"", label_rand_hash, "\">\n" );
-        
-    fi;
+    CallFuncList( CreateDocEntryForInstallMethod, arg );
     
     return true;
     
@@ -764,8 +648,7 @@ end );
 InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
 
   function( arg )
-    local name, description, return_value, arguments, chapter_info,
-          label_rand_hash, doc_stream, i, grouping, is_grouped, option_record, label_list, label_name;
+    local name;
     
     if not Length( arg ) in [ 3 .. 6 ] then
         
@@ -777,154 +660,9 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
     
     name := arg[ 1 ];
     
-    if AUTOMATIC_DOCUMENTATION.enable_documentation then
-        
-        option_record := arg[ Length( arg ) ];
-        
-        if not IsRecord( option_record ) then
-            
-            option_record := rec( );
-            
-        else
-            
-            Remove( arg );
-            
-        fi;
-        
-        if IsBound( option_record.group ) then
-            
-            is_grouped := true;
-            
-            grouping := option_record.group;
-            
-            if not IsString( grouping ) then
-                
-                Error( "group name must be a string." );
-                
-            fi;
-            
-        else
-            
-            is_grouped := false;
-            
-        fi;
-        
-        description := arg[ 2 ];
-        
-        if IsString( description ) then
-            
-            description := [ description ];
-            
-        fi;
-        
-        if not ForAll( description, IsString ) then
-            
-            Error( "second argument must be a string or a list of strings" );
-            
-        fi;
-        
-        return_value := arg[ 3 ];
-        
-        if Length( arg ) = 4 then
-            
-            if IsString( arg[ 4 ] ) then
-                
-                arguments :=  arg[ 4 ];
-                
-                chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.global_functions;
-                
-            elif IsList( arg[ 4 ] ) and not IsString( arg[ 4 ] ) then
-                
-                chapter_info := arg[ 4 ];
-                
-                arguments := "args";
-                
-            fi;
-            
-        elif Length( arg ) = 5 then
-            
-            arguments := arg[ 4 ];
-            
-            chapter_info := arg[ 5 ];
-            
-        else
-            
-            arguments := "args";
-            
-            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.global_functions;
-            
-        fi;
-        
-        if Length( return_value ) = 0 then
-            
-            return_value := "Nothing";
-            
-        fi;
-        
-        label_list := [ ];
-        
-        if IsBound( option_record.label ) and IsString( option_record.label ) then
-            
-            label_list := [ option_record.label ];
-            
-        fi;
-        
-        label_name := "";
-        
-        if IsBound( option_record.function_label ) and IsString( option_record.function_label ) then
-            
-            label_name := option_record.function_label;
-            
-        fi;
-        
-        label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] },
-                                          String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
-        
-        if is_grouped and not IsBound( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping) ) then
-            
-            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping) := rec( elements := [ ],
-                                                                          description := [ ],
-                                                                          label_rand_hash := label_rand_hash,
-                                                                          chapter_info := chapter_info,
-                                                                          return_value := "",
-                                                                          label_list := label_list,
-                                                                         );
-            
-            CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
-            
-            AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
-                      "<#Include Label=\"", label_rand_hash, "\">\n" );
-            
-        elif not is_grouped then
-            
-            CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
-            
-            AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
-                      "<#Include Label=\"", label_rand_hash, "\">\n" );
-            
-        fi;
-        
-        if is_grouped then
-            
-            Add( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).elements, [ "Func", arguments, name, label_name ] ); ## Empty string might cause problems.
-            
-            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).description := Concatenation( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).description, description );
-            
-            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).return_value := return_value;
-            
-            AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).label_list := Concatenation( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).label_list, label_list );
-            
-        else
-            
-            doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
-            
-            AutoDoc_WriteEntry( doc_stream, label_rand_hash, "Func", arguments, name, label_name, return_value, description, label_list );
-            
-        fi;
-        
-    fi;
-    
     DeclareGlobalFunction( name );
+    
+    CallFuncList( CreateDocEntryForGlobalFunction, arg );
     
     return true;
     
@@ -938,7 +676,7 @@ InstallGlobalFunction( DeclareGlobalVariableWithDocumentation,
     local name, description, chapter_info,
           label_rand_hash, doc_stream, i;
     
-    if not Length( arg ) in [ 2 .. 4 ] then
+    if not Length( arg ) in [ 2 .. 5 ] then
         
         Error( "wrong number of arguments\n" );
         
@@ -948,65 +686,9 @@ InstallGlobalFunction( DeclareGlobalVariableWithDocumentation,
     
     name := arg[ 1 ];
     
-    if AUTOMATIC_DOCUMENTATION.enable_documentation then
-        
-        description := arg[ 2 ];
-        
-        if IsString( description ) then
-            
-            description := [ description ];
-            
-        fi;
-        
-        if not ForAll( description, IsString ) then
-            
-            Error( "second argument must be a string or a list of strings" );
-            
-        fi;
-        
-        if Length( arg ) = 3 then
-            
-            chapter_info := arg[ 3 ];
-            
-        else
-            
-            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.global_variables;
-            
-        fi;
-        
-        label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] }, String( Random( 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
-        
-        doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
-        
-        AppendTo( doc_stream, "##  <#GAPDoc Label=\"", label_rand_hash , "\">\n" );
-        AppendTo( doc_stream, "##  <ManSection>\n" );
-        AppendTo( doc_stream, "##    <Var Name=\"", name, "\"/>\n" );
-        AppendTo( doc_stream, "##    <Description>\n" );
-        
-        for i in description do
-            
-            AppendTo( doc_stream, "##      ", i, "\n" );
-            
-        od;
-        
-        AppendTo( doc_stream, "##    </Description>\n" );
-        AppendTo( doc_stream, "##  </ManSection>\n" );
-        AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
-        AppendTo( doc_stream, "##\n\n" );
-        
-        if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]) ) 
-           or not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]) ) then
-            
-            CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
-            
-        fi;
-        
-        AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
-                  "<#Include Label=\"", label_rand_hash, "\">\n" );
-        
-    fi;
-    
     DeclareGlobalVariable( name );
+    
+    CallFuncList( CreateDocEntryForGlobalVariable, arg );
     
     return true;
     
