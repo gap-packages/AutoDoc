@@ -4,7 +4,7 @@ doc: doc/manual.six
 
 doc/manual.six: makedoc.g ListOfDocFiles.g \
 		PackageInfo.g \
-		doc/AutoDoc.bib doc/*.xml doc/*.css \
+		doc/AutoDoc.bib doc/*.xml \
 		gap/*.gd gap/*.gi
 	        gap makedoc.g
 
@@ -25,7 +25,7 @@ towww: archive
 	cp PackageInfo.g ${WEBPOS}
 	cp README ${WEBPOS}/README.AutoDoc
 	cp doc/manual.pdf ${WEBPOS}/AutoDoc.pdf
-	cp doc/*.{css,html} ${WEBPOS}
+	cp doc/*.{js,css,html} ${WEBPOS}
 	rm -f ${WEBPOS}/*.tar.gz
 	mv ../tar/AutoDoc.tar.gz ${WEBPOS}/AutoDoc-`cat VERSION`.tar.gz
 	rm -f ${WEBPOS_FINAL}/*.tar.gz
