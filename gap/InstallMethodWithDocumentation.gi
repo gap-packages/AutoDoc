@@ -590,8 +590,7 @@ end );
 InstallGlobalFunction( DeclarePropertyWithDocumentation,
 
   function( arg )
-    local name, tester, description, arguments, chapter_info,
-          tester_names, i, j, label_rand_hash, doc_stream;
+    local name, tester;
     
     if not Length( arg ) in [ 3 .. 6 ] then
         
@@ -617,7 +616,7 @@ end );
 InstallGlobalFunction( InstallMethodWithDocumentation,
 
   function( arg )
-    local name, short_descr, func, tester;
+    local name, short_descr, tester, func;
     
     if not Length( arg ) in [ 6 .. 9 ] then
         
@@ -673,8 +672,7 @@ end );
 InstallGlobalFunction( DeclareGlobalVariableWithDocumentation,
 
   function( arg )
-    local name, description, chapter_info,
-          label_rand_hash, doc_stream, i;
+    local name;
     
     if not Length( arg ) in [ 2 .. 5 ] then
         
