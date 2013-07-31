@@ -11,6 +11,8 @@ doc/manual.six
 doc/*.pdf
 doc/*.html
 doc/*.txt
+doc/*.css
+doc/*.js
 doc/*Bib.xml.bib
 doc/*.aux
 doc/*.bbl

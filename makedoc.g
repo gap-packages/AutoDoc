@@ -17,6 +17,8 @@ PrintTo( "VERSION", PackageInfo( "AutoDoc" )[1].Version );
 
 MakeGAPDocDoc( "doc", "AutoDoc", list, "AutoDoc" );
 
+CopyHTMLStyleFiles("doc");
+
 GAPDocManualLab( "AutoDoc" );
 
 QUIT;
