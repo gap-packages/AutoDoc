@@ -32,9 +32,7 @@ InstallGlobalFunction( CreateDocEntryForCategory,
                          optional_arguments := arg{ [ 4 .. Length( arg ) ] },
                        );
     
-    AutoDoc_CreateCompleteEntry( argument_rec );
-    
-    return true;
+    return AutoDoc_CreateCompleteEntry( argument_rec );
     
 end );
 
@@ -62,9 +60,7 @@ InstallGlobalFunction( CreateDocEntryForRepresentation,
                          optional_arguments := arg{ [ 5 .. Length( arg ) ] },
                        );
     
-    AutoDoc_CreateCompleteEntry( argument_rec );
-    
-    return true;
+    return AutoDoc_CreateCompleteEntry( argument_rec );
     
 end );
 
@@ -91,9 +87,7 @@ InstallGlobalFunction( CreateDocEntryForOperation,
                          optional_arguments := arg{ [ 5 .. Length( arg ) ] },
                        );
     
-    AutoDoc_CreateCompleteEntry( argument_rec );
-    
-    return true;
+    return AutoDoc_CreateCompleteEntry( argument_rec );
     
 end );
 
@@ -121,9 +115,7 @@ InstallGlobalFunction( CreateDocEntryForAttribute,
                          optional_arguments := arg{ [ 5 .. Length( arg ) ] },
                        );
     
-    AutoDoc_CreateCompleteEntry( argument_rec );
-    
-    return true;
+    return AutoDoc_CreateCompleteEntry( argument_rec );
     
 end );
 
@@ -150,9 +142,7 @@ InstallGlobalFunction( CreateDocEntryForProperty,
                          optional_arguments := arg{ [ 4 .. Length( arg ) ] },
                        );
     
-    AutoDoc_CreateCompleteEntry( argument_rec );
-    
-    return true;
+    return AutoDoc_CreateCompleteEntry( argument_rec );
     
 end );
 
@@ -179,9 +169,7 @@ InstallGlobalFunction( CreateDocEntryForGlobalFunction,
                          optional_arguments := arg{ [ 4 .. Length( arg ) ] },
                        );
     
-    AutoDoc_CreateCompleteEntry( argument_rec );
-    
-    return true;
+    return AutoDoc_CreateCompleteEntry( argument_rec );
     
 end );
 
@@ -208,9 +196,7 @@ InstallGlobalFunction( CreateDocEntryForGlobalVariable,
                          optional_arguments := arg{ [ 3 .. Length( arg ) ] },
                        );
     
-    AutoDoc_CreateCompleteEntry( argument_rec );
-    
-    return true;
+    return AutoDoc_CreateCompleteEntry( argument_rec );
     
 end );
 
@@ -230,8 +216,6 @@ InstallGlobalFunction( CreateDocEntryForInstallMethod,
                          optional_arguments := arg{ [ 6 .. Length( arg ) - 1 ] },
                        );
     
-    AutoDoc_CreateCompleteEntry( argument_rec );
-    
-    return true;
+    return AutoDoc_CreateCompleteEntry( argument_rec );
     
 end );
