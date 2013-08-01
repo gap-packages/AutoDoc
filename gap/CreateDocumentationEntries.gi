@@ -206,6 +206,14 @@ InstallGlobalFunction( CreateDocEntryForInstallMethod,
   function( arg )
     local argument_rec;
     
+    if not Length( arg ) in [ 6 .. 9 ] then
+        
+        Error( "wrong number of arguments\n" );
+        
+        return false;
+        
+    fi;
+    
     argument_rec := rec( name := NameFunction( arg[ 1 ] ),
                          tester := arg[ 3 ],
                          description := arg[ 4 ],

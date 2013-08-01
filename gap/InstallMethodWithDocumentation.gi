@@ -17,12 +17,20 @@ InstallValue( AUTOMATIC_DOCUMENTATION,
                 documentation_stream := false,
                 documentation_headers := rec( ),
                 documentation_headers_main_file := false,
-                path_to_xmlfiles := "",
+                path_to_xmlfiles := Directory(""),
                 default_chapter := rec( ),
                 random_value := 10^10,
                 grouped_items := rec( ),
               )
            );
+
+
+BindGlobal("AUTODOC_XML_HEADER", Concatenation(
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n",
+    "<!--\n This is an automatically generated file. \n -->\n"
+    )
+);
+
 
 ##
 InstallGlobalFunction( CreateDefaultChapterData,
@@ -59,7 +67,7 @@ InstallGlobalFunction( CreateTitlePage,
   function( package_name )
     local filestream, indent, package_info, titlepage, author_records, tmp, lines, Out;
     
-    filestream := OutputTextFile( Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, "title.xml" ), false );
+    filestream := OutputTextFile( Filename( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, "title.xml" ), false );
     
     SetPrintFormattingStatus( filestream, false );
     
@@ -71,9 +79,7 @@ InstallGlobalFunction( CreateTitlePage,
         AppendTo( filestream, s );
     end;
     
-    Out( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
-    
-    Out( "<!--\n This is an automatically generated file. \n -->\n" );
+    Out( AUTODOC_XML_HEADER );
 
     Out( "<TitlePage>\n" );
     
@@ -97,7 +103,7 @@ InstallGlobalFunction( CreateTitlePage,
     fi;
     Out( "<Subtitle>", tmp, "</Subtitle>\n" );
     
-    Out( "<TitleComment>(<E>this manual is still under construction</E>)\n" );
+    Out( "<TitleComment>\n" );
     indent := indent + 1;
     Out( "<Br/><Br/>\n" );
     Out( "This manual is best viewed as an <B>HTML</B> document.\n" );
@@ -141,7 +147,7 @@ InstallGlobalFunction( CreateTitlePage,
 
     Out( "<Copyright>\n" );
     if IsBound(titlepage.Copyright) then
-        tmp := titlepage.Copyright;
+        Out( titlepage.Copyright );
         Unbind( titlepage.Copyright );
     else
         Out( "This package may be distributed under the terms and conditions of the\n" );
@@ -195,13 +201,11 @@ InstallGlobalFunction( CreateMainPage,
         
     fi;
     
-    filestream := OutputTextFile( Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, package_name, ".xml" ), false );
+    filestream := OutputTextFile( Filename( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, Concatenation( package_name, ".xml" ) ), false );
     
     SetPrintFormattingStatus( filestream, false );
     
-    AppendTo( filestream, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n" );
-    
-    AppendTo( filestream, "<!--\n This is an automatically generated file. \n -->\n" );
+    AppendTo( filestream, AUTODOC_XML_HEADER );
     
     AppendTo( filestream, "<!DOCTYPE Book SYSTEM \"gapdoc.dtd\"\n[\n" );
     
@@ -252,7 +256,7 @@ InstallGlobalFunction( CreateNewChapterXMLFile,
     
     filename := Concatenation( chapter_name, ".xml" );
     
-    filestream := OutputTextFile( Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename ), false );
+    filestream := OutputTextFile( Filename( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename ), false );
     
     SetPrintFormattingStatus( filestream, false );
     
@@ -260,9 +264,7 @@ InstallGlobalFunction( CreateNewChapterXMLFile,
     
     AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, Concatenation( "<#Include SYSTEM \"", filename, "\">" ) );
     
-    AppendTo( filestream, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
-    
-    AppendTo( filestream, "<!--\n This is an automatically generated file. \n -->\n" );
+    AppendTo( filestream, AUTODOC_XML_HEADER );
     
     AppendTo( filestream, Concatenation( [ "<Chapter Label=\"", chapter_name, "_automatically_generated_documentation_parts\">\n" ] ) );
     
@@ -296,7 +298,7 @@ InstallGlobalFunction( CreateNewSectionXMLFile,
     
     filename := Concatenation( chapter_name, "Section", section_name, ".xml" );
     
-    filestream := OutputTextFile( Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename ), false );
+    filestream := OutputTextFile( Filename( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename ), false );
     
     SetPrintFormattingStatus( filestream, false );
     
@@ -304,9 +306,7 @@ InstallGlobalFunction( CreateNewSectionXMLFile,
     
     AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).main_filestream, Concatenation( "<#Include SYSTEM \"", filename, "\">\n" ) );
     
-    AppendTo( filestream, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
-    
-    AppendTo( filestream, "<!--\n This is an automatically generated file. \n -->\n" );
+    AppendTo( filestream, AUTODOC_XML_HEADER );
     
     AppendTo( filestream, Concatenation( [ "<Section Label=\"", section_name, "_automatically_generated_documentation_parts\">\n" ] ) );
     
@@ -331,6 +331,10 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     name_documentation_file := arg[ 2 ];
     
     path_to_xmlfiles := arg[ 3 ];
+
+    if IsString( path_to_xmlfiles ) then
+        path_to_xmlfiles := Directory( path_to_xmlfiles );
+    fi;
     
     create_full_docu := arg[ 4 ];
     
@@ -353,14 +357,12 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     
     SetPrintFormattingStatus( AUTOMATIC_DOCUMENTATION.documentation_stream, false );
     
-    AUTOMATIC_DOCUMENTATION.documentation_headers_main_file := OutputTextFile( Concatenation( path_to_xmlfiles, "AutoDocMainFile.xml" ), false );
+    AUTOMATIC_DOCUMENTATION.documentation_headers_main_file := OutputTextFile( Filename( path_to_xmlfiles, "AutoDocMainFile.xml" ), false );
     
     SetPrintFormattingStatus( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, false );
     
     ## Creating a header for the xml file.
-    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
-    
-    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, "<!--\n This is an automatically generated file. \n -->\n" );
+    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, AUTODOC_XML_HEADER );
     
     if Length( arg ) = 5 then
         
@@ -490,14 +492,6 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
   function( arg )
     local name, tester;
     
-    if not Length( arg ) in [ 3 .. 6 ] then
-        
-        Error( "wrong number of arguments\n" );
-        
-        return false;
-        
-    fi;
-    
     name := arg[ 1 ];
     
     tester := arg[ 2 ];
@@ -514,14 +508,6 @@ InstallGlobalFunction( DeclareRepresentationWithDocumentation,
 
   function( arg )
     local name, tester, req_entries;
-    
-    if not Length( arg ) in [ 4 .. 7 ] then
-        
-        Error( "wrong number of arguments\n" );
-        
-        return false;
-        
-    fi;
     
     name := arg[ 1 ];
     
@@ -542,14 +528,6 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
   function( arg )
     local name, tester;
     
-    if not Length( arg ) in [ 4 .. 7 ] then
-        
-        Error( "wrong number of arguments\n" );
-        
-        return false;
-        
-    fi;
-    
     name := arg[ 1 ];
     
     tester := arg[ 2 ];
@@ -567,14 +545,6 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
   function( arg )
     local name, tester;
     
-    if not Length( arg ) in [ 4 .. 7 ] then
-        
-        Error( "wrong number of arguments\n" );
-        
-        return false;
-        
-    fi;
-    
     name := arg[ 1 ];
     
     tester := arg[ 2 ];
@@ -590,16 +560,7 @@ end );
 InstallGlobalFunction( DeclarePropertyWithDocumentation,
 
   function( arg )
-    local name, tester, description, arguments, chapter_info,
-          tester_names, i, j, label_rand_hash, doc_stream;
-    
-    if not Length( arg ) in [ 3 .. 6 ] then
-        
-        Error( "wrong number of arguments\n" );
-        
-        return false;
-        
-    fi;
+    local name, tester;
     
     name := arg[ 1 ];
     
@@ -617,15 +578,7 @@ end );
 InstallGlobalFunction( InstallMethodWithDocumentation,
 
   function( arg )
-    local name, short_descr, func, tester;
-    
-    if not Length( arg ) in [ 6 .. 9 ] then
-        
-        Error( "wrong number of arguments\n" );
-        
-        return false;
-        
-    fi;
+    local name, short_descr, tester, func;
     
     name := arg[ 1 ];
     
@@ -650,14 +603,6 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
   function( arg )
     local name;
     
-    if not Length( arg ) in [ 3 .. 6 ] then
-        
-        Error( "wrong number of arguments\n" );
-        
-        return false;
-        
-    fi;
-    
     name := arg[ 1 ];
     
     DeclareGlobalFunction( name );
@@ -673,16 +618,7 @@ end );
 InstallGlobalFunction( DeclareGlobalVariableWithDocumentation,
 
   function( arg )
-    local name, description, chapter_info,
-          label_rand_hash, doc_stream, i;
-    
-    if not Length( arg ) in [ 2 .. 5 ] then
-        
-        Error( "wrong number of arguments\n" );
-        
-        return false;
-        
-    fi;
+    local name;
     
     name := arg[ 1 ];
     
