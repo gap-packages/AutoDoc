@@ -112,7 +112,7 @@ InstallGlobalFunction( CreateTitlePage,
     indent := indent - 1;
     Out( "</TitleComment>\n" );
     
-    Out( "<Version>Version <#Include SYSTEM \"../VERSION\"></Version>\n" );
+    Out( "<Version>Version ", package_info.Version, "</Version>\n" );
     
     for author_records in package_info.Persons do
         
