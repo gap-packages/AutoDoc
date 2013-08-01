@@ -17,7 +17,7 @@ InstallValue( AUTOMATIC_DOCUMENTATION,
                 documentation_stream := false,
                 documentation_headers := rec( ),
                 documentation_headers_main_file := false,
-                path_to_xmlfiles := "",
+                path_to_xmlfiles := Directory(""),
                 default_chapter := rec( ),
                 random_value := 10^10,
                 grouped_items := rec( ),
@@ -67,7 +67,7 @@ InstallGlobalFunction( CreateTitlePage,
   function( package_name )
     local filestream, indent, package_info, titlepage, author_records, tmp, lines, Out;
     
-    filestream := OutputTextFile( Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, "title.xml" ), false );
+    filestream := OutputTextFile( Filename( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, "title.xml" ), false );
     
     SetPrintFormattingStatus( filestream, false );
     
@@ -201,7 +201,7 @@ InstallGlobalFunction( CreateMainPage,
         
     fi;
     
-    filestream := OutputTextFile( Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, package_name, ".xml" ), false );
+    filestream := OutputTextFile( Filename( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, Concatenation( package_name, ".xml" ) ), false );
     
     SetPrintFormattingStatus( filestream, false );
     
@@ -256,7 +256,7 @@ InstallGlobalFunction( CreateNewChapterXMLFile,
     
     filename := Concatenation( chapter_name, ".xml" );
     
-    filestream := OutputTextFile( Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename ), false );
+    filestream := OutputTextFile( Filename( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename ), false );
     
     SetPrintFormattingStatus( filestream, false );
     
@@ -298,7 +298,7 @@ InstallGlobalFunction( CreateNewSectionXMLFile,
     
     filename := Concatenation( chapter_name, "Section", section_name, ".xml" );
     
-    filestream := OutputTextFile( Concatenation( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename ), false );
+    filestream := OutputTextFile( Filename( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename ), false );
     
     SetPrintFormattingStatus( filestream, false );
     
@@ -331,6 +331,10 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     name_documentation_file := arg[ 2 ];
     
     path_to_xmlfiles := arg[ 3 ];
+
+    if IsString( path_to_xmlfiles ) then
+        path_to_xmlfiles := Directory( path_to_xmlfiles );
+    fi;
     
     create_full_docu := arg[ 4 ];
     
@@ -353,7 +357,7 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     
     SetPrintFormattingStatus( AUTOMATIC_DOCUMENTATION.documentation_stream, false );
     
-    AUTOMATIC_DOCUMENTATION.documentation_headers_main_file := OutputTextFile( Concatenation( path_to_xmlfiles, "AutoDocMainFile.xml" ), false );
+    AUTOMATIC_DOCUMENTATION.documentation_headers_main_file := OutputTextFile( Filename( path_to_xmlfiles, "AutoDocMainFile.xml" ), false );
     
     SetPrintFormattingStatus( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, false );
     

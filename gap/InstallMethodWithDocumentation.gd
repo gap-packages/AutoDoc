@@ -31,7 +31,7 @@ DeclareGlobalVariable( "AUTOMATIC_DOCUMENTATION" );
 ##      This is the main method of the package. After loading the package, run it with the name of the pacckage
 ##      you want to create a documentation of as first argument, with an (empty) filepath (everything will be overwritten) as second argument.
 ##      Make sure you have included this file as source if you run your GAPDoc documentation creating script.
-##      The third argument is a path to the directory where it can store the GAPDoc XML files. The path MUST end with a slash. 
+##      The third argument is a path to the directory where it can store the GAPDoc XML files. 
 ##      It will produce several files out of the
 ##      Declare*WithDocumentation declarations you have used in your package <A>package_name</A>, and one named AutoDocMainFile.xml,
 ##      which you can simply include to your documentation.
