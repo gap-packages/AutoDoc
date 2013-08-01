@@ -14,7 +14,7 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
                        
   function( argument_record )
     local name, tester, description, return_value, arguments, chapter_info,
-          tester_names, i, j, label_rand_hash, doc_stream, grouping, is_grouped,
+          tester_names, i, j, label_hash, doc_stream, grouping, is_grouped,
           option_record, label_list, current_rec_entry;
     
     if not AUTOMATIC_DOCUMENTATION.enable_documentation then
@@ -229,14 +229,23 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
         
     fi;
     
-    label_rand_hash := Concatenation( [ name{ [ 1 .. Minimum( Length( name ), SizeScreen( )[ 1 ] - LogInt( AUTOMATIC_DOCUMENTATION.random_value, 10 ) -22 ) ] },
-                                          String( Random( GlobalMersenneTwister, 0, AUTOMATIC_DOCUMENTATION.random_value ) ) ] );
+    # Generate a "random" label. The label counter helps ensure that
+    # things with the same name still get different labels.
+    
+    AUTOMATIC_DOCUMENTATION.label_counter := AUTOMATIC_DOCUMENTATION.label_counter + 1;
+    
+    label_hash := Concatenation( name, String(AUTOMATIC_DOCUMENTATION.label_counter) );
+    
+    # Compute the label hash, based on (but different from) the corresponding GAPDoc code
+    label_hash := Concatenation(name{ [ 1 .. Minimum( Length( name ), 20 ) ] },
+            HexStringInt(CrcString( label_hash ) + 2^31 ),
+            HexStringInt(CrcString( Reversed( label_hash ) ) + 2^31 ) );
     
     if is_grouped and not IsBound( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping) ) then
         
         AUTOMATIC_DOCUMENTATION.grouped_items.(grouping) := rec( elements := [ ],
                                                                  description := [ ],
-                                                                 label_rand_hash := label_rand_hash,
+                                                                 label_hash := label_hash,
                                                                  chapter_info := chapter_info,
                                                                  return_value := "",
                                                                  label_list := label_list,
@@ -245,14 +254,14 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
         CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
         
         AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
-                  "<#Include Label=\"", label_rand_hash, "\">\n" );
+                  "<#Include Label=\"", label_hash, "\">\n" );
         
     elif not is_grouped then
         
         CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
         
         AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
-                  "<#Include Label=\"", label_rand_hash, "\">\n" );
+                  "<#Include Label=\"", label_hash, "\">\n" );
         
     fi;
         
@@ -270,7 +279,7 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
         
         doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
         
-        AutoDoc_WriteEntry( doc_stream, label_rand_hash, argument_record.type, arguments, name, tester_names, return_value, description, label_list );
+        AutoDoc_WriteEntry( doc_stream, label_hash, argument_record.type, arguments, name, tester_names, return_value, description, label_list );
     
     fi;
     

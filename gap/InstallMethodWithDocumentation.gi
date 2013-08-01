@@ -19,7 +19,7 @@ InstallValue( AUTOMATIC_DOCUMENTATION,
                 documentation_headers_main_file := false,
                 path_to_xmlfiles := Directory(""),
                 default_chapter := rec( ),
-                random_value := 10^10,
+                label_counter := 0,
                 grouped_items := rec( ),
               )
            );
@@ -455,7 +455,7 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
         
         current_group := AUTOMATIC_DOCUMENTATION.grouped_items.(group_names);
         
-        AutoDoc_WriteGroupedEntry( AUTOMATIC_DOCUMENTATION.documentation_stream, current_group.label_rand_hash, current_group.elements, current_group.return_value, current_group.description, current_group.label_list );
+        AutoDoc_WriteGroupedEntry( AUTOMATIC_DOCUMENTATION.documentation_stream, current_group.label_hash, current_group.elements, current_group.return_value, current_group.description, current_group.label_list );
         
     od;
     
