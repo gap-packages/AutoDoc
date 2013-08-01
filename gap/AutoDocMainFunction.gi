@@ -261,7 +261,7 @@ InstallGlobalFunction( CreateNewChapterXMLFile,
     
     AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).main_filestream := filestream;
     
-    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, Concatenation( "<#Include SYSTEM \"", filename, "\">" ) );
+    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, Concatenation( "<#Include SYSTEM \"", filename, "\">\n" ) );
     
     AppendTo( filestream, AUTODOC_XML_HEADER );
     
