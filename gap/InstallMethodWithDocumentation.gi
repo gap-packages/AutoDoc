@@ -103,7 +103,7 @@ InstallGlobalFunction( CreateTitlePage,
     fi;
     Out( "<Subtitle>", tmp, "</Subtitle>\n" );
     
-    Out( "<TitleComment>(<E>this manual is still under construction</E>)\n" );
+    Out( "<TitleComment>\n" );
     indent := indent + 1;
     Out( "<Br/><Br/>\n" );
     Out( "This manual is best viewed as an <B>HTML</B> document.\n" );
@@ -147,7 +147,7 @@ InstallGlobalFunction( CreateTitlePage,
 
     Out( "<Copyright>\n" );
     if IsBound(titlepage.Copyright) then
-        tmp := titlepage.Copyright;
+        Out( titlepage.Copyright );
         Unbind( titlepage.Copyright );
     else
         Out( "This package may be distributed under the terms and conditions of the\n" );
