@@ -24,6 +24,14 @@ InstallValue( AUTOMATIC_DOCUMENTATION,
               )
            );
 
+
+BindGlobal("AUTODOC_XML_HEADER", Concatenation(
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n",
+    "<!--\n This is an automatically generated file. \n -->\n"
+    )
+);
+
+
 ##
 InstallGlobalFunction( CreateDefaultChapterData,
                        
@@ -71,9 +79,7 @@ InstallGlobalFunction( CreateTitlePage,
         AppendTo( filestream, s );
     end;
     
-    Out( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
-    
-    Out( "<!--\n This is an automatically generated file. \n -->\n" );
+    Out( AUTODOC_XML_HEADER );
 
     Out( "<TitlePage>\n" );
     
@@ -199,9 +205,7 @@ InstallGlobalFunction( CreateMainPage,
     
     SetPrintFormattingStatus( filestream, false );
     
-    AppendTo( filestream, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n" );
-    
-    AppendTo( filestream, "<!--\n This is an automatically generated file. \n -->\n" );
+    AppendTo( filestream, AUTODOC_XML_HEADER );
     
     AppendTo( filestream, "<!DOCTYPE Book SYSTEM \"gapdoc.dtd\"\n[\n" );
     
@@ -260,9 +264,7 @@ InstallGlobalFunction( CreateNewChapterXMLFile,
     
     AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, Concatenation( "<#Include SYSTEM \"", filename, "\">" ) );
     
-    AppendTo( filestream, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
-    
-    AppendTo( filestream, "<!--\n This is an automatically generated file. \n -->\n" );
+    AppendTo( filestream, AUTODOC_XML_HEADER );
     
     AppendTo( filestream, Concatenation( [ "<Chapter Label=\"", chapter_name, "_automatically_generated_documentation_parts\">\n" ] ) );
     
@@ -304,9 +306,7 @@ InstallGlobalFunction( CreateNewSectionXMLFile,
     
     AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).main_filestream, Concatenation( "<#Include SYSTEM \"", filename, "\">\n" ) );
     
-    AppendTo( filestream, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
-    
-    AppendTo( filestream, "<!--\n This is an automatically generated file. \n -->\n" );
+    AppendTo( filestream, AUTODOC_XML_HEADER );
     
     AppendTo( filestream, Concatenation( [ "<Section Label=\"", section_name, "_automatically_generated_documentation_parts\">\n" ] ) );
     
@@ -358,9 +358,7 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     SetPrintFormattingStatus( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, false );
     
     ## Creating a header for the xml file.
-    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n" );
-    
-    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, "<!--\n This is an automatically generated file. \n -->\n" );
+    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, AUTODOC_XML_HEADER );
     
     if Length( arg ) = 5 then
         
