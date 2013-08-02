@@ -8,3 +8,11 @@
 ##  Reading the implementation of the AutoDoc package.
 ##
 #############################################################################
+
+ReadPackage( "AutoDoc", "gap/AutoDocMainFunction.gi" );
+
+ReadPackage( "AutoDoc", "gap/ToolFunctions.gi" );
+
+ReadPackage( "AutoDoc", "gap/CreateDocumentationEntries.gi" );
+
+ReadPackage( "AutoDoc", "gap/DeclareWithDocumentation.gi" );
