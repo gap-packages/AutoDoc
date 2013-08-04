@@ -25,8 +25,8 @@ InstallValue( AUTOMATIC_DOCUMENTATION,
 
 
 BindGlobal("AUTODOC_XML_HEADER", Concatenation(
-    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n",
-    "<!--\n This is an automatically generated file. \n -->\n"
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n",
+    "<!-- This is an automatically generated file. -->\n"
     )
 );
 
