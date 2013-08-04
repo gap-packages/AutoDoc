@@ -10,7 +10,7 @@ CreateDocEntryForGlobalFunction( "CreateAutomaticDocumentation",
                                    "which you can simply include to your documentation.",
                                    "<A>create_full_docu</A> can either be true or false. If true, a full documentation with title file is created. The only thing left",
                                    "for you to do is run GAPDoc and provide a bibliography.",
-                                   "<A>section_intros</A> is optional, it must be a list containing lists of of either two or three strings. If two are given, first one must be".
+                                   "<A>section_intros</A> is optional, it must be a list containing lists of of either two or three strings. If two are given, first one must be",
                                    "a chapter title, with underscores instead of spaces, and the second one a string which will be displayed in the documentation at the beginning of",
                                    "the chapter. If three are given, first one must be a chapter, second a section, third the description." ],
                                  "<C>true</C> or <C>false</C>",
@@ -38,7 +38,7 @@ CreateDocEntryForGlobalFunction( "DeclareCategoryWithDocumentation",
                                    "manual setting can be done for reference purposes." ],
                                  "<C>true</C> or <C>false</C>",
                                  "name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]",
-                                 [ "The_main_functions", "The_install_functions" ],
+                                 [ "The_main_functions", "The_install_functions" ]
                                 );
 
 CreateDocEntryForGlobalFunction( "InstallMethodWithDocumentation",
@@ -53,14 +53,14 @@ CreateDocEntryForGlobalFunction( "InstallMethodWithDocumentation",
                                    "the header of the chapter or the section." ],
                                  "<C>true</C> or <C>false</C>",
                                  "name, short_descr, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], func",
-                                 [ "The_main_functions", "The_install_functions" ],
+                                 [ "The_main_functions", "The_install_functions" ]
                                 );
 
-CreateDocEntryForGlobalFunction( "DeclareOperationWithDocumentation"
+CreateDocEntryForGlobalFunction( "DeclareOperationWithDocumentation",
                                  [ "This method declares an operation, like DeclareOperation( <A>name</A>, <A>list_of_filters</A> ) would do. The description string is added to the documentation",
                                    "if CreateAutoDoc is called. It",
                                    "can either be a string or a list of strings. Lists will be concatenated with a space between them.",
-                                   "<A>return_value</A> is a string displayed as the return value of the method. It is not optional."
+                                   "<A>return_value</A> is a string displayed as the return value of the method. It is not optional.",
                                    "<A>arguments</A> is an optional string which is displayed in the documentation as attributes of the operation.",
                                    "<A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this method",
                                    "should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in",
@@ -72,7 +72,7 @@ CreateDocEntryForGlobalFunction( "DeclareOperationWithDocumentation"
                                    "manual setting can be done for reference purposes." ],
                                  "<C>true</C> or <C>false</C>",
                                  "name, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], [ option_record ]",
-                                 [ "The_main_functions", "The_install_functions" ],
+                                 [ "The_main_functions", "The_install_functions" ]
                                 );
 
 CreateDocEntryForGlobalFunction( "DeclareRepresentationWithDocumentation",
@@ -143,7 +143,7 @@ CreateDocEntryForGlobalFunction( "DeclareGlobalFunctionWithDocumentation",
                                    "to set the label of the function manually. Normally, they would be the name of the testers of that attribute, for example for IsInt,IsList. This",
                                    "manual setting can be done for reference purposes." ],
                                  "<C>true</C> or <C>false</C>",
-                                 "name, description, return_value [ arguments ], [ chapter_and_section ], [ option_record ]"
+                                 "name, description, return_value [ arguments ], [ chapter_and_section ], [ option_record ]",
                                  [ "The_main_functions", "The_install_functions" ] );
 
 CreateDocEntryForGlobalFunction( "DeclareGlobalVariableWithDocumentation",

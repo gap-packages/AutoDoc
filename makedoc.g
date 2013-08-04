@@ -4,6 +4,10 @@
 ##  Call this with GAP.
 ##
 
+LoadPackage( "AutoDoc" );
+
+CreateAutomaticDocumentation( "AutoDoc", "gap/AutoDocEntries.g", "doc/", false );
+
 LoadPackage( "GAPDoc" );
 
 SetGapDocLaTeXOptions( "utf8" );

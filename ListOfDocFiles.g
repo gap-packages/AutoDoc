@@ -7,4 +7,5 @@ list := [
         "../gap/DeclareWithDocumentation.gi",
         "../gap/ToolFunctions.gd",
         "../gap/ToolFunctions.gi",
+	"../gap/AutoDocEntries.g"
          ];

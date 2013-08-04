@@ -63,7 +63,8 @@
 <Index>&AutoDoc;</Index>
 
 <#Include SYSTEM "intro.xml">
-<#Include SYSTEM "install.xml">
+
+<#Include SYSTEM "AutoDocMainFile.xml">
 
 
 </Body>
