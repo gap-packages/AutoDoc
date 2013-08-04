@@ -146,6 +146,7 @@ InstallGlobalFunction( CreateTitlePage,
         Unbind( titlepage.TitleComment );
     else
         indent := indent + 1;
+        # TODO: Do we really want this (resp. any) default string?
         Out( "<Br/><Br/>\n" );
         Out( "This manual is best viewed as an <B>HTML</B> document.\n" );
         Out( "An <B>offline</B> version should be included in the documentation\n" );
@@ -266,6 +267,10 @@ InstallGlobalFunction( CreateMainPage,
         
     fi;
 
+    # TODO: Allow more complicated entities definitions: E.g. by allowing pairs
+    #  [ name, value ]
+    # TODO: and if we do that, then do not add package_name unconditionally to the list,
+    # to allow the package author to define this entity slightly differently...
     Add( opt.entities, package_name );
     
     if IsBound( opt.main_xml_file ) then
