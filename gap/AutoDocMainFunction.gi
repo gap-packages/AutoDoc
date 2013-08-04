@@ -13,6 +13,7 @@
 InstallValue( AUTOMATIC_DOCUMENTATION,
               rec(
                 enable_documentation := false,
+                package_name := "",
                 documentation_stream := false,
                 documentation_headers := rec( ),
                 documentation_headers_main_file := false,
@@ -466,13 +467,7 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     
     AUTOMATIC_DOCUMENTATION.path_to_xmlfiles := path_to_xmlfiles;
     
-    ## First of all, make shure $package_name is the only package to be loaded:
-    dependencies := PackageInfo( package_name )[ 1 ].Dependencies;
-    
-    List( dependencies.NeededOtherPackages, i -> LoadPackage( i[ 1 ] ) );
-    
-    List( dependencies.SuggestedOtherPackages, i -> LoadPackage( i[ 1 ] ) );
-    ## Now loading $package_name only loads ONE package.
+    AUTOMATIC_DOCUMENTATION.package_name := package_name;
     
     ## Initialising the filestreams.
     AUTOMATIC_DOCUMENTATION.enable_documentation := true;
