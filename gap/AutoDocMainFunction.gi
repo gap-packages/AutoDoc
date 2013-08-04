@@ -64,7 +64,7 @@ end );
 InstallGlobalFunction( CreateTitlePage,
                        
   function( arg )
-    local package_name, dir, opt, filestream, indent, package_info, titlepage, author_records, tmp, lines, Out;
+    local package_name, dir, opt, filestream, indent, package_info, titlepage, author_records, tmp, lines, Out, OutWithTag;
     
     package_name := arg[ 1 ];
     package_info := PackageInfo( package_name )[ 1 ];
@@ -96,8 +96,26 @@ InstallGlobalFunction( CreateTitlePage,
     Out := function(arg)
         local s;
         s := ListWithIdenticalEntries( indent * 2, ' ');
-        Append( s,  Concatenation( arg ) );
+        Append( s, Concatenation( arg ) );
         AppendTo( filestream, s );
+    end;
+    
+    OutWithTag := function( tag, content )
+        local lines, s, l;
+        if not IsString( content ) then
+            content := Concatenation( content );
+        fi;
+        lines := SplitString( content, "\n" );
+        s := ListWithIdenticalEntries( indent * 2, ' ');
+        if Length(lines) = 1 then
+            AppendTo( filestream, s, "<", tag, ">", content, "</", tag, ">\n" );
+        else
+            AppendTo( filestream, s, "<", tag, ">\n" );
+            for l in lines do
+                AppendTo( filestream, s, "  ", l, "\n" );
+            od;
+            AppendTo( filestream, s, "</", tag, ">\n" );
+        fi;
     end;
     
     Out( AUTODOC_XML_HEADER );
@@ -106,7 +124,7 @@ InstallGlobalFunction( CreateTitlePage,
     
     indent := indent + 1;
     
-    Out( "<Title>&", package_name, ";</Title>\n" );
+    OutWithTag( "Title", [ "&", package_name, ";" ] );
     
     if IsBound(opt.TitlePage) then
         titlepage := StructuralCopy(opt.TitlePage);
@@ -120,7 +138,7 @@ InstallGlobalFunction( CreateTitlePage,
     else
         tmp := ReplacedString( package_info.Subtitle, "GAP", "&GAP;" );
     fi;
-    Out( "<Subtitle>", tmp, "</Subtitle>\n" );
+    OutWithTag( "Subtitle", tmp );
     
     Out( "<TitleComment>\n" );
     if IsBound(titlepage.TitleComment) then
@@ -137,7 +155,7 @@ InstallGlobalFunction( CreateTitlePage,
     fi;
     Out( "</TitleComment>\n" );
     
-    Out( "<Version>Version ", package_info.Version, "</Version>\n" );
+    OutWithTag( "Version", [ "Version ", package_info.Version ] );
     
     for author_records in package_info.Persons do
         
@@ -148,17 +166,24 @@ InstallGlobalFunction( CreateTitlePage,
             indent := indent + 1;
 
             # TODO: Properly indent strings containing newlines
-            Out( "<Address>\n" );
-            indent := indent + 1;
-            lines := SplitString( author_records.PostalAddress, "\n" );
-            for tmp in lines do
-               Out( tmp, "<Br/>\n" );
-            od;
-            #Out( author_records.PostalAddress, "\n" );
-            indent := indent - 1;
-            Out( "</Address>\n" );
-            Out( "<Email>", author_records.Email, "</Email>\n" );
-            Out( "<Homepage>", author_records.WWWHome, "</Homepage>\n" );
+            if IsBound(author_records.PostalAddress) then
+                Out( "<Address>\n" );
+                indent := indent + 1;
+                lines := SplitString( author_records.PostalAddress, "\n" );
+                for tmp in lines do
+                    # TODO: Make the <Br/> here optionally, or even remove it entirely?
+                    Out( tmp, "<Br/>\n" );
+                od;
+                #Out( author_records.PostalAddress, "\n" );
+                indent := indent - 1;
+                Out( "</Address>\n" );
+            fi;
+            if IsBound(author_records.Email) then
+                OutWithTag( "Email", author_records.Email );
+            fi;
+            if IsBound(author_records.WWWHome) then
+                OutWithTag( "Homepage", author_records.WWWHome );
+            fi;
             indent := indent - 1;
 
             Out( "</Author>\n" );
@@ -167,23 +192,22 @@ InstallGlobalFunction( CreateTitlePage,
         
     od;
     
-    Out( "<Date>", package_info.Date, "</Date>\n" );
+    OutWithTag( "Date", package_info.Date );
 
-    Out( "<Copyright>\n" );
     if IsBound(titlepage.Copyright) then
-        Out( titlepage.Copyright );
+        OutWithTag( "Copyright", titlepage.Copyright );
         Unbind( titlepage.Copyright );
     else
-        # TODO: Do we really want this default string?
-        Out( "This package may be distributed under the terms and conditions of the\n" );
-        Out( "GNU Public License Version 2.\n" );
+        # TODO: Do we really want this (resp. any) default string?
+        OutWithTag( "Copyright", [
+            "This package may be distributed under the terms and conditions of the\n",
+            "GNU Public License Version 2.\n",
+            ]
+        );
     fi;
-    Out( "</Copyright>\n" );
 
     for tmp in RecNames(titlepage) do
-        Out( "<", tmp, ">\n" );
-        Out( titlepage.(tmp) );
-        Out( "</", tmp, ">\n" );
+        OutWithTag( tmp, titlepage.(tmp) );
     od;
 
     indent := indent - 1;
