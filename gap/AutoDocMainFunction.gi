@@ -159,7 +159,9 @@ InstallGlobalFunction( CreateTitlePage,
     
     for author_records in package_info.Persons do
         
-        if author_records.IsAuthor then
+        # FIXME: Why not show maintainers?
+        # We should show them, but could add a flag indicating they are not authors
+        #if author_records.IsAuthor then
             
             Out( "<Author>", Concatenation(
                    author_records.FirstNames, " ", author_records.LastName ), "<Alt Only=\"LaTeX\"><Br/></Alt>\n" );
@@ -188,7 +190,7 @@ InstallGlobalFunction( CreateTitlePage,
 
             Out( "</Author>\n" );
             
-        fi;
+        #fi;
         
     od;
     
