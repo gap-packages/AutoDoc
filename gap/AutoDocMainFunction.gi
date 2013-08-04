@@ -51,8 +51,7 @@ InstallGlobalFunction( CreateDefaultChapterData,
     
     for i in list_of_types do
         
-        default_chapter_record.(i) := [ chapter_name,
-                                        Concatenation( package_name, "_automatic_generated_documentation_of_", i ) ];
+        default_chapter_record.(i) := [ chapter_name, Concatenation( chapter_name, "_of_", i ) ];
         
     od;
     
@@ -580,15 +579,17 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     
     for chapter_record in RecNames(AUTOMATIC_DOCUMENTATION.documentation_headers) do
         
-        AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record).main_filestream, "</Chapter>" );
+        chapter_record := AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record);
         
-        CloseStream( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record).main_filestream );
+        AppendTo( chapter_record.main_filestream, "</Chapter>" );
         
-        for section_stream in RecNames( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record).sections ) do
+        CloseStream( chapter_record.main_filestream );
+        
+        for section_stream in RecNames( chapter_record.sections ) do
             
-            AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record).sections.(section_stream), "</Section>" );
+            AppendTo( chapter_record.sections.(section_stream), "</Section>" );
             
-            CloseStream( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record).sections.(section_stream) );
+            CloseStream( chapter_record.sections.(section_stream) );
             
         od;
         

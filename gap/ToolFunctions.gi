@@ -267,13 +267,15 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
         
     if is_grouped then
         
-        Add( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).elements, [ argument_record.type, arguments, name, tester_names ] );
+        grouping := AUTOMATIC_DOCUMENTATION.grouped_items.(grouping);
         
-        AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).description := Concatenation( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).description, description );
+        Add( grouping.elements, [ argument_record.type, arguments, name, tester_names ] );
         
-        AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).return_value := return_value;
+        grouping.description := Concatenation( grouping.description, description );
         
-        AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).label_list := Concatenation( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping).label_list, label_list );
+        grouping.return_value := return_value;
+        
+        grouping.label_list := Concatenation( grouping.label_list, label_list );
         
     else
         
