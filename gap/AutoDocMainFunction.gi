@@ -446,7 +446,16 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     fi;
     
     ## Magic!
-    LoadPackage( package_name );
+    
+    if LowercaseString( package_name ) = "autodoc" then
+        
+        ReadPackage( "AutoDoc", "gap/AutoDocDocEntries.g" );
+        
+    else
+        
+        LoadPackage( package_name );
+        
+    fi;
     
     ## Write out the groups
     
