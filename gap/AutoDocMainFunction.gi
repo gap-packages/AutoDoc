@@ -30,6 +30,22 @@ BindGlobal("AUTODOC_XML_HEADER", Concatenation(
     )
 );
 
+BindGlobal( "AUTODOC_OutputTextFile",
+function( arg )
+    local filename, filestream;
+    if Length( arg ) = 1 then
+        filename := arg[1];
+    else
+        filename := Filename( arg[1], arg[2] );
+    fi;
+    
+    filestream := OutputTextFile( filename, false );
+    SetPrintFormattingStatus( filestream, false );
+    
+    return filestream;
+    
+end );
+
 
 ##
 InstallGlobalFunction( CreateDefaultChapterData,
@@ -87,9 +103,7 @@ InstallGlobalFunction( CreateTitlePage,
 
     fi;
 
-    filestream := OutputTextFile( Filename( dir, "title.xml" ), false );
-    
-    SetPrintFormattingStatus( filestream, false );
+    filestream := AUTODOC_OutputTextFile( dir, "title.xml" );
     
     indent := 0;
     Out := function(arg)
@@ -282,9 +296,7 @@ InstallGlobalFunction( CreateMainPage,
         
     fi;
     
-    filestream := OutputTextFile( Filename( dir, filename ), false );
-    
-    SetPrintFormattingStatus( filestream, false );
+    filestream := AUTODOC_OutputTextFile( dir, filename );
     
     AppendTo( filestream, AUTODOC_XML_HEADER );
     
@@ -372,9 +384,7 @@ InstallGlobalFunction( CreateNewChapterXMLFile,
     
     filename := Concatenation( chapter_name, ".xml" );
     
-    filestream := OutputTextFile( Filename( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename ), false );
-    
-    SetPrintFormattingStatus( filestream, false );
+    filestream := AUTODOC_OutputTextFile( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename );
     
     AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).main_filestream := filestream;
     
@@ -414,9 +424,7 @@ InstallGlobalFunction( CreateNewSectionXMLFile,
     
     filename := Concatenation( chapter_name, "Section", section_name, ".xml" );
     
-    filestream := OutputTextFile( Filename( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename ), false );
-    
-    SetPrintFormattingStatus( filestream, false );
+    filestream := AUTODOC_OutputTextFile( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename );
     
     AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).sections.(section_name) := filestream;
     
@@ -469,13 +477,9 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     ## Initialising the filestreams.
     AUTOMATIC_DOCUMENTATION.enable_documentation := true;
     
-    AUTOMATIC_DOCUMENTATION.documentation_stream := OutputTextFile( name_documentation_file, false );
+    AUTOMATIC_DOCUMENTATION.documentation_stream := AUTODOC_OutputTextFile( name_documentation_file );
     
-    SetPrintFormattingStatus( AUTOMATIC_DOCUMENTATION.documentation_stream, false );
-    
-    AUTOMATIC_DOCUMENTATION.documentation_headers_main_file := OutputTextFile( Filename( path_to_xmlfiles, "AutoDocMainFile.xml" ), false );
-    
-    SetPrintFormattingStatus( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, false );
+    AUTOMATIC_DOCUMENTATION.documentation_headers_main_file := AUTODOC_OutputTextFile( path_to_xmlfiles, "AutoDocMainFile.xml" );
     
     ## Creating a header for the xml file.
     AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, AUTODOC_XML_HEADER );
