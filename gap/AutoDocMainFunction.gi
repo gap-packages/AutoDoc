@@ -25,8 +25,8 @@ InstallValue( AUTOMATIC_DOCUMENTATION,
 
 
 BindGlobal("AUTODOC_XML_HEADER", Concatenation(
-    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n\n",
-    "<!--\n This is an automatically generated file. \n -->\n"
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n",
+    "<!-- This is an automatically generated file. -->\n"
     )
 );
 
@@ -51,8 +51,7 @@ InstallGlobalFunction( CreateDefaultChapterData,
     
     for i in list_of_types do
         
-        default_chapter_record.(i) := [ chapter_name,
-                                        Concatenation( package_name, "_automatic_generated_documentation_of_", i ) ];
+        default_chapter_record.(i) := [ chapter_name, Concatenation( chapter_name, "_of_", i ) ];
         
     od;
     
@@ -63,10 +62,32 @@ end );
 ##
 InstallGlobalFunction( CreateTitlePage,
                        
-  function( package_name )
-    local filestream, indent, package_info, titlepage, author_records, tmp, lines, Out;
+  function( arg )
+    local package_name, dir, opt, filestream, indent, package_info, titlepage, author_records, tmp, lines, Out, OutWithTag;
     
-    filestream := OutputTextFile( Filename( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, "title.xml" ), false );
+    package_name := arg[ 1 ];
+    package_info := PackageInfo( package_name )[ 1 ];
+
+    dir := arg[ 2 ];
+    if IsString(dir) then
+        dir := Directory(dir);
+    fi;
+    
+    if Length( arg ) = 3 then
+        
+        opt := arg[ 3 ];
+        
+    elif Length( arg ) = 2 then
+
+        opt := package_info.AutoDoc;
+        
+    else
+        
+        Error( "Wrong number of arguments\n" );
+
+    fi;
+
+    filestream := OutputTextFile( Filename( dir, "title.xml" ), false );
     
     SetPrintFormattingStatus( filestream, false );
     
@@ -74,8 +95,26 @@ InstallGlobalFunction( CreateTitlePage,
     Out := function(arg)
         local s;
         s := ListWithIdenticalEntries( indent * 2, ' ');
-        Append( s,  Concatenation( arg ) );
+        Append( s, Concatenation( arg ) );
         AppendTo( filestream, s );
+    end;
+    
+    OutWithTag := function( tag, content )
+        local lines, s, l;
+        if not IsString( content ) then
+            content := Concatenation( content );
+        fi;
+        lines := SplitString( content, "\n" );
+        s := ListWithIdenticalEntries( indent * 2, ' ');
+        if Length(lines) = 1 then
+            AppendTo( filestream, s, "<", tag, ">", content, "</", tag, ">\n" );
+        else
+            AppendTo( filestream, s, "<", tag, ">\n" );
+            for l in lines do
+                AppendTo( filestream, s, "  ", l, "\n" );
+            od;
+            AppendTo( filestream, s, "</", tag, ">\n" );
+        fi;
     end;
     
     Out( AUTODOC_XML_HEADER );
@@ -84,12 +123,10 @@ InstallGlobalFunction( CreateTitlePage,
     
     indent := indent + 1;
     
-    Out( "<Title>&", package_name, ";</Title>\n" );
+    OutWithTag( "Title", [ "&", package_name, ";" ] );
     
-    package_info := PackageInfo( package_name )[ 1 ];
-    
-    if IsBound(package_info.AutoDoc) and IsBound(package_info.AutoDoc.TitlePage) then
-        titlepage := StructuralCopy(package_info.AutoDoc.TitlePage);
+    if IsBound(opt.TitlePage) then
+        titlepage := StructuralCopy(opt.TitlePage);
     else
         titlepage := rec();
     fi;
@@ -100,64 +137,79 @@ InstallGlobalFunction( CreateTitlePage,
     else
         tmp := ReplacedString( package_info.Subtitle, "GAP", "&GAP;" );
     fi;
-    Out( "<Subtitle>", tmp, "</Subtitle>\n" );
+    OutWithTag( "Subtitle", tmp );
     
     Out( "<TitleComment>\n" );
-    indent := indent + 1;
-    Out( "<Br/><Br/>\n" );
-    Out( "This manual is best viewed as an <B>HTML</B> document.\n" );
-    Out( "An <B>offline</B> version should be included in the documentation\n" );
-    Out( "subfolder of the package.\n" );
-    Out( "<Br/><Br/>\n" );
-    indent := indent - 1;
+    if IsBound(titlepage.TitleComment) then
+        Out( titlepage.TitleComment );
+        Unbind( titlepage.TitleComment );
+    else
+        indent := indent + 1;
+        # TODO: Do we really want this (resp. any) default string?
+        Out( "<Br/><Br/>\n" );
+        Out( "This manual is best viewed as an <B>HTML</B> document.\n" );
+        Out( "An <B>offline</B> version should be included in the documentation\n" );
+        Out( "subfolder of the package.\n" );
+        Out( "<Br/><Br/>\n" );
+        indent := indent - 1;
+    fi;
     Out( "</TitleComment>\n" );
     
-    Out( "<Version>Version ", package_info.Version, "</Version>\n" );
+    OutWithTag( "Version", [ "Version ", package_info.Version ] );
     
     for author_records in package_info.Persons do
         
-        if author_records.IsAuthor then
+        # FIXME: Why not show maintainers?
+        # We should show them, but could add a flag indicating they are not authors
+        #if author_records.IsAuthor then
             
             Out( "<Author>", Concatenation(
                    author_records.FirstNames, " ", author_records.LastName ), "<Alt Only=\"LaTeX\"><Br/></Alt>\n" );
             indent := indent + 1;
 
             # TODO: Properly indent strings containing newlines
-            Out( "<Address>\n" );
-            indent := indent + 1;
-            lines := SplitString( author_records.PostalAddress, "\n" );
-            for tmp in lines do
-               Out( tmp, "<Br/>\n" );
-            od;
-            #Out( author_records.PostalAddress, "\n" );
-            indent := indent - 1;
-            Out( "</Address>\n" );
-            Out( "<Email>", author_records.Email, "</Email>\n" );
-            Out( "<Homepage>", author_records.WWWHome, "</Homepage>\n" );
+            if IsBound(author_records.PostalAddress) then
+                Out( "<Address>\n" );
+                indent := indent + 1;
+                lines := SplitString( author_records.PostalAddress, "\n" );
+                for tmp in lines do
+                    # TODO: Make the <Br/> here optionally, or even remove it entirely?
+                    Out( tmp, "<Br/>\n" );
+                od;
+                #Out( author_records.PostalAddress, "\n" );
+                indent := indent - 1;
+                Out( "</Address>\n" );
+            fi;
+            if IsBound(author_records.Email) then
+                OutWithTag( "Email", author_records.Email );
+            fi;
+            if IsBound(author_records.WWWHome) then
+                OutWithTag( "Homepage", author_records.WWWHome );
+            fi;
             indent := indent - 1;
 
             Out( "</Author>\n" );
             
-        fi;
+        #fi;
         
     od;
     
-    Out( Concatenation( "<Date>", package_info.Date, "</Date>\n" ) );
+    OutWithTag( "Date", package_info.Date );
 
-    Out( "<Copyright>\n" );
     if IsBound(titlepage.Copyright) then
-        Out( titlepage.Copyright );
+        OutWithTag( "Copyright", titlepage.Copyright );
         Unbind( titlepage.Copyright );
     else
-        Out( "This package may be distributed under the terms and conditions of the\n" );
-        Out( "GNU Public License Version 2.\n" );
+        # TODO: Do we really want this (resp. any) default string?
+        OutWithTag( "Copyright", [
+            "This package may be distributed under the terms and conditions of the\n",
+            "GNU Public License Version 2.\n",
+            ]
+        );
     fi;
-    Out( "</Copyright>\n" );
 
     for tmp in RecNames(titlepage) do
-        Out( "<", tmp, ">\n" );
-        Out( titlepage.(tmp) );
-        Out( "</", tmp, ">\n" );
+        OutWithTag( tmp, titlepage.(tmp) );
     od;
 
     indent := indent - 1;
@@ -175,32 +227,62 @@ end );
 InstallGlobalFunction( CreateMainPage,
                        
   function( arg )
-    local package_name, entities, filestream, i;
+    local package_name, dir, opt, filename, filestream, i, package_info;
     
     package_name := arg[ 1 ];
+    package_info := PackageInfo( package_name )[ 1 ];
+
+    dir := arg[ 2 ];
+    if IsString(dir) then
+        dir := Directory(dir);
+    fi;
+
+    if IsBound( package_info.AutoDoc ) then
+        opt := package_info.AutoDoc;
+    else
+        opt := rec();
+    fi;
+
+    if Length( arg ) = 3 then
+        if IsRecord( arg[ 3 ] ) then
+            opt := arg[ 3 ];
+        else
+            # HACK: Support old-style calling with entities list as second parameter
+            opt.entities := arg[ 2 ];
+        fi;
+    elif Length( arg ) > 3 then
+        Error( "Wrong number of arguments\n" );
+    fi;
     
-    if Length( arg ) = 2 then
+    if not IsBound( opt.entities ) then
         
-        entities := arg[ 2 ];
-        
-        Add( entities, package_name );
-        
-    elif Length( arg ) = 1 then
-        
-        entities := [ "GAP4", "Maple", "Mathematica", "Singular", "Plural", "Sage", "python", "cython", 
+        opt.entities := [
+                      "GAP4", "Maple", "Mathematica", "Singular", "Plural", "Sage", "python", "cython", 
                       "C", "MAGMA", "Macaulay2", "IO", "homalg", "ResidueClassRingForHomalg", "LIRNG", "LIMAP",
                       "LIMAT", "COLEM", "LIMOD", "LIMOR", "LICPX", "ExamplesForHomalg", "alexander", "Gauss",
                       "GaussForHomalg", "HomalgToCAS", "IO_ForHomalg", "MapleForHomalg", "RingsForHomalg",
                       "LessGenerators", "Yoneda", "Sheaves", "SCO", "LocalizeRingForHomalg", "GAPDoc", "AutoDoc",
-                      package_name ];
+                    ];
+        
+    fi;
+
+    # TODO: Allow more complicated entities definitions: E.g. by allowing pairs
+    #  [ name, value ]
+    # TODO: and if we do that, then do not add package_name unconditionally to the list,
+    # to allow the package author to define this entity slightly differently...
+    Add( opt.entities, package_name );
+    
+    if IsBound( opt.main_xml_file ) then
+        
+        filename := opt.main_xml_file;
         
     else
         
-        Error( "Wrong number of arguments\n" );
+        filename := Concatenation( package_name, ".xml" );
         
     fi;
     
-    filestream := OutputTextFile( Filename( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, Concatenation( package_name, ".xml" ) ), false );
+    filestream := OutputTextFile( Filename( dir, filename ), false );
     
     SetPrintFormattingStatus( filestream, false );
     
@@ -210,15 +292,15 @@ InstallGlobalFunction( CreateMainPage,
     
     AppendTo( filestream, "<!ENTITY see '<Alt Only=\"LaTeX\">$\to$</Alt><Alt Not=\"LaTeX\">--&gt;</Alt>'>\n" );
     
-    for i in entities do
+    for i in opt.entities do
         
-        AppendTo( filestream, Concatenation( "<!ENTITY ", i, " '<Package>", i, "</Package>'>\n" ) );
+        AppendTo( filestream, "<!ENTITY ", i, " '<Package>", i, "</Package>'>\n" );
         
     od;
     
     AppendTo( filestream, "]\n>\n" );
     
-    AppendTo( filestream, Concatenation( "<Book Name=\"", package_name, "\">\n" ) );
+    AppendTo( filestream, "<Book Name=\"", package_name, "\">\n" );
     
     AppendTo( filestream, "<#Include SYSTEM \"title.xml\">\n" );
     
@@ -226,11 +308,46 @@ InstallGlobalFunction( CreateMainPage,
     
     AppendTo( filestream, "<Body>\n" );
     
-    AppendTo( filestream, Concatenation( "<Index>&", package_name, ";</Index>\n" ) );
+    AppendTo( filestream, "<Index>&", package_name, ";</Index>\n" );
+
+    if IsBound( opt.includes ) then
+        
+        for i in opt.includes do
+            
+            AppendTo( filestream, "<#Include SYSTEM \"", i, "\">\n" );
+            
+        od;
+        
+    else
+        
+        # TODO: Move "AutoDocMainFile.xml" to a global constant, and/or make it customizable?
+        # It is also referenced in CreateAutomaticDocumentation()
+
+        AppendTo( filestream, "<#Include SYSTEM \"AutoDocMainFile.xml\">\n" );
+        
+    fi;
     
-    AppendTo( filestream, "<#Include SYSTEM \"AutoDocMainFile.xml\">\n" );
+    AppendTo( filestream, "</Body>\n" );
+
+    if IsBound( opt.appendix ) then
+        
+        for i in opt.appendix do
+            
+            AppendTo( filestream, "<#Include SYSTEM \"", i, "\">\n" );
+            
+        od;
+        
+    fi;
     
-    AppendTo( filestream, "</Body>\n<TheIndex/>\n</Book>" );
+    if IsBound( opt.bib ) then
+        
+        AppendTo( filestream, "<Bibliography Databases=\"", opt.bib, "\"/>\n" );
+
+    fi;
+    
+    AppendTo( filestream, "<TheIndex/>\n" );
+
+    AppendTo( filestream, "</Book>\n" );
     
     CloseStream( filestream );
     
@@ -471,15 +588,17 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     
     for chapter_record in RecNames(AUTOMATIC_DOCUMENTATION.documentation_headers) do
         
-        AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record).main_filestream, "</Chapter>" );
+        chapter_record := AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record);
         
-        CloseStream( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record).main_filestream );
+        AppendTo( chapter_record.main_filestream, "</Chapter>" );
         
-        for section_stream in RecNames( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record).sections ) do
+        CloseStream( chapter_record.main_filestream );
+        
+        for section_stream in RecNames( chapter_record.sections ) do
             
-            AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record).sections.(section_stream), "</Section>" );
+            AppendTo( chapter_record.sections.(section_stream), "</Section>" );
             
-            CloseStream( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record).sections.(section_stream) );
+            CloseStream( chapter_record.sections.(section_stream) );
             
         od;
         
