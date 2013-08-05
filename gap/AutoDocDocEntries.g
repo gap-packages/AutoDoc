@@ -69,19 +69,16 @@ CreateDocEntryForGlobalFunction(
                 "This string is used as label of the element in the documentation. If you want to make a",
                 "reference to a specific entry, you need to set the label manually.",
                 "Otherwise, this is not necessary.",
-                # FIXME: What is the next sentence meant to say??? Either elaborate, or else remove it.
-                "Please be careful.",
+                
+                "Please be careful to not give two entries the same description by giving two declarations with",
+                "the same name the same label."
             "</Item>",
             "<Mark><A>function_label</A></Mark><Item>",
-                # FIXME: This is easy to confuse with 'label'. Perhaps rename it.
-                # FIXME: It does not become quite clear what this parameter is good for and why/when
-                # would use it.
-                "This allows to set the label of the function manually. Normally, they would be the",
-                # FIXME: When it says 'attribute' in the following sentence, does it really mean
-                # to say 'argument'?
-                "name of the testers of that attribute, for example for IsInt,IsList.",
-                # FIXME: Max does not understand the next sentence at all.
-                "This manual setting can be done for reference purposes.",
+                "This sets the label of the function to the string <A>function_label</A>.",
+                "It might be useful for reference purposes, also this string is displayed as argument",
+                "of this method in the manual.",
+                "This really sets the label of the function, not the label of the ManItem.",
+                "Please see the &GAPDoc; manual for more infos on labels and references.",
             "</Item>",
             "</List>",
         "</Item>",
