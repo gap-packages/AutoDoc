@@ -116,7 +116,9 @@ function( arg )
     #
     if not IsBound(opt.autodoc) then
         # Enable AutoDoc support if the package depends on AutoDoc.
-        if ForAny( package_info.Dependencies.NeededOtherPackages, x -> LowercaseString(x[1]) = "autodoc" ) then
+        tmp := Concatenation( package_info.Dependencies.NeededOtherPackages,
+                              package_info.Dependencies.SuggestedOtherPackages );
+        if ForAny( tmp, x -> LowercaseString(x[1]) = "autodoc" ) then
             autodoc := rec();
         fi;
     elif IsRecord(opt.autodoc) then
