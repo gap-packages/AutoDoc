@@ -138,12 +138,8 @@ function( arg )
     # Extract GAPDoc settings
     #
     if not IsBound( opt.gapdoc ) then
-        # Enable GAPDoc support if the package depends on GAPDoc, or if autodoc support is on.
-        if IsBound( autodoc ) then
-            gapdoc := rec();
-        elif ForAny( package_info.Dependencies.NeededOtherPackages, x -> LowercaseString(x[1]) = "gapdoc" ) then
-            gapdoc := rec();
-        fi;
+        # Enable GAPDoc support by default
+        gapdoc := rec();
     elif IsRecord( opt.gapdoc ) then
         gapdoc := opt.gapdoc;
     elif IsBool( opt.gapdoc ) and opt.gapdoc = true then
