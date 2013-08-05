@@ -1,6 +1,6 @@
 ##  <#GAPDoc Label="CreateAutomaticDocum7FF7CB7879E3103D">
 ##  <ManSection>
-##    <Func Arg="package_name, documentation_file, path_to_xml_file, create_full_docu, [ section_intros ]" Name="CreateAutomaticDocumentation" Label=""/>
+##    <Func Arg="package_name, documentation_file, path_to_xml_file, create_full_docu, [ section_intros ]" Name="CreateAutomaticDocumentation"/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
 ##      This is the main method of the package. After loading the package, run it with the name of the package
@@ -32,7 +32,7 @@
 
 ##  <#GAPDoc Label="DeclareOperationWith7F05AD3D87726034">
 ##  <ManSection>
-##    <Func Arg="name, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], [ option_record ]" Name="DeclareOperationWithDocumentation" Label=""/>
+##    <Func Arg="name, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], [ option_record ]" Name="DeclareOperationWithDocumentation"/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
 ##      This method declares an operation, like DeclareOperation( <A>name</A>, <A>list_of_filters</A> ) would do.
@@ -89,7 +89,7 @@
 
 ##  <#GAPDoc Label="DeclareCategoryWithD856B7A3A82E9480E">
 ##  <ManSection>
-##    <Func Arg="name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="DeclareCategoryWithDocumentation" Label=""/>
+##    <Func Arg="name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="DeclareCategoryWithDocumentation"/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
 ##      This method declares a category, like DeclareCategory( <A>name</A>, <A>filter</A> ) would do.
@@ -103,7 +103,7 @@
 
 ##  <#GAPDoc Label="DeclareRepresentatio7FB1C438813DBD1E">
 ##  <ManSection>
-##    <Func Arg="name, filter, list_of_req_entries, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="DeclareRepresentationWithDocumentation" Label=""/>
+##    <Func Arg="name, filter, list_of_req_entries, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="DeclareRepresentationWithDocumentation"/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
 ##      This method declares a representation, like DeclareRepresentation( <A>name</A>, <A>filter</A>, <A>list_of_req_entries</A> )
@@ -118,7 +118,7 @@
 
 ##  <#GAPDoc Label="DeclareAttributeWith7F6F06A17DF430FF">
 ##  <ManSection>
-##    <Func Arg="name, filter, description, return_value [ argument ], [ chapter_and_section ], [ option_record ]" Name="DeclareAttributeWithDocumentation" Label=""/>
+##    <Func Arg="name, filter, description, return_value [ argument ], [ chapter_and_section ], [ option_record ]" Name="DeclareAttributeWithDocumentation"/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
 ##      This method declares an attribute, like DeclareAttribute( <A>name</A>, <A>filter</A> ) would do.
@@ -132,7 +132,7 @@
 
 ##  <#GAPDoc Label="DeclarePropertyWithD7DC223AE7F5C7789">
 ##  <ManSection>
-##    <Func Arg="name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="DeclarePropertyWithDocumentation" Label=""/>
+##    <Func Arg="name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="DeclarePropertyWithDocumentation"/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
 ##      This method declares a property, like DeclareProperty( <A>name</A>, <A>filter</A> ) would do.
@@ -146,7 +146,7 @@
 
 ##  <#GAPDoc Label="DeclareGlobalFunctio7F7402AB8383D0AC">
 ##  <ManSection>
-##    <Func Arg="name, description, return_value [ arguments ], [ chapter_and_section ], [ option_record ]" Name="DeclareGlobalFunctionWithDocumentation" Label=""/>
+##    <Func Arg="name, description, return_value [ arguments ], [ chapter_and_section ], [ option_record ]" Name="DeclareGlobalFunctionWithDocumentation"/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
 ##      This method declares a global function like DeclareGlobalFunction( <A>name</A> ) would do.
@@ -160,7 +160,7 @@
 
 ##  <#GAPDoc Label="DeclareGlobalVariabl8193C81283CDA95A">
 ##  <ManSection>
-##    <Func Arg="name, description, [ chapter_and_section ]" Name="DeclareGlobalVariableWithDocumentation" Label=""/>
+##    <Func Arg="name, description, [ chapter_and_section ]" Name="DeclareGlobalVariableWithDocumentation"/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
 ##      This method declares a global variable like DeclareGlobalVariable( <A>name</A> ) would do.
@@ -174,7 +174,7 @@
 
 ##  <#GAPDoc Label="InstallMethodWithDoc876BF65C8663577E">
 ##  <ManSection>
-##    <Func Arg="name, short_descr, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], func" Name="InstallMethodWithDocumentation" Label=""/>
+##    <Func Arg="name, short_descr, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], func" Name="InstallMethodWithDocumentation"/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
 ##      This method installs a method, like InstallMethod( <A>name</A>, <A>short_descr</A>, <A>list_of_filters</A>, <A>func</A> ) would do.
@@ -188,7 +188,7 @@
 
 ##  <#GAPDoc Label="CreateDocEntryForCat85DE17917C282F46">
 ##  <ManSection>
-##    <Func Arg="name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="CreateDocEntryForCategory" Label=""/>
+##    <Func Arg="name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="CreateDocEntryForCategory"/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
 ##      This works like <Ref Func='DeclareCategoryWithDocumentation'/> except that it
@@ -200,7 +200,7 @@
 
 ##  <#GAPDoc Label="CreateDocEntryForRep7B4216B3819043CE">
 ##  <ManSection>
-##    <Func Arg="name, filter, list_of_req_entries, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="CreateDocEntryForRepresentation" Label=""/>
+##    <Func Arg="name, filter, list_of_req_entries, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="CreateDocEntryForRepresentation"/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
 ##      This works like <Ref Func='DeclareRepresentationWithDocumentation'/> except that it
@@ -212,7 +212,7 @@
 
 ##  <#GAPDoc Label="CreateDocEntryForOpe7AB5CCA081EAC274">
 ##  <ManSection>
-##    <Func Arg="name, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], [ option_record ]" Name="CreateDocEntryForOperation" Label=""/>
+##    <Func Arg="name, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], [ option_record ]" Name="CreateDocEntryForOperation"/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
 ##      This works like <Ref Func='DeclareOperationWithDocumentation'/> except that it
@@ -224,7 +224,7 @@
 
 ##  <#GAPDoc Label="CreateDocEntryForAtt81D2368F81855963">
 ##  <ManSection>
-##    <Func Arg="name, filter, description, return_value [ argument ], [ chapter_and_section ], [ option_record ]" Name="CreateDocEntryForAttribute" Label=""/>
+##    <Func Arg="name, filter, description, return_value [ argument ], [ chapter_and_section ], [ option_record ]" Name="CreateDocEntryForAttribute"/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
 ##      This works like <Ref Func='DeclareAttributeWithDocumentation'/> except that it
@@ -236,7 +236,7 @@
 
 ##  <#GAPDoc Label="CreateDocEntryForPro7E7BCCAA7C708139">
 ##  <ManSection>
-##    <Func Arg="name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="CreateDocEntryForProperty" Label=""/>
+##    <Func Arg="name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="CreateDocEntryForProperty"/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
 ##      This works like <Ref Func='DeclarePropertyWithDocumentation'/> except that it

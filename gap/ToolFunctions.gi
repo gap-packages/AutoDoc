@@ -307,7 +307,7 @@ InstallGlobalFunction( AutoDoc_WriteEntry,
     
     AppendTo( doc_stream, " Name=\"", name, "\"" );
     
-    if tester_names <> fail then
+    if tester_names <> fail and tester_names <> "" then
         AppendTo( doc_stream, " Label=\"", tester_names, "\"" );
     fi;
     
@@ -353,7 +353,7 @@ InstallGlobalFunction( AutoDoc_WriteGroupedEntry,
         
         AppendTo( doc_stream, "Name=\"", i[ 3 ], "\" " );
         
-        if i[ 4 ] <> fail then
+        if i[ 4 ] <> fail and i[ 4 ] <> "" then
             AppendTo( doc_stream, "Label=\"", i[ 4 ], "\"" );
         fi;
         
