@@ -1,6 +1,6 @@
 ##  <#GAPDoc Label="CreateAutomaticDocum7FF7CB7879E3103D">
 ##  <ManSection>
-##    <Meth Arg="package_name, documentation_file, path_to_xml_file,create_full_docu[,section_intros]" Name="CreateAutomaticDocumentation" Label=""/>
+##    <Func Arg="package_name, documentation_file, path_to_xml_file,create_full_docu[,section_intros]" Name="CreateAutomaticDocumentation" Label=""/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
 ##      This is the main method of the package. After loading the package, run it with the name of the pacckage

@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
-<!--
- This is an automatically generated file. 
- -->
+<!-- This is an automatically generated file. -->
 <Chapter Label="The_main_functions_automatically_generated_documentation_parts">
 <Heading>The main functions</Heading>
 <#Include SYSTEM "The_main_functionsSectionThe_main_function.xml">
