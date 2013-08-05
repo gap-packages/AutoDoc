@@ -1,0 +1,23 @@
+* why is an internal detail like AUTOMATIC_DOCUMENTATION documented?
+  at most, it should be part of the "developers documentation".
+
+* Why does e.g. DeclareCategoryWithDocumentation return something?
+
+* DeclareAttributeWithDocumentation does not support all arguments DeclareAttribute supports.
+  Same for some of the others.
+  Possible solution: Change the signature of DeclareAttributeWithDocumentation to accept
+  as first param a list; this list will then be used to call DeclareAttribute.
+
+* Why does AutoDoc force the user to replace spaces by underscores in chapter_and_section?
+  I mean, it later translates those underscores to spaces in some places... so why not reverse
+  the logic, and allow the user to use spaces... then replace those by underscores when needed.
+
+* Why is chapter_and_section not just an entry of the options record?
+
+* For that matter, have you looked into using ValueOption etc. instead of an option record?
+
+* Perhaps add a tool which allows extracting TODO / FIXME comments from the code, collecting
+  them, together with nice links to the relevant code sections. Think "doxygen for GAP".
+  Indeed, in the ultimate version, this would also generate a HTML file for each GAP source file,
+  with a nice syntax highlighted version of the GAP code, line numbers etc., so that documentation
+  can directly link to each defined function... hui... :)
