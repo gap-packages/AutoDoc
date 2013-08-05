@@ -1,0 +1,26 @@
+<Chapter Label="Tutorials">
+<Heading>Tutorials for using &AutoDoc;</Heading>
+
+
+<Section Label="Tut2">
+<Heading>Integrating &AutoDoc; into your existing documentation</Heading>
+
+Suppose you already have a package, let's name it <C>Harald</C>, and <C>Harald</C> already has some documentation.
+But from now on you want to get rid of always writing xml. Then you can use &AutoDoc; to write your new documentation parts.
+All you need is to follow those simple steps, to include &AutoDoc; generated documentation in <C>Harald</C>s already existing documentation.
+  
+  Step 1:
+    Declare the new objects with the <C>Declare*WithDocumentation</C> methods and add the descriptions.
+  
+  Step 2:
+    Launch the AutoDoc command with arguments <C>Harald</C> and the path of your documentation. If you want to,
+    you can also enable &GAPDoc; in the command.
+    
+    ##INSERT CORRECT COMMAND HERE!
+    
+  Step 3:
+    Step 2 should have created, among other files, a file named AutoDocMainFile.xml in your documentation folder. Include this file in your documentation via
+    
+    ##INSERT SYSTEM COMMAND (Verbatim)
+    
+  Now you should have your &AutoDoc; created data in your documentation. Have fun with it.
