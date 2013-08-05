@@ -37,7 +37,7 @@ GenerateDocumentation(
     Step 2 should have created, among other files, a file named AutoDocMainFile.xml in your documentation folder. Include this file in your documentation via
 
 <Verb>
-<#Include SYSTEM "AutoDocMainFile.xml">
+#Include SYSTEM "AutoDocMainFile.xml"
 </Verb>
 
   Now you should have your &AutoDoc; created data in your documentation. Have fun with it.
