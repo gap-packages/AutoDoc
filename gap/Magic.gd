@@ -7,5 +7,5 @@
 #############################################################################
 
 
-DeclareGlobalFunction( "GenerateDocumentation" );
+DeclareGlobalFunction( "AutoDoc" );
 

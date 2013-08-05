@@ -20,29 +20,11 @@ end );
 
 
 
-# GenerateDocumentation(pkg[, opt])
+# AutoDoc(pkg[, opt])
 #
 # TODO: Write documentation
 #
-#  pkg: name of the package for which we generate docs
-#  opt: record with optional settings:
-#    opt.dir
-#    opt.scaffold:  true / false / record
-#    opt.autodoc:  true / false / record
-#    opt.gapdoc:  true / false / record
-#    ...
-#    opt.gapdoc.main
-#    opt.gapdoc.files
-#    opt.gapdoc.bookname
-#    ...
-#
-# TODO: Find better name!!! In particular, in contrast to CreateAutomaticDocumentation and MakeGAPDocDoc...
-#   some ideas:  DocWizard,  MagicDoc, DocGenerator, AutoDoc, ... -- nobody documents faster
-#
-# Note that this function is useful even if one does not use DeclareFOOWithDocumentation !
-
-
-InstallGlobalFunction( GenerateDocumentation,
+InstallGlobalFunction( AutoDoc,
 function( arg )
     local pkg, package_info, opt, dir, scaffold, gapdoc, autodoc,
             d, files, i, tmp;
