@@ -1,9 +1,9 @@
 ##  <#GAPDoc Label="CreateAutomaticDocum7FF7CB7879E3103D">
 ##  <ManSection>
-##    <Meth Arg="package_name, documentation_file, path_to_xml_file,create_full_docu[,section_intros]" Name="CreateAutomaticDocumentation" Label=""/>
+##    <Func Arg="package_name, documentation_file, path_to_xml_file, create_full_docu, [ section_intros ]" Name="CreateAutomaticDocumentation" Label=""/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
-##      This is the main method of the package. After loading the package, run it with the name of the pacckage
+##      This is the main method of the package. After loading the package, run it with the name of the package
 ##      you want to create a documentation of as first argument, with an (empty) filepath (everything will be overwritten) as second argument.
 ##      Make sure you have included this file as source if you run your GAPDoc documentation creating script.
 ##      The third argument is a path to the directory where it can store the GAPDoc XML files.
@@ -24,179 +24,163 @@
 ##  <ManSection>
 ##    <Var Name="AUTOMATIC_DOCUMENTATION"/>
 ##    <Description>
-##      This global variable stores all the streams and some additional data,
-##      like chapter names.
+##      This global variable stores all the streams and some additional data, like chapter names.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
 ##
 
-##  <#GAPDoc Label="DeclareCategoryWithD7C8D33607AE49723">
-##  <ManSection>
-##    <Func Arg="name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="DeclareCategoryWithDocumentation" Label=""/>
-##    <Returns><C>true</C> or <C>false</C></Returns>
-##    <Description>
-##      This method declares a category, like DeclareCategory( <A>name</A>, <A>filter</A> ) would do. The description string is added to the documentation
-##      if CreateAutoDoc is called. It
-##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
-##      <A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.
-##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this category
-##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
-##      the header of the chapter or the section. <A>option_record</A> can be a record with some options. The entry <A>group</A> must be a
-##      string and will group functions with the same name together in the documentation. Their description will be concatenated, chapter and section info
-##      of the first element in the group will be used. <A>label</A> will be the label of the element in the documentation. If you want to make a
-##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful. <A>function_label</A> allows
-##      to set the label of the function manually. Normally, they would be the name of the testers of that attribute, for example for IsInt,IsList. This
-##      manual setting can be done for reference purposes.
-##    </Description>
-##  </ManSection>
-##  <#/GAPDoc>
-##
-
-##  <#GAPDoc Label="InstallMethodWithDoc8134EA0F84DB234E">
-##  <ManSection>
-##    <Func Arg="name, short_descr, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], func" Name="InstallMethodWithDocumentation" Label=""/>
-##    <Returns><C>true</C> or <C>false</C></Returns>
-##    <Description>
-##      This method installs a method, like InstallMethod( <A>name</A>, <A>short_descr</A>, <A>list_of_filters</A>, <A>func</A> ) would do.
-##      The description string is added to the documentation
-##      if CreateAutoDoc is called. It
-##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
-##      <A>return_value</A> is a string displayed as the return value of the method. It is not optional.
-##      <A>arguments</A> is an optional string which is displayed in the documentation as attributes of the operation.
-##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this method
-##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
-##      the header of the chapter or the section.
-##    </Description>
-##  </ManSection>
-##  <#/GAPDoc>
-##
-
-##  <#GAPDoc Label="DeclareOperationWith8193976E7AC2BE5F">
+##  <#GAPDoc Label="DeclareOperationWith7F05AD3D87726034">
 ##  <ManSection>
 ##    <Func Arg="name, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], [ option_record ]" Name="DeclareOperationWithDocumentation" Label=""/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
-##      This method declares an operation, like DeclareOperation( <A>name</A>, <A>list_of_filters</A> ) would do. The description string is added to the documentation
-##      if CreateAutoDoc is called. It
-##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
-##      <A>return_value</A> is a string displayed as the return value of the method. It is not optional.
-##      <A>arguments</A> is an optional string which is displayed in the documentation as attributes of the operation.
-##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this method
-##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
-##      the header of the chapter or the section. <A>option_record</A> can be a record with some options. The entry <A>group</A> must be a
-##      string and will group functions with the same name together in the documentation. Their description will be concatenated, chapter and section info
-##      of the first element in the group will be used. <A>label</A> will be the label of the element in the documentation. If you want to make a
-##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful. <A>function_label</A> allows
-##      to set the label of the function manually. Normally, they would be the name of the testers of that attribute, for example for IsInt,IsList. This
-##      manual setting can be done for reference purposes.
+##      This method declares an operation, like DeclareOperation( <A>name</A>, <A>list_of_filters</A> ) would do.
+##      In addition, it specifies various information documenting the declared operation.
+##      There can be used to generate &GAPDoc; documentation files by calling
+##      <Ref Func='CreateAutomaticDocumentation'/> in a suitable way.
+##      <Br/>
+##      The additional parameters have the following meaning:
+##      <List>
+##      <Mark><A>description</A></Mark><Item>
+##      This contains a descriptive text which is added to the generated documentation.
+##      It can either be a string or a list of strings. If it is a list of strings, then these
+##      strings are concatenated with a space between them.
+##      </Item>
+##      <Mark><A>return_value</A></Mark><Item>
+##      A string displayed as description of the return value.
+##      </Item>
+##      <Mark><A>arguments</A></Mark><Item>
+##      An optional string which is displayed in the documentation as arguments list of the operation.
+##      </Item>
+##      <Mark><A>chapter_and_section</A></Mark><Item>
+##      An optional argument which, if present, must be a list of two strings, naming the chapter
+##      and the section in which the generated documentation for the operation should be placed.
+##      There are no spaces allowed in this string, underscores will be converted to spaces in
+##      the header of the chapter or the section.
+##      </Item>
+##      <Mark><A>option_record</A></Mark><Item>
+##      <A>option_record</A> can be a record with some additional options.
+##      The following are currently supported:
+##      <List>
+##      <Mark><A>group</A></Mark><Item>
+##      This must be a string and is used to group functions with the same group name together
+##      in the documentation. Their description will be concatenated, chapter and section info
+##      of the first element in the group will be used.
+##      </Item>
+##      <Mark><A>label</A></Mark><Item>
+##      This string is used as label of the element in the documentation. If you want to make a
+##      reference to a specific entry, you need to set the label manually.
+##      Otherwise, this is not necessary.
+##      Please be careful.
+##      </Item>
+##      <Mark><A>function_label</A></Mark><Item>
+##      This allows to set the label of the function manually. Normally, they would be the
+##      name of the testers of that attribute, for example for IsInt,IsList.
+##      This manual setting can be done for reference purposes.
+##      </Item>
+##      </List>
+##      </Item>
+##      </List>
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
 ##
 
-##  <#GAPDoc Label="DeclareRepresentatio862151237C040CD1">
+##  <#GAPDoc Label="DeclareCategoryWithD856B7A3A82E9480E">
+##  <ManSection>
+##    <Func Arg="name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="DeclareCategoryWithDocumentation" Label=""/>
+##    <Returns><C>true</C> or <C>false</C></Returns>
+##    <Description>
+##      This method declares a category, like DeclareCategory( <A>name</A>, <A>filter</A> ) would do.
+##      <Br/>
+##      <Br/>
+##      The remaining parameters behave as described for <Ref Func='DeclareOperationWithDocumentation'/>.
+##    </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+##
+
+##  <#GAPDoc Label="DeclareRepresentatio7FB1C438813DBD1E">
 ##  <ManSection>
 ##    <Func Arg="name, filter, list_of_req_entries, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="DeclareRepresentationWithDocumentation" Label=""/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
 ##      This method declares a representation, like DeclareRepresentation( <A>name</A>, <A>filter</A>, <A>list_of_req_entries</A> )
-##      would do. The description string is added to the documentation
-##      if CreateAutoDoc is called. It
-##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
-##      <A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.
-##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this category
-##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
-##      the header of the chapter or the section. <A>option_record</A> can be a record with some options. The entry <A>group</A> must be a
-##      string and will group functions with the same name together in the documentation. Their description will be concatenated, chapter and section info
-##      of the first element in the group will be used. <A>label</A> will be the label of the element in the documentation. If you want to make a
-##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful. <A>function_label</A> allows
-##      to set the label of the function manually. Normally, they would be the name of the testers of that attribute, for example for IsInt,IsList. This
-##      manual setting can be done for reference purposes.
+##      would do.
+##      <Br/>
+##      <Br/>
+##      The remaining parameters behave as described for <Ref Func='DeclareOperationWithDocumentation'/>.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
 ##
 
-##  <#GAPDoc Label="DeclareAttributeWith781F75A87FBC15EC">
+##  <#GAPDoc Label="DeclareAttributeWith7F6F06A17DF430FF">
 ##  <ManSection>
 ##    <Func Arg="name, filter, description, return_value [ argument ], [ chapter_and_section ], [ option_record ]" Name="DeclareAttributeWithDocumentation" Label=""/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
-##      This method declares an attribute, like DeclareAttribute( <A>name</A>, <A>filter</A> ) would do. The description string is added to the documentation
-##      if CreateAutoDoc is called. It
-##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
-##      <A>return_value</A> is a string displayed as the return value of the attribute. It is not optional.
-##      <A>argument</A> is an optional string which is displayed in the documentation as attribute of the attribute.
-##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this attribute
-##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
-##      the header of the chapter or the section. <A>option_record</A> can be a record with some options. The entry <A>group</A> must be a
-##      string and will group functions with the same name together in the documentation. Their description will be concatenated, chapter and section info
-##      of the first element in the group will be used. <A>label</A> will be the label of the element in the documentation. If you want to make a
-##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful. <A>function_label</A> allows
-##      to set the label of the function manually. Normally, they would be the name of the testers of that attribute, for example for IsInt,IsList. This
-##      manual setting can be done for reference purposes.
+##      This method declares an attribute, like DeclareAttribute( <A>name</A>, <A>filter</A> ) would do.
+##      <Br/>
+##      <Br/>
+##      The remaining parameters behave as described for <Ref Func='DeclareOperationWithDocumentation'/>.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
 ##
 
-##  <#GAPDoc Label="DeclarePropertyWithD84C9D277819FF0B9">
+##  <#GAPDoc Label="DeclarePropertyWithD7DC223AE7F5C7789">
 ##  <ManSection>
 ##    <Func Arg="name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="DeclarePropertyWithDocumentation" Label=""/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
-##      This method declares a property, like DeclareProperty( <A>name</A>, <A>filter</A> ) would do. The description string is added to the documentation
-##      if CreateAutoDoc is called. It
-##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
-##      <A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.
-##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this property
-##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
-##      the header of the chapter or the section. <A>option_record</A> can be a record with some options. The entry <A>group</A> must be a
-##      string and will group functions with the same name together in the documentation. Their description will be concatenated, chapter and section info
-##      of the first element in the group will be used. <A>label</A> will be the label of the element in the documentation. If you want to make a
-##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful. <A>function_label</A> allows
-##      to set the label of the function manually. Normally, they would be the name of the testers of that attribute, for example for IsInt,IsList. This
-##      manual setting can be done for reference purposes.
+##      This method declares a property, like DeclareProperty( <A>name</A>, <A>filter</A> ) would do.
+##      <Br/>
+##      <Br/>
+##      The remaining parameters behave as described for <Ref Func='DeclareOperationWithDocumentation'/>.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
 ##
 
-##  <#GAPDoc Label="DeclareGlobalFunctio780471A2876B4016">
+##  <#GAPDoc Label="DeclareGlobalFunctio7F7402AB8383D0AC">
 ##  <ManSection>
 ##    <Func Arg="name, description, return_value [ arguments ], [ chapter_and_section ], [ option_record ]" Name="DeclareGlobalFunctionWithDocumentation" Label=""/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
-##      This method declares a global function like DeclareGlobalFunction( <A>name</A> ) would do. The description string is added to the documentation
-##      if CreateAutoDoc is called. It
-##      can either be a string or a list of strings.
-##      Lists will be concatenated with a space between them. <A>return_value</A> is a string displayed as the return value of the function. It is not optional.
-##      <A>arguments</A> is an optional string which is displayed in the documentation as attributes of the operation.
-##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this function
-##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
-##      the header of the chapter or the section. <A>option_record</A> can be a record with some options. The entry <A>group</A> must be a
-##      string and will group functions with the same name together in the documentation. Their description will be concatenated, chapter and section info
-##      of the first element in the group will be used. <A>label</A> will be the label of the element in the documentation. If you want to make a
-##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful. <A>function_label</A> allows
-##      to set the label of the function manually. Normally, they would be the name of the testers of that attribute, for example for IsInt,IsList. This
-##      manual setting can be done for reference purposes.
+##      This method declares a global function like DeclareGlobalFunction( <A>name</A> ) would do.
+##      <Br/>
+##      <Br/>
+##      The remaining parameters behave as described for <Ref Func='DeclareOperationWithDocumentation'/>.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
 ##
 
-##  <#GAPDoc Label="DeclareGlobalVariabl83C1403D793BAA65">
+##  <#GAPDoc Label="DeclareGlobalVariabl8193C81283CDA95A">
 ##  <ManSection>
 ##    <Func Arg="name, description, [ chapter_and_section ]" Name="DeclareGlobalVariableWithDocumentation" Label=""/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
-##      This method declares a global variable like DeclareGlobalVariable( <A>name</A> ) would do. The description string is added to the documentation
-##      if CreateAutoDoc is called. It
-##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
-##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this variable
-##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
-##      the header of the chapter or the section.
+##      This method declares a global variable like DeclareGlobalVariable( <A>name</A> ) would do.
+##      <Br/>
+##      <Br/>
+##      The remaining parameters behave as described for <Ref Func='DeclareOperationWithDocumentation'/>.
+##    </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+##
+
+##  <#GAPDoc Label="InstallMethodWithDoc876BF65C8663577E">
+##  <ManSection>
+##    <Func Arg="name, short_descr, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], func" Name="InstallMethodWithDocumentation" Label=""/>
+##    <Returns><C>true</C> or <C>false</C></Returns>
+##    <Description>
+##      This method installs a method, like InstallMethod( <A>name</A>, <A>short_descr</A>, <A>list_of_filters</A>, <A>func</A> ) would do.
+##      <Br/>
+##      <Br/>
+##      The remaining parameters behave as described for <Ref Func='DeclareOperationWithDocumentation'/>.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
@@ -207,18 +191,8 @@
 ##    <Func Arg="name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="CreateDocEntryForCategory" Label=""/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
-##      The description string is added to the documentation
-##      if CreateAutoDoc is called. It
-##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
-##      <A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.
-##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this category
-##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
-##      the header of the chapter or the section. <A>option_record</A> can be a record with some options. The entry <A>group</A> must be a
-##      string and will group functions with the same name together in the documentation. Their description will be concatenated, chapter and section info
-##      of the first element in the group will be used. <A>label</A> will be the label of the element in the documentation. If you want to make a
-##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful. <A>function_label</A> allows
-##      to set the label of the function manually. Normally, they would be the name of the testers of that attribute, for example for IsInt,IsList. This
-##      manual setting can be done for reference purposes.
+##      This works like <Ref Func='DeclareCategoryWithDocumentation'/> except that it
+##      does not call DeclareCategory.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
@@ -229,18 +203,8 @@
 ##    <Func Arg="name, filter, list_of_req_entries, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="CreateDocEntryForRepresentation" Label=""/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
-##      The description string is added to the documentation
-##      if CreateAutoDoc is called. It
-##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
-##      <A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.
-##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this category
-##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
-##      the header of the chapter or the section. <A>option_record</A> can be a record with some options. The entry <A>group</A> must be a
-##      string and will group functions with the same name together in the documentation. Their description will be concatenated, chapter and section info
-##      of the first element in the group will be used. <A>label</A> will be the label of the element in the documentation. If you want to make a
-##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful. <A>function_label</A> allows
-##      to set the label of the function manually. Normally, they would be the name of the testers of that attribute, for example for IsInt,IsList. This
-##      manual setting can be done for reference purposes.
+##      This works like <Ref Func='DeclareRepresentationWithDocumentation'/> except that it
+##      does not call DeclareRepresentation.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
@@ -251,19 +215,8 @@
 ##    <Func Arg="name, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], [ option_record ]" Name="CreateDocEntryForOperation" Label=""/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
-##      The description string is added to the documentation
-##      if CreateAutoDoc is called. It
-##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
-##      <A>return_value</A> is a string displayed as the return value of the method. It is not optional.
-##      <A>arguments</A> is an optional string which is displayed in the documentation as attributes of the operation.
-##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this method
-##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
-##      the header of the chapter or the section. <A>option_record</A> can be a record with some options. The entry <A>group</A> must be a
-##      string and will group functions with the same name together in the documentation. Their description will be concatenated, chapter and section info
-##      of the first element in the group will be used. <A>label</A> will be the label of the element in the documentation. If you want to make a
-##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful. <A>function_label</A> allows
-##      to set the label of the function manually. Normally, they would be the name of the testers of that attribute, for example for IsInt,IsList. This
-##      manual setting can be done for reference purposes.
+##      This works like <Ref Func='DeclareOperationWithDocumentation'/> except that it
+##      does not call DeclareOperation.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
@@ -274,19 +227,8 @@
 ##    <Func Arg="name, filter, description, return_value [ argument ], [ chapter_and_section ], [ option_record ]" Name="CreateDocEntryForAttribute" Label=""/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
-##      The description string is added to the documentation
-##      if CreateAutoDoc is called. It
-##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
-##      <A>return_value</A> is a string displayed as the return value of the attribute. It is not optional.
-##      <A>argument</A> is an optional string which is displayed in the documentation as attribute of the attribute.
-##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this attribute
-##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
-##      the header of the chapter or the section. <A>option_record</A> can be a record with some options. The entry <A>group</A> must be a
-##      string and will group functions with the same name together in the documentation. Their description will be concatenated, chapter and section info
-##      of the first element in the group will be used. <A>label</A> will be the label of the element in the documentation. If you want to make a
-##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful. <A>function_label</A> allows
-##      to set the label of the function manually. Normally, they would be the name of the testers of that attribute, for example for IsInt,IsList. This
-##      manual setting can be done for reference purposes.
+##      This works like <Ref Func='DeclareAttributeWithDocumentation'/> except that it
+##      does not call DeclareAttribute.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
@@ -297,18 +239,8 @@
 ##    <Func Arg="name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]" Name="CreateDocEntryForProperty" Label=""/>
 ##    <Returns><C>true</C> or <C>false</C></Returns>
 ##    <Description>
-##      The description string is added to the documentation
-##      if CreateAutoDoc is called. It
-##      can either be a string or a list of strings. Lists will be concatenated with a space between them.
-##      <A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.
-##      <A>chapter_and_section</A> is an optional arguments which must be a list with two strings, naming the chapter and the section in which this property
-##      should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in
-##      the header of the chapter or the section. <A>option_record</A> can be a record with some options. The entry <A>group</A> must be a
-##      string and will group functions with the same name together in the documentation. Their description will be concatenated, chapter and section info
-##      of the first element in the group will be used. <A>label</A> will be the label of the element in the documentation. If you want to make a
-##      reference to a specific entry, you need to set the label manually. Otherwise, this is not necessary. Please be careful. <A>function_label</A> allows
-##      to set the label of the function manually. Normally, they would be the name of the testers of that attribute, for example for IsInt,IsList. This
-##      manual setting can be done for reference purposes.
+##      This works like <Ref Func='DeclarePropertyWithDocumentation'/> except that it
+##      does not call DeclareProperty.
 ##    </Description>
 ##  </ManSection>
 ##  <#/GAPDoc>
