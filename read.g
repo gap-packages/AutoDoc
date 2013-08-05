@@ -16,3 +16,5 @@ ReadPackage( "AutoDoc", "gap/ToolFunctions.gi" );
 ReadPackage( "AutoDoc", "gap/CreateDocumentationEntries.gi" );
 
 ReadPackage( "AutoDoc", "gap/DeclareWithDocumentation.gi" );
+
+ReadPackage( "AutoDoc", "gap/Magic.gi" );
