@@ -64,6 +64,8 @@
 
 <#Include SYSTEM "intro.xml">
 
+<#Include SYSTEM "Tutorials.xml">
+
 <#Include SYSTEM "AutoDocMainFile.xml">
 
 

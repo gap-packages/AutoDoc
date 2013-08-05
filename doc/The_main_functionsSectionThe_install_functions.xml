@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
-<!--
- This is an automatically generated file. 
- -->
+<!-- This is an automatically generated file. -->
 <Section Label="The_install_functions_automatically_generated_documentation_parts">
 <Heading>The install functions</Heading>
 <#Include Label="DeclareCategoryWithD7C8D33607AE49723">
