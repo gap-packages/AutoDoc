@@ -3,12 +3,5 @@
 <!-- This is an automatically generated file. -->
 <Section Label="The_install_functions_automatically_generated_documentation_parts">
 <Heading>The install functions</Heading>
-<#Include Label="DeclareCategoryWithD7C8D33607AE49723">
-<#Include Label="InstallMethodWithDoc8134EA0F84DB234E">
-<#Include Label="DeclareOperationWith8193976E7AC2BE5F">
-<#Include Label="DeclareRepresentatio862151237C040CD1">
-<#Include Label="DeclareAttributeWith781F75A87FBC15EC">
-<#Include Label="DeclarePropertyWithD84C9D277819FF0B9">
-<#Include Label="DeclareGlobalFunctio780471A2876B4016">
-<#Include Label="DeclareGlobalVariabl83C1403D793BAA65">
+<#Include Label="InstallMethodWithDoc876BF65C8663577E">
 </Section>

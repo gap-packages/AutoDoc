@@ -11,14 +11,19 @@
 
 
 
-##
+# Documentation for this global variable can be found in gap/AutoDocDocEntries.g
+# respectively in the manual.
+
 DeclareGlobalVariable( "AUTOMATIC_DOCUMENTATION" );
 
 
 
-##    <Func Arg="package_name, documentation_file, path_to_xml_file,create_full_docu[,section_intros]" Name="CreateAutomaticDocumentation"/>
-##
+# Documentation for this global function can be found in gap/AutoDocDocEntries.g
+# respectively in the manual.
 DeclareGlobalFunction( "CreateAutomaticDocumentation" );
+
+
+# The following functions are currently undocumented and for internal use only.
 
 ##
 ## This function creates a title file. It must be called with the package name and the path to doc files.

@@ -5,6 +5,7 @@
 <Heading>The main functions</Heading>
 <#Include SYSTEM "The_main_functionsSectionThe_main_function.xml">
 <#Include SYSTEM "The_main_functionsSectionGlobal_variable.xml">
+<#Include SYSTEM "The_main_functionsSectionThe_declare_functions.xml">
 <#Include SYSTEM "The_main_functionsSectionThe_install_functions.xml">
 <#Include SYSTEM "The_main_functionsSectionThe_create_functions.xml">
 </Chapter>
