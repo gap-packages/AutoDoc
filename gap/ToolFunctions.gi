@@ -17,7 +17,7 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
           tester_names, i, j, label_hash, doc_stream, grouping, is_grouped,
           option_record, label_list, current_rec_entry;
     
-    if not AUTOMATIC_DOCUMENTATION.enable_documentation then
+    if not ( AUTOMATIC_DOCUMENTATION.enable_documentation and AUTOMATIC_DOCUMENTATION.package_name = CURRENT_NAMESPACE() ) then
         
         return true;
         
