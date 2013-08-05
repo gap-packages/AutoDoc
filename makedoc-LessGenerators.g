@@ -23,9 +23,6 @@ GenerateDocumentation(
                       "..." ] ]
                 ],
         ),
-        gapdoc := rec(
-            bib := true,   # default:  "<docdir>/<pkgname>.bib", aber ein String geht auch:  bib := "doc/LessGenerators.bib",
-        ),
     )
 );
 

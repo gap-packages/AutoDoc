@@ -38,7 +38,6 @@ GenerateDocumentation(
         autodoc := true,    # TODO: autodoc is not in the package dependency list...
         gapdoc := rec(
             main := "D-ModulesForHomalg",
-            bib := true,   # default:  "<docdir>/<pkgname>.bib", aber ein String geht auch:  bib := "doc/D-Modules.bib",
         ),
     )
 );
