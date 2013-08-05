@@ -17,7 +17,6 @@
 DeclareGlobalVariable( "AUTOMATIC_DOCUMENTATION" );
 
 
-
 # Documentation for this global function can be found in gap/AutoDocDocEntries.g
 # respectively in the manual.
 DeclareGlobalFunction( "CreateAutomaticDocumentation" );
