@@ -45,7 +45,7 @@ end );
 InstallGlobalFunction( GenerateDocumentation,
 function( arg )
     local pkg, package_info, opt, dir, scaffold, gapdoc, autodoc,
-            d, files, i, tmp, bib_xml;
+            d, files, i, tmp;
     
     pkg := arg[1];
     package_info := PackageInfo( pkg )[ 1 ];
@@ -195,36 +195,6 @@ function( arg )
         d := Concatenation( ListWithIdenticalEntries(d, "../") );
         gapdoc.files := List( gapdoc.files, f -> Concatenation( d, f ) );
 
-
-        if IsBound( gapdoc.bib ) and IsBool( gapdoc.bib ) then
-            if gapdoc.bib = true then
-# FIXME: Actually, perform a sanity check and see if the specified file exists.
-# If not, report an error.
-                gapdoc.bib := Filename( dir, Concatenation( pkg, ".bib" ) );
-            else
-                Unbind( gapdoc.bib );
-            fi;
-        fi;
-
-# TODO: If there is a file   doc/PKG.bib, assume that we want to use it?
-
-# TODO: People may wish to manage their bib in an XML file, not a .bib file.
-# Support that, too!
-# E.g. check whether the provided file has a .bib or an .xml suffix...
-
-        if IsBound( gapdoc.bib ) then
-            if AUTODOC_HasSuffix( gapdoc.bib, ".xml" ) then
-                bib_xml := gapdoc.bib;
-            elif AUTODOC_HasSuffix( gapdoc.bib, ".bib" ) then
-                # 
-                #bib_xml := Concatenation( d, gapdoc.bib, ".xml" );
-                bib_xml := Concatenation( pkg, "Bib.xml" );
-            else
-                Error("opt.gapdoc.bib must be either a .bib or an .xml file");
-            fi;
-        fi;
-
-
     fi;
     
     
@@ -245,8 +215,17 @@ function( arg )
             # and in which order relative to the other includes...
         fi;
 
-        if IsBound( bib_xml ) then
-            scaffold.bib := bib_xml;
+        if IsBound( scaffold.bib ) and IsBool( scaffold.bib ) then
+            if scaffold.bib = true then
+                scaffold.bib := pkg;
+            else
+                Unbind( scaffold.bib );
+            fi;
+        elif not IsBound( scaffold.bib ) then
+            # If there is a doc/PKG.bib file, assume that we want to reference it in the scaffold.
+            if IsReadableFile( Filename( dir, Concatenation( pkg, ".bib" ) ) ) then
+                scaffold.bib := pkg;
+            fi;
         fi;
 
         if IsBound( gapdoc ) then
@@ -289,11 +268,6 @@ function( arg )
         # of the documentation are also in UTF-8 encoding, and may contain characters
         # not contained in the default Latin 1 encoding.
         SetGapDocLaTeXOptions( "utf8" );
-
-        if IsBound( gapdoc.bib ) and AUTODOC_HasSuffix( gapdoc.bib, ".bib" ) then
-            tmp := ParseBibFiles( gapdoc.bib );
-            WriteBibXMLextFile( Filename( dir, bib_xml ), tmp );
-        fi;
 
         MakeGAPDocDoc( dir, gapdoc.main, gapdoc.files, gapdoc.bookname, "MathJax" );
 
