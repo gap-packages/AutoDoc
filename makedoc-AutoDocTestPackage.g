@@ -1,6 +1,6 @@
 LoadPackage("AutoDoc");
 
-GenerateDocumentation(
+AutoDoc(
     "AutoDocTestPackage",
     rec(
         #dir := "doc",     # default

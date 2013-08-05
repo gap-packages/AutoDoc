@@ -1,6 +1,6 @@
 LoadPackage("AutoDoc");
 
-GenerateDocumentation(
+AutoDoc(
     "AutoDoc",
     rec(
         scaffold := rec(

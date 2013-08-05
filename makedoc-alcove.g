@@ -1,6 +1,6 @@
 LoadPackage("AutoDoc");
 
-GenerateDocumentation(
+AutoDoc(
     "alcove",
     rec(
         #dir := "doc",     # default

@@ -1,6 +1,6 @@
 LoadPackage("AutoDoc");
 
-GenerateDocumentation(
+AutoDoc(
     "ToolsForHomalg",
     rec(
         #scaffold := false,  # TODO: Reconsider this?

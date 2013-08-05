@@ -1,6 +1,6 @@
 LoadPackage("AutoDoc");
 
-GenerateDocumentation(
+AutoDoc(
     "D-Modules",
     rec(
         #scaffold := false,  # TODO: Reconsider this?
