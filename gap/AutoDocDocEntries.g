@@ -89,7 +89,7 @@ CreateDocEntryForGlobalFunction(
     ],
     "<C>true</C> or <C>false</C>",
     "name, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], [ option_record ]",
-    [ "The_main_functions", "The_install_functions" ]
+    [ "The_main_functions", "The_declare_functions" ]
 );
 
 CreateDocEntryForGlobalFunction(
@@ -102,7 +102,7 @@ CreateDocEntryForGlobalFunction(
     ],
     "<C>true</C> or <C>false</C>",
     "name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]",
-    [ "The_main_functions", "The_install_functions" ]
+    [ "The_main_functions", "The_declare_functions" ]
 );
 
 CreateDocEntryForGlobalFunction(
@@ -116,7 +116,7 @@ CreateDocEntryForGlobalFunction(
     ],
     "<C>true</C> or <C>false</C>",
     "name, filter, list_of_req_entries, description, [ arguments ], [ chapter_and_section ], [ option_record ]",
-    [ "The_main_functions", "The_install_functions" ]
+    [ "The_main_functions", "The_declare_functions" ]
 );
 
 CreateDocEntryForGlobalFunction(
@@ -129,7 +129,7 @@ CreateDocEntryForGlobalFunction(
     ],
     "<C>true</C> or <C>false</C>",
     "name, filter, description, return_value [ argument ], [ chapter_and_section ], [ option_record ]",
-    [ "The_main_functions", "The_install_functions" ]
+    [ "The_main_functions", "The_declare_functions" ]
 );
 
 CreateDocEntryForGlobalFunction(
@@ -142,7 +142,7 @@ CreateDocEntryForGlobalFunction(
     ],
     "<C>true</C> or <C>false</C>",
     "name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]",
-    [ "The_main_functions", "The_install_functions" ]
+    [ "The_main_functions", "The_declare_functions" ]
 );
 
 CreateDocEntryForGlobalFunction(
@@ -155,7 +155,7 @@ CreateDocEntryForGlobalFunction(
     ],
     "<C>true</C> or <C>false</C>",
     "name, description, return_value [ arguments ], [ chapter_and_section ], [ option_record ]",
-    [ "The_main_functions", "The_install_functions" ]
+    [ "The_main_functions", "The_declare_functions" ]
 );
 
 CreateDocEntryForGlobalFunction(
@@ -164,11 +164,11 @@ CreateDocEntryForGlobalFunction(
         "This method declares a global variable like DeclareGlobalVariable( <A>name</A> ) would do.",
         "<Br/>",
         "<Br/>",
-        "The remaining parameters behave as described for <Ref Func='DeclareOperationWithDocumentation'/>",
+        "The remaining parameters behave as described for <Ref Func='DeclareOperationWithDocumentation'/>.",
     ],
     "<C>true</C> or <C>false</C>",
     "name, description, [ chapter_and_section ]",
-    [ "The_main_functions", "The_install_functions" ]
+    [ "The_main_functions", "The_declare_functions" ]
 );
 
 CreateDocEntryForGlobalFunction(
