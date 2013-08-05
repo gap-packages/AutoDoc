@@ -87,8 +87,10 @@ function( arg )
     # opt.scaffold or package_info.AutoDoc. The former has precedence.
     #
     if not IsBound(opt.scaffold) then
-        # Default: enable scaffolding
-        scaffold := rec();
+        # Default: enable scaffolding if and only if package_info.AutoDoc is present
+        if IsBound( package_info.AutoDoc ) then
+            scaffold := rec();
+        fi;
     elif IsRecord(opt.scaffold) then
         scaffold := opt.scaffold;
     elif IsBool(opt.scaffold) then
