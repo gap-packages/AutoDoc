@@ -34,7 +34,7 @@ CreateDocEntryForGlobalFunction(
     "DeclareCategoryWithDocumentation",
     [
         "This method declares a category, like DeclareCategory( <A>name</A>, <A>filter</A> ) would do. The description string is added to the documentation",
-        "if CreateAutoDoc is called. It",
+        "if CreateAutomaticDocumentation is called. It",
         "can either be a string or a list of strings. Lists will be concatenated with a space between them.",
         "<A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.",
         "<A>chapter_and_section</A> is an optional argument which must be a list with two strings, naming the chapter and the section in which this category",
@@ -56,7 +56,7 @@ CreateDocEntryForGlobalFunction(
     [
         "This method installs a method, like InstallMethod( <A>name</A>, <A>short_descr</A>, <A>list_of_filters</A>, <A>func</A> ) would do.",
         "The description string is added to the documentation",
-        "if CreateAutoDoc is called. It",
+        "if CreateAutomaticDocumentation is called. It",
         "can either be a string or a list of strings. Lists will be concatenated with a space between them.",
         "<A>return_value</A> is a string displayed as the return value of the method. It is not optional.",
         "<A>arguments</A> is an optional string which is displayed in the documentation as attributes of the operation.",
@@ -73,7 +73,7 @@ CreateDocEntryForGlobalFunction(
     "DeclareOperationWithDocumentation",
     [
         "This method declares an operation, like DeclareOperation( <A>name</A>, <A>list_of_filters</A> ) would do. The description string is added to the documentation",
-        "if CreateAutoDoc is called. It",
+        "if CreateAutomaticDocumentation is called. It",
         "can either be a string or a list of strings. Lists will be concatenated with a space between them.",
         "<A>return_value</A> is a string displayed as the return value of the method. It is not optional.",
         "<A>arguments</A> is an optional string which is displayed in the documentation as attributes of the operation.",
@@ -96,7 +96,7 @@ CreateDocEntryForGlobalFunction(
     [
         "This method declares a representation, like DeclareRepresentation( <A>name</A>, <A>filter</A>, <A>list_of_req_entries</A> )",
         "would do. The description string is added to the documentation",
-        "if CreateAutoDoc is called. It",
+        "if CreateAutomaticDocumentation is called. It",
         "can either be a string or a list of strings. Lists will be concatenated with a space between them.",
         "<A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.",
         "<A>chapter_and_section</A> is an optional argument which must be a list with two strings, naming the chapter and the section in which this category",
@@ -117,7 +117,7 @@ CreateDocEntryForGlobalFunction(
     "DeclareAttributeWithDocumentation",
     [
         "This method declares an attribute, like DeclareAttribute( <A>name</A>, <A>filter</A> ) would do. The description string is added to the documentation",
-        "if CreateAutoDoc is called. It",
+        "if CreateAutomaticDocumentation is called. It",
         "can either be a string or a list of strings. Lists will be concatenated with a space between them.",
         "<A>return_value</A> is a string displayed as the return value of the attribute. It is not optional.",
         "<A>argument</A> is an optional string which is displayed in the documentation as attribute of the attribute.",
@@ -139,7 +139,7 @@ CreateDocEntryForGlobalFunction(
     "DeclarePropertyWithDocumentation",
     [
         "This method declares a property, like DeclareProperty( <A>name</A>, <A>filter</A> ) would do. The description string is added to the documentation",
-        "if CreateAutoDoc is called. It",
+        "if CreateAutomaticDocumentation is called. It",
         "can either be a string or a list of strings. Lists will be concatenated with a space between them.",
         "<A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.",
         "<A>chapter_and_section</A> is an optional argument which must be a list with two strings, naming the chapter and the section in which this property",
@@ -160,7 +160,7 @@ CreateDocEntryForGlobalFunction(
     "DeclareGlobalFunctionWithDocumentation",
     [
         "This method declares a global function like DeclareGlobalFunction( <A>name</A> ) would do. The description string is added to the documentation",
-        "if CreateAutoDoc is called. It",
+        "if CreateAutomaticDocumentation is called. It",
         "can either be a string or a list of strings.",
         "Lists will be concatenated with a space between them. <A>return_value</A> is a string displayed as the return value of the function. It is not optional.",
         "<A>arguments</A> is an optional string which is displayed in the documentation as attributes of the operation.",
@@ -182,7 +182,7 @@ CreateDocEntryForGlobalFunction(
     "DeclareGlobalVariableWithDocumentation",
     [
         "This method declares a global variable like DeclareGlobalVariable( <A>name</A> ) would do. The description string is added to the documentation",
-        "if CreateAutoDoc is called. It",
+        "if CreateAutomaticDocumentation is called. It",
         "can either be a string or a list of strings. Lists will be concatenated with a space between them.",
         "<A>chapter_and_section</A> is an optional argument which must be a list with two strings, naming the chapter and the section in which this variable",
         "should be displayed in the automatic generated documentation. There are no spaces allowed in this string, underscores will be converted to spaces in",
@@ -199,7 +199,7 @@ CreateDocEntryForGlobalFunction(
     "CreateDocEntryForCategory",
     [
         "The description string is added to the documentation",
-        "if CreateAutoDoc is called. It",
+        "if CreateAutomaticDocumentation is called. It",
         "can either be a string or a list of strings. Lists will be concatenated with a space between them.",
         "<A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.",
         "<A>chapter_and_section</A> is an optional argument which must be a list with two strings, naming the chapter and the section in which this category",
@@ -220,7 +220,7 @@ CreateDocEntryForGlobalFunction(
     "CreateDocEntryForRepresentation",
     [
         "The description string is added to the documentation",
-        "if CreateAutoDoc is called. It",
+        "if CreateAutomaticDocumentation is called. It",
         "can either be a string or a list of strings. Lists will be concatenated with a space between them.",
         "<A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.",
         "<A>chapter_and_section</A> is an optional argument which must be a list with two strings, naming the chapter and the section in which this category",
@@ -241,7 +241,7 @@ CreateDocEntryForGlobalFunction(
     "CreateDocEntryForOperation",
     [
         "The description string is added to the documentation",
-        "if CreateAutoDoc is called. It",
+        "if CreateAutomaticDocumentation is called. It",
         "can either be a string or a list of strings. Lists will be concatenated with a space between them.",
         "<A>return_value</A> is a string displayed as the return value of the method. It is not optional.",
         "<A>arguments</A> is an optional string which is displayed in the documentation as attributes of the operation.",
@@ -263,7 +263,7 @@ CreateDocEntryForGlobalFunction(
     "CreateDocEntryForAttribute",
     [
         "The description string is added to the documentation",
-        "if CreateAutoDoc is called. It",
+        "if CreateAutomaticDocumentation is called. It",
         "can either be a string or a list of strings. Lists will be concatenated with a space between them.",
         "<A>return_value</A> is a string displayed as the return value of the attribute. It is not optional.",
         "<A>argument</A> is an optional string which is displayed in the documentation as attribute of the attribute.",
@@ -285,7 +285,7 @@ CreateDocEntryForGlobalFunction(
     "CreateDocEntryForProperty",
     [
         "The description string is added to the documentation",
-        "if CreateAutoDoc is called. It",
+        "if CreateAutomaticDocumentation is called. It",
         "can either be a string or a list of strings. Lists will be concatenated with a space between them.",
         "<A>arguments</A> is an optional string which is displayed in the documentation as attribute of the tester.",
         "<A>chapter_and_section</A> is an optional argument which must be a list with two strings, naming the chapter and the section in which this property",
