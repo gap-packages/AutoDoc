@@ -1,4 +1,12 @@
-
+CreateDocEntryForGlobalFunction( "AutoDoc",
+    [
+    "TODO."
+    ],
+    "nothing",
+    "package_name[, option_record ]",
+    # TODO: new section
+    [ "The_main_functions", "The_main_function" ]
+    );
 
 CreateDocEntryForGlobalFunction(
     "CreateAutomaticDocumentation",
