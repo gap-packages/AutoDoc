@@ -90,19 +90,22 @@ InstallGlobalFunction( CreateTitlePage,
         dir := Directory(dir);
     fi;
     
-    if Length( arg ) = 3 then
-        
-        opt := arg[ 3 ];
-        
-    elif Length( arg ) = 2 and IsBound( package_info.AutoDoc ) then
-
+    if IsBound( package_info.AutoDoc ) then
         opt := package_info.AutoDoc;
-        
     else
-        
-        opt := rec( );
-
+        opt := rec();
     fi;
+
+    if Length( arg ) = 3 then
+        if IsRecord( arg[ 3 ] ) then
+            opt := arg[ 3 ];
+        else
+            Error( "Third parameter must be a record" );
+        fi;
+    elif Length( arg ) > 3 then
+        Error( "Wrong number of arguments\n" );
+    fi;
+
 
     filestream := AUTODOC_OutputTextFile( dir, "title.xml" );
     
@@ -508,7 +511,15 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
         
         CreateTitlePage( package_name, path_to_xmlfiles );
         
-        CreateMainPage( package_name, path_to_xmlfiles );
+        if IsBound( entities ) then
+            
+            CreateMainPage( package_name, path_to_xmlfiles, entities );
+            
+        else
+            
+            CreateMainPage( package_name, path_to_xmlfiles );
+            
+        fi;
         
     fi;
     
