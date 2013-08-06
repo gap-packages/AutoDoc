@@ -71,7 +71,7 @@ CreateDocEntryForGlobalFunction(
                 "Otherwise, this is not necessary.",
                 
                 "Please be careful to not give two entries the same description by giving two declarations with",
-                "the same name the same label."
+                "the same name the same label.",
             "</Item>",
             "<Mark><A>function_label</A></Mark><Item>",
                 "This sets the label of the function to the string <A>function_label</A>.",
