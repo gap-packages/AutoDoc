@@ -7,6 +7,8 @@
 bin
 change.log
 VERSION
+public_html
+public_html.version
 doc/manual.six
 doc/*.pdf
 doc/*.html
