@@ -113,7 +113,7 @@ function( arg )
         if not IsBound(autodoc.output) then
             # FIXME: is this name good?
             # FIXME: OK to put this generated file into the doc dir?
-            autodoc.output := Filename(dir, "autodoc.out");
+            autodoc.output := Filename(dir, "AutoDocEntries.g");
             # TODO: many packages use this:   gap/AutoDocEntries.g
             #    perhaps we should do, too?
         fi;
