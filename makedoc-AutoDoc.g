@@ -18,3 +18,5 @@ AutoDoc(
 
 # Create VERSION file for "make towww"
 PrintTo( "VERSION", PackageInfo( "AutoDoc" )[1].Version );
+
+QUIT;
