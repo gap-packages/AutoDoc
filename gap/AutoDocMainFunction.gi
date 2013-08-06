@@ -94,13 +94,13 @@ InstallGlobalFunction( CreateTitlePage,
         
         opt := arg[ 3 ];
         
-    elif Length( arg ) = 2 then
+    elif Length( arg ) = 2 and IsBound( package_info.AutoDoc ) then
 
         opt := package_info.AutoDoc;
         
     else
         
-        Error( "Wrong number of arguments\n" );
+        opt := rec( );
 
     fi;
 
@@ -263,6 +263,7 @@ InstallGlobalFunction( CreateMainPage,
             opt := arg[ 3 ];
         else
             # HACK: Support old-style calling with entities list as second parameter
+            # This is not supported anymore, please see line 250s
             opt.entities := arg[ 2 ];
         fi;
     elif Length( arg ) > 3 then
@@ -383,7 +384,7 @@ InstallGlobalFunction( CreateNewChapterXMLFile,
     
     AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name) := rec( sections := rec( ) );
     
-    filename := Concatenation( chapter_name, ".xml" );
+    filename := Concatenation( "Chapter_", chapter_name, ".xml" );
     
     filestream := AUTODOC_OutputTextFile( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename );
     
@@ -423,7 +424,7 @@ InstallGlobalFunction( CreateNewSectionXMLFile,
         
     fi;
     
-    filename := Concatenation( chapter_name, "Section", section_name, ".xml" );
+    filename := Concatenation( "Chapter_", chapter_name, "Section", section_name, ".xml" );
     
     filestream := AUTODOC_OutputTextFile( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename );
     
@@ -505,17 +506,9 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     
     if create_full_docu then
         
-        CreateTitlePage( package_name );
+        CreateTitlePage( package_name, path_to_xmlfiles );
         
-        if IsBound( entities ) then
-            
-            CreateMainPage( package_name, entities );
-            
-        else
-            
-            CreateMainPage( package_name );
-            
-        fi;
+        CreateMainPage( package_name, path_to_xmlfiles );
         
     fi;
     
