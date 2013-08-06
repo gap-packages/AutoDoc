@@ -7,12 +7,15 @@
 bin
 change.log
 VERSION
+public_html
+public_html.version
 doc/manual.six
 doc/*.pdf
 doc/*.html
 doc/*.txt
 doc/*.css
 doc/*.js
+doc/*Bib.xml
 doc/*Bib.xml.bib
 doc/*.aux
 doc/*.bbl
@@ -32,4 +35,3 @@ doc/AutoDocMainFile.xml
 doc/The_main_functions*.xml
 gap/AutoDocEntries.g
 doc/Chapter*xml
-
