@@ -26,7 +26,7 @@ install your methods with documentations. When you want to create the documentat
 use the CreateAutomaticDocumentation method to create the documentation xml files.
 After that, you need to process them with GAPDoc to get the usual documentation.
 The Package ToolsForHomalg is completely documented with AutoDoc, so you can
-find a example for the usage there.
+find an example for the usage there.
 </Section>
 
 <!-- ############################################################ -->
