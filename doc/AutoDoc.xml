@@ -38,7 +38,7 @@
 	  <!ENTITY SCO "<Package>SCO</Package>">
 	  <!ENTITY LocalizeRingForHomalg "<Package>LocalizeRingForHomalg</Package>">
 	  <!ENTITY GAPDoc "<Package>GAPDoc</Package>">
-    <!ENTITY AutoDoc "<Package>AutoDoc</Package>">
+          <!ENTITY AutoDoc "<Package>AutoDoc</Package>">
 	  ]
 	  >
 
