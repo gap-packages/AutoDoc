@@ -2,7 +2,7 @@ SetPackageInfo( rec(
 
 PackageName := "AutoDoc",
 
-Subtitle := "Tools for generating automatic GAPDoc documentations",
+Subtitle := "Generate documentation from GAP source code",
 
 Version := Maximum( [
   "2013.07.31", ## Sebas' version
@@ -69,7 +69,7 @@ PackageDoc := rec(
   HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
-  LongTitle := "Tools for generating automatic documentation",
+  LongTitle := "Generate documentation from GAP source code",
   Autoload  := false
 ),
 

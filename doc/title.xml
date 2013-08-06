@@ -11,7 +11,7 @@
 <TitlePage>
   <Title>AutoDoc
   </Title>
-  <Subtitle>a nice way to create documentations</Subtitle>
+  <Subtitle>Generate documentation from GAP source code</Subtitle>
   <TitleComment>
     <Br/><Br/>
     
