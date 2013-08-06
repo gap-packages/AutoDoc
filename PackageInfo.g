@@ -1,6 +1,3 @@
-
-
-
 SetPackageInfo( rec(
 
 PackageName := "AutoDoc",
@@ -19,8 +16,6 @@ Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1
 ArchiveURL := Concatenation( "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutoDoc/AutoDoc-", ~.Version ),
 
 ArchiveFormats := ".tar.gz",
-
-
 
 Persons := [
   rec(
@@ -78,7 +73,6 @@ PackageDoc := rec(
   LongTitle := "Tools for generating automatic documentation",
   Autoload  := false
 ),
-
 
 Dependencies := rec(
   GAP := ">=4.4",

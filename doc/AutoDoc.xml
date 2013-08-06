@@ -66,11 +66,9 @@
 
 <#Include SYSTEM "AutoDocMainFile.xml">
 
-
 </Body>
 
 <!--  And finally an index as well   -->
 <TheIndex/>
 
 </Book>
-
