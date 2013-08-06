@@ -275,13 +275,7 @@ InstallGlobalFunction( CreateMainPage,
     
     if not IsBound( opt.entities ) then
         
-        opt.entities := [
-                      "GAP4", "Maple", "Mathematica", "Singular", "Plural", "Sage", "python", "cython", 
-                      "C", "MAGMA", "Macaulay2", "IO", "homalg", "ResidueClassRingForHomalg", "LIRNG", "LIMAP",
-                      "LIMAT", "COLEM", "LIMOD", "LIMOR", "LICPX", "ExamplesForHomalg", "alexander", "Gauss",
-                      "GaussForHomalg", "HomalgToCAS", "IO_ForHomalg", "MapleForHomalg", "RingsForHomalg",
-                      "LessGenerators", "Yoneda", "Sheaves", "SCO", "LocalizeRingForHomalg", "GAPDoc", "AutoDoc",
-                    ];
+        opt.entities := [];
         
     fi;
 
