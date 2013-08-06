@@ -10,9 +10,6 @@ CreateAutomaticDocumentation( "AutoDoc", "gap/AutoDocEntries.g", "doc/", false )
 
 SetGapDocLaTeXOptions( "utf8" );
 
-bib := ParseBibFiles( "doc/AutoDoc.bib" );
-WriteBibXMLextFile( "doc/AutoDocBib.xml", bib );
-
 Read( "ListOfDocFiles.g" );
 
 PrintTo( "VERSION", PackageInfo( "AutoDoc" )[1].Version );
