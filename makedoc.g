@@ -8,8 +8,6 @@ LoadPackage( "AutoDoc" );
 
 CreateAutomaticDocumentation( "AutoDoc", "gap/AutoDocEntries.g", "doc/", false );
 
-LoadPackage( "GAPDoc" );
-
 SetGapDocLaTeXOptions( "utf8" );
 
 bib := ParseBibFiles( "doc/AutoDoc.bib" );
@@ -21,7 +19,7 @@ PrintTo( "VERSION", PackageInfo( "AutoDoc" )[1].Version );
 
 MakeGAPDocDoc( "doc", "AutoDoc", list, "AutoDoc", "MathJax" );
 
-CopyHTMLStyleFiles("doc");
+CopyHTMLStyleFiles( "doc" );
 
 GAPDocManualLab( "AutoDoc" );
 
