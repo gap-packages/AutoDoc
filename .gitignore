@@ -31,3 +31,5 @@ doc/manual.lab
 doc/AutoDocMainFile.xml
 doc/The_main_functions*.xml
 gap/AutoDocEntries.g
+doc/Chapter*xml
+
