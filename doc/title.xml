@@ -4,15 +4,14 @@
 
   title.xml             AutoDoc package documentation
 
-         Copyright (C) 2007-2013, Sebastian Gutsche, RWTH Aachen
+         Copyright (C) 2012-2013, Sebastian Gutsche, RWTH Aachen
          Copyright (C) 2013, Max Horn, JLU Gießen
 
 -->
 <TitlePage>
-  <Title>Automatic
-  Documentation
+  <Title>AutoDoc
   </Title>
-  <Subtitle>a nice way to create documentations</Subtitle>
+  <Subtitle>Generate documentation from GAP source code</Subtitle>
   <TitleComment>
     <Br/><Br/>
     

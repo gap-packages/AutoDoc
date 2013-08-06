@@ -28,7 +28,6 @@ doc/*.toc
 doc/*.out
 doc/manual.lab
 *.DS_Store
-PackageInfo.checksum
-doc/Basic.xml
-doc/ToolsForHomalg.bin
-removecommentspackageinfo.sh
+doc/AutoDocMainFile.xml
+doc/The_main_functions*.xml
+gap/AutoDocEntries.g

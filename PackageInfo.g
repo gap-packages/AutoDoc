@@ -1,11 +1,8 @@
-
-
-
 SetPackageInfo( rec(
 
 PackageName := "AutoDoc",
 
-Subtitle := "Tools for generating automatic GAPDoc documentations",
+Subtitle := "Generate documentation from GAP source code",
 
 Version := Maximum( [
   "2013.07.31", ## Sebas' version
@@ -19,8 +16,6 @@ Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1
 ArchiveURL := Concatenation( "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutoDoc/AutoDoc-", ~.Version ),
 
 ArchiveFormats := ".tar.gz",
-
-
 
 Persons := [
   rec(
@@ -60,11 +55,10 @@ Persons := [
 
 Status := "deposited",
 
-
 README_URL := 
   "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutoDoc/README.AutoDoc",
 PackageInfoURL := 
-   "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutoDoc/PackageInfo.g",
+  "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutoDoc/PackageInfo.g",
 
 AbstractHTML := 
   "",
@@ -75,10 +69,9 @@ PackageDoc := rec(
   HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
-  LongTitle := "Tools for generating automatic documentation",
+  LongTitle := "Generate documentation from GAP source code",
   Autoload  := false
 ),
-
 
 Dependencies := rec(
   GAP := ">= 4.5",
@@ -92,22 +85,9 @@ AvailabilityTest := function()
     return true;
   end,
 
-# BannerString := Concatenation( 
-#   "----------------------------------------------------------------\n",
-#   "Loading  AutoDoc ", ~.Version, "\n",
-#   "by ", ~.Persons[1].FirstNames, " ", ~.Persons[1].LastName,
-#         " (", ~.Persons[1].WWWHome, ")\n",
-#   "   ", ~.Persons[2].FirstNames, " ", ~.Persons[2].LastName,
-#         " (", ~.Persons[2].WWWHome, ")\n",
-#   "Type:\n",
-#   "  ?AutoDoc:        ## for the contents of the manual\n",
-#   "  ?AutoDoc:x       ## for chapter/section/topic x\n",
-#   "----------------------------------------------------------------\n" ),
-
 Autoload := false,
 
-
-Keywords := [  ]
+Keywords := [ "Automatic documentation, GAP, GAPDoc" ]
 
 ));
 

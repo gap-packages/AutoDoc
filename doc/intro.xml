@@ -2,12 +2,10 @@
 
 <!-- 
 
-  intro.xml            AutoDoc package documentation            Mohamed Barakat
+  intro.xml             AutoDoc package documentation
 
-         Copyright (C) 2007-2009, Mohamed Barakat, RWTH-Aachen
-
-This chapter gives a short introduction and explains the philosophy
-behind the package.
+         Copyright (C) 2012-2013, Sebastian Gutsche, RWTH Aachen
+         Copyright (C) 2013, Max Horn, JLU Gießen
 
 -->
 
@@ -28,12 +26,9 @@ install your methods with documentations. When you want to create the documentat
 use the CreateAutomaticDocumentation method to create the documentation xml files.
 After that, you need to process them with GAPDoc to get the usual documentation.
 The Package ToolsForHomalg is completely documented with AutoDoc, so you can
-find a example for the usage there.
+find an example for the usage there.
 </Section>
 
 <!-- ############################################################ -->
 
 </Chapter>
-
-<!--  LocalWords:  ExamplesForHomalg
- -->
