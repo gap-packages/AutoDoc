@@ -32,6 +32,5 @@ doc/*.out
 doc/manual.lab
 *.DS_Store
 doc/AutoDocMainFile.xml
-doc/The_main_functions*.xml
-gap/AutoDocEntries.g
 doc/Chapter*xml
+gap/AutoDocEntries.g
