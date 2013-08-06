@@ -154,3 +154,34 @@ InstallGlobalFunction( InstallMethodWithDocumentation,
     return true;
     
 end );
+
+for i in [ "Category", "Representation",
+           "Property", "Attribute", "Operation",
+           "GlobalFunction", "GlobalVariable" ] do
+
+    
+    ## And that's why we LOVE GAP.
+    
+    ##
+    InstallGlobalFunction( ValueGlobal( Concatenation( "Declare", i, "WithDoc" ) ),
+                          
+      function( arg )
+        
+        CallFuncList( ValueGlobal( Concatenation( "Declare", i ) ), arg );
+        
+        CallFuncList( ValueGlobal( Concatenation( "CreateDocEntryFor", i, "_WithOptions" ) ), arg );
+        
+    end );
+    
+od;
+
+##
+InstallGlobalFunction( InstallMethodWithDoc,
+                       
+  function( arg )
+    
+    CallFuncList( InstallMethod, arg );
+    
+    CallFuncList( CreateDocEntryForInstallMethod_WithOptions, arg );
+    
+end );
