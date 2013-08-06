@@ -15,6 +15,7 @@ doc/*.html
 doc/*.txt
 doc/*.css
 doc/*.js
+doc/*Bib.xml
 doc/*Bib.xml.bib
 doc/*.aux
 doc/*.bbl
