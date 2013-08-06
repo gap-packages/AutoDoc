@@ -55,11 +55,10 @@ Persons := [
 
 Status := "deposited",
 
-
 README_URL := 
   "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutoDoc/README.AutoDoc",
 PackageInfoURL := 
-   "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutoDoc/PackageInfo.g",
+  "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutoDoc/PackageInfo.g",
 
 AbstractHTML := 
   "",
@@ -86,22 +85,9 @@ AvailabilityTest := function()
     return true;
   end,
 
-# BannerString := Concatenation( 
-#   "----------------------------------------------------------------\n",
-#   "Loading  AutoDoc ", ~.Version, "\n",
-#   "by ", ~.Persons[1].FirstNames, " ", ~.Persons[1].LastName,
-#         " (", ~.Persons[1].WWWHome, ")\n",
-#   "   ", ~.Persons[2].FirstNames, " ", ~.Persons[2].LastName,
-#         " (", ~.Persons[2].WWWHome, ")\n",
-#   "Type:\n",
-#   "  ?AutoDoc:        ## for the contents of the manual\n",
-#   "  ?AutoDoc:x       ## for chapter/section/topic x\n",
-#   "----------------------------------------------------------------\n" ),
-
 Autoload := false,
 
-
-Keywords := [  ]
+Keywords := [ "Automatic documentation, GAP, GAPDoc" ]
 
 ));
 
