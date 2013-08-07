@@ -247,7 +247,7 @@ InstallGlobalFunction( CreateDocEntryForGlobalFunction_WithOptions,
     AutoDoc_CreateCompleteEntry_WithOptions( :
                                              name := arg[ 1 ],
                                              tester := "",
-                                             tyoe := "Func",
+                                             type := "Func",
                                              doc_stream_type := "global_functions" );
     
 end );
