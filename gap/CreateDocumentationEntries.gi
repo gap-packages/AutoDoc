@@ -36,6 +36,19 @@ InstallGlobalFunction( CreateDocEntryForCategory,
     
 end );
 
+InstallGlobalFunction( "CreateDocEntryForCategory_WithOptions",
+                       
+  function( arg )
+    
+    AutoDoc_CreateCompleteEntry_WithOptions( :
+                                             name := arg[ 1 ],
+                                             tester := arg[ 2 ],
+                                             return_value := "<C>true</C> or <C>false</C>",
+                                             type := "Filt",
+                                             doc_stream_type := "categories" );
+    
+end );
+
 ##
 ## Call this with arguments name, tester, description, arguments. The last one is optional
 InstallGlobalFunction( CreateDocEntryForRepresentation,
@@ -64,6 +77,19 @@ InstallGlobalFunction( CreateDocEntryForRepresentation,
     
 end );
 
+InstallGlobalFunction( CreateDocEntryForRepresentation_WithOptions,
+                       
+  function( arg )
+    
+    AutoDoc_CreateCompleteEntry_WithOptions( :
+                                             name := arg[ 1 ],
+                                             tester := arg[ 2 ],
+                                             return_value := "<C>true</C> or <C>false</C>",
+                                             type := "Filt",
+                                             doc_stream_type := "categories" );
+    
+end ); 
+
 ##
 InstallGlobalFunction( CreateDocEntryForOperation,
 
@@ -88,6 +114,19 @@ InstallGlobalFunction( CreateDocEntryForOperation,
                        );
     
     return AutoDoc_CreateCompleteEntry( argument_rec );
+    
+end );
+
+##
+InstallGlobalFunction( CreateDocEntryForOperation_WithOptions,
+                       
+  function( arg )
+    
+    AutoDoc_CreateCompleteEntry_WithOptions( :
+                                             name := arg[ 1 ],
+                                             tester := arg[ 2 ],
+                                             type := "Oper",
+                                             doc_stream_type := "methods" );
     
 end );
 
@@ -120,6 +159,19 @@ InstallGlobalFunction( CreateDocEntryForAttribute,
 end );
 
 ##
+InstallGlobalFunction( CreateDocEntryForAttribute_WithOptions,
+                       
+  function( arg )
+    
+    AutoDoc_CreateCompleteEntry_WithOptions( :
+                                             name := arg[ 1 ],
+                                             tester := arg[ 2 ],
+                                             type := "Attr",
+                                             doc_stream_type := "attributes" );
+    
+end );
+
+##
 InstallGlobalFunction( CreateDocEntryForProperty,
 
   function( arg )
@@ -143,6 +195,20 @@ InstallGlobalFunction( CreateDocEntryForProperty,
                        );
     
     return AutoDoc_CreateCompleteEntry( argument_rec );
+    
+end );
+
+##
+InstallGlobalFunction( CreateDocEntryForProperty_WithOptions,
+                       
+  function( arg )
+    
+    AutoDoc_CreateCompleteEntry_WithOptions( :
+                                             name := arg[ 1 ],
+                                             tester := arg[ 2 ],
+                                             return_value := "<C>true</C> or <C>false</C>",
+                                             type := "Prop",
+                                             doc_stream_type := "properties" );
     
 end );
 
@@ -174,6 +240,19 @@ InstallGlobalFunction( CreateDocEntryForGlobalFunction,
 end );
 
 ##
+InstallGlobalFunction( CreateDocEntryForGlobalFunction_WithOptions,
+                       
+  function( arg )
+    
+    AutoDoc_CreateCompleteEntry_WithOptions( :
+                                             name := arg[ 1 ],
+                                             tester := "",
+                                             type := "Func",
+                                             doc_stream_type := "global_functions" );
+    
+end );
+
+##
 InstallGlobalFunction( CreateDocEntryForGlobalVariable,
                        
   function( arg )
@@ -197,6 +276,20 @@ InstallGlobalFunction( CreateDocEntryForGlobalVariable,
                        );
     
     return AutoDoc_CreateCompleteEntry( argument_rec );
+    
+end );
+
+##
+InstallGlobalFunction( CreateDocEntryForGlobalVariable_WithOptions,
+                       
+  function( arg )
+    
+    AutoDoc_CreateCompleteEntry_WithOptions( :
+                                             name := arg[ 1 ],
+                                             tester := fail,
+                                             return_value := fail,
+                                             type := "Var",
+                                             doc_stream_type := "global_variables" );
     
 end );
 
@@ -225,5 +318,37 @@ InstallGlobalFunction( CreateDocEntryForInstallMethod,
                        );
     
     return AutoDoc_CreateCompleteEntry( argument_rec );
+    
+end );
+
+##
+InstallGlobalFunction( CreateDocEntryForInstallMethod_WithOptions,
+                       
+  function( arg )
+    local tester;
+    
+    if IsString( arg[ 2 ] ) then
+        
+        if IsFunction( arg[ 3 ] ) then
+            
+            tester := arg[ 4 ];
+            
+        else
+            
+            tester := arg[ 3 ];
+            
+        fi;
+        
+    else
+        
+        tester := arg[ 2 ];
+        
+    fi;
+    
+    AutoDoc_CreateCompleteEntry_WithOptions( :
+                                             name := NameFunction( arg[ 1 ] ),
+                                             tester := tester,
+                                             type := "Meth",
+                                             doc_stream_type := "methods" );
     
 end );

@@ -298,6 +298,57 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
 end );
 
 ##
+InstallGlobalFunction( AutoDoc_CreateCompleteEntry_WithOptions,
+                       
+  function( arg )
+    local return_record, current_option, opt_rec, i;
+    
+    return_record := rec( name := ValueOption( "name" ),
+                          tester := ValueOption( "tester" )
+    );
+    
+    ## These should be set every time
+    for i in [ "type", "doc_stream_type", "description", "return_value" ] do
+        
+        return_record.( i ) := ValueOption( i );
+        
+    od;
+    
+    return_record!.optional_arguments := [ ];
+    
+    for i in [ "arguments", "chapter_info" ] do
+        
+        current_option := ValueOption( i );
+        
+        if current_option <> fail then
+            
+            Add( return_record!.optional_arguments, current_option );
+            
+        fi;
+        
+    od;
+    
+    opt_rec := rec( );
+    
+    for i in [ "group", "label", "function_label" ] do
+        
+        current_option := ValueOption( i );
+        
+        if current_option <> fail then
+            
+            opt_rec.( i ) := current_option;
+            
+        fi;
+        
+    od;
+    
+    Add( return_record!.optional_arguments, opt_rec );
+    
+    AutoDoc_CreateCompleteEntry( return_record );
+    
+end );
+
+##
 InstallGlobalFunction( AutoDoc_WriteEntry,
                        
   function( doc_stream, label, type, arguments, name, tester_names, return_value, description, label_for_mansection )

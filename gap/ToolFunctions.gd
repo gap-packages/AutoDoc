@@ -11,6 +11,8 @@
 
 DeclareGlobalFunction( "AutoDoc_CreateCompleteEntry" );
 
+DeclareGlobalFunction( "AutoDoc_CreateCompleteEntry_WithOptions" );
+
 DeclareGlobalFunction( "AutoDoc_WriteEntry" );
 
 DeclareGlobalFunction( "AutoDoc_WriteGroupedEntry" );

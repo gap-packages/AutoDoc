@@ -154,3 +154,42 @@ InstallGlobalFunction( InstallMethodWithDocumentation,
     return true;
     
 end );
+
+##FIXME: This should be easier:
+
+AutoDoc_InstallGlobalFunction_TempFunction := function( i )
+    
+    ##
+    InstallGlobalFunction( ValueGlobal( Concatenation( "Declare", i, "WithDoc" ) ),
+                          
+      function( arg )
+        
+        CallFuncList( ValueGlobal( Concatenation( "Declare", i ) ), arg );
+        
+        CallFuncList( ValueGlobal( Concatenation( "CreateDocEntryFor", i, "_WithOptions" ) ), arg );
+        
+    end );
+    
+end;
+
+for i in [ "Category", "Representation",
+           "Property", "Attribute", "Operation",
+           "GlobalFunction", "GlobalVariable" ] do
+
+    
+    ## And that's why we LOVE GAP.
+    
+    AutoDoc_InstallGlobalFunction_TempFunction( i );
+    
+od;
+
+##
+InstallGlobalFunction( InstallMethodWithDoc,
+                       
+  function( arg )
+    
+    CallFuncList( InstallMethod, arg );
+    
+    CallFuncList( CreateDocEntryForInstallMethod_WithOptions, arg );
+    
+end );
