@@ -151,15 +151,23 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
     
     if not IsBound( chapter_info ) then
         
-        if not IsBound( argument_record.doc_stream_type ) then
+        if IsBound( AUTOMATIC_DOCUMENTATION.default_chapter.current_default_chapter_name ) and
+           IsBound( AUTOMATIC_DOCUMENTATION.default_chapter.current_default_section_name ) then
+            
+            chapter_info := [ AUTOMATIC_DOCUMENTATION.default_chapter.current_default_chapter_name,
+                              AUTOMATIC_DOCUMENTATION.default_chapter.current_default_section_name ];
+        
+        elif IsBound( argument_record.doc_stream_type ) then
+            
+            chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.( argument_record.doc_stream_type );
+            
+        else
             
             Error( "Cannot figure out which chapter :(" );
             
             return fail;
             
         fi;
-        
-        chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.( argument_record.doc_stream_type );
         
     fi;
     

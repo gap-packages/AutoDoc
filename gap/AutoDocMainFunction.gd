@@ -47,3 +47,10 @@ DeclareGlobalFunction( "CreateNewChapterXMLFile" );
 ## This function is for internal use only.
 ## It creates streams for new sections and prepares the xml file.
 DeclareGlobalFunction( "CreateNewSectionXMLFile" );
+
+DeclareGlobalFunction( "SetCurrentAutoDocChapter" );
+DeclareGlobalFunction( "UnsetCurrentAutoDocChapter" );
+
+
+DeclareGlobalFunction( "SetCurrentAutoDocSection" );
+DeclareGlobalFunction( "UnsetCurrentAutoDocSection" );

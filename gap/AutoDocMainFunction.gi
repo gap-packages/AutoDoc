@@ -608,3 +608,53 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     return true;
 
 end );
+
+##
+InstallGlobalFunction( SetCurrentAutoDocChapter,
+                       
+  function( chapter_name )
+    
+    if not IsString( chapter_name ) then
+        
+        Error( "Argument must be a string" );
+        
+    fi;
+    
+    AUTOMATIC_DOCUMENTATION.default_chapter.current_default_chapter_name := chapter_name;
+    
+end );
+
+##
+InstallGlobalFunction( UnsetCurrentAutoDocChapter,
+                       
+  function( )
+    
+    Unbind( AUTOMATIC_DOCUMENTATION.default_chapter.current_default_chapter_name );
+    
+    Unbind( AUTOMATIC_DOCUMENTATION.default_chapter.current_default_section_name );
+    
+end );
+
+##
+InstallGlobalFunction( SetCurrentAutoDocSection,
+                       
+  function( section_name )
+    
+    if not IsString( section_name ) then
+        
+        Error( "Argument must be a string" );
+        
+    fi;
+    
+    AUTOMATIC_DOCUMENTATION.default_chapter.current_default_section_name := section_name;
+    
+end );
+
+##
+InstallGlobalFunction( UnsetCurrentAutoDocSection,
+                       
+  function( )
+    
+    Unbind( AUTOMATIC_DOCUMENTATION.default_chapter.current_default_section_name );
+    
+end );
