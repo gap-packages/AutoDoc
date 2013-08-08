@@ -49,8 +49,10 @@ DeclareGlobalFunction( "CreateNewChapterXMLFile" );
 DeclareGlobalFunction( "CreateNewSectionXMLFile" );
 
 DeclareGlobalFunction( "SetCurrentAutoDocChapter" );
-DeclareGlobalFunction( "UnsetCurrentAutoDocChapter" );
+DeclareGlobalFunction( "ResetCurrentAutoDocChapter" );
 
 
 DeclareGlobalFunction( "SetCurrentAutoDocSection" );
-DeclareGlobalFunction( "UnsetCurrentAutoDocSection" );
+DeclareGlobalFunction( "ResetCurrentAutoDocSection" );
+
+DeclareGlobalFunction( "WriteStringIntoDoc" );

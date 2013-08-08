@@ -373,7 +373,7 @@ InstallGlobalFunction( CreateNewChapterXMLFile,
   function( chapter_name )
     local filename, filestream, name_chapter;
     
-    if IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.chapter_name ) then
+    if IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name) ) then
         
         return true;
         
@@ -614,6 +614,12 @@ InstallGlobalFunction( SetCurrentAutoDocChapter,
                        
   function( chapter_name )
     
+    if not ( AUTOMATIC_DOCUMENTATION.enable_documentation and AUTOMATIC_DOCUMENTATION.package_name = CURRENT_NAMESPACE() ) then
+        
+        return;
+        
+    fi;
+    
     if not IsString( chapter_name ) then
         
         Error( "Argument must be a string" );
@@ -625,7 +631,7 @@ InstallGlobalFunction( SetCurrentAutoDocChapter,
 end );
 
 ##
-InstallGlobalFunction( UnsetCurrentAutoDocChapter,
+InstallGlobalFunction( ResetCurrentAutoDocChapter,
                        
   function( )
     
@@ -640,6 +646,12 @@ InstallGlobalFunction( SetCurrentAutoDocSection,
                        
   function( section_name )
     
+    if not ( AUTOMATIC_DOCUMENTATION.enable_documentation and AUTOMATIC_DOCUMENTATION.package_name = CURRENT_NAMESPACE() ) then
+        
+        return;
+        
+    fi;
+    
     if not IsString( section_name ) then
         
         Error( "Argument must be a string" );
@@ -651,10 +663,76 @@ InstallGlobalFunction( SetCurrentAutoDocSection,
 end );
 
 ##
-InstallGlobalFunction( UnsetCurrentAutoDocSection,
+InstallGlobalFunction( ResetCurrentAutoDocSection,
                        
   function( )
     
     Unbind( AUTOMATIC_DOCUMENTATION.default_chapter.current_default_section_name );
+    
+end );
+
+##
+InstallGlobalFunction( WriteStringIntoDoc,
+                       
+  function( arg )
+    local chapter_info, description, filestream;
+    
+    if not ( AUTOMATIC_DOCUMENTATION.enable_documentation and AUTOMATIC_DOCUMENTATION.package_name = CURRENT_NAMESPACE() ) then
+        
+        return;
+        
+    fi;
+    
+    description := arg[ 1 ];
+    
+    if IsString( description ) then
+        
+        description := [ description ];
+        
+    fi;
+    
+    if not IsList( description ) then
+        
+        Error( "Wrong input" );
+        
+    fi;
+    
+    chapter_info := ValueOption( "chapter_info" );
+    
+    if chapter_info = fail then
+        
+        if IsBound( AUTOMATIC_DOCUMENTATION.default_chapter.current_default_chapter_name ) then
+            
+            chapter_info := [ AUTOMATIC_DOCUMENTATION.default_chapter.current_default_chapter_name ];
+            
+            if IsBound( AUTOMATIC_DOCUMENTATION.default_chapter.current_default_section_name ) then
+                
+                Add( chapter_info, AUTOMATIC_DOCUMENTATION.default_chapter.current_default_section_name );
+                
+            fi;
+            
+        else
+            
+            Error( "no default chapter set" );
+            
+        fi;
+        
+    fi;
+    
+    if Length( chapter_info ) = 2 then
+        
+        CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
+        
+        filestream := AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]);
+        
+    else
+        
+        CreateNewChapterXMLFile( chapter_info[ 1 ] );
+        
+        filestream := AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).main_filestream;
+        
+    fi;
+    
+    Perform( description, function( i ) AppendTo( filestream, i, "\n" ); end );
     
 end );
