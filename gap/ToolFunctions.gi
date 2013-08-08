@@ -313,11 +313,36 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry_WithOptions,
     );
     
     ## These should be set every time
-    for i in [ "type", "doc_stream_type", "description", "return_value" ] do
+    for i in [ "type", "doc_stream_type" ] do
         
         return_record.( i ) := ValueOption( i );
         
     od;
+    
+    current_option := ValueOption( "description" );
+    
+    if current_option <> fail then
+        
+        return_record.description := current_option;
+        
+    else
+        
+        return_record.description := "";
+        
+    fi;
+    
+    current_option := ValueOption( "return_value" );
+    
+    ## FIXME: Implement a better logic here.
+    if current_option = fail and return_record.type <> "Var" then
+        
+        return_record.return_value := "";
+        
+    else
+        
+        return_record.return_value := current_option;
+        
+    fi;
     
     return_record!.optional_arguments := [ ];
     
