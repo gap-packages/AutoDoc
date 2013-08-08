@@ -431,7 +431,7 @@ InstallGlobalFunction( CreateNewSectionXMLFile,
     
     AppendTo( filestream, AUTODOC_XML_HEADER );
     
-    AppendTo( filestream, Concatenation( [ "<Section Label=\" Chapter_", chapter_name, "_Section_", section_name, "_automatically_generated_documentation_parts\">\n" ] ) );
+    AppendTo( filestream, Concatenation( [ "<Section Label=\"Chapter_", chapter_name, "_Section_", section_name, "_automatically_generated_documentation_parts\">\n" ] ) );
     
     name_chapter := ReplacedString( section_name, "_", " " );
     
