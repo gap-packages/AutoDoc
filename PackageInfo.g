@@ -6,8 +6,10 @@ Subtitle := "Generate documentation from GAP source code",
 
 Version := Maximum( [
   "2013.08.08.15:45", ## Sebas' version
-##This line prevents merge conflicts
+## This line prevents merge conflicts
   "2013.07.30", ## Max' version
+## This line prevents merge conflicts
+  "2013.08.08.20:20", ## Mohamed's version
 ] ),
 
 Date := ~.Version{[ 1 .. 10 ]},

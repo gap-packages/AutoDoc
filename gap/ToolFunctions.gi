@@ -65,16 +65,21 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
             
             for j in [ 1 .. Length( tester_names ) ] do
                 
-                for i in [ 1 .. Length( tester_names[ j ] ) ] do
+                i := 1;
+                
+                while i <= Length( tester_names[j] ) do
                     
                     if IsMatchingSublist( tester_names[ j ][ i ], "Tester(" ) then
                         
                         Remove( tester_names[ j ], i );
                         
+                    else
+                        
+                        i := i + 1;
+                        
                     fi;
                     
                 od;
-                
                 
                 if Length( tester_names[ j ] ) = 0 then
                     
