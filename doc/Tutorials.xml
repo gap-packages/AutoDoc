@@ -1,14 +1,110 @@
 <Chapter Label="Tutorials">
-<Heading>Tutorials for using &AutoDoc;</Heading>
+<Heading>Getting started using &AutoDoc;</Heading>
 
+In this chapter we describe how &AutoDoc; can aide package authors in creating
+and maintaing their package's documentation.
+
+To this end, we will assume from now on that your package is called &SomePackage;.
+
+<Section Label="Tut:Scratch">
+<Heading>Using &AutoDoc; to create a new package manual from scratch</Heading>
+
+Suppose your package is already up and running, but so far has no manual.
+Then you can rapidly generate a scaffold for a manual using the <Ref
+Func="AutoDoc"/> command like this:
+<Verb>
+LoadPackage("AutoDoc");
+AutoDoc("SomePackage", rec( scaffold := true ));
+</Verb>
+This creates two XML files <F>doc/SomePackage.xml</F> and <F>doc/title.xml</F>
+insider the package directory and then runs &GAPDoc; on them to
+produce a nice initial PDF and HTML version of your fresh manual.
+<P/>
+
+Of course it will be mostly empty for now, but it already
+will contain information such as your packages's name, version and description
+as well as information about its authors, based on the data in your
+<F>PackageInfo.g</F>. And if you ever change the package data,
+just re-run the above command to regenerate the two main XML files
+with the latest information.
+<P/>
+
+Next of course you need to provide actual content (unfortunately, we were
+not yet able to automate <E>that</E> for you, more research on artificial intelligence
+is required).
+To add more content, you have several options: You could add further &GAPDoc;
+XML files containing extra chapters, sections and so on. Or you could use classic &GAPDoc;
+source comments (in either case, see Section <Ref Sect="Tut:IntegrateExisting"/> on
+how to teach the <Ref Func="AutoDoc"/> command to include this extra documentation).
+Or you could use the special documentation facilities &AutoDoc; provides (see Section
+<Ref Sect="Tut:AdvancedAutoDoc"/>).
+<P/>
+
+You may also wish to consult Section <Ref Sect="Tut:AutoRegenerate"/> for hints
+on automatically re-generating your package manual when necessary.
+
+</Section>
+
+
+<Section Label="Tut:IntegrateExisting">
+<Heading>Integrating &AutoDoc; into your existing documentation</Heading>
+
+TODO: Explain how one can use AutoDoc() just to regenerate the manual;
+but also to regenerate the title.xml.
+
+</Section>
+
+
+<Section Label="Tut:AdvancedAutoDoc">
+<Heading>Using &AutoDoc; to document your operations, categories, methods etc.</Heading>
+
+TODO: Explain here how to use Declare*WithDocumentation etc.
+
+Also mention how to mix this with existing &GAPDoc; XML files.
+
+
+</Section>
+
+<Section Label="Tut:AutoRegenerate">
+<Heading>Regenerating the HTML, PDF and text versions of your manual whenever necessary.</Heading>
+
+You will probably want to re-run the  <Ref Func="AutoDoc"/> command
+frequently, e.g. whenever you modified your documentation or your
+<F>PackageInfo.g</F>. To make this more convenient and reproducible, we
+recommend putting its invocation into a file <F>makedoc.g</F> in your package
+directory. Then you can regenerate the manual from the command line with the
+following simple command (assuming you are in the package directory):
+<Verb>
+gap makedoc.g
+</Verb>
+
+For further convenience, if you are working on Unix (e.g. Linux, BSD, Mac OS
+X, ...), you may want to add a <F>Makefile</F> in your package with content
+like this:
+<Verb>
+doc: doc/manual.six
+
+doc/manual.six: makedoc.g PackageInfo.g doc/*.xml */*.gd */*.gi
+    gap makedoc.g
+</Verb>
+With this in place, you can can regenerate your documentation from the
+command line with the command
+<Verb>
+make doc
+</Verb>
+This may not look easier than the previous command, but it has the advantage
+that it will only do something if any of your XML or source files changed. If
+nothing changed, then nothing happens and no time is wasted.
+
+</Section>
 
 
 <Section Label="Tut2">
-<Heading>Integrating &AutoDoc; into your existing documentation</Heading>
+<Heading>TODO: old section, revise</Heading>
 
-Suppose you already have a package, let's name it <C>Harald</C>, and <C>Harald</C> already has some documentation.
+Suppose the package &SomePackage; already has some documentation written using &GAPDoc;.
 But from now on you want to get rid of always writing xml. Then you can use &AutoDoc; to write your new documentation parts.
-All you need is to follow those simple steps, to include &AutoDoc; generated documentation in <C>Harald</C>s already existing documentation.
+All you need is to follow those simple steps, to include &AutoDoc; generated documentation in &SomePackage;'s already existing documentation.
 
  <List>
    <Item>
@@ -25,14 +121,14 @@ DeclareCategoryWithDocumentation( "ACategory",
 
   <Item>
   Step 2:
-    Launch the AutoDoc command with arguments <C>Harald</C> and the path of your documentation. If you want to,
+    Run the AutoDoc command with arguments &SomePackage; and the path of your documentation. If you want to,
     you can also enable &GAPDoc; in the command.
     
 <Verb>
 LoadPackage("AutoDoc");
 
 AutoDoc(
-    "Harald",
+    "SomePackage",
     rec(
         dir := "doc/",     # default
         scaffold := false,  # implied by existence of PackageInfo.AutoDoc

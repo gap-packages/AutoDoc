@@ -9,6 +9,9 @@ AutoDoc(
                 "Tutorials.xml",
                 "AutoDocMainFile.xml",
                 ],
+            entities := [
+                "SomePackage",
+            ],
         ),
         autodoc := rec(
             output := "gap/AutoDocEntries.g",
