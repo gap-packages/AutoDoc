@@ -11,11 +11,11 @@
 # Or perhaps move them into new files Scaffold.{gi,gd} ?
 
 BindGlobal( "AUTODOC_HasSuffix",
-function(list, suffix)
+function(str, suffix)
     local n, m;
-    n := Length(list);
+    n := Length(str);
     m := Length(suffix);
-    return n >= m and list{[n-m+1..n]} = suffix;
+    return n >= m and str{[n-m+1..n]} = suffix;
 end );
 
 
