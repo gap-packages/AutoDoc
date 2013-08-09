@@ -4,7 +4,7 @@ doc: doc/manual.six
 
 doc/manual.six: makedoc.g ListOfDocFiles.g \
 		PackageInfo.g \
-		doc/AutoDoc.bib doc/*.xml \
+		doc/*.xml \
 		gap/*.gd gap/*.gi gap/AutoDocDocEntries.g
 	        gap makedoc.g
 
