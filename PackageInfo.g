@@ -7,7 +7,7 @@ Subtitle := "Generate documentation from GAP source code",
 Version := Maximum( [
   "2013.08.09:12:41", ## Sebas' version
 ## This line prevents merge conflicts
-  "2013.07.30", ## Max' version
+  "2013.08.09:14:09", ## Max' version
 ## This line prevents merge conflicts
   "2013.08.08.23:06", ## Mohamed's version
 ] ),
@@ -89,7 +89,17 @@ AvailabilityTest := function()
 
 Autoload := false,
 
-Keywords := [ "Automatic documentation, GAP, GAPDoc" ]
+Keywords := [ "Automatic documentation, GAP, GAPDoc" ],
+
+AutoDoc := rec(
+    TitlePage := rec(
+        Copyright := Concatenation(
+                    "&copyright; 2012-2013 by Sebastian Gutsche and Max Horn<P/>\n\n",
+                    "This package may be distributed under the terms and conditions of the\n",
+                    "GNU Public License Version 2.\n"
+                ),
+    )
+),
 
 ));
 

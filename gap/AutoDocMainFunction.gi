@@ -443,6 +443,10 @@ end );
 
 ##
 ## Gets three strings. Initialises everything.
+#
+# Note: the optional arguments create_full_docu and entities are
+# intentionally undocumented and are only here for backward
+# compatibility. We should remove them completely at some point.
 InstallGlobalFunction( CreateAutomaticDocumentation,
 
   function( arg )
@@ -459,7 +463,11 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
         path_to_xmlfiles := Directory( path_to_xmlfiles );
     fi;
     
-    create_full_docu := arg[ 4 ];
+    if Length( arg ) >= 4 and IsBool( arg[ 4 ] ) then
+        create_full_docu := Remove( arg, 4 );
+    else
+        create_full_docu := false;
+    fi;
     
     CreateDefaultChapterData( package_name );
     
@@ -477,27 +485,27 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     ## Creating a header for the xml file.
     AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, AUTODOC_XML_HEADER );
     
-    if Length( arg ) = 5 then
+    if Length( arg ) = 4 then
         
-        if Length( arg[ 5 ] ) > 0 then
+        if Length( arg[ 4 ] ) > 0 then
             
-            if IsString( arg[ 5 ][ 1 ] ) then
+            if IsString( arg[ 4 ][ 1 ] ) then
                 
-                entities := arg[ 5 ];
+                entities := arg[ 4 ];
                 
-            elif IsList( arg[ 5 ][ 1 ] ) and not IsString( arg[ 5 ][ 1 ] ) then
+            elif IsList( arg[ 4 ][ 1 ] ) then
                 
-                introduction_list := arg[ 5 ];
+                introduction_list := arg[ 4 ];
                 
             fi;
             
         fi;
         
-    elif Length( arg ) = 6 then
+    elif Length( arg ) = 5 then
         
-        introduction_list := arg[ 5 ];
+        introduction_list := arg[ 4 ];
         
-        entities := arg[ 6 ];
+        entities := arg[ 5 ];
         
     fi;
     
@@ -519,7 +527,7 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     
     if IsBound( introduction_list ) then
       
-        for intro in arg[ 5 ] do
+        for intro in introduction_list do
             
             if Length( intro ) = 2 then
                 
