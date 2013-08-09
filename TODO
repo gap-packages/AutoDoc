@@ -2,6 +2,7 @@
   at most, it should be part of the "developers documentation".
 
 * Why does e.g. DeclareCategoryWithDocumentation return something?
+->Declare*WithDoc doesn't do this anymore.
 
 * DeclareAttributeWithDocumentation does not support all arguments DeclareAttribute supports.
   Same for some of the others.
