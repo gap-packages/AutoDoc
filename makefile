@@ -2,7 +2,7 @@ all: doc
 
 doc: doc/manual.six
 
-doc/manual.six: makedoc.g ListOfDocFiles.g \
+doc/manual.six: makedoc.g \
 		PackageInfo.g \
 		doc/*.xml \
 		gap/*.gd gap/*.gi gap/AutoDocDocEntries.g
@@ -12,7 +12,7 @@ clean:
 	(cd doc ; ./clean)
 
 archive: doc
-	(mkdir -p ../tar; cd ..; tar czvf tar/AutoDoc.tar.gz --exclude ".DS_Store" --exclude "*~" AutoDoc/doc/*.* AutoDoc/doc/clean AutoDoc/gap/*.{gi,gd} AutoDoc/{CHANGES,PackageInfo.g,README,VERSION,init.g,read.g,makedoc.g,makefile,ListOfDocFiles.g})
+	(mkdir -p ../tar; cd ..; tar czvf tar/AutoDoc.tar.gz --exclude ".DS_Store" --exclude "*~" AutoDoc/doc/*.* AutoDoc/doc/clean AutoDoc/gap/*.{gi,gd} AutoDoc/{CHANGES,PackageInfo.g,README,VERSION,init.g,read.g,makedoc.g,makefile})
 
 WEBPOS=public_html
 WEBPOS_FINAL=~/public_html/gap_packages/AutoDoc
