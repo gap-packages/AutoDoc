@@ -7,12 +7,44 @@
 #############################################################################
 
 
+# Check if a string has the given suffix or not. Another
+# name for this would "StringEndsWithOtherString".
+# For example, AUTODOC_HasSuffix("file.gi", ".gi") returns
+# true while AUTODOC_HasSuffix("file.txt", ".gi") returns false.
 BindGlobal( "AUTODOC_HasSuffix",
 function(str, suffix)
     local n, m;
     n := Length(str);
     m := Length(suffix);
     return n >= m and str{[n-m+1..n]} = suffix;
+end );
+
+# Given a string containing a ".", , return its suffix,
+# i.e. the bit after the last ".". For example, given "test.txt",
+# it returns "txt".
+BindGlobal( "AUTODOC_GetSuffix",
+function(str)
+    local i;
+    i := Length(str);
+    while i >= 0 and str[i] <> '.' do i := i - 1; od;
+    if i < 0 then return ""; fi;
+    return str{[i+1..Length(str)]};
+end );
+
+# Check whether the given directory exists, and if not, attempt
+# to create it.
+BindGlobal( "AUTODOC_CreateDirIfMissing",
+function(d)
+    local tmp;
+    if not IsDirectoryPath(d) then
+        tmp := CreateDir(d); # Note: CreateDir is currently undocumented
+        if tmp = fail then
+            Error("Cannot create directory ", d, "\n",
+                  "Error message: ", LastSystemError().message, "\n");
+            return false;
+        fi;
+    fi;
+    return true;
 end );
 
 
@@ -23,11 +55,12 @@ end );
 #
 InstallGlobalFunction( AutoDoc,
 function( arg )
-    local pkg, package_info, opt, dir, scaffold, gapdoc, autodoc,
-            d, files, i, tmp;
+    local pkg, package_info, opt, scaffold, gapdoc, autodoc,
+          pkg_dir, doc_dir, doc_dir_rel, d, d_rel, files, i, tmp;
     
     pkg := arg[1];
     package_info := PackageInfo( pkg )[ 1 ];
+    pkg_dir := DirectoriesPackageLibrary( pkg, "" )[1];
 
     if Length(arg) >= 2 then
         opt := arg[2];
@@ -39,28 +72,39 @@ function( arg )
     #
     # Setup the output directory
     #
-    if not IsBound(opt.dir) then
-        dir := Directory("doc");
-    elif IsString(opt.dir) then
-        dir := Directory(opt.dir);
-    elif IsDirectory(opt.dir) then
-        dir := opt.dir;
+    if not IsBound( opt.dir ) then
+        doc_dir := "doc";
+    elif IsString( opt.dir ) or IsDirectory( opt.dir ) then
+        doc_dir := opt.dir;
     else
-        Error("opt.dir must be a string containing a path, or a directory object");
+        Error( "opt.dir must be a string containing a path, or a directory object" );
+    fi;
+    
+    if IsString( doc_dir ) then
+        # Record the relative version of the path
+        doc_dir_rel := Directory( doc_dir );
+
+        # We intentionally do not use
+        #   DirectoriesPackageLibrary( pkg, "doc" )
+        # because it returns an empty list if the subdirectory is missing.
+        # But we want to handle that case by creating the directory.
+        doc_dir := Filename(pkg_dir, doc_dir);
+        doc_dir := Directory(doc_dir);
+
+    else
+        # TODO: doc_dir_rel = ... ?
     fi;
 
     # Ensure the output directory exists, create it if necessary
-    d := Filename(dir, "");
-    if not IsDirectoryPath(d) then
-        tmp := CreateDir(d); # Note: CreateDir is currently undocumented
-        if tmp = fail then
-            Error("Cannot create directory ", d, "\n",
-                  "Error message: ", LastSystemError().message, "\n");
-            return false;
-        fi;
-    fi;
+    AUTODOC_CreateDirIfMissing(Filename(doc_dir, ""));
     
-    
+    # Let the developer know where we are generating the documentation.
+    # This helps diagnose problems where multiple instances of a package
+    # are visible to GAP and the wrong one is used for generating the
+    # documentation.
+    # TODO: Using Info() instead of Print?
+    Print( "Generating documentation in ", doc_dir, "\n" );
+
     #
     # Extract scaffolding settings, which can be controlled via
     # opt.scaffold or package_info.AutoDoc. The former has precedence.
@@ -111,7 +155,7 @@ function( arg )
             # FIXME: is this name good?
             # FIXME: OK to put this generated file into the doc dir?
             # Will be fixed with new data structure.
-            autodoc.output := Filename(dir, "AutoDocEntries.g");
+            autodoc.output := Filename( doc_dir_rel, "AutoDocEntries.g" );
         fi;
     fi;
 
@@ -146,17 +190,26 @@ function( arg )
             gapdoc.scan_dirs := [ "gap", "lib", "examples", "examples/doc" ];
         fi;
 
-        for d in gapdoc.scan_dirs do
-            d := Directory(d);
-            if not IsDirectoryPath(Filename(d, "")) then
+        for d_rel in gapdoc.scan_dirs do
+            # Get the absolute path to the directory in side the package...
+            d := DirectoriesPackageLibrary( pkg, d_rel );
+            if IsEmpty( d ) then
                 continue;
             fi;
-            files := DirectoryContents(d);
-            files := Filtered( files, x -> 
-                AUTODOC_HasSuffix(x, ".gd") or AUTODOC_HasSuffix(x, ".gi") or AUTODOC_HasSuffix(x, ".g") );
-            files := List( files, x -> Filename(d, x) );
-            files := Filtered( files, IsReadableFile );
-            Append( gapdoc.files, files );
+            d := d[1];
+            # ... but also keep the relative path (such as "gap")
+            d_rel := Directory( d_rel );
+
+            files := DirectoryContents( d );
+            for tmp in files do
+                if not AUTODOC_GetSuffix( tmp ) in [ "g", "gi", "gd" ] then
+                    continue;
+                fi;
+                if not IsReadableFile( Filename( d, tmp ) ) then
+                    continue;
+                fi;
+                Add( gapdoc.files, Filename( d_rel, tmp ) );
+            od;
         od;
 
         # Ensure the autodoc output file gets scanned by GAPDoc
@@ -169,10 +222,10 @@ function( arg )
         gapdoc.files := Set( gapdoc.files );
         
         # Convert the file paths in gapdoc.files, which are relative to
-        # the current dir, to paths which are relative to the doc dir.
-        # For this, we assume that the dir path is normalized (e.g.
+        # the package directory, to paths which are relative to the doc directory.
+        # For this, we assume that doc_dir_rel is normalized (e.g.
         # it does not contains '//') and relative.
-        d := Number( Filename( dir, "" ), x -> x = '/' );
+        d := Number( Filename( doc_dir_rel, "" ), x -> x = '/' );
         d := Concatenation( ListWithIdenticalEntries(d, "../") );
         gapdoc.files := List( gapdoc.files, f -> Concatenation( d, f ) );
 
@@ -208,7 +261,7 @@ function( arg )
             fi;
         elif not IsBound( scaffold.bib ) then
             # If there is a doc/PKG.bib file, assume that we want to reference it in the scaffold.
-            if IsReadableFile( Filename( dir, Concatenation( pkg, ".bib" ) ) ) then
+            if IsReadableFile( Filename( doc_dir, Concatenation( pkg, ".bib" ) ) ) then
                 scaffold.bib := Concatenation( pkg, ".bib" );
             fi;
         fi;
@@ -219,9 +272,9 @@ function( arg )
 
         # TODO: It should be possible to only rebuild the title page. (Perhaps also only the main page? but this is less important)
         
-        CreateTitlePage( pkg, dir, scaffold );
+        CreateTitlePage( pkg, doc_dir, scaffold );
         
-        CreateMainPage( pkg, dir, scaffold );
+        CreateMainPage( pkg, doc_dir, scaffold );
 
     fi;
     
@@ -231,9 +284,9 @@ function( arg )
     if IsBound( autodoc ) then
     
         if IsBound( autodoc.section_intros ) then
-            CreateAutomaticDocumentation( pkg, autodoc.output, dir, false, autodoc.section_intros );
+            CreateAutomaticDocumentation( pkg, autodoc.output, doc_dir, autodoc.section_intros );
         else
-            CreateAutomaticDocumentation( pkg, autodoc.output, dir, false );
+            CreateAutomaticDocumentation( pkg, autodoc.output, doc_dir );
         fi;
 
     fi;
@@ -249,9 +302,9 @@ function( arg )
         # not contained in the default Latin 1 encoding.
         SetGapDocLaTeXOptions( "utf8" );
 
-        MakeGAPDocDoc( dir, gapdoc.main, gapdoc.files, gapdoc.bookname, "MathJax" );
+        MakeGAPDocDoc( doc_dir, gapdoc.main, gapdoc.files, gapdoc.bookname, "MathJax" );
 
-        CopyHTMLStyleFiles( Filename(dir, "") );
+        CopyHTMLStyleFiles( Filename( doc_dir, "" ) );
 
         # The following (undocumented) API is there for compatibility
         # with old-style gapmacro.tex based package manuals. It
