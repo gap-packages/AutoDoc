@@ -7,9 +7,6 @@
 #############################################################################
 
 
-# TODO: Move CreateTitlePage and CreateMainPage into this file, too?
-# Or perhaps move them into new files Scaffold.{gi,gd} ?
-
 BindGlobal( "AUTODOC_HasSuffix",
 function(str, suffix)
     local n, m;
@@ -113,9 +110,8 @@ function( arg )
         if not IsBound(autodoc.output) then
             # FIXME: is this name good?
             # FIXME: OK to put this generated file into the doc dir?
+            # Will be fixed with new data structure.
             autodoc.output := Filename(dir, "AutoDocEntries.g");
-            # TODO: many packages use this:   gap/AutoDocEntries.g
-            #    perhaps we should do, too?
         fi;
     fi;
 
@@ -144,7 +140,6 @@ function( arg )
 
         if not IsBound( gapdoc.files ) then
             gapdoc.files := [];
-            # TODO: Add PackageInfo.g  ?  resp.  ../PackageInfo.g
         fi;
 
         if not IsBound( gapdoc.scan_dirs ) then
@@ -218,15 +213,10 @@ function( arg )
             scaffold.main_xml_file := Concatenation( gapdoc.main, ".xml" );
         fi;
 
-# TODO: It should be possible to only rebuild the title page. (Perhaps also only the main page? but this is less important)
+        # TODO: It should be possible to only rebuild the title page. (Perhaps also only the main page? but this is less important)
         
-        # TODO: Possibly only pass scaffold.TitlePage???
         CreateTitlePage( pkg, dir, scaffold );
         
-        # TODO: Possibly only pass scaffold.entities and scaffold.includes??
-        # TODO: Possibly pass gapdoc.main (as another param or via the
-        # option record), to make sure the created .tex file get
-        # appropriately named?
         CreateMainPage( pkg, dir, scaffold );
 
     fi;
@@ -235,7 +225,6 @@ function( arg )
     # Run AutoDoc
     #
     if IsBound( autodoc ) then
-# TODO: bring back create_doc param to CreateAutomaticDocumentation for now, to allow migration
     
         if IsBound( autodoc.section_intros ) then
             CreateAutomaticDocumentation( pkg, autodoc.output, dir, false, autodoc.section_intros );
