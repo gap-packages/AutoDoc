@@ -1,23 +1,22 @@
-##  this creates the documentation, needs: GAPDoc package, latex, pdflatex,
-##  mkindex, dvips
-##  
-##  Call this with GAP.
-##
+LoadPackage("AutoDoc");
 
-LoadPackage( "AutoDoc" );
+AutoDoc(
+    "AutoDoc",
+    rec(
+        scaffold := rec(
+            includes := [
+                "intro.xml",
+                "Tutorials.xml",
+                "AutoDocMainFile.xml",
+                ],
+        ),
+        autodoc := rec(
+            output := "gap/AutoDocEntries.g",
+        ),
+    )
+);
 
-CreateAutomaticDocumentation( "AutoDoc", "gap/AutoDocEntries.g", "doc/", false );
-
-SetGapDocLaTeXOptions( "utf8" );
-
-Read( "ListOfDocFiles.g" );
-
+# Create VERSION file for "make towww"
 PrintTo( "VERSION", PackageInfo( "AutoDoc" )[1].Version );
-
-MakeGAPDocDoc( "doc", "AutoDoc", list, "AutoDoc", "MathJax" );
-
-CopyHTMLStyleFiles( "doc" );
-
-GAPDocManualLab( "AutoDoc" );
 
 QUIT;
