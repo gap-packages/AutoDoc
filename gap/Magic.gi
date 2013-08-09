@@ -191,9 +191,13 @@ function( arg )
                 scaffold.includes := [ ];
             fi;
         else
-            # If scaffold.includes is already set, then we leave it to
-            # the package author to decide whether to include AutoDocMainFile.xml,
-            # and in which order relative to the other includes...
+            # If scaffold.includes is already set, then we add
+            # AutoDocMainFile.xml to it, but *only* if it not already
+            # there. This way, package authors can control where
+            # it is put in their includes list.
+            if not "AutoDocMainFile.xml" in scaffold.includes then
+                Add( scaffold.includes, "AutoDocMainFile.xml" );
+            fi;
         fi;
 
         if IsBound( scaffold.bib ) and IsBool( scaffold.bib ) then
