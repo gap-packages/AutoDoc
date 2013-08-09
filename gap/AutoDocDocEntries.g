@@ -183,7 +183,7 @@ CreateDocEntryForGlobalFunction(
 
 
 #
-# Documentation for CreatDocEntryFor* functions follows
+# Documentation for CreateDocEntryFor* functions follows
 #
 
 CreateDocEntryForGlobalFunction(
@@ -239,5 +239,68 @@ CreateDocEntryForGlobalFunction(
     "<C>true</C> or <C>false</C>",
     "name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]",
     [ "The_main_functions", "The_create_functions" ]
+);
+
+###########################################
+##
+## Documentation of Declare*WithDoc functions.
+##
+###########################################
+
+CreateDocEntryForGlobalFunction_WithOptions(
+    "DeclareOperationWithDoc" :
+    description := [
+        "This method declares an operation, like DeclareOperation( <A>name</A>, <A>list_of_filters</A> ) would do.",
+        "In addition, it specifies various information documenting the declared operation.",
+        "There can be used to generate &GAPDoc; documentation files by calling",
+        "<Ref Func='CreateAutomaticDocumentation'/> in a suitable way.",
+        "<Br/>",
+        "The following parameters are given as options to the function.",
+        "All of them are optional, a documentation entry will be created",
+        "even if you specify none of them.",
+        "The additional parameters have the following meaning:",
+        "<List>",
+        "<Mark><A>description</A></Mark><Item>",
+            "This contains a descriptive text which is added to the generated documentation.",
+            "It can either be a string or a list of strings. If it is a list of strings, then these",
+            "strings are concatenated with a space between them.",
+        "</Item>",
+        "<Mark><A>return_value</A></Mark><Item>",
+            "A string displayed as description of the return value.",
+        "</Item>",
+        "<Mark><A>arguments</A></Mark><Item>",
+            "An optional string which is displayed in the documentation as arguments list of the operation.",
+        "</Item>",
+        "<Mark><A>chapter_info</A></Mark><Item>",
+            "An optional argument which, if present, must be a list of two strings, naming the chapter",
+            "and the section in which the generated documentation for the operation should be placed.",
+            "There are no spaces allowed in this string, underscores will be converted to spaces in",
+            "the header of the chapter or the section.",
+        "</Item>",
+        "<Mark><A>group</A></Mark><Item>",
+            "This must be a string and is used to group functions with the same group name together",
+            "in the documentation. Their description will be concatenated, chapter and section info",
+            "of the first element in the group will be used.",
+        "</Item>",
+        "<Mark><A>label</A></Mark><Item>",
+            "This string is used as label of the element in the documentation. If you want to make a",
+            "reference to a specific entry, you need to set the label manually.",
+            "Otherwise, this is not necessary.",
+            
+            "Please be careful to not give two entries the same description by giving two declarations with",
+            "the same name the same label.",
+        "</Item>",
+        "<Mark><A>function_label</A></Mark><Item>",
+            "This sets the label of the function to the string <A>function_label</A>.",
+            "It might be useful for reference purposes, also this string is displayed as argument",
+            "of this method in the manual.",
+            "This really sets the label of the function, not the label of the ManItem.",
+            "Please see the &GAPDoc; manual for more infos on labels and references.",
+        "</Item>",
+        "</List>",
+    ],
+    return_value := "nothing",
+    arguments := "name, list_of_filters : description, return_value, arguments, chapter_info, label, function_label, group",
+    chapter_info := [ "The_main_functions", "The_declare_functions" ]
 );
 
