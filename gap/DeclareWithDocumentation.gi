@@ -23,7 +23,7 @@ InstallGlobalFunction( DeclareCategoryWithDocumentation,
     
     DeclareCategory( name, tester );
     
-    return CallFuncList( CreateDocEntryForCategory, arg );
+    CallFuncList( CreateDocEntryForCategory, arg );
     
 end );
 
@@ -42,7 +42,7 @@ InstallGlobalFunction( DeclareRepresentationWithDocumentation,
     
     DeclareRepresentation( name, tester, req_entries );
     
-    return CallFuncList( CreateDocEntryForRepresentation, arg );
+    CallFuncList( CreateDocEntryForRepresentation, arg );
     
 end );
 
@@ -59,7 +59,7 @@ InstallGlobalFunction( DeclareOperationWithDocumentation,
     
     DeclareOperation( name, tester );
     
-    return CallFuncList( CreateDocEntryForOperation, arg );
+    CallFuncList( CreateDocEntryForOperation, arg );
     
 end );
 
@@ -76,7 +76,7 @@ InstallGlobalFunction( DeclareAttributeWithDocumentation,
     
     DeclareAttribute( name, tester );
     
-    return CallFuncList( CreateDocEntryForAttribute, arg );
+    CallFuncList( CreateDocEntryForAttribute, arg );
     
 end );
 
@@ -93,7 +93,7 @@ InstallGlobalFunction( DeclarePropertyWithDocumentation,
     
     DeclareProperty( name, tester );
     
-    return CallFuncList( CreateDocEntryForProperty, arg );
+    CallFuncList( CreateDocEntryForProperty, arg );
     
 end );
 
@@ -110,8 +110,6 @@ InstallGlobalFunction( DeclareGlobalFunctionWithDocumentation,
     
     CallFuncList( CreateDocEntryForGlobalFunction, arg );
     
-    return true;
-    
 end );
 
 ##
@@ -126,8 +124,6 @@ InstallGlobalFunction( DeclareGlobalVariableWithDocumentation,
     DeclareGlobalVariable( name );
     
     CallFuncList( CreateDocEntryForGlobalVariable, arg );
-    
-    return true;
     
 end );
 
@@ -150,8 +146,6 @@ InstallGlobalFunction( InstallMethodWithDocumentation,
     InstallMethod( name, short_descr, tester, func );
     
     CallFuncList( CreateDocEntryForInstallMethod, arg );
-    
-    return true;
     
 end );
 

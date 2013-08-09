@@ -31,7 +31,7 @@ DeclareCategoryWithDocumentation( "ACategory",
 <Verb>
 LoadPackage("AutoDoc");
 
-GenerateDocumentation(
+AutoDoc(
     "Harald",
     rec(
         dir := "doc/",     # default

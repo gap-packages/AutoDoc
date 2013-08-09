@@ -16,7 +16,7 @@ CreateDocEntryForGlobalFunction(
         "a chapter title, with underscores instead of spaces, and the second one a string which will be displayed in the documentation at the beginning of",
         "the chapter. If three are given, first one must be a chapter, second a section, third the description.",
     ],
-    "<C>true</C> or <C>false</C>",
+    "nothing",
     "package_name, documentation_file, path_to_xml_file, create_full_docu, [ section_intros ]",
     [ "The_main_functions", "The_main_function" ]
 );
@@ -84,7 +84,7 @@ CreateDocEntryForGlobalFunction(
         "</Item>",
         "</List>",
     ],
-    "<C>true</C> or <C>false</C>",
+    "nothing",
     "name, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], [ option_record ]",
     [ "The_main_functions", "The_declare_functions" ]
 );
@@ -97,7 +97,7 @@ CreateDocEntryForGlobalFunction(
         "<Br/>",
         "The remaining parameters behave as described for <Ref Func='DeclareOperationWithDocumentation'/>.",
     ],
-    "<C>true</C> or <C>false</C>",
+    "nothing",
     "name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]",
     [ "The_main_functions", "The_declare_functions" ]
 );
@@ -111,7 +111,7 @@ CreateDocEntryForGlobalFunction(
         "<Br/>",
         "The remaining parameters behave as described for <Ref Func='DeclareOperationWithDocumentation'/>.",
     ],
-    "<C>true</C> or <C>false</C>",
+    "nothing",
     "name, filter, list_of_req_entries, description, [ arguments ], [ chapter_and_section ], [ option_record ]",
     [ "The_main_functions", "The_declare_functions" ]
 );
@@ -124,7 +124,7 @@ CreateDocEntryForGlobalFunction(
         "<Br/>",
         "The remaining parameters behave as described for <Ref Func='DeclareOperationWithDocumentation'/>.",
     ],
-    "<C>true</C> or <C>false</C>",
+    "nothing",
     "name, filter, description, return_value [ argument ], [ chapter_and_section ], [ option_record ]",
     [ "The_main_functions", "The_declare_functions" ]
 );
@@ -137,7 +137,7 @@ CreateDocEntryForGlobalFunction(
         "<Br/>",
         "The remaining parameters behave as described for <Ref Func='DeclareOperationWithDocumentation'/>.",
     ],
-    "<C>true</C> or <C>false</C>",
+    "nothing",
     "name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]",
     [ "The_main_functions", "The_declare_functions" ]
 );
@@ -150,7 +150,7 @@ CreateDocEntryForGlobalFunction(
         "<Br/>",
         "The remaining parameters behave as described for <Ref Func='DeclareOperationWithDocumentation'/>.",
     ],
-    "<C>true</C> or <C>false</C>",
+    "nothing",
     "name, description, return_value [ arguments ], [ chapter_and_section ], [ option_record ]",
     [ "The_main_functions", "The_declare_functions" ]
 );
@@ -163,7 +163,7 @@ CreateDocEntryForGlobalFunction(
         "<Br/>",
         "The remaining parameters behave as described for <Ref Func='DeclareOperationWithDocumentation'/>.",
     ],
-    "<C>true</C> or <C>false</C>",
+    "nothing",
     "name, description, [ chapter_and_section ]",
     [ "The_main_functions", "The_declare_functions" ]
 );
@@ -176,7 +176,7 @@ CreateDocEntryForGlobalFunction(
         "<Br/>",
         "The remaining parameters behave as described for <Ref Func='DeclareOperationWithDocumentation'/>.",
     ],
-    "<C>true</C> or <C>false</C>",
+    "nothing",
     "name, short_descr, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], func",
     [ "The_main_functions", "The_install_functions" ]
 );
@@ -192,7 +192,7 @@ CreateDocEntryForGlobalFunction(
         "This works like <Ref Func='DeclareCategoryWithDocumentation'/> except that it",
         "does not call DeclareCategory.",
     ],
-    "<C>true</C> or <C>false</C>",
+    "nothing",
     "name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]",
     [ "The_main_functions", "The_create_functions" ]
 );
@@ -203,7 +203,7 @@ CreateDocEntryForGlobalFunction(
         "This works like <Ref Func='DeclareRepresentationWithDocumentation'/> except that it",
         "does not call DeclareRepresentation.",
     ],
-    "<C>true</C> or <C>false</C>",
+    "nothing",
     "name, filter, list_of_req_entries, description, [ arguments ], [ chapter_and_section ], [ option_record ]",
     [ "The_main_functions", "The_create_functions" ]
 );
@@ -214,7 +214,7 @@ CreateDocEntryForGlobalFunction(
         "This works like <Ref Func='DeclareOperationWithDocumentation'/> except that it",
         "does not call DeclareOperation.",
     ],
-    "<C>true</C> or <C>false</C>",
+    "nothing",
     "name, list_of_filters, description, return_value [ arguments ], [ chapter_and_section ], [ option_record ]",
     [ "The_main_functions", "The_create_functions" ]
 );
@@ -225,7 +225,7 @@ CreateDocEntryForGlobalFunction(
         "This works like <Ref Func='DeclareAttributeWithDocumentation'/> except that it",
         "does not call DeclareAttribute.",
     ],
-    "<C>true</C> or <C>false</C>",
+    "nothing",
     "name, filter, description, return_value [ argument ], [ chapter_and_section ], [ option_record ]",
     [ "The_main_functions", "The_create_functions" ]
 );
@@ -236,7 +236,7 @@ CreateDocEntryForGlobalFunction(
         "This works like <Ref Func='DeclarePropertyWithDocumentation'/> except that it",
         "does not call DeclareProperty.",
     ],
-    "<C>true</C> or <C>false</C>",
+    "nothing",
     "name, filter, description, [ arguments ], [ chapter_and_section ], [ option_record ]",
     [ "The_main_functions", "The_create_functions" ]
 );
