@@ -135,7 +135,7 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
         ##Check for chapter info
         if IsList( current_rec_entry ) and Length( current_rec_entry ) = 2 and ForAll( current_rec_entry, IsString ) then
             
-            chapter_info := current_rec_entry;
+            chapter_info := List( current_rec_entry, i -> ReplacedString( i, " ", "_" ) );
             
             continue;
             
