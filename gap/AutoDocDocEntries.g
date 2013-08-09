@@ -304,3 +304,94 @@ CreateDocEntryForGlobalFunction_WithOptions(
     chapter_info := [ "The_main_functions", "The_declare_functions" ]
 );
 
+CreateDocEntryForGlobalFunction_WithOptions(
+    "DeclareCategoryWithDoc" :
+    description := [
+        "This method declares a category, like DeclareCategory( <A>arg</A> ) would do.",
+        "<Br/>",
+        "<Br/>",
+        "The remaining options behave as described for <Ref Func='DeclareOperationWithDoc'/>.",
+    ],
+    return_value := "nothing",
+    arguments := "arg : description, arguments, chapter_info, label, function_label, group",
+    chapter_info := [ "The_main_functions", "The_declare_functions" ]
+);
+
+CreateDocEntryForGlobalFunction_WithOptions(
+    "DeclareRepresentationWithDoc" :
+    description := [
+        "This method declares a representation, like DeclareRepresentation( <A>arg</A> )",
+        "would do.",
+        "<Br/>",
+        "<Br/>",
+        "The remaining options behave as described for <Ref Func='DeclareOperationWithDoc'/>.",
+    ],
+    return_value := "nothing",
+    arguments := "arg : description, arguments, chapter_info, label, function_label, group",
+    chapter_info := [ "The_main_functions", "The_declare_functions" ]
+);
+
+CreateDocEntryForGlobalFunction_WithOptions(
+    "DeclareAttributeWithDoc" :
+    description := [
+        "This method declares an attribute, like DeclareAttribute( <A>arg</A> ) would do.",
+        "<Br/>",
+        "<Br/>",
+        "The remaining options behave as described for <Ref Func='DeclareOperationWithDoc'/>.",
+    ],
+    return_value := "nothing",
+    arguments := "arg : description, return_value, argument, chapter_info, label, function_label, group",
+    chapter_info := [ "The_main_functions", "The_declare_functions" ]
+);
+
+CreateDocEntryForGlobalFunction_WithOptions(
+    "DeclarePropertyWithDoc" :
+    description := [
+        "This method declares a property, like DeclareProperty( <A>arg</A> ) would do.",
+        "<Br/>",
+        "<Br/>",
+        "The remaining parameters behave as described for <Ref Func='DeclareOperationWithDoc'/>.",
+    ],
+    return_value := "nothing",
+    arguments := "arg : description, arguments, chapter_info, label, function_label, group",
+    chapter_info := [ "The_main_functions", "The_declare_functions" ]
+);
+
+CreateDocEntryForGlobalFunction_WithOptions(
+    "DeclareGlobalFunctionWithDoc" :
+    description := [
+        "This method declares a global function like DeclareGlobalFunction( <A>arg</A> ) would do.",
+        "<Br/>",
+        "<Br/>",
+        "The remaining parameters behave as described for <Ref Func='DeclareOperationWithDoc'/>.",
+    ],
+    return_value := "nothing",
+    arguments := "arg : description, return_value arguments, chapter_info, label, function_label, group",
+    chapter_info := [ "The_main_functions", "The_declare_functions" ]
+);
+
+CreateDocEntryForGlobalFunction_WithOptions(
+    "DeclareGlobalVariableWithDoc" :
+    description := [
+        "This method declares a global variable like DeclareGlobalVariable( <A>arg</A> ) would do.",
+        "<Br/>",
+        "<Br/>",
+        "The remaining parameters behave as described for <Ref Func='DeclareOperationWithDoc'/>.",
+    ],
+    return_value := "nothing",
+    arguments := "arg : description, chapter_info, label, function_label, group",
+    chapter_info := [ "The_main_functions", "The_declare_functions" ]
+);
+
+CreateDocEntryForGlobalFunction_WithOptions(
+    "InstallMethodWithDoc" :
+    description := [
+        "This method installs a method, like InstallMethod( <A>arg</A> ) would do.",
+        "<Br/>",
+        "<Br/>",
+        "The remaining parameters behave as described for <Ref Func='DeclareOperationWithDoc'/>.",
+    ],
+    return_value := "nothing",
+    arguments := "arg : description, return_value, arguments, chapter_info, label, function_label, group",
+    chapter_info := [ "The_main_functions", "The_install_functions" ]
+);
