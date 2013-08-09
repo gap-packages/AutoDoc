@@ -222,11 +222,11 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
         
     fi;
     
-    if return_value <> fail and Length( return_value ) = 0 then
-        
-        return_value := "Nothing";
-        
-    fi;
+#     if not IsBool( return_value ) and Length( return_value ) = 0 then
+#         
+#         return_value := "Nothing";
+#         
+#     fi;
     
     if IsBound( option_record.function_label ) and IsString( option_record.function_label ) then
         
@@ -333,8 +333,7 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry_WithOptions,
     
     current_option := ValueOption( "return_value" );
     
-    ## FIXME: Implement a better logic here.
-    if current_option = fail and return_record.type <> "Var" then
+    if current_option = fail then
         
         return_record.return_value := "";
         
@@ -402,7 +401,7 @@ InstallGlobalFunction( AutoDoc_WriteEntry,
     
     AppendTo( doc_stream, "/>\n" );
     
-    if return_value <> fail then
+    if return_value <> false then
         AppendTo( doc_stream, "##    <Returns>", return_value, "</Returns>\n" );
     fi;
     
@@ -450,7 +449,7 @@ InstallGlobalFunction( AutoDoc_WriteGroupedEntry,
         
     od;
     
-    if return_value <> fail then
+    if return_value <> false then
         AppendTo( doc_stream, "##    <Returns>", return_value, "</Returns>\n" );
     fi;
     

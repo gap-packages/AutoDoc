@@ -269,7 +269,7 @@ InstallGlobalFunction( CreateDocEntryForGlobalVariable,
     argument_rec := rec( name := arg[ 1 ],
                          tester := fail,
                          description := arg[ 2 ],
-                         return_value := fail,
+                         return_value := false,
                          type := "Var",
                          doc_stream_type := "global_variables",
                          optional_arguments := arg{ [ 3 .. Length( arg ) ] },
@@ -287,7 +287,7 @@ InstallGlobalFunction( CreateDocEntryForGlobalVariable_WithOptions,
     AutoDoc_CreateCompleteEntry_WithOptions( :
                                              name := arg[ 1 ],
                                              tester := fail,
-                                             return_value := fail,
+                                             return_value := false,
                                              type := "Var",
                                              doc_stream_type := "global_variables" );
     

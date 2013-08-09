@@ -5,7 +5,7 @@ PackageName := "AutoDoc",
 Subtitle := "Generate documentation from GAP source code",
 
 Version := Maximum( [
-  "2013.08.08.15:45", ## Sebas' version
+  "2013.08.09:08:32", ## Sebas' version
 ## This line prevents merge conflicts
   "2013.07.30", ## Max' version
 ## This line prevents merge conflicts
