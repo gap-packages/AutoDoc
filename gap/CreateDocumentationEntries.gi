@@ -19,8 +19,6 @@ InstallGlobalFunction( CreateDocEntryForCategory,
         
         Error( "wrong number of arguments\n" );
         
-        return false;
-        
     fi;
     
     argument_rec := rec( name := arg[ 1 ],
@@ -32,7 +30,7 @@ InstallGlobalFunction( CreateDocEntryForCategory,
                          optional_arguments := arg{ [ 4 .. Length( arg ) ] },
                        );
     
-    return AutoDoc_CreateCompleteEntry( argument_rec );
+    AutoDoc_CreateCompleteEntry( argument_rec );
     
 end );
 
@@ -60,8 +58,6 @@ InstallGlobalFunction( CreateDocEntryForRepresentation,
         
         Error( "wrong number of arguments\n" );
         
-        return false;
-        
     fi;
     
     argument_rec := rec( name := arg[ 1 ],
@@ -73,7 +69,7 @@ InstallGlobalFunction( CreateDocEntryForRepresentation,
                          optional_arguments := arg{ [ 5 .. Length( arg ) ] },
                        );
     
-    return AutoDoc_CreateCompleteEntry( argument_rec );
+    AutoDoc_CreateCompleteEntry( argument_rec );
     
 end );
 
@@ -100,8 +96,6 @@ InstallGlobalFunction( CreateDocEntryForOperation,
         
         Error( "wrong number of arguments\n" );
         
-        return false;
-        
     fi;
     
     argument_rec := rec( name := arg[ 1 ],
@@ -113,7 +107,7 @@ InstallGlobalFunction( CreateDocEntryForOperation,
                          optional_arguments := arg{ [ 5 .. Length( arg ) ] },
                        );
     
-    return AutoDoc_CreateCompleteEntry( argument_rec );
+    AutoDoc_CreateCompleteEntry( argument_rec );
     
 end );
 
@@ -141,8 +135,6 @@ InstallGlobalFunction( CreateDocEntryForAttribute,
         
         Error( "wrong number of arguments\n" );
         
-        return false;
-        
     fi;
     
     argument_rec := rec( name := arg[ 1 ],
@@ -154,7 +146,7 @@ InstallGlobalFunction( CreateDocEntryForAttribute,
                          optional_arguments := arg{ [ 5 .. Length( arg ) ] },
                        );
     
-    return AutoDoc_CreateCompleteEntry( argument_rec );
+    AutoDoc_CreateCompleteEntry( argument_rec );
     
 end );
 
@@ -181,8 +173,6 @@ InstallGlobalFunction( CreateDocEntryForProperty,
         
         Error( "wrong number of arguments\n" );
         
-        return false;
-        
     fi;
     
     argument_rec := rec( name := arg[ 1 ],
@@ -194,7 +184,7 @@ InstallGlobalFunction( CreateDocEntryForProperty,
                          optional_arguments := arg{ [ 4 .. Length( arg ) ] },
                        );
     
-    return AutoDoc_CreateCompleteEntry( argument_rec );
+    AutoDoc_CreateCompleteEntry( argument_rec );
     
 end );
 
@@ -222,8 +212,6 @@ InstallGlobalFunction( CreateDocEntryForGlobalFunction,
         
         Error( "wrong number of arguments\n" );
         
-        return false;
-        
     fi;
     
     argument_rec := rec( name := arg[ 1 ],
@@ -235,7 +223,7 @@ InstallGlobalFunction( CreateDocEntryForGlobalFunction,
                          optional_arguments := arg{ [ 4 .. Length( arg ) ] },
                        );
     
-    return AutoDoc_CreateCompleteEntry( argument_rec );
+    AutoDoc_CreateCompleteEntry( argument_rec );
     
 end );
 
@@ -262,8 +250,6 @@ InstallGlobalFunction( CreateDocEntryForGlobalVariable,
         
         Error( "wrong number of arguments\n" );
         
-        return false;
-        
     fi;
     
     argument_rec := rec( name := arg[ 1 ],
@@ -275,7 +261,7 @@ InstallGlobalFunction( CreateDocEntryForGlobalVariable,
                          optional_arguments := arg{ [ 3 .. Length( arg ) ] },
                        );
     
-    return AutoDoc_CreateCompleteEntry( argument_rec );
+    AutoDoc_CreateCompleteEntry( argument_rec );
     
 end );
 
@@ -303,8 +289,6 @@ InstallGlobalFunction( CreateDocEntryForInstallMethod,
         
         Error( "wrong number of arguments\n" );
         
-        return false;
-        
     fi;
     
     argument_rec := rec( name := NameFunction( arg[ 1 ] ),
@@ -317,7 +301,7 @@ InstallGlobalFunction( CreateDocEntryForInstallMethod,
                          optional_arguments := arg{ [ 6 .. Length( arg ) - 1 ] },
                        );
     
-    return AutoDoc_CreateCompleteEntry( argument_rec );
+    AutoDoc_CreateCompleteEntry( argument_rec );
     
 end );
 
