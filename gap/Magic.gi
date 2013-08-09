@@ -198,14 +198,14 @@ function( arg )
 
         if IsBound( scaffold.bib ) and IsBool( scaffold.bib ) then
             if scaffold.bib = true then
-                scaffold.bib := pkg;
+                scaffold.bib := Concatenation( pkg, ".bib" );
             else
                 Unbind( scaffold.bib );
             fi;
         elif not IsBound( scaffold.bib ) then
             # If there is a doc/PKG.bib file, assume that we want to reference it in the scaffold.
             if IsReadableFile( Filename( dir, Concatenation( pkg, ".bib" ) ) ) then
-                scaffold.bib := pkg;
+                scaffold.bib := Concatenation( pkg, ".bib" );
             fi;
         fi;
 
