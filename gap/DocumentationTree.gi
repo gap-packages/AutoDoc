@@ -396,7 +396,7 @@ InstallMethod( WriteDocumentation,
     
     replaced_name := ReplacedString( name, "_", " " );
     
-    AppendTo( chapter_stream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n" ] ) );
+    AppendTo( chapter_stream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
     
     for i in node!.nodes do
         
@@ -419,13 +419,19 @@ InstallMethod( WriteDocumentation,
     
     text := node!.content;
     
-    if not IsString( text ) then
+    if IsString( text ) then
         
-        text := JoinStringsWithSeparator( text, " " );
+        text := [ text ];
         
     fi;
     
-    AppendTo( filestream, text );
+    for i in text do
+        
+        AppendTo( filestream, " ", i, "\n" );
+        
+    od;
+    
+    AppendTo( filestream, "\n" );
     
 end );
 
@@ -453,7 +459,7 @@ InstallMethod( WriteDocumentation,
     
     replaced_name := ReplacedString( name, "_", " " );
     
-    AppendTo( filestream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n" ] ) );
+    AppendTo( filestream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
     
     for i in node!.nodes do
         

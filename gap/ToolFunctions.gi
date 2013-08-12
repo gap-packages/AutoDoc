@@ -445,6 +445,6 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
     od;
     
     AppendTo( filestream, " </Description>\n" );
-    AppendTo( filestream, "</ManSection>\n" );
+    AppendTo( filestream, "</ManSection>\n\n" );
     
 end );
