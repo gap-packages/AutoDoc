@@ -4,6 +4,7 @@
 <!DOCTYPE Book SYSTEM "gapdoc.dtd"
 [
 <!ENTITY see '<Alt Only="LaTeX">$	o$</Alt><Alt Not="LaTeX">--&gt;</Alt>'>
+<!ENTITY SomePackage '<Package>SomePackage</Package>'>
 <!ENTITY AutoDoc '<Package>AutoDoc</Package>'>
 ]
 >
@@ -16,6 +17,5 @@
 <#Include SYSTEM "Tutorials.xml">
 <#Include SYSTEM "AutoDocMainFile.xml">
 </Body>
-<Bibliography Databases="AutoDoc"/>
 <TheIndex/>
 </Book>
