@@ -9,13 +9,31 @@
 ##
 #############################################################################
 
+InstallGlobalFunction( "AUTODOC_OutputTextFile",
+                       
+function( arg )
+    local filename, filestream;
+    if Length( arg ) = 1 then
+        filename := arg[1];
+    else
+        filename := Filename( arg[1], arg[2] );
+    fi;
+    
+    filestream := OutputTextFile( filename, false );
+    SetPrintFormattingStatus( filestream, false );
+    
+    return filestream;
+    
+end );
+
+
 ##
 InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
                        
   function( argument_record )
     local name, tester, description, return_value, arguments, chapter_info,
           tester_names, i, j, label_hash, doc_stream, grouping, is_grouped,
-          option_record, label_list, current_rec_entry;
+          option_record, label_list, current_rec_entry, entry_record;
     
     if not ( AUTOMATIC_DOCUMENTATION.enable_documentation and AUTOMATIC_DOCUMENTATION.package_name = CURRENT_NAMESPACE() ) then
         
@@ -31,6 +49,8 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
         
     fi;
     
+    entry_record := rec( );
+    
     for i in [ "type", "name", "tester", "description", "return_value" ] do
         
         if not IsBound( argument_record.(i) ) then
@@ -43,7 +63,9 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
         
     od;
     
-    name := argument_record.name;
+    entry_record.type := argument_record.type;
+    
+    entry_record.name := argument_record.name;
     
     tester := argument_record.tester;
     
@@ -105,6 +127,8 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
         
     fi;
     
+    entry_record.tester_names := tester_names;
+    
     description := argument_record.description;
     
     if IsString( description ) then
@@ -119,7 +143,9 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
         
     fi;
     
-    return_value := argument_record.return_value;
+    entry_record.description := description;
+    
+    entry_record.return_value := argument_record.return_value;
     
     for current_rec_entry in argument_record.optional_arguments do
         
@@ -176,6 +202,8 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
         
     fi;
     
+    entry_record.chapter_info := chapter_info;
+    
     if argument_record.type = "Var" then
         
         arguments := fail;
@@ -198,6 +226,8 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
         
     fi;
     
+    entry_record.arguments := arguments;
+    
     if not IsBound( option_record ) then
         
         option_record := rec( );
@@ -208,9 +238,9 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
         
         is_grouped := true;
         
-        grouping := option_record.group;
+        entry_record.group := option_record.group;
         
-        if not IsString( grouping ) then
+        if not IsString( entry_record.group ) then
             
             Error( "group name must be a string." );
             
@@ -222,83 +252,21 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
         
     fi;
     
-#     if not IsBool( return_value ) and Length( return_value ) = 0 then
-#         
-#         return_value := "Nothing";
-#         
-#     fi;
-    
     if IsBound( option_record.function_label ) and IsString( option_record.function_label ) then
         
-        tester_names := option_record.function_label;
+        entry_record.tester_names := option_record.function_label;
         
     fi;
     
-    label_list := [ ];
+    entry_record.label_list := [ ];
     
     if IsBound( option_record.label ) and IsString( option_record.label ) then
         
-        label_list := [ option_record.label ];
+        entry_record.label_list := [ option_record.label ];
         
     fi;
     
-    # Generate a "random" label. The label counter helps ensure that
-    # things with the same name still get different labels.
-    
-    AUTOMATIC_DOCUMENTATION.label_counter := AUTOMATIC_DOCUMENTATION.label_counter + 1;
-    
-    label_hash := Concatenation( name, String(AUTOMATIC_DOCUMENTATION.label_counter) );
-    
-    # Compute the label hash, based on (but different from) the corresponding GAPDoc code
-    label_hash := Concatenation(name{ [ 1 .. Minimum( Length( name ), 20 ) ] },
-            HexStringInt(CrcString( label_hash ) + 2^31 ),
-            HexStringInt(CrcString( Reversed( label_hash ) ) + 2^31 ) );
-    
-    if is_grouped and not IsBound( AUTOMATIC_DOCUMENTATION.grouped_items.(grouping) ) then
-        
-        AUTOMATIC_DOCUMENTATION.grouped_items.(grouping) := rec( elements := [ ],
-                                                                 description := [ ],
-                                                                 label_hash := label_hash,
-                                                                 chapter_info := chapter_info,
-                                                                 return_value := "",
-                                                                 label_list := label_list,
-                                                                );
-        
-        CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
-        
-        AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
-                  "<#Include Label=\"", label_hash, "\">\n" );
-        
-    elif not is_grouped then
-        
-        CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
-        
-        AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]),
-                  "<#Include Label=\"", label_hash, "\">\n" );
-        
-    fi;
-        
-    if is_grouped then
-        
-        grouping := AUTOMATIC_DOCUMENTATION.grouped_items.(grouping);
-        
-        Add( grouping.elements, [ argument_record.type, arguments, name, tester_names ] );
-        
-        grouping.description := Concatenation( grouping.description, description );
-        
-        grouping.return_value := return_value;
-        
-        grouping.label_list := Concatenation( grouping.label_list, label_list );
-        
-    else
-        
-        doc_stream := AUTOMATIC_DOCUMENTATION.documentation_stream;
-        
-        AutoDoc_WriteEntry( doc_stream, label_hash, argument_record.type, arguments, name, tester_names, return_value, description, label_list );
-    
-    fi;
-    
-    return true;
+    Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationItem( entry_record ) );
     
 end );
 
@@ -465,5 +433,109 @@ InstallGlobalFunction( AutoDoc_WriteGroupedEntry,
     AppendTo( doc_stream, "##  </ManSection>\n" );
     AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
     AppendTo( doc_stream, "##\n\n" );
+    
+end );
+
+##
+InstallGlobalFunction( AutoDoc_WriteDocEntry,
+                       
+  function( filestream, list_of_records )
+    local return_value, description, current_description, labels, i;
+    
+    ##look for a good return value (it should be the same everywhere)
+    for i in list_of_records do
+        
+        if IsBound( i.return_value ) then
+            
+            if IsList( i.return_value ) and Length( i.return_value ) > 0 then
+                
+                return_value := i.return_value;
+                
+                break;
+                
+            elif IsBool( i.return_value ) then
+                
+                return_value := i.return_value;
+                
+                break;
+                
+            fi;
+            
+        fi;
+        
+    od;
+    
+    ## Default.
+    if not IsBound( return_value ) then
+        
+        return_value := "";
+        
+    fi;
+    
+    description := [ ];
+    
+    ##collect description (for readability not in the loop above)
+    for i in list_of_records do
+        
+        current_description := i.description;
+        
+        if IsString( current_description ) then
+            
+            current_description := [ current_description ];
+            
+        fi;
+        
+        description := Concatenation( description, current_description );
+        
+    od;
+    
+    labels := [ ];
+    
+    for i in list_of_records do
+        
+        labels := Concatenation( labels, i.label_list );
+        
+    od;
+    
+    ## Write stuff out
+    
+    ##First labels, this has no effect in the current GAPDoc, btw.
+    AppendTo( filestream, "<ManSection" );
+    Perform( labels, function( i ) AppendTo( filestream, " Label=\"", i, "\"" ); end );
+    AppendTo( filestream, ">\n" );
+    
+    ## Function heades
+    for i in list_of_records do
+        
+         AppendTo( filestream, "  <", i.type, " " );
+        
+        if i.arguments <> fail and i.type <> "Var" then
+            AppendTo( filestream, "Arg=\"", i.arguments, "\" " );
+        fi;
+        
+        AppendTo( filestream, "Name=\"", i.name, "\" " );
+        
+        if i.tester_names <> fail and i.tester_names <> "" then
+            AppendTo( filestream, "Label=\"", i.tester_names, "\"" );
+        fi;
+        
+        AppendTo( filestream, "/>\n" );
+        
+    od;
+    
+    if return_value <> false then
+        AppendTo( filestream, " <Returns>", return_value, "</Returns>\n" );
+    fi;
+    
+    AppendTo( filestream, " <Description>\n" );
+    
+    for i in description do
+        
+        AppendTo( filestream, Concatenation( [ "    ", i, "\n" ] ) );
+        
+    od;
+    
+    AppendTo( filestream, " </Description>\n" );
+    AppendTo( filestream, "</ManSection>\n" );
     
 end );

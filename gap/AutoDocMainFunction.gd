@@ -16,6 +16,8 @@
 
 DeclareGlobalVariable( "AUTOMATIC_DOCUMENTATION" );
 
+DeclareGlobalVariable( "AUTODOC_XML_HEADER" );
+
 
 # Documentation for this global function can be found in gap/AutoDocDocEntries.g
 # respectively in the manual.

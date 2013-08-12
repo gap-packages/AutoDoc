@@ -24,29 +24,13 @@ InstallValue( AUTOMATIC_DOCUMENTATION,
               )
            );
 
-
-BindGlobal("AUTODOC_XML_HEADER", Concatenation(
+##
+InstallValue( AUTODOC_XML_HEADER, 
+    Concatenation(
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n",
     "<!-- This is an automatically generated file. -->\n"
     )
 );
-
-BindGlobal( "AUTODOC_OutputTextFile",
-function( arg )
-    local filename, filestream;
-    if Length( arg ) = 1 then
-        filename := arg[1];
-    else
-        filename := Filename( arg[1], arg[2] );
-    fi;
-    
-    filestream := OutputTextFile( filename, false );
-    SetPrintFormattingStatus( filestream, false );
-    
-    return filestream;
-    
-end );
-
 
 ##
 InstallGlobalFunction( CreateDefaultChapterData,
@@ -375,11 +359,13 @@ InstallGlobalFunction( CreateNewChapterXMLFile,
     
     if IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name) ) then
         
-        return true;
+        return AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).main_filestream;
         
     fi;
     
-    AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name) := rec( sections := rec( ) );
+    ## This might be useful for control purposes
+    
+    AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name) := rec( );
     
     filename := Concatenation( "Chapter_", chapter_name, ".xml" );
     
@@ -397,47 +383,7 @@ InstallGlobalFunction( CreateNewChapterXMLFile,
     
     AppendTo( filestream, Concatenation( [ "<Heading>", name_chapter, "</Heading>\n" ] ) );
     
-    return true;
-    
-end );
-## ToDo: Close all chapters.
-
-##
-## Call this with a chapter name and a section name
-InstallGlobalFunction( CreateNewSectionXMLFile,
-                       
-  function( chapter_name, section_name )
-    local filename, filestream, name_chapter;
-    
-    if not IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name) ) then
-        
-        CreateNewChapterXMLFile( chapter_name );
-        
-    fi;
-    
-    if IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).sections.(section_name) ) then
-        
-        return true;
-        
-    fi;
-    
-    filename := Concatenation( "Chapter_", chapter_name, "Section", section_name, ".xml" );
-    
-    filestream := AUTODOC_OutputTextFile( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename );
-    
-    AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).sections.(section_name) := filestream;
-    
-    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).main_filestream, Concatenation( "<#Include SYSTEM \"", filename, "\">\n" ) );
-    
-    AppendTo( filestream, AUTODOC_XML_HEADER );
-    
-    AppendTo( filestream, Concatenation( [ "<Section Label=\"Chapter_", chapter_name, "_Section_", section_name, "_automatically_generated_documentation_parts\">\n" ] ) );
-    
-    name_chapter := ReplacedString( section_name, "_", " " );
-    
-    AppendTo( filestream, Concatenation( [ "<Heading>", name_chapter, "</Heading>\n" ] ) );
-    
-    return true;
+    return filestream;
     
 end );
 
@@ -477,13 +423,6 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     
     ## Initialising the filestreams.
     AUTOMATIC_DOCUMENTATION.enable_documentation := true;
-    
-    AUTOMATIC_DOCUMENTATION.documentation_stream := AUTODOC_OutputTextFile( name_documentation_file );
-    
-    AUTOMATIC_DOCUMENTATION.documentation_headers_main_file := AUTODOC_OutputTextFile( path_to_xmlfiles, "AutoDocMainFile.xml" );
-    
-    ## Creating a header for the xml file.
-    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, AUTODOC_XML_HEADER );
     
     if Length( arg ) = 4 then
         
@@ -525,37 +464,23 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
         
     fi;
     
+    AUTOMATIC_DOCUMENTATION.tree := DocumentationTree( );
+    
     if IsBound( introduction_list ) then
       
         for intro in introduction_list do
             
             if Length( intro ) = 2 then
                 
-                CreateNewChapterXMLFile( intro[ 1 ] );
-                
                 intro_string := intro[ 2 ];
                 
-                if not IsString( intro_string ) then
-                    
-                    intro_string := JoinStringsWithSeparator( intro_string, " " );
-                    
-                fi;
-                
-                AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(intro[ 1 ]).main_filestream, intro_string );
+                Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationText( intro_string, [ intro[ 1 ] ] ) );
                 
             elif Length( intro ) = 3 then
                 
-                CreateNewSectionXMLFile( intro[ 1 ], intro[ 2 ] );
-                
                 intro_string := intro[ 3 ];
                 
-                if not IsString( intro_string ) then
-                    
-                    intro_string := JoinStringsWithSeparator( intro_string, " " );
-                    
-                fi;
-                
-                AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers.(intro[ 1 ]).sections.(intro[ 2 ]), intro_string );
+                Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationText( intro_string, [ intro[ 1 ], intro[ 2 ] ] ) );
                 
             else
                 
@@ -567,7 +492,7 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
         
     fi;
     
-    ## Magic!
+    AUTOMATIC_DOCUMENTATION.tree := DocumentationTree( );
     
     if LowercaseString( package_name ) = "autodoc" then
         
@@ -579,39 +504,7 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
         
     fi;
     
-    ## Write out the groups
-    
-    for group_names in RecNames( AUTOMATIC_DOCUMENTATION.grouped_items ) do
-        
-        current_group := AUTOMATIC_DOCUMENTATION.grouped_items.(group_names);
-        
-        AutoDoc_WriteGroupedEntry( AUTOMATIC_DOCUMENTATION.documentation_stream, current_group.label_hash, current_group.elements, current_group.return_value, current_group.description, current_group.label_list );
-        
-    od;
-    
-    ## Close header file and streams
-    
-    for chapter_record in RecNames(AUTOMATIC_DOCUMENTATION.documentation_headers) do
-        
-        chapter_record := AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_record);
-        
-        AppendTo( chapter_record.main_filestream, "</Chapter>" );
-        
-        CloseStream( chapter_record.main_filestream );
-        
-        for section_stream in RecNames( chapter_record.sections ) do
-            
-            AppendTo( chapter_record.sections.(section_stream), "</Section>" );
-            
-            CloseStream( chapter_record.sections.(section_stream) );
-            
-        od;
-        
-    od;
-    
-    CloseStream( AUTOMATIC_DOCUMENTATION.documentation_stream );
-    
-    CloseStream( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file );
+    WriteDocumentation( AUTOMATIC_DOCUMENTATION.tree, path_to_xmlfiles );
     
     return true;
 
@@ -727,20 +620,6 @@ InstallGlobalFunction( WriteStringIntoDoc,
         
     fi;
     
-    if Length( chapter_info ) = 2 then
-        
-        CreateNewSectionXMLFile( chapter_info[ 1 ], chapter_info[ 2 ] );
-        
-        filestream := AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).sections.(chapter_info[ 2 ]);
-        
-    else
-        
-        CreateNewChapterXMLFile( chapter_info[ 1 ] );
-        
-        filestream := AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_info[ 1 ]).main_filestream;
-        
-    fi;
-    
-    Perform( description, function( i ) AppendTo( filestream, i, "\n" ); end );
+    Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationText( description, chapter_info ) );
     
 end );

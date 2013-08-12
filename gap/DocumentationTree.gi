@@ -136,7 +136,7 @@ InstallMethod( DocumentationSection,
                );
     
     ObjectifyWithAttributes( section,
-                             TheTypeOfDocumentationTreeNodesForChapter,
+                             TheTypeOfDocumentationTreeNodesForSection,
                              Name, name
                              );
     
@@ -256,7 +256,7 @@ InstallMethod( SectionInTree,
     
     section := DocumentationSection( section_name );
     
-    Add( chapter!.nodes, section_name );
+    Add( chapter!.nodes, section );
     
     chapter!.nodes_by_name.( section_name ) := section;
     
@@ -265,7 +265,7 @@ InstallMethod( SectionInTree,
 end );
 
 ##
-InstallMethod( \+,
+InstallMethod( Add,
                "for text nodes",
                [ IsTreeForDocumentation, IsTreeForDocumentationNodeForTextRep ],
                
@@ -289,7 +289,7 @@ InstallMethod( \+,
 end );
 
 ##
-InstallMethod( \+,
+InstallMethod( Add,
                "for manitem nodes",
                [ IsTreeForDocumentation, IsTreeForDocumentationNodeForManItemRep ],
                
@@ -311,7 +311,7 @@ InstallMethod( \+,
 end );
 
 ##
-InstallMethod( \+,
+InstallMethod( Add,
                "for group nodes",
                [ IsTreeForDocumentation, IsTreeForDocumentationNodeForGroupRep ],
                
@@ -341,4 +341,152 @@ InstallMethod( \+,
     
 end );
 
+#############################################
+##
+## Write functions
+##
+#############################################
 
+##
+InstallMethod( WriteDocumentation,
+               [ IsTreeForDocumentation, IsDirectory ],
+               
+  function( tree, path_to_xmlfiles )
+    local stream, i;
+    
+    stream := AUTODOC_OutputTextFile( path_to_xmlfiles, "AutoDocMainFile.xml" );
+    
+    AppendTo( stream, AUTODOC_XML_HEADER );
+    
+    for i in tree!.nodes do
+        
+        if not IsTreeForDocumentationNodeForChapterRep( i ) then
+            
+            Error( "this should never happen" );
+            
+        fi;
+        
+        ## FIXME: If there is anything else than a chapter, this will break!
+        WriteDocumentation( i, stream, path_to_xmlfiles );
+        
+    od;
+    
+    CloseStream( stream );
+    
+end );
+
+##
+InstallMethod( WriteDocumentation,
+               [ IsTreeForDocumentationNodeForChapterRep, IsStream, IsDirectory ],
+               
+  function( node, stream, path_to_xmlfiles )
+    local filename, chapter_stream, name, replaced_name, i;
+    
+    name := Name( node );
+    
+    filename := Concatenation( "Chapter_", name, ".xml" );
+    
+    chapter_stream := AUTODOC_OutputTextFile( path_to_xmlfiles, filename );
+    
+    AppendTo( stream, Concatenation( "<#Include SYSTEM \"", filename, "\">\n" ) );
+    
+    AppendTo( chapter_stream, AUTODOC_XML_HEADER );
+    
+    AppendTo( chapter_stream, Concatenation( [ "<Chapter Label=\"Chapter_", name, "_automatically_generated_documentation_parts\">\n" ] ) );
+    
+    replaced_name := ReplacedString( name, "_", " " );
+    
+    AppendTo( chapter_stream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n" ] ) );
+    
+    for i in node!.nodes do
+        
+        WriteDocumentation( i, chapter_stream, name );
+        
+    od;
+    
+    AppendTo( chapter_stream, "</Chapter>\n\n" );
+    
+    CloseStream( chapter_stream );
+    
+end );
+
+##
+InstallMethod( WriteDocumentation,
+               [ IsTreeForDocumentationNodeForTextRep, IsStream ],
+               
+  function( node, filestream )
+    local text, i;
+    
+    text := node!.content;
+    
+    if not IsString( text ) then
+        
+        text := JoinStringsWithSeparator( text, " " );
+        
+    fi;
+    
+    AppendTo( filestream, text );
+    
+end );
+
+##
+InstallMethod( WriteDocumentation,
+               [ IsTreeForDocumentationNodeForTextRep, IsStream, IsString ],
+               
+  ##Please note that chapter_name is for sections only. It will be discarded.
+  function( node, filestream, chapter_name )
+    
+    WriteDocumentation( node, filestream );
+    
+end );
+
+##
+InstallMethod( WriteDocumentation,
+               [ IsTreeForDocumentationNodeForSectionRep, IsStream, IsString ],
+               
+  function( node, filestream, chapter_name )
+    local name, replaced_name, i;
+    
+    name := Name( node );
+    
+    AppendTo( filestream, Concatenation( [ "<Section Label=\"Chapter_", chapter_name, "_Section_", name, "_automatically_generated_documentation_parts\">\n" ] ) );
+    
+    replaced_name := ReplacedString( name, "_", " " );
+    
+    AppendTo( filestream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n" ] ) );
+    
+    for i in node!.nodes do
+        
+        WriteDocumentation( i, filestream );
+        
+    od;
+    
+    AppendTo( filestream, "</Section>\n\n" );
+    
+end );
+
+##
+InstallMethod( WriteDocumentation,
+               [ IsTreeForDocumentationNodeForManItemRep, IsStream ],
+               
+  function( node, filestream )
+    local entry_record;
+    
+    entry_record := node!.content;
+    
+    AutoDoc_WriteDocEntry( filestream, [ entry_record ] );
+    
+end );
+
+##
+InstallMethod( WriteDocumentation,
+               [ IsTreeForDocumentationNodeForGroupRep, IsStream ],
+               
+  function( node, filestream )
+    local entry_list;
+    
+    entry_list := node!.content_list;
+    
+    AutoDoc_WriteDocEntry( filestream, entry_list );
+    
+end );

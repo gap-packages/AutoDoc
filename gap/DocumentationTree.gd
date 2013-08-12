@@ -60,8 +60,26 @@ DeclareOperation( "SectionInTree",
 DeclareOperation( "GroupInTree",
                   [ IsTreeForDocumentation, IsString ] );
 
-DeclareOperation( "\+",
+DeclareOperation( "Add",
                   [ IsTreeForDocumentation, IsTreeForDocumentationNode ] );
 
 DeclareOperation( "MergeGroupEntries",
                   [ IsTreeForDocumentationNode, IsTreeForDocumentationNode ] );
+
+#######################################
+##
+## Write methods
+##
+#######################################
+
+DeclareOperation( "WriteDocumentation",
+                  [ IsTreeForDocumentation, IsDirectory ] );
+
+DeclareOperation( "WriteDocumentation",
+                  [ IsTreeForDocumentationNode, IsStream ] );
+
+DeclareOperation( "WriteDocumentation",
+                  [ IsTreeForDocumentationNode, IsStream, IsString ] );
+
+DeclareOperation( "WriteDocumentation",
+                  [ IsTreeForDocumentationNode, IsStream, IsDirectory ] );
