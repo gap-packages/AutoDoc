@@ -237,7 +237,7 @@ CreateDocEntryForGlobalFunction(
     [
         "This method declares an operation, like DeclareOperation( <A>name</A>, <A>list_of_filters</A> ) would do.",
         "In addition, it specifies various information documenting the declared operation.",
-        "There can be used to generate &GAPDoc; documentation files by calling",
+        "They can be used to generate &GAPDoc; documentation files by calling",
         "<Ref Func='CreateAutomaticDocumentation'/> in a suitable way.",
         "<Br/>",
         "The additional parameters have the following meaning:",
@@ -598,3 +598,46 @@ CreateDocEntryForGlobalFunction_WithOptions(
     arguments := "arg : description, return_value, arguments, chapter_info, label, function_label, group",
     chapter_info := [ "The_main_functions", "The_install_functions" ]
 );
+
+CreateDocEntryForGlobalFunction_WithOptions(
+    "SetCurrentAutoDocChapter" :
+    description := [
+    "These functions set or reset a current chapter or section, which will be applied to",
+    "entries without a <A>chapter_info</A> instead of the default one. Note that setting a section",
+    "without a chapter does nothing, and reseting the chapter also resets the section." ],
+    arguments := "name",
+    chapter_info := [ "The_main_functions", "Additional_functions" ],
+    group := "SetCurrent" );
+
+CreateDocEntryForGlobalFunction_WithOptions(
+    "ResetCurrentAutoDocChapter" :
+    description := [ ],
+    arguments := " ",
+    chapter_info := [ "The_main_functions", "Additional_functions" ],
+    group := "SetCurrent" );
+
+CreateDocEntryForGlobalFunction_WithOptions(
+    "SetCurrentAutoDocSection" :
+    description := [ ],
+    arguments := "name",
+    chapter_info := [ "The_main_functions", "Additional_functions" ],
+    group := "SetCurrent" );
+
+CreateDocEntryForGlobalFunction_WithOptions(
+    "ResetCurrentAutoDocSection" :
+    description := [ ],
+    arguments := " ",
+    chapter_info := [ "The_main_functions", "Additional_functions" ],
+    group := "SetCurrent" );
+
+CreateDocEntryForGlobalFunction_WithOptions(
+  "InsertStringIntoDoc" :
+  description := [
+  "Writes a string or a list of strings given as argument <A>description</A> into doc.",
+  "<A>chapter_info</A> is optional, but without a current chapter set, this would cause an error.",
+  "Also it is possible here to only give the chapter, not the section. It will be written in the chapter at the current point,",
+  "i.e. after the last written section." ],
+  arguments := "description : chapter_info",
+  chapter_info := [ "The_main_functions", "Additional_functions" ] );
+
+
