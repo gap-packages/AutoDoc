@@ -39,16 +39,6 @@ DeclareGlobalFunction( "CreateMainPage" );
 ## It creates names for the default chapters and sections.
 DeclareGlobalFunction( "CreateDefaultChapterData" );
 
-##
-## This function is for internal use only.
-## It creates streams for new chapters and prepares the xml file.
-DeclareGlobalFunction( "CreateNewChapterXMLFile" );
-
-##
-## This function is for internal use only.
-## It creates streams for new sections and prepares the xml file.
-DeclareGlobalFunction( "CreateNewSectionXMLFile" );
-
 DeclareGlobalFunction( "SetCurrentAutoDocChapter" );
 DeclareGlobalFunction( "ResetCurrentAutoDocChapter" );
 

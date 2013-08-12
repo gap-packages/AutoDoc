@@ -32,7 +32,7 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry,
                        
   function( argument_record )
     local name, tester, description, return_value, arguments, chapter_info,
-          tester_names, i, j, label_hash, doc_stream, grouping, is_grouped,
+          tester_names, i, j, doc_stream, grouping, is_grouped,
           option_record, label_list, current_rec_entry, entry_record;
     
     if not ( AUTOMATIC_DOCUMENTATION.enable_documentation and AUTOMATIC_DOCUMENTATION.package_name = CURRENT_NAMESPACE() ) then
@@ -342,97 +342,6 @@ InstallGlobalFunction( AutoDoc_CreateCompleteEntry_WithOptions,
     Add( return_record!.optional_arguments, opt_rec );
     
     AutoDoc_CreateCompleteEntry( return_record );
-    
-end );
-
-##
-InstallGlobalFunction( AutoDoc_WriteEntry,
-                       
-  function( doc_stream, label, type, arguments, name, tester_names, return_value, description, label_for_mansection )
-    local i;
-    
-    AppendTo( doc_stream, "##  <#GAPDoc Label=\"", label , "\">\n" );
-    AppendTo( doc_stream, "##  <ManSection" );
-    Perform( label_for_mansection, function( i ) AppendTo( doc_stream, " Label=\"", i, "\"" ); end );
-    AppendTo( doc_stream, ">\n" );
-    AppendTo( doc_stream, "##    <", type );
-    
-    if arguments <> fail then
-        AppendTo( doc_stream, " Arg=\"", arguments, "\"" );
-    fi;
-    
-    AppendTo( doc_stream, " Name=\"", name, "\"" );
-    
-    if tester_names <> fail and tester_names <> "" then
-        AppendTo( doc_stream, " Label=\"", tester_names, "\"" );
-    fi;
-    
-    AppendTo( doc_stream, "/>\n" );
-    
-    if return_value <> false then
-        AppendTo( doc_stream, "##    <Returns>", return_value, "</Returns>\n" );
-    fi;
-    
-    AppendTo( doc_stream, "##    <Description>\n" );
-    
-    for i in description do
-        
-        AppendTo( doc_stream, Concatenation( [ "##      ", i, "\n" ] ) );
-        
-    od;
-    
-    AppendTo( doc_stream, "##    </Description>\n" );
-    AppendTo( doc_stream, "##  </ManSection>\n" );
-    AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
-    AppendTo( doc_stream, "##\n\n" );
-    
-end );
-
-##
-InstallGlobalFunction( AutoDoc_WriteGroupedEntry,
-                       
-  function( doc_stream, label, list_of_type_arg_name_testernames, return_value, description, label_list )
-    local i;
-    
-    AppendTo( doc_stream, "##  <#GAPDoc Label=\"", label , "\">\n" );
-    AppendTo( doc_stream, "##  <ManSection" );
-    Perform( label_list, function( i ) AppendTo( doc_stream, " Label=\"", i, "\"" ); end );
-    AppendTo( doc_stream, ">\n" );
-    
-    for i in list_of_type_arg_name_testernames do
-        
-         AppendTo( doc_stream, "##    <", i[ 1 ], " " );
-        
-        if i[ 2 ] <> fail and i[ 1 ] <> "Var" then
-            AppendTo( doc_stream, "Arg=\"", i[ 2 ], "\" " );
-        fi;
-        
-        AppendTo( doc_stream, "Name=\"", i[ 3 ], "\" " );
-        
-        if i[ 4 ] <> fail and i[ 4 ] <> "" then
-            AppendTo( doc_stream, "Label=\"", i[ 4 ], "\"" );
-        fi;
-        
-        AppendTo( doc_stream, "/>\n" );
-        
-    od;
-    
-    if return_value <> false then
-        AppendTo( doc_stream, "##    <Returns>", return_value, "</Returns>\n" );
-    fi;
-    
-    AppendTo( doc_stream, "##    <Description>\n" );
-    
-    for i in description do
-        
-        AppendTo( doc_stream, Concatenation( [ "##      ", i, "\n" ] ) );
-        
-    od;
-    
-    AppendTo( doc_stream, "##    </Description>\n" );
-    AppendTo( doc_stream, "##  </ManSection>\n" );
-    AppendTo( doc_stream, "##  <#/GAPDoc>\n" );
-    AppendTo( doc_stream, "##\n\n" );
     
 end );
 

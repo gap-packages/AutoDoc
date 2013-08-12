@@ -14,13 +14,8 @@ InstallValue( AUTOMATIC_DOCUMENTATION,
               rec(
                 enable_documentation := false,
                 package_name := "",
-                documentation_stream := false,
-                documentation_headers := rec( ),
-                documentation_headers_main_file := false,
                 path_to_xmlfiles := Directory(""),
                 default_chapter := rec( ),
-                label_counter := 0,
-                grouped_items := rec( ),
               )
            );
 
@@ -347,43 +342,6 @@ InstallGlobalFunction( CreateMainPage,
     CloseStream( filestream );
     
     return true;
-    
-end );
-
-##
-## Call this with the name of the chapter without whitespaces. THEY MUST BE UNDERSCORES! IMPORTANT! UNDERSCORES!
-InstallGlobalFunction( CreateNewChapterXMLFile,
-                       
-  function( chapter_name )
-    local filename, filestream, name_chapter;
-    
-    if IsBound( AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name) ) then
-        
-        return AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).main_filestream;
-        
-    fi;
-    
-    ## This might be useful for control purposes
-    
-    AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name) := rec( );
-    
-    filename := Concatenation( "Chapter_", chapter_name, ".xml" );
-    
-    filestream := AUTODOC_OutputTextFile( AUTOMATIC_DOCUMENTATION.path_to_xmlfiles, filename );
-    
-    AUTOMATIC_DOCUMENTATION.documentation_headers.(chapter_name).main_filestream := filestream;
-    
-    AppendTo( AUTOMATIC_DOCUMENTATION.documentation_headers_main_file, Concatenation( "<#Include SYSTEM \"", filename, "\">\n" ) );
-    
-    AppendTo( filestream, AUTODOC_XML_HEADER );
-    
-    AppendTo( filestream, Concatenation( [ "<Chapter Label=\"Chapter_", chapter_name, "_automatically_generated_documentation_parts\">\n" ] ) );
-    
-    name_chapter := ReplacedString( chapter_name, "_", " " );
-    
-    AppendTo( filestream, Concatenation( [ "<Heading>", name_chapter, "</Heading>\n" ] ) );
-    
-    return filestream;
     
 end );
 
