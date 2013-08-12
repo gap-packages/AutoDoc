@@ -26,7 +26,7 @@ BindGlobal( "AUTODOC_GetSuffix",
 function(str)
     local i;
     i := Length(str);
-    while i >= 0 and str[i] <> '.' do i := i - 1; od;
+    while i > 0 and str[i] <> '.' do i := i - 1; od;
     if i < 0 then return ""; fi;
     return str{[i+1..Length(str)]};
 end );
