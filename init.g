@@ -10,6 +10,8 @@
 ##
 #############################################################################
 
+ReadPackage( "AutoDoc", "gap/DocumentationTree.gd" );
+
 ReadPackage( "AutoDoc", "gap/AutoDocMainFunction.gd" );
 
 ReadPackage( "AutoDoc", "gap/ToolFunctions.gd" );

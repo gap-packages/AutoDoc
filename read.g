@@ -9,6 +9,8 @@
 ##
 #############################################################################
 
+ReadPackage( "AutoDoc", "gap/DocumentationTree.gi" );
+
 ReadPackage( "AutoDoc", "gap/AutoDocMainFunction.gi" );
 
 ReadPackage( "AutoDoc", "gap/ToolFunctions.gi" );
