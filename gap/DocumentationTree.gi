@@ -388,11 +388,11 @@ InstallMethod( WriteDocumentation,
     
     chapter_stream := AUTODOC_OutputTextFile( path_to_xmlfiles, filename );
     
-    AppendTo( stream, Concatenation( "<#Include SYSTEM \"", filename, "\">\n" ) );
+    AppendTo( stream, "<#Include SYSTEM \"", filename, "\">\n" );
     
     AppendTo( chapter_stream, AUTODOC_XML_HEADER );
     
-    AppendTo( chapter_stream, Concatenation( [ "<Chapter Label=\"Chapter_", name, "_automatically_generated_documentation_parts\">\n" ] ) );
+    AppendTo( chapter_stream, "<Chapter Label=\"Chapter_", name, "_automatically_generated_documentation_parts\">\n" );
     
     replaced_name := ReplacedString( name, "_", " " );
     
@@ -431,7 +431,7 @@ InstallMethod( WriteDocumentation,
         
     od;
     
-    AppendTo( filestream, "\n" );
+    AppendTo( filestream, "\n\n" );
     
 end );
 

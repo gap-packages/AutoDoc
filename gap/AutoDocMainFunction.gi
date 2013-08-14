@@ -450,8 +450,6 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
         
     fi;
     
-    AUTOMATIC_DOCUMENTATION.tree := DocumentationTree( );
-    
     if LowercaseString( package_name ) = "autodoc" then
         
         ReadPackage( "AutoDoc", "gap/AutoDocDocEntries.g" );
