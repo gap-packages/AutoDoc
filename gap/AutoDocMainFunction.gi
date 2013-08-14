@@ -432,13 +432,13 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
                 
                 intro_string := intro[ 2 ];
                 
-                Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationText( intro_string, [ intro[ 1 ] ] ) );
+                Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationText( intro_string, [ ReplacedString( intro[ 1 ], " ", "_" ) ] ) );
                 
             elif Length( intro ) = 3 then
                 
                 intro_string := intro[ 3 ];
                 
-                Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationText( intro_string, [ intro[ 1 ], intro[ 2 ] ] ) );
+                Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationText( intro_string, [ ReplacedString( intro[ 1 ], " ", "_" ), ReplacedString( intro[ 2 ], " ", "_" ) ] ) );
                 
             else
                 
@@ -483,7 +483,7 @@ InstallGlobalFunction( SetCurrentAutoDocChapter,
         
     fi;
     
-    AUTOMATIC_DOCUMENTATION.default_chapter.current_default_chapter_name := chapter_name;
+    AUTOMATIC_DOCUMENTATION.default_chapter.current_default_chapter_name := ReplacedString( chapter_name, " ", "_" );
     
 end );
 
@@ -515,7 +515,7 @@ InstallGlobalFunction( SetCurrentAutoDocSection,
         
     fi;
     
-    AUTOMATIC_DOCUMENTATION.default_chapter.current_default_section_name := section_name;
+    AUTOMATIC_DOCUMENTATION.default_chapter.current_default_section_name := ReplacedString( section_name, " ", "_" );
     
 end );
 
@@ -575,6 +575,8 @@ InstallGlobalFunction( WriteStringIntoDoc,
         fi;
         
     fi;
+    
+    chapter_info := List( chapter_info, i -> ReplacedString( i, " ", "_" ) );
     
     Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationText( description, chapter_info ) );
     
