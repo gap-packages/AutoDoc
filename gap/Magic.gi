@@ -150,6 +150,7 @@ function( arg )
         autodoc := rec();
     fi;
     
+## FIXME: This file is no longer needed.
     if IsBound(autodoc) then
         if not IsBound(autodoc.output) then
             # FIXME: is this name good?
@@ -213,9 +214,9 @@ function( arg )
         od;
 
         # Ensure the autodoc output file gets scanned by GAPDoc
-        if IsBound( autodoc ) then
-            Add( gapdoc.files, autodoc.output );
-        fi;
+#         if IsBound( autodoc ) then
+#             Add( gapdoc.files, autodoc.output );
+#         fi;
         
         # Attempt to weed out duplicates as they may confuse GAPDoc (this
         # won't work if there are any non-normalized paths in the list).
