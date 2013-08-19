@@ -7,6 +7,7 @@
 #############################################################################
 
 ##
+## FIXME: Do this more efficient
 InstallGlobalFunction( AutoDoc_RemoveSpacesAndComments,
                        
   function( string )
@@ -95,31 +96,49 @@ InstallGlobalFunction( AutoDoc_Flush,
         
     fi;
     
+    return [ "None", [ ] ];
+    
 end );
 
 ##
 InstallGlobalFunction( AutoDoc_Prepare_Item_Record,
                        
-  function( current_item, chapter_info )
+  function( current_item, chapter_info, group )
     local type;
     
     type := current_item[ 1 ];
     
     if type = "Chapter" or type = "Section" then
         
-        AutoDoc_Flush( current_item );
+        current_item := AutoDoc_Flush( current_item );
         
-        current_item := [ "Item", rec( ) ];
+        current_item := [ "Item", rec( description := [ ],
+                                       return_value := "",
+                                       label_list := "",
+                                       arguments := "args",
+                                       tester_names := "",
+                                     ) ];
         
     elif type = "None" then
         
-        current_item := [ "Item", rec( ) ];
+        current_item := [ "Item", rec( description := [ ],
+                                       return_value := "",
+                                       label_list := "",
+                                       arguments := "args",
+                                       tester_names := "",
+                                     ) ];
         
     fi;
     
     if IsBound( chapter_info[ 1 ] ) and IsBound( chapter_info[ 2 ] ) then
         
         current_item[ 2 ].chapter_info := chapter_info;
+        
+    fi;
+    
+    if group <> false then
+        
+        current_item[ 2 ].group := group;
         
     fi;
     
@@ -131,7 +150,7 @@ end );
 InstallGlobalFunction( AutoDoc_Type_Of_Item,
                        
   function( current_item, type )
-    local item_rec, entries, has_filters;
+    local item_rec, entries, has_filters, ret_val;
     
     item_rec := current_item[ 2 ];
     
@@ -139,11 +158,15 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         entries := [ "Filt", "categories" ];
         
+        ret_val := "<C>true</C> or <C>false</C>";
+        
         has_filters := "One";
         
     elif type = "Representation" then
         
         entries := [ "Filt", "categories" ];
+        
+        ret_val := "<C>true</C> or <C>false</C>";
         
         has_filters := "One";
         
@@ -157,11 +180,13 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         entries := [ "Prop", "properties" ];
         
+        ret_val := "<C>true</C> or <C>false</C>";
+        
         has_filters := "One";
         
     elif type = "Operation" then
         
-        entries := [ "Oper", "operations" ];
+        entries := [ "Oper", "methods" ];
         
         has_filters := "List";
         
@@ -175,6 +200,8 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         entries := [ "Var", "global_variables" ];
         
+        ret_val := fail;
+        
         has_filters := "No";
         
     else
@@ -187,7 +214,15 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
     
     item_rec.doc_stream_type := entries[ 2 ];
     
-    item_rec.chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.( entries[ 2 ] );
+    if not IsBound( item_rec.chapter_info ) then
+        item_rec.chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.( entries[ 2 ] );
+    fi;
+    
+    if IsBound( ret_val ) and not IsBound( item_rec.return_value ) then
+        
+        item_rec.return_value := ret_val;
+        
+    fi;
     
     return has_filters;
     
@@ -197,22 +232,19 @@ end );
 InstallGlobalFunction( AutoDoc_Parser_ReadFile,
                        
   function( filename )
-    local warning_class, filestream, autodoc_active, current_line,
+    local filestream, autodoc_active, current_line,
           chapter_info, is_autodoc_comment, is_function_declaration,
           pos_of_autodoc_comment, declare_position, current_item,
           has_filters, filter_string, current_command, current_string_list,
-          scope_chapter, scope_section, scope_group, current_type, autodoc_counter;
-    
-    warning_class := NewInfoClass( "warning_class" );
-    
-    SetInfoLevel( warning_class, 1 );
+          scope_chapter, scope_section, scope_group, current_type, autodoc_counter,
+          position_parentesis;
     
     filestream := InputTextFile( filename );
     
     ## After this, I assume the stream contains one line.
     if filestream = fail then
         
-        Info( warning_class, 1, "Warning: The text file ", filename, " was not readable.\n" );
+        Info( InfoWarning, 1, "Warning: The text file ", filename, " was not readable.\n" );
         
         return;
         
@@ -226,19 +258,19 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
     
     current_string_list := [ ];
     
-    current_item := [ "None" ];
+    current_item := [ "None", [ ] ];
+    
+    scope_group := false;
     
     ## Next if ensures termination.
     while true do
-        
-        Print( String( autodoc_counter ), "\n" );
         
         current_line := ReadLine( filestream );
         
         ## Ensures termination of the loop.
         if current_line = fail then
             
-            AutoDoc_Flush( current_item );
+            current_item := AutoDoc_Flush( current_item );
             
             break;
             
@@ -254,6 +286,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         
         if current_line = "" then
             
+            autodoc_counter := autodoc_counter - 1;
+            
             continue;
             
         fi;
@@ -265,7 +299,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         pos_of_autodoc_comment := PositionSublist( current_line, "#!" );
         
         ## Check wether line contains autodoc comments
-        if pos_of_autodoc_comment  <> fail then
+        if pos_of_autodoc_comment <> fail then
+          
+          autodoc_counter := 3;
           
           autodoc_active := true;
           
@@ -277,12 +313,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
           
           is_function_declaration := false;
           
-          autodoc_counter := autodoc_counter - 1;
-          
         fi;
         
         ## Assures no function will be read while AutoDoc is not active
         if not autodoc_active and not is_autodoc_comment then
+            
+            autodoc_counter := 0;
             
             continue;
             
@@ -295,31 +331,35 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
             if declare_position = fail then
                 
+                autodoc_counter := autodoc_counter - 1;
+                
                 continue;
                 
             fi;
             
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info );
+            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
             
             current_line := current_line{[ declare_position + 7 .. Length( current_line ) ]};
             
-            if PositionSublist( current_line, "(" ) = fail then
+            position_parentesis := PositionSublist( current_line, "(" );
+            
+            if position_parentesis = fail then
                 
                 Error( "Something went wrong" );
                 
             fi;
             
-            current_type := current_line{ [ 1 .. PositionSublist( current_line, "(" ) - 1 ] };
+            current_type := current_line{ [ 1 .. position_parentesis - 1 ] };
             
             has_filters := AutoDoc_Type_Of_Item( current_item, current_type );
             
-            current_line := current_line{ [ PositionSublist( current_line, "(" ) + 1 .. Length( current_line ) ] };
+            current_line := current_line{ [ position_parentesis + 1 .. Length( current_line ) ] };
             
             ## Not the funny part begins:
             ## try fetching the name:
             
             ## Assuming the name is in the same line as its 
-            while PositionSublist( current_line, "," ) = fail do
+            while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
                 
                 current_line := ReadLine( filestream );
                 
@@ -331,7 +371,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
             current_line := AutoDoc_RemoveSpacesAndComments( current_line );
             
-            current_item[ 2 ].name := current_line{ [ 1 .. PositionSublist( current_line, "," ) - 1 ] };
+            current_item[ 2 ].name := current_line{ [ 1 .. Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) - 1 ] };
             
             current_item[ 2 ].name := AutoDoc_RemoveSpacesAndComments( ReplacedString( current_item[ 2 ].name, "\"", "" ) );
             
@@ -385,17 +425,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
                 
             fi;
             
-            current_item[ 2 ].list_of_filters := filter_string;
+            current_item[ 2 ].tester_names := filter_string;
             
-            ## Everything is done now.
-            
-            AutoDoc_Flush( current_item );
+            current_item := AutoDoc_Flush( current_item );
             
             continue;
             
         fi;
-        
-        autodoc_counter := 3;
         
         current_command := AutoDoc_Scan_for_command( current_line );
         
@@ -431,7 +467,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         if current_command[ 1 ] = "@Chapter" then
             
             ## First chapter has no current item.
-            if IsBound( current_item ) then AutoDoc_Flush( current_item ); fi;
+            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
             
             ## Reset section
             Unbind( scope_section );
@@ -453,7 +489,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         if current_command[ 1 ] = "@Section" then
             
             ##Flush current node.
-            if IsBound( current_item ) then AutoDoc_Flush( current_item ); fi;
+            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
             
             scope_section := ReplacedString( current_command[ 2 ], " ", "_" );
             
@@ -477,7 +513,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
                 
             fi;
             
-            if IsBound( current_item ) then AutoDoc_Flush( current_item ); fi;
+            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
             
             current_item := [ "Chapter", chapter_info[ 1 ], [ ] ];
             
@@ -493,9 +529,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         
         if current_command[ 1 ] = "@BeginGroup" then
             
-            if IsBound( current_item ) then AutoDoc_Flush( current_item ); fi;
-            
-            Unbind( current_item );
+            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
             
             if current_command[ 2 ] = "" then
                 
@@ -513,11 +547,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         
         if current_command[ 1 ] = "@EndGroup" then
             
-            if IsBound( current_item ) then AutoDoc_Flush( current_item, chapter_info ); fi;
+            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
             
-            Unbind( current_item );
-            
-            Unbind( scope_group );
+            scope_group := false;
             
             continue;
             
@@ -525,7 +557,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         
         if current_command[ 1 ] = "@Description" then
             
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info );
+            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
             
             current_item[ 2 ].description := [ ];
             
@@ -537,7 +569,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         
         if current_command[ 1 ] = "@ReturnValue" then
             
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info );
+            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
             
             current_item[ 2 ].return_value := current_command[ 2 ];
             
@@ -547,7 +579,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         
         if current_command[ 1 ] = "@Arguments" then
             
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info );
+            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
             
             current_item[ 2 ].arguments := current_command[ 2 ];
             
@@ -558,7 +590,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         ## This should be deprecated by now.
         if current_command[ 1 ] = "@Label" then
             
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info );
+            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
             
             current_item[ 2 ].label := current_command[ 2 ];
             
@@ -568,7 +600,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         
         if current_command[ 1 ] = "@FunctionLabel" then
             
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info );
+            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
             
             current_item[ 2 ].function_label := current_command[ 2 ];
             
@@ -578,7 +610,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         
         if current_command[ 1 ] = "@Group" then
             
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info );
+            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
             
             current_item[ 2 ].group := current_command[ 2 ];
             
@@ -588,7 +620,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         
         if current_command[ 1 ] = "@ChapterInfo" then
             
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info );
+            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
             
             current_item[ 2 ].chapter_info := SplitString( current_command[ 2 ], "," );
             

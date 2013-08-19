@@ -355,7 +355,15 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
 
   function( arg )
     local package_name, name_documentation_file, path_to_xmlfiles, create_full_docu, introduction_list, entities, 
-          dependencies, intro, chapter_record, section_stream, intro_string, group_names, current_group;
+          dependencies, intro, chapter_record, section_stream, intro_string, group_names, current_group, files_to_scan, i;
+    
+    files_to_scan := ValueOption( "files_to_scan" );
+    
+    if files_to_scan = false then
+        
+        files_to_scan := [ ];
+        
+    fi;
     
     package_name := arg[ 1 ];
     
@@ -461,6 +469,11 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     fi;
     
     ##Use parser now.
+    for i in files_to_scan do
+        
+        AutoDoc_Parser_ReadFile( i );
+        
+    od;
     
     
     WriteDocumentation( AUTOMATIC_DOCUMENTATION.tree, path_to_xmlfiles );
