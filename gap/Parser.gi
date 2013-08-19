@@ -111,6 +111,10 @@ InstallGlobalFunction( AutoDoc_Prepare_Item_Record,
         
         current_item := [ "Item", rec( ) ];
         
+    elif type = "None" then
+        
+        current_item := [ "Item", rec( ) ];
+        
     fi;
     
     if IsBound( chapter_info[ 1 ] ) and IsBound( chapter_info[ 2 ] ) then
@@ -181,7 +185,9 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
     
     item_rec.type := entries[ 1 ];
     
-    item_rec.doc_type := entries[ 2 ];
+    item_rec.doc_stream_type := entries[ 2 ];
+    
+    item_rec.chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.( entries[ 2 ] );
     
     return has_filters;
     
@@ -195,7 +201,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
           chapter_info, is_autodoc_comment, is_function_declaration,
           pos_of_autodoc_comment, declare_position, current_item,
           has_filters, filter_string, current_command, current_string_list,
-          scope_chapter, scope_section, scope_group, current_type;
+          scope_chapter, scope_section, scope_group, current_type, autodoc_counter;
     
     warning_class := NewInfoClass( "warning_class" );
     
@@ -212,12 +218,20 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         
     fi;
     
+    autodoc_counter := 0;
+    
     autodoc_active := false;
     
     chapter_info := [ ];
     
+    current_string_list := [ ];
+    
+    current_item := [ "None" ];
+    
     ## Next if ensures termination.
     while true do
+        
+        Print( String( autodoc_counter ), "\n" );
         
         current_line := ReadLine( filestream );
         
@@ -227,6 +241,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             AutoDoc_Flush( current_item );
             
             break;
+            
+        fi;
+        
+        if autodoc_counter = 0 then
+            
+            autodoc_active := false;
             
         fi;
         
@@ -247,6 +267,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         ## Check wether line contains autodoc comments
         if pos_of_autodoc_comment  <> fail then
           
+          autodoc_active := true;
+          
           current_line := current_line{[ pos_of_autodoc_comment + 2 .. Length( current_line ) ]};
           
           current_line := AutoDoc_RemoveSpacesAndComments( current_line );
@@ -254,6 +276,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
           is_autodoc_comment := true;
           
           is_function_declaration := false;
+          
+          autodoc_counter := autodoc_counter - 1;
           
         fi;
         
@@ -299,6 +323,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
                 
                 current_line := ReadLine( filestream );
                 
+                ##if current_line = fail then break; fi;
+                
             od;
             
             NormalizeWhitespace( current_line );
@@ -311,13 +337,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
             current_line := current_line{ [ PositionSublist( current_line, "," ) + 1 .. Length( current_line ) ] };
             
-            Error( "test0" );
-            
             if has_filters = "One" then
                 
                 filter_string := "for ";
                 
-                while PositionSublist( current_line, "," ) = fail do
+                while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
                     
                     Append( filter_string, AutoDoc_RemoveSpacesAndComments( current_line ) );
                     
@@ -327,14 +351,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
                     
                 od;
                 
-                Append( filter_string, AutoDoc_RemoveSpacesAndComments( current_line{ [ 1 .. PositionSublist( current_line, "," ) - 1 ] } ) );
+                Append( filter_string, AutoDoc_RemoveSpacesAndComments( current_line{ [ 1 .. Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) - 1 ] } ) );
                 
             elif has_filters = "List" then
                 
                 filter_string := "for ";
-                
-                
-                Error( "test" );
                 
                 while PositionSublist( current_line, "[" ) = fail do
                     
@@ -346,8 +367,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
                 
                 current_line := current_line{ [ PositionSublist( current_line, "[" ) + 1 .. Length( current_line ) ] };
                 
-                Error( "test2" );
-                
                 while PositionSublist( current_line, "]" ) = fail do
                     
                     Append( filter_string, AutoDoc_RemoveSpacesAndComments( current_line ) );
@@ -358,11 +377,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
                     
                 od;
                 
-                Error( "test3" );
-                
                 Append( filter_string, AutoDoc_RemoveSpacesAndComments( current_line{[ 1 .. PositionSublist( current_line, "]" ) - 1 ]} ) );
-                
-                Error( "test4" );
                 
             else
                 
@@ -380,6 +395,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
         fi;
         
+        autodoc_counter := 3;
+        
         current_command := AutoDoc_Scan_for_command( current_line );
         
         if current_command[ 1 ] = false then
@@ -394,6 +411,18 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         if current_command[ 1 ] = "@AutoDoc" then
             
             autodoc_active := true;
+            
+            autodoc_counter := -1;
+            
+            continue;
+            
+        fi;
+        
+        if current_command[ 1 ] = "@EndAutoDoc" then
+            
+            autodoc_active := false;
+            
+            autodoc_counter := 0;
             
             continue;
             
