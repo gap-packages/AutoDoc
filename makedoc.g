@@ -13,9 +13,7 @@ AutoDoc(
                 "SomePackage",
             ],
         ),
-        autodoc := rec(
-            output := "gap/AutoDocEntries.g",
-        ),
+        autodoc := true,
     )
 );
 
