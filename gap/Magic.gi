@@ -239,12 +239,10 @@ function( arg )
     if IsBound( scaffold ) then
 
         if not IsBound( scaffold.includes ) then
-            if IsBound( autodoc ) then
-                scaffold.includes := [ "AutoDocMainFile.xml" ];
-            else
-                scaffold.includes := [ ];
-            fi;
-        else
+            scaffold.includes := [ ];
+        fi;
+
+        if IsBound( autodoc ) then
             # If scaffold.includes is already set, then we add
             # AutoDocMainFile.xml to it, but *only* if it not already
             # there. This way, package authors can control where
