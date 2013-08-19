@@ -268,9 +268,9 @@ function( arg )
     if IsBound( autodoc ) then
     
         if IsBound( autodoc.section_intros ) then
-            CreateAutomaticDocumentation( pkg, "", doc_dir, autodoc.section_intros );
+            CreateAutomaticDocumentation( pkg, doc_dir, autodoc.section_intros );
         else
-            CreateAutomaticDocumentation( pkg, "", doc_dir );
+            CreateAutomaticDocumentation( pkg, doc_dir );
         fi;
 
     fi;

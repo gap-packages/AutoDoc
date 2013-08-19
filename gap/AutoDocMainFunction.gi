@@ -348,27 +348,31 @@ end );
 ##
 ## Gets three strings. Initialises everything.
 #
-# Note: the optional arguments create_full_docu and entities are
-# intentionally undocumented and are only here for backward
+# Note: the optional arguments name_documentation_file, create_full_docu and
+# entities are intentionally undocumented and are only here for backward
 # compatibility. We should remove them completely at some point.
 InstallGlobalFunction( CreateAutomaticDocumentation,
 
   function( arg )
-    local package_name, name_documentation_file, path_to_xmlfiles, create_full_docu, introduction_list, entities, 
+    local package_name, path_to_xmlfiles, create_full_docu, introduction_list, entities, 
           dependencies, intro, chapter_record, section_stream, intro_string, group_names, current_group;
     
     package_name := arg[ 1 ];
     
-    name_documentation_file := arg[ 2 ];
+    if Length( arg ) >= 3 and IsString( arg[ 2 ] ) and IsString( arg[ 3 ] ) then
+
+        Remove( arg, 2 ); # former name_documentation_file, ignore
     
-    path_to_xmlfiles := arg[ 3 ];
+    fi;
+
+    path_to_xmlfiles := arg[ 2 ];
 
     if IsString( path_to_xmlfiles ) then
         path_to_xmlfiles := Directory( path_to_xmlfiles );
     fi;
     
-    if Length( arg ) >= 4 and IsBool( arg[ 4 ] ) then
-        create_full_docu := Remove( arg, 4 );
+    if Length( arg ) >= 3 and IsBool( arg[ 3 ] ) then
+        create_full_docu := Remove( arg, 3 );
     else
         create_full_docu := false;
     fi;
@@ -382,27 +386,27 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     ## Initialising the filestreams.
     AUTOMATIC_DOCUMENTATION.enable_documentation := true;
     
-    if Length( arg ) = 4 then
+    if Length( arg ) = 3 then
         
-        if Length( arg[ 4 ] ) > 0 then
+        if Length( arg[ 3 ] ) > 0 then
             
-            if IsString( arg[ 4 ][ 1 ] ) then
+            if IsString( arg[ 3 ][ 1 ] ) then
                 
-                entities := arg[ 4 ];
+                entities := arg[ 3 ];
                 
-            elif IsList( arg[ 4 ][ 1 ] ) then
+            elif IsList( arg[ 3 ][ 1 ] ) then
                 
-                introduction_list := arg[ 4 ];
+                introduction_list := arg[ 3 ];
                 
             fi;
             
         fi;
         
-    elif Length( arg ) = 5 then
+    elif Length( arg ) = 4 then
         
-        introduction_list := arg[ 4 ];
+        introduction_list := arg[ 3 ];
         
-        entities := arg[ 5 ];
+        entities := arg[ 4 ];
         
     fi;
     
