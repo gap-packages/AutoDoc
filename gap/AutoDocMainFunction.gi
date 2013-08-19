@@ -460,6 +460,9 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
         
     fi;
     
+    ##Use parser now.
+    
+    
     WriteDocumentation( AUTOMATIC_DOCUMENTATION.tree, path_to_xmlfiles );
     
     return true;

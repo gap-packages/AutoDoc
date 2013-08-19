@@ -6,7 +6,6 @@
 ##
 #############################################################################
 
-
 # Check if a string has the given suffix or not. Another
 # name for this would "StringEndsWithOtherString".
 # For example, AUTODOC_HasSuffix("file.gi", ".gi") returns
