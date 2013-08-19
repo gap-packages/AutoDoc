@@ -133,7 +133,6 @@ AutoDoc(
         dir := "doc/",     # default
         scaffold := false,  # implied by existence of PackageInfo.AutoDoc
         autodoc := rec(
-            output := "gap/AutoDocEntries.g",
             entities := [],
         )
     )

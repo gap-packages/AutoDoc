@@ -150,16 +150,6 @@ function( arg )
         autodoc := rec();
     fi;
     
-## FIXME: This file is no longer needed.
-    if IsBound(autodoc) then
-        if not IsBound(autodoc.output) then
-            # FIXME: is this name good?
-            # FIXME: OK to put this generated file into the doc dir?
-            # Will be fixed with new data structure.
-            autodoc.output := Filename( doc_dir_rel, "AutoDocEntries.g" );
-        fi;
-    fi;
-
 
     #
     # Extract GAPDoc settings
@@ -213,11 +203,6 @@ function( arg )
             od;
         od;
 
-        # Ensure the autodoc output file gets scanned by GAPDoc
-#         if IsBound( autodoc ) then
-#             Add( gapdoc.files, autodoc.output );
-#         fi;
-        
         # Attempt to weed out duplicates as they may confuse GAPDoc (this
         # won't work if there are any non-normalized paths in the list).
         gapdoc.files := Set( gapdoc.files );
@@ -239,12 +224,10 @@ function( arg )
     if IsBound( scaffold ) then
 
         if not IsBound( scaffold.includes ) then
-            if IsBound( autodoc ) then
-                scaffold.includes := [ "AutoDocMainFile.xml" ];
-            else
-                scaffold.includes := [ ];
-            fi;
-        else
+            scaffold.includes := [ ];
+        fi;
+
+        if IsBound( autodoc ) then
             # If scaffold.includes is already set, then we add
             # AutoDocMainFile.xml to it, but *only* if it not already
             # there. This way, package authors can control where
@@ -285,9 +268,9 @@ function( arg )
     if IsBound( autodoc ) then
     
         if IsBound( autodoc.section_intros ) then
-            CreateAutomaticDocumentation( pkg, autodoc.output, doc_dir, autodoc.section_intros );
+            CreateAutomaticDocumentation( pkg, doc_dir, autodoc.section_intros );
         else
-            CreateAutomaticDocumentation( pkg, autodoc.output, doc_dir );
+            CreateAutomaticDocumentation( pkg, doc_dir );
         fi;
 
     fi;

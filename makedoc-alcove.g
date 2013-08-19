@@ -6,7 +6,6 @@ AutoDoc(
         #dir := "doc",     # default
         #scaffold := true,  # implied by existence of PackageInfo.AutoDoc
         autodoc := rec(
-            output := "gap/AutoDocEntries.g",
             section_intros := 
                 [
                     [ "Matroids", "Construction", Concatenation( [ "This section describes the basic constructions to create matroids using alcove.",
@@ -18,7 +17,6 @@ AutoDoc(
             entities := [],
         ),
         gapdoc := rec(
-            #files := [ "gap/AutoDocEntries.g" ],   # automatic thanks to scan_dirs
             scan_dirs := [ "gap" ],
         ),
         

@@ -209,9 +209,9 @@ CreateDocEntryForGlobalFunction(
     [
 # TODO: overhaul the documentation for this
         "After loading the package, run it with the name of the package",
-        "you want to create a documentation of as first argument, with an (empty) filepath (everything will be overwritten) as second argument.",
+        "you want to create a documentation of as first argument.",
         "Make sure you have included this file as source if you run your &GAPDoc; documentation creating script.",
-        "The third argument is a path to the directory where it can store the &GAPDoc; XML files.",
+        "The second argument is a path to the directory where it can store the &GAPDoc; XML files.",
         "It will produce several files out of the",
         "Declare*WithDocumentation declarations you have used in your package <A>package_name</A>, and one named AutoDocMainFile.xml,",
         "which you can simply include to your documentation.",
@@ -220,7 +220,7 @@ CreateDocEntryForGlobalFunction(
         "the chapter. If three are given, first one must be a chapter, second a section, third the description.",
     ],
     "nothing",
-    "package_name, documentation_file, path_to_xml_file, [ section_intros ]",
+    "package_name, path_to_xml_file, [ section_intros ]",
     [ "The_main_functions", "The_main_function" ]
 );
 

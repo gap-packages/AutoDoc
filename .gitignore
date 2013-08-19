@@ -33,5 +33,4 @@ doc/manual.lab
 *.DS_Store
 doc/AutoDocMainFile.xml
 doc/Chapter*xml
-gap/AutoDocEntries.g
 doc/title.xml
