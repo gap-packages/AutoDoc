@@ -213,7 +213,7 @@ CreateDocEntryForGlobalFunction(
         "Make sure you have included this file as source if you run your &GAPDoc; documentation creating script.",
         "The second argument is a path to the directory where it can store the &GAPDoc; XML files.",
         "It will produce several files out of the",
-        "Declare*WithDocumentation declarations you have used in your package <A>package_name</A>, and one named AutoDocMainFile.xml,",
+        "Declare*WithDoc declarations you have used in your package <A>package_name</A>, and one named AutoDocMainFile.xml,",
         "which you can simply include to your documentation.",
         "<A>section_intros</A> is optional, it must be a list containing lists of of either two or three strings. If two are given, first one must be",
         "a chapter title, with underscores instead of spaces, and the second one a string which will be displayed in the documentation at the beginning of",
@@ -268,14 +268,14 @@ CreateDocEntryForGlobalFunction(
                 "in the documentation. Their description will be concatenated, chapter and section info",
                 "of the first element in the group will be used.",
             "</Item>",
-            "<Mark><A>label</A></Mark><Item>",
-                "This string is used as label of the element in the documentation. If you want to make a",
-                "reference to a specific entry, you need to set the label manually.",
-                "Otherwise, this is not necessary.",
-                
-                "Please be careful to not give two entries the same description by giving two declarations with",
-                "the same name the same label.",
-            "</Item>",
+#             "<Mark><A>label</A></Mark><Item>",
+#                 "This string is used as label of the element in the documentation. If you want to make a",
+#                 "reference to a specific entry, you need to set the label manually.",
+#                 "Otherwise, this is not necessary.",
+#                 
+#                 "Please be careful to not give two entries the same description by giving two declarations with",
+#                 "the same name the same label.",
+#             "</Item>",
             "<Mark><A>function_label</A></Mark><Item>",
                 "This sets the label of the function to the string <A>function_label</A>.",
                 "It might be useful for reference purposes, also this string is displayed as argument",
@@ -485,14 +485,15 @@ CreateDocEntryForGlobalFunction_WithOptions(
             "in the documentation. Their description will be concatenated, chapter and section info",
             "of the first element in the group will be used.",
         "</Item>",
-        "<Mark><A>label</A></Mark><Item>",
-            "This string is used as label of the element in the documentation. If you want to make a",
-            "reference to a specific entry, you need to set the label manually.",
-            "Otherwise, this is not necessary.",
-            
-            "Please be careful to not give two entries the same description by giving two declarations with",
-            "the same name the same label.",
-        "</Item>",
+        ## Deprecated
+#         "<Mark><A>label</A></Mark><Item>",
+#             "This string is used as label of the element in the documentation. If you want to make a",
+#             "reference to a specific entry, you need to set the label manually.",
+#             "Otherwise, this is not necessary.",
+#             
+#             "Please be careful to not give two entries the same description by giving two declarations with",
+#             "the same name the same label.",
+#         "</Item>",
         "<Mark><A>function_label</A></Mark><Item>",
             "This sets the label of the function to the string <A>function_label</A>.",
             "It might be useful for reference purposes, also this string is displayed as argument",
@@ -586,6 +587,29 @@ CreateDocEntryForGlobalFunction_WithOptions(
     chapter_info := [ "The_main_functions", "The_declare_functions" ]
 );
 
+for i in [ "Category",
+           "Representation",
+           "Property",
+           "Attribute",
+           "Operation",
+           "GlobalFunction",
+           "GlobalVariable" ] do
+           
+  CreateDocEntryForGlobalFunction_WithOptions(
+      Concatenation( "CreateDocEntryFor", i, "_WithOptions" ) :
+      description := [
+          "Takes the same arguments and options as",
+          Concatenation( "Declare", i, "WithDoc," ),
+          "but without declaring any name.",
+          "It only creates the doc entries."
+      ],
+      return_value := "nothing",
+      arguments := "arg : description, chapter_info, label, function_label, group",
+      chapter_info := [ "The_main_functions", "The_create_functions" ]
+  );
+  
+od;
+
 CreateDocEntryForGlobalFunction_WithOptions(
     "InstallMethodWithDoc" :
     description := [
@@ -640,4 +664,4 @@ CreateDocEntryForGlobalFunction_WithOptions(
   arguments := "description : chapter_info",
   chapter_info := [ "The_main_functions", "Additional_functions" ] );
 
-
+### TODO: Document _WithOptions commands
