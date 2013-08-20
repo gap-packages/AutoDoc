@@ -456,7 +456,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
         fi;
         
-        autodoc_active := is_autodoc_scope;
+        if is_autodoc_scope then
+            
+            autodoc_active := true;
+            
+        fi;
         
         NormalizeWhitespace( current_line );
         
