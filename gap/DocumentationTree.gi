@@ -419,6 +419,15 @@ InstallMethod( WriteDocumentation,
     
     text := node!.content;
     
+    ## In case the list is empty, do nothing.
+    ## Once the empty string = empty list bug is fixed,
+    ## this could be removed.
+    if text = "" then
+        
+        return;
+        
+    fi;
+    
     if IsString( text ) then
         
         text := [ text ];

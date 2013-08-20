@@ -44,7 +44,8 @@ InstallGlobalFunction( AutoDoc_Scan_for_command,
     
     string := string{ [ command_pos .. Length( string ) ] };
     
-    command_list := [ "@AutoDoc",
+    command_list := [ "@ChapterInfo",
+                      "@AutoDoc",
                       "@EndAutoDoc",
                       "@Chapter",
                       "@Section",
@@ -56,7 +57,9 @@ InstallGlobalFunction( AutoDoc_Scan_for_command,
                       "@Arguments",
                       "@Group",
                       "@Label",
-                      "@FunctionLabel" ];
+                      "@FunctionLabel",
+                      "@BREAK"
+                    ];
                       
     for i in command_list do
         
@@ -70,7 +73,9 @@ InstallGlobalFunction( AutoDoc_Scan_for_command,
         
     od;
     
-    return;
+    Error( "Unrecognized command" );
+    
+    return fail;
     
 end );
 
@@ -250,6 +255,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         
     fi;
     
+    is_autodoc_scope := true;
+    
     autodoc_counter := 0;
     
     autodoc_active := false;
@@ -276,7 +283,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
         fi;
         
-        if autodoc_counter = 0 then
+        if autodoc_counter = 0 and not is_autodoc_scope then
             
             autodoc_active := false;
             
@@ -301,7 +308,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         ## Check wether line contains autodoc comments
         if pos_of_autodoc_comment <> fail then
           
-          autodoc_counter := 3;
+          autodoc_counter := 1;
           
           autodoc_active := true;
           
@@ -375,7 +382,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
             current_item[ 2 ].name := AutoDoc_RemoveSpacesAndComments( ReplacedString( current_item[ 2 ].name, "\"", "" ) );
             
-            current_line := current_line{ [ PositionSublist( current_line, "," ) + 1 .. Length( current_line ) ] };
+            current_line := current_line{ [ Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) + 1 .. Length( current_line ) ] };
             
             if has_filters = "One" then
                 
