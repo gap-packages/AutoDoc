@@ -428,7 +428,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         
     fi;
     
-    is_autodoc_scope := true;
+    is_autodoc_scope := false;
     
     autodoc_counter := 0;
     
@@ -456,21 +456,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
         fi;
         
-        if autodoc_counter = 0 and not is_autodoc_scope then
+        if is_autodoc_scope then
             
-            autodoc_active := false;
+            autodoc_active := true;
             
         fi;
         
         NormalizeWhitespace( current_line );
-        
-        if current_line = "" then
-            
-            autodoc_counter := autodoc_counter - 1;
-            
-            continue;
-            
-        fi;
         
         is_autodoc_comment := false;
         
@@ -480,25 +472,21 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         
         ## Check wether line contains autodoc comments
         if pos_of_autodoc_comment <> fail then
-          
-          autodoc_counter := 1;
-          
-          autodoc_active := true;
-          
-          current_line := current_line{[ pos_of_autodoc_comment + 2 .. Length( current_line ) ]};
-          
-          current_line := AutoDoc_RemoveSpacesAndComments( current_line );
-          
-          is_autodoc_comment := true;
-          
-          is_function_declaration := false;
-          
+            
+            autodoc_active := true;
+            
+            current_line := current_line{[ pos_of_autodoc_comment + 2 .. Length( current_line ) ]};
+            
+            current_line := AutoDoc_RemoveSpacesAndComments( current_line );
+            
+            is_autodoc_comment := true;
+            
+            is_function_declaration := false;
+            
         fi;
         
         ## Assures no function will be read while AutoDoc is not active
         if not autodoc_active and not is_autodoc_comment then
-            
-            autodoc_counter := 0;
             
             continue;
             
@@ -511,7 +499,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
             if declare_position = fail then
                 
-                autodoc_counter := autodoc_counter - 1;
+                autodoc_active := false;
                 
                 continue;
                 
