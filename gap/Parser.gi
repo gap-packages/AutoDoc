@@ -242,7 +242,180 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
           pos_of_autodoc_comment, declare_position, current_item,
           has_filters, filter_string, current_command, current_string_list,
           scope_chapter, scope_section, scope_group, current_type, autodoc_counter,
-          position_parentesis;
+          position_parentesis, is_autodoc_scope, command_function_record;
+    
+    #### Initialize the command_function_record
+    command_function_record := rec(
+        
+        @AutoDoc := function()
+            
+            autodoc_active := true;
+            
+            is_autodoc_scope := true;
+            
+            autodoc_counter := -1;
+            
+        end,
+        
+        @EndAutoDoc := function()
+            
+            autodoc_active := false;
+            
+            is_autodoc_scope := false;
+            
+            autodoc_counter := 0;
+            
+        end,
+        
+        @Chapter := function()
+            
+            ## First chapter has no current item.
+            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
+            
+            ## Reset section
+            Unbind( scope_section );
+            
+            scope_chapter := ReplacedString( current_command[ 2 ], " ", "_" );
+            
+            current_item := [ "Chapter", scope_chapter, [ ] ];
+            
+            ChapterInTree( AUTOMATIC_DOCUMENTATION.tree, scope_chapter );
+            
+            current_string_list := current_item[ 3 ];
+            
+            chapter_info[ 1 ] := scope_chapter;
+            
+        end,
+        
+        @Section := function()
+            
+            ##Flush current node.
+            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
+            
+            scope_section := ReplacedString( current_command[ 2 ], " ", "_" );
+            
+            SectionInTree( AUTOMATIC_DOCUMENTATION.tree, scope_chapter, scope_section );
+            
+            current_item := [ "Section", scope_chapter, scope_section, [ ] ];
+            
+            current_string_list := current_item[ 4 ];
+            
+            chapter_info[ 2 ] := scope_section;
+            
+        end,
+        
+        @EndSection := function()
+            
+            if not IsBound( scope_section ) then
+                
+                Error( "No section set" );
+                
+            fi;
+            
+            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
+            
+            current_item := [ "Chapter", chapter_info[ 1 ], [ ] ];
+            
+            current_string_list := current_item[ 3 ];
+            
+            Unbind( scope_section );
+            
+            Unbind( chapter_info[ 2 ] );
+            
+        end,
+        
+        @BeginGroup := function()
+            
+            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
+            
+            if current_command[ 2 ] = "" then
+                
+                AUTOMATIC_DOCUMENTATION.groupnumber := AUTOMATIC_DOCUMENTATION.groupnumber + 1;
+                
+                current_command[ 2 ] := Concatenation( "AutoDoc_generated_group", String( AUTOMATIC_DOCUMENTATION.groupnumber ) );
+                
+            fi;
+            
+            scope_group := ReplacedString( current_command[ 2 ], " ", "_" );
+            
+        end,
+        
+        @EndGroup := function()
+            
+            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
+            
+            scope_group := false;
+            
+        end,
+        
+        @Description := function()
+            
+            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
+            
+            current_item[ 2 ].description := [ ];
+            
+            current_string_list := current_item[ 2 ].description;
+            
+        end,
+        
+        @ReturnValue := function()
+            
+            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
+            
+            current_item[ 2 ].return_value := current_command[ 2 ];
+            
+        end,
+        
+        @Arguments := function()
+            
+            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
+            
+            current_item[ 2 ].arguments := current_command[ 2 ];
+            
+        end,
+        
+        ## This should be deprecated by now.
+        @Label := function()
+            
+            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
+            
+            current_item[ 2 ].label := current_command[ 2 ];
+            
+        end,
+        
+        @FunctionLabel := function()
+            
+            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
+            
+            current_item[ 2 ].function_label := current_command[ 2 ];
+            
+        end,
+        
+        @Group := function()
+            
+            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
+            
+            current_item[ 2 ].group := current_command[ 2 ];
+            
+        end,
+        
+        @ChapterInfo := function()
+            
+            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
+            
+            current_item[ 2 ].chapter_info := SplitString( current_command[ 2 ], "," );
+            
+            current_item[ 2 ].chapter_info := List( current_item[ 2 ].chapter_info, i -> ReplacedString( AutoDoc_RemoveSpacesAndComments( i ), " ", "_" ) );
+            
+        end,
+        
+        @BREAK := function()
+            
+            Error( current_command[ 2 ] );
+            
+        end
+    
+    );
     
     filestream := InputTextFile( filename );
     
@@ -450,196 +623,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
         fi;
         
-        ## Go through commands
-        if current_command[ 1 ] = "@AutoDoc" then
-            
-            autodoc_active := true;
-            
-            autodoc_counter := -1;
-            
-            continue;
-            
-        fi;
-        
-        if current_command[ 1 ] = "@EndAutoDoc" then
-            
-            autodoc_active := false;
-            
-            autodoc_counter := 0;
-            
-            continue;
-            
-        fi;
-        
-        if current_command[ 1 ] = "@Chapter" then
-            
-            ## First chapter has no current item.
-            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
-            
-            ## Reset section
-            Unbind( scope_section );
-            
-            scope_chapter := ReplacedString( current_command[ 2 ], " ", "_" );
-            
-            current_item := [ "Chapter", scope_chapter, [ ] ];
-            
-            Error( "" );
-            
-            ChapterInTree( AUTOMATIC_DOCUMENTATION.tree, scope_chapter );
-            
-            Error( "" );
-            
-            current_string_list := current_item[ 3 ];
-            
-            chapter_info[ 1 ] := scope_chapter;
-            
-            continue;
-            
-        fi;
-        
-        if current_command[ 1 ] = "@Section" then
-            
-            ##Flush current node.
-            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
-            
-            scope_section := ReplacedString( current_command[ 2 ], " ", "_" );
-            
-            SectionInTree( AUTOMATIC_DOCUMENTATION.tree, scope_chapter, scope_section );
-            
-            current_item := [ "Section", scope_chapter, scope_section, [ ] ];
-            
-            current_string_list := current_item[ 4 ];
-            
-            chapter_info[ 2 ] := scope_section;
-            
-            continue;
-            
-        fi;
-        
-        if current_command = "@EndSection" then
-            
-            if not IsBound( scope_section ) then
-                
-                Error( "No section set" );
-                
-            fi;
-            
-            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
-            
-            current_item := [ "Chapter", chapter_info[ 1 ], [ ] ];
-            
-            current_string_list := current_item[ 3 ];
-            
-            Unbind( scope_section );
-            
-            Unbind( chapter_info[ 2 ] );
-            
-            continue;
-            
-        fi;
-        
-        if current_command[ 1 ] = "@BeginGroup" then
-            
-            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
-            
-            if current_command[ 2 ] = "" then
-                
-                AUTOMATIC_DOCUMENTATION.groupnumber := AUTOMATIC_DOCUMENTATION.groupnumber + 1;
-                
-                current_command[ 2 ] := Concatenation( "AutoDoc_generated_group", String( AUTOMATIC_DOCUMENTATION.groupnumber ) );
-                
-            fi;
-            
-            scope_group := ReplacedString( current_command[ 2 ], " ", "_" );
-            
-            continue;
-            
-        fi;
-        
-        if current_command[ 1 ] = "@EndGroup" then
-            
-            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
-            
-            scope_group := false;
-            
-            continue;
-            
-        fi;
-        
-        if current_command[ 1 ] = "@Description" then
-            
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
-            
-            current_item[ 2 ].description := [ ];
-            
-            current_string_list := current_item[ 2 ].description;
-            
-            continue;
-            
-        fi;
-        
-        if current_command[ 1 ] = "@ReturnValue" then
-            
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
-            
-            current_item[ 2 ].return_value := current_command[ 2 ];
-            
-            continue;
-            
-        fi;
-        
-        if current_command[ 1 ] = "@Arguments" then
-            
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
-            
-            current_item[ 2 ].arguments := current_command[ 2 ];
-            
-            continue;
-            
-        fi;
-        
-        ## This should be deprecated by now.
-        if current_command[ 1 ] = "@Label" then
-            
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
-            
-            current_item[ 2 ].label := current_command[ 2 ];
-            
-            continue;
-            
-        fi;
-        
-        if current_command[ 1 ] = "@FunctionLabel" then
-            
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
-            
-            current_item[ 2 ].function_label := current_command[ 2 ];
-            
-            continue;
-            
-        fi;
-        
-        if current_command[ 1 ] = "@Group" then
-            
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
-            
-            current_item[ 2 ].group := current_command[ 2 ];
-            
-            continue;
-            
-        fi;
-        
-        if current_command[ 1 ] = "@ChapterInfo" then
-            
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
-            
-            current_item[ 2 ].chapter_info := SplitString( current_command[ 2 ], "," );
-            
-            current_item[ 2 ].chapter_info := List( current_item[ 2 ].chapter_info, i -> ReplacedString( AutoDoc_RemoveSpacesAndComments( i ), " ", "_" ) );
-            
-            continue;
-            
-        fi;
+        command_function_record.(current_command[ 1 ])();
         
     od;
     
