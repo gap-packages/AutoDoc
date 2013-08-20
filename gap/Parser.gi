@@ -527,8 +527,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
                 
                 current_line := ReadLine( filestream );
                 
-                ##if current_line = fail then break; fi;
-                
             od;
             
             NormalizeWhitespace( current_line );
