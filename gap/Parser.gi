@@ -113,7 +113,7 @@ InstallGlobalFunction( AutoDoc_Prepare_Item_Record,
         current_item := AutoDoc_Flush( current_item );
         
         current_item := [ "Item", rec( description := [ ],
-                                       return_value := "",
+                                       return_value := fail,
                                        label_list := "",
                                        arguments := "args",
                                        tester_names := "",
@@ -122,7 +122,7 @@ InstallGlobalFunction( AutoDoc_Prepare_Item_Record,
     elif type = "None" then
         
         current_item := [ "Item", rec( description := [ ],
-                                       return_value := "",
+                                       return_value := fail,
                                        label_list := "",
                                        arguments := "args",
                                        tester_names := "",
@@ -218,7 +218,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         item_rec.chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.( entries[ 2 ] );
     fi;
     
-    if IsBound( ret_val ) and not IsBound( item_rec.return_value ) then
+    if IsBound( ret_val ) and item_rec.return_value = fail then
         
         item_rec.return_value := ret_val;
         
@@ -335,7 +335,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
                 
                 continue;
                 
-            fi;
+            fi; 
             
             current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
             
@@ -476,7 +476,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
             current_item := [ "Chapter", scope_chapter, [ ] ];
             
+            Error( "" );
+            
             ChapterInTree( AUTOMATIC_DOCUMENTATION.tree, scope_chapter );
+            
+            Error( "" );
             
             current_string_list := current_item[ 3 ];
             
