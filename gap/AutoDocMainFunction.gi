@@ -434,6 +434,8 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
         
     fi;
     
+    AUTOMATIC_DOCUMENTATION.groupnumber := 0;
+    
     AUTOMATIC_DOCUMENTATION.tree := DocumentationTree( );
     
     if IsBound( introduction_list ) then

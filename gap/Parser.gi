@@ -144,7 +144,7 @@ InstallGlobalFunction( AutoDoc_Prepare_Item_Record,
         current_item := AutoDoc_Flush( current_item );
         
         current_item := [ "Item", rec( description := [ ],
-                                       return_value := fail,
+                                       return_value := false,
                                        label_list := "",
                                        tester_names := "",
                                      ) ];
@@ -152,7 +152,7 @@ InstallGlobalFunction( AutoDoc_Prepare_Item_Record,
     elif type = "None" then
         
         current_item := [ "Item", rec( description := [ ],
-                                       return_value := fail,
+                                       return_value := false,
                                        label_list := "",
                                        tester_names := "",
                                      ) ];
@@ -255,7 +255,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         item_rec.chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.( entries[ 2 ] );
     fi;
     
-    if IsBound( ret_val ) and item_rec.return_value = fail then
+    if IsBound( ret_val ) and item_rec.return_value = false then
         
         item_rec.return_value := ret_val;
         
@@ -274,7 +274,31 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
           pos_of_autodoc_comment, declare_position, current_item,
           has_filters, filter_string, current_command, current_string_list,
           scope_chapter, scope_section, scope_group, current_type, autodoc_counter,
-          position_parentesis, is_autodoc_scope, command_function_record;
+          position_parentesis, is_autodoc_scope, command_function_record, recover_item;
+    
+    recover_item := function( )
+      
+      if IsBound( scope_section ) then
+          
+          current_item := [ "Section", scope_chapter, scope_section, [ ] ];
+          
+          current_string_list := current_item[ 4 ];
+          
+      elif IsBound( scope_chapter ) then
+          
+          current_item := [ "Chapter", scope_chapter, [ ] ];
+          
+          current_string_list := current_item[ 3 ];
+          
+      else
+          
+          current_item := [ "None", [ ] ];
+          
+          current_string_list := current_item[ 2 ];
+          
+      fi;
+      
+    end;
     
     #### Initialize the command_function_record
     command_function_record := rec(
@@ -309,11 +333,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
             scope_chapter := ReplacedString( current_command[ 2 ], " ", "_" );
             
-            current_item := [ "Chapter", scope_chapter, [ ] ];
-            
             ChapterInTree( AUTOMATIC_DOCUMENTATION.tree, scope_chapter );
             
-            current_string_list := current_item[ 3 ];
+            recover_item();
             
             chapter_info[ 1 ] := scope_chapter;
             
@@ -328,9 +350,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
             SectionInTree( AUTOMATIC_DOCUMENTATION.tree, scope_chapter, scope_section );
             
-            current_item := [ "Section", scope_chapter, scope_section, [ ] ];
-            
-            current_string_list := current_item[ 4 ];
+            recover_item();
             
             chapter_info[ 2 ] := scope_section;
             
@@ -346,11 +366,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
             if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
             
-            current_item := [ "Chapter", chapter_info[ 1 ], [ ] ];
-            
-            current_string_list := current_item[ 3 ];
-            
             Unbind( scope_section );
+            
+            recover_item();
             
             Unbind( chapter_info[ 2 ] );
             
@@ -375,6 +393,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         @EndGroup := function()
             
             if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
+            
+            recover_item();
             
             scope_group := false;
             
@@ -627,6 +647,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
                 
                 current_item := AutoDoc_Flush( current_item );
                 
+                recover_item();
+                
                 continue;
                 
             fi;
@@ -736,6 +758,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
                 fi;
                 
                 current_item := AutoDoc_Flush( current_item );
+                
+                recover_item();
                 
             fi;
             
