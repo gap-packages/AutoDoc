@@ -19,3 +19,6 @@
   Indeed, in the ultimate version, this would also generate a HTML file for each GAP source file,
   with a nice syntax highlighted version of the GAP code, line numbers etc., so that documentation
   can directly link to each defined function... hui... :)
+
+* Parser does not really find out number of arguments by itself. Fix this. There needs to be another function between
+  flushing and the main parser loop.

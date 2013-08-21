@@ -6,7 +6,6 @@
 ##
 #############################################################################
 
-
 # Check if a string has the given suffix or not. Another
 # name for this would "StringEndsWithOtherString".
 # For example, AUTODOC_HasSuffix("file.gi", ".gi") returns
@@ -150,6 +149,44 @@ function( arg )
         autodoc := rec();
     fi;
     
+## FIXME: This file is no longer needed.
+    if IsBound(autodoc) then
+        
+        if not IsBound( autodoc.files_to_scan ) then
+            
+            autodoc.files_to_scan := [ ];
+            
+        fi;
+        
+        if not IsBound( autodoc.scan_dirs ) then
+            autodoc.scan_dirs := [ "gap", "lib", "examples", "examples/doc" ];
+        fi;
+        
+        
+        ## FIXME: Move this into a seperate function
+        for d_rel in autodoc.scan_dirs do
+            # Get the absolute path to the directory in side the package...
+            d := DirectoriesPackageLibrary( pkg, d_rel );
+            if IsEmpty( d ) then
+                continue;
+            fi;
+            d := d[1];
+            # ... but also keep the relative path (such as "gap")
+            d_rel := Directory( d_rel );
+
+            files := DirectoryContents( d );
+            for tmp in files do
+                if not AUTODOC_GetSuffix( tmp ) in [ "g", "gi", "gd" ] then
+                    continue;
+                fi;
+                if not IsReadableFile( Filename( d, tmp ) ) then
+                    continue;
+                fi;
+                Add( autodoc.files_to_scan, Filename( d_rel, tmp ) );
+            od;
+        od;
+        
+    fi;
 
     #
     # Extract GAPDoc settings
@@ -268,9 +305,13 @@ function( arg )
     if IsBound( autodoc ) then
     
         if IsBound( autodoc.section_intros ) then
-            CreateAutomaticDocumentation( pkg, doc_dir, autodoc.section_intros );
+            
+            CreateAutomaticDocumentation( pkg, doc_dir, autodoc.section_intros : files_to_scan := autodoc.files_to_scan );
+            
         else
-            CreateAutomaticDocumentation( pkg, doc_dir );
+            
+            CreateAutomaticDocumentation( pkg, doc_dir : files_to_scan := autodoc.files_to_scan );
+            
         fi;
 
     fi;
