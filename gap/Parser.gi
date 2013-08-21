@@ -83,7 +83,7 @@ end );
 InstallGlobalFunction( AutoDoc_Flush,
                        
   function( current_item )
-    local type;
+    local type, length_arg_list;
     
     type := current_item[ 1 ];
     
@@ -96,6 +96,32 @@ InstallGlobalFunction( AutoDoc_Flush,
         Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationText( current_item[ 4 ], [ current_item[ 2 ], current_item[ 3 ] ] ) );
         
     elif type = "Item" then
+        
+        length_arg_list := 0;
+        
+        if IsBound( current_item[ 2 ].tester_names )
+            and current_item[ 2 ].tester_names <> false
+            and Length( current_item[ 2 ].tester_names ) > 0 then
+            
+            length_arg_list := Length( SplitString( current_item[ 2 ].tester_names, "," ) );
+            
+        fi;
+        
+        if not IsBound( current_item[ 2 ].arguments ) then
+           
+           if length_arg_list > 1 then
+                
+                current_item[ 2 ].arguments := JoinStringsWithSeparator(
+                                                  List( [ 1 .. length_arg_list ], 
+                                                        i -> Concatenation( "arg", String( i ) ) ), "," );
+                
+            elif length_arg_list = 1 then
+                
+                current_item[ 2 ].arguments := "arg";
+                
+            fi;
+            
+        fi;
         
         Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationItem( current_item[ 2 ] ) );
         
@@ -120,7 +146,6 @@ InstallGlobalFunction( AutoDoc_Prepare_Item_Record,
         current_item := [ "Item", rec( description := [ ],
                                        return_value := fail,
                                        label_list := "",
-                                       arguments := "args",
                                        tester_names := "",
                                      ) ];
         
@@ -129,7 +154,6 @@ InstallGlobalFunction( AutoDoc_Prepare_Item_Record,
         current_item := [ "Item", rec( description := [ ],
                                        return_value := fail,
                                        label_list := "",
-                                       arguments := "args",
                                        tester_names := "",
                                      ) ];
         
@@ -201,6 +225,12 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         has_filters := "No";
         
+        if not IsBound( item_rec.arguments ) then
+            
+            item_rec.arguments := "arg";
+            
+        fi;
+        
     elif type = "GlobalVariable" then
         
         entries := [ "Var", "global_variables" ];
@@ -208,6 +238,8 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         ret_val := fail;
         
         has_filters := "No";
+        
+        item_rec.arguments := fail;
         
     else
         
