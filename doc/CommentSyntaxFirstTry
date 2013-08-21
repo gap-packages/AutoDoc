@@ -53,17 +53,40 @@ Sets a chapter, all functions without seperate info will be added to this chapte
 Also all text comments, i.e. lines that begin with #! without a command, and which do not
 follow after @description, will be added to the chapter as regular text.
 
+Example:
+
+#! @Chapter My chapter
+#!  This is my chapter.
+#!  I document my stuff in it.
+
 @Section name
 Sets a section like chapter sets a chapter.
 
+#! @Section My first manual section
+#!  In this section I am going to document my first method
+
 @EndSection
 Closes the current section.
+
+#! @EndSection
+#### The following text again belongs to the chapter
+#! Now we have a second section.
 
 @AutoDoc
 Causes all functions to be documented, if they have a #! in the line before or not.
 
 @EndAutoDoc
 Causes function without #! before them to be no longer documented.
+
+#! @AutoDoc
+
+DeclareOperation( "Operation1",
+                  [ IsList ] );
+
+DeclareProperty( "IsProperty",
+                 IsList );
+
+#! @EndAutoDoc
 
 @BeginGroup [grpname]
 Starts a group. All functions without @Group will now be grouped in a group, until the end group command
@@ -73,3 +96,15 @@ Also, one can add items to the group via the @Group grpname command.
 @EndGroup
 Ends the current group.
 
+#! @BeginGroup MyGroup
+#!
+DeclareAttribute( "GroupedAttribute",
+                  IsList );
+
+DeclareOperation( "NonGroupedOperation",
+                  [ IsObject ] );
+
+#!
+DeclareOperation( "GroupedOperation",
+                  [ IsList, IsRubbish ] );
+#! @EndGroup
