@@ -47,6 +47,44 @@ function(d)
 end );
 
 
+# Scan the given (by name) subdirs of a package dir for
+# files with one of the given extensions, and return the corresponding
+# filenames, as relative paths (relative to the package dir).
+#
+# For example, the invocation
+#   AUTODOC_FindMatchingFiles("AutoDoc", [ "gap/" ], [ "gi", "gd" ]);
+# might return a list looking like
+#  [ "gap/AutoDocMainFunction.gd", "gap/AutoDocMainFunction.gi", ... ]
+BindGlobal( "AUTODOC_FindMatchingFiles",
+function (pkg, subdirs, extensions)
+    local d_rel, d, tmp, files, result;
+
+    result := [];
+
+    for d_rel in subdirs do
+        # Get the absolute path to the directory in side the package...
+        d := DirectoriesPackageLibrary( pkg, d_rel );
+        if IsEmpty( d ) then
+            continue;
+        fi;
+        d := d[1];
+        # ... but also keep the relative path (such as "gap")
+        d_rel := Directory( d_rel );
+
+        files := DirectoryContents( d );
+        for tmp in files do
+            if not AUTODOC_GetSuffix( tmp ) in [ "g", "gi", "gd" ] then
+                continue;
+            fi;
+            if not IsReadableFile( Filename( d, tmp ) ) then
+                continue;
+            fi;
+            Add( result, Filename( d_rel, tmp ) );
+        od;
+    od;
+    return result;
+end );
+
 
 # AutoDoc(pkg[, opt])
 #
@@ -55,7 +93,7 @@ end );
 InstallGlobalFunction( AutoDoc,
 function( arg )
     local pkg, package_info, opt, scaffold, gapdoc, autodoc,
-          pkg_dir, doc_dir, doc_dir_rel, d, d_rel, files, i, tmp;
+          pkg_dir, doc_dir, doc_dir_rel, d, tmp;
     
     pkg := arg[1];
     package_info := PackageInfo( pkg )[ 1 ];
@@ -163,28 +201,7 @@ function( arg )
         fi;
         
         
-        ## FIXME: Move this into a seperate function
-        for d_rel in autodoc.scan_dirs do
-            # Get the absolute path to the directory in side the package...
-            d := DirectoriesPackageLibrary( pkg, d_rel );
-            if IsEmpty( d ) then
-                continue;
-            fi;
-            d := d[1];
-            # ... but also keep the relative path (such as "gap")
-            d_rel := Directory( d_rel );
-
-            files := DirectoryContents( d );
-            for tmp in files do
-                if not AUTODOC_GetSuffix( tmp ) in [ "g", "gi", "gd" ] then
-                    continue;
-                fi;
-                if not IsReadableFile( Filename( d, tmp ) ) then
-                    continue;
-                fi;
-                Add( autodoc.files_to_scan, Filename( d_rel, tmp ) );
-            od;
-        od;
+        Append( autodoc.files_to_scan, AUTODOC_FindMatchingFiles(pkg, autodoc.scan_dirs, [ "g", "gi", "gd" ]) );
         
     fi;
 
@@ -218,27 +235,7 @@ function( arg )
             gapdoc.scan_dirs := [ "gap", "lib", "examples", "examples/doc" ];
         fi;
 
-        for d_rel in gapdoc.scan_dirs do
-            # Get the absolute path to the directory in side the package...
-            d := DirectoriesPackageLibrary( pkg, d_rel );
-            if IsEmpty( d ) then
-                continue;
-            fi;
-            d := d[1];
-            # ... but also keep the relative path (such as "gap")
-            d_rel := Directory( d_rel );
-
-            files := DirectoryContents( d );
-            for tmp in files do
-                if not AUTODOC_GetSuffix( tmp ) in [ "g", "gi", "gd" ] then
-                    continue;
-                fi;
-                if not IsReadableFile( Filename( d, tmp ) ) then
-                    continue;
-                fi;
-                Add( gapdoc.files, Filename( d_rel, tmp ) );
-            od;
-        od;
+        Append( gapdoc.files, AUTODOC_FindMatchingFiles(pkg, gapdoc.scan_dirs, [ "g", "gi", "gd" ]) );
 
         # Attempt to weed out duplicates as they may confuse GAPDoc (this
         # won't work if there are any non-normalized paths in the list).
