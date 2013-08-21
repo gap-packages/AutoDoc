@@ -388,6 +388,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
             current_string_list := current_item[ 2 ].description;
             
+            if current_command[ 2 ] <> "" then
+                
+                Add( current_string_list, current_command[ 2 ] );
+                
+            fi;
+            
         end,
         
         @Returns := function()
