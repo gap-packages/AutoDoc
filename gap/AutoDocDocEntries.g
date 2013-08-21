@@ -592,23 +592,27 @@ for i in [ "Category",
            "Property",
            "Attribute",
            "Operation",
-           "GlobalFunction",
-           "GlobalVariable" ] do
+           "GlobalFunction" ] do
            
   CreateDocEntryForGlobalFunction_WithOptions(
       Concatenation( "CreateDocEntryFor", i, "_WithOptions" ) :
-      description := [
-          "Takes the same arguments and options as",
-          Concatenation( "Declare", i, "WithDoc," ),
-          "but without declaring any name.",
-          "It only creates the doc entries."
-      ],
       return_value := "nothing",
       arguments := "arg : description, chapter_info, label, function_label, group",
-      chapter_info := [ "The_main_functions", "The_create_functions" ]
+      chapter_info := [ "The_main_functions", "The_create_functions" ],
+      group := "WithDocGroup"
   );
-  
+
 od;
+
+CreateDocEntryForGlobalFunction_WithOptions( "CreateDocEntryForGlobalVariable_WithDoc" :
+      description := [
+          "Does the same as Declare*WithDoc",
+          "but without declaring anything."
+      ],
+      arguments := "arg : description, chapter_info, label, function_label, group",
+      chapter_info := [ "The_main_functions", "The_create_functions" ],
+      group := "WithDocGroup"
+  );
 
 CreateDocEntryForGlobalFunction_WithOptions(
     "InstallMethodWithDoc" :
