@@ -53,7 +53,7 @@ InstallGlobalFunction( AutoDoc_Scan_for_command,
                       "@BeginGroup",
                       "@EndGroup",
                       "@Description",
-                      "@ReturnValue",
+                      "@Returns",
                       "@Arguments",
                       "@Group",
                       "@Label",
@@ -390,7 +390,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
         end,
         
-        @ReturnValue := function()
+        @Returns := function()
             
             current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
             
