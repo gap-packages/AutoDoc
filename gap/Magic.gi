@@ -104,7 +104,21 @@ function( arg )
     else
         opt := rec();
     fi;
+
+    # Check for certain user supplied options, and if present, add them
+    # to the opt record.
+    tmp := function( key )
+        local val;
+        val := ValueOption( key );
+        if val <> fail then
+            opt.(key) := val;
+        fi;
+    end;
     
+    tmp( "dir" );
+    tmp( "scaffold" );
+    tmp( "autodoc" );
+    tmp( "gapdoc" );
     
     #
     # Setup the output directory
