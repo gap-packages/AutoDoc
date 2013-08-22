@@ -36,13 +36,12 @@ PackageDoc := rec(
 ),
 </Listing>
 
-Congratulations, if you got this far, your package now has a minimal
-working manual, which is integrated with the &GAP; help system. Of
+Congratulations, your package now has a minimal working manual. Of
 course it will be mostly empty for now, but it already should contain
 some useful information, based on the data in your <F>PackageInfo.g</F>.
-This includes your packages's name, version and description as well as
+This includes your package's name, version and description as well as
 information about its authors. And if you ever change the package data,
-(e.g. because your email address changed) just re-run the above command
+(e.g. because your email address changed), just re-run the above command
 to regenerate the two main XML files with the latest information.
 <P/>
 
@@ -83,7 +82,9 @@ of the form <C>#!</C> directly in front of it. For example:
 DeclareOperation( "ToricVariety", [ IsConvexObject ] );
 </Listing>
 
-In general, you should add some more information, such as in the following example:
+This tiny change is already sufficient to ensure that the operation
+appears in the manual. In general, you will want to add further
+information about the operation, such as in the following example:
 
 <Listing><![CDATA[
 #! @Arguments conv
@@ -94,8 +95,8 @@ In general, you should add some more information, such as in the following examp
 DeclareOperation( "ToricVariety", [ IsConvexObject ] );
 ]]></Listing>
 
-For a full description of the capabilities of &AutoDoc;,
-please refer to chapter <Ref Chap="TODO"/>. 
+For a thorough description of what you can do with &AutoDoc;
+documentation comments, please refer to chapter <Ref Chap="Comments"/>.
 
 <!--
 Once we switched AutoDoc itself to use AutoDoc comments,
