@@ -201,12 +201,11 @@ function( arg )
         autodoc := rec();
     fi;
     
-## FIXME: This file is no longer needed.
     if IsBound(autodoc) then
         
-        if not IsBound( autodoc.files_to_scan ) then
+        if not IsBound( autodoc.files ) then
             
-            autodoc.files_to_scan := [ ];
+            autodoc.files := [ ];
             
         fi;
         
@@ -215,7 +214,7 @@ function( arg )
         fi;
         
         
-        Append( autodoc.files_to_scan, AUTODOC_FindMatchingFiles(pkg, autodoc.scan_dirs, [ "g", "gi", "gd" ]) );
+        Append( autodoc.files, AUTODOC_FindMatchingFiles(pkg, autodoc.scan_dirs, [ "g", "gi", "gd" ]) );
         
     fi;
 
@@ -317,11 +316,11 @@ function( arg )
     
         if IsBound( autodoc.section_intros ) then
             
-            CreateAutomaticDocumentation( pkg, doc_dir, autodoc.section_intros : files_to_scan := autodoc.files_to_scan );
+            CreateAutomaticDocumentation( pkg, doc_dir, autodoc.section_intros : files_to_scan := autodoc.files );
             
         else
             
-            CreateAutomaticDocumentation( pkg, doc_dir : files_to_scan := autodoc.files_to_scan );
+            CreateAutomaticDocumentation( pkg, doc_dir : files_to_scan := autodoc.files );
             
         fi;
 
