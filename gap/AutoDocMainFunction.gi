@@ -359,7 +359,7 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     
     files_to_scan := ValueOption( "files_to_scan" );
     
-    if files_to_scan = false then
+    if files_to_scan = fail then
         
         files_to_scan := [ ];
         
