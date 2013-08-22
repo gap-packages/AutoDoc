@@ -7,26 +7,43 @@ and maintaing their package's documentation.
 To this end, we will assume from now on that your package is called &SomePackage;.
 
 <Section Label="Tut:Scratch">
-<Heading>Using &AutoDoc; to create a new package manual from scratch</Heading>
+<Heading>Creating a package manual from scratch</Heading>
 
-Suppose your package is already up and running, but so far has no manual.
-Then you can rapidly generate a scaffold for a manual using the <Ref
-Func="AutoDoc"/> command like this:
-<Verb>
+Suppose your package is already up and running, but so far has no
+manual. Then you can rapidly generate a scaffold for a manual using the
+<Ref Func="AutoDoc"/> command like this:
+<Listing>
 LoadPackage("AutoDoc");
-AutoDoc("SomePackage", rec( scaffold := true ));
-</Verb>
-This creates two XML files <F>doc/SomePackage.xml</F> and <F>doc/title.xml</F>
-insider the package directory and then runs &GAPDoc; on them to
-produce a nice initial PDF and HTML version of your fresh manual.
+AutoDoc("SomePackage" : scaffold := true );
+</Listing>
+This creates two XML files <F>doc/SomePackage.xml</F> and
+<F>doc/title.xml</F> insider the package directory and then runs
+&GAPDoc; on them to produce a nice initial PDF and HTML version of your
+fresh manual.
 <P/>
 
-Of course it will be mostly empty for now, but it already
-will contain information such as your packages's name, version and description
-as well as information about its authors, based on the data in your
-<F>PackageInfo.g</F>. And if you ever change the package data,
-just re-run the above command to regenerate the two main XML files
-with the latest information.
+To ensure that the &GAP; help system picks up your package manual, you
+should also add the following (or a variation of it) to your
+<F>PackageInfo.g</F>:
+<Listing>
+PackageDoc := rec(
+  BookName  := ~.PackageName,
+  ArchiveURLSubset := ["doc"],
+  HTMLStart := "doc/chap0.html",
+  PDFFile   := "doc/manual.pdf",
+  SixFile   := "doc/manual.six",
+  LongTitle := ~.Subtitle,
+),
+</Listing>
+
+Congratulations, if you got this far, your package now has a minimal
+working manual, which is integrated with the &GAP; help system. Of
+course it will be mostly empty for now, but it already should contain
+some useful information, based on the data in your <F>PackageInfo.g</F>.
+This includes your packages's name, version and description as well as
+information about its authors. And if you ever change the package data,
+(e.g. because your email address changed) just re-run the above command
+to regenerate the two main XML files with the latest information.
 <P/>
 
 Next of course you need to provide actual content (unfortunately, we were
@@ -47,7 +64,7 @@ on automatically re-generating your package manual when necessary.
 
 
 <Section Label="Tut:IntegrateExisting">
-<Heading>Integrating &AutoDoc; into your existing documentation</Heading>
+<Heading>Using &AutoDoc; in an existing &GAPDoc; manual</Heading>
 
 TODO: Explain how one can use AutoDoc() just to regenerate the manual;
 but also to regenerate the title.xml.
@@ -56,17 +73,79 @@ but also to regenerate the title.xml.
 
 
 <Section Label="Tut:AdvancedAutoDoc">
-<Heading>Using &AutoDoc; to document your operations, categories, methods etc.</Heading>
+<Heading>Using &AutoDoc; to document your code</Heading>
 
-TODO: Explain here how to use Declare*WithDocumentation etc.
+To get one of your global functions, operations, attributes
+etc. to appear in the package manual, simply insert an &AutoDoc; comment
+of the form <C>#!</C> directly in front of it. For example:
+<Listing>
+#!
+DeclareOperation( "ToricVariety", [ IsConvexObject ] );
+</Listing>
 
-Also mention how to mix this with existing &GAPDoc; XML files.
+In general, you should add some more information, such as in the following example:
+
+<Listing><![CDATA[
+#! @Arguments conv
+#! @Returns a toric variety
+#! @Description
+#!  Creates a toric variety out
+#!  of the convex object <A>conv</A>.
+DeclareOperation( "ToricVariety", [ IsConvexObject ] );
+]]></Listing>
+
+For a full description of the capabilities of &AutoDoc;,
+please refer to chapter <Ref Chap="TODO"/>. 
+
+<!--
+Once we switched AutoDoc itself to use AutoDoc comments,
+mention that, i.e. point out that all operations and functions
+documented in this manual are documented exactly like
+described here, and that one can hence use that as examples.
+-->
+
+<!-- 
+
+#  <#GAPDoc Label="ToricVarietyConst">
+#  <ManSection>
+#    <Oper Arg="conv" Name="ToricVariety"
+#          Label="for IsConvexObject"/>
+#    <Returns>a toric variety</Returns>
+#    <Description>
+#      Creates a toric variety out 
+#      of the convex object <A>conv</A>.
+#    </Description>
+#  </ManSection>
+#  <#/GAPDoc>
+DeclareOperation( "ToricVariety",
+                  [ IsConvexObject ] );
+ -->
+
+<P/>
+
+TODO: Explain now how to combine this with AutoDoc(); namely by calling:
+<Listing>
+LoadPackage("AutoDoc");
+# also add AutoDocMainFile.xml to your main .XML file
+AutoDoc("SomePackage" : autodoc := true );
+
+# or if you use scaffolding:
+AutoDoc("SomePackage" : scaffold := true, autodoc := true );
+</Listing>
+
+
+<P/>
+
+
+TODO: Explain how to mix this with existing &GAPDoc; XML files.
 
 
 </Section>
 
+
+
 <Section Label="Tut:AutoRegenerate">
-<Heading>Regenerating the HTML, PDF and text versions of your manual whenever necessary.</Heading>
+<Heading>How to automate manual regeneration</Heading>
 
 You will probably want to re-run the  <Ref Func="AutoDoc"/> command
 frequently, e.g. whenever you modified your documentation or your
@@ -78,23 +157,17 @@ following simple command (assuming you are in the package directory):
 gap makedoc.g
 </Verb>
 
-For further convenience, if you are working on Unix (e.g. Linux, BSD, Mac OS
-X, ...), you may want to add a <F>Makefile</F> in your package with content
-like this:
-<Verb>
-doc: doc/manual.six
+</Section>
 
-doc/manual.six: makedoc.g PackageInfo.g doc/*.xml */*.gd */*.gi
-    gap makedoc.g
-</Verb>
-With this in place, you can can regenerate your documentation from the
-command line with the command
-<Verb>
-make doc
-</Verb>
-This may not look easier than the previous command, but it has the advantage
-that it will only do something if any of your XML or source files changed. If
-nothing changed, then nothing happens and no time is wasted.
+<Section Label="Tut:PackageInfo">
+<Heading>What is taken from <F>PackageInfo.g</F></Heading>
+
+TODO: Explain which information is extracted from <F>PackageInfo.g</F>.
+This includes data from at least the following record components:
+AutoDoc, Subtitle, Version, Date, Persons, PackageDoc.BookName
+
+TODO: Perhaps PackageWWWHome could also be used (if set and non-empty)
+at some point?
 
 </Section>
 
@@ -126,17 +199,7 @@ DeclareCategoryWithDocumentation( "ACategory",
     
 <Verb>
 LoadPackage("AutoDoc");
-
-AutoDoc(
-    "SomePackage",
-    rec(
-        dir := "doc/",     # default
-        scaffold := false,  # implied by existence of PackageInfo.AutoDoc
-        autodoc := rec(
-            entities := [],
-        )
-    )
-);
+AutoDoc( "SomePackage" : scaffold := true, autodoc := true );
 </Verb>
 </Item>
 
