@@ -45,12 +45,6 @@ CreateDocEntryForGlobalFunction( "AutoDoc",
         "</Item>",
 
 
-# TODO: Instead of an option record, perhaps this should be using the optional
-# parameter system, i.e. with ValueOptions() etc.
-# So the call
-#    AutoDoc("pkg", rec( scaffold := true ));
-# would become
-#    AutoDoc("pkg" : scaffold := true );
         "<Mark><A>option_record</A></Mark>",
         "<Item>",
             "<A>option_record</A> can be a record with some additional options.",

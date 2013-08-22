@@ -88,8 +88,6 @@ end );
 
 # AutoDoc(pkg[, opt])
 #
-# TODO: Write documentation
-#
 InstallGlobalFunction( AutoDoc,
 function( arg )
     local pkg, package_info, opt, scaffold, gapdoc, autodoc,
