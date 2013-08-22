@@ -315,7 +315,11 @@ function( arg )
         fi;
 
         if IsBound( gapdoc ) then
-            scaffold.main_xml_file := Concatenation( gapdoc.main, ".xml" );
+            if AUTODOC_GetSuffix( gapdoc.main ) = "xml" then
+                scaffold.main_xml_file := gapdoc.main;
+            else
+                scaffold.main_xml_file := Concatenation( gapdoc.main, ".xml" );
+            fi;
         fi;
 
         # TODO: It should be possible to only rebuild the title page. (Perhaps also only the main page? but this is less important)
