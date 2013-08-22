@@ -254,6 +254,6 @@
 #!
 #! @Returns nothing
 #! @Arguments package_name[, option_record ]
-#! @ChapterInfo The main functions, The main function
+#! @ChapterInfo AutoDoc, The AutoDoc() function
 DeclareGlobalFunction( "AutoDoc" );
 
