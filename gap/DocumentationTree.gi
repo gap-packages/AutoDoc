@@ -272,6 +272,12 @@ InstallMethod( Add,
   function( tree, node )
     local chapter_info, entry_node;
     
+    if node!.content = [ ] then
+        
+        return;
+        
+    fi;
+    
     chapter_info := ChapterInfo( node );
     
     if Length( chapter_info ) = 1 then
@@ -384,6 +390,12 @@ InstallMethod( WriteDocumentation,
     
     name := Name( node );
     
+    if Length( node!.nodes ) = 0 then
+        
+        return;
+        
+    fi;
+    
     filename := Concatenation( "Chapter_", name, ".xml" );
     
     chapter_stream := AUTODOC_OutputTextFile( path_to_xmlfiles, filename );
@@ -463,6 +475,12 @@ InstallMethod( WriteDocumentation,
     local name, replaced_name, i;
     
     name := Name( node );
+    
+    if Length( node!.nodes ) = 0 then
+        
+        return;
+        
+    fi;
     
     AppendTo( filestream, Concatenation( [ "<Section Label=\"Chapter_", chapter_name, "_Section_", name, "_automatically_generated_documentation_parts\">\n" ] ) );
     
