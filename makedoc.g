@@ -7,6 +7,7 @@ AutoDoc(
         includes := [
             "intro.xml",
             "Tutorials.xml",
+            "Comments.xml",
             "AutoDocMainFile.xml",
             ],
         entities := [
