@@ -72,7 +72,6 @@ PackageDoc := rec(
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := "Generate documentation from GAP source code",
-  Autoload  := false
 ),
 
 Dependencies := rec(
