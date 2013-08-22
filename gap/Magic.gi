@@ -47,15 +47,51 @@ function(d)
 end );
 
 
+# Scan the given (by name) subdirs of a package dir for
+# files with one of the given extensions, and return the corresponding
+# filenames, as relative paths (relative to the package dir).
+#
+# For example, the invocation
+#   AUTODOC_FindMatchingFiles("AutoDoc", [ "gap/" ], [ "gi", "gd" ]);
+# might return a list looking like
+#  [ "gap/AutoDocMainFunction.gd", "gap/AutoDocMainFunction.gi", ... ]
+BindGlobal( "AUTODOC_FindMatchingFiles",
+function (pkg, subdirs, extensions)
+    local d_rel, d, tmp, files, result;
+
+    result := [];
+
+    for d_rel in subdirs do
+        # Get the absolute path to the directory in side the package...
+        d := DirectoriesPackageLibrary( pkg, d_rel );
+        if IsEmpty( d ) then
+            continue;
+        fi;
+        d := d[1];
+        # ... but also keep the relative path (such as "gap")
+        d_rel := Directory( d_rel );
+
+        files := DirectoryContents( d );
+        for tmp in files do
+            if not AUTODOC_GetSuffix( tmp ) in [ "g", "gi", "gd" ] then
+                continue;
+            fi;
+            if not IsReadableFile( Filename( d, tmp ) ) then
+                continue;
+            fi;
+            Add( result, Filename( d_rel, tmp ) );
+        od;
+    od;
+    return result;
+end );
+
 
 # AutoDoc(pkg[, opt])
-#
-# TODO: Write documentation
 #
 InstallGlobalFunction( AutoDoc,
 function( arg )
     local pkg, package_info, opt, scaffold, gapdoc, autodoc,
-          pkg_dir, doc_dir, doc_dir_rel, d, d_rel, files, i, tmp;
+          pkg_dir, doc_dir, doc_dir_rel, d, tmp;
     
     pkg := arg[1];
     package_info := PackageInfo( pkg )[ 1 ];
@@ -66,7 +102,21 @@ function( arg )
     else
         opt := rec();
     fi;
+
+    # Check for certain user supplied options, and if present, add them
+    # to the opt record.
+    tmp := function( key )
+        local val;
+        val := ValueOption( key );
+        if val <> fail then
+            opt.(key) := val;
+        fi;
+    end;
     
+    tmp( "dir" );
+    tmp( "scaffold" );
+    tmp( "autodoc" );
+    tmp( "gapdoc" );
     
     #
     # Setup the output directory
@@ -149,12 +199,11 @@ function( arg )
         autodoc := rec();
     fi;
     
-## FIXME: This file is no longer needed.
     if IsBound(autodoc) then
         
-        if not IsBound( autodoc.files_to_scan ) then
+        if not IsBound( autodoc.files ) then
             
-            autodoc.files_to_scan := [ ];
+            autodoc.files := [ ];
             
         fi;
         
@@ -163,28 +212,7 @@ function( arg )
         fi;
         
         
-        ## FIXME: Move this into a seperate function
-        for d_rel in autodoc.scan_dirs do
-            # Get the absolute path to the directory in side the package...
-            d := DirectoriesPackageLibrary( pkg, d_rel );
-            if IsEmpty( d ) then
-                continue;
-            fi;
-            d := d[1];
-            # ... but also keep the relative path (such as "gap")
-            d_rel := Directory( d_rel );
-
-            files := DirectoryContents( d );
-            for tmp in files do
-                if not AUTODOC_GetSuffix( tmp ) in [ "g", "gi", "gd" ] then
-                    continue;
-                fi;
-                if not IsReadableFile( Filename( d, tmp ) ) then
-                    continue;
-                fi;
-                Add( autodoc.files_to_scan, Filename( d_rel, tmp ) );
-            od;
-        od;
+        Append( autodoc.files, AUTODOC_FindMatchingFiles(pkg, autodoc.scan_dirs, [ "g", "gi", "gd" ]) );
         
     fi;
 
@@ -206,8 +234,27 @@ function( arg )
             gapdoc.main := pkg;
         fi;
 
-        if not IsBound( gapdoc.bookname ) then
-            gapdoc.bookname := gapdoc.main;
+        # FIXME: the following may break if a package uses more than one book
+        if IsBound( package_info.PackageDoc ) and IsBound( package_info.PackageDoc[1].BookName ) then
+            gapdoc.bookname := package_info.PackageDoc[1].BookName;
+        else
+            # Default: book name = package name
+            gapdoc.bookname := pkg;
+
+            Print("\n");
+            Print("WARNING: PackageInfo.g is missing a PackageDoc entry!\n");
+            Print("Without this, your package manual will not be recognized by the GAP help system.\n");
+            Print("You can correct this by adding the following to your PackageInfo.g:\n");
+            Print("PackageDoc := rec(\n");
+            Print("  BookName  := ~.PackageName,\n");
+            #Print("  BookName  := \"", pkg, "\",\n");
+            Print("  ArchiveURLSubset := [\"doc\"],\n");
+            Print("  HTMLStart := \"doc/chap0.html\",\n");
+            Print("  PDFFile   := \"doc/manual.pdf\",\n");
+            Print("  SixFile   := \"doc/manual.six\",\n");
+            Print("  LongTitle := ~.Subtitle,\n");
+            Print("),\n");
+            Print("\n");
         fi;
 
         if not IsBound( gapdoc.files ) then
@@ -218,27 +265,7 @@ function( arg )
             gapdoc.scan_dirs := [ "gap", "lib", "examples", "examples/doc" ];
         fi;
 
-        for d_rel in gapdoc.scan_dirs do
-            # Get the absolute path to the directory in side the package...
-            d := DirectoriesPackageLibrary( pkg, d_rel );
-            if IsEmpty( d ) then
-                continue;
-            fi;
-            d := d[1];
-            # ... but also keep the relative path (such as "gap")
-            d_rel := Directory( d_rel );
-
-            files := DirectoryContents( d );
-            for tmp in files do
-                if not AUTODOC_GetSuffix( tmp ) in [ "g", "gi", "gd" ] then
-                    continue;
-                fi;
-                if not IsReadableFile( Filename( d, tmp ) ) then
-                    continue;
-                fi;
-                Add( gapdoc.files, Filename( d_rel, tmp ) );
-            od;
-        od;
+        Append( gapdoc.files, AUTODOC_FindMatchingFiles(pkg, gapdoc.scan_dirs, [ "g", "gi", "gd" ]) );
 
         # Attempt to weed out duplicates as they may confuse GAPDoc (this
         # won't work if there are any non-normalized paths in the list).
@@ -288,7 +315,11 @@ function( arg )
         fi;
 
         if IsBound( gapdoc ) then
-            scaffold.main_xml_file := Concatenation( gapdoc.main, ".xml" );
+            if AUTODOC_GetSuffix( gapdoc.main ) = "xml" then
+                scaffold.main_xml_file := gapdoc.main;
+            else
+                scaffold.main_xml_file := Concatenation( gapdoc.main, ".xml" );
+            fi;
         fi;
 
         # TODO: It should be possible to only rebuild the title page. (Perhaps also only the main page? but this is less important)
@@ -306,11 +337,11 @@ function( arg )
     
         if IsBound( autodoc.section_intros ) then
             
-            CreateAutomaticDocumentation( pkg, doc_dir, autodoc.section_intros : files_to_scan := autodoc.files_to_scan );
+            CreateAutomaticDocumentation( pkg, doc_dir, autodoc.section_intros : files_to_scan := autodoc.files );
             
         else
             
-            CreateAutomaticDocumentation( pkg, doc_dir : files_to_scan := autodoc.files_to_scan );
+            CreateAutomaticDocumentation( pkg, doc_dir : files_to_scan := autodoc.files );
             
         fi;
 

@@ -1,19 +1,18 @@
 LoadPackage("AutoDoc");
 
 AutoDoc(
-    "AutoDoc",
-    rec(
-        scaffold := rec(
-            includes := [
-                "intro.xml",
-                "Tutorials.xml",
-                "AutoDocMainFile.xml",
-                ],
-            entities := [
-                "SomePackage",
+    "AutoDoc" : 
+    autodoc := true,
+    scaffold := rec(
+        includes := [
+            "intro.xml",
+            "Tutorials.xml",
+            "Comments.xml",
+            "AutoDocMainFile.xml",
             ],
-        ),
-        autodoc := true,
+        entities := [
+            "SomePackage",
+        ],
     )
 );
 

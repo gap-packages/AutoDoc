@@ -1,0 +1,163 @@
+<Chapter Label="Comments">
+<Heading>&AutoDoc; documentation comments</Heading>
+
+You can document functions via &AutoDoc; comments in your sources.
+An &AutoDoc; comment always starts with <C>#!</C>. This is also the smallest possible
+&AutoDoc; command. If you want your declaration documented, just write
+<C>#!</C> at the line before the documentation. For example:
+
+<Listing><![CDATA[
+#!
+DeclareOperation( "AnOperation",
+                  [ IsList ] );
+]]></Listing>
+
+This will produce a manual entry for the operation <C>AnOperation</C>.
+
+Before a function, you can put several &AutoDoc; commands, to make the manual
+entry more rich. Those are:
+
+<List>
+
+<Mark>@Description <A>descr</A></Mark>
+<Item>
+which adds the next lines of &AutoDoc; comments without a command, until reaching the next or the declaration
+to the description of the entry.
+</Item>
+
+<Mark>@Returns <A>ret_val</A></Mark>
+<Item>
+Adds the text after this command as return value.
+</Item>
+
+<Mark>@Arguments <A>args</A></Mark>
+<Item>
+Passes the text after this command as argument names.
+</Item>
+
+<Mark>@Group <A>grpname</A></Mark>
+<Item>
+Adds the following method to a group with name grpname. This is only one of two ways to create groups.
+</Item>
+
+<Mark>@FunctionLabel <A>label</A></Mark>
+<Item>
+Adds label to the function as label. By default, this is produced out of the testers.
+</Item>
+
+<Mark>@ChapterInfo <A>chapter, section</A></Mark>
+<Item>
+Adds the entry to the given chapter in the given section.
+</Item>
+
+</List>
+
+
+An entry with all options can look like this
+
+<Listing><![CDATA[
+#! @Description
+#! Computes the list of lists of degrees of ordinary characters
+#! associated to the <A>p</A>-blocks of the group <A>G</A>
+#! with <A>p</A>-modular character table <A>modtbl</A>
+#! and underlying ordinary character table <A>ordtbl</A>.
+#! @Returns a list
+#! @Arguments modtbl
+#! @Group CharacterDegreesOfBlocks
+#! @FunctionLabel chardegblocks
+#! @ChapterInfo Blocks, Attributes
+DeclareAttribute( "CharacterDegreesOfBlocks",
+        IsBrauerTable );
+]]></Listing>
+
+Also, there are commands to set some global enviroments
+
+<List>
+
+<Mark>@Chapter <A>name</A></Mark>
+<Item>
+Sets a chapter, all functions without seperate info will be added to this chapter.
+Also all text comments, i.e. lines that begin with #! without a command, and which do not
+follow after @description, will be added to the chapter as regular text.
+
+Example:
+
+<Listing><![CDATA[
+#! @Chapter My chapter
+#!  This is my chapter.
+#!  I document my stuff in it.
+]]></Listing>
+</Item>
+
+<Mark>@Section <A>name</A></Mark>
+<Item>
+Sets a section like chapter sets a chapter.
+
+<Listing><![CDATA[
+#! @Section My first manual section
+#!  In this section I am going to document my first method
+]]></Listing>
+</Item>
+
+<Mark>@EndSection</Mark>
+<Item>
+Closes the current section.
+
+<Listing><![CDATA[
+#! @EndSection
+#### The following text again belongs to the chapter
+#! Now we have a second section.
+</Item>
+
+<Mark>@AutoDoc</Mark>
+<Item>
+Causes all functions to be documented, if they have a #! in the line before or not.
+</Item>
+
+<Mark>@EndAutoDoc</Mark>
+<Item>
+Causes function without #! before them to be no longer documented.
+
+<Listing><![CDATA[
+#! @AutoDoc
+
+DeclareOperation( "Operation1",
+                  [ IsList ] );
+
+DeclareProperty( "IsProperty",
+                 IsList );
+
+#! @EndAutoDoc
+]]></Listing>
+</Item>
+
+<Mark>@BeginGroup <A>[grpname]</A></Mark>
+<Item>
+Starts a group. All functions without @Group will now be grouped in a group, until the end group command
+is triggered. Groups with the same name will be documented all together, even if there are in several documents.
+Also, one can add items to the group via the @Group grpname command.
+</Item>
+
+<Mark>@EndGroup</Mark>
+<Item>
+Ends the current group.
+
+<Listing><![CDATA[
+#! @BeginGroup MyGroup
+#!
+DeclareAttribute( "GroupedAttribute",
+                  IsList );
+
+DeclareOperation( "NonGroupedOperation",
+                  [ IsObject ] );
+
+#!
+DeclareOperation( "GroupedOperation",
+                  [ IsList, IsRubbish ] );
+#! @EndGroup
+]]></Listing>
+</Item>
+
+</List>
+
+</Chapter>
