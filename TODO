@@ -1,15 +1,6 @@
 * why is an internal detail like AUTOMATIC_DOCUMENTATION documented?
   at most, it should be part of the "developers documentation".
 
-* DeclareAttributeWithDocumentation does not support all arguments DeclareAttribute supports.
-  Same for some of the others.
-  Possible solution: Change the signature of DeclareAttributeWithDocumentation to accept
-  as first param a list; this list will then be used to call DeclareAttribute.
-
-* Why does AutoDoc force the user to replace spaces by underscores in chapter_and_section?
-  I mean, it later translates those underscores to spaces in some places... so why not reverse
-  the logic, and allow the user to use spaces... then replace those by underscores when needed.
-
 * Why is chapter_and_section not just an entry of the options record?
 
 * For that matter, have you looked into using ValueOption etc. instead of an option record?
@@ -22,3 +13,43 @@
 
 * Parser does not really find out number of arguments by itself. Fix this. There needs to be another function between
   flushing and the main parser loop.
+
+* For the scaffold, perhaps PackageWWWHome could also be used (if set and non-empty)
+  at some point?
+
+* perhaps rename FunctionLabel to Label -- as it is also used for Variables, the
+  current name is misleading.
+
+* Perhaps allow optionally specifying a (Function)Label for groups? THis could look like this:
+  #! @BeginGroup SomeGroup
+  #! @Label GroupLabel
+  #! ...
+
+* Idea for an alternate approach towards the scaffolds: The current approach
+  is that we generate a bunch of XML, but offer the user a few very select hooks
+  for inserting extra data. We could reverse this and follow a template model:
+  The user provides a template (well, at first *WE* would provide such a a
+  template to the user ;) from the which MAIN.xml and title.xml are generated;
+  in these files, there can be special markers which we replace by, say, the
+  value of PackageInfo.Version, the list of authors, etc.
+
+  This way, inserting extra stuff like a copyright text, becomes trivial.
+  Also, things we have not anticipated can still be achieved. Also, reordering
+  stuff becomes trivial. This should in particular remove the need for
+  scaffold.includes and scaffold.bib.
+
+* We need a way to let users tweak how chapters are ordered, and sections
+  within chapters, and other stuff within sections.
+
+  Steve suggests the following: Provide a "skeleton file"  which just lists the chapter
+  labels (and possible more labels) in the order things should appear.
+
+  This is then parsed. If it mentions a chapter or section that contains no data,
+  issue a warning (the user may have made a typo). If on the other hand something is
+  missing from it, also issue a warning.
+
+  Finally, this could even allow inserting text and other stuff... I.e. it could
+  basically use the same (or at least a similar) syntax as AutoDoc doc comments.
+
+* Perhaps somehow distinguish between authors and maintainers when generating
+  the <Author> elements on the title page?
