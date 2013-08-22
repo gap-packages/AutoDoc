@@ -64,7 +64,7 @@
 #!         Directory() object specifying where the package documentation
 #!         (i.e. the &GAPDoc; XML files) are stored.
 #!         <Br/>
-#!         <E>Default value: <C>\"doc/\"</C>.</E>
+#!         <E>Default value: <C>"doc/"</C>.</E>
 #!     </Item>
 #!     <Mark><A>scaffold</A></Mark>
 #!     <Item>
@@ -134,7 +134,7 @@
 #!             example, you could pass the following record to set a custom
 #!             acknowledgements text:
 #!             <Listing><![CDATA[
-#!             rec( Acknowledgements := \"Many thanks to ...\" )]]></Listing>
+#!             rec( Acknowledgements := "Many thanks to ..." )]]></Listing>
 #!             For a list of valid entries in the titlepage, please refer to the
 #!             &GAPDoc; manual, specifically section <Ref Subsect='Title' BookName='gapdoc'/>
 #!             and following.
@@ -175,7 +175,7 @@
 #!             which &AutoDoc; then scans for .gi, .gd and .g files; all of these files
 #!             are then scanned for &AutoDoc; documentation comments.
 #!             <Br/>
-#!             <E>Default value: <C>[ \"gap\", \"lib\", \"examples\", \"examples/doc\" ]</C>.</E>
+#!             <E>Default value: <C>[ "gap", "lib", "examples", "examples/doc" ]</C>.</E>
 #!         </Item>
 #!
 #### TODO: Document section_intros later on.
@@ -241,7 +241,7 @@
 #!             which &AutoDoc; then scans for .gi, .gd and .g files; all of these files
 #!             are then scanned for &GAPDoc; documentation comments.
 #!             <Br/>
-#!             <E>Default value: <C>[ \"gap\", \"lib\", \"examples\", \"examples/doc\" ]</C>.</E>
+#!             <E>Default value: <C>[ "gap", "lib", "examples", "examples/doc" ]</C>.</E>
 #!         </Item>
 #!
 #!         </List>
