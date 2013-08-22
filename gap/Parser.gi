@@ -564,6 +564,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
                 
                 has_filters := AutoDoc_Type_Of_Item( current_item, current_type );
                 
+                if has_filters = fail then
+                    
+                    current_item := recover_item();
+                    
+                    continue;
+                    
+                fi;
+                
                 current_line := current_line{ [ position_parentesis + 1 .. Length( current_line ) ] };
                 
                 ## Not the funny part begins:
