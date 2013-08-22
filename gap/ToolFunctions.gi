@@ -402,9 +402,19 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
     
     for i in list_of_records do
         
-        labels := Concatenation( labels, i.label_list );
+        if IsBound( i.group ) then
+            
+            Add( labels, i.group );
+            
+        fi;
         
     od;
+    
+    if Length( labels ) > 1 then
+        
+        labels :=  [ labels[ 1 ] ];
+        
+    fi;
     
     ## Write stuff out
     

@@ -432,16 +432,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
         end,
         
-        ## This should be deprecated by now.
         @Label := function()
-            
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
-            
-            current_item[ 2 ].label := current_command[ 2 ];
-            
-        end,
-        
-        @FunctionLabel := function()
             
             current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
             
