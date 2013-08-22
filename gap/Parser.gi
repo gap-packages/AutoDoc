@@ -57,7 +57,6 @@ InstallGlobalFunction( AutoDoc_Scan_for_command,
                       "@Arguments",
                       "@Group",
                       "@Label",
-                      "@FunctionLabel",
                       "@BREAK"
                     ];
                       
