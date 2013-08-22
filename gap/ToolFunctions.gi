@@ -402,7 +402,7 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
     
     for i in list_of_records do
         
-        if IsBound( i.group ) then
+        if IsBound( i.group ) and IsString( i.group ) then
             
             Add( labels, i.group );
             

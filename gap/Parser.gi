@@ -634,7 +634,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
                     
                 fi;
                 
-                current_item[ 2 ].tester_names := filter_string;
+                if filter_string <> false then
+                    
+                    current_item[ 2 ].tester_names := filter_string;
+                    
+                fi;
                 
                 current_item := AutoDoc_Flush( current_item );
                 
