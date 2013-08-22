@@ -25,6 +25,7 @@ this, there are several commands you can put into the &AutoDoc; comment
 before the declaration. Currently, the following commands are provided:
 
 <Subsection Label="@Description">
+<Index Key="@Description"><C>@Description</C></Index>
 <Heading>@Description <A>descr</A></Heading>
 Adds the text in the following lines of the &AutoDoc; to the description
 of the declaration in the manual. Lines are until the next &AutoDoc; command
@@ -32,6 +33,7 @@ or until the declaration is reached.
 </Subsection>
 
 <Subsection Label="@Returns">
+<Index Key="@Returns"><C>@Returns</C></Index>
 <Heading>@Returns <A>ret_val</A></Heading>
 The string <A>ret_val</A> is added to the documentation, with the text <Q>Returns: </Q>
 put in front of it. This should usually give a brief hint about the type or meaning
@@ -39,6 +41,7 @@ of the value retuned by the documented function.
 </Subsection>
 
 <Subsection Label="@Arguments">
+<Index Key="@Arguments"><C>@Arguments</C></Index>
 <Heading>@Arguments <A>args</A></Heading>
 The string <A>args</A> contains a description of the arguments the
 function expects, including optional parts, which are denoted by square
@@ -49,11 +52,14 @@ and one or more assignments, like <Q>n[, r]: tries := 100</Q>.
 </Subsection>
 
 <Subsection Label="@Group">
+<Index Key="@Group"><C>@Group</C></Index>
 <Heading>@Group <A>grpname</A></Heading>
-Adds the following method to a group with name grpname. This is only one of two ways to create groups.
+Adds the following method to a group with the given name.
+See section <Ref Sect="Groups"/> for more information about groups.
 </Subsection>
 
 <Subsection Label="@FunctionLabel">
+<Index Key="@FunctionLabel"><C>@FunctionLabel</C></Index>
 <Heading>@FunctionLabel <A>label</A></Heading>
 Adds label to the function as label.
 
@@ -64,6 +70,7 @@ a default label is generated from this filter list.
 </Subsection>
 
 <Subsection Label="@ChapterInfo">
+<Index Key="@ChapterInfo"><C>@ChapterInfo</C></Index>
 <Heading>@ChapterInfo <A>chapter, section</A></Heading>
 Adds the entry to the given chapter and section. Here,
 <A>chapter</A> and <A>section</A> are the respective
@@ -97,6 +104,7 @@ There are also some commands which can be used in &AutoDoc; comments
 that are not associated to any declaration.
 
 <Subsection Label="@Chapter">
+<Index Key="@Chapter"><C>@Chapter</C></Index>
 <Heading>@Chapter <A>name</A></Heading>
 Sets a chapter, all functions without seperate info will be added to this chapter.
 Also all text comments, i.e. lines that begin with #! without a command, and which do not
@@ -112,6 +120,7 @@ Example:
 </Subsection>
 
 <Subsection Label="@Section">
+<Index Key="@Section"><C>@Section</C></Index>
 <Heading>@Section <A>name</A></Heading>
 Sets a section like chapter sets a chapter.
 
@@ -122,6 +131,7 @@ Sets a section like chapter sets a chapter.
 </Subsection>
 
 <Subsection Label="@EndSection">
+<Index Key="@EndSection"><C>@EndSection</C></Index>
 <Heading>@EndSection</Heading>
 Closes the current section.
 
@@ -133,13 +143,16 @@ Closes the current section.
 </Subsection>
 
 <Subsection Label="@AutoDoc">
+<Index Key="@AutoDoc"><C>@AutoDoc</C></Index>
 <Heading>@AutoDoc</Heading>
+
 Causes all subsequent declarations to be documented in the manual,
 regardless of whether they have an &AutoDoc; comment in front of
 them or not.
 </Subsection>
 
 <Subsection Label="@EndAutoDoc">
+<Index Key="@EndAutoDoc"><C>@EndAutoDoc</C></Index>
 <Heading>@EndAutoDoc</Heading>
 Ends the affect of <C>@AutoDoc</C>. So from here on, again only declarations
 with an explicit &AutoDoc; comment in front are added to the manual.
@@ -147,34 +160,30 @@ with an explicit &AutoDoc; comment in front are added to the manual.
 <Listing><![CDATA[
 #! @AutoDoc
 
-DeclareOperation( "Operation1",
-                  [ IsList ] );
+DeclareOperation( "Operation1", [ IsList ] );
 
-DeclareProperty( "IsProperty",
-                 IsList );
+DeclareProperty( "IsProperty", IsList );
 
 #! @EndAutoDoc
 ]]></Listing>
 </Subsection>
 
 <Subsection Label="@BeginGroup">
+<Index Key="@BeginGroup"><C>@BeginGroup</C></Index>
 <Heading>@BeginGroup <A>[grpname]</A></Heading>
-Starts a group. All following documented declarations without an explicit @Group
-will now be grouped in a single group, until an <C>@EndGroup</C> command
+Starts a group. All following documented declarations without an
+explicit <C>@Group</C> command are grouped together in the same group
+with the given name. If no name is given, then a new nameless group is
+generated.
+The effect of this command is ended when an <C>@EndGroup</C> command
 is reached.
 <P/>
 
-If no group name is given, then one is generated.
-Note that the name of groups are globally unique throughout the whole manual.
-That is, groups with the same name are in fact merged into a single group, even if they
-were declared in different source files.
-Thus you can have multiple <C>@BeginGroup</C> / <C>@EndGroup</C> pairs using the
-same group name, in different places, and these all will refer to the same group.
-
-Also, one can add items to the group via the <C>@Group</C> command.
+See section <Ref Sect="Groups"/> for more information about groups.
 </Subsection>
 
 <Subsection Label="@EndGroup">
+<Index Key="@EndGroup"><C>@EndGroup</C></Index>
 <Heading>@EndGroup</Heading>
 Ends the current group.
 
@@ -196,13 +205,24 @@ DeclareOperation( "GroupedOperation",
 
 </Section>
 
-<!--
-<Section>
+<Section Label="Groups">
 <Heading>Grouping</Heading>
 
-TODO: Move the explanations for grouping here, and add some example. 
+TODO: explain more about groups and what they do, how they look in the
+generated output etc.
+<P/>
+
+Note that group names are globally unique throughout the whole manual.
+That is, groups with the same name are in fact merged into a single group, even if they
+were declared in different source files.
+Thus you can have multiple <C>@BeginGroup</C> / <C>@EndGroup</C> pairs using the
+same group name, in different places, and these all will refer to the same group.
+<P/>
+
+Moreover, this means that you can add items to a group via the <C>@Group</C> command
+in the &AutoDoc; comment of an arbitrary declaration, at any time.
+
 
 </Section>
--->
 
 </Chapter>
