@@ -1,3 +1,8 @@
+# HACK: Enforce chapter order
+SetCurrentAutoDocChapter("AutoDoc");
+WriteStringIntoDoc("");
+SetCurrentAutoDocChapter("The main functions");
+WriteStringIntoDoc("");
 
 CreateDocEntryForGlobalFunction(
     "CreateAutomaticDocumentation",
@@ -460,7 +465,7 @@ CreateDocEntryForGlobalFunction_WithOptions(
     group := "SetCurrent" );
 
 CreateDocEntryForGlobalFunction_WithOptions(
-  "InsertStringIntoDoc" :
+  "WriteStringIntoDoc" :
   description := [
   "Writes a string or a list of strings given as argument <A>description</A> into doc.",
   "<A>chapter_info</A> is optional, but without a current chapter set, this would cause an error.",
