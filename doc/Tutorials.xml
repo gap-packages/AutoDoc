@@ -10,7 +10,7 @@ To this end, we will assume from now on that your package is called &SomePackage
 <Heading>Creating a package manual from scratch</Heading>
 
 Suppose your package is already up and running, but so far has no
-manual. Then you can rapidly generate a scaffold for a manual using the
+manual. Then you can rapidly generate a <Q>scaffold</Q> for a manual using the
 <Ref Func="AutoDoc"/> command like this:
 <Listing>
 LoadPackage("AutoDoc");
@@ -62,17 +62,8 @@ on automatically re-generating your package manual when necessary.
 </Section>
 
 
-<Section Label="Tut:IntegrateExisting">
-<Heading>Using &AutoDoc; in an existing &GAPDoc; manual</Heading>
-
-TODO: Explain how one can use AutoDoc() just to regenerate the manual;
-but also to regenerate the title.xml.
-
-</Section>
-
-
 <Section Label="Tut:AdvancedAutoDoc">
-<Heading>Using &AutoDoc; to document your code</Heading>
+<Heading>Documenting code with &AutoDoc;</Heading>
 
 To get one of your global functions, operations, attributes
 etc. to appear in the package manual, simply insert an &AutoDoc; comment
@@ -97,6 +88,7 @@ DeclareOperation( "ToricVariety", [ IsConvexObject ] );
 
 For a thorough description of what you can do with &AutoDoc;
 documentation comments, please refer to chapter <Ref Chap="Comments"/>.
+<P/>
 
 <!--
 Once we switched AutoDoc itself to use AutoDoc comments,
@@ -122,31 +114,60 @@ DeclareOperation( "ToricVariety",
                   [ IsConvexObject ] );
  -->
 
-<P/>
 
-TODO: Explain now how to combine this with AutoDoc(); namely by calling:
+Suppose you have not been using &GAPDoc; before but instead used the process
+described in section <Ref Sect="Tut:Scratch"/> to create your manual.
+Then the following &GAP; command will regenerate the manual and automatically
+include all newly documented functions, operations etc.:
+
 <Listing>
 LoadPackage("AutoDoc");
-# also add AutoDocMainFile.xml to your main .XML file
-AutoDoc("SomePackage" : autodoc := true );
-
-# or if you use scaffolding:
 AutoDoc("SomePackage" : scaffold := true, autodoc := true );
 </Listing>
 
+If you are not using the scaffolding feature, e.g. because you already
+have an existing &GAPDoc; based manual, then you can still use &AutoDoc;
+documentation comments. Just make sure to first edit the main XML
+file of your documentation, and insert the line
+<Listing>
+#Include SYSTEM "AutoDocMainFile.xml"
+</Listing>
+in a suitable place. This means that you can mix &AutoDoc; documentation
+comment freely with your existing documentation; you can even still make
+use of any existing &GAPDoc; documentation comments in your code.
 
+The following command should be useful for you in this case; it
+still scans the package code for &AutoDoc; documentation comments
+and the runs &GAPDoc; to produce HTML and PDF output, but does not
+touch your documentation XML files otherwise.
+<Listing>
+LoadPackage("AutoDoc");
+AutoDoc("SomePackage" : autodoc := true );
+</Listing>
+
+
+<!--
+TODO: Explain how to mix this with existing &GAPDoc; XML files.
+-->
+
+</Section>
+
+
+<Section Label="Tut:IntegrateExisting">
+<Heading>Using &AutoDoc; in an existing &GAPDoc; manual</Heading>
+
+TODO: Explain that it might still be interesting to switch to using scaffolding?
 <P/>
 
-
-TODO: Explain how to mix this with existing &GAPDoc; XML files.
+TODO: Demonstrate how to add / mix your own XML files, &AutoDoc; generated
+XML files, and &GAPDoc; stuff...
 
 
 </Section>
 
 
-
 <Section Label="Tut:AutoRegenerate">
-<Heading>How to automate manual regeneration</Heading>
+<Heading>Automatic regeneration of the manual</Heading>
 
 You will probably want to re-run the  <Ref Func="AutoDoc"/> command
 frequently, e.g. whenever you modified your documentation or your
@@ -154,68 +175,65 @@ frequently, e.g. whenever you modified your documentation or your
 recommend putting its invocation into a file <F>makedoc.g</F> in your package
 directory. Then you can regenerate the manual from the command line with the
 following simple command (assuming you are in the package directory):
-<Verb>
+<Listing>
 gap makedoc.g
-</Verb>
+</Listing>
 
 </Section>
 
 <Section Label="Tut:PackageInfo">
 <Heading>What is taken from <F>PackageInfo.g</F></Heading>
 
-TODO: Explain which information is extracted from <F>PackageInfo.g</F>.
-This includes data from at least the following record components:
-AutoDoc, Subtitle, Version, Date, Persons, PackageDoc.BookName
+&AutoDoc; can extract data from <F>PackageInfo.g</F> in order to
+generate a title page. Specifically, the following components
+of the package info record are looked at:
 
-TODO: Perhaps PackageWWWHome could also be used (if set and non-empty)
-at some point?
+<List>
 
-</Section>
-
-
-<Section Label="Tut2">
-<Heading>TODO: old section, revise</Heading>
-
-Suppose the package &SomePackage; already has some documentation written using &GAPDoc;.
-But from now on you want to get rid of always writing xml. Then you can use &AutoDoc; to write your new documentation parts.
-All you need is to follow those simple steps, to include &AutoDoc; generated documentation in &SomePackage;'s already existing documentation.
-
- <List>
-   <Item>
-  Step 1:
-    Declare the new objects with the <C>Declare*WithDocumentation</C> methods and add the descriptions like this:
-
-<Verb>
-DeclareCategoryWithDocumentation( "ACategory",
-                                  IsObject,
-                                  "A test.",
-                                  [ "With_chapter_info", "Category_section" ] );
-</Verb>
+<Mark>Version</Mark><Item>
+This is used to set the <C>&lt;Version></C> element of the
+title page, with the string <Q>Version </Q> prepended.
 </Item>
 
-  <Item>
-  Step 2:
-    Run the AutoDoc command with arguments &SomePackage; and the path of your documentation. If you want to,
-    you can also enable &GAPDoc; in the command.
-    
-<Verb>
-LoadPackage("AutoDoc");
-AutoDoc( "SomePackage" : scaffold := true, autodoc := true );
-</Verb>
+<Mark>Date</Mark><Item>
+This is used to set the <C>&lt;Date></C> element of the
+title page.
 </Item>
 
-  <Item>
-  Step 3:
-    Step 2 should have created, among other files, a file named AutoDocMainFile.xml in your documentation folder. Include this file in your documentation via
+<Mark>Subtitle</Mark><Item>
+This is used to set the <C>&lt;Subtitle></C> element of the
+title page (the <C>&lt;Title></C> is set to the package name).
+</Item>
 
-<Verb>
-#Include SYSTEM "AutoDocMainFile.xml"
-</Verb>
+<Mark>Persons</Mark><Item>
+This is used to generate <C>&lt;Author></C> elements in the
+generated title page.
+</Item>
+
+<Mark>PackageDoc</Mark><Item>
+This is a record (or a list of records) which is used to tell the
+&GAP; help system about the package manual. Currently &AutoDoc;
+extracts the value of the <C>PackageDoc.BookName</C> component
+and then passes that on to &GAPDoc; when creating the HTML, PDF
+and text versions of the manual.
+</Item>
+
+<Mark>AutoDoc</Mark><Item>
+This is a record which can be used to control the scaffolding performed by
+&AutoDoc;, specifically to provide extra information for the title page. For
+example, you can set <C>AutoDoc.TitlePage.Copyright</C> to a string which will
+then be inserted on the generated title page. Using this method you can
+customize the following title page elements: <C>TitleComment</C>,
+<C>Abstract</C>, <C>Copyright</C>, <C>Acknowledgements</C> and <C>Colophon</C>.
+
+<P/>
+Note that <C>AutoDoc.TitlePage</C> behaves exactly the same
+as the <C>scaffold.TitlePage</C> parameter of the <Ref Func="AutoDoc"/>
+function.
 </Item>
 
 </List>
 
-  Now you should have your &AutoDoc; created data in your documentation. Have fun with it.
-
 </Section>
+
 </Chapter>
