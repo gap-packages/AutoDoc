@@ -72,6 +72,7 @@ function (pkg, subdirs, extensions)
         d_rel := Directory( d_rel );
 
         files := DirectoryContents( d );
+        Sort( files );
         for tmp in files do
             if not AUTODOC_GetSuffix( tmp ) in [ "g", "gi", "gd" ] then
                 continue;
