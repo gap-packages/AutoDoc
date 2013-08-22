@@ -236,8 +236,27 @@ function( arg )
             gapdoc.main := pkg;
         fi;
 
-        if not IsBound( gapdoc.bookname ) then
-            gapdoc.bookname := gapdoc.main;
+        # FIXME: the following may break if a package uses more than one book
+        if IsBound( package_info.PackageDoc ) and IsBound( package_info.PackageDoc[1].BookName ) then
+            gapdoc.bookname := package_info.PackageDoc[1].BookName;
+        else
+            # Default: book name = package name
+            gapdoc.bookname := pkg;
+
+            Print("\n");
+            Print("WARNING: PackageInfo.g is missing a PackageDoc entry!\n");
+            Print("Without this, your package manual will not be recognized by the GAP help system.\n");
+            Print("You can correct this by adding the following to your PackageInfo.g:\n");
+            Print("PackageDoc := rec(\n");
+            Print("  BookName  := ~.PackageName,\n");
+            #Print("  BookName  := \"", pkg, "\",\n");
+            Print("  ArchiveURLSubset := [\"doc\"],\n");
+            Print("  HTMLStart := \"doc/chap0.html\",\n");
+            Print("  PDFFile   := \"doc/manual.pdf\",\n");
+            Print("  SixFile   := \"doc/manual.six\",\n");
+            Print("  LongTitle := ~.Subtitle,\n");
+            Print("),\n");
+            Print("\n");
         fi;
 
         if not IsBound( gapdoc.files ) then
