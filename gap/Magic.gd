@@ -178,6 +178,13 @@
 #!             <E>Default value: <C>[ "gap", "lib", "examples", "examples/doc" ]</C>.</E>
 #!         </Item>
 #!
+#!         <Mark><A>level</A></Mark>
+#!         <Item>
+#!             This defines the level of the created documentation. The default value is 0.
+#!             When parts of the manual are declared with a higher value
+#!             they will not be printed into the manual.
+#!         </Item>
+#!
 #### TODO: Document section_intros later on.
 #### However, note that thanks to the new AutoDoc comment syntax, the only remaining
 #### use for this seems to be the ability to specify the order of chapters and

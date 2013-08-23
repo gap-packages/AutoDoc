@@ -203,8 +203,26 @@ DeclareOperation( "GroupedOperation",
 ]]></Listing>
 </Subsection>
 
-</Section>
+<Subsection Label="@Level">
+<Index Key="@Level"><C>@Level</C></Index>
+<Heading>@Level <A>lvl</A></Heading>
+Sets the current level of the documentation. All items created after this,
+chapters, sections, and items, are given the level <A>lvl</A>,
+until the <C>@ResetLevel</C> command resets the level to 0 or another level
+is set.
+<P/>
 
+See section <Ref Sect="Level"/> for more information about groups.
+</Subsection>
+
+<Subsection Label="@ResetLevel">
+<Index Key="@ResetLevel"><C>@ResetLevel</C></Index>
+<Heading>@ResetLevel</Heading>
+Resets the current level to 0.
+<P/>
+</Subsection>
+
+</Section>
 <Section Label="Groups">
 <Heading>Grouping</Heading>
 
@@ -223,6 +241,26 @@ Moreover, this means that you can add items to a group via the <C>@Group</C> com
 in the &AutoDoc; comment of an arbitrary declaration, at any time.
 
 
+</Section>
+
+<Section Label="Level">
+<Heading>Level</Heading>
+  Levels can be set to not write certain parts in the manual by default.
+  Every entry has by default the level 0. The command <C>@Level</C> can
+  be used to set the level of the following part to a higher level, for
+  example 1, and prevent it from being printed to the manual by default.
+  However, if one sets the level to a higher value in the autodoc option of
+  <C>AutoDoc</C>, the parts will be included in the manual at the specific place.
+
+<Listing><![CDATA[
+#! This text will be printed to the manual.
+#! @Level 1
+#! This text will be printed to the manual if created with level 1 or higher.
+#! @Level 2
+#! This text will be printed to the manual if created with level 2 or higher.
+#! @ResetLevel
+#! This text will be printed to the manual.
+]]></Listing>
 </Section>
 
 </Chapter>
