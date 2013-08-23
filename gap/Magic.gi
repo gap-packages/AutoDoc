@@ -212,6 +212,13 @@ function( arg )
             autodoc.scan_dirs := [ "gap", "lib", "examples", "examples/doc" ];
         fi;
         
+        if not IsBound( autodoc.level ) then
+            
+            autodoc.level := 0;
+            
+        fi;
+        
+        PushOptions( rec( level_value := autodoc.level ) );
         
         Append( autodoc.files, AUTODOC_FindMatchingFiles(pkg, autodoc.scan_dirs, [ "g", "gi", "gd" ]) );
         

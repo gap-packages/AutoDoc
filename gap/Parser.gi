@@ -57,6 +57,7 @@ InstallGlobalFunction( AutoDoc_Scan_for_command,
                       "@Arguments",
                       "@Group",
                       "@Label",
+                      "@Level",
                       "@BREAK"
                     ];
                       
@@ -273,7 +274,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
           pos_of_autodoc_comment, declare_position, current_item,
           has_filters, filter_string, current_command, current_string_list,
           scope_chapter, scope_section, scope_group, current_type, autodoc_counter,
-          position_parentesis, is_autodoc_scope, command_function_record, recover_item;
+          position_parentesis, is_autodoc_scope, command_function_record, recover_item,
+          level_value;
     
     recover_item := function( )
       
@@ -296,6 +298,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
           current_string_list := current_item[ 2 ];
           
       fi;
+      
+      PushOptions( rec( level_value := 0 ) );
       
     end;
     
@@ -460,6 +464,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         @BREAK := function()
             
             Error( current_command[ 2 ] );
+            
+        end,
+        
+        @Level := function()
+            
+            PushOptions( rec( level_value := Int( current_command[ 2 ] ) ) );
             
         end
     

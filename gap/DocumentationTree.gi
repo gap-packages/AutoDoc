@@ -107,11 +107,20 @@ InstallMethod( DocumentationChapter,
                [ IsString ],
                
   function( name )
-    local chapter;
+    local level, chapter;
     
-    chapter := rec( 
+    level := ValueOption( "level_value" );
+    
+    if level = fail then
+        
+        level := 0;
+        
+    fi;
+    
+    chapter := rec(
                     nodes := [ ],
-                    nodes_by_name := rec( )
+                    nodes_by_name := rec( ),
+                    level := level
                );
     
     ObjectifyWithAttributes( chapter,
@@ -129,11 +138,20 @@ InstallMethod( DocumentationSection,
                [ IsString ],
                
   function( name )
-    local section;
+    local level, section;
+    
+    level := ValueOption( "level_value" );
+    
+    if level = fail then
+        
+        level := 0;
+        
+    fi;
     
     section := rec( 
                     nodes := [ ],
-                    nodes_by_name := rec( )
+                    nodes_by_name := rec( ),
+                    level := level
                );
     
     ObjectifyWithAttributes( section,
@@ -151,9 +169,18 @@ InstallMethod( DocumentationText,
                [ IsList, IsList ],
                
   function( text, chapter_info )
-    local textnode;
+    local level, textnode;
     
-    textnode := rec( content := text );
+    level := ValueOption( "level_value" );
+    
+    if level = fail then
+        
+        level := 0;
+        
+    fi;
+    
+    textnode := rec( content := text,
+                     level := level );
     
     ObjectifyWithAttributes( textnode,
                              TheTypeOfDocumentationTreeNodesForText,
@@ -168,13 +195,23 @@ InstallMethod( DocumentationItem,
                [ IsRecord ],
                
   function( entry_rec )
-    local item, group;
+    local level, item, group;
     
-    item := rec( content := entry_rec );
+    level := ValueOption( "level_value" );
+    
+    if level = fail then
+        
+        level := 0;
+        
+    fi;
+    
+    item := rec( content := entry_rec,
+                 level := level );
     
     if IsBound( entry_rec.group ) then
         
-        item := rec( content_list := [ entry_rec ] );
+        item := rec( content_list := [ entry_rec ],
+                     level := level );
         
         ObjectifyWithAttributes( item,
                                  TheTypeOfDocumentationTreeNodesForGroup,
@@ -396,6 +433,12 @@ InstallMethod( WriteDocumentation,
   function( node, stream, path_to_xmlfiles )
     local filename, chapter_stream, name, replaced_name, i;
     
+    if node!.level > ValueOption( "level_value" ) then
+        
+        return;
+        
+    fi;
+    
     name := Name( node );
     
     if ForAll( node!.nodes, IsEmptyNode ) then
@@ -436,6 +479,12 @@ InstallMethod( WriteDocumentation,
                
   function( node, filestream )
     local text, i;
+    
+    if node!.level < ValueOption( "level_value" ) then
+        
+        return;
+        
+    fi;
     
     text := node!.content;
     
@@ -484,6 +533,12 @@ InstallMethod( WriteDocumentation,
     
     name := Name( node );
     
+    if node!.level > ValueOption( "level_value" ) then
+        
+        return;
+        
+    fi;
+    
     if ForAll( node!.nodes, IsEmptyNode ) then
         
         return;
@@ -513,6 +568,12 @@ InstallMethod( WriteDocumentation,
   function( node, filestream )
     local entry_record;
     
+    if node!.level > ValueOption( "level_value" ) then
+        
+        return;
+        
+    fi;
+    
     entry_record := node!.content;
     
     AutoDoc_WriteDocEntry( filestream, [ entry_record ] );
@@ -525,6 +586,12 @@ InstallMethod( WriteDocumentation,
                
   function( node, filestream )
     local entry_list;
+    
+    if node!.level > ValueOption( "level_value" ) then
+        
+        return;
+        
+    fi;
     
     entry_list := node!.content_list;
     
