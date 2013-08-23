@@ -116,7 +116,8 @@ InstallMethod( DocumentationChapter,
     
     ObjectifyWithAttributes( chapter,
                              TheTypeOfDocumentationTreeNodesForChapter,
-                             Name, name
+                             Name, name,
+                             IsEmptyNode, true
                              );
     
     return chapter;
@@ -137,7 +138,8 @@ InstallMethod( DocumentationSection,
     
     ObjectifyWithAttributes( section,
                              TheTypeOfDocumentationTreeNodesForSection,
-                             Name, name
+                             Name, name,
+                             IsEmptyNode, true
                              );
     
     return section;
@@ -290,6 +292,8 @@ InstallMethod( Add,
         
     fi;
     
+    ResetFilterObj( entry_node, IsEmptyNode );
+    
     Add( entry_node!.nodes, node );
     
 end );
@@ -311,6 +315,8 @@ InstallMethod( Add,
     fi;
     
     entry_node := SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] );
+    
+    ResetFilterObj( entry_node, IsEmptyNode );
     
     Add( entry_node!.nodes, node );
     
@@ -341,6 +347,8 @@ InstallMethod( Add,
     tree!.groups.( name ) := node;
     
     Add( entry_node!.nodes, node );
+    
+    ResetFilterObj( entry_node, IsEmptyNode );
     
     ## FIXME: This might be irrelevant.
     entry_node!.nodes_by_name.( name ) := node;
@@ -390,7 +398,7 @@ InstallMethod( WriteDocumentation,
     
     name := Name( node );
     
-    if Length( node!.nodes ) = 0 then
+    if ForAll( node!.nodes, IsEmptyNode ) then
         
         return;
         
@@ -476,7 +484,7 @@ InstallMethod( WriteDocumentation,
     
     name := Name( node );
     
-    if Length( node!.nodes ) = 0 then
+    if ForAll( node!.nodes, IsEmptyNode ) then
         
         return;
         

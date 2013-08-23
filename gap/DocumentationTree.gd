@@ -18,6 +18,8 @@ DeclareCategory( "IsTreeForDocumentationNode",
 ##
 ######################################
 
+DeclareFilter( "IsEmptyNode" );
+
 DeclareAttribute( "Name",
                   IsTreeForDocumentationNode );
 
