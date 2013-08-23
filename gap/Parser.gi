@@ -58,6 +58,7 @@ InstallGlobalFunction( AutoDoc_Scan_for_command,
                       "@Group",
                       "@Label",
                       "@Level",
+                      "@ResetLevel",
                       "@BREAK"
                     ];
                       
@@ -299,8 +300,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
           
       fi;
       
-      PushOptions( rec( level_value := 0 ) );
-      
     end;
     
     #### Initialize the command_function_record
@@ -469,7 +468,21 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         
         @Level := function()
             
+            AutoDoc_Flush( current_item );
+            
+            recover_item();
+            
             PushOptions( rec( level_value := Int( current_command[ 2 ] ) ) );
+            
+        end,
+        
+        @ResetLevel := function()
+            
+            AutoDoc_Flush( current_item );
+            
+            recover_item();
+            
+            PushOptions( rec( level_value := 0 ) );
             
         end
     
@@ -795,6 +808,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         
     od;
     
-    return;
+    PushOptions( rec( level_value := 0 ) );
     
 end );
