@@ -285,6 +285,24 @@ Order(S3);
 ]]></Listing>
 </Subsection>
 
+<Subsection Label="@Chunk">
+<Index Key="@Chunk"><C>@Chunk, @EndChunk, and @InsertChunk</C></Index>
+<Heading>@Chunk <A>name</A>, @EndChunk, and @InsertChunk <A>name</A></Heading>
+@Chunk <A>name</A> begins a chunk of text, and @EndChunk ends it. The text between
+those text is added to a chunk of text, and not displayed at the corresponding point
+in the manual. Text in chunks with the same <A>name</A> are collected in the whole
+source files. @InsertChunk <A>name</A> adds the whole collected text from the chunks with
+this name at the point where @InsertChunk is called.
+<Listing><![CDATA[
+#! @Chunk MyChunk
+#! This is some text.
+#! @EndChunk
+
+#! @InsertChunk MyChunk
+## Text is inserted here.
+]]></Listing>
+</Subsection>
+
 </Section>
 <Section Label="Groups">
 <Heading>Grouping</Heading>
