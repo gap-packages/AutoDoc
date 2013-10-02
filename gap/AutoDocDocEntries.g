@@ -393,22 +393,31 @@ CreateDocEntryForGlobalFunction_WithOptions(
     chapter_info := [ "The_main_functions", "The_declare_functions" ]
 );
 
-for i in [ "Category",
-           "Representation",
-           "Property",
-           "Attribute",
-           "Operation",
-           "GlobalFunction" ] do
-           
-  CreateDocEntryForGlobalFunction_WithOptions(
-      Concatenation( "CreateDocEntryFor", i, "_WithOptions" ) :
-      return_value := "nothing",
-      arguments := "arg : description, chapter_info, label, function_label, group",
-      chapter_info := [ "The_main_functions", "The_create_functions" ],
-      group := "WithDocGroup"
-  );
+BindGlobal( "AUTODOC_Create_Certain_Documentation_Entries",
 
-od;
+  function()
+    local i;
+    
+    for i in [ "Category",
+              "Representation",
+              "Property",
+              "Attribute",
+              "Operation",
+              "GlobalFunction" ] do
+              
+      CreateDocEntryForGlobalFunction_WithOptions(
+          Concatenation( "CreateDocEntryFor", i, "_WithOptions" ) :
+          return_value := "nothing",
+          arguments := "arg : description, chapter_info, label, function_label, group",
+          chapter_info := [ "The_main_functions", "The_create_functions" ],
+          group := "WithDocGroup"
+      );
+
+    od;
+    
+end );
+
+AUTODOC_Create_Certain_Documentation_Entries();
 
 CreateDocEntryForGlobalFunction_WithOptions( "CreateDocEntryForGlobalVariable_WithDoc" :
       description := [

@@ -166,16 +166,25 @@ AutoDoc_InstallGlobalFunction_TempFunction := function( i )
     
 end;
 
-for i in [ "Category", "Representation",
-           "Property", "Attribute", "Operation",
-           "GlobalFunction", "GlobalVariable" ] do
+BindGlobal( "AUTODOC_Create_certain_with_Options_functions",
+  
+  function()
+    local i;
 
+    for i in [ "Category", "Representation",
+              "Property", "Attribute", "Operation",
+              "GlobalFunction", "GlobalVariable" ] do
+
+        
+        ## And that's why we LOVE GAP.
+        
+        AutoDoc_InstallGlobalFunction_TempFunction( i );
+        
+    od;
     
-    ## And that's why we LOVE GAP.
-    
-    AutoDoc_InstallGlobalFunction_TempFunction( i );
-    
-od;
+end );
+
+AUTODOC_Create_certain_with_Options_functions();
 
 ##
 InstallGlobalFunction( InstallMethodWithDoc,
