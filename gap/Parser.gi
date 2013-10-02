@@ -32,6 +32,7 @@ InstallGlobalFunction( Scan_for_AutoDoc_Part,
   function( line )
     local position, whitespace_position, command, argument;
     
+    #! @DONT_SCAN_NEXT_LINE
     position := PositionSublist( line, "#!" );
     
     if position = fail then
@@ -519,6 +520,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
             
             ##if is comment, simply remove comments.
+            #! @DONT_SCAN_NEXT_LINE
             temp_pos_comment := PositionSublist( temp_curr_line, "#!" );
             
             if temp_pos_comment <> fail then
@@ -564,6 +566,15 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     end;
     
     command_function_record := rec(
+        
+        ## HACK: Needed for AutoDoc parser to be scanned savely.
+        ##       The lines where the AutoDoc comments are
+        ##       searched cause problems otherwise.
+        @DONT_SCAN_NEXT_LINE := function()
+            
+            ReadLine( filestream );
+            
+        end,
         
         @AutoDoc := function()
             
