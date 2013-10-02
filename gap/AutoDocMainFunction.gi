@@ -51,7 +51,7 @@ InstallGlobalFunction( CreateDefaultChapterData,
         
     od;
     
-    return true;
+    return default_chapter_record;
     
 end );
 
@@ -355,7 +355,8 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
 
   function( arg )
     local package_name, path_to_xmlfiles, create_full_docu, introduction_list, entities, 
-          dependencies, intro, chapter_record, section_stream, intro_string, group_names, current_group, files_to_scan, i;
+          dependencies, intro, chapter_record, section_stream, intro_string, group_names, current_group, files_to_scan, i,
+          default_chapter_record, tree;
     
     files_to_scan := ValueOption( "files_to_scan" );
     
@@ -385,7 +386,7 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
         create_full_docu := false;
     fi;
     
-    CreateDefaultChapterData( package_name );
+    default_chapter_record := CreateDefaultChapterData( package_name );
     
     AUTOMATIC_DOCUMENTATION.path_to_xmlfiles := path_to_xmlfiles;
     
@@ -434,9 +435,9 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
         
     fi;
     
-    AUTOMATIC_DOCUMENTATION.groupnumber := 0;
-    
     AUTOMATIC_DOCUMENTATION.tree := DocumentationTree( );
+    
+    tree := AUTOMATIC_DOCUMENTATION.tree;
     
     if IsBound( introduction_list ) then
       
@@ -475,14 +476,9 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     fi;
     
     ##Use parser now.
-    for i in files_to_scan do
-        
-        AutoDoc_Parser_ReadFile( i );
-        
-    od;
+    AutoDoc_Parser_ReadFiles( files_to_scan, AUTOMATIC_DOCUMENTATION.tree, default_chapter_record );
     
-    
-    WriteDocumentation( AUTOMATIC_DOCUMENTATION.tree, path_to_xmlfiles );
+    WriteDocumentation( tree, path_to_xmlfiles );
     
     return true;
 
