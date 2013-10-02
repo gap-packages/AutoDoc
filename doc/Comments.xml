@@ -142,6 +142,29 @@ Closes the current section.
 ]]></Listing>
 </Subsection>
 
+<Subsection Label="@Subsection">
+<Index Key="@Subsection"><C>@Subsection</C></Index>
+<Heading>@Subsection <A>name</A></Heading>
+Sets a subsection like chapter sets a chapter.
+
+<Listing><![CDATA[
+#! @Subsection My first manual subsection
+#!  In this subsection I am going to document my first example.
+]]></Listing>
+</Subsection>
+
+<Subsection Label="@EndSubsection">
+<Index Key="@EndSubsection"><C>@EndSubsection</C></Index>
+<Heading>@EndSubsection</Heading>
+Closes the current subsection.
+
+<Listing><![CDATA[
+#! @EndSubsection
+#### The following text again belongs to the section
+#! Now we are in the section again
+]]></Listing>
+</Subsection>
+
 <Subsection Label="@AutoDoc">
 <Index Key="@AutoDoc"><C>@AutoDoc</C></Index>
 <Heading>@AutoDoc</Heading>
@@ -220,6 +243,46 @@ See section <Ref Sect="Level"/> for more information about groups.
 <Heading>@ResetLevel</Heading>
 Resets the current level to 0.
 <P/>
+</Subsection>
+
+
+<Subsection Label="@Example">
+<Index Key="@Example"><C>@Example and @EndExample</C></Index>
+<Heading>@Example and @EndExample</Heading>
+@Example inserts an example into the manual. The syntax is like the example enviroment
+in GAPDoc. This examples can be tested by GAPDoc, and also stay readable by GAP.
+The GAP prompt is added by AutoDoc.
+@EndExample ends the example block.
+<Listing><![CDATA[
+#! @Example
+S3 := SymmetricGroup(5);
+#! Sym( [ 1 .. 5 ] )
+Order(S3);
+#! 120
+#! @EndExample
+]]></Listing>
+</Subsection>
+
+<Subsection Label="@System">
+<Index Key="@System"><C>@System and @InsertSystem</C></Index>
+<Heading>@System <A>name</A> and @InsertSystem <A>name</A></Heading>
+@System makes the next documentation item (can be an example, a text or a function)
+not to be inserted in the documentation at it's point in the file, but at the point
+where the @InsertSystem <A>name</A> command is. This can be used to insert examples from
+different files at a specific point in the documentation.
+<Listing><![CDATA[
+#! @System Example_Symmetric_Group
+#! @Example
+S3 := SymmetricGroup(5);
+#! Sym( [ 1 .. 5 ] )
+Order(S3);
+#! 120
+#! @EndExample
+]]></Listing>
+
+<Listing><![CDATA[
+#! @SInsertystem Example_Symmetric_Group
+]]></Listing>
 </Subsection>
 
 </Section>
