@@ -7,182 +7,78 @@
 #############################################################################
 
 ##
-## FIXME: Do this more efficient
-InstallGlobalFunction( AutoDoc_RemoveSpacesAndComments,
+InstallGlobalFunction( Normalized_ReadLine,
                        
-  function( string )
+  function( stream )
+    local string;
     
-    while string <> "" and ( string[ 1 ] = ' ' or string[ 1 ] = '#' ) do
-        
-        Remove( string, 1 );
-        
-    od;
+    string := ReadLine( stream );
     
-    while string <> "" and string[ Length( string ) ] = ' ' do
+    if string = fail then
         
-        Remove( string, Length( string ) );
+        return fail;
         
-    od;
+    fi;
+    
+    NormalizeWhitespace( string );
     
     return string;
     
 end );
 
 ##
-InstallGlobalFunction( AutoDoc_Scan_for_command,
+InstallGlobalFunction( Scan_for_AutoDoc_Part,
                        
-  function( string )
-    local command_pos, rest_of_string, i , command_list;
+  function( line )
+    local position, whitespace_position, command, argument;
     
-    command_pos := PositionSublist( string, "@" );
+    position := PositionSublist( line, "#!" );
     
-    if command_pos = fail then
+    if position = fail then
         
-        return [ false, AutoDoc_RemoveSpacesAndComments( string ) ];
+        return [ false, line ];
         
     fi;
     
-    string := string{ [ command_pos .. Length( string ) ] };
+    line := StripBeginEnd( line{[ position + 2 .. Length( line ) ]}, " " );
     
-    command_list := [ "@ChapterInfo",
-                      "@AutoDoc",
-                      "@EndAutoDoc",
-                      "@Chapter",
-                      "@Section",
-                      "@EndSection",
-                      "@BeginGroup",
-                      "@EndGroup",
-                      "@Description",
-                      "@Returns",
-                      "@Arguments",
-                      "@Group",
-                      "@Label",
-                      "@Level",
-                      "@ResetLevel",
-                      "@BREAK"
-                    ];
-                      
-    for i in command_list do
-        
-        command_pos := PositionSublist( string, i );
-        
-        if command_pos <> fail then
-            
-            return [ i, AutoDoc_RemoveSpacesAndComments( string{[ command_pos + Length( i ) .. Length( string ) ] } ) ];
-            
-        fi;
-        
-    od;
+    ## Scan for a command
     
-    Error( "Unrecognized command" );
+    position := PositionSublist( line, "@" );
     
-    return fail;
-    
-end );
-
-##
-InstallGlobalFunction( AutoDoc_Flush,
-                       
-  function( current_item )
-    local type, length_arg_list;
-    
-    type := current_item[ 1 ];
-    
-    if type = "Chapter" then
+    if position = fail then
         
-        Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationText( current_item[ 3 ], [ current_item[ 2 ] ] ) );
-        
-    elif type = "Section" then
-        
-        Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationText( current_item[ 4 ], [ current_item[ 2 ], current_item[ 3 ] ] ) );
-        
-    elif type = "Item" then
-        
-        length_arg_list := 0;
-        
-        if IsBound( current_item[ 2 ].tester_names )
-            and current_item[ 2 ].tester_names <> false
-            and Length( current_item[ 2 ].tester_names ) > 0 then
-            
-            length_arg_list := Length( SplitString( current_item[ 2 ].tester_names, "," ) );
-            
-        fi;
-        
-        if not IsBound( current_item[ 2 ].arguments ) then
-           
-           if length_arg_list > 1 then
-                
-                current_item[ 2 ].arguments := JoinStringsWithSeparator(
-                                                  List( [ 1 .. length_arg_list ], 
-                                                        i -> Concatenation( "arg", String( i ) ) ), "," );
-                
-            elif length_arg_list = 1 then
-                
-                current_item[ 2 ].arguments := "arg";
-                
-            fi;
-            
-        fi;
-        
-        Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationItem( current_item[ 2 ] ) );
+        return [ "STRING", line ];
         
     fi;
     
-    return [ "None", [ ] ];
+    whitespace_position := PositionSublist( line, " " );
     
-end );
-
-##
-InstallGlobalFunction( AutoDoc_Prepare_Item_Record,
-                       
-  function( current_item, chapter_info, group )
-    local type;
-    
-    type := current_item[ 1 ];
-    
-    if type = "Chapter" or type = "Section" then
+    if whitespace_position = fail then
         
-        current_item := AutoDoc_Flush( current_item );
+        command := line{[ position .. Length( line ) ]};
         
-        current_item := [ "Item", rec( description := [ ],
-                                       return_value := false,
-                                       label_list := "",
-                                       tester_names := "",
-                                     ) ];
+        argument := "";
         
-    elif type = "None" then
+    else
         
-        current_item := [ "Item", rec( description := [ ],
-                                       return_value := false,
-                                       label_list := "",
-                                       tester_names := "",
-                                     ) ];
+        command := line{[ position .. whitespace_position - 1 ]};
+        
+        argument := line{[ whitespace_position + 1 .. Length( line ) ]};
         
     fi;
     
-    if IsBound( chapter_info[ 1 ] ) and IsBound( chapter_info[ 2 ] ) then
-        
-        current_item[ 2 ].chapter_info := chapter_info;
-        
-    fi;
-    
-    if group <> false then
-        
-        current_item[ 2 ].group := group;
-        
-    fi;
-    
-    return current_item;
+    return [ command, argument ];
     
 end );
 
 ##
 InstallGlobalFunction( AutoDoc_Type_Of_Item,
                        
-  function( current_item, type )
+  function( current_item, type, default_chapter_data )
     local item_rec, entries, has_filters, ret_val;
     
-    item_rec := current_item[ 2 ];
+    item_rec := current_item;
     
     if type = "Category" then
         
@@ -236,8 +132,6 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         entries := [ "Var", "global_variables" ];
         
-        ret_val := fail;
-        
         has_filters := "No";
         
         item_rec.arguments := fail;
@@ -253,7 +147,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
     item_rec.doc_stream_type := entries[ 2 ];
     
     if not IsBound( item_rec.chapter_info ) then
-        item_rec.chapter_info := AUTOMATIC_DOCUMENTATION.default_chapter.( entries[ 2 ] );
+        item_rec.chapter_info := default_chapter_data.( entries[ 2 ] );
     fi;
     
     if IsBound( ret_val ) and item_rec.return_value = false then
@@ -267,92 +161,455 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
 end );
 
 ##
-InstallGlobalFunction( AutoDoc_Parser_ReadFile,
+InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                        
-  function( filename )
-    local filestream, autodoc_active, current_line,
-          chapter_info, is_autodoc_comment, is_function_declaration,
-          pos_of_autodoc_comment, declare_position, current_item,
-          has_filters, filter_string, current_command, current_string_list,
-          scope_chapter, scope_section, scope_group, current_type, autodoc_counter,
-          position_parentesis, is_autodoc_scope, command_function_record, recover_item,
-          level_value;
+  function( filename_list, tree, default_chapter_data )
+    local current_item, flush_and_recover, chapter_info, current_string_list,
+          Scan_for_Declaration_part, flush_and_prepare_for_item, current_line, filestream,
+          level_scope, scope_group, read_example, command_function_record, autodoc_read_line,
+          current_command, was_declaration, filename, system_scope, groupnumber, chunk_list;
     
-    recover_item := function( )
-      
-      if IsBound( scope_section ) then
-          
-          current_item := [ "Section", scope_chapter, scope_section, [ ] ];
-          
-          current_string_list := current_item[ 4 ];
-          
-      elif IsBound( scope_chapter ) then
-          
-          current_item := [ "Chapter", scope_chapter, [ ] ];
-          
-          current_string_list := current_item[ 3 ];
-          
-      else
-          
-          current_item := [ "None", [ ] ];
-          
-          current_string_list := current_item[ 2 ];
-          
-      fi;
-      
+    groupnumber := 0;
+    
+    level_scope := 0;
+    
+    autodoc_read_line := false;
+    
+    chapter_info := [ ];
+    
+    chunk_list := rec( );
+    
+    Scan_for_Declaration_part := function()
+        local declare_position, current_type, filter_string, has_filters,
+              position_parentesis;
+        
+        declare_position := PositionSublist( current_line, "Declare" );
+        
+        if declare_position <> fail then
+            
+            flush_and_prepare_for_item();
+            
+            current_line := current_line{[ declare_position + 7 .. Length( current_line ) ]};
+            
+            position_parentesis := PositionSublist( current_line, "(" );
+            
+            if position_parentesis = fail then
+                
+                Error( "Something went wrong" );
+                
+            fi;
+            
+            current_type := current_line{ [ 1 .. position_parentesis - 1 ] };
+            
+            has_filters := AutoDoc_Type_Of_Item( current_item, current_type, default_chapter_data );
+            
+            if has_filters = fail then
+                
+                Error( "Unrecognized scan type" );
+                
+                return fail;
+                
+            fi;
+            
+            current_line := current_line{ [ position_parentesis + 1 .. Length( current_line ) ] };
+            
+            ## Not the funny part begins:
+            ## try fetching the name:
+            
+            ## Assuming the name is in the same line as its 
+            while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
+                
+                current_line := Normalized_ReadLine( filestream );
+                
+            od;
+            
+            current_line := StripBeginEnd( current_line, " " );
+            
+            current_item.name := current_line{ [ 1 .. Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) - 1 ] };
+            
+            current_item.name := StripBeginEnd( ReplacedString( current_item.name, "\"", "" ), " " );
+            
+            current_line := current_line{ [ Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) + 1 .. Length( current_line ) ] };
+            
+            if has_filters = "One" then
+                
+                filter_string := "for ";
+                
+                while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
+                    
+                    Append( filter_string, StripBeginEnd( current_line, " " ) );
+                    
+                    current_line := ReadLine( filestream );
+                    
+                    NormalizeWhitespace( current_line );
+                    
+                od;
+                
+                Append( filter_string, StripBeginEnd( current_line{ [ 1 .. Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) - 1 ] }, " " ) );
+                
+            elif has_filters = "List" then
+                
+                filter_string := "for ";
+                
+                while PositionSublist( current_line, "[" ) = fail do
+                    
+                    current_line := ReadLine( filestream );
+                    
+                    NormalizeWhitespace( current_line );
+                    
+                od;
+                
+                current_line := current_line{ [ PositionSublist( current_line, "[" ) + 1 .. Length( current_line ) ] };
+                
+                while PositionSublist( current_line, "]" ) = fail do
+                    
+                    Append( filter_string, StripBeginEnd( current_line, " " ) );
+                    
+                    current_line := ReadLine( filestream );
+                    
+                    NormalizeWhitespace( current_line );
+                    
+                od;
+                
+                Append( filter_string, StripBeginEnd( current_line{[ 1 .. PositionSublist( current_line, "]" ) - 1 ]}, " " ) );
+                
+            else
+                
+                filter_string := false;
+                
+            fi;
+            
+            if filter_string <> false then
+                
+                if current_item.tester_names = fail then
+                    
+                    current_item.tester_names := filter_string;
+                    
+                fi;
+                
+                ##Adjust arguments
+                
+                if not IsBound( current_item.arguments ) then
+                    
+                    if has_filters = "One" then
+                        
+                        current_item.arguments := "arg";
+                        
+                    elif has_filters = "List" then
+                        
+                        current_item.arguments := List( [ 1 .. Length( SplitString( filter_string, "," ) ) ], i -> Concatenation( "arg", String( i ) ) );
+                        
+                        if Length( current_item.arguments ) = 1 then
+                            
+                            current_item.arguments := "arg";
+                            
+                        else
+                            
+                            current_item.arguments := JoinStringsWithSeparator( current_item.arguments, "," );
+                            
+                        fi;
+                        
+                    fi;
+                    
+                fi;
+                
+            fi;
+            
+            return true;
+            
+        fi;
+        
+        declare_position := PositionSublist( current_line, "InstallMethod" );
+        
+        if declare_position <> fail then
+            
+            flush_and_prepare_for_item();
+            
+            current_item.type := "Func";
+            
+            current_item.doc_stream_type := "operations";
+            
+            ##Find name
+            
+            position_parentesis := PositionSublist( current_line, "(" );
+            
+            current_line := current_line{ [ position_parentesis + 1 .. Length( current_line ) ] };
+            
+            ## find next colon
+            current_item.name := "";
+            
+            while PositionSublist( current_line, "," ) = fail do
+                
+                Append( current_item.name, current_line );
+                
+                current_line := Normalized_ReadLine( filestream );
+                
+            od;
+            
+            position_parentesis := PositionSublist( current_line, "," );
+            
+            Append( current_item.name, current_line{[ 1 .. position_parentesis - 1 ]} );
+            
+            NormalizeWhitespace( current_item.name );
+            
+            current_item.name := StripBeginEnd( current_item.name, " " );
+            
+            while PositionSublist( current_line, "[" ) = fail do
+                
+                current_line := Normalized_ReadLine( filestream );
+                
+            od;
+            
+            position_parentesis := PositionSublist( current_line, "[" );
+            
+            current_line := current_line{[ position_parentesis + 1 .. Length( current_line ) ]};
+            
+            filter_string := "for ";
+            
+            while PositionSublist( current_line, "]" ) = fail do
+                
+                Append( filter_string, current_line );
+                
+            od;
+            
+            position_parentesis := PositionSublist( current_line, "]" );
+            
+            Append( filter_string, current_line{[ 1 .. position_parentesis - 1 ]} );
+            
+            current_line := current_line{[ position_parentesis + 1 .. Length( current_line )]};
+            
+            NormalizeWhitespace( filter_string );
+            
+            if current_item.tester_names = fail then
+                
+                current_item.tester_names := filter_string;
+                
+            fi;
+            
+            ##Maybe find some argument names
+            if not IsBound( current_item.arguments ) then
+            
+                while PositionSublist( current_line, "function(" ) = fail and PositionSublist( current_line, ");" ) = fail do
+                    
+                    current_line := Normalized_ReadLine( filestream );
+                    
+                od;
+                
+                position_parentesis := PositionSublist( current_line, "function(" );
+                
+                if position_parentesis <> fail then
+                    
+                    current_line := current_line{[ position_parentesis + 9 .. Length( current_line ) ]};
+                    
+                    filter_string := "";
+                    
+                    while PositionSublist( current_line, ")" ) = fail do;
+                        
+                        current_line := StripBeginEnd( current_line, " " );
+                        
+                        Append( filter_string, current_line );
+                        
+                        current_line := Normalized_ReadLine( current_line );
+                        
+                    od;
+                    
+                    position_parentesis := PositionSublist( current_line, ")" );
+                    
+                    Append( filter_string, current_line{[ 1 .. position_parentesis - 1 ]} );
+                    
+                    NormalizeWhitespace( filter_string );
+                    
+                    filter_string := StripBeginEnd( filter_string, " " );
+                    
+                    current_item.arguments := filter_string;
+                    
+                fi;
+                
+            fi;
+            
+            return true;
+            
+        fi;
+        
+        return false;
+        
     end;
     
-    #### Initialize the command_function_record
+    flush_and_prepare_for_item := function()
+        local node;
+        
+        if current_item.node_type = "ITEM" then
+            
+            return;
+            
+        fi;
+        
+        if not current_item.node_type = "TEXT" or not current_item.text = [ ] then
+            
+            flush_and_recover();
+            
+        fi;
+        
+        current_item.node_type := "ITEM";
+        
+        current_item.description := [ ];
+        
+        current_item.return_value := false;
+        
+        current_item.label_list := "";
+        
+        current_item.tester_names := fail;
+        
+    end;
+    
+    flush_and_recover := function()
+        local node;
+        
+        if IsBound( current_item ) then
+            
+            node := DocumentationNode( current_item );
+            
+            Add( tree, node );
+            
+        fi;
+        
+        current_item := rec( );
+        
+        current_item.chapter_info := chapter_info;
+        
+        current_item.level := level_scope;
+        
+        current_item.node_type := "TEXT";
+        
+        current_item.text := [ ];
+        
+        current_string_list := current_item.text;
+        
+        if IsBound( scope_group ) then
+            
+            current_item.group := scope_group;
+            
+        fi;
+        
+    end;
+    
+    read_example := function()
+        local temp_string_list, temp_curr_line, temp_pos_comment, is_following_line;
+        
+        current_item.node_type := "EXAMPLE";
+        
+        temp_string_list := current_item.text;
+        
+        is_following_line := false;
+        
+        while true do
+            
+            temp_curr_line := ReadLine( filestream );
+            
+            if temp_curr_line[ Length( temp_curr_line )] = '\n' then
+                
+                temp_curr_line := temp_curr_line{[ 1 .. Length( temp_curr_line ) - 1 ]};
+                
+            fi;
+            
+            if filestream = fail or PositionSublist( temp_curr_line, "@EndExample" ) <> fail then
+                
+                break;
+                
+            fi;
+            
+            ##if is comment, simply remove comments.
+            temp_pos_comment := PositionSublist( temp_curr_line, "#!" );
+            
+            if temp_pos_comment <> fail then
+                
+                temp_curr_line := temp_curr_line{[ temp_pos_comment + 3 .. Length( temp_curr_line ) ]};
+                
+                Add( temp_string_list, temp_curr_line );
+                
+                is_following_line := false;
+                
+                continue;
+                
+            else
+                
+                if is_following_line then
+                    
+                    temp_curr_line := Concatenation( "> ", temp_curr_line );
+                    
+                    if PositionSublist( temp_curr_line, ";" ) <> fail then
+                        
+                        is_following_line := false;
+                        
+                    fi;
+                    
+                else
+                    
+                    temp_curr_line := Concatenation( "gap> ", temp_curr_line );
+                    
+                    is_following_line := PositionSublist( temp_curr_line, ";" ) = fail;
+                    
+                fi;
+                
+                Add( temp_string_list, temp_curr_line );
+                
+                continue;
+                
+            fi;
+            
+        od;
+        
+        return temp_string_list;
+        
+    end;
+    
     command_function_record := rec(
         
         @AutoDoc := function()
             
-            autodoc_active := true;
-            
-            is_autodoc_scope := true;
-            
-            autodoc_counter := -1;
+            autodoc_read_line := fail;
             
         end,
         
         @EndAutoDoc := function()
             
-            autodoc_active := false;
-            
-            is_autodoc_scope := false;
-            
-            autodoc_counter := 0;
+            autodoc_read_line := false;
             
         end,
         
         @Chapter := function()
+            local scope_chapter;
             
-            ## First chapter has no current item.
-            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
-            
-            ## Reset section
-            Unbind( scope_section );
+            flush_and_recover();
             
             scope_chapter := ReplacedString( current_command[ 2 ], " ", "_" );
             
-            ChapterInTree( AUTOMATIC_DOCUMENTATION.tree, scope_chapter );
-            
-            recover_item();
+            ChapterInTree( tree, scope_chapter );
             
             chapter_info[ 1 ] := scope_chapter;
+            
+            Unbind( chapter_info[ 2 ] );
+            
+            Unbind( chapter_info[ 3 ] );
             
         end,
         
         @Section := function()
+            local scope_section;
             
-            ##Flush current node.
-            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
+            flush_and_recover();
+            
+            if not IsBound( chapter_info[ 1 ] ) then
+                
+                Error( "no section without chapter allowed" );
+                
+            fi;
             
             scope_section := ReplacedString( current_command[ 2 ], " ", "_" );
             
-            SectionInTree( AUTOMATIC_DOCUMENTATION.tree, scope_chapter, scope_section );
+            SectionInTree( tree, chapter_info[ 1 ], scope_section );
             
-            recover_item();
+            Unbind( chapter_info[ 3 ] );
             
             chapter_info[ 2 ] := scope_section;
             
@@ -360,55 +617,70 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         
         @EndSection := function()
             
-            if not IsBound( scope_section ) then
+            flush_and_recover();
+            
+            Unbind( chapter_info[ 2 ] );
+            
+            Unbind( chapter_info[ 3 ] );
+            
+        end,
+        
+        @Subsection := function()
+            local scope_subsection;
+            
+            if not IsBound( chapter_info[ 1 ] ) or not IsBound( chapter_info[ 2 ] ) then
                 
-                Error( "No section set" );
+                Error( "no subsection without chapter and section" );
                 
             fi;
             
-            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
+            flush_and_recover();
             
-            Unbind( scope_section );
+            scope_subsection := ReplacedString( current_command[ 2 ], " ", "_" );
             
-            recover_item();
+            SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], scope_subsection );
             
-            Unbind( chapter_info[ 2 ] );
+            chapter_info[ 3 ] := scope_subsection;
+            
+        end,
+        
+        @EndSubsection := function()
+            
+            flush_and_recover();
+            
+            Unbind( chapter_info[ 3 ] );
             
         end,
         
         @BeginGroup := function()
             
-            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
-            
             if current_command[ 2 ] = "" then
                 
-                AUTOMATIC_DOCUMENTATION.groupnumber := AUTOMATIC_DOCUMENTATION.groupnumber + 1;
+                groupnumber := groupnumber + 1;
                 
-                current_command[ 2 ] := Concatenation( "AutoDoc_generated_group", String( AUTOMATIC_DOCUMENTATION.groupnumber ) );
+                current_command[ 2 ] := Concatenation( "AutoDoc_generated_group", String( groupnumber ) );
                 
             fi;
             
             scope_group := ReplacedString( current_command[ 2 ], " ", "_" );
             
+            flush_and_recover();
+            
         end,
         
         @EndGroup := function()
             
-            if IsBound( current_item ) then current_item := AutoDoc_Flush( current_item ); fi;
+            Unbind( scope_group );
             
-            recover_item();
-            
-            scope_group := false;
+            flush_and_recover();
             
         end,
         
         @Description := function()
             
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
+            flush_and_prepare_for_item();
             
-            current_item[ 2 ].description := [ ];
-            
-            current_string_list := current_item[ 2 ].description;
+            current_string_list := current_item.description;
             
             if current_command[ 2 ] <> "" then
                 
@@ -420,43 +692,43 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
         
         @Returns := function()
             
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
+            flush_and_prepare_for_item();
             
-            current_item[ 2 ].return_value := current_command[ 2 ];
+            current_item.return_value := current_command[ 2 ];
             
         end,
         
         @Arguments := function()
             
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
+            flush_and_prepare_for_item();
             
-            current_item[ 2 ].arguments := current_command[ 2 ];
+            current_item.arguments := current_command[ 2 ];
             
         end,
         
         @Label := function()
             
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
+            flush_and_prepare_for_item();
             
-            current_item[ 2 ].function_label := current_command[ 2 ];
+            current_item.tester_names := current_command[ 2 ];
             
         end,
         
         @Group := function()
             
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
+            flush_and_prepare_for_item();
             
-            current_item[ 2 ].group := current_command[ 2 ];
+            current_item.group := current_command[ 2 ];
             
         end,
         
         @ChapterInfo := function()
             
-            current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
+            flush_and_prepare_for_item();
             
-            current_item[ 2 ].chapter_info := SplitString( current_command[ 2 ], "," );
+            current_item.chapter_info := SplitString( current_command[ 2 ], "," );
             
-            current_item[ 2 ].chapter_info := List( current_item[ 2 ].chapter_info, i -> ReplacedString( AutoDoc_RemoveSpacesAndComments( i ), " ", "_" ) );
+            current_item.chapter_info := List( current_item.chapter_info, i -> ReplacedString( StripBeginEnd( i, " " ), " ", "_" ) );
             
         end,
         
@@ -466,348 +738,168 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFile,
             
         end,
         
-        @Level := function()
+        @SetLevel := function()
             
-            AutoDoc_Flush( current_item );
+            level_scope := Int( current_command[ 2 ] );
             
-            recover_item();
-            
-            PushOptions( rec( level_value := Int( current_command[ 2 ] ) ) );
+            flush_and_recover();
             
         end,
         
         @ResetLevel := function()
             
-            AutoDoc_Flush( current_item );
+            level_scope := 0;
             
-            recover_item();
+            flush_and_recover();
             
-            PushOptions( rec( level_value := 0 ) );
+        end,
+        
+        @Level := function()
+            
+            current_item.level := Int( current_command[ 2 ] );
+            
+        end,
+        
+        @InsertSystem := function()
+            
+            flush_and_recover();
+            
+            Add( tree, DocumentationDummy( current_command[ 2 ], chapter_info ) );
+            
+        end,
+        
+        @System := function()
+            
+            flush_and_recover();
+            
+            system_scope := current_command[ 2 ];
+            
+        end,
+        
+        @Example := function()
+            
+            flush_and_recover();
+            
+            read_example();
+            
+            flush_and_recover();
+            
+        end,
+        
+        @Author := function()
+            
+            if not IsBound( tree!.worksheet_author ) then
+                
+                tree!.worksheet_author := [ ];
+                
+            fi;
+                
+            Add( tree!.worksheet_author, current_command[ 2 ] );
+            
+        end,
+        
+        @Title := function()
+            
+            tree!.worksheet_title := current_command[ 2 ];
+            
+        end,
+        
+        STRING := function()
+            
+            Add( current_string_list, current_command[ 2 ] );
+            
+        end,
+        
+        @Chunk := function()
+            
+            flush_and_recover();
+            
+            if not IsBound( chunk_list.(current_command[ 2 ] ) ) then
+                
+                chunk_list.( current_command[ 2 ] ) := [ ];
+                
+            fi;
+            
+            current_string_list := chunk_list.( current_command[ 2 ] );
+            
+        end,
+        
+        @EndChunk := function()
+            
+            flush_and_recover();
+            
+        end,
+        
+        @InsertChunk := function()
+            
+            flush_and_recover();
+            
+            if not IsBound( chunk_list.(current_command[ 2 ] ) ) then
+                
+                chunk_list.( current_command[ 2 ] ) := [ ];
+                
+            fi;
+            
+            current_item.text := chunk_list.( current_command[ 2 ] );
+            
+            flush_and_recover();
             
         end
-    
     );
     
-    filestream := InputTextFile( filename );
-    
-    ## After this, I assume the stream contains one line.
-    if filestream = fail then
+    ##Now read the files.
+    for filename in filename_list do
         
-        Info( InfoWarning, 1, "Warning: The text file ", filename, " was not readable.\n" );
+        filestream := InputTextFile( filename );
         
-        return;
-        
-    fi;
-    
-    is_autodoc_scope := false;
-    
-    autodoc_counter := 0;
-    
-    autodoc_active := false;
-    
-    chapter_info := [ ];
-    
-    current_string_list := [ ];
-    
-    current_item := [ "None", [ ] ];
-    
-    scope_group := false;
-    
-    ## Next if ensures termination.
-    while true do
-        
-        current_line := ReadLine( filestream );
-        
-        ## Ensures termination of the loop.
-        if current_line = fail then
+        while true do
             
-            current_item := AutoDoc_Flush( current_item );
+            current_line := Normalized_ReadLine( filestream );
             
-            break;
-            
-        fi;
-        
-        if is_autodoc_scope then
-            
-            autodoc_active := true;
-            
-        fi;
-        
-        NormalizeWhitespace( current_line );
-        
-        is_autodoc_comment := false;
-        
-        is_function_declaration := false;
-        
-        pos_of_autodoc_comment := PositionSublist( current_line, "#!" );
-        
-        ## Check wether line contains autodoc comments
-        if pos_of_autodoc_comment <> fail then
-            
-            autodoc_active := true;
-            
-            current_line := current_line{[ pos_of_autodoc_comment + 2 .. Length( current_line ) ]};
-            
-            current_line := AutoDoc_RemoveSpacesAndComments( current_line );
-            
-            is_autodoc_comment := true;
-            
-            is_function_declaration := false;
-            
-        fi;
-        
-        ## Assures no function will be read while AutoDoc is not active
-        if not autodoc_active and not is_autodoc_comment then
-            
-            continue;
-            
-        fi;
-        
-        if autodoc_active and not is_autodoc_comment then
-            
-            ## Scan if it is the beginning of a declaration.
-            declare_position := PositionSublist( current_line, "Declare" );
-            
-            if declare_position <> fail then
+            if current_line = fail then
                 
-                current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
+                flush_and_recover();
                 
-                current_line := current_line{[ declare_position + 7 .. Length( current_line ) ]};
+                break;
                 
-                position_parentesis := PositionSublist( current_line, "(" );
+            fi;
+            
+            current_command := Scan_for_AutoDoc_Part( current_line );
+            
+            if current_command[ 1 ] <> false then
                 
-                if position_parentesis = fail then
+                command_function_record.(current_command[ 1 ])();
+                
+                if autodoc_read_line <> fail then
                     
-                    Error( "Something went wrong" );
+                    autodoc_read_line := true;
                     
                 fi;
-                
-                current_type := current_line{ [ 1 .. position_parentesis - 1 ] };
-                
-                has_filters := AutoDoc_Type_Of_Item( current_item, current_type );
-                
-                if has_filters = fail then
-                    
-                    current_item := recover_item();
-                    
-                    continue;
-                    
-                fi;
-                
-                current_line := current_line{ [ position_parentesis + 1 .. Length( current_line ) ] };
-                
-                ## Not the funny part begins:
-                ## try fetching the name:
-                
-                ## Assuming the name is in the same line as its 
-                while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
-                    
-                    current_line := ReadLine( filestream );
-                    
-                od;
-                
-                NormalizeWhitespace( current_line );
-                
-                current_line := AutoDoc_RemoveSpacesAndComments( current_line );
-                
-                current_item[ 2 ].name := current_line{ [ 1 .. Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) - 1 ] };
-                
-                current_item[ 2 ].name := AutoDoc_RemoveSpacesAndComments( ReplacedString( current_item[ 2 ].name, "\"", "" ) );
-                
-                current_line := current_line{ [ Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) + 1 .. Length( current_line ) ] };
-                
-                if has_filters = "One" then
-                    
-                    filter_string := "for ";
-                    
-                    while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
-                        
-                        Append( filter_string, AutoDoc_RemoveSpacesAndComments( current_line ) );
-                        
-                        current_line := ReadLine( filestream );
-                        
-                        NormalizeWhitespace( current_line );
-                        
-                    od;
-                    
-                    Append( filter_string, AutoDoc_RemoveSpacesAndComments( current_line{ [ 1 .. Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) - 1 ] } ) );
-                    
-                elif has_filters = "List" then
-                    
-                    filter_string := "for ";
-                    
-                    while PositionSublist( current_line, "[" ) = fail do
-                        
-                        current_line := ReadLine( filestream );
-                        
-                        NormalizeWhitespace( current_line );
-                        
-                    od;
-                    
-                    current_line := current_line{ [ PositionSublist( current_line, "[" ) + 1 .. Length( current_line ) ] };
-                    
-                    while PositionSublist( current_line, "]" ) = fail do
-                        
-                        Append( filter_string, AutoDoc_RemoveSpacesAndComments( current_line ) );
-                        
-                        current_line := ReadLine( filestream );
-                        
-                        NormalizeWhitespace( current_line );
-                        
-                    od;
-                    
-                    Append( filter_string, AutoDoc_RemoveSpacesAndComments( current_line{[ 1 .. PositionSublist( current_line, "]" ) - 1 ]} ) );
-                    
-                else
-                    
-                    filter_string := false;
-                    
-                fi;
-                
-                if filter_string <> false then
-                    
-                    current_item[ 2 ].tester_names := filter_string;
-                    
-                fi;
-                
-                current_item := AutoDoc_Flush( current_item );
-                
-                recover_item();
                 
                 continue;
                 
             fi;
             
-            declare_position := PositionSublist( current_line, "InstallMethod" );
+            current_line := current_command[ 2 ];
             
-            if declare_position <> fail then
+            if autodoc_read_line = true or autodoc_read_line = fail then
                 
-                current_item := AutoDoc_Prepare_Item_Record( current_item, chapter_info, scope_group );
+                was_declaration := Scan_for_Declaration_part( );
                 
-                current_item[ 2 ].type := "Func";
-                
-                current_item[ 2 ].doc_stream_type := "operations";
-                
-                ##Find name
-                
-                position_parentesis := PositionSublist( current_line, "(" );
-                
-                current_line := current_line{ [ position_parentesis + 1 .. Length( current_line ) ] };
-                
-                ## find next colon
-                current_item[ 2 ].name := "";
-                
-                while PositionSublist( current_line, "," ) = fail do
+                if was_declaration = true then
                     
-                    Append( current_item[ 2 ].name, current_line );
+                    flush_and_recover();
                     
-                od;
-                
-                position_parentesis := PositionSublist( current_line, "," );
-                
-                Append( current_item[ 2 ].name, current_line{[ 1 .. position_parentesis - 1 ]} );
-                
-                NormalizeWhitespace( current_item[ 2 ].name );
-                
-                current_item[ 2 ].name := AutoDoc_RemoveSpacesAndComments( current_item[ 2 ].name );
-                
-                while PositionSublist( current_line, "[" ) = fail do
+                elif not was_declaration and autodoc_read_line <> fail then
                     
-                    current_line := ReadLine( filestream );
-                    
-                od;
-                
-                position_parentesis := PositionSublist( current_line, "[" );
-                
-                current_line := current_line{[ position_parentesis + 1 .. Length( current_line ) ]};
-                
-                filter_string := "for ";
-                
-                while PositionSublist( current_line, "]" ) = fail do
-                    
-                    Append( filter_string, current_line );
-                    
-                od;
-                
-                position_parentesis := PositionSublist( current_line, "]" );
-                
-                Append( filter_string, current_line{[ 1 .. position_parentesis - 1 ]} );
-                
-                current_line := current_line{[ position_parentesis + 1 .. Length( current_line )]};
-                
-                NormalizeWhitespace( filter_string );
-                
-                current_item[ 2 ].tester_names := filter_string;
-                
-                ##Maybe find some argument names
-                if not IsBound( current_item[ 2 ].arguments ) then
-                
-                    while PositionSublist( current_line, "function(" ) = fail and PositionSublist( current_line, ");" ) = fail do
-                        
-                        current_line := ReadLine( filestream );
-                        
-                    od;
-                    
-                    position_parentesis := PositionSublist( current_line, "function(" );
-                    
-                    if position_parentesis <> fail then
-                        
-                        current_line := current_line{[ position_parentesis + 9 .. Length( current_line ) ]};
-                        
-                        filter_string := "";
-                        
-                        while PositionSublist( current_line, ")" ) = fail do
-                            
-                            NormalizeWhitespace( current_line );
-                            
-                            current_line := AutoDoc_RemoveSpacesAndComments( current_line );
-                            
-                            Append( filter_string, current_line );
-                            
-                            current_line := ReadLine( current_line );
-                            
-                        od;
-                        
-                        position_parentesis := PositionSublist( current_line, ")" );
-                        
-                        Append( filter_string, current_line{[ 1 .. position_parentesis - 1 ]} );
-                        
-                        NormalizeWhitespace( filter_string );
-                        
-                        filter_string := AutoDoc_RemoveSpacesAndComments( filter_string );
-                        
-                        current_item[ 2 ].arguments := filter_string;
-                        
-                    fi;
+                    autodoc_read_line := false;
                     
                 fi;
                 
-                current_item := AutoDoc_Flush( current_item );
-                
-                recover_item();
-                
             fi;
             
-            autodoc_active := false;
-            
-            continue;
-            
-        fi;
-        
-        current_command := AutoDoc_Scan_for_command( current_line );
-        
-        if current_command[ 1 ] = false then
-            
-            Add( current_string_list, current_command[ 2 ] );
-            
-            continue;
-            
-        fi;
-        
-        command_function_record.(current_command[ 1 ])();
+        od;
         
     od;
-    
-    PushOptions( rec( level_value := 0 ) );
     
 end );
