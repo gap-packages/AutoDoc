@@ -599,3 +599,208 @@ InstallGlobalFunction( WriteStringIntoDoc,
     Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationText( description, chapter_info ) );
     
 end );
+
+##
+InstallGlobalFunction( AutoDocWorksheet,
+                       
+  function( filelist )
+    local folder, filename, folder_length, filestream, plain_filename, title, author, output_folder, testfile,
+          book_name, maketest_commands, commands, bibfile, bib_tmp, tree, write_title_page, table_of_contents;
+    
+    write_title_page := false;
+    
+    if IsString( filelist ) then
+        
+        filelist := [ filelist ];
+        
+    fi;
+    
+    output_folder := ValueOption( "OutputFolder" );
+    
+    if output_folder = fail then
+        
+        filename := filelist[ 1 ];
+        
+        output_folder := StructuralCopy( filename );
+        
+        while output_folder[ Length( output_folder ) ] <> '/' do
+            
+            Remove( output_folder, Length( output_folder ) );
+            
+        od;
+        
+        folder_length := Length( output_folder );
+        
+    fi;
+    
+    output_folder := Directory( output_folder );
+    
+    tree := DocumentationTree();
+    
+        ## No default names here.
+        AutoDoc_Parser_ReadFiles( filelist, tree, rec( ) );
+    
+    if IsBound( tree!.worksheet_title ) then
+        
+        title := tree!.worksheet_title;
+        
+    else
+        
+        title := fail;
+        
+    fi;
+    
+    if IsBound( tree!.worksheet_author ) then
+        
+        author := tree!.worksheet_author;
+        
+    else
+        
+        author := fail;
+        
+    fi;
+    
+    book_name := ValueOption( "BookName" );
+    
+    if book_name = fail then
+        
+        if title = fail then
+            
+            book_name := filename{[ folder_length + 1 .. Length( filename ) ]};
+            
+        else
+            
+            book_name := ReplacedString( title, " ", "_" );
+            
+        fi;
+        
+    fi;
+    
+    if title = fail then
+        
+        if book_name = fail then
+            
+            title := filename{[ folder_length + 1 .. Length( filename ) ]};
+            
+        else
+            
+            title := book_name;
+            
+        fi;
+        
+    fi;
+    
+    WriteDocumentation( tree, output_folder );
+    
+    filestream := AUTODOC_OutputTextFile( output_folder, Concatenation( book_name, ".xml" ) );
+    
+    AppendTo( filestream, AUTODOC_XML_HEADER );
+    
+    AppendTo( filestream, "<!DOCTYPE Book SYSTEM \"gapdoc.dtd\"\n[\n" );
+    
+    AppendTo( filestream, "<!ENTITY ", book_name, " '<Package>", book_name, "</Package>'>\n" );
+    
+    AppendTo( filestream, "]\n>\n" );
+    
+    AppendTo( filestream, "<Book Name=\"", book_name, "\">\n" );
+    
+    AppendTo( filestream, "<TitlePage>\n" );
+    
+    if title <> fail then
+        
+        AppendTo( filestream, "<Title>", title, "</Title>\n" );
+        
+    fi;
+    
+    author := ValueOption( "AutoDoc_Author" );
+    
+    if author <> fail then
+        
+        AppendTo( filestream, "<Author>", author, "</Author>\n" );
+        
+    fi;
+    
+    AppendTo( filestream, "</TitlePage>" );
+    
+    table_of_contents := ValueOption( "TableOfContents" );
+    
+    if table_of_contents = true then
+        
+        AppendTo( filestream, "<TableOfContents/>\n" );
+        
+    fi;
+    
+    AppendTo( filestream, "<Body>\n" );
+    
+    AppendTo( filestream, "<Index>&", book_name, ";</Index>\n" );
+    
+    AppendTo( filestream, "<#Include SYSTEM \"AutoDocMainFile.xml\">\n" );
+    
+    AppendTo( filestream, "</Body>\n" );
+    
+    bibfile := ValueOption( "Bibliography" );
+    
+    if bibfile <> fail then
+        
+        AppendTo( filestream, "<Bibliography Databases=\"", bibfile, "\"/>\n" );
+        
+    fi;
+      
+    AppendTo( filestream, "<TheIndex/>\n" );
+    
+    AppendTo( filestream, "</Book>\n" );
+    
+    CloseStream( filestream );
+    
+    SetGapDocLaTeXOptions( "utf8" );
+    
+    MakeGAPDocDoc( output_folder, book_name, [ ], book_name, "MathJax" );
+    
+    CopyHTMLStyleFiles( Filename( output_folder, "" ) );
+    
+    testfile := ValueOption( "TestFile" );
+    
+    maketest_commands := ValueOption( "TestFileCommands" );
+    
+    if IsString( maketest_commands ) then
+        
+        maketest_commands := [ maketest_commands ];
+        
+    fi;
+    
+    if testfile <> false then
+        
+        if testfile = fail then
+            
+            testfile := "maketest.g";
+            
+        fi;
+        
+        filestream := AUTODOC_OutputTextFile( output_folder, testfile );
+        
+        if maketest_commands <> fail then
+            
+            for commands in maketest_commands do
+                
+                AppendTo( filestream, commands );
+                
+                AppendTo( filestream, "\n\n" );
+                
+            od;
+            
+        fi;
+        
+        AppendTo( filestream, "LoadPackage( \" GAPDoc\" );\n\n" );
+        
+        AppendTo( filestream, "example_tree := ExtractExamples( Directory(\".\"), \"", Concatenation( book_name, ".xml" ),"\", [ ], 500 );\n\n" );
+        
+        AppendTo( filestream, "RunExamples( example_tree, rec( compareFunction := \"uptowhitespace\" ) );\n\n" );
+        
+        AppendTo( filestream, "QUIT;\n" );
+        
+    fi;
+    
+    return true;
+    
+end );
+
