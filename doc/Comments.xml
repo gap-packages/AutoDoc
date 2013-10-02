@@ -266,7 +266,7 @@ Order(S3);
 <Subsection Label="@System">
 <Index Key="@System"><C>@System and @InsertSystem</C></Index>
 <Heading>@System <A>name</A> and @InsertSystem <A>name</A></Heading>
-@System makes the next documentation item (can be an example, a text or a function)
+@System causes the next documentation item (can be an example, a text or a function)
 not to be inserted in the documentation at it's point in the file, but at the point
 where the @InsertSystem <A>name</A> command is. This can be used to insert examples from
 different files at a specific point in the documentation.
@@ -281,7 +281,7 @@ Order(S3);
 ]]></Listing>
 
 <Listing><![CDATA[
-#! @SInsertystem Example_Symmetric_Group
+#! @InsertSystem Example_Symmetric_Group
 ]]></Listing>
 </Subsection>
 
