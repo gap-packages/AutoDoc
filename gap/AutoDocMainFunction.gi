@@ -605,7 +605,7 @@ InstallGlobalFunction( AutoDocWorksheet,
                        
   function( filelist )
     local folder, filename, folder_length, filestream, plain_filename, title, author, output_folder, testfile,
-          book_name, maketest_commands, commands, bibfile, bib_tmp, tree, write_title_page, table_of_contents;
+          book_name, maketest_commands, commands, bibfile, bib_tmp, tree, write_title_page, table_of_contents, i;
     
     write_title_page := false;
     
@@ -712,11 +712,13 @@ InstallGlobalFunction( AutoDocWorksheet,
         
     fi;
     
-    author := ValueOption( "AutoDoc_Author" );
-    
     if author <> fail then
         
-        AppendTo( filestream, "<Author>", author, "</Author>\n" );
+        for i in author do
+            
+            AppendTo( filestream, "<Author>", i, "</Author>\n" );
+            
+        od;
         
     fi;
     
