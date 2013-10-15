@@ -111,6 +111,11 @@ DeclareGlobalFunction( "WriteStringIntoDoc" );
 #! <Item>
 #! Path to a bibliography file.
 #! </Item>
+#! <Mark>CreateIndex</Mark>
+#! <Item>
+#!  Enables the index if set to true. Please enable it only if you have something
+#!  to index. It will create an error otherwise.
+#! </Item>
 #! </List>
 #! @Arguments list_of_filenames : BookName, TestFile, OutputFolder, TestFileCommands, Bibliography
 DeclareGlobalFunction( "AutoDocWorksheet" );
