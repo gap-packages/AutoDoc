@@ -81,6 +81,12 @@ DeclareGlobalFunction( "WriteStringIntoDoc" );
 #! then it is used as name of the testfile. If nothing is given, the testfile will be
 #! maketest.g.
 #! </Item>
+#! <Mark>TestFileOutputFolder</Mark>
+#! <Item>
+#! Defines an output folder for a testfile. If the string "current" is given,
+#! the current folder will be used to output the testfile. If nothing is given,
+#! OutputFolder will be used.
+#! </Item>
 #! <Mark>OutputFolder</Mark>
 #! <Item>
 #! All files will be stored in OutputFolder. If OutputFolder is not given, the folder of the first file will be used.
