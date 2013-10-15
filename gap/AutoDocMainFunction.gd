@@ -65,6 +65,18 @@ DeclareGlobalFunction( "WriteStringIntoDoc" );
 #!  <Item>
 #!    This adds an author to the document.
 #!  </Item>
+#!  <Mark>Dependency <A>packagename</A>, <A>version</A></Mark>
+#!  <Item>
+#!   This adds a dependency to the worksheet which will be
+#!   checked at compile time. If your GAP does not provide
+#!   the correct <A>version</A> of the package <A>packagename</A>
+#!   the command will give an error. If you only want to compile
+#!   the worksheet, you can continue. A possible <A>version</A> is >=20.
+#!  </Item>
+#!  <Mark>Date <A>date</A></Mark>
+#!  <Item>
+#!  Adds the string <A>date</A> as a date to the titlepage of the pdf.
+#!  </Item>
 #!  </List>
 #!  Note that some commands have no effect, i.e. the level command.
 #! The options are as follows.

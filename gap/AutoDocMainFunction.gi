@@ -638,8 +638,22 @@ InstallGlobalFunction( AutoDocWorksheet,
     
     tree := DocumentationTree();
     
-        ## No default names here.
-        AutoDoc_Parser_ReadFiles( filelist, tree, rec( ) );
+    ## No default names here.
+    AutoDoc_Parser_ReadFiles( filelist, tree, rec( ) );
+    
+    if IsBound( tree!.worksheet_dependencies ) then
+        
+        for i in tree!.worksheet_dependencies do
+            
+            if CallFuncList( TestPackageAvailability, Concatenation( i, [ true ] ) ) = fail then
+                
+                Error( Concatenation( "Package ", i[ 1 ], " is not loadable" ) );
+                
+            fi;
+            
+        od;
+        
+    fi;
     
     if IsBound( tree!.worksheet_title ) then
         
@@ -720,6 +734,12 @@ InstallGlobalFunction( AutoDocWorksheet,
             AppendTo( filestream, "<Author>", i, "</Author>\n" );
             
         od;
+        
+    fi;
+    
+    if IsBound( tree!.worksheet_date ) then
+        
+        AppendTo( filestream, "<Date>", tree!.worksheet_date, "</Date>" );
         
     fi;
     

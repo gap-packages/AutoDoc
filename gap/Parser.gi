@@ -855,7 +855,28 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             flush_and_recover();
             
+        end,
+        
+        @Dependency := function()
+            
+            if not IsBound( tree!.worksheet_dependencies ) then
+                
+                tree!.worksheet_dependencies := [ ];
+                
+            fi;
+            
+            NormalizeWhitespace( current_command[ 2 ] );
+            
+            Add( tree!.worksheet_dependencies, SplitString( current_command[ 2 ], " " ) );
+            
+        end,
+        
+        @Date := function()
+            
+            tree!.worksheet_date := current_command[ 2 ];
+            
         end
+        
     );
     
     ##Now read the files.
