@@ -605,7 +605,8 @@ InstallGlobalFunction( AutoDocWorksheet,
                        
   function( filelist )
     local folder, filename, folder_length, filestream, plain_filename, title, author, output_folder, testfile,
-          book_name, maketest_commands, commands, bibfile, bib_tmp, tree, write_title_page, table_of_contents, i;
+          book_name, maketest_commands, commands, bibfile, bib_tmp, tree, write_title_page, table_of_contents, i,
+          testfile_output_folder, current_directory_set;
     
     write_title_page := false;
     
@@ -770,6 +771,8 @@ InstallGlobalFunction( AutoDocWorksheet,
         
     fi;
     
+    current_directory_set := false;
+    
     if testfile <> false then
         
         if testfile = fail then
@@ -778,7 +781,31 @@ InstallGlobalFunction( AutoDocWorksheet,
             
         fi;
         
-        filestream := AUTODOC_OutputTextFile( output_folder, testfile );
+        testfile_output_folder := ValueOption( "TestFileOutputFolder" );
+        
+        if testfile_output_folder = fail then
+            
+            testfile_output_folder := output_folder;
+            
+        elif IsString( testfile_output_folder ) and LowercaseString( testfile_output_folder ) = "current" then
+            
+            testfile_output_folder := DirectoryCurrent( );
+            
+            current_directory_set := true;
+            
+        elif IsString( testfile_output_folder ) then
+            
+            testfile_output_folder := Directory( testfile_output_folder );
+            
+            current_directory_set := true;
+            
+        else
+            
+            Error( "TestFileOutputFolder must be \"current\" or directory" );
+            
+        fi;
+        
+        filestream := AUTODOC_OutputTextFile( testfile_output_folder, testfile );
         
         if maketest_commands <> fail then
             
@@ -794,7 +821,15 @@ InstallGlobalFunction( AutoDocWorksheet,
         
         AppendTo( filestream, "LoadPackage( \"GAPDoc\" );\n\n" );
         
-        AppendTo( filestream, "example_tree := ExtractExamples( Directory(\".\"), \"", Concatenation( book_name, ".xml" ),"\", [ ], 500 );\n\n" );
+        if current_directory_set = true then
+            
+            AppendTo( filestream, "example_tree := ExtractExamples( ", output_folder, ", \"", Concatenation( book_name, ".xml" ),"\", [ ], 500 );\n\n" );
+            
+        else
+            
+            AppendTo( filestream, "example_tree := ExtractExamples( Directory( \".\" ), \"", Concatenation( book_name, ".xml" ),"\", [ ], 500 );\n\n" );
+            
+        fi;
         
         AppendTo( filestream, "RunExamples( example_tree, rec( compareFunction := \"uptowhitespace\" ) );\n\n" );
         

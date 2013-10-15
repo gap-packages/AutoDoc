@@ -79,7 +79,7 @@ DeclareGlobalFunction( "WriteStringIntoDoc" );
 #! <Item>
 #! If TestFile is set to false, no testfile is produced. If TestFile is a string,
 #! then it is used as name of the testfile. If nothing is given, the testfile will be
-#! maketest.g
+#! maketest.g.
 #! </Item>
 #! <Mark>OutputFolder</Mark>
 #! <Item>
