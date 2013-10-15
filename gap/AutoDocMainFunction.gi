@@ -755,8 +755,6 @@ InstallGlobalFunction( AutoDocWorksheet,
     
     AppendTo( filestream, "<Body>\n" );
     
-    AppendTo( filestream, "<Index>&", book_name, ";</Index>\n" );
-    
     AppendTo( filestream, "<#Include SYSTEM \"AutoDocMainFile.xml\">\n" );
     
     AppendTo( filestream, "</Body>\n" );
@@ -768,8 +766,12 @@ InstallGlobalFunction( AutoDocWorksheet,
         AppendTo( filestream, "<Bibliography Databases=\"", bibfile, "\"/>\n" );
         
     fi;
-      
-    AppendTo( filestream, "<TheIndex/>\n" );
+    
+    if ValueOption( "CreateIndex" ) <> fail then
+        
+        AppendTo( filestream, "<TheIndex/>\n" );
+        
+    fi;
     
     AppendTo( filestream, "</Book>\n" );
     
