@@ -792,7 +792,7 @@ InstallGlobalFunction( AutoDocWorksheet,
             
         fi;
         
-        AppendTo( filestream, "LoadPackage( \" GAPDoc\" );\n\n" );
+        AppendTo( filestream, "LoadPackage( \"GAPDoc\" );\n\n" );
         
         AppendTo( filestream, "example_tree := ExtractExamples( Directory(\".\"), \"", Concatenation( book_name, ".xml" ),"\", [ ], 500 );\n\n" );
         
