@@ -606,7 +606,7 @@ InstallGlobalFunction( AutoDocWorksheet,
   function( filelist )
     local folder, filename, folder_length, filestream, plain_filename, title, author, output_folder, testfile,
           book_name, maketest_commands, commands, bibfile, bib_tmp, tree, write_title_page, table_of_contents, i,
-          testfile_output_folder, current_directory_set;
+          testfile_output_folder, current_directory_set, entity_list;
     
     write_title_page := false;
     
@@ -714,6 +714,24 @@ InstallGlobalFunction( AutoDocWorksheet,
     AppendTo( filestream, "<!DOCTYPE Book SYSTEM \"gapdoc.dtd\"\n[\n" );
     
     AppendTo( filestream, "<!ENTITY ", book_name, " '<Package>", book_name, "</Package>'>\n" );
+    
+    entity_list := ValueOption( "EntityList" );
+    
+    if IsString( entity_list ) then
+        
+        entity_list := [ entity_list ];
+        
+    fi;
+    
+    if IsList( entity_list ) then
+        
+        for i in entity_list do
+            
+            AppendTo( filestream, i, "\n" );
+            
+        od;
+        
+    fi;
     
     AppendTo( filestream, "]\n>\n" );
     
