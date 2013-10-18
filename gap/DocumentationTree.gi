@@ -691,7 +691,7 @@ InstallMethod( WriteDocumentation,
     
     AppendTo( chapter_stream, AUTODOC_XML_HEADER );
     
-    AppendTo( chapter_stream, "<Chapter Label=\"Chapter_", name, "_automatically_generated_documentation_parts\">\n" );
+    AppendTo( chapter_stream, "<Chapter Label=\"Chapter_", name, "\">\n" );
     
     replaced_name := ReplacedString( name, "_", " " );
     
@@ -781,7 +781,7 @@ InstallMethod( WriteDocumentation,
         
     fi;
     
-    AppendTo( filestream, Concatenation( [ "<Section Label=\"Chapter_", chapter_name, "_Section_", name, "_automatically_generated_documentation_parts\">\n" ] ) );
+    AppendTo( filestream, Concatenation( [ "<Section Label=\"Chapter_", chapter_name, "_Section_", name, "\">\n" ] ) );
     
     replaced_name := ReplacedString( name, "_", " " );
     
@@ -826,7 +826,7 @@ InstallMethod( WriteDocumentation,
         
     fi;
     
-    AppendTo( filestream, Concatenation( [ "<Subsection Label=\"Chapter_", chapter_name, "_Section_", section_name, "_Subsection_", name, "_automatically_generated_documentation_parts\">\n" ] ) );
+    AppendTo( filestream, Concatenation( [ "<Subsection Label=\"Chapter_", chapter_name, "_Section_", section_name, "_Subsection_", name, "\">\n" ] ) );
     
     replaced_name := ReplacedString( name, "_", " " );
     
