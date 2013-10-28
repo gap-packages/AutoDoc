@@ -761,6 +761,12 @@ InstallGlobalFunction( AutoDocWorksheet,
         
     fi;
     
+    if IsBound( tree!.worksheet_URL_string ) then
+        
+        AppendTo( filestream, "<TitleComment>\n<URL>", tree!.worksheet_URL_string, "</URL>\n</TitleComment>\n\n" );
+        
+    fi;
+    
     if IsBound( tree!.acknowledgements ) then
         
         AppendTo( filestream, "<Acknowledgements>\n" );
@@ -772,6 +778,20 @@ InstallGlobalFunction( AutoDocWorksheet,
         od;
         
         AppendTo( filestream, "</Acknowledgements>\n" );
+        
+    fi;
+    
+    if IsBound( tree!.abstract ) then
+        
+        AppendTo( filestream, "<Abstract>\n" );
+        
+        for i in tree!.abstract do
+            
+            AppendTo( filestream, i, "\n" );
+            
+        od;
+        
+        AppendTo( filestream, "</Abstract>" );
         
     fi;
     

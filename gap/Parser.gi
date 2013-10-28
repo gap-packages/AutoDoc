@@ -903,6 +903,28 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             current_string_list := tree!.acknowledgements;
             
+        end,
+        
+        @URL := function()
+            
+            tree!.worksheet_URL_string := current_command[ 2 ];
+            
+        end,
+        
+        @Abstract := function( )
+            
+            flush_and_recover( );
+            
+            Unbind( current_item );
+            
+            if not IsBound( tree!.abstract ) then
+                
+                tree!.abstract := [ ];
+                
+            fi;
+            
+            current_string_list := tree!.abstract;
+            
         end
         
     );
