@@ -761,6 +761,20 @@ InstallGlobalFunction( AutoDocWorksheet,
         
     fi;
     
+    if IsBound( tree!.acknowledgements ) then
+        
+        AppendTo( filestream, "<Acknowledgements>\n" );
+        
+        for i in tree!.acknowledgements do
+            
+            AppendTo( filestream, i, "\n" );
+            
+        od;
+        
+        AppendTo( filestream, "</Acknowledgements>\n" );
+        
+    fi;
+    
     AppendTo( filestream, "</TitlePage>" );
     
     table_of_contents := ValueOption( "TableOfContents" );

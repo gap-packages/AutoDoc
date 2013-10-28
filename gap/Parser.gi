@@ -887,6 +887,22 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             tree!.worksheet_date := current_command[ 2 ];
             
+        end,
+        
+        @Acknowledgements := function()
+            
+            flush_and_recover();
+            
+            Unbind( current_item );
+            
+            if not IsBound( tree!.acknowledgements ) then
+                
+                tree!.acknowledgements := [ ];
+                
+            fi;
+            
+            current_string_list := tree!.acknowledgements;
+            
         end
         
     );
