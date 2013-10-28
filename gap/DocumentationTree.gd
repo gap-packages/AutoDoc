@@ -61,7 +61,7 @@ DeclareOperation( "DocumentationDummy",
                   [ IsString, IsList ] );
 
 DeclareOperation( "DocumentationExample",
-                  [ IsList, IsList ] );
+                  [ IsList, IsList, IsBool ] );
 
 ######################################
 ##

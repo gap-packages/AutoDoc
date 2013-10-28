@@ -246,7 +246,7 @@ InstallMethod( DocumentationNode,
         
     elif type = "EXAMPLE" then
         
-        node := DocumentationExample( content.text, content.chapter_info );
+        node := DocumentationExample( content.text, content.chapter_info, content.is_tested_example );
         
     elif type = "DUMMY" then
         
@@ -317,13 +317,15 @@ end );
 
 ##
 InstallMethod( DocumentationExample,
-               [ IsList, IsList ],
+               [ IsList, IsList, IsBool ],
                
-  function( string_list, chapter_info )
+  function( string_list, chapter_info, is_tested_example )
     local level, node;
     
     node := rec( content := string_list,
-                 level := 0 );
+                 level := 0,
+                 is_tested_example := is_tested_example
+               );
     
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeExampleNodes,
                              ChapterInfo, chapter_info );
@@ -899,7 +901,7 @@ InstallMethod( WriteDocumentation,
                [ IsTreeForDocumentationExampleNodeRep, IsStream ],
                
   function( node, filestream )
-    local contents, i;
+    local contents, i, tested, inserted_string;
     
     if node!.level > ValueOption( "level_value" ) then
         
@@ -909,7 +911,23 @@ InstallMethod( WriteDocumentation,
     
     contents := node!.content;
     
-    AppendTo( filestream, "<Example><![CDATA[\n" );
+    tested := node!.is_tested_example;
+    
+    if tested = true then
+        
+        inserted_string := "Example";
+        
+    elif tested = false then
+        
+        inserted_string := "Log";
+        
+    else
+        
+        Error( "This should not happen!" );
+        
+    fi;
+    
+    AppendTo( filestream, "<", inserted_string, "><![CDATA[\n" );
     
     for i in contents do
         
@@ -917,6 +935,6 @@ InstallMethod( WriteDocumentation,
         
     od;
     
-    AppendTo( filestream, "]]></Example>\n\n" );
+    AppendTo( filestream, "]]></", inserted_string, ">\n\n" );
     
 end );
