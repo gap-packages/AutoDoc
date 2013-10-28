@@ -263,6 +263,13 @@ Order(S3);
 ]]></Listing>
 </Subsection>
 
+<Subsection Label="@Log">
+<Index Key="Log"><C>@Log and @EndLog</C></Index>
+<Heading>@Log and @EndLog</Heading>
+Works just like the @Example command, but the example
+wont be testet. See the GAPDoc manual for more information.
+</Subsection>
+
 <Subsection Label="@System">
 <Index Key="@System"><C>@System and @InsertSystem</C></Index>
 <Heading>@System <A>name</A> and @InsertSystem <A>name</A></Heading>

@@ -77,6 +77,19 @@ DeclareGlobalFunction( "WriteStringIntoDoc" );
 #!  <Item>
 #!  Adds the string <A>date</A> as a date to the titlepage of the pdf.
 #!  </Item>
+#!  <Mark>Abstract</Mark>
+#!  <Item>
+#!  Adds the following lines as abstract to the title of the worksheet.
+#!  </Item>
+#!  <Mark>Acknowledgement</Mark>
+#!  <Item>
+#!  Adds the following lines as acknowledgement to the title of the worksheet.
+#!  </Item>
+#!  <Mark>URL <A>url</A></Mark>
+#!  <Item>
+#!  Adds the URL <A>url</A> as a link to the titlepage of the worksheet.
+#!  This is done in the TitleComment section of the TitlePage.
+#!  </Item>
 #!  </List>
 #!  Note that some commands have no effect, i.e. the level command.
 #! The options are as follows.
