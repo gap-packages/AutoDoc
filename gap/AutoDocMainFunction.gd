@@ -18,6 +18,8 @@ DeclareGlobalVariable( "AUTOMATIC_DOCUMENTATION" );
 
 DeclareGlobalVariable( "AUTODOC_XML_HEADER" );
 
+DeclareGlobalFunction( "AUTODOC_WriteOnce" );
+
 
 # Documentation for this global function can be found in gap/AutoDocDocEntries.g
 # respectively in the manual.
@@ -47,6 +49,8 @@ DeclareGlobalFunction( "SetCurrentAutoDocSection" );
 DeclareGlobalFunction( "ResetCurrentAutoDocSection" );
 
 DeclareGlobalFunction( "WriteStringIntoDoc" );
+
+DeclareGlobalFunction( "CreateMakeTest" );
 
 #! @Chapter AutoDoc worksheets
 #! @Section Worksheets

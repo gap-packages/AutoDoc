@@ -27,6 +27,18 @@ InstallValue( AUTODOC_XML_HEADER,
     )
 );
 
+InstallGlobalFunction( AUTODOC_WriteOnce,
+            
+  function( record, name, val )
+    
+    if not IsBound( record.(name) ) then
+        
+        record.(name) := val;
+        
+    fi;
+    
+end );
+
 ##
 InstallGlobalFunction( CreateDefaultChapterData,
                        
@@ -606,7 +618,7 @@ InstallGlobalFunction( AutoDocWorksheet,
   function( filelist )
     local folder, filename, folder_length, filestream, plain_filename, title, author, output_folder, testfile,
           book_name, maketest_commands, commands, bibfile, bib_tmp, tree, write_title_page, table_of_contents, i,
-          testfile_output_folder, current_directory_set, entity_list;
+          testfile_output_folder, current_directory_set, entity_list, maketest_record, testfile_name;
     
     write_title_page := false;
     
@@ -849,11 +861,21 @@ InstallGlobalFunction( AutoDocWorksheet,
     
     if testfile <> false then
         
-        if testfile = fail then
+        if IsString( testfile ) then
             
-            testfile := "maketest.g";
+            testfile_name := testfile;
+            
+            testfile := rec( );
+            
+        elif IsBool( testfile ) then
+            
+            testfile := rec( );
+            
+            testfile_name := "maketest.g";
             
         fi;
+        
+        AUTODOC_WriteOnce( testfile, "name", testfile_name );
         
         testfile_output_folder := ValueOption( "TestFileOutputFolder" );
         
@@ -879,39 +901,108 @@ InstallGlobalFunction( AutoDocWorksheet,
             
         fi;
         
-        filestream := AUTODOC_OutputTextFile( testfile_output_folder, testfile );
+        AUTODOC_WriteOnce( testfile, "folder", testfile_output_folder );
         
-        if maketest_commands <> fail then
+        if IsString( testfile.folder ) then
             
-            for commands in maketest_commands do
-                
-                AppendTo( filestream, commands );
-                
-                AppendTo( filestream, "\n\n" );
-                
-            od;
+            testfile.folder := Directory( testfile.folder );
             
         fi;
         
-        AppendTo( filestream, "LoadPackage( \"GAPDoc\" );\n\n" );
+        AUTODOC_WriteOnce( testfile, "commands", maketest_commands );
         
-        if current_directory_set = true then
+        if current_directory_set then
             
-            AppendTo( filestream, "example_tree := ExtractExamples( ", output_folder, ", \"", Concatenation( book_name, ".xml" ),"\", [ ], 500 );\n\n" );
-            
-        else
-            
-            AppendTo( filestream, "example_tree := ExtractExamples( Directory( \".\" ), \"", Concatenation( book_name, ".xml" ),"\", [ ], 500 );\n\n" );
+            AUTODOC_WriteOnce( testfile, "scan_dir", Directory( "." ) );
             
         fi;
         
-        AppendTo( filestream, "RunExamples( example_tree, rec( compareFunction := \"uptowhitespace\" ) );\n\n" );
+        AUTODOC_WriteOnce( testfile, "scan_dir", output_folder );
         
-        AppendTo( filestream, "QUIT;\n" );
+        AUTODOC_WriteOnce( testfile, "book_name", book_name );
+        
+        CreateMakeTest( testfile );
         
     fi;
     
     return true;
+    
+end );
+
+InstallGlobalFunction( CreateMakeTest,
+                       
+  function( argument_rec )
+    local filename, folder, filestream, i, scan_dir, book_name;
+    
+    if IsBound( argument_rec.name ) then
+        
+        filename := argument_rec.name;
+        
+    else
+        
+        filename := "maketest.g";
+        
+    fi;
+    
+    if IsBound( argument_rec.folder ) then
+        
+        folder := argument_rec.folder;
+        
+    else
+        
+        folder := Directory( "." );
+        
+    fi;
+    
+    filestream := AUTODOC_OutputTextFile( folder, filename );
+    
+    if IsBound( argument_rec.commands ) then
+        
+        if IsString( argument_rec.commands ) and argument_rec.commands <> [ ] then
+            
+            argument_rec.commands := [ argument_rec.commands ];
+            
+        fi;
+        
+        for i in argument_rec.commands do
+            
+            AppendTo( filestream, i );
+            
+            AppendTo( filestream, "\n\n" );
+            
+        od;
+        
+    fi;
+    
+    AppendTo( filestream, "LoadPackage( \"GAPDoc\" );\n\n" );
+    
+    if IsBound( argument_rec.scan_dir ) then
+        
+        scan_dir := argument_rec.scan_dir;
+        
+    else
+        
+        scan_dir := ".";
+        
+    fi;
+    
+    if IsBound( argument_rec.book_name ) then
+        
+        book_name := argument_rec.book_name;
+        
+    else
+        
+        Error( "No book name given to extract the examples." );
+        
+    fi;
+    
+    AppendTo( filestream, "example_tree := ExtractExamples( ", scan_dir, ", \"", Concatenation( book_name, ".xml" ),"\", [ ], 500 );\n\n" );
+    
+    AppendTo( filestream, "RunExamples( example_tree, rec( compareFunction := \"uptowhitespace\" ) );\n\n" );
+    
+    AppendTo( filestream, "QUIT;\n" );
+    
+    CloseStream( filestream );
     
 end );
 

@@ -118,6 +118,7 @@ function( arg )
     tmp( "scaffold" );
     tmp( "autodoc" );
     tmp( "gapdoc" );
+    tmp( "maketest" );
     
     #
     # Setup the output directory
@@ -235,7 +236,21 @@ function( arg )
     elif IsBool( opt.gapdoc ) and opt.gapdoc = true then
         gapdoc := rec();
     fi;
-
+    
+    #
+    # Extract test settings
+    #
+    
+    if ( not IsBound( opt.maketest ) ) or ( IsBool( opt.maketest ) and opt.maketest = true ) then
+        
+        maketest := rec( );
+        
+    elif IsRecord( opt.maketest ) then
+        
+        maketest := opt.maketest;
+        
+    fi;
+    
     if IsBound( gapdoc ) then
 
         if not IsBound( gapdoc.main ) then
@@ -378,6 +393,34 @@ function( arg )
         # now, doing it does not hurt.
         GAPDocManualLab( pkg );
 
+    fi;
+    
+    if IsBound( maketest ) then
+        
+        AUTODOC_WriteOnce( maketest, "filename", "maketest.g" );
+        
+        AUTODOC_WriteOnce( maketest, "folder", doc_dir );
+        
+        AUTODOC_WriteOnce( maketest, "scan_dir", doc_dir );
+        
+        if IsString( maketest.folder ) then
+            
+            maketest.folder := Directory( maketest.folder );
+            
+        fi;
+        
+        if IsString( maketest.scan_dir ) then
+            
+            maketest.scan_dir := Directory( maketest.scan_dir );
+            
+        fi;
+        
+        AUTODOC_WriteOnce( maketest, "commands", [ ] );
+        
+        AUTODOC_WriteOnce( maketest, "book_name", gapdoc.main );
+        
+        CreateMakeTest( maketest );
+        
     fi;
 
     return true;
