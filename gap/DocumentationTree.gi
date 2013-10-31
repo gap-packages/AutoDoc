@@ -260,6 +260,12 @@ InstallMethod( DocumentationNode,
     
     node!.level := content.level;
     
+    if IsBound( content.system_scope ) then
+        
+        SetDummyName( node, content.system_scope );
+        
+    fi;
+    
     return node;
     
 end );
@@ -483,15 +489,16 @@ end );
 InstallMethod( Add,
                "for dummy fillers",
                [ IsTreeForDocumentation, IsTreeForDocumentationNodeRep and HasDummyName ],
+               10000, ##WHY IS THIS NECESSARY 
                
   function( tree, node )
     local name;
     
-    name := Name( node );
+    name := DummyName( node );
     
     if IsBound( tree!.dummies.(name) ) then
         
-        tree!.dummies!.(name).content := node;
+        tree!.dummies!.(name)!.content := node;
         
     else
         

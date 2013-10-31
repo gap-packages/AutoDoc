@@ -466,15 +466,21 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     flush_and_recover := function()
         local node;
         
-        if IsBound( current_item ) then
+        if IsBound( current_item ) and  ( current_item!.text <> [ ] or current_item.node_type <> "TEXT" ) then
             
             node := DocumentationNode( current_item );
             
             Add( tree, node );
             
+            current_item := rec( );
+            
         fi;
-        
-        current_item := rec( );
+            
+        if not IsBound( current_item ) then
+            
+            current_item := rec( );
+            
+        fi;
         
         current_item.chapter_info := chapter_info;
         
@@ -485,6 +491,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         current_item.text := [ ];
         
         current_string_list := current_item.text;
+        
+        if IsBound( system_scope ) then
+            
+            current_item.system_scope := system_scope;
+            
+            Unbind( system_scope );
+            
+        fi;
         
         if IsBound( scope_group ) then
             
@@ -783,9 +797,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
         @System := function()
             
-            flush_and_recover();
-            
             system_scope := current_command[ 2 ];
+            
+            flush_and_recover();
             
         end,
         
