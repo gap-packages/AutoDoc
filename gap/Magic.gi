@@ -241,7 +241,7 @@ function( arg )
     # Extract test settings
     #
     
-    if ( not IsBound( opt.maketest ) ) or ( IsBool( opt.maketest ) and opt.maketest = true ) then
+    if IsBool( opt.maketest ) and opt.maketest = true then
         
         maketest := rec( );
         
@@ -399,7 +399,7 @@ function( arg )
         
         AUTODOC_WriteOnce( maketest, "filename", "maketest.g" );
         
-        AUTODOC_WriteOnce( maketest, "folder", doc_dir );
+        AUTODOC_WriteOnce( maketest, "folder", pkg_dir );
         
         AUTODOC_WriteOnce( maketest, "scan_dir", doc_dir );
         
