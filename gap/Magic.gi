@@ -91,8 +91,8 @@ end );
 #
 InstallGlobalFunction( AutoDoc,
 function( arg )
-    local pkg, package_info, opt, scaffold, gapdoc, autodoc,
-          pkg_dir, doc_dir, doc_dir_rel, d, tmp;
+    local pkg, package_info, opt, scaffold, gapdoc, maketest,
+          autodoc, pkg_dir, doc_dir, doc_dir_rel, d, tmp;
     
     pkg := arg[1];
     package_info := PackageInfo( pkg )[ 1 ];
