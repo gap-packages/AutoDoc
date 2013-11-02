@@ -529,7 +529,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 
             fi;
             
-            if filestream = fail or PositionSublist( temp_curr_line, "@EndExample" ) <> fail or PositionSublist( temp_curr_line, "@Log" ) <> fail then
+            if filestream = fail or PositionSublist( temp_curr_line, "@EndExample" ) <> fail or PositionSublist( temp_curr_line, "@EndLog" ) <> fail then
                 
                 break;
                 
