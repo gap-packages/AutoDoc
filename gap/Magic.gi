@@ -241,14 +241,12 @@ function( arg )
     # Extract test settings
     #
     
-    if IsBool( opt.maketest ) and opt.maketest = true then
-        
-        maketest := rec( );
-        
-    elif IsRecord( opt.maketest ) then
-        
-        maketest := opt.maketest;
-        
+    if IsBound( opt.maketest ) then
+        if IsRecord( opt.maketest ) then
+            maketest := opt.maketest;
+        elif opt.maketest = true then
+            maketest := rec( );
+        fi;
     fi;
     
     if IsBound( gapdoc ) then
