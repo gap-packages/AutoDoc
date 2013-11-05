@@ -134,5 +134,10 @@ DeclareGlobalFunction( "CreateMakeTest" );
 #!  to index. It will create an error otherwise.
 #! </Item>
 #! </List>
+#! <Mark>EntityList</Mark>
+#! <Item>
+#!  Works like the entities part in the AutoDoc command.
+#! </Item>
+#! 
 #! @Arguments list_of_filenames : BookName, TestFile, OutputFolder, TestFileCommands, Bibliography
 DeclareGlobalFunction( "AutoDocWorksheet" );
