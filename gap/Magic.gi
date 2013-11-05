@@ -401,6 +401,8 @@ function( arg )
         
         AUTODOC_WriteOnce( maketest, "scan_dir", doc_dir );
         
+        AUTODOC_WriteOnce( maketest, "files_to_scan", gapdoc.files );
+        
         if IsString( maketest.folder ) then
             
             maketest.folder := Directory( maketest.folder );

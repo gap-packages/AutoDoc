@@ -944,7 +944,17 @@ end );
 InstallGlobalFunction( CreateMakeTest,
                        
   function( argument_rec )
-    local filename, folder, filestream, i, scan_dir, book_name;
+    local filename, folder, filestream, i, scan_dir, book_name, scan_list;
+    
+    if IsBound( argument_rec.files_to_scan ) then
+        
+        scan_list := argument_rec.files_to_scan;
+        
+    else
+        
+        scan_list := [ ];
+        
+    fi;
     
     if IsBound( argument_rec.name ) then
         
@@ -986,6 +996,8 @@ InstallGlobalFunction( CreateMakeTest,
         
     fi;
     
+    AppendTo( filestream, "AUTODOC_file_scan_list := ", scan_list, ";\n\n" );
+    
     AppendTo( filestream, "LoadPackage( \"GAPDoc\" );\n\n" );
     
     if IsBound( argument_rec.scan_dir ) then
@@ -1008,7 +1020,7 @@ InstallGlobalFunction( CreateMakeTest,
         
     fi;
     
-    AppendTo( filestream, "example_tree := ExtractExamples( ", scan_dir, ", \"", Concatenation( book_name, ".xml" ),"\", [ ], 500 );\n\n" );
+    AppendTo( filestream, "example_tree := ExtractExamples( ", scan_dir, ", \"", Concatenation( book_name, ".xml" ),"\", AUTODOC_file_scan_list, 500 );\n\n" );
     
     AppendTo( filestream, "RunExamples( example_tree, rec( compareFunction := \"uptowhitespace\" ) );\n\n" );
     
