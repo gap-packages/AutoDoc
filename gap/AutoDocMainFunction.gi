@@ -296,7 +296,13 @@ InstallGlobalFunction( CreateMainPage,
     
     for i in opt.entities do
         
-        AppendTo( filestream, "<!ENTITY ", i, " '<Package>", i, "</Package>'>\n" );
+        if IsString( i ) then
+            
+            i := [ "Package", i ];
+            
+        fi;
+        
+        AppendTo( filestream, "<!ENTITY ", i[ 2 ], " '<", i[ 1 ], ">", i[ 2 ], "</", i[ 1 ], ">'>\n" );
         
     od;
     
@@ -739,7 +745,13 @@ InstallGlobalFunction( AutoDocWorksheet,
         
         for i in entity_list do
             
-            AppendTo( filestream, i, "\n" );
+            if IsString( i ) then
+                
+                i := [ "Package", i ];
+                
+            fi;
+            
+            AppendTo( filestream, "<!ENTITY ", i[ 2 ], " '<", i[ 1 ], ">", i[ 2 ], "</", i[ 1 ], ">'>\n" );
             
         od;
         

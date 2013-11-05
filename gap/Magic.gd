@@ -116,12 +116,15 @@
 ####
 ####                 <Mark><A>entities</A></Mark>
 ####                 <Item>
-####                     A list of package names which are used to define corresponding XML entities.
+####                     A list of package names or other entities which are used to define corresponding XML entities.
 ####                     For example, if set to a list containing the string <Q>SomePackage</Q>,
 ####                     then the following is added to the XML preamble:
 ####                     <Listing><![CDATA[<!ENTITY SomePackage '<Package>SomePackage</Package>'>]]></Listing>
 ####                     This allows you to write <Q>&amp;SomePackage;</Q> in your documentation
-####                     to reference that package.
+####                     to reference that package. If another type of entity is desired, one can simply add,
+####                     instead of a string, add a two entry list <A>a</A> to the list. It will be handled as
+####                     <Listing><![CDATA[<!ENTITY a[ 2 ] '<a[ 1 ]>a[ 2 ]</a[ 1 ]>'>]]></Listing>,
+####                     so please be careful.
 ####                 </Item>
 #!
 #!         <Mark><A>TitlePage</A></Mark>
