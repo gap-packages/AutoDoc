@@ -905,8 +905,6 @@ InstallGlobalFunction( AutoDocWorksheet,
             
             testfile_output_folder := Directory( testfile_output_folder );
             
-            current_directory_set := true;
-            
         else
             
             Error( "TestFileOutputFolder must be \"current\" or directory" );
