@@ -30,6 +30,8 @@ InstallGlobalFunction( CreateDocEntryForCategory,
                          optional_arguments := arg{ [ 4 .. Length( arg ) ] },
                        );
     
+    
+    
     AutoDoc_CreateCompleteEntry( argument_rec );
     
 end );

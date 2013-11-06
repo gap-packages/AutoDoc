@@ -270,6 +270,13 @@ Works just like the @Example command, but the example
 wont be testet. See the GAPDoc manual for more information.
 </Subsection>
 
+<Subsection Label="@DoNotReadRestOfFile">
+<Index Key="DoNotReadRestOfFile"><C>@DoNotReadRestOfFile</C></Index>
+<Heading>@DoNotReadRestOfFile</Heading>
+Prevents the rest of the file from being read by the parser. Useful for
+not finished or temporary files.
+</Subsection>
+
 <Subsection Label="@System">
 <Index Key="@System"><C>@System and @InsertSystem</C></Index>
 <Heading>@System <A>name</A> and @InsertSystem <A>name</A></Heading>

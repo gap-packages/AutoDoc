@@ -168,7 +168,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     local current_item, flush_and_recover, chapter_info, current_string_list,
           Scan_for_Declaration_part, flush_and_prepare_for_item, current_line, filestream,
           level_scope, scope_group, read_example, command_function_record, autodoc_read_line,
-          current_command, was_declaration, filename, system_scope, groupnumber, chunk_list;
+          current_command, was_declaration, filename, system_scope, groupnumber, chunk_list, rest_of_file_skipped;
     
     groupnumber := 0;
     
@@ -592,6 +592,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
+        @DoNotReadRestOfFile := function()
+            
+            flush_and_recover( );
+            
+            rest_of_file_skipped := true;
+            
+        end,
+        
         @AutoDoc := function()
             
             autodoc_read_line := fail;
@@ -943,12 +951,22 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
     );
     
+    rest_of_file_skipped := false;
+    
     ##Now read the files.
     for filename in filename_list do
         
         filestream := InputTextFile( filename );
         
         while true do
+            
+            if rest_of_file_skipped = true then
+                
+                rest_of_file_skipped := false;
+                
+                break;
+                
+            fi;
             
             current_line := Normalized_ReadLine( filestream );
             
