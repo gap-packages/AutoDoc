@@ -466,7 +466,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     flush_and_recover := function()
         local node;
         
-        if IsBound( current_item ) and  ( current_item!.text <> [ ] or current_item.node_type <> "TEXT" ) then
+        if IsBound( current_item ) and  ( current_item <> [ ] or current_item.node_type <> "TEXT" ) then
             
             node := DocumentationNode( current_item );
             

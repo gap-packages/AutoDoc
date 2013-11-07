@@ -54,6 +54,9 @@ DeclareOperation( "DocumentationNode",
 DeclareOperation( "DocumentationText",
                   [ IsList, IsList ] );
 
+DeclareOperation( "DocumentationText",
+                  [ IsRecord ] );
+
 DeclareOperation( "DocumentationItem",
                   [ IsRecord ] );
 

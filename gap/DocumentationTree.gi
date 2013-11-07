@@ -238,7 +238,7 @@ InstallMethod( DocumentationNode,
     
     if type = "TEXT" then
         
-        node := DocumentationText( content.text, content.chapter_info );
+        node := DocumentationText( content );
         
     elif type = "ITEM" then
         
@@ -276,6 +276,29 @@ InstallMethod( DocumentationText,
                
   function( text, chapter_info )
     local level, textnode;
+    
+    textnode := rec( content := text,
+                     level := 0 );
+    
+    ObjectifyWithAttributes( textnode,
+                             TheTypeOfDocumentationTreeNodesForText,
+                             ChapterInfo, chapter_info
+                           );
+    
+    return textnode;
+    
+end );
+
+##
+InstallMethod( DocumentationText,
+               [ IsRecord ],
+               
+  function( record )
+    local text, chapter_info, level, textnode;
+    
+    text := record.text;
+    
+    chapter_info := record.chapter_info;
     
     textnode := rec( content := text,
                      level := 0 );
@@ -515,12 +538,6 @@ InstallMethod( Add,
                
   function( tree, node )
     local chapter_info, entry_node;
-    
-    if node!.content = [ ] then
-        
-        return;
-        
-    fi;
     
     chapter_info := ChapterInfo( node );
     
