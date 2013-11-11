@@ -439,13 +439,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     flush_and_prepare_for_item := function()
         local node;
         
-        if current_item.node_type = "ITEM" then
+        if IsBound( current_item ) and current_item.node_type = "ITEM" then
             
             return;
             
         fi;
         
-        if not current_item.node_type = "TEXT" or not current_item.text = [ ] then
+        if not IsBound( current_item )  or not current_item.node_type = "TEXT" or not current_item.text = [ ] then
             
             flush_and_recover();
             
