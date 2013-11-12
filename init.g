@@ -18,8 +18,8 @@ ReadPackage( "AutoDoc", "gap/AutoDocMainFunction.gd" );
 
 ReadPackage( "AutoDoc", "gap/ToolFunctions.gd" );
 
-ReadPackage( "AutoDoc", "gap/CreateDocumentationEntries.gd" );
-
-ReadPackage( "AutoDoc", "gap/DeclareWithDocumentation.gd" );
+# ReadPackage( "AutoDoc", "gap/CreateDocumentationEntries.gd" );
+# 
+# ReadPackage( "AutoDoc", "gap/DeclareWithDocumentation.gd" );
 
 ReadPackage( "AutoDoc", "gap/Magic.gd" );

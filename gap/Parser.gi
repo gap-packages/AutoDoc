@@ -445,7 +445,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         fi;
         
-        if not IsBound( current_item )  or not current_item.node_type = "TEXT" or not current_item.text = [ ] then
+        if not IsBound( current_item ) or not current_item.node_type = "TEXT" or not current_item.text = [ ] then
             
             flush_and_recover();
             
