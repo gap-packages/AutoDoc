@@ -50,3 +50,6 @@ DeclareOperation( "SetChunk",
 
 DeclareOperation( "SetSystem",
                   [ IsContextObjectForDocumentation, IsString ] );
+
+DeclareOperation( "SetExample",
+                  [ IsContextObjectForDocumentation, IsString ] );

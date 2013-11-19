@@ -225,3 +225,48 @@ InstallMethod( SetSystem,
     context!.current := [ [ "SYSTEM", system ] ];
     
 end );
+
+##
+InstallMethod( SetExample,
+               [ IsContextObjectForDocumentation, IsString ],
+               
+  function( context, example )
+    
+    Add( context!.stack, context!.current );
+    
+    context!.current := [ [ "EXAMPLE", example ] ];
+    
+end );
+
+########################################
+##
+## Display & View
+##
+########################################
+
+##
+InstallMethod( ViewObj,
+               [ IsContextObjectForDocumentation ],
+               
+  function( context )
+  
+  Print( "<", context!.current, ">\n" );
+  
+end );
+
+##
+InstallMethod( Display,
+               [ IsContextObjectForDocumentation ],
+               
+  function( context )
+    local i;
+    
+    for i in context!.stack do
+        
+        Print( i, "\n" );
+        
+    od;
+    
+    Print( context!.current, "\n" );
+    
+end );
