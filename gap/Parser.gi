@@ -729,7 +729,15 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             flush_and_prepare_for_item();
             
-            current_item.return_value := current_command[ 2 ];
+            current_item.return_value := [ ];
+            
+            current_string_list := current_item.return_value;
+            
+            if current_command[ 2 ] <> "" then
+                
+                Add( current_string_list, current_command[ 2 ] );
+                
+            fi;
             
         end,
         

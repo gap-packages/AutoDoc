@@ -381,6 +381,12 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
         
     fi;
     
+    if IsList( return_value ) and ( not IsString( return_value ) ) and return_value <> "" then
+        
+        return_value := JoinStringsWithSeparator( return_value, " " );
+        
+    fi;
+    
     description := [ ];
     
     ##collect description (for readability not in the loop above)
