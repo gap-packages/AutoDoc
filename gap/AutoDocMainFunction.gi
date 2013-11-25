@@ -976,7 +976,7 @@ InstallGlobalFunction( CreateMakeTest,
     
     filestream := AUTODOC_OutputTextFile( folder, filename );
     
-    if IsBound( argument_rec.commands ) then
+    if IsBound( argument_rec.commands ) and IsList( argument_rec.commands ) then
         
         if IsString( argument_rec.commands ) and argument_rec.commands <> [ ] then
             
