@@ -143,17 +143,17 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
     fi;
     
-    item_rec.type := entries[ 1 ];
+    item_rec!.item_type := entries[ 1 ];
     
-    item_rec.doc_stream_type := entries[ 2 ];
+    item_rec!.doc_stream_type := entries[ 2 ];
     
-    if not IsBound( item_rec.chapter_info ) then
-        item_rec.chapter_info := default_chapter_data.( entries[ 2 ] );
+    if not IsBound( item_rec!.chapter_info ) then
+        item_rec!.chapter_info := default_chapter_data.( entries[ 2 ] );
     fi;
     
-    if IsBound( ret_val ) and item_rec.return_value = false then
+    if IsBound( ret_val ) and ( not IsBound( item_rec!.return_value ) or item_rec!.return_value = false ) then
         
-        item_rec.return_value := ret_val;
+        item_rec!.return_value := [ ret_val ];
         
     fi;
     
@@ -168,7 +168,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     local current_item, flush_and_recover, chapter_info, current_string_list,
           Scan_for_Declaration_part, flush_and_prepare_for_item, current_line, filestream,
           level_scope, scope_group, read_example, command_function_record, autodoc_read_line,
-          current_command, was_declaration, filename, system_scope, groupnumber, chunk_list, rest_of_file_skipped;
+          current_command, was_declaration, filename, system_scope, groupnumber, chunk_list, rest_of_file_skipped,
+          context_stack, new_man_item, add_man_item, Reset;
     
     groupnumber := 0;
     
@@ -176,9 +177,51 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     
     autodoc_read_line := false;
     
+    context_stack := [ ];
+    
     chapter_info := [ ];
     
-    chunk_list := rec( );
+    new_man_item := function( )
+        local man_item;
+        
+        if IsTreeForDocumentationNodeForManItemRep( current_item ) then
+            
+            return current_item;
+            
+        fi;
+        
+        man_item := DocumentationManItem( tree );
+        
+        Add( context_stack, current_item );
+        
+        man_item!.chapter_info := ShallowCopy( chapter_info );
+        
+        man_item!.tester_names := fail;
+        
+        return man_item;
+        
+    end;
+    
+    add_man_item := function( )
+        local man_item;
+        
+        man_item := current_item;
+        
+        current_item := Remove( context_stack );
+        
+        Add( context_stack, man_item );
+        
+    end;
+    
+    Reset := function( )
+        
+        chapter_info := [ ];
+        
+        context_stack := [ ];
+        
+        Unbind( current_item );
+        
+    end;
     
     Scan_for_Declaration_part := function()
         local declare_position, current_type, filter_string, has_filters,
@@ -188,7 +231,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
         if declare_position <> fail then
             
-            flush_and_prepare_for_item();
+            current_item := new_man_item();
             
             current_line := current_line{[ declare_position + 7 .. Length( current_line ) ]};
             
@@ -226,9 +269,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             current_line := StripBeginEnd( current_line, " " );
             
-            current_item.name := current_line{ [ 1 .. Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) - 1 ] };
+            current_item!.name := current_line{ [ 1 .. Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) - 1 ] };
             
-            current_item.name := StripBeginEnd( ReplacedString( current_item.name, "\"", "" ), " " );
+            current_item!.name := StripBeginEnd( ReplacedString( current_item!.name, "\"", "" ), " " );
             
             current_line := current_line{ [ Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) + 1 .. Length( current_line ) ] };
             
@@ -282,31 +325,31 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             if filter_string <> false then
                 
-                if current_item.tester_names = fail then
+                if current_item!.tester_names = fail then
                     
-                    current_item.tester_names := filter_string;
+                    current_item!.tester_names := filter_string;
                     
                 fi;
                 
                 ##Adjust arguments
                 
-                if not IsBound( current_item.arguments ) then
+                if not IsBound( current_item!.arguments ) then
                     
                     if has_filters = "One" then
                         
-                        current_item.arguments := "arg";
+                        current_item!.arguments := "arg";
                         
                     elif has_filters = "List" then
                         
-                        current_item.arguments := List( [ 1 .. Length( SplitString( filter_string, "," ) ) ], i -> Concatenation( "arg", String( i ) ) );
+                        current_item!.arguments := List( [ 1 .. Length( SplitString( filter_string, "," ) ) ], i -> Concatenation( "arg", String( i ) ) );
                         
-                        if Length( current_item.arguments ) = 1 then
+                        if Length( current_item!.arguments ) = 1 then
                             
-                            current_item.arguments := "arg";
+                            current_item!.arguments := "arg";
                             
                         else
                             
-                            current_item.arguments := JoinStringsWithSeparator( current_item.arguments, "," );
+                            current_item!.arguments := JoinStringsWithSeparator( current_item!.arguments, "," );
                             
                         fi;
                         
@@ -316,6 +359,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 
             fi;
             
+            add_man_item();
+            
             return true;
             
         fi;
@@ -324,11 +369,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
         if declare_position <> fail then
             
-            flush_and_prepare_for_item();
+            current_item := new_man_item();
             
-            current_item.type := "Func";
+            current_item!.item_type := "Func";
             
-            current_item.doc_stream_type := "operations";
+            current_item!.doc_stream_type := "operations";
             
             ##Find name
             
@@ -337,11 +382,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             current_line := current_line{ [ position_parentesis + 1 .. Length( current_line ) ] };
             
             ## find next colon
-            current_item.name := "";
+            current_item!.name := "";
             
             while PositionSublist( current_line, "," ) = fail do
                 
-                Append( current_item.name, current_line );
+                Append( current_item!.name, current_line );
                 
                 current_line := Normalized_ReadLine( filestream );
                 
@@ -349,11 +394,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             position_parentesis := PositionSublist( current_line, "," );
             
-            Append( current_item.name, current_line{[ 1 .. position_parentesis - 1 ]} );
+            Append( current_item!.name, current_line{[ 1 .. position_parentesis - 1 ]} );
             
-            NormalizeWhitespace( current_item.name );
+            NormalizeWhitespace( current_item!.name );
             
-            current_item.name := StripBeginEnd( current_item.name, " " );
+            current_item!.name := StripBeginEnd( current_item!.name, " " );
             
             while PositionSublist( current_line, "[" ) = fail do
                 
@@ -381,14 +426,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             NormalizeWhitespace( filter_string );
             
-            if current_item.tester_names = fail then
+            if current_item!.tester_names = fail then
                 
-                current_item.tester_names := filter_string;
+                current_item!.tester_names := filter_string;
                 
             fi;
             
             ##Maybe find some argument names
-            if not IsBound( current_item.arguments ) then
+            if not IsBound( current_item!.arguments ) then
             
                 while PositionSublist( current_line, "function(" ) = fail and PositionSublist( current_line, ");" ) = fail do
                     
@@ -422,11 +467,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                     
                     filter_string := StripBeginEnd( filter_string, " " );
                     
-                    current_item.arguments := filter_string;
+                    current_item!.arguments := filter_string;
                     
                 fi;
                 
             fi;
+            
+            add_man_item();
             
             return true;
             
@@ -436,86 +483,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
     end;
     
-    flush_and_prepare_for_item := function()
-        local node;
-        
-        if IsBound( current_item ) and current_item.node_type = "ITEM" then
-            
-            return;
-            
-        fi;
-        
-        if not IsBound( current_item ) or not current_item.node_type = "TEXT" or not current_item.text = [ ] then
-            
-            flush_and_recover();
-            
-        fi;
-        
-        current_item.node_type := "ITEM";
-        
-        current_item.description := [ ];
-        
-        current_item.return_value := false;
-        
-        current_item.label_list := "";
-        
-        current_item.tester_names := fail;
-        
-    end;
-    
-    flush_and_recover := function()
-        local node;
-        
-        if IsBound( current_item ) and  ( current_item!.text <> [ ] or current_item.node_type <> "TEXT" ) then
-            
-            node := DocumentationNode( current_item );
-            
-            Add( tree, node );
-            
-            current_item := rec( );
-            
-        fi;
-            
-        if not IsBound( current_item ) then
-            
-            current_item := rec( );
-            
-        fi;
-        
-        current_item.chapter_info := chapter_info;
-        
-        current_item.level := level_scope;
-        
-        current_item.node_type := "TEXT";
-        
-        current_item.text := [ ];
-        
-        current_string_list := current_item.text;
-        
-        if IsBound( system_scope ) then
-            
-            current_item.system_scope := system_scope;
-            
-            Unbind( system_scope );
-            
-        fi;
-        
-        if IsBound( scope_group ) then
-            
-            current_item.group := scope_group;
-            
-        fi;
-        
-    end;
-    
     read_example := function( is_tested_example )
-        local temp_string_list, temp_curr_line, temp_pos_comment, is_following_line;
+        local temp_string_list, temp_curr_line, temp_pos_comment, is_following_line, item_temp, example_node;
         
-        current_item.node_type := "EXAMPLE";
+        example_node := DocumentationExample( tree );
         
-        current_item.is_tested_example := is_tested_example;
+        example_node!.is_tested_example := is_tested_example;
         
-        temp_string_list := current_item.text;
+        temp_string_list := example_node!.content;
         
         is_following_line := false;
         
@@ -563,6 +538,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                     
                 else
                     
+                    if temp_curr_line = "" then
+                        
+                        continue;
+                        
+                    fi;
+                    
                     temp_curr_line := Concatenation( "gap> ", temp_curr_line );
                     
                     is_following_line := PositionSublist( temp_curr_line, ";" ) = fail;
@@ -577,7 +558,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         od;
         
-        return temp_string_list;
+        return example_node;
         
     end;
     
@@ -594,7 +575,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
         @DoNotReadRestOfFile := function()
             
-            flush_and_recover( );
+            Reset();
             
             rest_of_file_skipped := true;
             
@@ -615,34 +596,26 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @Chapter := function()
             local scope_chapter;
             
-            flush_and_recover();
-            
             scope_chapter := ReplacedString( current_command[ 2 ], " ", "_" );
             
-            ChapterInTree( tree, scope_chapter );
+            current_item := ChapterInTree( tree, scope_chapter );
             
             chapter_info[ 1 ] := scope_chapter;
-            
-            Unbind( chapter_info[ 2 ] );
-            
-            Unbind( chapter_info[ 3 ] );
             
         end,
         
         @Section := function()
             local scope_section;
             
-            flush_and_recover();
-            
             if not IsBound( chapter_info[ 1 ] ) then
                 
-                Error( "no section without chapter allowed" );
+                Error( "Chapter must be given" );
                 
             fi;
             
             scope_section := ReplacedString( current_command[ 2 ], " ", "_" );
             
-            SectionInTree( tree, chapter_info[ 1 ], scope_section );
+            current_item := SectionInTree( tree, chapter_info[ 1 ], scope_section );
             
             Unbind( chapter_info[ 3 ] );
             
@@ -652,11 +625,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
         @EndSection := function()
             
-            flush_and_recover();
-            
             Unbind( chapter_info[ 2 ] );
             
             Unbind( chapter_info[ 3 ] );
+            
+            current_item := ChapterInTree( tree, chapter_info[ 1 ] );
             
         end,
         
@@ -669,11 +642,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 
             fi;
             
-            flush_and_recover();
-            
             scope_subsection := ReplacedString( current_command[ 2 ], " ", "_" );
             
-            SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], scope_subsection );
+            current_item := SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], scope_subsection );
             
             chapter_info[ 3 ] := scope_subsection;
             
@@ -681,13 +652,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
         @EndSubsection := function()
             
-            flush_and_recover();
-            
             Unbind( chapter_info[ 3 ] );
+            
+            current_item := SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] );
             
         end,
         
         @BeginGroup := function()
+            local grp;
             
             if current_command[ 2 ] = "" then
                 
@@ -699,43 +671,41 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             scope_group := ReplacedString( current_command[ 2 ], " ", "_" );
             
-            flush_and_recover();
+            grp := DocumentationGroup( tree, scope_group );
+            
+            Add( context_stack, current_item );
+            
+            Add( current_item, grp );
+            
+            current_item := grp;
             
         end,
         
         @EndGroup := function()
             
-            Unbind( scope_group );
-            
-            flush_and_recover();
+            current_item := Remove( context_stack );
             
         end,
         
         @Description := function()
             
-            flush_and_prepare_for_item();
+            current_item := new_man_item();
             
-            current_string_list := current_item.description;
+            SetManItemToDescription( current_item );
             
-            if current_command[ 2 ] <> "" then
-                
-                Add( current_string_list, current_command[ 2 ] );
-                
-            fi;
+            Add( current_item, current_command[ 2 ] );
             
         end,
         
         @Returns := function()
             
-            flush_and_prepare_for_item();
+            current_item := new_man_item();
             
-            current_item.return_value := [ ];
-            
-            current_string_list := current_item.return_value;
+            SetManItemToReturnValue( current_item );
             
             if current_command[ 2 ] <> "" then
                 
-                Add( current_string_list, current_command[ 2 ] );
+                Add( current_item, current_command[ 2 ] );
                 
             fi;
             
@@ -743,35 +713,38 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
         @Arguments := function()
             
-            flush_and_prepare_for_item();
+            current_item := new_man_item();
             
-            current_item.arguments := current_command[ 2 ];
+            current_item!.arguments := current_command[ 2 ];
             
         end,
         
         @Label := function()
             
-            flush_and_prepare_for_item();
+            current_item := new_man_item();
             
-            current_item.tester_names := current_command[ 2 ];
+            current_item!.tester_names := current_command[ 2 ];
             
         end,
         
         @Group := function()
             
-            flush_and_prepare_for_item();
+            current_item := new_man_item();
             
-            current_item.group := current_command[ 2 ];
+            current_item!.group := current_command[ 2 ];
             
         end,
         
         @ChapterInfo := function()
+            local current_chapter_info;
             
-            flush_and_prepare_for_item();
+            current_item := new_man_item();
             
-            current_item.chapter_info := SplitString( current_command[ 2 ], "," );
+            current_chapter_info := SplitString( current_command[ 2 ], "," );
             
-            current_item.chapter_info := List( current_item.chapter_info, i -> ReplacedString( StripBeginEnd( i, " " ), " ", "_" ) );
+            current_chapter_info := List( current_chapter_info, i -> ReplacedString( StripBeginEnd( i, " " ), " ", "_" ) );
+            
+            SetChapterInfo( current_chapter_info );
             
         end,
         
@@ -785,57 +758,54 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             level_scope := Int( current_command[ 2 ] );
             
-            flush_and_recover();
-            
         end,
         
         @ResetLevel := function()
             
             level_scope := 0;
             
-            flush_and_recover();
             
         end,
         
         @Level := function()
             
-            current_item.level := Int( current_command[ 2 ] );
+            current_item!.level := Int( current_command[ 2 ] );
             
         end,
         
         @InsertSystem := function()
             
-            flush_and_recover();
-            
-            Add( tree, DocumentationDummy( current_command[ 2 ], chapter_info ) );
+            Add( current_item, DocumentationDummy( tree, current_command[ 2 ] ) );
             
         end,
         
         @System := function()
             
-            system_scope := current_command[ 2 ];
+            current_item := DocumentationDummy( tree, current_command[ 2 ] );
             
-            flush_and_recover();
+        end,
+        
+        @EndSystem := function()
+            
+            current_item := Remove( context_stack );
             
         end,
         
         @Example := function()
+            local example_node;
             
-            flush_and_recover();
+            example_node := read_example( true );
             
-            read_example( true );
-            
-            flush_and_recover();
+            Add( current_item, example_node );
             
         end,
         
         @Log := function()
+            local example_node;
             
-            flush_and_recover() ;
+            example_node := read_example( false );
             
-            read_example( false );
-            
-            flush_and_recover();
+            Add( current_item, example_node );
             
         end,
         
@@ -859,45 +829,15 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
         STRING := function()
             
-            Add( current_string_list, current_command[ 2 ] );
+            Add( current_item, current_command[ 2 ] );
             
         end,
         
-        @Chunk := function()
-            
-            flush_and_recover();
-            
-            if not IsBound( chunk_list.(current_command[ 2 ] ) ) then
-                
-                chunk_list.( current_command[ 2 ] ) := [ ];
-                
-            fi;
-            
-            current_string_list := chunk_list.( current_command[ 2 ] );
-            
-        end,
+        @Chunk := ~.@System,
         
-        @EndChunk := function()
-            
-            flush_and_recover();
-            
-        end,
+        @EndChunk := ~.@EndSystem,
         
-        @InsertChunk := function()
-            
-            flush_and_recover();
-            
-            if not IsBound( chunk_list.(current_command[ 2 ] ) ) then
-                
-                chunk_list.( current_command[ 2 ] ) := [ ];
-                
-            fi;
-            
-            current_item.text := chunk_list.( current_command[ 2 ] );
-            
-            flush_and_recover();
-            
-        end,
+        @InsertChunk := ~.@InsertSystem,
         
         @Dependency := function()
             
@@ -919,11 +859,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
+        ## FIXME
         @Acknowledgements := function()
-            
-            flush_and_recover();
-            
-            Unbind( current_item );
             
             if not IsBound( tree!.acknowledgements ) then
                 
@@ -941,11 +878,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
+        ## FIXME
         @Abstract := function( )
-            
-            flush_and_recover( );
-            
-            Unbind( current_item );
             
             if not IsBound( tree!.abstract ) then
                 
@@ -964,6 +898,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     ##Now read the files.
     for filename in filename_list do
         
+        Reset();
+        
         filestream := InputTextFile( filename );
         
         while true do
@@ -979,8 +915,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             current_line := Normalized_ReadLine( filestream );
             
             if current_line = fail then
-                
-                flush_and_recover();
                 
                 break;
                 
@@ -1008,11 +942,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 
                 was_declaration := Scan_for_Declaration_part( );
                 
-                if was_declaration = true then
-                    
-                    flush_and_recover();
-                    
-                elif not was_declaration and autodoc_read_line <> fail then
+                if not was_declaration and autodoc_read_line <> fail then
                     
                     autodoc_read_line := false;
                     

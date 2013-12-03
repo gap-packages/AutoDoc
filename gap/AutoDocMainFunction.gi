@@ -453,9 +453,7 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
         
     fi;
     
-    AUTOMATIC_DOCUMENTATION.tree := DocumentationTree( );
-    
-    tree := AUTOMATIC_DOCUMENTATION.tree;
+    tree := DocumentationTree( );
     
     if IsBound( introduction_list ) then
       
@@ -465,13 +463,33 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
                 
                 intro_string := intro[ 2 ];
                 
-                Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationText( intro_string, [ ReplacedString( intro[ 1 ], " ", "_" ) ] ) );
+                if IsString( intro_string ) then
+                    
+                    intro_string := [ intro_string ];
+                    
+                fi;
+                
+                for i in intro_string do
+                    
+                    Add( ChapterInTree( tree, ReplacedString( intro[ 1 ], " ", "_" ) ), i );
+                    
+                od;
                 
             elif Length( intro ) = 3 then
                 
                 intro_string := intro[ 3 ];
                 
-                Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationText( intro_string, [ ReplacedString( intro[ 1 ], " ", "_" ), ReplacedString( intro[ 2 ], " ", "_" ) ] ) );
+                if IsString( intro_string ) then
+                    
+                    intro_string := [ intro_string ];
+                    
+                fi;
+                
+                for i in intro_string do
+                    
+                    Add( SectionInTree( tree, ReplacedString( intro[ 1 ], " ", "_" ), ReplacedString( intro[ 2 ], " ", "_" ) ), i );
+                    
+                od;
                 
             else
                 
@@ -494,7 +512,7 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
     fi;
     
     ##Use parser now.
-    AutoDoc_Parser_ReadFiles( files_to_scan, AUTOMATIC_DOCUMENTATION.tree, default_chapter_record );
+    AutoDoc_Parser_ReadFiles( files_to_scan, tree, default_chapter_record );
     
     WriteDocumentation( tree, path_to_xmlfiles );
     
@@ -564,59 +582,59 @@ InstallGlobalFunction( ResetCurrentAutoDocSection,
     
 end );
 
-##
-InstallGlobalFunction( WriteStringIntoDoc,
-                       
-  function( arg )
-    local chapter_info, description, filestream;
-    
-    if not ( AUTOMATIC_DOCUMENTATION.enable_documentation and AUTOMATIC_DOCUMENTATION.package_name = CURRENT_NAMESPACE() ) then
-        
-        return;
-        
-    fi;
-    
-    description := arg[ 1 ];
-    
-    if IsString( description ) then
-        
-        description := [ description ];
-        
-    fi;
-    
-    if not IsList( description ) then
-        
-        Error( "Wrong input" );
-        
-    fi;
-    
-    chapter_info := ValueOption( "chapter_info" );
-    
-    if chapter_info = fail then
-        
-        if IsBound( AUTOMATIC_DOCUMENTATION.default_chapter.current_default_chapter_name ) then
-            
-            chapter_info := [ AUTOMATIC_DOCUMENTATION.default_chapter.current_default_chapter_name ];
-            
-            if IsBound( AUTOMATIC_DOCUMENTATION.default_chapter.current_default_section_name ) then
-                
-                Add( chapter_info, AUTOMATIC_DOCUMENTATION.default_chapter.current_default_section_name );
-                
-            fi;
-            
-        else
-            
-            Error( "no default chapter set" );
-            
-        fi;
-        
-    fi;
-    
-    chapter_info := List( chapter_info, i -> ReplacedString( i, " ", "_" ) );
-    
-    Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationText( description, chapter_info ) );
-    
-end );
+# ##
+# InstallGlobalFunction( WriteStringIntoDoc,
+#                        
+#   function( arg )
+#     local chapter_info, description, filestream;
+#     
+#     if not ( AUTOMATIC_DOCUMENTATION.enable_documentation and AUTOMATIC_DOCUMENTATION.package_name = CURRENT_NAMESPACE() ) then
+#         
+#         return;
+#         
+#     fi;
+#     
+#     description := arg[ 1 ];
+#     
+#     if IsString( description ) then
+#         
+#         description := [ description ];
+#         
+#     fi;
+#     
+#     if not IsList( description ) then
+#         
+#         Error( "Wrong input" );
+#         
+#     fi;
+#     
+#     chapter_info := ValueOption( "chapter_info" );
+#     
+#     if chapter_info = fail then
+#         
+#         if IsBound( AUTOMATIC_DOCUMENTATION.default_chapter.current_default_chapter_name ) then
+#             
+#             chapter_info := [ AUTOMATIC_DOCUMENTATION.default_chapter.current_default_chapter_name ];
+#             
+#             if IsBound( AUTOMATIC_DOCUMENTATION.default_chapter.current_default_section_name ) then
+#                 
+#                 Add( chapter_info, AUTOMATIC_DOCUMENTATION.default_chapter.current_default_section_name );
+#                 
+#             fi;
+#             
+#         else
+#             
+#             Error( "no default chapter set" );
+#             
+#         fi;
+#         
+#     fi;
+#     
+#     chapter_info := List( chapter_info, i -> ReplacedString( i, " ", "_" ) );
+#     
+#     Add( AUTOMATIC_DOCUMENTATION.tree, DocumentationText( description, chapter_info ) );
+#     
+# end );
 
 ##
 InstallGlobalFunction( AutoDocWorksheet,

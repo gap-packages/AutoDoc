@@ -103,6 +103,63 @@ BindGlobal( "TheTypeOfDocumentationTreeExampleNodes",
 
 ###################################
 ##
+## Tools
+##
+###################################
+
+##
+InstallGlobalFunction( AUTODOC_TREE_NODE_NAME_ITERATOR,
+                       
+  function( tree )
+    local curr_val;
+    
+    curr_val := tree!.node_name_iterator;
+    
+    tree!.node_name_iterator := curr_val + 1;
+    
+    return curr_val;
+    
+end );
+
+##
+InstallGlobalFunction( AUTODOC_TRANSLATE_CONTEXT,
+                       
+  function( context )
+    
+    if not IsList( context ) then
+        
+        Error( "wrong type of context" );
+        
+    fi;
+    
+    if IsString( context ) then
+        
+        return context;
+        
+    fi;
+    
+    if Length( context ) = 1 then
+        
+        return Concatenation( "Chapter_", context[ 1 ] );
+        
+    elif Length( context ) = 2 then
+        
+        return Concatenation( "Chapter_", context[ 1 ], "_Section_", context[ 2 ] );
+        
+    elif Length( context ) = 3 then
+        
+        return Concatenation( "Chapter_", context[ 1 ], "_Section_", context[ 2 ], "_Subsection_", context[ 3 ] );
+        
+    else
+        
+        Error( "wrong type of context" );
+        
+    fi;
+    
+end );
+
+###################################
+##
 ## Constructors
 ##
 ###################################
@@ -117,10 +174,9 @@ InstallMethod( DocumentationTree,
     tree := rec(
                   nodes := [ ],
                   nodes_by_name := rec( ),
-                  groups := rec( ),
-                  dummies := rec( ),
                   contents_for_dummies := rec( ),
-                  chunks := rec( )
+                  node_name_iterator := 0,
+                  current_level := 0,
             );
     
     ObjectifyWithAttributes( tree,
@@ -130,272 +186,325 @@ InstallMethod( DocumentationTree,
     
 end );
 
-##
-InstallMethod( DocumentationChapter,
-               [ IsString ],
+InstallMethod( DocumentationStructurePart,
+               [ IsTreeForDocumentation, IsList ],
                
-  function( name )
-    local level, chapter;
+  function( tree, chapter_info )
     
-    level := ValueOption( "level_value" );
+    return DocumentationStructurePart( tree, rec( chapter_info := chapter_info ) );
     
-    if level = fail then
+end );
+
+##
+## This method creates chapters, sections, subsections.
+InstallMethod( DocumentationStructurePart,
+               [ IsTreeForDocumentation, IsRecord ],
+               
+  function( tree, record )
+    local chapter_info, structure_obj, name, obj_name, type;
+    
+    if not IsBound( record.chapter_info ) or not IsList( record.chapter_info ) or Length( record.chapter_info ) < 1 then
         
-        level := 0;
+        Error( "name of chapter must be given" );
         
     fi;
     
-    chapter := rec(
-                    nodes := [ ],
-                    nodes_by_name := rec( ),
-                    level := level
-               );
+    structure_obj := record;
     
-    ObjectifyWithAttributes( chapter,
-                             TheTypeOfDocumentationTreeNodesForChapter,
-                             Name, name,
+    structure_obj.level := tree!.current_level;
+    
+    chapter_info := structure_obj.chapter_info;
+    
+    if not ForAll( chapter_info, IsString ) then
+        
+        Error( "chapter info must be list of strings" );
+        
+    fi;
+    
+    if Length( chapter_info ) = 1 then
+        
+        type := TheTypeOfDocumentationTreeNodesForChapter;
+        
+    elif Length( chapter_info ) = 2 then
+        
+        type := TheTypeOfDocumentationTreeNodesForSection;
+        
+    elif Length( chapter_info ) = 3 then
+        
+        type := TheTypeOfDocumentationTreeNodesForSubsection;
+        
+    fi;
+    
+    obj_name := AUTODOC_TRANSLATE_CONTEXT( chapter_info );
+    
+    name := chapter_info[ Length( chapter_info ) ];
+    
+    structure_obj.name := name;
+    
+    structure_obj.content := [ ];
+    
+    ObjectifyWithAttributes( structure_obj, type,
+                             Name, obj_name,
                              IsEmptyNode, true
-                             );
-    
-    return chapter;
-    
-end );
-
-##
-InstallMethod( DocumentationSection,
-               [ IsString ],
-               
-  function( name )
-    local level, section;
-    
-    level := ValueOption( "level_value" );
-    
-    if level = fail then
-        
-        level := 0;
-        
-    fi;
-    
-    section := rec( 
-                    nodes := [ ],
-                    nodes_by_name := rec( ),
-                    level := level
-               );
-    
-    ObjectifyWithAttributes( section,
-                             TheTypeOfDocumentationTreeNodesForSection,
-                             Name, name,
-                             IsEmptyNode, true
-                             );
-    
-    return section;
-    
-end );
-
-##
-InstallMethod( DocumentationSubsection,
-               [ IsString ],
-               
-  function( name )
-    local level, subsection;
-    
-    level := ValueOption( "level_value" );
-    
-    if level = fail then
-        
-        level := 0;
-        
-    fi;
-    
-    subsection := rec( nodes := [ ],
-                       nodes_by_name := rec( ),
-                       level := level );
-    
-    ObjectifyWithAttributes( subsection,
-                             TheTypeOfDocumentationTreeNodesForSubsection,
-                             Name, name,
-                             IsEmptyNode, true
-                            );
-    
-    return subsection;
-    
-end );
-
-##
-InstallMethod( DocumentationNode,
-               [ IsRecord ],
-               
-  function( content )
-    local node, type;
-    
-    if not IsBound( content.node_type ) then
-        
-        Error( "node type must be set to create node" );
-        
-    fi;
-    
-    type := content.node_type;
-    
-    if type = "TEXT" then
-        
-        node := DocumentationText( content );
-        
-    elif type = "ITEM" then
-        
-        node := DocumentationItem( content );
-        
-    elif type = "EXAMPLE" then
-        
-        node := DocumentationExample( content.text, content.chapter_info, content.is_tested_example );
-        
-    elif type = "DUMMY" then
-        
-        node := DocumentationDummy( content.name, content.chapter_info );
-        
-    else
-        
-        Error( "unrecognised type" );
-        
-    fi;
-    
-    node!.level := content.level;
-    
-    if IsBound( content.system_scope ) then
-        
-        SetDummyName( node, content.system_scope );
-        
-    fi;
-    
-    return node;
-    
-end );
-
-##
-InstallMethod( DocumentationText,
-               [ IsList, IsList ],
-               
-  function( text, chapter_info )
-    local level, textnode;
-    
-    textnode := rec( content := text,
-                     level := 0 );
-    
-    ObjectifyWithAttributes( textnode,
-                             TheTypeOfDocumentationTreeNodesForText,
-                             ChapterInfo, chapter_info
                            );
     
-    return textnode;
+    tree!.nodes_by_name.( Name( structure_obj ) ) := structure_obj;
     
-end );
-
-##
-InstallMethod( DocumentationText,
-               [ IsRecord ],
-               
-  function( record )
-    local text, chapter_info, level, textnode;
-    
-    text := record.text;
-    
-    chapter_info := record.chapter_info;
-    
-    textnode := rec( content := text,
-                     level := 0 );
-    
-    ObjectifyWithAttributes( textnode,
-                             TheTypeOfDocumentationTreeNodesForText,
-                             ChapterInfo, chapter_info
-                           );
-    
-    return textnode;
-    
-end );
-
-##
-InstallMethod( DocumentationItem,
-               [ IsRecord ],
-               
-  function( entry_rec )
-    local level, item, group;
-    
-    item := rec( content := entry_rec,
-                 level := 0 );
-    
-    if IsBound( entry_rec.group ) then
-        
-        item := rec( content_list := [ entry_rec ],
-                     level := 0 );
-        
-        ObjectifyWithAttributes( item,
-                                 TheTypeOfDocumentationTreeNodesForGroup,
-                                 Name, entry_rec.group,
-                                 ChapterInfo, entry_rec.chapter_info );
-        
-    else
-        
-        ObjectifyWithAttributes( item,
-                                 TheTypeOfDocumentationTreeNodesForManItem,
-                                 ChapterInfo, entry_rec.chapter_info );
-        
-    fi;
-    
-    return item;
+    return structure_obj;
     
 end );
 
 ##
 InstallMethod( DocumentationExample,
-               [ IsList, IsList, IsBool ],
+               [ IsTreeForDocumentation, IsList ],
                
-  function( string_list, chapter_info, is_tested_example )
-    local level, node;
+  function( tree, context )
+    local node;
     
-    node := rec( content := string_list,
-                 level := 0,
-                 is_tested_example := is_tested_example
-               );
+    node := DocumentationExample( tree );
     
-    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeExampleNodes,
-                             ChapterInfo, chapter_info );
+    Add( tree, node, context );
     
     return node;
     
 end );
 
-## This method is going to have side effects on its first argument.
-## So no readding would be necessary. This should only be used internally.
-## The side effects are also the reason why this is not called Concatenation.
 ##
-InstallMethod( MergeGroupEntries,
-               [ IsTreeForDocumentationNodeForGroupRep, IsTreeForDocumentationNodeForGroupRep ],
+InstallMethod( DocumentationExample,
+               [ IsTreeForDocumentation ],
                
-  function( group1, group2 )
-    local entry_rec;
+  function( tree )
+    local node;
     
-    if Name( group1 ) <> Name( group2 ) then
+    node := rec( content := [ ],
+                 level := tree!.current_level );
+    
+    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeExampleNodes,
+                             Name, Concatenation( "Example_", String( AUTODOC_TREE_NODE_NAME_ITERATOR( tree ) ) ) );
+    
+    tree!.nodes_by_name.( Name( node ) ) := node;
+    
+    return node;
+    
+end );
+
+##
+InstallMethod( DocumentationDummy,
+               [ IsTreeForDocumentation, IsString, IsList ],
+               
+  function( tree, name, context )
+    local node;
+    
+    node := DocumentationDummy( tree, name );
+    
+    Add( tree, node, context );
+    
+    return node;
+    
+end );
+
+##
+InstallMethod( DocumentationDummy,
+               [ IsTreeForDocumentation, IsString ],
+               
+  function( tree, name )
+    local node;
+    
+    name := Concatenation( "System_", name );
+    
+    if IsBound( tree!.nodes_by_name.( name ) ) then
         
-        Error( "groups of different name cannot be merged." );
+        return tree!.nodes_by_name.( name );
         
     fi;
     
-    group1!.content_list := Concatenation( group1!.content_list, group2!.content_list );
+    node := rec( content := [ ],
+                  level := tree!.current_level );
+    
+    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeDummyNodes,
+                              Name, name );
+    
+    tree!.nodes_by_name.( name ) := node;
+    
+    return node;
     
 end );
 
-InstallMethod( DocumentationDummy,
-               [ IsString, IsList ],
+##
+InstallMethod( DocumentationManItem,
+               [ IsTreeForDocumentation ],
                
-  function( name, chapter_info )
-    local node;
+  function( tree )
+    local node, name;
     
-    node := rec( chapter_info := chapter_info,
-                 level := 0 );
+    node := rec( description := [ ],
+                 return_value := [ ],
+                 level := tree!.current_level );
     
-    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeDummyNodes,
-                             Name, name );
+    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeNodesForManItem );
+    
+    name := Concatenation( "ManItem_", String( AUTODOC_TREE_NODE_NAME_ITERATOR( tree ) ) );
+    
+    tree!.nodes_by_name.( name ) := node;
+    
+    node!.content := node!.description;
     
     return node;
+    
+end );
+
+##
+InstallMethod( SetManItemToDescription,
+               [ IsTreeForDocumentationNodeForManItemRep ],
+               
+  function( node )
+    
+    node!.content := node!.description;
+    
+end );
+
+##
+InstallMethod( SetManItemToReturnValue,
+               [ IsTreeForDocumentationNodeForManItemRep ],
+               
+  function( node )
+    
+    node!.content := node!.return_value;
+    
+end );
+
+##
+InstallMethod( DocumentationGroup,
+               [ IsTreeForDocumentation, IsString ],
+               
+  function( tree, group_name )
+    local group, name;
+    
+    name := Concatenation( "Group_", group_name );
+    
+    if IsBound( tree!.nodes_by_name.( name ) ) then
+        
+        return tree!.nodes_by_name.( name );
+        
+    fi;
+    
+    group := rec( content := [ ] );
+    
+    ObjectifyWithAttributes( group, TheTypeOfDocumentationTreeNodesForGroup,
+                             Name, name );
+    
+    tree!.nodes_by_name.( name ) := group;
+    
+    group!.is_added := false;
+    
+    return group;
+    
+end );
+
+##
+InstallMethod( DocumentationGroup,
+               [ IsTreeForDocumentation, IsString, IsList ],
+               
+  function( tree, group_name, context )
+    local name, group;
+    
+    name := Concatenation( "GROUP_", group_name );
+    
+    if IsBound( tree!.nodes_by_name.( name ) ) then
+        
+        return tree!.nodes_by_name.( name );
+        
+    fi;
+    
+    context := AUTODOC_TRANSLATE_CONTEXT( context );
+    
+    group := DocumentationGroup( tree, group_name );
+    
+    Add( tree!.nodes_by_name.( context ), group );
+    
+    group!.is_added := true;
+    
+    return group;
+    
+end );
+
+##
+InstallMethod( Add,
+               [ IsTreeForDocumentationNode, IsTreeForDocumentationNode ],
+               
+  function( insert_node, node )
+    
+    Add( insert_node!.content, node );
+    
+    ResetFilterObj( insert_node, IsEmptyNode );
+    
+end );
+
+##
+InstallMethod( Add,
+               [ IsTreeForDocumentationNode, IsString ],
+               
+  function( insert_node, string )
+    
+    Add( insert_node!.content, string );
+    
+    ResetFilterObj( insert_node, IsEmptyNode );
+    
+end );
+
+##
+InstallMethod( Add,
+               [ IsTreeForDocumentation, IsTreeForDocumentationNodeForManItemRep and HasChapterInfo, IsList ],
+               
+  function( tree, node, context )
+    local section;
+    
+    section := SectionInTree( tree, ChapterInfo( node )[ 1 ], ChapterInfo( node )[ 2 ] );
+    
+    Add( section, node );
+    
+end );
+
+##
+InstallMethod( Add,
+               [ IsTreeForDocumentation, IsTreeForDocumentationNodeForManItemRep and HasGroupName, IsList ],
+               
+  function( tree, node, context )
+    local group;
+    
+    group := DocumentationGroup( tree, GroupName( node ) );
+    
+    Add( group, node );
+    
+end );
+
+##
+InstallMethod( Add,
+               [ IsTreeForDocumentation, IsTreeForDocumentationNodeForManItemRep and HasGroupName and HasChapterInfo, IsList ],
+               
+  function( tree, node, context )
+    local chapter_info, group;
+    
+    chapter_info := ChapterInfo( node );
+    
+    group := DocumentationGroup( tree, GroupName( node ), chapter_info );
+    
+    Add( group, node );
+    
+end );
+
+##
+InstallMethod( Add,
+               [ IsTreeForDocumentation, IsTreeForDocumentationNode, IsList ],
+               
+  function( tree, node, context )
+    local insert_node;
+    
+    insert_node := AUTODOC_TRANSLATE_CONTEXT( context );
+    
+    insert_node := tree!.nodes_by_name.(insert_node);
+    
+    Add( insert_node, node );
     
 end );
 
@@ -411,17 +520,15 @@ InstallMethod( ChapterInTree,
   function( tree, name )
     local chapter;
     
-    if IsBound( tree!.nodes_by_name.( name ) ) then
+    if IsBound( tree!.nodes_by_name.( Concatenation( "Chapter_", name ) ) ) then
         
-        return tree!.nodes_by_name.( name );
+        return tree!.nodes_by_name.( Concatenation( "Chapter_", name ) );
         
     fi;
     
-    chapter := DocumentationChapter( name );
+    chapter := DocumentationStructurePart( tree, [ name ] );
     
     Add( tree!.nodes, chapter );
-    
-    tree!.nodes_by_name.( name ) := chapter;
     
     return chapter;
     
@@ -432,21 +539,21 @@ InstallMethod( SectionInTree,
                [ IsTreeForDocumentation, IsString, IsString ],
                
   function( tree, chapter_name, section_name )
-    local chapter, section;
+    local name, chapter, section;
     
-    chapter := ChapterInTree( tree, chapter_name );
+    name := Concatenation( "Chapter_", chapter_name, "_Section_", section_name );
     
-    if IsBound( chapter!.nodes_by_name.( section_name ) ) then
+    if IsBound( tree!.nodes_by_name.( name ) ) then
         
-        return chapter!.nodes_by_name.( section_name );
+        return tree!.nodes_by_name.( name );
         
     fi;
     
-    section := DocumentationSection( section_name );
+    chapter := ChapterInTree( tree, chapter_name );
     
-    Add( chapter!.nodes, section );
+    section := DocumentationStructurePart( tree, [ chapter_name, section_name ] );
     
-    chapter!.nodes_by_name.( section_name ) := section;
+    Add( chapter!.content, section );
     
     return section;
     
@@ -457,200 +564,23 @@ InstallMethod( SubsectionInTree,
                [ IsTreeForDocumentation, IsString, IsString, IsString ],
                
   function( tree, chapter_name, section_name, subsection_name )
-    local section, subsection;
+    local name, chapter, section;
     
-    section := SectionInTree( tree, chapter_name, section_name );
+    name := Concatenation( "Chapter_", chapter_name, "_Section_", section_name, "_Subsection_", subsection_name );
     
-    if IsBound( section!.nodes_by_name.( subsection_name ) ) then
+    if IsBound( tree!.nodes_by_name.( name ) ) then
         
-        return section!.nodes_by_name.( subsection_name );
-        
-    fi;
-    
-    subsection := DocumentationSubsection( subsection_name );
-    
-    Add( section!.nodes, subsection );
-    
-    section!.nodes_by_name.( subsection_name ) := subsection;
-    
-    return subsection;
-    
-end );
-
-##
-InstallMethod( EntryNode,
-               [ IsTreeForDocumentation, IsList ],
-               
-  function( tree, chapter_info )
-    local length, arg_array;
-    
-    length := Length( chapter_info );
-    
-    arg_array := Concatenation( [ tree ], chapter_info );
-    
-    if length = 1 then
-        
-        return CallFuncList( ChapterInTree, arg_array );
-        
-    elif length = 2 then
-        
-        return CallFuncList( SectionInTree, arg_array );
-        
-    elif length = 3 then
-        
-        return CallFuncList( SubsectionInTree, arg_array );
-        
-    else
-        
-        Error( "bad chapter_info type" );
+        return tree!.nodes_by_name.( name );
         
     fi;
     
-end );
-
-##
-InstallMethod( Add,
-               "for dummy fillers",
-               [ IsTreeForDocumentation, IsTreeForDocumentationNodeRep and HasDummyName ],
-               10000, ##WHY IS THIS NECESSARY 
-               
-  function( tree, node )
-    local name;
+    chapter := ChapterInTree( tree, chapter_name );
     
-    name := DummyName( node );
+    section := DocumentationStructurePart( tree, [ chapter_name, section_name ] );
     
-    if IsBound( tree!.dummies.(name) ) then
-        
-        tree!.dummies!.(name)!.content := node;
-        
-    else
-        
-        tree!.contents_for_dummies.(name) := node;
-        
-    fi;
+    Add( chapter!.content, section );
     
-end );
-
-##
-InstallMethod( Add,
-               "for text nodes",
-               [ IsTreeForDocumentation, IsTreeForDocumentationNodeForTextRep ],
-               
-  function( tree, node )
-    local chapter_info, entry_node;
-    
-    chapter_info := ChapterInfo( node );
-    
-    entry_node := EntryNode( tree, chapter_info );
-    
-    ResetFilterObj( entry_node, IsEmptyNode );
-    
-    Add( entry_node!.nodes, node );
-    
-end );
-
-##
-InstallMethod( Add,
-               "for example nodes",
-               [ IsTreeForDocumentation, IsTreeForDocumentationExampleNodeRep ],
-               
-  function( tree, node )
-    local chapter_info, entry_node;
-    
-    chapter_info := ChapterInfo( node );
-    
-    entry_node := EntryNode( tree, chapter_info );
-    
-    ResetFilterObj( entry_node, IsEmptyNode );
-    
-    Add( entry_node!.nodes, node );
-    
-end );
-
-##
-InstallMethod( Add,
-               "for manitem nodes",
-               [ IsTreeForDocumentation, IsTreeForDocumentationNodeForManItemRep ],
-               
-  function( tree, node )
-    local chapter_info, entry_node;
-    
-    chapter_info := ChapterInfo( node );
-    
-    if Length( chapter_info ) <> 2 then
-        
-        Error( "ManItem must be contained in section" );
-        
-    fi;
-    
-    entry_node := SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] );
-    
-    ResetFilterObj( entry_node, IsEmptyNode );
-    
-    Add( entry_node!.nodes, node );
-    
-end );
-
-##
-InstallMethod( Add,
-               "for group nodes",
-               [ IsTreeForDocumentation, IsTreeForDocumentationNodeForGroupRep ],
-               
-  function( tree, node )
-    local name, chapter_info, entry_node;
-    
-    name := Name( node );
-    
-    if IsBound( tree!.groups.( name ) ) then
-        
-        MergeGroupEntries( tree!.groups.( name ), node );
-        
-        return;
-        
-    fi;
-    
-    chapter_info := ChapterInfo( node );
-    
-    entry_node := SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] );
-    
-    tree!.groups.( name ) := node;
-    
-    Add( entry_node!.nodes, node );
-    
-    ResetFilterObj( entry_node, IsEmptyNode );
-    
-    ## FIXME: This might be irrelevant.
-    entry_node!.nodes_by_name.( name ) := node;
-    
-end );
-
-##
-InstallMethod( Add,
-               "for dummy nodes",
-               [ IsTreeForDocumentation, IsTreeForDocumentationDummyNodeRep ],
-               
-  function( tree, node )
-    local name, entry_node, chapter_info;
-    
-    chapter_info := node!.chapter_info;
-    
-    name := Name( node );
-    
-    if IsBound( tree!.contents_for_dummies.(name) ) then
-        
-        node!.content := tree!.contents_for_dummies.(name);
-        
-    fi;
-    
-    entry_node := EntryNode( tree, chapter_info );
-    
-    Add( entry_node!.nodes, node );
-    
-    entry_node!.nodes_by_name.(name) := node;
-    
-    ResetFilterObj( entry_node, IsEmptyNode );
-    
-    tree!.dummies.(name) := node;
+    return section;
     
 end );
 
@@ -703,7 +633,7 @@ InstallMethod( WriteDocumentation,
     
     name := Name( node );
     
-    if ForAll( node!.nodes, IsEmptyNode ) then
+    if ForAll( node!.content, IsEmptyNode ) then
         
         return;
         
@@ -717,15 +647,17 @@ InstallMethod( WriteDocumentation,
     
     AppendTo( chapter_stream, AUTODOC_XML_HEADER );
     
-    AppendTo( chapter_stream, "<Chapter Label=\"Chapter_", name, "\">\n" );
+    AppendTo( chapter_stream, "<Chapter Label=\"", Name( node ) ,"\">\n" );
     
     replaced_name := ReplacedString( name, "_", " " );
     
     AppendTo( chapter_stream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
     
-    for i in node!.nodes do
+    for i in node!.content do
         
-        WriteDocumentation( i, chapter_stream, name );
+        WriteDocumentation( i, chapter_stream );
+        
+        AppendTo( chapter_stream, "\n" );
         
     od;
     
@@ -737,18 +669,9 @@ end );
 
 ##
 InstallMethod( WriteDocumentation,
-               [ IsTreeForDocumentationNodeForTextRep, IsStream ],
+               [ IsString, IsStream ],
                
-  function( node, filestream )
-    local text, i, level;
-    
-    if node!.level > ValueOption( "level_value" ) then
-        
-        return;
-        
-    fi;
-    
-    text := node!.content;
+  function( text, filestream )
     
     ## In case the list is empty, do nothing.
     ## Once the empty string = empty list bug is fixed,
@@ -759,38 +682,15 @@ InstallMethod( WriteDocumentation,
         
     fi;
     
-    if IsString( text ) then
-        
-        text := [ text ];
-        
-    fi;
-    
-    for i in text do
-        
-        AppendTo( filestream, " ", i, "\n" );
-        
-    od;
-    
-    AppendTo( filestream, "\n\n" );
+    AppendTo( filestream, " ", text, "\n" );
     
 end );
 
 ##
 InstallMethod( WriteDocumentation,
-               [ IsTreeForDocumentationNodeForTextRep, IsStream, IsString ],
+               [ IsTreeForDocumentationNodeForSectionRep, IsStream ],
                
-  ##Please note that chapter_name is for sections only. It will be discarded.
-  function( node, filestream, chapter_name )
-    
-    WriteDocumentation( node, filestream );
-    
-end );
-
-##
-InstallMethod( WriteDocumentation,
-               [ IsTreeForDocumentationNodeForSectionRep, IsStream, IsString ],
-               
-  function( node, filestream, chapter_name )
+  function( node, filestream )
     local name, replaced_name, i;
     
     name := Name( node );
@@ -801,29 +701,21 @@ InstallMethod( WriteDocumentation,
         
     fi;
     
-    if ForAll( node!.nodes, IsEmptyNode ) then
+    if ForAll( node!.content, IsEmptyNode ) then
         
         return;
         
     fi;
     
-    AppendTo( filestream, Concatenation( [ "<Section Label=\"Chapter_", chapter_name, "_Section_", name, "\">\n" ] ) );
+    AppendTo( filestream, "<Section Label=\"", Name( node ), "\">\n" );
     
-    replaced_name := ReplacedString( name, "_", " " );
+    replaced_name := ReplacedString( node!.name, "_", " " );
     
     AppendTo( filestream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
     
-    for i in node!.nodes do
+    for i in node!.content do
         
-        if IsTreeForDocumentationNodeForSubsectionRep( i ) then
-            
-            WriteDocumentation( i, filestream, chapter_name, name );
-            
-        else
-            
-            WriteDocumentation( i, filestream );
-            
-        fi;
+        WriteDocumentation( i, filestream );
         
     od;
     
@@ -833,12 +725,10 @@ end );
 
 ##
 InstallMethod( WriteDocumentation,
-               [ IsTreeForDocumentationNodeForSubsectionRep, IsStream, IsString, IsString ],
+               [ IsTreeForDocumentationNodeForSubsectionRep, IsStream ],
                
-  function( node, filestream, chapter_name, section_name )
+  function( node, filestream )
     local i, name, replaced_name;
-
-    name := Name( node );
     
     if node!.level > ValueOption( "level_value" ) then
         
@@ -846,19 +736,19 @@ InstallMethod( WriteDocumentation,
         
     fi;
     
-    if ForAll( node!.nodes, IsEmptyNode ) then
+    if ForAll( node!.content, IsEmptyNode ) then
         
         return;
         
     fi;
     
-    AppendTo( filestream, Concatenation( [ "<Subsection Label=\"Chapter_", chapter_name, "_Section_", section_name, "_Subsection_", name, "\">\n" ] ) );
+    AppendTo( filestream, "<Subsection Label=\"", Name( node ), "\">\n" );
     
-    replaced_name := ReplacedString( name, "_", " " );
+    replaced_name := ReplacedString( node!.name, "_", " " );
     
     AppendTo( filestream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
     
-    for i in node!.nodes do
+    for i in node!.content do
         
         WriteDocumentation( i, filestream );
         
@@ -868,7 +758,7 @@ InstallMethod( WriteDocumentation,
     
 end );
 
-##
+##FIXME
 InstallMethod( WriteDocumentation,
                [ IsTreeForDocumentationNodeForManItemRep, IsStream ],
                
@@ -887,7 +777,7 @@ InstallMethod( WriteDocumentation,
     
 end );
 
-##
+##FIXME
 InstallMethod( WriteDocumentation,
                [ IsTreeForDocumentationNodeForGroupRep, IsStream ],
                
@@ -911,10 +801,15 @@ InstallMethod( WriteDocumentation,
                [ IsTreeForDocumentationDummyNodeRep, IsStream ],
                
   function( node, filestream )
+    local i;
     
     if IsBound( node!.content ) then
         
-        WriteDocumentation( node!.content, filestream );
+        for i in node!.content do
+            
+            WriteDocumentation( i, filestream );
+            
+        od;
         
     fi;
     
