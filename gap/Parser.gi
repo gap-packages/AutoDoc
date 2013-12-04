@@ -839,6 +839,34 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
         @InsertChunk := ~.@InsertSystem,
         
+        @BeginLatexOnly := function()
+            
+            Add( current_item, "<Alt Only=\"LaTeX\">" );
+            
+            if current_command[ 2 ] <> "" then
+                
+                Add( current_item, current_command[ 2 ] );
+                
+            fi;
+            
+        end,
+        
+        @EndLatexOnly := function()
+            
+            Add( current_item, "</Alt>" );
+            
+        end,
+        
+        @LatexOnly := function()
+            
+            Add( current_item, "<Alt Only=\"LaTeX\">" );
+            
+            Add( current_item, current_command[ 2 ] );
+            
+            Add( current_item, "</Alt>" );
+            
+        end,
+        
         @Dependency := function()
             
             if not IsBound( tree!.worksheet_dependencies ) then
