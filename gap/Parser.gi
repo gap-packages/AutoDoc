@@ -123,9 +123,9 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         has_filters := "No";
         
-        if not IsBound( item_rec.arguments ) then
+        if not IsBound( item_rec!.arguments ) then
             
-            item_rec.arguments := "arg";
+            item_rec!.arguments := "arg";
             
         fi;
         
@@ -135,7 +135,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         has_filters := "No";
         
-        item_rec.arguments := fail;
+        item_rec!.arguments := fail;
         
     else
         
@@ -192,7 +192,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
         man_item := DocumentationManItem( tree );
         
-        Add( context_stack, current_item );
+        if IsBound( current_item ) then
+            
+            Add( context_stack, current_item );
+            
+        fi;
         
         man_item!.chapter_info := ShallowCopy( chapter_info );
         
@@ -207,9 +211,25 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
         man_item := current_item;
         
-        current_item := Remove( context_stack );
+        if context_stack <> [ ] then
+            
+            current_item := Remove( context_stack );
+            
+        else
+            
+            Unbind( current_item );
+            
+        fi;
         
-        Add( current_item, man_item );
+        if IsBound( current_item ) then
+            
+            Add( current_item, man_item );
+            
+        else
+            
+            Add( tree, man_item );
+            
+        fi;
         
     end;
     
@@ -710,9 +730,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 
                 Add( context_stack, current_item );
                 
+                Add( current_item, grp );
+                
             fi;
-            
-            Add( current_item, grp );
             
             current_item := grp;
             

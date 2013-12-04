@@ -459,13 +459,9 @@ InstallMethod( Add,
   function( tree, node )
     local section;
     
-    Error( "" );
-    
     section := SectionInTree( tree, ChapterInfo( node )[ 1 ], ChapterInfo( node )[ 2 ] );
     
     Add( section, node );
-    
-    Error( "" );
     
 end );
 
