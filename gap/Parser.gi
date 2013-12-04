@@ -169,7 +169,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           Scan_for_Declaration_part, flush_and_prepare_for_item, current_line, filestream,
           level_scope, scope_group, read_example, command_function_record, autodoc_read_line,
           current_command, was_declaration, filename, system_scope, groupnumber, chunk_list, rest_of_file_skipped,
-          context_stack, new_man_item, add_man_item, Reset;
+          context_stack, new_man_item, add_man_item, Reset, read_code;
     
     groupnumber := 0;
     
@@ -184,7 +184,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     new_man_item := function( )
         local man_item;
         
-        if IsTreeForDocumentationNodeForManItemRep( current_item ) then
+        if IsBound( current_item ) and IsTreeForDocumentationNodeForManItemRep( current_item ) then
             
             return current_item;
             
@@ -483,6 +483,39 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
     end;
     
+    read_code := function( )
+        local code, temp_curr_line;
+        
+        code := [ ];
+        
+        Add( code, "<Listing Type=\"Code\"><![CDATA[" );
+        
+        while true do
+            
+            temp_curr_line := ReadLine( filestream );
+            
+            if temp_curr_line[ Length( temp_curr_line )] = '\n' then
+                
+                temp_curr_line := temp_curr_line{[ 1 .. Length( temp_curr_line ) - 1 ]};
+                
+            fi;
+            
+            if filestream = fail or PositionSublist( temp_curr_line, "@EndCode" ) <> fail then
+                
+                break;
+                
+            fi;
+            
+            Add( code, temp_curr_line );
+            
+        od;
+        
+        Add( code, "]]></Listing>" );
+        
+        return code;
+        
+    end;
+    
     read_example := function( is_tested_example )
         local temp_string_list, temp_curr_line, temp_pos_comment, is_following_line, item_temp, example_node;
         
@@ -673,7 +706,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             grp := DocumentationGroup( tree, scope_group );
             
-            Add( context_stack, current_item );
+            if IsBound( current_item ) then
+                
+                Add( context_stack, current_item );
+                
+            fi;
             
             Add( current_item, grp );
             
@@ -683,7 +720,15 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
         @EndGroup := function()
             
-            current_item := Remove( context_stack );
+            if context_stack <> [ ] then
+                
+                current_item := Remove( context_stack );
+                
+            else
+                
+                Unbind( current_item );
+                
+            fi;
             
         end,
         
@@ -764,7 +809,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             level_scope := 0;
             
-            
         end,
         
         @Level := function()
@@ -781,13 +825,38 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
         @System := function()
             
+            if IsBound( current_item ) then
+                
+                Add( context_stack, current_item );
+                
+            fi;
+            
             current_item := DocumentationDummy( tree, current_command[ 2 ] );
             
         end,
         
+        @Code := function()
+            local tmp_system;
+            
+            tmp_system := DocumentationDummy( tree, current_command[ 2 ] );
+            
+            Append( tmp_system!.content, read_code() );
+            
+        end,
+        
+        @InsertCode := ~.@InsertSystem,
+        
         @EndSystem := function()
             
-            current_item := Remove( context_stack );
+            if context_stack <> [ ] then
+                
+                current_item := Remove( context_stack );
+                
+            else
+                
+                Unbind( current_item );
+                
+            fi;
             
         end,
         
@@ -890,13 +959,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         ## FIXME
         @Acknowledgements := function()
             
-            if not IsBound( tree!.acknowledgements ) then
-                
-                tree!.acknowledgements := [ ];
-                
-            fi;
+            current_item := tree;
             
-            current_string_list := tree!.acknowledgements;
+            SetTreeToAcknowledgement( tree );
             
         end,
         
@@ -906,16 +971,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
-        ## FIXME
         @Abstract := function( )
             
-            if not IsBound( tree!.abstract ) then
-                
-                tree!.abstract := [ ];
-                
-            fi;
+            current_item := tree;
             
-            current_string_list := tree!.abstract;
+            SetTreeToAbstract( tree );
             
         end
         

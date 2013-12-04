@@ -512,6 +512,48 @@ InstallMethod( Add,
     
 end );
 
+##
+InstallMethod( Add,
+               [ IsTreeForDocumentation, IsString ],
+               
+  function( tree, string )
+    
+    Add( tree!.content, string );
+    
+end );
+
+##
+InstallMethod( SetTreeToAcknowledgement,
+               [ IsTreeForDocumentation ],
+               
+  function( tree )
+    
+    if not IsBound( tree!.acknowledgement ) then
+        
+        tree!.acknowledgement := [ ];
+        
+    fi;
+    
+    tree!.content := tree!.acknowledgement;
+    
+end );
+
+##
+InstallMethod( SetTreeToAbstract,
+               [ IsTreeForDocumentation ],
+               
+  function( tree )
+    
+    if not IsBound( tree!.abstract ) then
+        
+        tree!.abstract := [ ];
+        
+    fi;
+    
+    tree!.content := tree!.abstract;
+    
+end );
+
 ####################################
 ##
 ## Add functions
@@ -762,7 +804,7 @@ InstallMethod( WriteDocumentation,
     
 end );
 
-##FIXME
+#
 InstallMethod( WriteDocumentation,
                [ IsTreeForDocumentationNodeForManItemRep, IsStream ],
                
@@ -779,7 +821,7 @@ InstallMethod( WriteDocumentation,
     
 end );
 
-##FIXME
+#
 InstallMethod( WriteDocumentation,
                [ IsTreeForDocumentationNodeForGroupRep, IsStream ],
                

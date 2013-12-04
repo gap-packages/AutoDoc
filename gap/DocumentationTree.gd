@@ -117,6 +117,15 @@ DeclareOperation( "Add",
 DeclareOperation( "MergeGroupEntries",
                   [ IsTreeForDocumentationNode, IsTreeForDocumentationNode ] );
 
+DeclareOperation( "Add",
+                  [ IsTreeForDocumentation, IsString ] );
+
+DeclareOperation( "SetTreeToAcknowledgement",
+                  [ IsTreeForDocumentation ] );
+
+DeclareOperation( "SetTreeToAbstract",
+                  [ IsTreeForDocumentation ] );
+
 #######################################
 ##
 ## Write methods
