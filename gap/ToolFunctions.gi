@@ -354,17 +354,17 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
     ##look for a good return value (it should be the same everywhere)
     for i in list_of_records do
         
-        if IsBound( i.return_value ) then
+        if IsBound( i!.return_value ) then
             
-            if IsList( i.return_value ) and Length( i.return_value ) > 0 then
+            if IsList( i!.return_value ) and Length( i!.return_value ) > 0 then
                 
-                return_value := i.return_value;
+                return_value := i!.return_value;
                 
                 break;
                 
-            elif IsBool( i.return_value ) then
+            elif IsBool( i!.return_value ) then
                 
-                return_value := i.return_value;
+                return_value := i!.return_value;
                 
                 break;
                 
@@ -392,7 +392,7 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
     ##collect description (for readability not in the loop above)
     for i in list_of_records do
         
-        current_description := i.description;
+        current_description := i!.description;
         
         if IsString( current_description ) then
             
@@ -408,9 +408,9 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
     
     for i in list_of_records do
         
-        if IsBound( i.group ) and IsString( i.group ) then
+        if IsBound( i!.group ) and IsString( i!.group ) then
             
-            Add( labels, i.group );
+            Add( labels, i!.group );
             
         fi;
         
@@ -432,16 +432,16 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
     ## Function heades
     for i in list_of_records do
         
-         AppendTo( filestream, "  <", i.type, " " );
+         AppendTo( filestream, "  <", i!.item_type, " " );
         
-        if i.arguments <> fail and i.type <> "Var" then
-            AppendTo( filestream, "Arg=\"", i.arguments, "\" " );
+        if i!.arguments <> fail and i!.item_type <> "Var" then
+            AppendTo( filestream, "Arg=\"", i!.arguments, "\" " );
         fi;
         
-        AppendTo( filestream, "Name=\"", i.name, "\" " );
+        AppendTo( filestream, "Name=\"", i!.name, "\" " );
         
-        if i.tester_names <> fail and i.tester_names <> "" then
-            AppendTo( filestream, "Label=\"", i.tester_names, "\"" );
+        if i!.tester_names <> fail and i!.tester_names <> "" then
+            AppendTo( filestream, "Label=\"", i!.tester_names, "\"" );
         fi;
         
         AppendTo( filestream, "/>\n" );
@@ -449,14 +449,31 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
     od;
     
     if return_value <> false then
-        AppendTo( filestream, " <Returns>", return_value, "</Returns>\n" );
+        
+        if IsString( return_value ) then
+            
+            return_value := [ return_value ];
+            
+        fi;
+        
+        AppendTo( filestream, " <Returns>" );
+        
+        for i in return_value do
+            
+            WriteDocumentation( i, filestream );
+            
+        od;
+        
+        AppendTo( filestream, "</Returns>\n" );
+        
+        
     fi;
     
     AppendTo( filestream, " <Description>\n" );
     
     for i in description do
         
-        AppendTo( filestream, Concatenation( [ "    ", i, "\n" ] ) );
+        WriteDocumentation( i, filestream );
         
     od;
     

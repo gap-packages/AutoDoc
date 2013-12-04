@@ -151,7 +151,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         item_rec!.chapter_info := default_chapter_data.( entries[ 2 ] );
     fi;
     
-    if IsBound( ret_val ) and ( not IsBound( item_rec!.return_value ) or item_rec!.return_value = false ) then
+    if IsBound( ret_val ) and ( item_rec!.return_value = [ ] or item_rec!.return_value = false ) then
         
         item_rec!.return_value := [ ret_val ];
         
@@ -209,7 +209,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
         current_item := Remove( context_stack );
         
-        Add( context_stack, man_item );
+        Add( current_item, man_item );
         
     end;
     
@@ -744,7 +744,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             current_chapter_info := List( current_chapter_info, i -> ReplacedString( StripBeginEnd( i, " " ), " ", "_" ) );
             
-            SetChapterInfo( current_chapter_info );
+            SetChapterInfo( current_item, current_chapter_info );
             
         end,
         

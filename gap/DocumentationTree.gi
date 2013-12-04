@@ -454,14 +454,18 @@ end );
 
 ##
 InstallMethod( Add,
-               [ IsTreeForDocumentation, IsTreeForDocumentationNodeForManItemRep and HasChapterInfo, IsList ],
+               [ IsTreeForDocumentation, IsTreeForDocumentationNodeForManItemRep and HasChapterInfo ],
                
-  function( tree, node, context )
+  function( tree, node )
     local section;
+    
+    Error( "" );
     
     section := SectionInTree( tree, ChapterInfo( node )[ 1 ], ChapterInfo( node )[ 2 ] );
     
     Add( section, node );
+    
+    Error( "" );
     
 end );
 
@@ -639,7 +643,7 @@ InstallMethod( WriteDocumentation,
         
     fi;
     
-    filename := Concatenation( "Chapter_", name, ".xml" );
+    filename := Concatenation( name, ".xml" );
     
     chapter_stream := AUTODOC_OutputTextFile( path_to_xmlfiles, filename );
     
@@ -647,9 +651,9 @@ InstallMethod( WriteDocumentation,
     
     AppendTo( chapter_stream, AUTODOC_XML_HEADER );
     
-    AppendTo( chapter_stream, "<Chapter Label=\"", Name( node ) ,"\">\n" );
+    AppendTo( chapter_stream, "<Chapter Label=\"", name,"\">\n" );
     
-    replaced_name := ReplacedString( name, "_", " " );
+    replaced_name := ReplacedString( node!.name, "_", " " );
     
     AppendTo( chapter_stream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
     
@@ -771,9 +775,7 @@ InstallMethod( WriteDocumentation,
         
     fi;
     
-    entry_record := node!.content;
-    
-    AutoDoc_WriteDocEntry( filestream, [ entry_record ] );
+    AutoDoc_WriteDocEntry( filestream, [ node ] );
     
 end );
 
@@ -790,9 +792,7 @@ InstallMethod( WriteDocumentation,
         
     fi;
     
-    entry_list := node!.content_list;
-    
-    AutoDoc_WriteDocEntry( filestream, entry_list );
+    AutoDoc_WriteDocEntry( filestream, node!.content );
     
 end );
 
