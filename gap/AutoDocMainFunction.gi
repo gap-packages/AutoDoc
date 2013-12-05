@@ -697,7 +697,7 @@ InstallGlobalFunction( AutoDocWorksheet,
         
         AppendTo( filestream, "<Acknowledgements>\n" );
         
-        for i in tree!.acknowledgements do
+        for i in tree!.acknowledgement do
             
             AppendTo( filestream, i, "\n" );
             
