@@ -380,7 +380,7 @@ InstallMethod( DocumentationGroup,
   function( tree, group_name )
     local group, name;
     
-    name := Concatenation( "Group_", group_name );
+    name := Concatenation( "GROUP_", group_name );
     
     if IsBound( tree!.nodes_by_name.( name ) ) then
         
@@ -388,7 +388,9 @@ InstallMethod( DocumentationGroup,
         
     fi;
     
-    group := rec( content := [ ] );
+    group := rec( content := [ ],
+                  level := tree!.current_level
+    );
     
     ObjectifyWithAttributes( group, TheTypeOfDocumentationTreeNodesForGroup,
                              Name, name );
@@ -467,9 +469,9 @@ end );
 
 ##
 InstallMethod( Add,
-               [ IsTreeForDocumentation, IsTreeForDocumentationNodeForManItemRep and HasGroupName, IsList ],
+               [ IsTreeForDocumentation, IsTreeForDocumentationNodeForManItemRep and HasGroupName ],
                
-  function( tree, node, context )
+  function( tree, node )
     local group;
     
     group := DocumentationGroup( tree, GroupName( node ) );
@@ -480,9 +482,9 @@ end );
 
 ##
 InstallMethod( Add,
-               [ IsTreeForDocumentation, IsTreeForDocumentationNodeForManItemRep and HasGroupName and HasChapterInfo, IsList ],
+               [ IsTreeForDocumentation, IsTreeForDocumentationNodeForManItemRep and HasGroupName and HasChapterInfo ],
                
-  function( tree, node, context )
+  function( tree, node )
     local chapter_info, group;
     
     chapter_info := ChapterInfo( node );

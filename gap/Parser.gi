@@ -221,15 +221,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         fi;
         
-        if IsBound( current_item ) then
+        if IsBound( man_item!.chapter_info ) then
             
-            Add( current_item, man_item );
-            
-        else
-            
-            Add( tree, man_item );
+            SetChapterInfo( man_item, man_item!.chapter_info );
             
         fi;
+        
+        Add( tree, man_item );
         
     end;
     
@@ -796,7 +794,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             current_item := new_man_item();
             
-            current_item!.group := current_command[ 2 ];
+            SetGroupName( current_item, ReplacedString( current_command[ 2 ], " ", "_" ) );
             
         end,
         
@@ -976,7 +974,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
-        ## FIXME
         @Acknowledgements := function()
             
             current_item := tree;
