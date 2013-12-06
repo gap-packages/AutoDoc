@@ -89,9 +89,9 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
     
     for i in list_of_records do
         
-        if IsBound( i!.group ) and IsString( i!.group ) then
+        if HasGroupName( i ) then
             
-            Add( labels, i!.group );
+            Add( labels, GroupName( i ) );
             
         fi;
         

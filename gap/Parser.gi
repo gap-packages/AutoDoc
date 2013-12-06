@@ -147,7 +147,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
     
     item_rec!.doc_stream_type := entries[ 2 ];
     
-    if not IsBound( item_rec!.chapter_info ) then
+    if not IsBound( item_rec!.chapter_info ) or item_rec!.chapter_info = [ ] then
         item_rec!.chapter_info := default_chapter_data.( entries[ 2 ] );
     fi;
     
@@ -791,10 +791,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end,
         
         @Group := function()
+            local group_name;
             
             current_item := new_man_item();
             
-            SetGroupName( current_item, ReplacedString( current_command[ 2 ], " ", "_" ) );
+            group_name := ReplacedString( current_command[ 2 ], " ", "_" );
+            
+            SetGroupName( current_item, group_name );
             
         end,
         
