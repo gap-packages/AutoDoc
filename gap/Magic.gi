@@ -92,7 +92,8 @@ end );
 InstallGlobalFunction( AutoDoc,
 function( arg )
     local pkg, package_info, opt, scaffold, gapdoc, maketest,
-          autodoc, pkg_dir, doc_dir, doc_dir_rel, d, tmp;
+          autodoc, pkg_dir, doc_dir, doc_dir_rel, d, tmp,
+          title_page, tree;
     
     pkg := arg[1];
     package_info := PackageInfo( pkg )[ 1 ];
@@ -163,7 +164,7 @@ function( arg )
     if not IsBound(opt.scaffold) then
         # Default: enable scaffolding if and only if package_info.AutoDoc is present
         if IsBound( package_info.AutoDoc ) then
-            scaffold := rec();
+            scaffold := rec( );
         fi;
     elif IsRecord(opt.scaffold) then
         scaffold := opt.scaffold;
@@ -177,11 +178,15 @@ function( arg )
 
     # Merge package_info.AutoDoc into scaffold
     if IsBound(scaffold) and IsBound( package_info.AutoDoc ) then
-        for d in RecNames( package_info.AutoDoc ) do
-            if not IsBound( scaffold.( d ) ) then
-                scaffold.( d ) := package_info.AutoDoc.( d );
-            fi;
-        od;
+        
+        AUTODOC_APPEND_RECORD_WRITEONCE( scaffold, package_info.AutoDoc );
+        
+    fi;
+    
+    if IsBound( scaffold ) then
+        
+        AUTODOC_WriteOnce( scaffold, "TitlePage", true );
+        
     fi;
 
     
@@ -303,6 +308,18 @@ function( arg )
     fi;
     
     
+    # read tree
+    
+    tree := DocumentationTree( );
+    
+    if IsBound( autodoc.section_intros ) then
+        
+        AUTODOC_PROCESS_INTRO_STRINGS( autodoc.section_intros : Tree := tree );
+        
+    fi;
+    
+    AutoDocScanFiles( autodoc.files : PackageName := pkg, Tree := tree );
+    
     #
     # Generate scaffold
     #
@@ -344,8 +361,31 @@ function( arg )
         fi;
 
         # TODO: It should be possible to only rebuild the title page. (Perhaps also only the main page? but this is less important)
-        
-        CreateTitlePage( pkg, doc_dir, scaffold );
+        if IsBound( scaffold.TitlePage ) then
+            
+            if IsRecord( scaffold.TitlePage ) then
+                
+                title_page := scaffold.TitlePage;
+                
+            else
+                
+                title_page := rec( );
+                
+            fi;
+            
+            AUTODOC_WriteOnce( title_page, "dir", doc_dir );
+            
+            AUTODOC_APPEND_RECORD_WRITEONCE( title_page, tree!.TitlePage );
+            
+            Error( "1" );
+            
+            AUTODOC_APPEND_RECORD_WRITEONCE( title_page, ExtractTitleInfoFromPackageInfo( pkg ) );
+            
+            Error( "2" );
+            
+            CreateTitlePage( title_page );
+            
+        fi;
         
         CreateMainPage( pkg, doc_dir, scaffold );
 
@@ -356,15 +396,7 @@ function( arg )
     #
     if IsBound( autodoc ) then
     
-        if IsBound( autodoc.section_intros ) then
-            
-            CreateAutomaticDocumentation( pkg, doc_dir, autodoc.section_intros : files_to_scan := autodoc.files );
-            
-        else
-            
-            CreateAutomaticDocumentation( pkg, doc_dir : files_to_scan := autodoc.files );
-            
-        fi;
+        CreateAutomaticDocumentation( rec( path_to_xmlfiles := doc_dir, tree := tree ) );
 
     fi;
     

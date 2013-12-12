@@ -40,6 +40,44 @@ InstallGlobalFunction( AUTODOC_WriteOnce,
 end );
 
 ##
+InstallGlobalFunction( AUTODOC_APPEND_STRING_ITERATIVE,
+                       
+  function( arg )
+    local string, i;
+    
+    string := arg[ 1 ];
+    
+    for i in [ 2 .. Length( arg ) ] do
+        
+        Append( string, arg[ i ] );
+        
+    od;
+    
+    Append( string, "\n" );
+    
+end );
+
+##
+InstallGlobalFunction( AUTODOC_APPEND_RECORD_WRITEONCE,
+                       
+  function( rec_1, rec_2 )
+    local names_list, i;
+    
+    names_list := RecNames( rec_2 );
+    
+    for i in names_list do
+        
+        if not IsBound( rec_1.( i ) ) then
+            
+            rec_1.( i ) := rec_2.( i );
+            
+        fi;
+        
+    od;
+    
+end );
+
+##
 InstallGlobalFunction( CreateDefaultChapterData,
                        
   function( package_name )
@@ -68,171 +106,7 @@ InstallGlobalFunction( CreateDefaultChapterData,
 end );
 
 ##
-InstallGlobalFunction( CreateTitlePage,
-                       
-  function( arg )
-    local package_name, dir, opt, filestream, indent, package_info, titlepage, author_records, tmp, lines, Out, OutWithTag;
-    
-    package_name := arg[ 1 ];
-    package_info := PackageInfo( package_name )[ 1 ];
-
-    dir := arg[ 2 ];
-    if IsString(dir) then
-        dir := Directory(dir);
-    fi;
-    
-    if IsBound( package_info.AutoDoc ) then
-        opt := package_info.AutoDoc;
-    else
-        opt := rec();
-    fi;
-
-    if Length( arg ) = 3 then
-        if IsRecord( arg[ 3 ] ) then
-            opt := arg[ 3 ];
-        else
-            Error( "Third parameter must be a record" );
-        fi;
-    elif Length( arg ) > 3 then
-        Error( "Wrong number of arguments\n" );
-    fi;
-
-
-    filestream := AUTODOC_OutputTextFile( dir, "title.xml" );
-    
-    indent := 0;
-    Out := function(arg)
-        local s;
-        s := ListWithIdenticalEntries( indent * 2, ' ');
-        Append( s, Concatenation( arg ) );
-        AppendTo( filestream, s );
-    end;
-    
-    OutWithTag := function( tag, content )
-        local lines, s, l;
-        if not IsString( content ) then
-            content := Concatenation( content );
-        fi;
-        lines := SplitString( content, "\n" );
-        s := ListWithIdenticalEntries( indent * 2, ' ');
-        if Length(lines) = 1 then
-            AppendTo( filestream, s, "<", tag, ">", content, "</", tag, ">\n" );
-        else
-            AppendTo( filestream, s, "<", tag, ">\n" );
-            for l in lines do
-                AppendTo( filestream, s, "  ", l, "\n" );
-            od;
-            AppendTo( filestream, s, "</", tag, ">\n" );
-        fi;
-    end;
-    
-    Out( AUTODOC_XML_HEADER );
-
-    Out( "<TitlePage>\n" );
-    
-    indent := indent + 1;
-    
-    OutWithTag( "Title", [ "&", package_name, ";" ] );
-    
-    if IsBound(opt.TitlePage) then
-        titlepage := StructuralCopy(opt.TitlePage);
-    else
-        titlepage := rec();
-    fi;
-
-    if IsBound(titlepage.Subtitle) then
-        tmp := titlepage.Subtitle;
-        Unbind( titlepage.Subtitle );
-    else
-        tmp := ReplacedString( package_info.Subtitle, "GAP", "&GAP;" );
-    fi;
-    OutWithTag( "Subtitle", tmp );
-    
-    Out( "<TitleComment>\n" );
-    if IsBound(titlepage.TitleComment) then
-        Out( titlepage.TitleComment );
-        Unbind( titlepage.TitleComment );
-    else
-        indent := indent + 1;
-        # TODO: Do we really want this (resp. any) default string?
-        Out( "<Br/><Br/>\n" );
-        Out( "This manual is best viewed as an <B>HTML</B> document.\n" );
-        Out( "An <B>offline</B> version should be included in the documentation\n" );
-        Out( "subfolder of the package.\n" );
-        Out( "<Br/><Br/>\n" );
-        indent := indent - 1;
-    fi;
-    Out( "</TitleComment>\n" );
-    
-    OutWithTag( "Version", [ "Version ", package_info.Version ] );
-    
-    for author_records in package_info.Persons do
-        
-        # FIXME: Why not show maintainers?
-        # We should show them, but could add a flag indicating they are not authors
-        #if author_records.IsAuthor then
-            
-            Out( "<Author>", Concatenation(
-                   author_records.FirstNames, " ", author_records.LastName ), "<Alt Only=\"LaTeX\"><Br/></Alt>\n" );
-            indent := indent + 1;
-
-            # TODO: Properly indent strings containing newlines
-            if IsBound(author_records.PostalAddress) then
-                Out( "<Address>\n" );
-                indent := indent + 1;
-                lines := SplitString( author_records.PostalAddress, "\n" );
-                for tmp in lines do
-                    # TODO: Make the <Br/> here optionally, or even remove it entirely?
-                    Out( tmp, "<Br/>\n" );
-                od;
-                #Out( author_records.PostalAddress, "\n" );
-                indent := indent - 1;
-                Out( "</Address>\n" );
-            fi;
-            if IsBound(author_records.Email) then
-                OutWithTag( "Email", author_records.Email );
-            fi;
-            if IsBound(author_records.WWWHome) then
-                OutWithTag( "Homepage", author_records.WWWHome );
-            fi;
-            indent := indent - 1;
-
-            Out( "</Author>\n" );
-            
-        #fi;
-        
-    od;
-    
-    OutWithTag( "Date", package_info.Date );
-
-    if IsBound(titlepage.Copyright) then
-        OutWithTag( "Copyright", titlepage.Copyright );
-        Unbind( titlepage.Copyright );
-    else
-        # TODO: Do we really want this (resp. any) default string?
-        OutWithTag( "Copyright", [
-            "This package may be distributed under the terms and conditions of the\n",
-            "GNU Public License Version 2.\n",
-            ]
-        );
-    fi;
-
-    for tmp in RecNames(titlepage) do
-        OutWithTag( tmp, titlepage.(tmp) );
-    od;
-
-    indent := indent - 1;
-    Out( "</TitlePage>\n" );
-    
-    CloseStream( filestream );
-    
-    return true;
-    
-end );
-
-##
 ## Call this with the packagename. It creates a simple main file. Call it with package name and maybe a list of entities.
-
 InstallGlobalFunction( CreateMainPage,
                        
   function( arg )
@@ -269,9 +143,7 @@ InstallGlobalFunction( CreateMainPage,
         opt.entities := [];
         
     fi;
-
-    # TODO: Allow more complicated entities definitions: E.g. by allowing pairs
-    #  [ name, value ]
+    
     # TODO: and if we do that, then do not add package_name unconditionally to the list,
     # to allow the package author to define this entity slightly differently...
     Add( opt.entities, package_name );
@@ -364,155 +236,245 @@ InstallGlobalFunction( CreateMainPage,
 end );
 
 ##
-## Gets three strings. Initialises everything.
+InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
+                       
+  function( package_name )
+    local package_info, title_rec, author_list, i, tmp_list, j, author_rec, author_string;
+    
+    package_info := PackageInfo( package_name )[ 1 ];
+    
+    if IsBound( package_info.AutoDoc ) then
+        
+        title_rec := package_info.AutoDoc.TitlePage;
+        
+    else
+        
+        title_rec := rec( );
+        
+    fi;
+    
+    AUTODOC_WriteOnce( title_rec, "Title", package_name );
+    
+    AUTODOC_WriteOnce( title_rec, "Subtitle", ReplacedString( package_info.Subtitle, "GAP", "&GAP;" ) );
+    
+    AUTODOC_WriteOnce( title_rec, "Version", package_info.Version );
+    
+    ## Sanitize author info
+    
+    if not IsBound( title_rec.Author ) then
+        
+        author_list := [ ];
+        
+        i := 1;
+        
+        for author_rec in package_info.Persons do
+            
+            author_string := "";
+            
+            AUTODOC_APPEND_STRING_ITERATIVE( author_string, author_rec.FirstNames, " ", author_rec.LastName, "<Alt Only=\"LaTeX\"><Br/></Alt>" );
+            
+            tmp_list := SplitString( author_rec.PostalAddress, "\n" );
+            
+            AUTODOC_APPEND_STRING_ITERATIVE( author_string, "<Address>" );
+            
+            for j in tmp_list do
+                
+                AUTODOC_APPEND_STRING_ITERATIVE( author_string, j, "<Br/>" );
+                
+            od;
+            
+            AUTODOC_APPEND_STRING_ITERATIVE( author_string, "</Address>" );
+            
+            AUTODOC_APPEND_STRING_ITERATIVE( author_string, "<Email>", author_rec.Email, "</Email>" );
+            
+            AUTODOC_APPEND_STRING_ITERATIVE( author_string, "<Homepage>", author_rec.WWWHome, "</Homepage>" );
+            
+            author_list[ i ] := author_string;
+            
+            i := i + 1;
+            
+        od;
+        
+        title_rec.Author := author_list;
+        
+    fi;
+    
+    AUTODOC_WriteOnce( title_rec, "Date", package_info.Date );
+    
+    return title_rec;
+    
+end );
+
+##
+## This creates a titlepage out of an argument record.
+## Please make sure that every entry in the record
+## has the name of its tag, even title etc.
+## Please note that entities will be treatened
+## seperately.
+InstallGlobalFunction( CreateTitlePage,
+                       
+  function( argument_rec )
+    local indent, tag, names, filestream, dir, entity_list, OutWithTag, Out, i;
+    
+    if not IsBound( argument_rec.dir ) then
+        
+        Error( "directory must be given" );
+        
+    fi;
+    
+    dir := argument_rec.dir;
+    
+    Unbind( argument_rec.dir );
+    
+    filestream := AUTODOC_OutputTextFile( dir, "title.xml" );
+    
+    indent := 0;
+    
+    Out := function(arg)
+        local s;
+        s := ListWithIdenticalEntries( indent * 2, ' ');
+        Append( s, Concatenation( arg ) );
+        AppendTo( filestream, s );
+    end;
+    
+    OutWithTag := function( tag, content )
+        local lines, s, l;
+        if not IsList( content ) then
+            Error( "can only print string or list of strings" );
+        fi;
+        
+        if IsString( content ) then
+            
+            content := [ content ];
+            
+        fi;
+        
+        s := ListWithIdenticalEntries( indent * 2, ' ');
+        
+        AppendTo( filestream, s, "<", tag, ">\n" );
+        for l in content do
+            AppendTo( filestream, s, "  ", l, "\n" );
+        od;
+        AppendTo( filestream, s, "</", tag, ">\n" );
+        
+    end;
+    
+    Out( AUTODOC_XML_HEADER );
+    
+    Out( "<TitlePage>\n" );
+    
+    indent := indent + 1;
+    
+    for i in [ "Title", "Subtitle", "Version", "TitleComment" ] do
+        
+        if IsBound( argument_rec.( i ) ) then
+            
+            OutWithTag( i, argument_rec.( i ) );
+            
+        fi;
+        
+    od;
+    
+    if IsBound( argument_rec.Author ) then
+        
+        for i in argument_rec.Author do
+            
+            OutWithTag( "Author", i );
+            
+        od;
+        
+    fi;
+    
+    for i in [ "Date", "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon" ] do
+        
+        if IsBound( argument_rec.( i ) ) then
+            
+            OutWithTag( i, argument_rec.( i ) );
+            
+        fi;
+        
+    od;
+    
+    Out( "</TitlePage>" );
+    
+end );
+
+InstallGlobalFunction( AUTODOC_PROCESS_INTRO_STRINGS,
+                       
+  function( introduction_list )
+    local tree, intro, intro_string, i;
+    
+    tree := ValueOption( "Tree" );
+    
+    if tree = fail then
+        
+        tree := DocumentationTree( );
+        
+    fi;
+    
+    for intro in introduction_list do
+        
+        if Length( intro ) = 2 then
+            
+            intro_string := intro[ 2 ];
+            
+            if IsString( intro_string ) then
+                
+                intro_string := [ intro_string ];
+                
+            fi;
+            
+            for i in intro_string do
+                
+                Add( ChapterInTree( tree, ReplacedString( intro[ 1 ], " ", "_" ) ), i );
+                
+            od;
+            
+        elif Length( intro ) = 3 then
+            
+            intro_string := intro[ 3 ];
+            
+            if IsString( intro_string ) then
+                
+                intro_string := [ intro_string ];
+                
+            fi;
+            
+            for i in intro_string do
+                
+                Add( SectionInTree( tree, ReplacedString( intro[ 1 ], " ", "_" ), ReplacedString( intro[ 2 ], " ", "_" ) ), i );
+                
+            od;
+            
+        else
+            
+            Error( "wrong format of introduction string list\n" );
+            
+        fi;
+        
+    od;
+    
+    return tree;
+    
+end );
+
+
 #
 # Note: the optional arguments name_documentation_file, create_full_docu and
 # entities are intentionally undocumented and are only here for backward
 # compatibility. We should remove them completely at some point.
 InstallGlobalFunction( CreateAutomaticDocumentation,
 
-  function( arg )
-    local package_name, path_to_xmlfiles, create_full_docu, introduction_list, entities, 
-          dependencies, intro, chapter_record, section_stream, intro_string, group_names, current_group, files_to_scan, i,
-          default_chapter_record, tree;
-    
-    files_to_scan := ValueOption( "files_to_scan" );
-    
-    if files_to_scan = fail then
-        
-        files_to_scan := [ ];
-        
-    fi;
-    
-    package_name := arg[ 1 ];
-    
-    if Length( arg ) >= 3 and IsString( arg[ 2 ] ) and IsString( arg[ 3 ] ) then
+  function( arg_rec )
+    local path_to_xmlfiles, tree;
 
-        Remove( arg, 2 ); # former name_documentation_file, ignore
-    
-    fi;
-
-    path_to_xmlfiles := arg[ 2 ];
+    path_to_xmlfiles := arg_rec.path_to_xmlfiles;
 
     if IsString( path_to_xmlfiles ) then
         path_to_xmlfiles := Directory( path_to_xmlfiles );
     fi;
     
-    if Length( arg ) >= 3 and IsBool( arg[ 3 ] ) then
-        create_full_docu := Remove( arg, 3 );
-    else
-        create_full_docu := false;
-    fi;
-    
-    default_chapter_record := CreateDefaultChapterData( package_name );
-    
-    AUTOMATIC_DOCUMENTATION.path_to_xmlfiles := path_to_xmlfiles;
-    
-    AUTOMATIC_DOCUMENTATION.package_name := package_name;
-    
-    ## Initialising the filestreams.
-    AUTOMATIC_DOCUMENTATION.enable_documentation := true;
-    
-    if Length( arg ) = 3 then
-        
-        if Length( arg[ 3 ] ) > 0 then
-            
-            if IsString( arg[ 3 ][ 1 ] ) then
-                
-                entities := arg[ 3 ];
-                
-            elif IsList( arg[ 3 ][ 1 ] ) then
-                
-                introduction_list := arg[ 3 ];
-                
-            fi;
-            
-        fi;
-        
-    elif Length( arg ) = 4 then
-        
-        introduction_list := arg[ 3 ];
-        
-        entities := arg[ 4 ];
-        
-    fi;
-    
-    if create_full_docu then
-        
-        CreateTitlePage( package_name, path_to_xmlfiles );
-        
-        if IsBound( entities ) then
-            
-            CreateMainPage( package_name, path_to_xmlfiles, entities );
-            
-        else
-            
-            CreateMainPage( package_name, path_to_xmlfiles );
-            
-        fi;
-        
-    fi;
-    
-    tree := DocumentationTree( );
-    
-    if IsBound( introduction_list ) then
-      
-        for intro in introduction_list do
-            
-            if Length( intro ) = 2 then
-                
-                intro_string := intro[ 2 ];
-                
-                if IsString( intro_string ) then
-                    
-                    intro_string := [ intro_string ];
-                    
-                fi;
-                
-                for i in intro_string do
-                    
-                    Add( ChapterInTree( tree, ReplacedString( intro[ 1 ], " ", "_" ) ), i );
-                    
-                od;
-                
-            elif Length( intro ) = 3 then
-                
-                intro_string := intro[ 3 ];
-                
-                if IsString( intro_string ) then
-                    
-                    intro_string := [ intro_string ];
-                    
-                fi;
-                
-                for i in intro_string do
-                    
-                    Add( SectionInTree( tree, ReplacedString( intro[ 1 ], " ", "_" ), ReplacedString( intro[ 2 ], " ", "_" ) ), i );
-                    
-                od;
-                
-            else
-                
-                Error( "wrong format of introduction string list\n" );
-                
-            fi;
-        
-        od;
-        
-    fi;
-    
-    if LowercaseString( package_name ) = "autodoc" then
-        
-        ReadPackage( "AutoDoc", "gap/AutoDocDocEntries.g" );
-        
-    else
-        
-        LoadPackage( package_name );
-        
-    fi;
-    
-    ##Use parser now.
-    AutoDoc_Parser_ReadFiles( files_to_scan, tree, default_chapter_record );
+    tree := arg_rec.tree;
     
     WriteDocumentation( tree, path_to_xmlfiles );
     
@@ -521,14 +483,61 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
 end );
 
 ##
+## Optional argument is PackageName, which creates a 
+## Default chapter record. This is not availible for
+## worksheets.
+InstallGlobalFunction( AutoDocScanFiles,
+                       
+  function( files_to_scan )
+    local package_name, default_chapter_record, tree;
+    
+    package_name := ValueOption( "PackageName" );
+    
+    if IsString( package_name ) then
+        
+        default_chapter_record := CreateDefaultChapterData( package_name );
+        
+    else
+        
+        default_chapter_record := rec( );
+        
+    fi;
+    
+    tree := ValueOption( "Tree" );
+    
+    if tree = fail then
+        
+        tree := DocumentationTree( );
+        
+    fi;
+    
+    AutoDoc_Parser_ReadFiles( files_to_scan, tree, default_chapter_record );
+    
+    return tree;
+    
+end );
+
+##
 InstallGlobalFunction( AutoDocWorksheet,
                        
   function( filelist )
     local folder, filename, folder_length, filestream, plain_filename, title, author, output_folder, testfile,
-          book_name, maketest_commands, commands, bibfile, bib_tmp, tree, write_title_page, table_of_contents, i,
+          book_name, maketest_commands, commands, bibfile, bib_tmp, tree, table_of_contents, i,
           testfile_output_folder, current_directory_set, entity_list, maketest_record, testfile_name;
     
-    write_title_page := false;
+    scaffold := ValueOption( "scaffold" );
+    
+    if scaffold = fail then
+        
+        scaffold := rec( TitlePage := rec( ) );
+        
+    fi;
+    
+    if not IsBound( scaffold.TitlePage ) then
+        
+        scaffold.TitlePage := rec( );
+        
+    fi;
     
     if IsString( filelist ) then
         
@@ -556,10 +565,7 @@ InstallGlobalFunction( AutoDocWorksheet,
     
     output_folder := Directory( output_folder );
     
-    tree := DocumentationTree();
-    
-    ## No default names here.
-    AutoDoc_Parser_ReadFiles( filelist, tree, rec( ) );
+    tree := AutoDocScanFiles( filelist );
     
     if IsBound( tree!.worksheet_dependencies ) then
         
@@ -575,27 +581,13 @@ InstallGlobalFunction( AutoDocWorksheet,
         
     fi;
     
-    if IsBound( tree!.worksheet_title ) then
-        
-        title := tree!.worksheet_title;
-        
-    else
-        
-        title := fail;
-        
-    fi;
+    TitlePage := scaffold.TitlePage;
     
-    if IsBound( tree!.worksheet_author ) then
-        
-        author := tree!.worksheet_author;
-        
-    else
-        
-        author := fail;
-        
-    fi;
+    AUTODOC_APPEND_RECORD_WRITEONCE( TitlePage, tree!.TitlePage );
     
     book_name := ValueOption( "BookName" );
+
+    TitlePage := scaffold.TitlePage;
     
     if book_name = fail then
         
@@ -663,65 +655,11 @@ InstallGlobalFunction( AutoDocWorksheet,
     
     AppendTo( filestream, "<Book Name=\"", book_name, "\">\n" );
     
-    AppendTo( filestream, "<TitlePage>\n" );
+    AppendTo( filestream, "<#Include SYSTEM \"Title.xml\">\n" );
     
-    if title <> fail then
-        
-        AppendTo( filestream, "<Title>", title, "</Title>\n" );
-        
-    fi;
+    TitlePage.dir := output_folder;
     
-    if author <> fail then
-        
-        for i in author do
-            
-            AppendTo( filestream, "<Author>", i, "</Author>\n" );
-            
-        od;
-        
-    fi;
-    
-    if IsBound( tree!.worksheet_date ) then
-        
-        AppendTo( filestream, "<Date>", tree!.worksheet_date, "</Date>" );
-        
-    fi;
-    
-    if IsBound( tree!.worksheet_URL_string ) then
-        
-        AppendTo( filestream, "<TitleComment>\n<URL>", tree!.worksheet_URL_string, "</URL>\n</TitleComment>\n\n" );
-        
-    fi;
-    
-    if IsBound( tree!.acknowledgement ) then
-        
-        AppendTo( filestream, "<Acknowledgements>\n" );
-        
-        for i in tree!.acknowledgement do
-            
-            AppendTo( filestream, i, "\n" );
-            
-        od;
-        
-        AppendTo( filestream, "</Acknowledgements>\n" );
-        
-    fi;
-    
-    if IsBound( tree!.abstract ) then
-        
-        AppendTo( filestream, "<Abstract>\n" );
-        
-        for i in tree!.abstract do
-            
-            AppendTo( filestream, i, "\n" );
-            
-        od;
-        
-        AppendTo( filestream, "</Abstract>" );
-        
-    fi;
-    
-    AppendTo( filestream, "</TitlePage>" );
+    CreateTitlePage( TitlePage );
     
     table_of_contents := ValueOption( "TableOfContents" );
     
@@ -762,8 +700,6 @@ InstallGlobalFunction( AutoDocWorksheet,
     CopyHTMLStyleFiles( Filename( output_folder, "" ) );
     
     testfile := ValueOption( "TestFile" );
-    
-    maketest_commands := ValueOption( "TestFileCommands" );
     
     if IsString( maketest_commands ) then
         

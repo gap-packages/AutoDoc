@@ -16,6 +16,8 @@ DeclareGlobalFunction( "AUTODOC_TREE_NODE_NAME_ITERATOR" );
 
 DeclareGlobalFunction( "AUTODOC_TRANSLATE_CONTEXT" );
 
+DeclareGlobalFunction( "AUTODOC_INSTALL_TREE_SETTERS" );
+
 ######################################
 ##
 ## Categories
@@ -119,12 +121,6 @@ DeclareOperation( "MergeGroupEntries",
 
 DeclareOperation( "Add",
                   [ IsTreeForDocumentation, IsString ] );
-
-DeclareOperation( "SetTreeToAcknowledgement",
-                  [ IsTreeForDocumentation ] );
-
-DeclareOperation( "SetTreeToAbstract",
-                  [ IsTreeForDocumentation ] );
 
 #######################################
 ##

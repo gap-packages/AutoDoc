@@ -177,6 +177,7 @@ InstallMethod( DocumentationTree,
                   contents_for_dummies := rec( ),
                   node_name_iterator := 0,
                   current_level := 0,
+                  TitlePage := rec( )
             );
     
     ObjectifyWithAttributes( tree,
@@ -520,37 +521,45 @@ InstallMethod( Add,
     
 end );
 
-##
-InstallMethod( SetTreeToAcknowledgement,
-               [ IsTreeForDocumentation ],
-               
-  function( tree )
+InstallGlobalFunction( AUTODOC_INSTALL_TREE_SETTERS,
+                       
+  function( )
+    local method_name, method_name_part, current_string, string_list;
     
-    if not IsBound( tree!.acknowledgement ) then
-        
-        tree!.acknowledgement := [ ];
-        
-    fi;
+    string_list := [ "Title", "Subtitle", "Version", "TitleComment", "Author", 
+                     "Date", "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon" ];
     
-    tree!.content := tree!.acknowledgement;
+    method_name_part := "SetTreeTo";
+    
+    for current_string in string_list do
+        
+        method_name := Concatenation( method_name_part, current_string );
+        
+        DeclareOperation( method_name,
+                          [ IsTreeForDocumentation ] );
+        
+        method_name := ValueGlobal( method_name );
+        
+        InstallMethod( method_name,
+                       [ IsTreeForDocumentation ],
+                       
+          function( tree )
+            
+            if not IsBound( tree!.TitlePage.( current_string ) ) then
+                
+                tree!.TitlePage.( current_string ) := [ ];
+                
+            fi;
+            
+            tree!.content := tree!.TitlePage.( current_string );
+            
+        end );
+        
+    od;
     
 end );
 
-##
-InstallMethod( SetTreeToAbstract,
-               [ IsTreeForDocumentation ],
-               
-  function( tree )
-    
-    if not IsBound( tree!.abstract ) then
-        
-        tree!.abstract := [ ];
-        
-    fi;
-    
-    tree!.content := tree!.abstract;
-    
-end );
+AUTODOC_INSTALL_TREE_SETTERS();
 
 ####################################
 ##

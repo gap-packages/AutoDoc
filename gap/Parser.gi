@@ -169,7 +169,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           Scan_for_Declaration_part, flush_and_prepare_for_item, current_line, filestream,
           level_scope, scope_group, read_example, command_function_record, autodoc_read_line,
           current_command, was_declaration, filename, system_scope, groupnumber, chunk_list, rest_of_file_skipped,
-          context_stack, new_man_item, add_man_item, Reset, read_code;
+          context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list;
     
     groupnumber := 0;
     
@@ -899,24 +899,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
-        @Author := function()
-            
-            if not IsBound( tree!.worksheet_author ) then
-                
-                tree!.worksheet_author := [ ];
-                
-            fi;
-                
-            Add( tree!.worksheet_author, current_command[ 2 ] );
-            
-        end,
-        
-        @Title := function()
-            
-            tree!.worksheet_title := current_command[ 2 ];
-            
-        end,
-        
         STRING := function()
             
             Add( current_item, current_command[ 2 ] );
@@ -971,35 +953,31 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
-        @Date := function()
-            
-            tree!.worksheet_date := current_command[ 2 ];
-            
-        end,
-        
-        @Acknowledgements := function()
-            
-            current_item := tree;
-            
-            SetTreeToAcknowledgement( tree );
-            
-        end,
-        
+        ## Needs to be done separately
         @URL := function()
             
             tree!.worksheet_URL_string := current_command[ 2 ];
             
         end,
         
-        @Abstract := function( )
+    );
+    
+    title_item_list := [ "Title", "Subtitle", "Version", "TitleComment", "Author", 
+                         "Date", "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon" ];
+    
+    for title_item in title_item_list do
+        
+        command_function_record.( Concatenation( "@", title_item ) ) := function( )
             
             current_item := tree;
             
-            SetTreeToAbstract( tree );
+            ValueGlobal( Concatenation( "SetTreeTo", title_item ) )( tree );
             
-        end
+            Add( tree, current_command[ 2 ] );
+            
+        end;
         
-    );
+    od;
     
     rest_of_file_skipped := false;
     

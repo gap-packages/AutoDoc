@@ -20,10 +20,18 @@ DeclareGlobalVariable( "AUTODOC_XML_HEADER" );
 
 DeclareGlobalFunction( "AUTODOC_WriteOnce" );
 
+DeclareGlobalFunction( "AUTODOC_APPEND_STRING_ITERATIVE" );
+
+DeclareGlobalFunction( "AUTODOC_APPEND_RECORD_WRITEONCE" );
+
+DeclareGlobalFunction( "AUTODOC_PROCESS_INTRO_STRINGS" );
+
 
 # Documentation for this global function can be found in gap/AutoDocDocEntries.g
 # respectively in the manual.
 DeclareGlobalFunction( "CreateAutomaticDocumentation" );
+
+DeclareGlobalFunction( "AutoDocScanFiles" );
 
 
 # The following functions are currently undocumented and for internal use only.
@@ -41,14 +49,9 @@ DeclareGlobalFunction( "CreateMainPage" );
 ## It creates names for the default chapters and sections.
 DeclareGlobalFunction( "CreateDefaultChapterData" );
 
-DeclareGlobalFunction( "SetCurrentAutoDocChapter" );
-DeclareGlobalFunction( "ResetCurrentAutoDocChapter" );
+DeclareGlobalFunction( "ExtractTitleInfoFromPackageInfo" );
 
 
-DeclareGlobalFunction( "SetCurrentAutoDocSection" );
-DeclareGlobalFunction( "ResetCurrentAutoDocSection" );
-
-DeclareGlobalFunction( "WriteStringIntoDoc" );
 
 DeclareGlobalFunction( "CreateMakeTest" );
 
