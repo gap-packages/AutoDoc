@@ -109,33 +109,20 @@ end );
 ## Call this with the packagename. It creates a simple main file. Call it with package name and maybe a list of entities.
 InstallGlobalFunction( CreateMainPage,
                        
-  function( arg )
-    local package_name, dir, opt, filename, filestream, i, package_info;
+  function( opt )
+    local package_name, dir, filename, filestream, i, package_info, book_name;
     
-    package_name := arg[ 1 ];
-    package_info := PackageInfo( package_name )[ 1 ];
-
-    dir := arg[ 2 ];
+    if not IsBound( opt.book_name ) then
+        
+        Error( "book name must be given" );
+        
+    fi;
+    
+    book_name := opt.book_name;
+    
+    dir := opt.dir;
     if IsString(dir) then
         dir := Directory(dir);
-    fi;
-
-    if IsBound( package_info.AutoDoc ) then
-        opt := package_info.AutoDoc;
-    else
-        opt := rec();
-    fi;
-
-    if Length( arg ) = 3 then
-        if IsRecord( arg[ 3 ] ) then
-            opt := arg[ 3 ];
-        else
-            # HACK: Support old-style calling with entities list as second parameter
-            # This is not supported anymore, please see line 250s
-            opt.entities := arg[ 2 ];
-        fi;
-    elif Length( arg ) > 3 then
-        Error( "Wrong number of arguments\n" );
     fi;
     
     if not IsBound( opt.entities ) then
@@ -146,7 +133,7 @@ InstallGlobalFunction( CreateMainPage,
     
     # TODO: and if we do that, then do not add package_name unconditionally to the list,
     # to allow the package author to define this entity slightly differently...
-    Add( opt.entities, package_name );
+    Add( opt.entities, book_name );
     
     if IsBound( opt.main_xml_file ) then
         
@@ -154,7 +141,7 @@ InstallGlobalFunction( CreateMainPage,
         
     else
         
-        filename := Concatenation( package_name, ".xml" );
+        filename := Concatenation( book_name, ".xml" );
         
     fi;
     
@@ -165,7 +152,7 @@ InstallGlobalFunction( CreateMainPage,
     AppendTo( filestream, "<!DOCTYPE Book SYSTEM \"gapdoc.dtd\"\n[\n" );
     
     AppendTo( filestream, "<!ENTITY see '<Alt Only=\"LaTeX\">$\to$</Alt><Alt Not=\"LaTeX\">--&gt;</Alt>'>\n" );
-    
+   
     for i in opt.entities do
         
         if IsString( i ) then
@@ -180,7 +167,7 @@ InstallGlobalFunction( CreateMainPage,
     
     AppendTo( filestream, "]\n>\n" );
     
-    AppendTo( filestream, "<Book Name=\"", package_name, "\">\n" );
+    AppendTo( filestream, "<Book Name=\"", book_name, "\">\n" );
     
     AppendTo( filestream, "<#Include SYSTEM \"title.xml\">\n" );
     
@@ -188,7 +175,7 @@ InstallGlobalFunction( CreateMainPage,
     
     AppendTo( filestream, "<Body>\n" );
     
-    AppendTo( filestream, "<Index>&", package_name, ";</Index>\n" );
+    AppendTo( filestream, "<Index>&", book_name, ";</Index>\n" );
 
     if IsBound( opt.includes ) then
         
@@ -232,6 +219,28 @@ InstallGlobalFunction( CreateMainPage,
     CloseStream( filestream );
     
     return true;
+    
+end );
+
+##
+InstallGlobalFunction( ExtractMainInfoFromPackageInfo,
+                       
+  function( package_name )
+    local package_info, return_record;
+    
+    package_info := PackageInfo( package_name )[ 1 ];
+    
+    if IsBound( package_info.AutoDoc ) then
+        
+        return_record := package_info.AutoDoc;
+        
+    else
+        
+        return_record := rec( );
+        
+    fi;
+    
+    return return_record;
     
 end );
 
@@ -523,7 +532,8 @@ InstallGlobalFunction( AutoDocWorksheet,
   function( filelist )
     local folder, filename, folder_length, filestream, plain_filename, title, author, output_folder, testfile,
           book_name, maketest_commands, commands, bibfile, bib_tmp, tree, table_of_contents, i,
-          testfile_output_folder, current_directory_set, entity_list, maketest_record, testfile_name;
+          testfile_output_folder, current_directory_set, entity_list, maketest_record, testfile_name, scaffold,
+          TitlePage;
     
     scaffold := ValueOption( "scaffold" );
     

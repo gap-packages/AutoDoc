@@ -187,6 +187,8 @@ function( arg )
         
         AUTODOC_WriteOnce( scaffold, "TitlePage", true );
         
+        AUTODOC_WriteOnce( scaffold, "MainPage", true );
+        
     fi;
 
     
@@ -377,17 +379,21 @@ function( arg )
             
             AUTODOC_APPEND_RECORD_WRITEONCE( title_page, tree!.TitlePage );
             
-            Error( "1" );
-            
             AUTODOC_APPEND_RECORD_WRITEONCE( title_page, ExtractTitleInfoFromPackageInfo( pkg ) );
-            
-            Error( "2" );
             
             CreateTitlePage( title_page );
             
         fi;
         
-        CreateMainPage( pkg, doc_dir, scaffold );
+        if IsBound( scaffold.MainPage ) and scaffold.MainPage <> false then
+            
+            scaffold.dir := doc_dir;
+            
+            scaffold.book_name := pkg;
+            
+            CreateMainPage( scaffold );
+            
+        fi;
 
     fi;
     

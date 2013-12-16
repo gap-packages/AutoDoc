@@ -51,6 +51,8 @@ DeclareGlobalFunction( "CreateDefaultChapterData" );
 
 DeclareGlobalFunction( "ExtractTitleInfoFromPackageInfo" );
 
+DeclareGlobalFunction( "ExtractMainInfoFromPackageInfo" );
+
 
 
 DeclareGlobalFunction( "CreateMakeTest" );

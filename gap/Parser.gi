@@ -29,13 +29,13 @@ end );
 ##
 InstallGlobalFunction( Scan_for_AutoDoc_Part,
                        
-  function( line )
+  function( line, plain_text_mode )
     local position, whitespace_position, command, argument;
     
     #! @DONT_SCAN_NEXT_LINE
     position := PositionSublist( line, "#!" );
     
-    if position = fail then
+    if position = fail and plain_text_mode = false then
         
         return [ false, line ];
         
@@ -169,7 +169,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           Scan_for_Declaration_part, flush_and_prepare_for_item, current_line, filestream,
           level_scope, scope_group, read_example, command_function_record, autodoc_read_line,
           current_command, was_declaration, filename, system_scope, groupnumber, chunk_list, rest_of_file_skipped,
-          context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list;
+          context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,install_tmp_func;
     
     groupnumber := 0;
     
@@ -238,6 +238,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         context_stack := [ ];
         
         Unbind( current_item );
+        
+        plain_text_mode := false;
         
     end;
     
@@ -953,19 +955,24 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
-        ## Needs to be done separately
-        @URL := function()
+        @AutoDocPlainText := function()
             
-            tree!.worksheet_URL_string := current_command[ 2 ];
+            plain_text_mode := true;
             
         end,
+        
+        @EndAutoDocPlainText := function()
+            
+            plain_text_mode := false;
+            
+        end
         
     );
     
     title_item_list := [ "Title", "Subtitle", "Version", "TitleComment", "Author", 
-                         "Date", "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon" ];
+                         "Date", "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon", "URL" ];
     
-    for title_item in title_item_list do
+    install_tmp_func := function( title_item )
         
         command_function_record.( Concatenation( "@", title_item ) ) := function( )
             
@@ -977,6 +984,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end;
         
+    end;
+    
+    for title_item in title_item_list do
+        
+        install_tmp_func( title_item );
+        
     od;
     
     rest_of_file_skipped := false;
@@ -985,6 +998,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     for filename in filename_list do
         
         Reset();
+        
+        ## FIXME: Is this dangerous? 
+        if PositionSublist( filename, ".autodoc" ) <> fail then
+            
+            plain_text_mode := true;
+            
+        fi;
         
         filestream := InputTextFile( filename );
         
@@ -1006,7 +1026,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 
             fi;
             
-            current_command := Scan_for_AutoDoc_Part( current_line );
+            current_command := Scan_for_AutoDoc_Part( current_line, plain_text_mode );
             
             if current_command[ 1 ] <> false then
                 
