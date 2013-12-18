@@ -969,12 +969,23 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             plain_text_mode := false;
             
-        end
+        end,
         
+        @URL := function( )
+            
+            SetTreeToTitleComment( tree );
+            
+            Add( tree, "<URL>" );
+            
+            Add( tree, command[ 2 ] );
+            
+            Add( tree, "</URL>" );
+            
+        end
     );
     
     title_item_list := [ "Title", "Subtitle", "Version", "TitleComment", "Author", 
-                         "Date", "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon", "URL" ];
+                         "Date", "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon" ];
     
     install_tmp_func := function( title_item )
         

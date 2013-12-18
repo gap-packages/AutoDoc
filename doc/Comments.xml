@@ -333,6 +333,20 @@ i := i + 1;
 ]]></Listing>
 </Subsection>
 
+<Subsection Label="@LatexOnly">
+<Index Key="@LatexOnly"><C>@@LatexOnly, @BeginLatexOnly, and @EndLatexOnly</C></Index>
+<Heading>@LatexOnly <A>text</A>, @BeginLatexOnly , and @EndLatexOnly</Heading>
+Code inserted between @BeginLatexOnly and @EndLatexOnly or after @LatexOnly is only inserted
+in the PDF version of the manual or worksheet. It can hold arbitrary LaTeX-commands.
+<Listing><![CDATA[
+#! @BeginLatexOnly
+#! \include{picture.tex}
+#! @EndLatexOnly
+
+#! @LatexOnly \include{picture.tex}
+]]></Listing>
+</Subsection>
+
 </Section>
 
 <Section Label="TitlepageCommands">
@@ -382,6 +396,15 @@ Those add the following lines at the corresponding point of the titlepage. Pleas
 things can be (better) extracted from the PackageInfo.g. In case you set some of those,
 the extracted or in scaffold defined items will be overwritten.
 </Section>
+
+ <Section Label="PlainText">
+   <Heading>Plain text files</Heading>
+   
+   AutoDoc plain text files work exactly like AutoDoc comments, except that the
+   #! is unnecessary at the beginning of a line which should be documented.
+   Files that have the suffix .autodoc will automatically regarded as plain text files
+   while the commands @AutoDocPlainText and @EndAutoDocPlainText mark parts in plain text files which
+   should be regarded as AutoDoc parts. All commands can be used like before.
 
 <Section Label="Groups">
 <Heading>Grouping</Heading>
