@@ -41,7 +41,11 @@ InstallGlobalFunction( Scan_for_AutoDoc_Part,
         
     fi;
     
-    line := StripBeginEnd( line{[ position + 2 .. Length( line ) ]}, " " );
+    if plain_text_mode <> true then
+        
+        line := StripBeginEnd( line{[ position + 2 .. Length( line ) ]}, " " );
+        
+    fi;
     
     ## Scan for a command
     
@@ -991,8 +995,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         install_tmp_func( title_item );
         
     od;
-    
-    Error( "" );
     
     rest_of_file_skipped := false;
     
