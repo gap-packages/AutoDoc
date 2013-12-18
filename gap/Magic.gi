@@ -384,9 +384,9 @@ function( arg )
             
         fi;
         
-        gapdoc.main := pkg;
+        gapdoc.main := ReplacedString( pkg, " ", "_" );
         
-        gapdoc.bookname := pkg;
+        gapdoc.bookname := ReplacedString( pkg, " ", "_" );
         
     fi;
     

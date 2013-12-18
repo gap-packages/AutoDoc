@@ -625,7 +625,7 @@ InstallMethod( SubsectionInTree,
                [ IsTreeForDocumentation, IsString, IsString, IsString ],
                
   function( tree, chapter_name, section_name, subsection_name )
-    local name, chapter, section;
+    local name, section, subsection;
     
     name := Concatenation( "Chapter_", chapter_name, "_Section_", section_name, "_Subsection_", subsection_name );
     
@@ -635,13 +635,13 @@ InstallMethod( SubsectionInTree,
         
     fi;
     
-    chapter := ChapterInTree( tree, chapter_name );
+    section := SectionInTree( tree, chapter_name, section_name );
     
-    section := DocumentationStructurePart( tree, [ chapter_name, section_name ] );
+    subsection := DocumentationStructurePart( tree, [ chapter_name, section_name, subsection_name ] );
     
-    Add( chapter!.content, section );
+    Add( section!.content, subsection );
     
-    return section;
+    return subsection;
     
 end );
 
