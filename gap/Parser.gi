@@ -992,6 +992,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
     od;
     
+    Error( "" );
+    
     rest_of_file_skipped := false;
     
     ##Now read the files.

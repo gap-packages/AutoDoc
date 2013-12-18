@@ -171,7 +171,11 @@ InstallGlobalFunction( CreateMainPage,
     
     AppendTo( filestream, "<#Include SYSTEM \"title.xml\">\n" );
     
-    AppendTo( filestream, "<TableOfContents/>\n" );
+    if not IsBound( opt.table_of_contents ) or opt.table_of_contents <> false then
+        
+        AppendTo( filestream, "<TableOfContents/>\n" );
+        
+    fi;
     
     AppendTo( filestream, "<Body>\n" );
     
@@ -206,7 +210,7 @@ InstallGlobalFunction( CreateMainPage,
         
     fi;
     
-    if IsBound( opt.bib ) then
+    if IsBound( opt.bib ) and opt.bib <> false then
         
         AppendTo( filestream, "<Bibliography Databases=\"", opt.bib, "\"/>\n" );
 
@@ -529,261 +533,46 @@ end );
 ##
 InstallGlobalFunction( AutoDocWorksheet,
                        
-  function( filelist )
-    local folder, filename, folder_length, filestream, plain_filename, title, author, output_folder, testfile,
-          book_name, maketest_commands, commands, bibfile, bib_tmp, tree, table_of_contents, i,
-          testfile_output_folder, current_directory_set, entity_list, maketest_record, testfile_name, scaffold,
-          TitlePage;
+  function( arg )
+    local arg_list, autodoc_rec;
     
-    scaffold := ValueOption( "scaffold" );
-    
-    if scaffold = fail then
+    if Length( arg ) = 1 then
         
-        scaffold := rec( TitlePage := rec( ) );
+        arg[ 2 ] := rec( );
         
     fi;
     
-    if not IsBound( scaffold.TitlePage ) then
+    if Length( arg ) = 2 then
         
-        scaffold.TitlePage := rec( );
+        arg_list := [ "AutoDocWorksheet", arg[ 2 ] ];
         
-    fi;
-    
-    if IsString( filelist ) then
+        autodoc_rec := ValueOption( "autodoc" );
         
-        filelist := [ filelist ];
-        
-    fi;
-    
-    output_folder := ValueOption( "OutputFolder" );
-    
-    if output_folder = fail then
-        
-        filename := filelist[ 1 ];
-        
-        output_folder := StructuralCopy( filename );
-        
-        while output_folder[ Length( output_folder ) ] <> '/' do
+        if IsString( arg[ 1 ] ) then
             
-            Remove( output_folder, Length( output_folder ) );
+            arg[ 1 ] := [ arg[ 1 ] ];
             
-        od;
+        fi;
         
-        folder_length := Length( output_folder );
-        
-    fi;
-    
-    output_folder := Directory( output_folder );
-    
-    tree := AutoDocScanFiles( filelist );
-    
-    if IsBound( tree!.worksheet_dependencies ) then
-        
-        for i in tree!.worksheet_dependencies do
+        if IsBound( autodoc_rec.files ) then
             
-            if CallFuncList( TestPackageAvailability, Concatenation( i, [ true ] ) ) = fail then
-                
-                Error( Concatenation( "Package ", i[ 1 ], " is not loadable" ) );
-                
-            fi;
-            
-        od;
-        
-    fi;
-    
-    TitlePage := scaffold.TitlePage;
-    
-    AUTODOC_APPEND_RECORD_WRITEONCE( TitlePage, tree!.TitlePage );
-    
-    book_name := ValueOption( "BookName" );
-
-    TitlePage := scaffold.TitlePage;
-    
-    if book_name = fail then
-        
-        if title = fail then
-            
-            book_name := filename{[ folder_length + 1 .. Length( filename ) ]};
+            Append( autodoc_rec.files, arg[ 1 ] );
             
         else
             
-            book_name := ReplacedString( title, " ", "_" );
+            autodoc_rec.files := arg[ 1 ];
             
         fi;
         
-    fi;
-    
-    if title = fail then
-        
-        if book_name = fail then
-            
-            title := filename{[ folder_length + 1 .. Length( filename ) ]};
-            
-        else
-            
-            title := book_name;
-            
-        fi;
+        AutoDoc( "AutoDocWorksheet", arg[ 2 ] : autodoc := autodoc_rec );
         
     fi;
     
-    WriteDocumentation( tree, output_folder );
-    
-    filestream := AUTODOC_OutputTextFile( output_folder, Concatenation( book_name, ".xml" ) );
-    
-    AppendTo( filestream, AUTODOC_XML_HEADER );
-    
-    AppendTo( filestream, "<!DOCTYPE Book SYSTEM \"gapdoc.dtd\"\n[\n" );
-    
-    AppendTo( filestream, "<!ENTITY ", book_name, " '<Package>", book_name, "</Package>'>\n" );
-    
-    entity_list := ValueOption( "EntityList" );
-    
-    if IsString( entity_list ) then
+    if Length( arg ) = 0 then
         
-        entity_list := [ entity_list ];
+        AutoDoc( "AutoDocWorksheet" );
         
     fi;
-    
-    if IsList( entity_list ) then
-        
-        for i in entity_list do
-            
-            if IsString( i ) then
-                
-                i := [ "Package", i ];
-                
-            fi;
-            
-            AppendTo( filestream, "<!ENTITY ", i[ 2 ], " '<", i[ 1 ], ">", i[ 2 ], "</", i[ 1 ], ">'>\n" );
-            
-        od;
-        
-    fi;
-    
-    AppendTo( filestream, "]\n>\n" );
-    
-    AppendTo( filestream, "<Book Name=\"", book_name, "\">\n" );
-    
-    AppendTo( filestream, "<#Include SYSTEM \"Title.xml\">\n" );
-    
-    TitlePage.dir := output_folder;
-    
-    CreateTitlePage( TitlePage );
-    
-    table_of_contents := ValueOption( "TableOfContents" );
-    
-    if table_of_contents = true then
-        
-        AppendTo( filestream, "<TableOfContents/>\n" );
-        
-    fi;
-    
-    AppendTo( filestream, "<Body>\n" );
-    
-    AppendTo( filestream, "<#Include SYSTEM \"AutoDocMainFile.xml\">\n" );
-    
-    AppendTo( filestream, "</Body>\n" );
-    
-    bibfile := ValueOption( "Bibliography" );
-    
-    if bibfile <> fail then
-        
-        AppendTo( filestream, "<Bibliography Databases=\"", bibfile, "\"/>\n" );
-        
-    fi;
-    
-    if ValueOption( "CreateIndex" ) <> fail then
-        
-        AppendTo( filestream, "<TheIndex/>\n" );
-        
-    fi;
-    
-    AppendTo( filestream, "</Book>\n" );
-    
-    CloseStream( filestream );
-    
-    SetGapDocLaTeXOptions( "utf8" );
-    
-    MakeGAPDocDoc( output_folder, book_name, [ ], book_name, "MathJax" );
-    
-    CopyHTMLStyleFiles( Filename( output_folder, "" ) );
-    
-    testfile := ValueOption( "TestFile" );
-    
-    if IsString( maketest_commands ) then
-        
-        maketest_commands := [ maketest_commands ];
-        
-    fi;
-    
-    current_directory_set := false;
-    
-    if testfile <> false then
-        
-        if IsString( testfile ) then
-            
-            testfile_name := testfile;
-            
-            testfile := rec( );
-            
-        elif IsBool( testfile ) then
-            
-            testfile := rec( );
-            
-            testfile_name := "maketest.g";
-            
-        fi;
-        
-        AUTODOC_WriteOnce( testfile, "name", testfile_name );
-        
-        testfile_output_folder := ValueOption( "TestFileOutputFolder" );
-        
-        if testfile_output_folder = fail then
-            
-            testfile_output_folder := output_folder;
-            
-        elif IsString( testfile_output_folder ) and LowercaseString( testfile_output_folder ) = "current" then
-            
-            testfile_output_folder := DirectoryCurrent( );
-            
-            current_directory_set := true;
-            
-        elif IsString( testfile_output_folder ) then
-            
-            testfile_output_folder := Directory( testfile_output_folder );
-            
-        else
-            
-            Error( "TestFileOutputFolder must be \"current\" or directory" );
-            
-        fi;
-        
-        AUTODOC_WriteOnce( testfile, "folder", testfile_output_folder );
-        
-        if IsString( testfile.folder ) then
-            
-            testfile.folder := Directory( testfile.folder );
-            
-        fi;
-        
-        AUTODOC_WriteOnce( testfile, "commands", maketest_commands );
-        
-        if current_directory_set then
-            
-            AUTODOC_WriteOnce( testfile, "scan_dir", Directory( "." ) );
-            
-        fi;
-        
-        AUTODOC_WriteOnce( testfile, "scan_dir", output_folder );
-        
-        AUTODOC_WriteOnce( testfile, "book_name", book_name );
-        
-        CreateMakeTest( testfile );
-        
-    fi;
-    
-    return true;
     
 end );
 

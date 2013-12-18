@@ -74,7 +74,7 @@ function (pkg, subdirs, extensions)
         files := DirectoryContents( d );
         Sort( files );
         for tmp in files do
-            if not AUTODOC_GetSuffix( tmp ) in [ "g", "gi", "gd" ] then
+            if not AUTODOC_GetSuffix( tmp ) in [ "g", "gi", "gd", "autodoc" ] then
                 continue;
             fi;
             if not IsReadableFile( Filename( d, tmp ) ) then
@@ -89,15 +89,33 @@ end );
 
 # AutoDoc(pkg[, opt])
 #
+## Make this function callable with the package_name AutoDocWorksheet.
+## Which will then create a worksheet!
 InstallGlobalFunction( AutoDoc,
 function( arg )
     local pkg, package_info, opt, scaffold, gapdoc, maketest,
           autodoc, pkg_dir, doc_dir, doc_dir_rel, d, tmp,
-          title_page, tree;
+          title_page, tree, is_worksheet;
     
     pkg := arg[1];
-    package_info := PackageInfo( pkg )[ 1 ];
-    pkg_dir := DirectoriesPackageLibrary( pkg, "" )[1];
+    
+    if LowercaseString( pkg ) = "autodocworksheet" then
+        
+        is_worksheet := true;
+        
+        package_info := rec( );
+        
+        pkg_dir := DirectoryCurrent( );
+        
+    else
+        
+        is_worksheet := false;
+        
+        package_info := PackageInfo( pkg )[ 1 ];
+        
+        pkg_dir := DirectoriesPackageLibrary( pkg, "" )[1];
+        
+    fi;
 
     if Length(arg) >= 2 then
         opt := arg[2];
@@ -195,7 +213,7 @@ function( arg )
     #
     # Extract AutoDoc settings
     #
-    if not IsBound(opt.autodoc) then
+    if not IsBound(opt.autodoc) and not is_worksheet then
         # Enable AutoDoc support if the package depends on AutoDoc.
         tmp := Concatenation( package_info.Dependencies.NeededOtherPackages,
                               package_info.Dependencies.SuggestedOtherPackages );
@@ -216,8 +234,10 @@ function( arg )
             
         fi;
         
-        if not IsBound( autodoc.scan_dirs ) then
+        if not IsBound( autodoc.scan_dirs ) and not is_worksheet then
             autodoc.scan_dirs := [ "gap", "lib", "examples", "examples/doc" ];
+        elif not IsBound( autodoc.scan_dirs ) and is_worksheet then
+            autodoc.scan_dirs := [ ];
         fi;
         
         if not IsBound( autodoc.level ) then
@@ -228,7 +248,9 @@ function( arg )
         
         PushOptions( rec( level_value := autodoc.level ) );
         
-        Append( autodoc.files, AUTODOC_FindMatchingFiles(pkg, autodoc.scan_dirs, [ "g", "gi", "gd" ]) );
+        if not is_worksheet then
+            Append( autodoc.files, AUTODOC_FindMatchingFiles(pkg, autodoc.scan_dirs, [ "g", "gi", "gd" ]) );
+        fi;
         
     fi;
 
@@ -265,7 +287,7 @@ function( arg )
         # FIXME: the following may break if a package uses more than one book
         if IsBound( package_info.PackageDoc ) and IsBound( package_info.PackageDoc[1].BookName ) then
             gapdoc.bookname := package_info.PackageDoc[1].BookName;
-        else
+        elif not is_worksheet then
             # Default: book name = package name
             gapdoc.bookname := pkg;
 
@@ -289,11 +311,13 @@ function( arg )
             gapdoc.files := [];
         fi;
 
-        if not IsBound( gapdoc.scan_dirs ) then
+        if not IsBound( gapdoc.scan_dirs ) and not is_worksheet then
             gapdoc.scan_dirs := [ "gap", "lib", "examples", "examples/doc" ];
         fi;
-
-        Append( gapdoc.files, AUTODOC_FindMatchingFiles(pkg, gapdoc.scan_dirs, [ "g", "gi", "gd" ]) );
+        
+        if not is_worksheet then
+            Append( gapdoc.files, AUTODOC_FindMatchingFiles(pkg, gapdoc.scan_dirs, [ "g", "gi", "gd" ]) );
+        fi;
 
         # Attempt to weed out duplicates as they may confuse GAPDoc (this
         # won't work if there are any non-normalized paths in the list).
@@ -321,6 +345,50 @@ function( arg )
     fi;
     
     AutoDocScanFiles( autodoc.files : PackageName := pkg, Tree := tree );
+    
+    if is_worksheet then
+        
+        if IsRecord( scaffold.TitlePage ) and IsBound( scaffold.TitlePage.Title ) then
+            
+            pkg := scaffold.TitlePage.Title;
+            
+        elif IsBound( tree!.TitlePage.Title ) then
+            
+            pkg := tree!.TitlePage.Title;
+            
+        elif IsBound( autodoc.files ) and Length( autodoc.files ) > 0  then
+            
+            pkg := autodoc.files[ 1 ];
+            
+            while Position( pkg, '/' ) <> fail do
+                
+                Remove( pkg, 1 );
+                
+            od;
+            
+            while Position( pkg, '.' ) <> fail do
+                
+                Remove( pkg, Length( pkg ) );
+                
+            od;
+            
+        else
+            
+            Error( "could not figure out a title." );
+            
+        fi;
+        
+        if not IsString( pkg ) then
+            
+            pkg := JoinStringsWithSeparator( pkg, " " );
+            
+        fi;
+        
+        gapdoc.main := pkg;
+        
+        gapdoc.bookname := pkg;
+        
+    fi;
     
     #
     # Generate scaffold
@@ -379,7 +447,11 @@ function( arg )
             
             AUTODOC_APPEND_RECORD_WRITEONCE( title_page, tree!.TitlePage );
             
-            AUTODOC_APPEND_RECORD_WRITEONCE( title_page, ExtractTitleInfoFromPackageInfo( pkg ) );
+            if not is_worksheet then
+                
+                AUTODOC_APPEND_RECORD_WRITEONCE( title_page, ExtractTitleInfoFromPackageInfo( pkg ) );
+                
+            fi;
             
             CreateTitlePage( title_page );
             
@@ -427,7 +499,12 @@ function( arg )
         # they wish to link to things in the manual we are currently
         # generating. This can probably be removed eventually, but for
         # now, doing it does not hurt.
-        GAPDocManualLab( pkg );
+        
+        if not is_worksheet then
+            
+            GAPDocManualLab( pkg );
+            
+        fi;
 
     fi;
     
