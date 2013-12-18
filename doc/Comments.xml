@@ -280,10 +280,13 @@ not finished or temporary files.
 <Subsection Label="@System">
 <Index Key="@System"><C>@System and @InsertSystem</C></Index>
 <Heading>@System <A>name</A> and @InsertSystem <A>name</A></Heading>
-@System causes the next documentation item (can be an example, a text or a function)
+@System causes the next documentation parts
 not to be inserted in the documentation at it's point in the file, but at the point
-where the @InsertSystem <A>name</A> command is. This can be used to insert examples from
+where the @InsertSystem <A>name</A> command is.
+This can be used to insert examples from
 different files at a specific point in the documentation.
+A normal system ends at the end of the file. You can also end a system with EndSystem.
+Systems are collected over the whole document.
 <Listing><![CDATA[
 #! @System Example_Symmetric_Group
 #! @Example
@@ -292,6 +295,7 @@ S3 := SymmetricGroup(5);
 Order(S3);
 #! 120
 #! @EndExample
+#! @EndSystem
 ]]></Listing>
 
 <Listing><![CDATA[
@@ -302,11 +306,7 @@ Order(S3);
 <Subsection Label="@Chunk">
 <Index Key="@Chunk"><C>@Chunk, @EndChunk, and @InsertChunk</C></Index>
 <Heading>@Chunk <A>name</A>, @EndChunk, and @InsertChunk <A>name</A></Heading>
-@Chunk <A>name</A> begins a chunk of text, and @EndChunk ends it. The text between
-those text is added to a chunk of text, and not displayed at the corresponding point
-in the manual. Text in chunks with the same <A>name</A> are collected in the whole
-source files. @InsertChunk <A>name</A> adds the whole collected text from the chunks with
-this name at the point where @InsertChunk is called.
+Just the same as system
 <Listing><![CDATA[
 #! @Chunk MyChunk
 #! This is some text.
@@ -317,7 +317,72 @@ this name at the point where @InsertChunk is called.
 ]]></Listing>
 </Subsection>
 
+<Subsection Label="@Code">
+<Index Key="@Code"><C>@Code, @EndCode, and @InsertCode</C></Index>
+<Heading>@Code <A>name</A>, @EndCode, and @InsertCode <A>name</A></Heading>
+Inserts the code between @Code and @EndCode verbatim at the point where
+@InsertCode is called. This is useful to insert your programm code
+directly into the manual.
+<Listing><![CDATA[
+#! @Code Increment
+i := i + 1;
+#! @EndCode
+
+#! @InsertCode Increment
+## Code is inserted here.
+]]></Listing>
+</Subsection>
+
 </Section>
+
+<Section Label="TitlepageCommands">
+<Heading>Title page commands</Heading>
+
+The following commands can be used to add the corresponding parts to the title page of
+the document, in case the scaffolding is enabled.
+<List>
+  <Item>
+    @Title
+  </Item>
+  <Item>
+    @Subtitle
+  </Item>
+  <Item>
+    @Version
+  </Item>
+  <Item>
+    @TitleComment
+  </Item>
+  <Item>
+    @Author
+  </Item>
+  <Item>
+    @Date
+  </Item>
+  <Item>
+    @Address
+  </Item>
+  <Item>
+    @Abstract
+  </Item>
+  <Item>
+    @Copyright
+  </Item>
+  <Item>
+    @Acknowledgements
+  </Item>
+  <Item>
+    @Colophon
+  </Item>
+  <Item>
+    @URL
+  </Item>
+</List>
+Those add the following lines at the corresponding point of the titlepage. Please note that many of those
+things can be (better) extracted from the PackageInfo.g. In case you set some of those,
+the extracted or in scaffold defined items will be overwritten.
+</Section>
+
 <Section Label="Groups">
 <Heading>Grouping</Heading>
 
