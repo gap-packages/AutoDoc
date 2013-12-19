@@ -202,6 +202,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         fi;
         
+        if IsBound( scope_group ) then
+            
+            SetGroupName( man_item, scope_group );
+            
+        fi;
+        
         man_item!.chapter_info := ShallowCopy( chapter_info );
         
         man_item!.tester_names := fail;
@@ -275,7 +281,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 
                 Error( "Unrecognized scan type" );
                 
-                return fail;
+                return false;
                 
             fi;
             
@@ -728,31 +734,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             scope_group := ReplacedString( current_command[ 2 ], " ", "_" );
             
-            grp := DocumentationGroup( tree, scope_group );
-            
-            if IsBound( current_item ) then
-                
-                Add( context_stack, current_item );
-                
-                Add( current_item, grp );
-                
-            fi;
-            
-            current_item := grp;
-            
         end,
         
         @EndGroup := function()
             
-            if context_stack <> [ ] then
-                
-                current_item := Remove( context_stack );
-                
-            else
-                
-                Unbind( current_item );
-                
-            fi;
+            Unbind( scope_group );
             
         end,
         
@@ -906,6 +892,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end,
         
         STRING := function()
+            
+            if current_command[ 2 ] = "" then
+                
+                return;
+                
+            fi;
             
             Add( current_item, current_command[ 2 ] );
             
