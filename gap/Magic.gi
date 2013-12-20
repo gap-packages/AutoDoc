@@ -421,6 +421,8 @@ function( arg )
                 scaffold.bib := Concatenation( pkg, ".bib" );
             fi;
         fi;
+        
+        AUTODOC_WriteOnce( scaffold, "index", true );
 
         if IsBound( gapdoc ) then
             if AUTODOC_GetSuffix( gapdoc.main ) = "xml" then

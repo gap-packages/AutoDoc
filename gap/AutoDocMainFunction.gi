@@ -161,13 +161,13 @@ InstallGlobalFunction( CreateMainPage,
             
         fi;
         
-        AppendTo( filestream, "<!ENTITY ", i[ 2 ], " '<", i[ 1 ], ">", i[ 2 ], "</", i[ 1 ], ">'>\n" );
+        AppendTo( filestream, "<!ENTITY ", ReplacedString( i[ 2 ], " ", "_" ), " '<", i[ 1 ], ">", i[ 2 ], "</", i[ 1 ], ">'>\n" );
         
     od;
     
     AppendTo( filestream, "]\n>\n" );
     
-    AppendTo( filestream, "<Book Name=\"", book_name, "\">\n" );
+    AppendTo( filestream, "<Book Name=\"", ReplacedString( book_name, " ", "_" ), "\">\n" );
     
     AppendTo( filestream, "<#Include SYSTEM \"title.xml\">\n" );
     
@@ -179,7 +179,11 @@ InstallGlobalFunction( CreateMainPage,
     
     AppendTo( filestream, "<Body>\n" );
     
-    AppendTo( filestream, "<Index>&", book_name, ";</Index>\n" );
+    if IsBound( opt.index ) and opt.index = true then
+        
+        AppendTo( filestream, "<Index>&", book_name, ";</Index>\n" );
+        
+    fi;
 
     if IsBound( opt.includes ) then
         
@@ -216,7 +220,11 @@ InstallGlobalFunction( CreateMainPage,
 
     fi;
     
-    AppendTo( filestream, "<TheIndex/>\n" );
+    if IsBound( opt.index ) and opt.index = true then
+        
+        AppendTo( filestream, "<TheIndex/>\n" );
+        
+    fi;
 
     AppendTo( filestream, "</Book>\n" );
     
@@ -480,9 +488,9 @@ InstallGlobalFunction( CreateAutomaticDocumentation,
 
   function( arg_rec )
     local path_to_xmlfiles, tree;
-
+    
     path_to_xmlfiles := arg_rec.path_to_xmlfiles;
-
+    
     if IsString( path_to_xmlfiles ) then
         path_to_xmlfiles := Directory( path_to_xmlfiles );
     fi;
@@ -534,7 +542,7 @@ end );
 InstallGlobalFunction( AutoDocWorksheet,
                        
   function( arg )
-    local arg_list, autodoc_rec;
+    local arg_list, autodoc_rec, scaffold_rec;
     
     if Length( arg ) = 1 then
         
@@ -542,11 +550,27 @@ InstallGlobalFunction( AutoDocWorksheet,
         
     fi;
     
+    scaffold_rec := ValueOption( "scaffold" );
+    
+    if scaffold_rec = fail then
+        
+        scaffold_rec := rec( );
+        
+    fi;
+    
+    AUTODOC_WriteOnce( scaffold_rec, "index", false );
+    
     if Length( arg ) = 2 then
         
         arg_list := [ "AutoDocWorksheet", arg[ 2 ] ];
         
         autodoc_rec := ValueOption( "autodoc" );
+        
+        if autodoc_rec = fail then
+            
+            autodoc_rec := rec( );
+            
+        fi;
         
         if IsString( arg[ 1 ] ) then
             
@@ -564,13 +588,13 @@ InstallGlobalFunction( AutoDocWorksheet,
             
         fi;
         
-        AutoDoc( "AutoDocWorksheet", arg[ 2 ] : autodoc := autodoc_rec );
+        AutoDoc( "AutoDocWorksheet", arg[ 2 ] : autodoc := autodoc_rec, scaffold := scaffold_rec );
         
     fi;
     
     if Length( arg ) = 0 then
         
-        AutoDoc( "AutoDocWorksheet" );
+        AutoDoc( "AutoDocWorksheet" : scaffold := scaffold_rec );
         
     fi;
     
