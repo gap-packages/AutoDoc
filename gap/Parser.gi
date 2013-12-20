@@ -969,7 +969,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             Add( tree, "<URL>" );
             
-            Add( tree, command[ 2 ] );
+            Add( tree, current_command[ 2 ] );
             
             Add( tree, "</URL>" );
             
