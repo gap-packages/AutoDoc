@@ -406,6 +406,8 @@ the extracted or in scaffold defined items will be overwritten.
    while the commands @AutoDocPlainText and @EndAutoDocPlainText mark parts in plain text files which
    should be regarded as AutoDoc parts. All commands can be used like before.
 
+</Section>
+
 <Section Label="Groups">
 <Heading>Grouping</Heading>
 
