@@ -503,6 +503,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 
             fi;
             
+            if not IsBound( current_item!.arguments ) then
+                
+                current_item!.arguments := Length( SplitString( current_item!.tester_names, "," ) );
+                
+                current_item!.arguments := JoinStringsWithSeparator( List( [ 1 .. current_item!.arguments ], i -> Concatenation( "arg", String( i ) ) ), "," );
+                
+            fi;
+            
             add_man_item();
             
             return true;

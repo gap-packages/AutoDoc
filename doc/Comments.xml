@@ -278,8 +278,8 @@ not finished or temporary files.
 </Subsection>
 
 <Subsection Label="@System">
-<Index Key="@System"><C>@System and @InsertSystem</C></Index>
-<Heading>@System <A>name</A> and @InsertSystem <A>name</A></Heading>
+<Index Key="@System"><C>@System, @EndSystem, and @InsertSystem</C></Index>
+<Heading>@System <A>name</A>, @EndSystem, and @InsertSystem <A>name</A></Heading>
 @System causes the next documentation parts
 not to be inserted in the documentation at it's point in the file, but at the point
 where the @InsertSystem <A>name</A> command is.
