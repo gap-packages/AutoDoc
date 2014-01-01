@@ -353,6 +353,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 
             fi;
             
+            if IsString( filter_string ) then
+                
+                filter_string := ReplacedString( filter_string, "\"", "" );
+                
+            fi;
+            
             if filter_string <> false then
                 
                 if current_item!.tester_names = fail then
@@ -455,6 +461,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             current_line := current_line{[ position_parentesis + 1 .. Length( current_line )]};
             
             NormalizeWhitespace( filter_string );
+            
+            if IsString( filter_string ) then
+                
+                filter_string := ReplacedString( filter_string, "\"", "" );
+                
+            fi;
             
             if current_item!.tester_names = fail then
                 
