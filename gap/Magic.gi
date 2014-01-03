@@ -3,6 +3,7 @@
 ##  Magic.gi                                         AutoDoc package
 ##
 ##  Copyright 2013, Max Horn, JLU Giessen
+##                  Sebastian Gutsche, University of Kaiserslautern
 ##
 #############################################################################
 
