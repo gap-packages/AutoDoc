@@ -1,10 +1,14 @@
 <Chapter Label="Tutorials">
 <Heading>Getting started using &AutoDoc;</Heading>
 
-In this chapter we describe how &AutoDoc; can aide package authors in creating
-and maintaing their package's documentation.
+&AutoDoc; is a &GAP; package which is meant to aide &GAP; package
+authors in creating and maintaing the documentation of their packages.
+In this capacity it builds upon &GAPDoc; (and hence is not a replacement
+for it, but rather a complement).
 
-To this end, we will assume from now on that your package is called &SomePackage;.
+In this chapter we describe how you can get started using &AutoDoc; for
+your package. To this end, we will assume from now on that your package
+is called &SomePackage;.
 
 <Section Label="Tut:Scratch">
 <Heading>Creating a package manual from scratch</Heading>

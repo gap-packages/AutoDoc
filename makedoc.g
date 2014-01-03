@@ -5,7 +5,6 @@ AutoDoc(
     autodoc := true,
     scaffold := rec(
         includes := [
-            "intro.xml",
             "Tutorials.xml",
             "Comments.xml",
             "AutoDocMainFile.xml",
