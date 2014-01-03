@@ -294,21 +294,33 @@ InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
             
             AUTODOC_APPEND_STRING_ITERATIVE( author_string, author_rec.FirstNames, " ", author_rec.LastName, "<Alt Only=\"LaTeX\"><Br/></Alt>" );
             
-            tmp_list := SplitString( author_rec.PostalAddress, "\n" );
-            
-            AUTODOC_APPEND_STRING_ITERATIVE( author_string, "<Address>" );
-            
-            for j in tmp_list do
+            if IsBound( author_rec.PostalAddress ) then
                 
-                AUTODOC_APPEND_STRING_ITERATIVE( author_string, j, "<Br/>" );
+                tmp_list := SplitString( author_rec.PostalAddress, "\n" );
                 
-            od;
+                AUTODOC_APPEND_STRING_ITERATIVE( author_string, "<Address>" );
+                
+                for j in tmp_list do
+                    
+                    AUTODOC_APPEND_STRING_ITERATIVE( author_string, j, "<Br/>" );
+                    
+                od;
+                
+                AUTODOC_APPEND_STRING_ITERATIVE( author_string, "</Address>" );
+                
+            fi;
             
-            AUTODOC_APPEND_STRING_ITERATIVE( author_string, "</Address>" );
+            if IsBound( author_rec.Email ) then
+                
+                AUTODOC_APPEND_STRING_ITERATIVE( author_string, "<Email>", author_rec.Email, "</Email>" );
+                
+            fi;
             
-            AUTODOC_APPEND_STRING_ITERATIVE( author_string, "<Email>", author_rec.Email, "</Email>" );
-            
-            AUTODOC_APPEND_STRING_ITERATIVE( author_string, "<Homepage>", author_rec.WWWHome, "</Homepage>" );
+            if IsBound( author_rec.WWWHome ) then
+                
+                AUTODOC_APPEND_STRING_ITERATIVE( author_string, "<Homepage>", author_rec.WWWHome, "</Homepage>" );
+                
+            fi;
             
             author_list[ i ] := author_string;
             
