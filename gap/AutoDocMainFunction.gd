@@ -21,8 +21,6 @@ DeclareGlobalFunction( "AUTODOC_APPEND_RECORD_WRITEONCE" );
 
 DeclareGlobalFunction( "AUTODOC_PROCESS_INTRO_STRINGS" );
 
-DeclareGlobalFunction( "CreateAutomaticDocumentation" );
-
 DeclareGlobalFunction( "AutoDocScanFiles" );
 
 

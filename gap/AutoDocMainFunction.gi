@@ -482,25 +482,6 @@ InstallGlobalFunction( AUTODOC_PROCESS_INTRO_STRINGS,
 end );
 
 
-InstallGlobalFunction( CreateAutomaticDocumentation,
-
-  function( arg_rec )
-    local path_to_xmlfiles, tree;
-    
-    path_to_xmlfiles := arg_rec.path_to_xmlfiles;
-    
-    if IsString( path_to_xmlfiles ) then
-        path_to_xmlfiles := Directory( path_to_xmlfiles );
-    fi;
-    
-    tree := arg_rec.tree;
-    
-    WriteDocumentation( tree, path_to_xmlfiles );
-    
-    return true;
-
-end );
-
 ##
 ## Optional argument is PackageName, which creates a 
 ## Default chapter record. This is not availible for

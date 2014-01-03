@@ -477,7 +477,7 @@ function( arg )
     #
     if IsBound( autodoc ) then
     
-        CreateAutomaticDocumentation( rec( path_to_xmlfiles := doc_dir, tree := tree ) );
+        WriteDocumentation( tree, doc_dir );
 
     fi;
     
