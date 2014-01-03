@@ -28,8 +28,7 @@
 #!     on the data in your <F>PackageInfo.g</F>.
 #! </Item>
 #! <Item>
-#!     It can invoke <Ref Func='CreateAutomaticDocumentation'/> to scan your
-#!     package for &AutoDoc; based documentation (defined using
+#!     It can scan your package for &AutoDoc; based documentation (defined using
 #!     <Ref Func='DeclareOperationWithDocumentation'/> and its siblings. This will
 #!     produce further XML files to be used as part of the package manual.
 #! </Item>

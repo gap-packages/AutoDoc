@@ -11,9 +11,6 @@
 
 
 
-# Documentation for this global variable can be found in gap/AutoDocDocEntries.g
-# respectively in the manual.
-
 DeclareGlobalVariable( "AUTOMATIC_DOCUMENTATION" );
 
 DeclareGlobalVariable( "AUTODOC_XML_HEADER" );
@@ -26,9 +23,6 @@ DeclareGlobalFunction( "AUTODOC_APPEND_RECORD_WRITEONCE" );
 
 DeclareGlobalFunction( "AUTODOC_PROCESS_INTRO_STRINGS" );
 
-
-# Documentation for this global function can be found in gap/AutoDocDocEntries.g
-# respectively in the manual.
 DeclareGlobalFunction( "CreateAutomaticDocumentation" );
 
 DeclareGlobalFunction( "AutoDocScanFiles" );
