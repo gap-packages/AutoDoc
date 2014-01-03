@@ -10,16 +10,6 @@
 #############################################################################
 
 ##
-InstallValue( AUTOMATIC_DOCUMENTATION,
-              rec(
-                enable_documentation := false,
-                package_name := "",
-                path_to_xmlfiles := Directory(""),
-                default_chapter := rec( ),
-              )
-           );
-
-##
 InstallValue( AUTODOC_XML_HEADER, 
     Concatenation(
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n",
@@ -91,7 +81,7 @@ InstallGlobalFunction( CreateDefaultChapterData,
     
     chapter_name := Concatenation( package_name, "_automatic_generated_documentation" );
     
-    default_chapter_record := AUTOMATIC_DOCUMENTATION.default_chapter;
+    default_chapter_record := rec();
     
     list_of_types := [ "categories", "methods", "attributes", "properties", "global_functions", "global_variables" ];
     
@@ -196,7 +186,7 @@ InstallGlobalFunction( CreateMainPage,
     else
         
         # TODO: Move "AutoDocMainFile.xml" to a global constant, and/or make it customizable?
-        # It is also referenced in CreateAutomaticDocumentation()
+        # It is also referenced in AutoDoc()
 
         AppendTo( filestream, "<#Include SYSTEM \"AutoDocMainFile.xml\">\n" );
         
@@ -492,10 +482,6 @@ InstallGlobalFunction( AUTODOC_PROCESS_INTRO_STRINGS,
 end );
 
 
-#
-# Note: the optional arguments name_documentation_file, create_full_docu and
-# entities are intentionally undocumented and are only here for backward
-# compatibility. We should remove them completely at some point.
 InstallGlobalFunction( CreateAutomaticDocumentation,
 
   function( arg_rec )

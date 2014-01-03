@@ -11,8 +11,6 @@
 
 
 
-DeclareGlobalVariable( "AUTOMATIC_DOCUMENTATION" );
-
 DeclareGlobalVariable( "AUTODOC_XML_HEADER" );
 
 DeclareGlobalFunction( "AUTODOC_WriteOnce" );
