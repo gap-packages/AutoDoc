@@ -133,12 +133,13 @@ Sets a section like chapter sets a chapter.
 <Subsection Label="@EndSection">
 <Index Key="@EndSection"><C>@EndSection</C></Index>
 <Heading>@EndSection</Heading>
-Closes the current section.
+Closes the current section. Please be careful here. Closing a section before
+opening it might cause unexpected errors.
 
 <Listing><![CDATA[
 #! @EndSection
 #### The following text again belongs to the chapter
-#! Now we have a second section.
+#! Now we could start a second section if we want to.
 ]]></Listing>
 </Subsection>
 
@@ -156,8 +157,8 @@ Sets a subsection like chapter sets a chapter.
 <Subsection Label="@EndSubsection">
 <Index Key="@EndSubsection"><C>@EndSubsection</C></Index>
 <Heading>@EndSubsection</Heading>
-Closes the current subsection.
-
+Closes the current subsection. Please be careful here. Closing a subsection before
+opening it might cause unexpected errors.
 <Listing><![CDATA[
 #! @EndSubsection
 #### The following text again belongs to the section
@@ -168,7 +169,6 @@ Closes the current subsection.
 <Subsection Label="@AutoDoc">
 <Index Key="@AutoDoc"><C>@AutoDoc</C></Index>
 <Heading>@AutoDoc</Heading>
-
 Causes all subsequent declarations to be documented in the manual,
 regardless of whether they have an &AutoDoc; comment in front of
 them or not.
@@ -189,6 +189,7 @@ DeclareProperty( "IsProperty", IsList );
 
 #! @EndAutoDoc
 ]]></Listing>
+Both, <C>Operation1</C> and <C>IsProperty</C> would appear in the manual.
 </Subsection>
 
 <Subsection Label="@BeginGroup">
@@ -275,6 +276,14 @@ wont be testet. See the GAPDoc manual for more information.
 <Heading>@DoNotReadRestOfFile</Heading>
 Prevents the rest of the file from being read by the parser. Useful for
 not finished or temporary files.
+
+<Listing><![CDATA[
+#! This will appear in the manual
+
+#! @DoNotReadRestOfFile
+
+#! This wont.
+]]></Listing>
 </Subsection>
 
 <Subsection Label="@System">
