@@ -145,6 +145,18 @@ InstallGlobalFunction( CreateMainPage,
    
     for i in opt.entities do
         
+        ## allow generic entities.
+        
+        if IsString( i ) and PositionSublist( i, "!ENTITY" ) <> fail then
+                
+                AppendTo( filestream, i );
+                
+                AppendTo( filestream, "\n" );
+                
+                continue;
+            
+        fi;
+        
         if IsString( i ) then
             
             i := [ "Package", i ];
