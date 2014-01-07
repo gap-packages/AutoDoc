@@ -503,6 +503,9 @@ function( arg )
         # generating. This can probably be removed eventually, but for
         # now, doing it does not hurt.
         
+        # FIXME: It seems that this command does not work if pdflatex
+        #        is not present. Maybe we should remove it.
+        
         if not is_worksheet then
             
             GAPDocManualLab( pkg );
