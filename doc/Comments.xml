@@ -58,16 +58,44 @@ Adds the following method to a group with the given name.
 See section <Ref Sect="Groups"/> for more information about groups.
 </Subsection>
 
-<Subsection Label="@FunctionLabel">
-<Index Key="@FunctionLabel"><C>@FunctionLabel</C></Index>
-<Heading>@FunctionLabel <A>label</A></Heading>
+<Subsection Label="@Label">
+<Index Key="@Label"><C>@Label</C></Index>
+<Heading>@Label <A>label</A></Heading>
 Adds label to the function as label.
 
 If this is not specified, then for declarations that involve a list of input filters
 (as is the case for <C>DeclareOperation</C>, <C>DeclareAttribute</C>, etc.),
 a default label is generated from this filter list.
-<!-- TODO: Give an example of this, i.e. some input and ALSO the resulting output -->
 </Subsection>
+
+<Listing><![CDATA[
+#! @Label testlabel
+DeclareProperty( "AProperty",
+                 IsObject );
+]]></Listing>
+leads to this:
+<ManSection>
+  <Prop Arg="arg" Name="AProperty" Label="testlabel"/>
+ <Returns> <C>true</C> or <C>false</C>
+</Returns>
+ <Description>
+ </Description>
+</ManSection>
+while
+<Listing><![CDATA[
+#!
+DeclareProperty( "AProperty",
+                 IsObject );
+]]></Listing>
+leads to this:
+<ManSection>
+  <Prop Arg="arg" Name="AProperty" Label="for IsObject"/>
+ <Returns> <C>true</C> or <C>false</C>
+</Returns>
+ <Description>
+ </Description>
+</ManSection>
+
 
 <Subsection Label="@ChapterInfo">
 <Index Key="@ChapterInfo"><C>@ChapterInfo</C></Index>
