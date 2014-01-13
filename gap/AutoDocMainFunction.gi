@@ -493,7 +493,6 @@ InstallGlobalFunction( AUTODOC_PROCESS_INTRO_STRINGS,
     
 end );
 
-
 ##
 ## Optional argument is PackageName, which creates a 
 ## Default chapter record. This is not availible for
