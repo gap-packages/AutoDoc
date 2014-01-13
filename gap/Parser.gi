@@ -141,6 +141,16 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         item_rec!.arguments := fail;
         
+    elif type = "InfoClass" then
+        
+        entries := [ "InfoClass", "info_classes" ];
+        
+        has_filters := "No";
+        
+        item_rec!.arguments := fail;
+        
+        item_rec!.return_value := false;
+        
     else
         
         return fail;
