@@ -714,17 +714,57 @@ InstallMethod( WriteDocumentation,
     
     AppendTo( chapter_stream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
     
-    for i in node!.content do
-        
-        WriteDocumentation( i, chapter_stream );
-        
-        AppendTo( chapter_stream, "\n" );
-        
-    od;
+    WriteDocumentation( node!.content, chapter_stream );
     
     AppendTo( chapter_stream, "</Chapter>\n\n" );
     
     CloseStream( chapter_stream );
+    
+end );
+
+InstallMethod( WriteDocumentation,
+               [ IsList, IsStream ],
+               
+  function( node_list, filestream )
+    local current_string_list, i, last_position;
+    
+    i := 1;
+    
+    current_string_list := [ ];
+    
+    for i in [ 1 .. Length( node_list ) ] do
+        
+        if IsString( node_list[ i ] ) then
+            
+            Add( current_string_list, node_list[ i ] );
+            
+        else
+            
+            if current_string_list <> [ ] then
+                
+                current_string_list := CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML( current_string_list );
+                
+                Perform( current_string_list, function( i ) WriteDocumentation( i, filestream ); end );
+                
+                current_string_list := [ ];
+                
+            fi;
+            
+            WriteDocumentation( node_list[ i ], filestream );
+            
+            AppendTo( filestream, "\n" );
+            
+        fi;
+        
+    od;
+    
+    if current_string_list <> [ ] then
+        
+        current_string_list := CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML( current_string_list );
+        
+        Perform( current_string_list, function( i ) WriteDocumentation( i, filestream ); end );
+        
+    fi;
     
 end );
 
@@ -737,6 +777,9 @@ InstallMethod( WriteDocumentation,
     ## In case the list is empty, do nothing.
     ## Once the empty string = empty list bug is fixed,
     ## this could be removed.
+    
+    NormalizeWhitespace( text );
+    
     if text = "" then
         
         return;
@@ -774,11 +817,7 @@ InstallMethod( WriteDocumentation,
     
     AppendTo( filestream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
     
-    for i in node!.content do
-        
-        WriteDocumentation( i, filestream );
-        
-    od;
+    WriteDocumentation( node!.content, filestream );
     
     AppendTo( filestream, "</Section>\n\n" );
     
@@ -809,11 +848,7 @@ InstallMethod( WriteDocumentation,
     
     AppendTo( filestream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
     
-    for i in node!.content do
-        
-        WriteDocumentation( i, filestream );
-        
-    od;
+    WriteDocumentation( node!.content, filestream );
     
     AppendTo( filestream, "</Subsection>\n\n" );
     
@@ -862,11 +897,7 @@ InstallMethod( WriteDocumentation,
     
     if IsBound( node!.content ) then
         
-        for i in node!.content do
-            
-            WriteDocumentation( i, filestream );
-            
-        od;
+        WriteDocumentation( node!.content, filestream );
         
     fi;
     

@@ -135,7 +135,7 @@ DeclareOperation( "WriteDocumentation",
                   [ IsTreeForDocumentationNode, IsStream ] );
 
 DeclareOperation( "WriteDocumentation",
-                  [ IsString, IsStream ] );
+                  [ IsList, IsStream ] );
 
 DeclareOperation( "WriteDocumentation",
                   [ IsTreeForDocumentationNode, IsStream, IsDirectory ] );

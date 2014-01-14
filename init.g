@@ -22,4 +22,6 @@ ReadPackage( "AutoDoc", "gap/Magic.gd" );
 
 ReadPackage( "AutoDoc", "gap/ContextObject.gd" );
 
+ReadPackage( "AutoDoc", "gap/Markdown.gd" );
+
 ReadPackage( "AutoDoc", "gap/compat.gi" );

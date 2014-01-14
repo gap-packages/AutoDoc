@@ -6,35 +6,22 @@
 ##
 #############################################################################
 
-BindGlobal( "READ_LINEWISE",
+##
+InstallGlobalFunction( INSERT_IN_STRING_WITH_REPLACE,
             
-  function( filename )
-    local input_stream, list, i;
+  function( string, new_string, position, nr_letters_to_be_replaced )
     
-    input_stream := InputTextFile( filename );
-    
-    list := [ ];
-    
-    i := ReadLine( input_stream );
-    
-    while i <> fail do
-        
-        Add( list, i );
-        
-        i := ReadLine( input_stream );
-        
-    od;
-    
-    return list;
+    return Concatenation( string{[ 1 .. position - 1 ]}, new_string, string{[ position + nr_letters_to_be_replaced .. Length( string ) ]} );
     
 end );
 
 ##
-BindGlobal( "CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML",
+InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
                        
   function( string_list )
     local i, current_list, current_string, max_line_length,
-          current_position, already_in_list, white_spaces;
+          current_position, already_in_list, command_list_with_translation, beginning,
+          commands, position_of_command, insert, beginning_whitespaces;
     
     ## Check for paragraphs by making an empty string into <br/>
     
@@ -64,8 +51,7 @@ BindGlobal( "CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML",
         
         i := 1;
         
-#         white_spaces := JoinStringsWithSeparator( ListWithIdenticalEntries( current_position + 1, " " ) ), "" );
-        
+        ## maybe make the first line marked by definition?
         while i <= Length( string_list ) do
             
             if PositionSublist( string_list[ i ], "* " ) = current_position
@@ -120,18 +106,53 @@ BindGlobal( "CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML",
             
         fi;
         
-        current_position := current_position + 2;
+        current_position := current_position + 1;
         
-#         Error( "" );
+    od;
+    
+    ## Find commands
+    
+    command_list_with_translation := [ [ "$$", "Display" ],
+                                       [ "$", "Math" ],
+                                       [ "**", "Emph" ],
+                                       [ "__", "Emph" ] ];
+    
+    for commands in command_list_with_translation do
+        
+        beginning := true;
+        
+        for i in [ 1 .. Length( string_list ) ] do
+            
+            while PositionSublist( string_list[ i ], commands[ 1 ] ) <> fail do
+                
+                position_of_command := PositionSublist( string_list[ i ], commands[ 1 ] );
+                
+                if beginning = true then
+                    
+                    insert := Concatenation( "<", commands[ 2 ], ">" );
+                    
+                else
+                    
+                    insert := Concatenation( "</", commands[ 2 ], ">" );
+                    
+                fi;
+                
+                string_list[ i ] := INSERT_IN_STRING_WITH_REPLACE( string_list[ i ], insert, position_of_command, Length( commands[ 1 ] ) );
+                
+                beginning := not beginning;
+                
+            od;
+            
+        od;
+        
+        if beginning = false then
+            
+            Error( "did you forget some ", commands[ 1 ] );
+            
+        fi;
         
     od;
     
     return string_list;
     
 end );
-
-list := READ_LINEWISE( "markdown_syntax_test" );
-
-list := CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML( list );
-
-Print( Concatenation( list ) );
