@@ -387,6 +387,105 @@ in the PDF version of the manual or worksheet. It can hold arbitrary LaTeX-comma
 
 </Section>
 
+<Section Label="MarkdownExtension">
+<Heading>Some syntax for &AutoDoc; text</Heading>
+
+&AutoDoc; offers some useful syntax extensions to
+inside its comments, which can be used in &AutoDoc; plain text files
+and &AutoDoc; comments. The syntax is inspired by the Markdown language,
+but it does not implement all features, neither is strict Markdown, but
+changed at some points where it was convenient. The following constructions
+are possible right now:
+
+<Subsection Label="MarkdownExtensionList">
+  <Heading>Lists</Heading>
+  
+  One can create items lists by beginning a new line with *, +, -, followed by one
+  space. the first item starts the list. When items are longer than one line, the following lines
+  have to be indented by at least two spaces. The list ends when a line, which does not start a new
+  item, is not indented by two spaces. Of curse lists can be nested. Here is an example:
+
+<Listing><![CDATA[
+#! The list starts in the next line
+#! * item 1
+#! * item 2
+#!   which is a bit longer
+#!   * and also contains a nested list
+#!   * with two items
+#! * item 3 of the outer list
+#! This does not belong to the list anymore.
+]]></Listing>
+
+The following will be the output:<Br/>
+The list starts in the next line
+  <List>
+    <Item>
+      item 1
+    </Item>
+    <Item>
+      item 2
+      which is a bit longer
+        <List>
+          <Item>
+            and also contains a nested list
+          </Item>
+          <Item>
+            with two items
+          </Item>
+        </List>
+    </Item>
+    <Item>
+      item 3 of the outer list
+    </Item>
+  </List>
+This does not belong to the list anymore.<Br/>
+
+
+The *, -, and + are fully interchangeable and can even be used mixed, but this is not recommended.
+
+</Subsection>
+
+ <Subsection Label="MarkdownExtensionMath">
+   <Heading>Math modes</Heading>
+   
+   One can start an inline formula with a $, and also end it with $, just like in &LaTeX;. This will translate into
+   &GAPDoc;s inline math enviroment. For display mode one can use $$, also like &LaTeX;.
+   
+<Listing><![CDATA[
+#! This is an inline formula: $1+1 = 2$.
+#! This is a display formula:
+#! $$ \sum_{i=1}^n i. $$
+]]></Listing>
+
+ will produce the following output:<Br/>
+   This is an inline formula: <Math>1+1 = 2</Math>.
+   This is a display formula:
+     <Display> \sum_{i=1}^n i. </Display>
+     
+</Subsection>
+
+ <Subsection Label="MarkdownExtensionEmph">
+   <Heading>Emphasize</Heading>
+   
+   One can emphasize text by using two asteriks (**) or two underscores (__) at the
+   beginning and the end of the text which should be emphasized. Example:
+   
+<Listing><![CDATA[
+#! **This** is very important.
+#! This is __also important__.
+#! **Naturally, more than one line
+#! can be important.**
+]]></Listing>
+
+ This will produce the following output:<Br/>
+<E>This</E> is very important.
+This is <E>also important</E>.
+<E>Naturally, more than one line
+can be important.</E>
+
+</Subsection>
+</Section>
+
 <Section Label="TitlepageCommands">
 <Heading>Title page commands</Heading>
 
