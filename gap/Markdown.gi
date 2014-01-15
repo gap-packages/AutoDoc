@@ -21,7 +21,7 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
   function( string_list )
     local i, current_list, current_string, max_line_length,
           current_position, already_in_list, command_list_with_translation, beginning,
-          commands, position_of_command, insert, beginning_whitespaces;
+          commands, position_of_command, insert, beginning_whitespaces, temp;
     
     ## Check for paragraphs by making an empty string into <br/>
     
@@ -81,6 +81,27 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
                     string_list[ i ] := string_list[ i ]{[ current_position + 2 .. Length( string_list[ i ] ) ]};
                     
                 fi;
+                
+                ## find out if line has to be marked
+                ## THIS is buggy. Discuss this
+                ## FIXME: This causes strange problems with GAPDoc.
+#                 if PositionSublist( string_list[ i ], "**" ) = 1 then
+#                     
+#                     string_list[ i ] := string_list[ i ]{[ 3 .. Length( string_list[ i ] ) ]};
+#                     
+#                     temp := string_list[ i ];
+#                     
+#                     string_list[ i ] := string_list[ i - 1 ];
+#                     
+#                     string_list[ i - 1 ] := temp;
+#                     
+#                     Add( string_list, "<Mark>", i - 1 );
+#                     
+#                     Add( string_list, "</Mark>", i + 1 );
+#                     
+#                     i := i + 2;
+#                     
+#                 fi;
                 
             elif already_in_list = true and PositionSublist( string_list[ i ], "  " ) > current_position then
                 
