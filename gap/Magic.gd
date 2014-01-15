@@ -28,8 +28,9 @@
 #!     on the data in your <F>PackageInfo.g</F>.
 #! </Item>
 #! <Item>
-#!     It can scan your package for &AutoDoc; based documentation (defined using
-#!     <Ref Func='DeclareOperationWithDocumentation'/> and its siblings. This will
+#!     It can scan your package for &AutoDoc; based documentation (by using &Autodoc;
+#!     tags and the Autodoc command.
+#!     This will
 #!     produce further XML files to be used as part of the package manual.
 #! </Item>
 #! <Item>
@@ -89,8 +90,8 @@
 #!         <Item>
 #!             A list of XML files to be included in the body of the main XML file.
 #!             If you specify this list and also are using &AutoDoc; to document
-#!             your operations via <Ref Func='DeclareOperationWithDocumentation'/>
-#!             and its siblings, you can add <F>AutoDocMainFile.xml</F> to this list
+#!             your operations with Autodoc comments,
+#!             you can add <F>AutoDocMainFile.xml</F> to this list
 #!             to control at which point the documentation produced by &AutoDoc;
 #!             is inserted. If you do not do this, it will be added after the last
 #!             of your own XML files.

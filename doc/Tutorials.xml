@@ -17,8 +17,8 @@ Suppose your package is already up and running, but so far has no
 manual. Then you can rapidly generate a <Q>scaffold</Q> for a manual using the
 <Ref Func="AutoDoc"/> command like this:
 <Listing>
-LoadPackage("AutoDoc");
-AutoDoc("SomePackage" : scaffold := true );
+LoadPackage( "AutoDoc" );
+AutoDoc( "SomePackage" : scaffold := true );
 </Listing>
 This creates two XML files <F>doc/SomePackage.xml</F> and
 <F>doc/title.xml</F> insider the package directory and then runs

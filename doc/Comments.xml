@@ -129,7 +129,8 @@ DeclareAttribute( "CharacterDegreesOfBlocks",
 <Heading>Other documentation comments</Heading>
 
 There are also some commands which can be used in &AutoDoc; comments
-that are not associated to any declaration.
+that are not associated to any declaration. This is useful for additional
+text in your documentation, examples, mathematical chapters, etc..
 
 <Subsection Label="@Chapter">
 <Index Key="@Chapter"><C>@Chapter</C></Index>
