@@ -28,7 +28,7 @@
 #!     on the data in your <F>PackageInfo.g</F>.
 #! </Item>
 #! <Item>
-#!     It can scan your package for &AutoDoc; based documentation (by using &Autodoc;
+#!     It can scan your package for &AutoDoc; based documentation (by using &AutoDoc;
 #!     tags and the Autodoc command.
 #!     This will
 #!     produce further XML files to be used as part of the package manual.
@@ -90,7 +90,7 @@
 #!         <Item>
 #!             A list of XML files to be included in the body of the main XML file.
 #!             If you specify this list and also are using &AutoDoc; to document
-#!             your operations with Autodoc comments,
+#!             your operations with &AutoDoc; comments,
 #!             you can add <F>AutoDocMainFile.xml</F> to this list
 #!             to control at which point the documentation produced by &AutoDoc;
 #!             is inserted. If you do not do this, it will be added after the last
