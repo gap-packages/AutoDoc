@@ -390,20 +390,19 @@ in the PDF version of the manual or worksheet. It can hold arbitrary LaTeX-comma
 <Section Label="MarkdownExtension">
 <Heading>Some syntax for &AutoDoc; text</Heading>
 
-&AutoDoc; offers some useful syntax extensions to
-inside its comments, which can be used in &AutoDoc; plain text files
+&AutoDoc; offers some useful syntax extensions which can be used in &AutoDoc; plain text files
 and &AutoDoc; comments. The syntax is inspired by the Markdown language,
-but it does not implement all features, neither is strict Markdown, but
-changed at some points where it was convenient. The following constructions
+but it does not implement all features, neither is strict Markdown, but tries to
+be as straight as possible. The following constructions
 are possible right now:
 
 <Subsection Label="MarkdownExtensionList">
   <Heading>Lists</Heading>
   
   One can create items lists by beginning a new line with *, +, -, followed by one
-  space. the first item starts the list. When items are longer than one line, the following lines
-  have to be indented by at least two spaces. The list ends when a line, which does not start a new
-  item, is not indented by two spaces. Of curse lists can be nested. Here is an example:
+  space. The first item starts the list. When items are longer than one line, the following lines
+  have to be indented by at least two spaces. The list ends when a line which does not start a new
+  item is not indented by two spaces. Of curse lists can be nested. Here is an example:
 
 <Listing><![CDATA[
 #! The list starts in the next line
@@ -416,7 +415,7 @@ are possible right now:
 #! This does not belong to the list anymore.
 ]]></Listing>
 
-The following will be the output:<Br/>
+This is the output:<Br/>
 The list starts in the next line
   <List>
     <Item>
@@ -457,7 +456,7 @@ The *, -, and + are fully interchangeable and can even be used mixed, but this i
 #! $$ \sum_{i=1}^n i. $$
 ]]></Listing>
 
- will produce the following output:<Br/>
+   produces the following output:<Br/>
    This is an inline formula: <Math>1+1 = 2</Math>.
    This is a display formula:
      <Display> \sum_{i=1}^n i. </Display>
@@ -477,7 +476,7 @@ The *, -, and + are fully interchangeable and can even be used mixed, but this i
 #! can be important.**
 ]]></Listing>
 
- This will produce the following output:<Br/>
+ This produces the following output:<Br/>
 <E>This</E> is very important.
 This is <E>also important</E>.
 <E>Naturally, more than one line
