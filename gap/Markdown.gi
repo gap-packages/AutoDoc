@@ -25,11 +25,11 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
     
     ## Check for paragraphs by making an empty string into <br/>
     
-    for i in [ 1 .. Length( string_list ) ] do
+    for i in [ 2 .. Length( string_list ) - 1 ] do
         
         if string_list[ i ] = "" then
             
-            string_list[ i ] := "<Br>";
+            string_list[ i ] := "<Br/>";
             
         fi;
         

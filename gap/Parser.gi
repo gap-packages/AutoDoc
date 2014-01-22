@@ -892,6 +892,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
         @EndSystem := function()
             
+            if autodoc_read_line = true then
+                
+                autodoc_read_line := false;
+                
+            fi;
+            
             if context_stack <> [ ] then
                 
                 current_item := Remove( context_stack );
@@ -964,6 +970,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end,
         
         @EndLatexOnly := function()
+            
+            if autodoc_read_line = true then
+                
+                autodoc_read_line := false;
+                
+            fi;
             
             Add( current_item, "</Alt>" );
             
@@ -1083,13 +1095,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             if current_command[ 1 ] <> false then
                 
-                command_function_record.(current_command[ 1 ])();
-                
                 if autodoc_read_line <> fail then
                     
                     autodoc_read_line := true;
                     
                 fi;
+                
+                command_function_record.(current_command[ 1 ])();
                 
                 continue;
                 

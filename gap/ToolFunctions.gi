@@ -139,24 +139,15 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
         
         AppendTo( filestream, " <Returns>" );
         
-        for i in return_value do
-            
-            WriteDocumentation( i, filestream );
-            
-        od;
+        WriteDocumentation( return_value, filestream );
         
         AppendTo( filestream, "</Returns>\n" );
-        
         
     fi;
     
     AppendTo( filestream, " <Description>\n" );
     
-    for i in description do
-        
-        WriteDocumentation( i, filestream );
-        
-    od;
+    WriteDocumentation( description, filestream );
     
     AppendTo( filestream, " </Description>\n" );
     AppendTo( filestream, "</ManSection>\n\n" );
