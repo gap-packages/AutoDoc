@@ -804,7 +804,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             SetManItemToDescription( current_item );
             
-            Add( current_item, current_command[ 2 ] );
+            NormalizeWhitespace( current_command[ 2 ] );
+            
+            if current_command[ 2 ] <> "" then
+                
+                Add( current_item, current_command[ 2 ] );
+                
+            fi;
             
         end,
         
