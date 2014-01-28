@@ -407,7 +407,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                             
                         else
                             
-                            current_item!.arguments := JoinStringsWithSeparator( List( [ 1 .. has_filters ], i -> Concatenation( "arg", String( i ) ) ), ", " );
+                            current_item!.arguments := JoinStringsWithSeparator( List( [ 1 .. has_filters ], i -> Concatenation( "arg", String( i ) ) ), "," );
                             
                         fi;
                         

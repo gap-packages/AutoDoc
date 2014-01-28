@@ -491,7 +491,7 @@ produces the following:
 <ManSection Label="Group1">
   <Oper Arg="arg" Name="FirstOperation" Label="for IsInt"/>
   <Oper Arg="arg1,arg2" Name="SecondOperation" Label="for IsInt, IsGroup"/>
-  <Oper Arg="arg1, arg2" Name="ThirdOperation" Label="for IsGroupIsGroup, "/>
+  <Oper Arg="arg1,arg2" Name="ThirdOperation" Label="for IsGroupIsGroup, "/>
  <Returns></Returns>
  <Description>
  First sentence.
