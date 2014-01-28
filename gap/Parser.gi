@@ -85,43 +85,43 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
     
     item_rec := current_item;
     
-    if type = "Category" then
+    if type = "DeclareCategory" then
         
         entries := [ "Filt", "categories" ];
         
         ret_val := "<C>true</C> or <C>false</C>";
         
-        has_filters := "One";
+        has_filters := 1;
         
-    elif type = "Representation" then
+    elif type = "DeclareRepresentation" then
         
         entries := [ "Filt", "categories" ];
         
         ret_val := "<C>true</C> or <C>false</C>";
         
-        has_filters := "One";
+        has_filters := 1;
         
-    elif type = "Attribute" then
+    elif type = "DeclareAttribute" then
         
         entries := [ "Attr", "attributes" ];
         
-        has_filters := "One";
+        has_filters := 1;
         
-    elif type = "Property" then
+    elif type = "DeclareProperty" then
         
         entries := [ "Prop", "properties" ];
         
         ret_val := "<C>true</C> or <C>false</C>";
         
-        has_filters := "One";
+        has_filters := 1;
         
-    elif type = "Operation" then
+    elif type = "DeclareOperation" then
         
         entries := [ "Oper", "methods" ];
         
         has_filters := "List";
         
-    elif type = "GlobalFunction" then
+    elif type = "DeclareGlobalFunction" then
         
         entries := [ "Func", "global_functions" ];
         
@@ -133,7 +133,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
             
         fi;
         
-    elif type = "GlobalVariable" then
+    elif type = "DeclareGlobalVariable" then
         
         entries := [ "Var", "global_variables" ];
         
@@ -141,7 +141,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         item_rec!.arguments := fail;
         
-    elif type = "InfoClass" then
+    elif type = "DeclareInfoClass" then
         
         entries := [ "InfoClass", "info_classes" ];
         
@@ -150,6 +150,12 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         item_rec!.arguments := fail;
         
         item_rec!.return_value := false;
+        
+    elif type = "KeyDependentOperation" then
+        
+        entries := [ "Oper", "methods" ];
+        
+        has_filters := 2;
         
     else
         
@@ -266,15 +272,17 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     
     Scan_for_Declaration_part := function()
         local declare_position, current_type, filter_string, has_filters,
-              position_parentesis;
+              position_parentesis, nr_of_attr_loops;
         
-        declare_position := PositionSublist( current_line, "Declare" );
+        
+        ## fail is bigger than every integer
+        declare_position := Minimum( [ PositionSublist( current_line, "Declare" ), PositionSublist( current_line, "KeyDependentOperation" ) ] );
         
         if declare_position <> fail then
             
             current_item := new_man_item();
             
-            current_line := current_line{[ declare_position + 7 .. Length( current_line ) ]};
+            current_line := current_line{[ declare_position .. Length( current_line ) ]};
             
             position_parentesis := PositionSublist( current_line, "(" );
             
@@ -316,25 +324,34 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             current_line := current_line{ [ Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) + 1 .. Length( current_line ) ] };
             
-            if has_filters = "One" then
+            filter_string := "for ";
+            
+            ## FIXME: The next two if's can be merged at some point
+            if IsInt( has_filters ) then
                 
-                filter_string := "for ";
-                
-                while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
+                for i in [ 1 .. has_filters ] do
                     
-                    Append( filter_string, StripBeginEnd( current_line, " " ) );
+                    while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
+                        
+                        Append( filter_string, StripBeginEnd( current_line, " " ) );
+                        
+                        current_line := ReadLine( filestream );
+                        
+                        NormalizeWhitespace( current_line );
+                        
+                    od;
                     
-                    current_line := ReadLine( filestream );
+                    Append( filter_string, StripBeginEnd( current_line{ [ 1 .. Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) - 1 ] }, " " ) );
                     
-                    NormalizeWhitespace( current_line );
+                    if i > 1 then
+                        
+                        Append( filter_string, ", " );
+                        
+                    fi;
                     
                 od;
                 
-                Append( filter_string, StripBeginEnd( current_line{ [ 1 .. Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) - 1 ] }, " " ) );
-                
             elif has_filters = "List" then
-                
-                filter_string := "for ";
                 
                 while PositionSublist( current_line, "[" ) = fail do
                     
@@ -382,9 +399,17 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 
                 if not IsBound( current_item!.arguments ) then
                     
-                    if has_filters = "One" then
+                    if IsInt( has_filters ) then
                         
-                        current_item!.arguments := "arg";
+                        if has_filters = 1 then
+                            
+                            current_item!.arguments := "arg";
+                            
+                        else
+                            
+                            current_item!.arguments := JoinStringsWithSeparator( List( [ 1 .. has_filters ], i -> Concatenation( "arg", String( i ) ) ), ", " );
+                            
+                        fi;
                         
                     elif has_filters = "List" then
                         
