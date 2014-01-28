@@ -387,6 +387,141 @@ in the PDF version of the manual or worksheet. It can hold arbitrary LaTeX-comma
 
 </Section>
 
+
+<Section Label="TitlepageCommands">
+<Heading>Title page commands</Heading>
+
+The following commands can be used to add the corresponding parts to the title page of
+the document, in case the scaffolding is enabled.
+<List>
+  <Item>
+    @Title
+  </Item>
+  <Item>
+    @Subtitle
+  </Item>
+  <Item>
+    @Version
+  </Item>
+  <Item>
+    @TitleComment
+  </Item>
+  <Item>
+    @Author
+  </Item>
+  <Item>
+    @Date
+  </Item>
+  <Item>
+    @Address
+  </Item>
+  <Item>
+    @Abstract
+  </Item>
+  <Item>
+    @Copyright
+  </Item>
+  <Item>
+    @Acknowledgements
+  </Item>
+  <Item>
+    @Colophon
+  </Item>
+  <Item>
+    @URL
+  </Item>
+</List>
+Those add the following lines at the corresponding point of the titlepage. Please note that many of those
+things can be (better) extracted from the PackageInfo.g. In case you set some of those,
+the extracted or in scaffold defined items will be overwritten.
+</Section>
+
+ <Section Label="PlainText">
+   <Heading>Plain text files</Heading>
+   
+   AutoDoc plain text files work exactly like AutoDoc comments, except that the
+   #! is unnecessary at the beginning of a line which should be documented.
+   Files that have the suffix .autodoc will automatically regarded as plain text files
+   while the commands @AutoDocPlainText and @EndAutoDocPlainText mark parts in plain text files which
+   should be regarded as AutoDoc parts. All commands can be used like before.
+
+</Section>
+
+<Section Label="Groups">
+<Heading>Grouping</Heading>
+
+TODO: explain more about groups and what they do, how they look in the
+generated output etc.
+<P/>
+
+Note that group names are globally unique throughout the whole manual.
+That is, groups with the same name are in fact merged into a single group, even if they
+were declared in different source files.
+Thus you can have multiple <C>@BeginGroup</C> / <C>@EndGroup</C> pairs using the
+same group name, in different places, and these all will refer to the same group.
+<P/>
+
+Moreover, this means that you can add items to a group via the <C>@Group</C> command
+in the &AutoDoc; comment of an arbitrary declaration, at any time.
+
+The following code
+<Listing><![CDATA[
+#! @BeginGroup Group1
+
+#! @Description
+#!  First sentence.
+DeclareOperation( "FirstOperation", [ IsInt ] );
+
+#! @Description
+#!  Second sentence.
+DeclareOperation( "SecondOperation", [ IsInt, IsGroup ] );
+
+#! @EndGroup
+
+## .. Stuff ..
+
+#! @Description
+#!  Third sentence.
+#! @Group Group1
+KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
+]]></Listing>
+
+produces the following:
+
+<ManSection Label="Group1">
+  <Oper Arg="arg" Name="FirstOperation" Label="for IsInt"/>
+  <Oper Arg="arg1,arg2" Name="SecondOperation" Label="for IsInt, IsGroup"/>
+  <Oper Arg="arg1, arg2" Name="ThirdOperation" Label="for IsGroupIsGroup, "/>
+ <Returns></Returns>
+ <Description>
+ First sentence.
+ Second sentence.
+ Third sentence.
+ </Description>
+</ManSection>
+
+</Section>
+
+<Section Label="Level">
+<Heading>Level</Heading>
+  Levels can be set to not write certain parts in the manual by default.
+  Every entry has by default the level 0. The command <C>@Level</C> can
+  be used to set the level of the following part to a higher level, for
+  example 1, and prevent it from being printed to the manual by default.
+  However, if one sets the level to a higher value in the autodoc option of
+  <C>AutoDoc</C>, the parts will be included in the manual at the specific place.
+
+<Listing><![CDATA[
+#! This text will be printed to the manual.
+#! @Level 1
+#! This text will be printed to the manual if created with level 1 or higher.
+#! @Level 2
+#! This text will be printed to the manual if created with level 2 or higher.
+#! @ResetLevel
+#! This text will be printed to the manual.
+]]></Listing>
+</Section>
+
 <Section Label="MarkdownExtension">
 <Heading>Some syntax for &AutoDoc; text</Heading>
 
@@ -483,105 +618,6 @@ This is <E>also important</E>.
 can be important.</E>
 
 </Subsection>
-</Section>
-
-<Section Label="TitlepageCommands">
-<Heading>Title page commands</Heading>
-
-The following commands can be used to add the corresponding parts to the title page of
-the document, in case the scaffolding is enabled.
-<List>
-  <Item>
-    @Title
-  </Item>
-  <Item>
-    @Subtitle
-  </Item>
-  <Item>
-    @Version
-  </Item>
-  <Item>
-    @TitleComment
-  </Item>
-  <Item>
-    @Author
-  </Item>
-  <Item>
-    @Date
-  </Item>
-  <Item>
-    @Address
-  </Item>
-  <Item>
-    @Abstract
-  </Item>
-  <Item>
-    @Copyright
-  </Item>
-  <Item>
-    @Acknowledgements
-  </Item>
-  <Item>
-    @Colophon
-  </Item>
-  <Item>
-    @URL
-  </Item>
-</List>
-Those add the following lines at the corresponding point of the titlepage. Please note that many of those
-things can be (better) extracted from the PackageInfo.g. In case you set some of those,
-the extracted or in scaffold defined items will be overwritten.
-</Section>
-
- <Section Label="PlainText">
-   <Heading>Plain text files</Heading>
-   
-   AutoDoc plain text files work exactly like AutoDoc comments, except that the
-   #! is unnecessary at the beginning of a line which should be documented.
-   Files that have the suffix .autodoc will automatically regarded as plain text files
-   while the commands @AutoDocPlainText and @EndAutoDocPlainText mark parts in plain text files which
-   should be regarded as AutoDoc parts. All commands can be used like before.
-
-</Section>
-
-<Section Label="Groups">
-<Heading>Grouping</Heading>
-
-TODO: explain more about groups and what they do, how they look in the
-generated output etc.
-<P/>
-
-Note that group names are globally unique throughout the whole manual.
-That is, groups with the same name are in fact merged into a single group, even if they
-were declared in different source files.
-Thus you can have multiple <C>@BeginGroup</C> / <C>@EndGroup</C> pairs using the
-same group name, in different places, and these all will refer to the same group.
-<P/>
-
-Moreover, this means that you can add items to a group via the <C>@Group</C> command
-in the &AutoDoc; comment of an arbitrary declaration, at any time.
-
-
-</Section>
-
-<Section Label="Level">
-<Heading>Level</Heading>
-  Levels can be set to not write certain parts in the manual by default.
-  Every entry has by default the level 0. The command <C>@Level</C> can
-  be used to set the level of the following part to a higher level, for
-  example 1, and prevent it from being printed to the manual by default.
-  However, if one sets the level to a higher value in the autodoc option of
-  <C>AutoDoc</C>, the parts will be included in the manual at the specific place.
-
-<Listing><![CDATA[
-#! This text will be printed to the manual.
-#! @Level 1
-#! This text will be printed to the manual if created with level 1 or higher.
-#! @Level 2
-#! This text will be printed to the manual if created with level 2 or higher.
-#! @ResetLevel
-#! This text will be printed to the manual.
-]]></Listing>
 </Section>
 
 </Chapter>
