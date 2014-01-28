@@ -12,7 +12,7 @@ clean:
 	(cd doc ; ./clean)
 
 archive: doc
-	(mkdir -p ../tar; cd ..; tar czvf tar/AutoDoc.tar.gz --exclude ".DS_Store" --exclude "*~" AutoDoc/doc/*.* AutoDoc/doc/clean AutoDoc/gap/*.{gi,gd} AutoDoc/{CHANGES,PackageInfo.g,README,VERSION,init.g,read.g,makedoc.g,makefile})
+	(mkdir -p ../tar; cd ..; tar czvf tar/AutoDoc.tar.gz --exclude ".DS_Store" --exclude "*~" AutoDoc/doc/*.* AutoDoc/doc/clean AutoDoc/gap/*.{gi,gd} AutoDoc/{CHANGES,COPYING,PackageInfo.g,README,VERSION,init.g,read.g,makedoc.g,makefile})
 
 WEBPOS=public_html
 WEBPOS_FINAL=~/public_html/gap_packages/AutoDoc
