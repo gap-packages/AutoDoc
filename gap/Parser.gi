@@ -272,7 +272,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     
     Scan_for_Declaration_part := function()
         local declare_position, current_type, filter_string, has_filters,
-              position_parentesis, nr_of_attr_loops;
+              position_parentesis, nr_of_attr_loops, i;
         
         
         ## fail is bigger than every integer
