@@ -21,7 +21,7 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
   function( string_list )
     local i, current_list, current_string, max_line_length,
           current_position, already_in_list, command_list_with_translation, beginning,
-          commands, position_of_command, insert, beginning_whitespaces, temp;
+          commands, position_of_command, insert, beginning_whitespaces, temp, string_list_temp;
     
     ## Check for paragraphs by making an empty string into <br/>
     
@@ -57,6 +57,14 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
             if PositionSublist( string_list[ i ], "* " ) = current_position
             or PositionSublist( string_list[ i ], "+ " ) = current_position
             or PositionSublist( string_list[ i ], "- " ) = current_position then
+                
+                if not ForAll( [ 1 .. current_position - 1 ], j -> string_list[ i ][ j ] = ' ' ) then
+                    
+                    i := i + 1;
+                    
+                    continue;
+                    
+                fi;
                 
                 if already_in_list = false then
                     

@@ -343,7 +343,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                     
                     Append( filter_string, StripBeginEnd( current_line{ [ 1 .. Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) - 1 ] }, " " ) );
                     
-                    if i > 1 then
+                    if has_filters - i > 0 then
                         
                         Append( filter_string, ", " );
                         
