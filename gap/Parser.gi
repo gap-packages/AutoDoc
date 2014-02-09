@@ -970,13 +970,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
             comment_pos := PositionSublist( current_line_unedited, "#!" );
             
-            if comment_pos = fail then
+            if comment_pos <> fail then
                 
-                Error( "something went wrong" );
+                current_line_unedited := current_line_unedited{[ comment_pos + 2 .. Length( current_line_unedited ) ]};
                 
             fi;
-            
-            current_line_unedited := current_line_unedited{[ comment_pos + 2 .. Length( current_line_unedited ) ]};
             
             Add( current_item, current_line_unedited );
             
