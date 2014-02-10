@@ -143,6 +143,18 @@
 #!             &GAPDoc; manual, specifically section <Ref Subsect='Title' BookName='gapdoc'/>
 #!             and following.
 #!         </Item>
+#!         <Mark><A>document_class</A></Mark>
+#!         <Item>
+#!             Sets the document class of the resulting pdf. The value can either be a string
+#!             which has to be the name of the new document class, a list containing this string, or
+#!             a list of two strings. Then the first one has to be the document class name, the second one
+#!             the option string ( contained in [ ] ) in LaTeX.
+#!         </Item>
+#!         <Mark><A>latex_header_file</A></Mark>
+#!         <Item>
+#!             Replaces the standard header from &GAPDoc; completely with the header in this LaTeX file.
+#!             Please be careful here, and look at GAPDoc's latexheader.tex file for an example.
+#!         </Item>
 #!
 #!         </List>
 #!     </Item>

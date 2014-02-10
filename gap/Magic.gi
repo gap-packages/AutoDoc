@@ -96,7 +96,7 @@ InstallGlobalFunction( AutoDoc,
 function( arg )
     local pkg, package_info, opt, scaffold, gapdoc, maketest,
           autodoc, pkg_dir, doc_dir, doc_dir_rel, d, tmp,
-          title_page, tree, is_worksheet;
+          title_page, tree, is_worksheet, position_document_class;
     
     pkg := arg[1];
     
@@ -395,7 +395,46 @@ function( arg )
     # Generate scaffold
     #
     if IsBound( scaffold ) then
-
+        
+        ## Syntax is [ "class", [ "options" ] ]
+        if IsBound( scaffold.document_class ) then
+            
+            position_document_class := PositionSublist( GAPDoc2LaTeXProcs.Head, "documentclass" );
+            
+            if IsString( scaffold.document_class ) then
+                
+                scaffold.document_class := [ scaffold.document_class ];
+                
+            fi;
+            
+            if position_document_class = fail then
+                
+                Error( "something is wrong with the latex header" );
+                
+            fi;
+            
+            GAPDoc2LaTeXProcs.Head := Concatenation(
+                                          GAPDoc2LaTeXProcs.Head{[ 1 .. PositionSublist( GAPDoc2LaTeXProcs.Head, "{", position_document_class ) ]},
+                                          scaffold.document_class[ 1 ],
+                                          GAPDoc2LaTeXProcs.Head{[ PositionSublist( GAPDoc2LaTeXProcs.Head, "}", position_document_class ) .. Length( GAPDoc2LaTeXProcs.Head ) ]} );
+            
+            if Length( scaffold.document_class ) = 2 then
+                
+                GAPDoc2LaTeXProcs.Head := Concatenation(
+                                              GAPDoc2LaTeXProcs.Head{[ 1 .. PositionSublist( GAPDoc2LaTeXProcs.Head, "[", position_document_class ) ]},
+                                              scaffold.document_class[ 2 ],
+                                              GAPDoc2LaTeXProcs.Head{[ PositionSublist( GAPDoc2LaTeXProcs.Head, "]", position_document_class ) .. Length( GAPDoc2LaTeXProcs.Head ) ]} );
+                
+            fi;
+            
+        fi;
+        
+        if IsBound( scaffold.latex_header_file ) then
+            
+            GAPDoc2LaTeXProcs.Head := StringFile( scaffold.latex_header_file );
+            
+        fi;
+        
         if not IsBound( scaffold.includes ) then
             scaffold.includes := [ ];
         fi;
