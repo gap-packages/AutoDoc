@@ -988,7 +988,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         
         @BeginLatexOnly := function()
             
-            Add( current_item, "<Alt Only=\"LaTeX\">" );
+            Add( current_item, "<Alt Only=\"LaTeX\"><![CDATA[" );
             
             if current_command[ 2 ] <> "" then
                 
@@ -1006,17 +1006,17 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 
             fi;
             
-            Add( current_item, "</Alt>" );
+            Add( current_item, "]]></Alt>" );
             
         end,
         
         @LatexOnly := function()
             
-            Add( current_item, "<Alt Only=\"LaTeX\">" );
+            Add( current_item, "<Alt Only=\"LaTeX\"><![CDATA[" );
             
             Add( current_item, current_command[ 2 ] );
             
-            Add( current_item, "</Alt>" );
+            Add( current_item, "]]></Alt>" );
             
         end,
         

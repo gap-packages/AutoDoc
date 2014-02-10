@@ -21,7 +21,7 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
   function( string_list )
     local i, current_list, current_string, max_line_length,
           current_position, already_in_list, command_list_with_translation, beginning,
-          commands, position_of_command, insert, beginning_whitespaces, temp, string_list_temp;
+          commands, position_of_command, insert, beginning_whitespaces, temp, string_list_temp, skipped;
     
     ## Check for paragraphs by making an empty string into <br/>
     
@@ -51,8 +51,34 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
         
         i := 1;
         
+        skipped := false;
+        
         ## maybe make the first line marked by definition?
         while i <= Length( string_list ) do
+            
+            if PositionSublist( string_list[ i ], "<![CDATA[" ) <> fail then
+                
+                skipped := true;
+                
+            fi;
+            
+            if PositionSublist( string_list[ i ], "]]>" ) <> fail then
+                
+                skipped := false;
+                
+                i := i + 1;
+                
+                continue;
+                
+            fi;
+            
+            if skipped = true then
+                
+                i := i + 1;
+                
+                continue;
+                
+            fi;
             
             if PositionSublist( string_list[ i ], "* " ) = current_position
             or PositionSublist( string_list[ i ], "+ " ) = current_position
@@ -150,7 +176,27 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
         
         beginning := true;
         
+        skipped := false;
+        
         for i in [ 1 .. Length( string_list ) ] do
+            
+            if PositionSublist( string_list[ i ], "<![CDATA[" ) <> fail then
+                
+                skipped := true;
+                
+            fi;
+            
+            if PositionSublist( string_list[ i ], "]]>" ) <> fail then
+                
+                skipped := false;
+                
+            fi;
+            
+            if skipped = true then
+                
+                continue;
+                
+            fi;
             
             while PositionSublist( string_list[ i ], commands[ 1 ] ) <> fail do
                 
