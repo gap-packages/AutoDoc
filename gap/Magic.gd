@@ -155,6 +155,13 @@
 #!             Replaces the standard header from &GAPDoc; completely with the header in this LaTeX file.
 #!             Please be careful here, and look at GAPDoc's latexheader.tex file for an example.
 #!         </Item>
+#!         <Mark><A>gapdoc_latex_options</A></Mark>
+#!         <Item>
+#!             Must be a record with entries which can be understood by SetGapDocLaTeXOptions. Each entry can be a string, which
+#!             will be given to &GAPDoc; directly, or a list containing of two entries: The first one must be the string "file",
+#!             the second one a filename. This file will be read and then its content is passed to &GAPDoc; as option with the name
+#!             of the entry.
+#!         </Item>
 #!
 #!         </List>
 #!     </Item>

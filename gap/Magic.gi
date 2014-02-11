@@ -96,7 +96,7 @@ InstallGlobalFunction( AutoDoc,
 function( arg )
     local pkg, package_info, opt, scaffold, gapdoc, maketest,
           autodoc, pkg_dir, doc_dir, doc_dir_rel, d, tmp,
-          title_page, tree, is_worksheet, position_document_class;
+          title_page, tree, is_worksheet, position_document_class, i;
     
     pkg := arg[1];
     
@@ -432,6 +432,28 @@ function( arg )
         if IsBound( scaffold.latex_header_file ) then
             
             GAPDoc2LaTeXProcs.Head := StringFile( scaffold.latex_header_file );
+            
+        fi;
+        
+        if IsBound( scaffold.gapdoc_latex_options ) then
+            
+            if IsRecord( scaffold.gapdoc_latex_options ) then
+                
+                for i in RecNames( scaffold.gapdoc_latex_options ) do
+                    
+                    if not IsString( scaffold.gapdoc_latex_options.( i ) )
+                       and IsList( scaffold.gapdoc_latex_options.( i ) )
+                       and LowercaseString( scaffold.gapdoc_latex_options.( i )[ 1 ] ) = "file" then
+                        
+                        scaffold.gapdoc_latex_options.( i ) := StringFile( scaffold.gapdoc_latex_options.( i )[ 2 ] );
+                        
+                    fi;
+                    
+                od;
+                
+                SetGapDocLaTeXOptions( scaffold.gapdoc_latex_options );
+                
+            fi;
             
         fi;
         
