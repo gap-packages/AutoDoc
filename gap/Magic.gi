@@ -96,7 +96,7 @@ InstallGlobalFunction( AutoDoc,
 function( arg )
     local pkg, package_info, opt, scaffold, gapdoc, maketest,
           autodoc, pkg_dir, doc_dir, doc_dir_rel, d, tmp,
-          title_page, tree, is_worksheet, position_document_class, i;
+          title_page, tree, is_worksheet, position_document_class, i, gapdoc_latex_option_record;
     
     pkg := arg[1];
     
@@ -435,6 +435,8 @@ function( arg )
             
         fi;
         
+        gapdoc_latex_option_record := rec( );
+        
         if IsBound( scaffold.gapdoc_latex_options ) then
             
             if IsRecord( scaffold.gapdoc_latex_options ) then
@@ -451,7 +453,7 @@ function( arg )
                     
                 od;
                 
-                SetGapDocLaTeXOptions( scaffold.gapdoc_latex_options );
+                gapdoc_latex_option_record := scaffold.gapdoc_latex_options;
                 
             fi;
             
@@ -551,7 +553,7 @@ function( arg )
         # Ask GAPDoc to use UTF-8 as input encoding for LaTeX, as the XML files
         # of the documentation are also in UTF-8 encoding, and may contain characters
         # not contained in the default Latin 1 encoding.
-        SetGapDocLaTeXOptions( "utf8" );
+        SetGapDocLaTeXOptions( "utf8", gapdoc_latex_option_record );
 
         MakeGAPDocDoc( doc_dir, gapdoc.main, gapdoc.files, gapdoc.bookname, "MathJax" );
 
