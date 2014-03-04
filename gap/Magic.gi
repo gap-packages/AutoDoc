@@ -394,6 +394,8 @@ function( arg )
     #
     # Generate scaffold
     #
+    gapdoc_latex_option_record := rec( );
+    
     if IsBound( scaffold ) then
         
         ## Syntax is [ "class", [ "options" ] ]
@@ -434,8 +436,6 @@ function( arg )
             GAPDoc2LaTeXProcs.Head := StringFile( scaffold.latex_header_file );
             
         fi;
-        
-        gapdoc_latex_option_record := rec( );
         
         if IsBound( scaffold.gapdoc_latex_options ) then
             
