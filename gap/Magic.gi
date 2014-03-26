@@ -101,21 +101,13 @@ function( arg )
     pkg := arg[1];
     
     if LowercaseString( pkg ) = "autodocworksheet" then
-        
         is_worksheet := true;
-        
         package_info := rec( );
-        
         pkg_dir := DirectoryCurrent( );
-        
     else
-        
         is_worksheet := false;
-        
         package_info := PackageInfo( pkg )[ 1 ];
-        
         pkg_dir := DirectoriesPackageLibrary( pkg, "" )[1];
-        
     fi;
 
     if Length(arg) >= 2 then
@@ -197,17 +189,12 @@ function( arg )
 
     # Merge package_info.AutoDoc into scaffold
     if IsBound(scaffold) and IsBound( package_info.AutoDoc ) then
-        
         AUTODOC_APPEND_RECORD_WRITEONCE( scaffold, package_info.AutoDoc );
-        
     fi;
     
     if IsBound( scaffold ) then
-        
         AUTODOC_WriteOnce( scaffold, "TitlePage", true );
-        
         AUTODOC_WriteOnce( scaffold, "MainPage", true );
-        
     fi;
 
     
@@ -228,11 +215,8 @@ function( arg )
     fi;
     
     if IsBound(autodoc) then
-        
         if not IsBound( autodoc.files ) then
-            
             autodoc.files := [ ];
-            
         fi;
         
         if not IsBound( autodoc.scan_dirs ) and not is_worksheet then
@@ -242,9 +226,7 @@ function( arg )
         fi;
         
         if not IsBound( autodoc.level ) then
-            
             autodoc.level := 0;
-            
         fi;
         
         PushOptions( rec( level_value := autodoc.level ) );
@@ -252,7 +234,6 @@ function( arg )
         if not is_worksheet then
             Append( autodoc.files, AUTODOC_FindMatchingFiles(pkg, autodoc.scan_dirs, [ "g", "gi", "gd" ]) );
         fi;
-        
     fi;
 
     #
@@ -331,64 +312,46 @@ function( arg )
         d := Number( Filename( doc_dir_rel, "" ), x -> x = '/' );
         d := Concatenation( ListWithIdenticalEntries(d, "../") );
         gapdoc.files := List( gapdoc.files, f -> Concatenation( d, f ) );
-
     fi;
     
     
     # read tree
-    
     tree := DocumentationTree( );
     
     if IsBound( autodoc.section_intros ) then
-        
         AUTODOC_PROCESS_INTRO_STRINGS( autodoc.section_intros : Tree := tree );
-        
     fi;
     
     AutoDocScanFiles( autodoc.files : PackageName := pkg, Tree := tree );
     
     if is_worksheet then
-        
         if IsRecord( scaffold.TitlePage ) and IsBound( scaffold.TitlePage.Title ) then
-            
             pkg := scaffold.TitlePage.Title;
-            
+
         elif IsBound( tree!.TitlePage.Title ) then
-            
             pkg := tree!.TitlePage.Title;
-            
+
         elif IsBound( autodoc.files ) and Length( autodoc.files ) > 0  then
-            
             pkg := autodoc.files[ 1 ];
             
             while Position( pkg, '/' ) <> fail do
-                
                 Remove( pkg, 1 );
-                
             od;
             
             while Position( pkg, '.' ) <> fail do
-                
                 Remove( pkg, Length( pkg ) );
-                
             od;
-            
+
         else
-            
             Error( "could not figure out a title." );
-            
         fi;
         
         if not IsString( pkg ) then
-            
             pkg := JoinStringsWithSeparator( pkg, " " );
-            
         fi;
         
         gapdoc.main := ReplacedString( pkg, " ", "_" );
-        
         gapdoc.bookname := ReplacedString( pkg, " ", "_" );
-        
     fi;
     
     #
@@ -397,66 +360,48 @@ function( arg )
     gapdoc_latex_option_record := rec( );
     
     if IsBound( scaffold ) then
-        
         ## Syntax is [ "class", [ "options" ] ]
         if IsBound( scaffold.document_class ) then
-            
             position_document_class := PositionSublist( GAPDoc2LaTeXProcs.Head, "documentclass" );
             
             if IsString( scaffold.document_class ) then
-                
                 scaffold.document_class := [ scaffold.document_class ];
-                
             fi;
             
             if position_document_class = fail then
-                
-                Error( "something is wrong with the latex header" );
-                
+                Error( "something is wrong with the LaTeX header" );
             fi;
             
             GAPDoc2LaTeXProcs.Head := Concatenation(
-                                          GAPDoc2LaTeXProcs.Head{[ 1 .. PositionSublist( GAPDoc2LaTeXProcs.Head, "{", position_document_class ) ]},
-                                          scaffold.document_class[ 1 ],
-                                          GAPDoc2LaTeXProcs.Head{[ PositionSublist( GAPDoc2LaTeXProcs.Head, "}", position_document_class ) .. Length( GAPDoc2LaTeXProcs.Head ) ]} );
+                  GAPDoc2LaTeXProcs.Head{[ 1 .. PositionSublist( GAPDoc2LaTeXProcs.Head, "{", position_document_class ) ]},
+                  scaffold.document_class[ 1 ],
+                  GAPDoc2LaTeXProcs.Head{[ PositionSublist( GAPDoc2LaTeXProcs.Head, "}", position_document_class ) .. Length( GAPDoc2LaTeXProcs.Head ) ]} );
             
             if Length( scaffold.document_class ) = 2 then
                 
                 GAPDoc2LaTeXProcs.Head := Concatenation(
-                                              GAPDoc2LaTeXProcs.Head{[ 1 .. PositionSublist( GAPDoc2LaTeXProcs.Head, "[", position_document_class ) ]},
-                                              scaffold.document_class[ 2 ],
-                                              GAPDoc2LaTeXProcs.Head{[ PositionSublist( GAPDoc2LaTeXProcs.Head, "]", position_document_class ) .. Length( GAPDoc2LaTeXProcs.Head ) ]} );
-                
+                      GAPDoc2LaTeXProcs.Head{[ 1 .. PositionSublist( GAPDoc2LaTeXProcs.Head, "[", position_document_class ) ]},
+                      scaffold.document_class[ 2 ],
+                      GAPDoc2LaTeXProcs.Head{[ PositionSublist( GAPDoc2LaTeXProcs.Head, "]", position_document_class ) .. Length( GAPDoc2LaTeXProcs.Head ) ]} );
             fi;
-            
         fi;
         
         if IsBound( scaffold.latex_header_file ) then
-            
             GAPDoc2LaTeXProcs.Head := StringFile( scaffold.latex_header_file );
-            
         fi;
         
         if IsBound( scaffold.gapdoc_latex_options ) then
-            
             if IsRecord( scaffold.gapdoc_latex_options ) then
-                
                 for i in RecNames( scaffold.gapdoc_latex_options ) do
-                    
                     if not IsString( scaffold.gapdoc_latex_options.( i ) )
                        and IsList( scaffold.gapdoc_latex_options.( i ) )
                        and LowercaseString( scaffold.gapdoc_latex_options.( i )[ 1 ] ) = "file" then
-                        
                         scaffold.gapdoc_latex_options.( i ) := StringFile( scaffold.gapdoc_latex_options.( i )[ 2 ] );
-                        
                     fi;
-                    
                 od;
                 
                 gapdoc_latex_option_record := scaffold.gapdoc_latex_options;
-                
             fi;
-            
         fi;
         
         if not IsBound( scaffold.includes ) then
@@ -498,50 +443,34 @@ function( arg )
 
         # TODO: It should be possible to only rebuild the title page. (Perhaps also only the main page? but this is less important)
         if IsBound( scaffold.TitlePage ) then
-            
             if IsRecord( scaffold.TitlePage ) then
-                
                 title_page := scaffold.TitlePage;
-                
             else
-                
                 title_page := rec( );
-                
             fi;
             
             AUTODOC_WriteOnce( title_page, "dir", doc_dir );
-            
             AUTODOC_APPEND_RECORD_WRITEONCE( title_page, tree!.TitlePage );
             
             if not is_worksheet then
-                
                 AUTODOC_APPEND_RECORD_WRITEONCE( title_page, ExtractTitleInfoFromPackageInfo( pkg ) );
-                
             fi;
             
             CreateTitlePage( title_page );
-            
         fi;
         
         if IsBound( scaffold.MainPage ) and scaffold.MainPage <> false then
-            
             scaffold.dir := doc_dir;
-            
             scaffold.book_name := pkg;
-            
             CreateMainPage( scaffold );
-            
         fi;
-
     fi;
     
     #
     # Run AutoDoc
     #
     if IsBound( autodoc ) then
-    
         WriteDocumentation( tree, doc_dir );
-
     fi;
     
     
@@ -570,9 +499,7 @@ function( arg )
         #        is not present. Maybe we should remove it.
         
         if not is_worksheet then
-            
             GAPDocManualLab( pkg );
-            
         fi;
 
     fi;
@@ -580,31 +507,22 @@ function( arg )
     if IsBound( maketest ) then
         
         AUTODOC_WriteOnce( maketest, "filename", "maketest.g" );
-        
         AUTODOC_WriteOnce( maketest, "folder", pkg_dir );
-        
         AUTODOC_WriteOnce( maketest, "scan_dir", doc_dir );
-        
         AUTODOC_WriteOnce( maketest, "files_to_scan", gapdoc.files );
-        
+
         if IsString( maketest.folder ) then
-            
             maketest.folder := Directory( maketest.folder );
-            
         fi;
         
         if IsString( maketest.scan_dir ) then
-            
             maketest.scan_dir := Directory( maketest.scan_dir );
-            
         fi;
         
         AUTODOC_WriteOnce( maketest, "commands", [ ] );
-        
         AUTODOC_WriteOnce( maketest, "book_name", gapdoc.main );
         
         CreateMakeTest( maketest );
-        
     fi;
 
     return true;
