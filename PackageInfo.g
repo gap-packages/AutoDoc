@@ -8,7 +8,7 @@ Subtitle := "Generate documentation from GAP source code",
 Version := Maximum( [
   "2014.03.04", ## Sebas' version
 ## This line prevents merge conflicts
-  "2014.01.03", ## Max' version
+  "2014.03.27", ## Max' version
 ## This line prevents merge conflicts
   "2013.11.01", ## Mohamed's version
 ] ),

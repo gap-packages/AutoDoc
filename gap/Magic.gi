@@ -318,11 +318,13 @@ function( arg )
     # read tree
     tree := DocumentationTree( );
     
-    if IsBound( autodoc.section_intros ) then
-        AUTODOC_PROCESS_INTRO_STRINGS( autodoc.section_intros : Tree := tree );
-    fi;
+    if IsBound( autodoc ) then
+        if IsBound( autodoc.section_intros ) then
+            AUTODOC_PROCESS_INTRO_STRINGS( autodoc.section_intros : Tree := tree );
+        fi;
     
-    AutoDocScanFiles( autodoc.files : PackageName := pkg, Tree := tree );
+        AutoDocScanFiles( autodoc.files : PackageName := pkg, Tree := tree );
+    fi;
     
     if is_worksheet then
         if IsRecord( scaffold.TitlePage ) and IsBound( scaffold.TitlePage.Title ) then
