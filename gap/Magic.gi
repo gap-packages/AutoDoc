@@ -316,6 +316,7 @@ function( arg )
     
     
     # read tree
+    # FIXME: shouldn't tree be declared inside of an 'if IsBound(autodoc)' section?
     tree := DocumentationTree( );
     
     if IsBound( autodoc ) then
@@ -327,6 +328,8 @@ function( arg )
     fi;
     
     if is_worksheet then
+        # FIXME: We use scaffold and autodoc here without checking whether
+        # they are bound. Does that mean worksheets always use them?
         if IsRecord( scaffold.TitlePage ) and IsBound( scaffold.TitlePage.Title ) then
             pkg := scaffold.TitlePage.Title;
 
