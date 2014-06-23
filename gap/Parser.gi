@@ -141,6 +141,18 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         item_rec!.arguments := fail;
         
+        item_rec!.return_value := false;
+        
+    elif type = "DeclareFilter" then
+        
+        entries := [ "Filt", "properties" ];
+        
+        has_filters := "No";
+        
+        item_rec!.arguments := fail;
+        
+        item_rec!.return_value := false;
+        
     elif type = "DeclareInfoClass" then
         
         entries := [ "InfoClass", "info_classes" ];
