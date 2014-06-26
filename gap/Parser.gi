@@ -85,7 +85,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
     
     item_rec := current_item;
     
-    if type = "DeclareCategory" then
+    if PositionSublist( type, "DeclareCategory" ) <> fail then
         
         entries := [ "Filt", "categories" ];
         
@@ -93,7 +93,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         has_filters := 1;
         
-    elif type = "DeclareRepresentation" then
+    elif PositionSublist( type, "DeclareRepresentation" ) <> fail then
         
         entries := [ "Filt", "categories" ];
         
@@ -101,13 +101,13 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         has_filters := 1;
         
-    elif type = "DeclareAttribute" then
+    elif PositionSublist( type, "DeclareAttribute" ) <> fail then
         
         entries := [ "Attr", "attributes" ];
         
         has_filters := 1;
         
-    elif type = "DeclareProperty" then
+    elif PositionSublist( type, "DeclareProperty" ) <> fail then
         
         entries := [ "Prop", "properties" ];
         
@@ -115,13 +115,13 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         has_filters := 1;
         
-    elif type = "DeclareOperation" then
+    elif PositionSublist( type, "DeclareOperation" ) <> fail then
         
         entries := [ "Oper", "methods" ];
         
         has_filters := "List";
         
-    elif type = "DeclareGlobalFunction" then
+    elif PositionSublist( type, "DeclareGlobalFunction" ) <> fail then
         
         entries := [ "Func", "global_functions" ];
         
@@ -133,7 +133,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
             
         fi;
         
-    elif type = "DeclareGlobalVariable" then
+    elif PositionSublist( type, "DeclareGlobalVariable" ) <> fail then
         
         entries := [ "Var", "global_variables" ];
         
@@ -143,7 +143,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         item_rec!.return_value := false;
         
-    elif type = "DeclareFilter" then
+    elif PositionSublist( type, "DeclareFilter" ) <> fail then
         
         entries := [ "Filt", "properties" ];
         
@@ -153,7 +153,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         item_rec!.return_value := false;
         
-    elif type = "DeclareInfoClass" then
+    elif PositionSublist( type, "DeclareInfoClass" ) <> fail then
         
         entries := [ "InfoClass", "info_classes" ];
         
@@ -163,7 +163,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         
         item_rec!.return_value := false;
         
-    elif type = "KeyDependentOperation" then
+    elif PositionSublist( type, "KeyDependentOperation" ) <> fail then
         
         entries := [ "Oper", "methods" ];
         
