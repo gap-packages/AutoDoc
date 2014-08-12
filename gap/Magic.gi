@@ -229,7 +229,9 @@ function( arg )
             autodoc.level := 0;
         fi;
         
-        PushOptions( rec( level_value := autodoc.level ) );
+        # This causes a bug. If a new layer is pushed to the option stack in a function that is called with options,
+        # this layer will be deleted at the end of the method, not the layer which was created when the method was called.
+#         PushOptions( rec( level_value := autodoc.level ) );
         
         if not is_worksheet then
             Append( autodoc.files, AUTODOC_FindMatchingFiles(pkg, autodoc.scan_dirs, [ "g", "gi", "gd" ]) );
@@ -475,7 +477,8 @@ function( arg )
     # Run AutoDoc
     #
     if IsBound( autodoc ) then
-        WriteDocumentation( tree, doc_dir );
+        
+        WriteDocumentation( tree, doc_dir : level_value := autodoc.level );
     fi;
     
     
