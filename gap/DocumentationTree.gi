@@ -245,8 +245,7 @@ InstallMethod( DocumentationStructurePart,
     structure_obj.content := [ ];
     
     ObjectifyWithAttributes( structure_obj, type,
-                             Name, obj_name,
-                             IsEmptyNode, true
+                             Name, obj_name
                            );
     
     tree!.nodes_by_name.( Name( structure_obj ) ) := structure_obj;
@@ -439,8 +438,6 @@ InstallMethod( Add,
     
     Add( insert_node!.content, node );
     
-    ResetFilterObj( insert_node, IsEmptyNode );
-    
 end );
 
 ##
@@ -450,8 +447,6 @@ InstallMethod( Add,
   function( insert_node, string )
     
     Add( insert_node!.content, string );
-    
-    ResetFilterObj( insert_node, IsEmptyNode );
     
 end );
 
@@ -568,6 +563,30 @@ InstallGlobalFunction( AUTODOC_INSTALL_TREE_SETTERS,
 end );
 
 AUTODOC_INSTALL_TREE_SETTERS();
+
+InstallMethod( IsEmptyNode,
+               [ IsTreeForDocumentationNode ],
+               
+  function( node )
+    
+    if IsBound( node!.content ) then
+        
+        return ForAll( node!.content, IsEmptyNode );
+        
+    fi;
+    
+    return false;
+    
+end );
+
+InstallMethod( IsEmptyNode,
+               [ IsString ],
+               
+  function( node )
+    
+    return node = "";
+    
+end );
 
 ####################################
 ##
