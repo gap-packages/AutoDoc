@@ -712,11 +712,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
-        @AutoDoc := function()
+        @BeginAutoDoc := function()
             
             autodoc_read_line := fail;
             
         end,
+        
+        @AutoDoc := ~.@BeginAutoDoc,
         
         @EndAutoDoc := function()
             
@@ -904,13 +906,15 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
-        @InsertSystem := function()
+        @InsertChunk := function()
             
             Add( current_item, DocumentationDummy( tree, current_command[ 2 ] ) );
             
         end,
         
-        @System := function()
+        @InsertSystem := ~.@InsertChunk,
+        
+        @BeginChunk := function()
             
             if IsBound( current_item ) then
                 
@@ -922,7 +926,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
-        @Code := function()
+        @Chunk := ~.@BeginChunk,
+        
+        @System := ~.@BeginChunk,
+        
+        @BeginSystem := ~.@BeginChunk,
+        
+        @BeginCode := function()
             local tmp_system;
             
             tmp_system := DocumentationDummy( tree, current_command[ 2 ] );
@@ -931,9 +941,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
+        @Code := ~.@BeginCode,
+        
         @InsertCode := ~.@InsertSystem,
         
-        @EndSystem := function()
+        @EndChunk := function()
             
             if autodoc_read_line = true then
                 
@@ -953,7 +965,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
-        @Example := function()
+        @EndSystem := ~.@EndChunk,
+        
+        @BeginExample := function()
             local example_node;
             
             example_node := read_example( true );
@@ -962,7 +976,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
-        @Log := function()
+        @Example := ~.@BeginExample,
+        
+        @BeginLog := function()
             local example_node;
             
             example_node := read_example( false );
@@ -970,6 +986,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             Add( current_item, example_node );
             
         end,
+        
+        @Log := ~.@BeginLog,
         
         STRING := function()
             local comment_pos;
@@ -991,12 +1009,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             Add( current_item, current_line_unedited );
             
         end,
-        
-        @Chunk := ~.@System,
-        
-        @EndChunk := ~.@EndSystem,
-        
-        @InsertChunk := ~.@InsertSystem,
         
         @BeginLatexOnly := function()
             
@@ -1046,11 +1058,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         end,
         
-        @AutoDocPlainText := function()
+        @BeginAutoDocPlainText := function()
             
             plain_text_mode := true;
             
         end,
+        
+        @AutoDocPlainText := ~.@BeginAutoDocPlainText,
         
         @EndAutoDocPlainText := function()
             

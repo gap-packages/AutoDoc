@@ -195,9 +195,9 @@ opening it might cause unexpected errors.
 ]]></Listing>
 </Subsection>
 
-<Subsection Label="@AutoDoc">
-<Index Key="@AutoDoc"><C>@AutoDoc</C></Index>
-<Heading>@AutoDoc</Heading>
+<Subsection Label="@BeginAutoDoc">
+<Index Key="@BeginAutoDoc"><C>@BeginAutoDoc</C></Index>
+<Heading>@BeginAutoDoc</Heading>
 Causes all subsequent declarations to be documented in the manual,
 regardless of whether they have an &AutoDoc; comment in front of
 them or not.
@@ -206,11 +206,11 @@ them or not.
 <Subsection Label="@EndAutoDoc">
 <Index Key="@EndAutoDoc"><C>@EndAutoDoc</C></Index>
 <Heading>@EndAutoDoc</Heading>
-Ends the affect of <C>@AutoDoc</C>. So from here on, again only declarations
+Ends the affect of <C>@BeginAutoDoc</C>. So from here on, again only declarations
 with an explicit &AutoDoc; comment in front are added to the manual.
 
 <Listing><![CDATA[
-#! @AutoDoc
+#! @BeginAutoDoc
 
 DeclareOperation( "Operation1", [ IsList ] );
 
@@ -276,15 +276,15 @@ Resets the current level to 0.
 </Subsection>
 
 
-<Subsection Label="@Example">
-<Index Key="@Example"><C>@Example and @EndExample</C></Index>
-<Heading>@Example and @EndExample</Heading>
-@Example inserts an example into the manual. The syntax is like the example enviroment
+<Subsection Label="@BeginExample">
+<Index Key="@BeginExample"><C>@BeginExample and @EndExample</C></Index>
+<Heading>@BeginExample and @EndExample</Heading>
+@BeginExample inserts an example into the manual. The syntax is like the example enviroment
 in GAPDoc. This examples can be tested by GAPDoc, and also stay readable by GAP.
 The GAP prompt is added by AutoDoc.
 @EndExample ends the example block.
 <Listing><![CDATA[
-#! @Example
+#! @BeginExample
 S3 := SymmetricGroup(5);
 #! Sym( [ 1 .. 5 ] )
 Order(S3);
@@ -293,10 +293,10 @@ Order(S3);
 ]]></Listing>
 </Subsection>
 
-<Subsection Label="@Log">
-<Index Key="Log"><C>@Log and @EndLog</C></Index>
-<Heading>@Log and @EndLog</Heading>
-Works just like the @Example command, but the example
+<Subsection Label="@BeginLog">
+<Index Key="@BeginLog"><C>@BeginLog and @EndLog</C></Index>
+<Heading>@BeginLog and @EndLog</Heading>
+Works just like the @BeginExample command, but the example
 wont be testet. See the GAPDoc manual for more information.
 </Subsection>
 
@@ -315,36 +315,15 @@ not finished or temporary files.
 ]]></Listing>
 </Subsection>
 
-<Subsection Label="@System">
-<Index Key="@System"><C>@System, @EndSystem, and @InsertSystem</C></Index>
-<Heading>@System <A>name</A>, @EndSystem, and @InsertSystem <A>name</A></Heading>
-@System causes the next documentation parts
+<Subsection Label="@BeginChunk">
+<Index Key="@BeginChunk"><C>@BeginChunk, @EndChunk, and @InsertChunk</C></Index>
+<Heading>@BeginChunk <A>name</A>, @EndChunk, and @InsertChunk <A>name</A></Heading>
+@BeginChunk causes the next documentation parts
 not to be inserted in the documentation at it's point in the file, but at the point
-where the @InsertSystem <A>name</A> command is.
+where the @InsertChunk <A>name</A> command is.
 This can be used to insert examples from
 different files at a specific point in the documentation.
-A normal system ends at the end of the file. You can also end a system with EndSystem.
-Systems are collected over the whole document.
-<Listing><![CDATA[
-#! @System Example_Symmetric_Group
-#! @Example
-S3 := SymmetricGroup(5);
-#! Sym( [ 1 .. 5 ] )
-Order(S3);
-#! 120
-#! @EndExample
-#! @EndSystem
-]]></Listing>
-
-<Listing><![CDATA[
-#! @InsertSystem Example_Symmetric_Group
-]]></Listing>
-</Subsection>
-
-<Subsection Label="@Chunk">
-<Index Key="@Chunk"><C>@Chunk, @EndChunk, and @InsertChunk</C></Index>
-<Heading>@Chunk <A>name</A>, @EndChunk, and @InsertChunk <A>name</A></Heading>
-Just the same as system
+A normal chunk ends at the end of the file. You can also end a system with @EndChunk.
 <Listing><![CDATA[
 #! @Chunk MyChunk
 #! This is some text.
@@ -353,16 +332,38 @@ Just the same as system
 #! @InsertChunk MyChunk
 ## Text is inserted here.
 ]]></Listing>
+
+<Listing><![CDATA[
+#! @BeginChunk Example_Symmetric_Group
+#! @BeginExample
+S3 := SymmetricGroup(5);
+#! Sym( [ 1 .. 5 ] )
+Order(S3);
+#! 120
+#! @EndExample
+#! @EndChunk
+]]></Listing>
+
+<Listing><![CDATA[
+#! @InsertChunk Example_Symmetric_Group
+]]></Listing>
+
 </Subsection>
 
-<Subsection Label="@Code">
-<Index Key="@Code"><C>@Code, @EndCode, and @InsertCode</C></Index>
-<Heading>@Code <A>name</A>, @EndCode, and @InsertCode <A>name</A></Heading>
-Inserts the code between @Code and @EndCode verbatim at the point where
+<Subsection Label="@BeginSystem">
+<Index Key="@BeginSystem"><C>@BeginSystem, @EndSystem, and @InsertSystem</C></Index>
+<Heading>@BeginSystem <A>name</A>, @EndSystem, and @InsertSystem <A>name</A></Heading>
+Same as @BeginChunk etc. This command is deprecated. Please use chunk instead.
+</Subsection>
+
+<Subsection Label="@BeginCode">
+<Index Key="@BeginCode"><C>@BeginCode, @EndCode, and @InsertCode</C></Index>
+<Heading>@BeginCode <A>name</A>, @EndCode, and @InsertCode <A>name</A></Heading>
+Inserts the code between @BeginCode and @EndCode verbatim at the point where
 @InsertCode is called. This is useful to insert your programm code
 directly into the manual.
 <Listing><![CDATA[
-#! @Code Increment
+#! @BeginCode Increment
 i := i + 1;
 #! @EndCode
 
