@@ -449,7 +449,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             
         fi;
         
-        declare_position := PositionSublist( current_line, "InstallMethod" );
+        declare_position := Minimum( [ PositionSublist( current_line, "InstallMethod" ), PositionSublist( current_line, "InstallOtherMethod" ) ] );
+                            ## Fail is larger than every integer.
         
         if declare_position <> fail then
             
