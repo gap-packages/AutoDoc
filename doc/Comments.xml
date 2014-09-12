@@ -325,7 +325,7 @@ This can be used to insert examples from
 different files at a specific point in the documentation.
 A normal chunk ends at the end of the file. You can also end a system with @EndChunk.
 <Listing><![CDATA[
-#! @Chunk MyChunk
+#! @BeginChunk MyChunk
 #! This is some text.
 #! @EndChunk
 
