@@ -588,6 +588,15 @@ InstallMethod( IsEmptyNode,
     
 end );
 
+InstallMethod( IsEmptyNode,
+               [ IsTreeForDocumentationNodeForManItemRep ],
+               
+  function( node )
+    
+    return false;
+    
+end );
+
 ####################################
 ##
 ## Add functions
