@@ -814,7 +814,7 @@ InstallMethod( WriteDocumentation,
         
     fi;
     
-    AppendTo( filestream, " ", text, "\n" );
+    AppendTo( filestream, text, "\n" );
     
 end );
 
