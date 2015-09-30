@@ -2,7 +2,7 @@
 ##
 ##  AutoDoc package
 ##
-##  Copyright 2012-2014,
+##  Copyright 2012-2015,
 ##                       Sebastian Gutsche
 ##                       Max Horn
 ##
@@ -18,4 +18,4 @@ compile it's output.
 Bug reports and other feedback are welcome. The latest version of this
 package can be found at
 
-    https://github.com/homalg-project/AutoDoc
+    https://github.com/gap-packages/AutoDoc
