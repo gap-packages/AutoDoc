@@ -268,7 +268,7 @@ InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
     
     if IsBound( package_info.AutoDoc ) then
         
-        title_rec := package_info.AutoDoc.TitlePage;
+        title_rec := ShallowCopy( package_info.AutoDoc.TitlePage );
         
     else
         

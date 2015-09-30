@@ -451,7 +451,7 @@ function( arg )
         # TODO: It should be possible to only rebuild the title page. (Perhaps also only the main page? but this is less important)
         if IsBound( scaffold.TitlePage ) then
             if IsRecord( scaffold.TitlePage ) then
-                title_page := scaffold.TitlePage;
+                title_page := ShallowCopy( scaffold.TitlePage );
             else
                 title_page := rec( );
             fi;
