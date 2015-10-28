@@ -1,0 +1,668 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<title>GAP (AutoDoc) - Chapter 2: AutoDoc documentation comments</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap2"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chap4_mj.html">4</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap1_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap3_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p id="mathjaxlink" class="pcenter"><a href="chap2.html">[MathJax off]</a></p>
+<p><a id="X8141B1A583434E12" name="X8141B1A583434E12"></a></p>
+<div class="ChapSects"><a href="chap2_mj.html#X8141B1A583434E12">2 <span class="Heading"><strong class="pkg">AutoDoc</strong> documentation comments</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2_mj.html#X871482CE838C68F6">2.1 <span class="Heading">Documenting declarations</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X8707DB2E7A8F0C3A">2.1-1 <span class="Heading">@Description <var class="Arg">descr</var></span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X86B758CA82D73B41">2.1-2 <span class="Heading">@Returns <var class="Arg">ret_val</var></span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X83FDE7028649130A">2.1-3 <span class="Heading">@Arguments <var class="Arg">args</var></span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X86A674A5869BAEC2">2.1-4 <span class="Heading">@Group <var class="Arg">grpname</var></span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X8749960C85248897">2.1-5 <span class="Heading">@Label <var class="Arg">label</var></span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X83B63B847B5199CF">2.1-6 AProperty</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X78A9022A7D5CB20E">2.1-7 AProperty</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7E44B99686FE9DC2">2.1-8 <span class="Heading">@ChapterInfo <var class="Arg">chapter, section</var></span></a>
+</span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2_mj.html#X8152FEF9844B1ACD">2.2 <span class="Heading">Other documentation comments</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X82747BD18578D5DA">2.2-1 <span class="Heading">@Chapter <var class="Arg">name</var></span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X83651A8B7EAE7F65">2.2-2 <span class="Heading">@Section <var class="Arg">name</var></span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X852C1B327A127225">2.2-3 <span class="Heading">@EndSection</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X8077F8E87C72A051">2.2-4 <span class="Heading">@Subsection <var class="Arg">name</var></span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X83F70B0F85628361">2.2-5 <span class="Heading">@EndSubsection</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7D22AA4485535112">2.2-6 <span class="Heading">@BeginAutoDoc</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X782E748B82E264EB">2.2-7 <span class="Heading">@EndAutoDoc</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7937E2BA7E142CC9">2.2-8 <span class="Heading">@BeginGroup <var class="Arg">[grpname]</var></span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7C17EB007FD42C87">2.2-9 <span class="Heading">@EndGroup</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X855AB48C8380D5BE">2.2-10 <span class="Heading">@Level <var class="Arg">lvl</var></span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7C6723D57F424215">2.2-11 <span class="Heading">@ResetLevel</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X83D6DA3B83D3436C">2.2-12 <span class="Heading">@BeginExample and @EndExample</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X81A2D44D834C0A17">2.2-13 <span class="Heading">@BeginLog and @EndLog</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X78DC644E8519280C">2.2-14 <span class="Heading">@DoNotReadRestOfFile</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X84F96D3E7BD5F617">2.2-15 <span class="Heading">@BeginChunk <var class="Arg">name</var>, @EndChunk, and @InsertChunk <var class="Arg">name</var></span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X86B00B6A876D6E7C">2.2-16 <span class="Heading">@BeginSystem <var class="Arg">name</var>, @EndSystem, and @InsertSystem <var class="Arg">name</var></span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X79B28EFE7C93E47D">2.2-17 <span class="Heading">@BeginCode <var class="Arg">name</var>, @EndCode, and @InsertCode <var class="Arg">name</var></span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X828C684E8582A9D0">2.2-18 <span class="Heading">@LatexOnly <var class="Arg">text</var>, @BeginLatexOnly , and @EndLatexOnly</span></a>
+</span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2_mj.html#X841E3AD584F5385C">2.3 <span class="Heading">Title page commands</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2_mj.html#X828AE38F80CB02E7">2.4 <span class="Heading">Plain text files</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2_mj.html#X7D7A38F87BC40C48">2.5 <span class="Heading">Grouping</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X859517FC87560167">2.5-1 FirstOperation</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2_mj.html#X8209AFDE8209AFDE">2.6 <span class="Heading">Level</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2_mj.html#X87D89E447B20A1BA">2.7 <span class="Heading">Some syntax for <strong class="pkg">AutoDoc</strong> text</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7B256AE5780F140A">2.7-1 <span class="Heading">Lists</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X871412737A0E12E2">2.7-2 <span class="Heading">Math modes</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7ED0330479146EFC">2.7-3 <span class="Heading">Emphasize</span></a>
+</span>
+</div></div>
+</div>
+
+<h3>2 <span class="Heading"><strong class="pkg">AutoDoc</strong> documentation comments</span></h3>
+
+<p>You can document declarations of global functions and variables, operations, attributes etc. by inserting <strong class="pkg">AutoDoc</strong> comments into your sources before these declaration. An <strong class="pkg">AutoDoc</strong> comment always starts with <code class="code">#!</code>. This is also the smallest possible <strong class="pkg">AutoDoc</strong> command. If you want your declaration documented, just write <code class="code">#!</code> at the line before the documentation. For example:</p>
+
+
+<div class="example"><pre>
+#!
+DeclareOperation( "AnOperation",
+                  [ IsList ] );
+</pre></div>
+
+<p>This will produce a manual entry for the operation <code class="code">AnOperation</code>.</p>
+
+<p><a id="X871482CE838C68F6" name="X871482CE838C68F6"></a></p>
+
+<h4>2.1 <span class="Heading">Documenting declarations</span></h4>
+
+<p>In the bare form above, the manual entry for <code class="code">AnOperation</code> will not contain much more than the name of the operation. In order to change this, there are several commands you can put into the <strong class="pkg">AutoDoc</strong> comment before the declaration. Currently, the following commands are provided:</p>
+
+<p><a id="X8707DB2E7A8F0C3A" name="X8707DB2E7A8F0C3A"></a></p>
+
+<h5>2.1-1 <span class="Heading">@Description <var class="Arg">descr</var></span></h5>
+
+<p>Adds the text in the following lines of the <strong class="pkg">AutoDoc</strong> to the description of the declaration in the manual. Lines are until the next <strong class="pkg">AutoDoc</strong> command or until the declaration is reached.</p>
+
+<p><a id="X86B758CA82D73B41" name="X86B758CA82D73B41"></a></p>
+
+<h5>2.1-2 <span class="Heading">@Returns <var class="Arg">ret_val</var></span></h5>
+
+<p>The string <var class="Arg">ret_val</var> is added to the documentation, with the text "Returns: " put in front of it. This should usually give a brief hint about the type or meaning of the value retuned by the documented function.</p>
+
+<p><a id="X83FDE7028649130A" name="X83FDE7028649130A"></a></p>
+
+<h5>2.1-3 <span class="Heading">@Arguments <var class="Arg">args</var></span></h5>
+
+<p>The string <var class="Arg">args</var> contains a description of the arguments the function expects, including optional parts, which are denoted by square brackets. The argument names can be separated by whitespace, commas or square brackets for the optional arguments, like "grp[, elm]" or "xx[y[z] ]". If <strong class="pkg">GAP</strong> options are used, this can be followed by a colon : and one or more assignments, like "n[, r]: tries := 100".</p>
+
+<p><a id="X86A674A5869BAEC2" name="X86A674A5869BAEC2"></a></p>
+
+<h5>2.1-4 <span class="Heading">@Group <var class="Arg">grpname</var></span></h5>
+
+<p>Adds the following method to a group with the given name. See section <a href="chap2_mj.html#X7D7A38F87BC40C48"><span class="RefLink">2.5</span></a> for more information about groups.</p>
+
+<p><a id="X8749960C85248897" name="X8749960C85248897"></a></p>
+
+<h5>2.1-5 <span class="Heading">@Label <var class="Arg">label</var></span></h5>
+
+<p>Adds label to the function as label. If this is not specified, then for declarations that involve a list of input filters (as is the case for <code class="code">DeclareOperation</code>, <code class="code">DeclareAttribute</code>, etc.), a default label is generated from this filter list.</p>
+
+
+<div class="example"><pre>
+#! @Label testlabel
+DeclareProperty( "AProperty",
+                 IsObject );
+</pre></div>
+
+<p>leads to this:</p>
+
+<p><a id="X83B63B847B5199CF" name="X83B63B847B5199CF"></a></p>
+
+<h5>2.1-6 AProperty</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AProperty</code>( <var class="Arg">arg</var> )</td><td class="tdright">( property )</td></tr></table></div>
+<p>Returns: <code class="code">true</code> or <code class="code">false</code></p>
+
+<p>while</p>
+
+
+<div class="example"><pre>
+#!
+DeclareProperty( "AProperty",
+                 IsObject );
+</pre></div>
+
+<p>leads to this:</p>
+
+<p><a id="X78A9022A7D5CB20E" name="X78A9022A7D5CB20E"></a></p>
+
+<h5>2.1-7 AProperty</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AProperty</code>( <var class="Arg">arg</var> )</td><td class="tdright">( property )</td></tr></table></div>
+<p>Returns: <code class="code">true</code> or <code class="code">false</code></p>
+
+<p><a id="X7E44B99686FE9DC2" name="X7E44B99686FE9DC2"></a></p>
+
+<h5>2.1-8 <span class="Heading">@ChapterInfo <var class="Arg">chapter, section</var></span></h5>
+
+<p>Adds the entry to the given chapter and section. Here, <var class="Arg">chapter</var> and <var class="Arg">section</var> are the respective titles.</p>
+
+<p>As an example, a full <strong class="pkg">AutoDoc</strong> comment for with all options could look like this:</p>
+
+
+<div class="example"><pre>
+#! @Description
+#! Computes the list of lists of degrees of ordinary characters
+#! associated to the &lt;A&gt;p&lt;/A&gt;-blocks of the group &lt;A&gt;G&lt;/A&gt;
+#! with &lt;A&gt;p&lt;/A&gt;-modular character table &lt;A&gt;modtbl&lt;/A&gt;
+#! and underlying ordinary character table &lt;A&gt;ordtbl&lt;/A&gt;.
+#! @Returns a list
+#! @Arguments modtbl
+#! @Group CharacterDegreesOfBlocks
+#! @FunctionLabel chardegblocks
+#! @ChapterInfo Blocks, Attributes
+DeclareAttribute( "CharacterDegreesOfBlocks",
+        IsBrauerTable );
+</pre></div>
+
+<p><a id="X8152FEF9844B1ACD" name="X8152FEF9844B1ACD"></a></p>
+
+<h4>2.2 <span class="Heading">Other documentation comments</span></h4>
+
+<p>There are also some commands which can be used in <strong class="pkg">AutoDoc</strong> comments that are not associated to any declaration. This is useful for additional text in your documentation, examples, mathematical chapters, etc..</p>
+
+<p><a id="X82747BD18578D5DA" name="X82747BD18578D5DA"></a></p>
+
+<h5>2.2-1 <span class="Heading">@Chapter <var class="Arg">name</var></span></h5>
+
+<p>Sets a chapter, all functions without seperate info will be added to this chapter. Also all text comments, i.e. lines that begin with #! without a command, and which do not follow after @description, will be added to the chapter as regular text. Example:</p>
+
+
+<div class="example"><pre>
+#! @Chapter My chapter
+#!  This is my chapter.
+#!  I document my stuff in it.
+</pre></div>
+
+<p><a id="X83651A8B7EAE7F65" name="X83651A8B7EAE7F65"></a></p>
+
+<h5>2.2-2 <span class="Heading">@Section <var class="Arg">name</var></span></h5>
+
+<p>Sets a section like chapter sets a chapter.</p>
+
+
+<div class="example"><pre>
+#! @Section My first manual section
+#!  In this section I am going to document my first method.
+</pre></div>
+
+<p><a id="X852C1B327A127225" name="X852C1B327A127225"></a></p>
+
+<h5>2.2-3 <span class="Heading">@EndSection</span></h5>
+
+<p>Closes the current section. Please be careful here. Closing a section before opening it might cause unexpected errors.</p>
+
+
+<div class="example"><pre>
+#! @EndSection
+#### The following text again belongs to the chapter
+#! Now we could start a second section if we want to.
+</pre></div>
+
+<p><a id="X8077F8E87C72A051" name="X8077F8E87C72A051"></a></p>
+
+<h5>2.2-4 <span class="Heading">@Subsection <var class="Arg">name</var></span></h5>
+
+<p>Sets a subsection like chapter sets a chapter.</p>
+
+
+<div class="example"><pre>
+#! @Subsection My first manual subsection
+#!  In this subsection I am going to document my first example.
+</pre></div>
+
+<p><a id="X83F70B0F85628361" name="X83F70B0F85628361"></a></p>
+
+<h5>2.2-5 <span class="Heading">@EndSubsection</span></h5>
+
+<p>Closes the current subsection. Please be careful here. Closing a subsection before opening it might cause unexpected errors.</p>
+
+
+<div class="example"><pre>
+#! @EndSubsection
+#### The following text again belongs to the section
+#! Now we are in the section again
+</pre></div>
+
+<p><a id="X7D22AA4485535112" name="X7D22AA4485535112"></a></p>
+
+<h5>2.2-6 <span class="Heading">@BeginAutoDoc</span></h5>
+
+<p>Causes all subsequent declarations to be documented in the manual, regardless of whether they have an <strong class="pkg">AutoDoc</strong> comment in front of them or not.</p>
+
+<p><a id="X782E748B82E264EB" name="X782E748B82E264EB"></a></p>
+
+<h5>2.2-7 <span class="Heading">@EndAutoDoc</span></h5>
+
+<p>Ends the affect of <code class="code">@BeginAutoDoc</code>. So from here on, again only declarations with an explicit <strong class="pkg">AutoDoc</strong> comment in front are added to the manual.</p>
+
+
+<div class="example"><pre>
+#! @BeginAutoDoc
+
+DeclareOperation( "Operation1", [ IsList ] );
+
+DeclareProperty( "IsProperty", IsList );
+
+#! @EndAutoDoc
+</pre></div>
+
+<p>Both, <code class="code">Operation1</code> and <code class="code">IsProperty</code> would appear in the manual.</p>
+
+<p><a id="X7937E2BA7E142CC9" name="X7937E2BA7E142CC9"></a></p>
+
+<h5>2.2-8 <span class="Heading">@BeginGroup <var class="Arg">[grpname]</var></span></h5>
+
+<p>Starts a group. All following documented declarations without an explicit <code class="code">@Group</code> command are grouped together in the same group with the given name. If no name is given, then a new nameless group is generated. The effect of this command is ended when an <code class="code">@EndGroup</code> command is reached.</p>
+
+<p>See section <a href="chap2_mj.html#X7D7A38F87BC40C48"><span class="RefLink">2.5</span></a> for more information about groups.</p>
+
+<p><a id="X7C17EB007FD42C87" name="X7C17EB007FD42C87"></a></p>
+
+<h5>2.2-9 <span class="Heading">@EndGroup</span></h5>
+
+<p>Ends the current group.</p>
+
+
+<div class="example"><pre>
+#! @BeginGroup MyGroup
+#!
+DeclareAttribute( "GroupedAttribute",
+                  IsList );
+
+DeclareOperation( "NonGroupedOperation",
+                  [ IsObject ] );
+
+#!
+DeclareOperation( "GroupedOperation",
+                  [ IsList, IsRubbish ] );
+#! @EndGroup
+</pre></div>
+
+<p><a id="X855AB48C8380D5BE" name="X855AB48C8380D5BE"></a></p>
+
+<h5>2.2-10 <span class="Heading">@Level <var class="Arg">lvl</var></span></h5>
+
+<p>Sets the current level of the documentation. All items created after this, chapters, sections, and items, are given the level <var class="Arg">lvl</var>, until the <code class="code">@ResetLevel</code> command resets the level to 0 or another level is set.</p>
+
+<p>See section <a href="chap2_mj.html#X8209AFDE8209AFDE"><span class="RefLink">2.6</span></a> for more information about groups.</p>
+
+<p><a id="X7C6723D57F424215" name="X7C6723D57F424215"></a></p>
+
+<h5>2.2-11 <span class="Heading">@ResetLevel</span></h5>
+
+<p>Resets the current level to 0.</p>
+
+<p><a id="X83D6DA3B83D3436C" name="X83D6DA3B83D3436C"></a></p>
+
+<h5>2.2-12 <span class="Heading">@BeginExample and @EndExample</span></h5>
+
+<p>@BeginExample inserts an example into the manual. The syntax is like the example enviroment in GAPDoc. This examples can be tested by GAPDoc, and also stay readable by GAP. The GAP prompt is added by AutoDoc. @EndExample ends the example block.</p>
+
+
+<div class="example"><pre>
+#! @BeginExample
+S3 := SymmetricGroup(5);
+#! Sym( [ 1 .. 5 ] )
+Order(S3);
+#! 120
+#! @EndExample
+</pre></div>
+
+<p><a id="X81A2D44D834C0A17" name="X81A2D44D834C0A17"></a></p>
+
+<h5>2.2-13 <span class="Heading">@BeginLog and @EndLog</span></h5>
+
+<p>Works just like the @BeginExample command, but the example wont be testet. See the GAPDoc manual for more information.</p>
+
+<p><a id="X78DC644E8519280C" name="X78DC644E8519280C"></a></p>
+
+<h5>2.2-14 <span class="Heading">@DoNotReadRestOfFile</span></h5>
+
+<p>Prevents the rest of the file from being read by the parser. Useful for not finished or temporary files.</p>
+
+
+<div class="example"><pre>
+#! This will appear in the manual
+
+#! @DoNotReadRestOfFile
+
+#! This wont.
+</pre></div>
+
+<p><a id="X84F96D3E7BD5F617" name="X84F96D3E7BD5F617"></a></p>
+
+<h5>2.2-15 <span class="Heading">@BeginChunk <var class="Arg">name</var>, @EndChunk, and @InsertChunk <var class="Arg">name</var></span></h5>
+
+<p>@BeginChunk causes the next documentation parts not to be inserted in the documentation at it's point in the file, but at the point where the @InsertChunk <var class="Arg">name</var> command is. This can be used to insert examples from different files at a specific point in the documentation. A normal chunk ends at the end of the file. You can also end a system with @EndChunk.</p>
+
+
+<div class="example"><pre>
+#! @BeginChunk MyChunk
+#! This is some text.
+#! @EndChunk
+
+#! @InsertChunk MyChunk
+## Text is inserted here.
+</pre></div>
+
+
+<div class="example"><pre>
+#! @BeginChunk Example_Symmetric_Group
+#! @BeginExample
+S3 := SymmetricGroup(5);
+#! Sym( [ 1 .. 5 ] )
+Order(S3);
+#! 120
+#! @EndExample
+#! @EndChunk
+</pre></div>
+
+
+<div class="example"><pre>
+#! @InsertChunk Example_Symmetric_Group
+</pre></div>
+
+<p><a id="X86B00B6A876D6E7C" name="X86B00B6A876D6E7C"></a></p>
+
+<h5>2.2-16 <span class="Heading">@BeginSystem <var class="Arg">name</var>, @EndSystem, and @InsertSystem <var class="Arg">name</var></span></h5>
+
+<p>Same as @BeginChunk etc. This command is deprecated. Please use chunk instead.</p>
+
+<p><a id="X79B28EFE7C93E47D" name="X79B28EFE7C93E47D"></a></p>
+
+<h5>2.2-17 <span class="Heading">@BeginCode <var class="Arg">name</var>, @EndCode, and @InsertCode <var class="Arg">name</var></span></h5>
+
+<p>Inserts the code between @BeginCode and @EndCode verbatim at the point where @InsertCode is called. This is useful to insert your programm code directly into the manual.</p>
+
+
+<div class="example"><pre>
+#! @BeginCode Increment
+i := i + 1;
+#! @EndCode
+
+#! @InsertCode Increment
+## Code is inserted here.
+</pre></div>
+
+<p><a id="X828C684E8582A9D0" name="X828C684E8582A9D0"></a></p>
+
+<h5>2.2-18 <span class="Heading">@LatexOnly <var class="Arg">text</var>, @BeginLatexOnly , and @EndLatexOnly</span></h5>
+
+<p>Code inserted between @BeginLatexOnly and @EndLatexOnly or after @LatexOnly is only inserted in the PDF version of the manual or worksheet. It can hold arbitrary LaTeX-commands.</p>
+
+
+<div class="example"><pre>
+#! @BeginLatexOnly
+#! \include{picture.tex}
+#! @EndLatexOnly
+
+#! @LatexOnly \include{picture.tex}
+</pre></div>
+
+<p><a id="X841E3AD584F5385C" name="X841E3AD584F5385C"></a></p>
+
+<h4>2.3 <span class="Heading">Title page commands</span></h4>
+
+<p>The following commands can be used to add the corresponding parts to the title page of the document, in case the scaffolding is enabled.</p>
+
+
+<ul>
+<li><p>@Title</p>
+
+</li>
+<li><p>@Subtitle</p>
+
+</li>
+<li><p>@Version</p>
+
+</li>
+<li><p>@TitleComment</p>
+
+</li>
+<li><p>@Author</p>
+
+</li>
+<li><p>@Date</p>
+
+</li>
+<li><p>@Address</p>
+
+</li>
+<li><p>@Abstract</p>
+
+</li>
+<li><p>@Copyright</p>
+
+</li>
+<li><p>@Acknowledgements</p>
+
+</li>
+<li><p>@Colophon</p>
+
+</li>
+<li><p>@URL</p>
+
+</li>
+</ul>
+<p>Those add the following lines at the corresponding point of the titlepage. Please note that many of those things can be (better) extracted from the PackageInfo.g. In case you set some of those, the extracted or in scaffold defined items will be overwritten.</p>
+
+<p><a id="X828AE38F80CB02E7" name="X828AE38F80CB02E7"></a></p>
+
+<h4>2.4 <span class="Heading">Plain text files</span></h4>
+
+<p>AutoDoc plain text files work exactly like AutoDoc comments, except that the #! is unnecessary at the beginning of a line which should be documented. Files that have the suffix .autodoc will automatically regarded as plain text files while the commands @AutoDocPlainText and @EndAutoDocPlainText mark parts in plain text files which should be regarded as AutoDoc parts. All commands can be used like before.</p>
+
+<p><a id="X7D7A38F87BC40C48" name="X7D7A38F87BC40C48"></a></p>
+
+<h4>2.5 <span class="Heading">Grouping</span></h4>
+
+<p>TODO: explain more about groups and what they do, how they look in the generated output etc.</p>
+
+<p>Note that group names are globally unique throughout the whole manual. That is, groups with the same name are in fact merged into a single group, even if they were declared in different source files. Thus you can have multiple <code class="code">@BeginGroup</code> / <code class="code">@EndGroup</code> pairs using the same group name, in different places, and these all will refer to the same group.</p>
+
+<p>Moreover, this means that you can add items to a group via the <code class="code">@Group</code> command in the <strong class="pkg">AutoDoc</strong> comment of an arbitrary declaration, at any time. The following code</p>
+
+
+<div class="example"><pre>
+#! @BeginGroup Group1
+
+#! @Description
+#!  First sentence.
+DeclareOperation( "FirstOperation", [ IsInt ] );
+
+#! @Description
+#!  Second sentence.
+DeclareOperation( "SecondOperation", [ IsInt, IsGroup ] );
+
+#! @EndGroup
+
+## .. Stuff ..
+
+#! @Description
+#!  Third sentence.
+#! @Group Group1
+KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
+</pre></div>
+
+<p>produces the following:</p>
+
+<p><a id="X859517FC87560167" name="X859517FC87560167"></a></p>
+
+<h5>2.5-1 FirstOperation</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FirstOperation</code>( <var class="Arg">arg</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SecondOperation</code>( <var class="Arg">arg1</var>, <var class="Arg">arg2</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ThirdOperation</code>( <var class="Arg">arg1</var>, <var class="Arg">arg2</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>First sentence. Second sentence. Third sentence.</p>
+
+<p><a id="X8209AFDE8209AFDE" name="X8209AFDE8209AFDE"></a></p>
+
+<h4>2.6 <span class="Heading">Level</span></h4>
+
+<p>Levels can be set to not write certain parts in the manual by default. Every entry has by default the level 0. The command <code class="code">@Level</code> can be used to set the level of the following part to a higher level, for example 1, and prevent it from being printed to the manual by default. However, if one sets the level to a higher value in the autodoc option of <code class="code">AutoDoc</code>, the parts will be included in the manual at the specific place.</p>
+
+
+<div class="example"><pre>
+#! This text will be printed to the manual.
+#! @Level 1
+#! This text will be printed to the manual if created with level 1 or higher.
+#! @Level 2
+#! This text will be printed to the manual if created with level 2 or higher.
+#! @ResetLevel
+#! This text will be printed to the manual.
+</pre></div>
+
+<p><a id="X87D89E447B20A1BA" name="X87D89E447B20A1BA"></a></p>
+
+<h4>2.7 <span class="Heading">Some syntax for <strong class="pkg">AutoDoc</strong> text</span></h4>
+
+<p><strong class="pkg">AutoDoc</strong> offers some useful syntax extensions which can be used in <strong class="pkg">AutoDoc</strong> plain text files and <strong class="pkg">AutoDoc</strong> comments. The syntax is inspired by the Markdown language, but it does not implement all features, neither is strict Markdown, but tries to be as straight as possible. The following constructions are possible right now:</p>
+
+<p><a id="X7B256AE5780F140A" name="X7B256AE5780F140A"></a></p>
+
+<h5>2.7-1 <span class="Heading">Lists</span></h5>
+
+<p>One can create items lists by beginning a new line with *, +, -, followed by one space. The first item starts the list. When items are longer than one line, the following lines have to be indented by at least two spaces. The list ends when a line which does not start a new item is not indented by two spaces. Of curse lists can be nested. Here is an example:</p>
+
+
+<div class="example"><pre>
+#! The list starts in the next line
+#! * item 1
+#! * item 2
+#!   which is a bit longer
+#!   * and also contains a nested list
+#!   * with two items
+#! * item 3 of the outer list
+#! This does not belong to the list anymore.
+</pre></div>
+
+<p>This is the output:<br /> The list starts in the next line</p>
+
+
+<ul>
+<li><p>item 1</p>
+
+</li>
+<li><p>item 2 which is a bit longer</p>
+
+
+<ul>
+<li><p>and also contains a nested list</p>
+
+</li>
+<li><p>with two items</p>
+
+</li>
+</ul>
+</li>
+<li><p>item 3 of the outer list</p>
+
+</li>
+</ul>
+<p>This does not belong to the list anymore.<br /> The *, -, and + are fully interchangeable and can even be used mixed, but this is not recommended.</p>
+
+<p><a id="X871412737A0E12E2" name="X871412737A0E12E2"></a></p>
+
+<h5>2.7-2 <span class="Heading">Math modes</span></h5>
+
+<p>One can start an inline formula with a $, and also end it with $, just like in LaTeX. This will translate into <strong class="pkg">GAPDoc</strong>s inline math enviroment. For display mode one can use $$, also like LaTeX.</p>
+
+
+<div class="example"><pre>
+#! This is an inline formula: $1+1 = 2$.
+#! This is a display formula:
+#! $$ \sum_{i=1}^n i. $$
+</pre></div>
+
+<p>produces the following output:<br /> This is an inline formula: <span class="SimpleMath">\(1+1 = 2\)</span>. This is a display formula:</p>
+
+<p class="center">\[ \sum_{i=1}^n i. \]</p>
+
+<p><a id="X7ED0330479146EFC" name="X7ED0330479146EFC"></a></p>
+
+<h5>2.7-3 <span class="Heading">Emphasize</span></h5>
+
+<p>One can emphasize text by using two asteriks (**) or two underscores (__) at the beginning and the end of the text which should be emphasized. Example:</p>
+
+
+<div class="example"><pre>
+#! **This** is very important.
+#! This is __also important__.
+#! **Naturally, more than one line
+#! can be important.**
+</pre></div>
+
+<p>This produces the following output:<br /> <em>This</em> is very important. This is <em>also important</em>. <em>Naturally, more than one line can be important.</em></p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap1_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap3_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chap4_mj.html">4</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

@@ -1,0 +1,16 @@
+  
+  [1X3 [33X[0;0YAutoDoc worksheets[133X[101X
+  
+  
+  [1X3.1 [33X[0;0YWorksheets[133X[101X
+  
+  [1X3.1-1 AutoDocWorksheet[101X
+  
+  [29X[2XAutoDocWorksheet[102X( [3Xlist_of_filenames:[103X [3Xoptions[103X ) [32X function
+  
+  [33X[0;0YThis function works exactly like the AutoDoc command, except that no package
+  is  needed to create a worksheet. It takes the sampe optional records as the
+  AutoDoc-command,  so  please  refer  this command for a full list. It's only
+  optional  argument  is  a (list of) filenames, which are then scanned by the
+  AutoDoc parser.[133X
+  

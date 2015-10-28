@@ -1,101 +1,109 @@
-#############################################################################
-##  
-##  Demo PackageInfo.g for the GitHubPagesForGAP
-##
 
 SetPackageInfo( rec(
 
-PackageName := "GitHubPagesForGAP",
+PackageName := "AutoDoc",
 
-Subtitle := "A GitHubPages generator for GAP packages",
-Version := "0.1",
-Date := "21/03/2014", # dd/mm/yyyy format
+Subtitle := "Generate documentation from GAP source code",
+
+Version := Maximum( [
+  "2015.12.03", ## Sebas' version
+## This line prevents merge conflicts
+  "2016.01.21", ## Max' version
+## This line prevents merge conflicts
+  "2013.11.01", ## Mohamed's version
+] ),
+
+Date := ~.Version{[ 1 .. 10 ]},
+Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1 .. 4 ]} ),
 
 Persons := [
   rec(
-    LastName      := "Horn",
-    FirstNames    := "Max",
+    LastName      := "Gutsche",
+    FirstNames    := "Sebastian",
     IsAuthor      := true,
     IsMaintainer  := true,
-    Email         := "max.horn@math.uni-giessen.de",
-    WWWHome       := "http://www.quendi.de/math",
-    PostalAddress := Concatenation(
-                       "AG Algebra\n",
-                       "Mathematisches Institut\n",
-                       "Justus-Liebig-Universit‰t Gieﬂen\n",
-                       "Arndtstraﬂe 2\n",
-                       "35392 Gieﬂen\n",
-                       "Germany" ),
-    Place         := "Gieﬂen",
-    Institution   := "Justus-Liebig-Universit‰t Gieﬂen"
+    Email         := "gutsche@mathematik.uni-kl.de",
+    WWWHome       := "http://wwwb.math.rwth-aachen.de/~gutsche/",
+    PostalAddress := Concatenation( [
+                       "Department of Mathematics\n",
+                       "University of Kaiserslautern\n",
+                       "67653 Kaiserslautern\n",
+                       "Germany" ] ),
+    Place         := "Kaiserslautern",
+    Institution   := "University of Kaiserslautern"
   ),
-
-  rec(
-    LastName      := "Thor",
-    FirstNames    := "A. U.",
-    IsAuthor      := true,
-    IsMaintainer  := false,
-    #Email         := "author@example.com",
-  ),
-
-  rec(
-    LastName      := "Itor",
-    FirstNames    := "Jan",
-    IsAuthor      := false,
-    IsMaintainer  := true,
-    #Email         := "janitor@example.com",
-  ),
+  
+  rec( LastName := "Horn",
+       FirstNames := "Max",
+       IsAuthor := true,
+       IsMaintainer := true,
+       Email := "max.horn@math.uni-giessen.de",
+       WWWHome := "http://www.quendi.de/math",
+       PostalAddress := Concatenation(
+               "AG Algebra\n",
+               "Mathematisches Institut\n",
+               "JLU Gie√üen\n",
+               "Arndtstra√üe 2\n",
+               "D-35392 Gie√üen\n",
+               "Germany" ),
+       Place := "Gie√üen",
+       Institution := "Justus-Liebig-Universit√§t Gie√üen"
+     ),
+  
 ],
 
-Status := "other",
+Status := "deposited",
+PackageWWWHome := "http://gap-packages.github.io/AutoDoc/",
 
-# The following are not strictly necessary in your own PackageInfo.g
-# (in the sense that update.g only looks at the usual fields
-# like PackageWWWHome, ArchiveURL etc.). But they are convenient
-# if you use exactly the scheme for your package website that we propose.
-GithubUser := "fingolfin",
-GithubRepository := ~.PackageName,
-GithubWWW := Concatenation("https://github.com/", ~.GithubUser, "/", ~.GithubRepository),
-
-PackageWWWHome := Concatenation("http://", ~.GithubUser, ".github.io/", ~.GithubRepository, "/"),
-README_URL     := Concatenation( ~.PackageWWWHome, "README" ),
-PackageInfoURL := Concatenation( ~.PackageWWWHome, "PackageInfo.g" ),
-# The following assumes you are using the Github releases system. If not, adjust
-# it accordingly.
-ArchiveURL     := Concatenation(~.GithubWWW,
-                    "/releases/download/v", ~.Version, "/",
-                    ~.GithubRepository, "-", ~.Version),
-
-ArchiveFormats := ".tar.gz .tar.bz2",
+SourceRepository := rec(
+    Type := "git",
+    URL := Concatenation( "https://github.com/gap-packages/", ~.PackageName ),
+),
+IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
+PackageWWWHome  := Concatenation( "https://gap-packages.github.io/", ~.PackageName ),
+README_URL      := Concatenation( ~.PackageWWWHome, "/README" ),
+PackageInfoURL  := Concatenation( ~.PackageWWWHome, "/PackageInfo.g" ),
+ArchiveURL      := Concatenation( ~.SourceRepository.URL,
+                                 "/releases/download/v", ~.Version,
+                                 "/", ~.PackageName ,"-", ~.Version ),
+ArchiveFormats := ".tar.gz",
 
 AbstractHTML := 
-  "This is a pseudo package that contains no actual\
-  <span class=\"pkgname\">GAP</span> code. Instead, it is a template for other\
-  GAP packages that allows to quickly setup GitHub pages.",
-
+  "",
 PackageDoc := rec(
-  BookName  := "GitHubPagesForGAP",
+  BookName  := "AutoDoc",
   ArchiveURLSubset := ["doc"],
   HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
-  LongTitle := "A GitHubPages generator for GAP packages",
+  LongTitle := "Generate documentation from GAP source code",
 ),
 
-# The following dependencies are fake and for testing / demo purposes
 Dependencies := rec(
-  GAP := ">=4.5.5",
-  NeededOtherPackages := [
-    ["GAPDoc", ">= 1.2"],
-    ["IO", ">= 4.1"],
-  ],
-  SuggestedOtherPackages := [["orb", ">= 4.2"]],
+  GAP := ">= 4.5",
+  NeededOtherPackages := [ [ "GAPDoc", ">= 1.5" ] ],
+  SuggestedOtherPackages := [ ],
   ExternalConditions := []
+                      
 ),
 
-AvailabilityTest := ReturnTrue,
+AvailabilityTest := function()
+    return true;
+  end,
 
-Keywords := ["GitHub pages", "GAP"]
+Autoload := false,
+
+Keywords := [ "Automatic documentation, GAP, GAPDoc" ],
+
+AutoDoc := rec(
+    TitlePage := rec(
+        Copyright := Concatenation(
+                    "&copyright; 2012-2014 by Sebastian Gutsche and Max Horn<P/>\n\n",
+                    "This package may be distributed under the terms and conditions of the\n",
+                    "GNU Public License Version 2.\n"
+                ),
+    )
+),
 
 ));
 
