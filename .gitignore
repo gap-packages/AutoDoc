@@ -38,3 +38,5 @@ doc/title.xml
 doc/maketest.g
 doc/AutoDoc.xml
 ExampleIdeas
+gh-pages
+make_dist_for_autodoc.sh
