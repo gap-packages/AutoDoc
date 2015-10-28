@@ -29,6 +29,7 @@ doc/*.pnr
 doc/*.tex
 doc/*.toc
 doc/*.out
+doc/QuickReference/*
 doc/manual.lab
 *.DS_Store
 doc/AutoDocMainFile.xml
@@ -36,3 +37,4 @@ doc/Chapter*xml
 doc/title.xml
 doc/maketest.g
 doc/AutoDoc.xml
+ExampleIdeas

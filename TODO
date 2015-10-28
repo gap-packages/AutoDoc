@@ -1,0 +1,34 @@
+
+todo:
+Please create a (maybe random) test suite for invoking the AutoDoc command.
+We already have a nice testsuite for all comments possible, although Mohamed always
+seems to find a way to crash them into void.
+
+IDEAS: We need to collect all possible combinations to invoke the AutoDoc command. It should be no problem
+to design a loop in GAP, but checking the output for differences might be painful. Also, what to do with entities? The following is a list of possible
+valid inputs for the different option records, which might produce the desired output in all combinations. However, Murphys Law tells us that at least one of them will
+break anyway. So good luck.
+
+dir: * doc
+     * nothing
+     -> Both should produce the same output.
+     
+scaffold: * includes
+          * appendix
+          * bib
+          * TitlePage: + ... Stuff, see GAPDoc.
+          * document_class
+          * latex_header_file
+          * gapdoc_latex_options
+
+
+
+Documenting C/C++/C# with AutoDoc:
+
+Use comments of C/C++/C# before AutoDoc hashes, i.e. // #!.
+You can also begin a whole comment section with /* and then end it with */.
+Please don't put a AutoDoc hash in the same line as /* and */. If using the @AutoDocPlainText command,
+you can get rid of the supersticious hashes. Please do *NOT* use the comment syntax with a asteriks at the
+beginning of every line, it will mess up the markdown extension!
+
+
