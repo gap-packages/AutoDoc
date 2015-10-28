@@ -16,10 +16,6 @@ Version := Maximum( [
 Date := ~.Version{[ 1 .. 10 ]},
 Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1 .. 4 ]} ),
 
-ArchiveURL := Concatenation( "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutoDoc/AutoDoc-", ~.Version ),
-
-ArchiveFormats := ".tar.gz",
-
 Persons := [
   rec(
     LastName      := "Gutsche",
@@ -57,15 +53,16 @@ Persons := [
 ],
 
 Status := "deposited",
+PackageWWWHome := "http://gap-packages.github.io/AutoDoc/",
 
-README_URL := 
-  "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutoDoc/README.AutoDoc",
-PackageInfoURL := 
-  "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutoDoc/PackageInfo.g",
+ArchiveFormats := ".tar.gz",
+
+ArchiveURL     := Concatenation( ~.PackageWWWHome, "AutoDoc-", ~.Version ),
+README_URL     := Concatenation( ~.PackageWWWHome, "README" ),
+PackageInfoURL := Concatenation( ~.PackageWWWHome, "PackageInfo.g" ),
 
 AbstractHTML := 
   "",
-PackageWWWHome := "http://wwwb.math.rwth-aachen.de/~gutsche/gap_packages/AutoDoc",
 PackageDoc := rec(
   BookName  := "AutoDoc",
   ArchiveURLSubset := ["doc"],
