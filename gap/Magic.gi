@@ -491,8 +491,11 @@ function( arg )
         # of the documentation are also in UTF-8 encoding, and may contain characters
         # not contained in the default Latin 1 encoding.
         SetGapDocLaTeXOptions( "utf8", gapdoc_latex_option_record );
-
-        MakeGAPDocDoc( doc_dir, gapdoc.main, gapdoc.files, gapdoc.bookname, "MathJax" );
+        if Filename(DirectoriesSystemPrograms(), "pdflatex") <> fail then
+            MakeGAPDocDoc( doc_dir, gapdoc.main, gapdoc.files, gapdoc.bookname, "MathJax" );
+        else
+            AutoDoc_MakeGAPDocDoc_WithoutLatex( doc_dir, gapdoc.main, gapdoc.files, gapdoc.bookname, "MathJax" );
+        fi;
 
         CopyHTMLStyleFiles( Filename( doc_dir, "" ) );
 
