@@ -460,7 +460,7 @@ function( arg )
             AUTODOC_APPEND_RECORD_WRITEONCE( title_page, tree!.TitlePage );
             
             if not is_worksheet then
-                AUTODOC_APPEND_RECORD_WRITEONCE( title_page, ExtractTitleInfoFromPackageInfo( pkg ) );
+                AUTODOC_APPEND_RECORD_WRITEONCE( title_page, ExtractTitleInfoFromPackageInfo( package_info ) );
             fi;
             
             CreateTitlePage( title_page );

@@ -240,10 +240,8 @@ end );
 ##
 InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
                        
-  function( package_name )
-    local package_info, title_rec, author_list, i, tmp_list, j, author_rec, author_string;
-    
-    package_info := PackageInfo( package_name )[ 1 ];
+  function( package_info )
+    local title_rec, author_list, i, tmp_list, j, author_rec, author_string;
     
     if IsBound( package_info.AutoDoc ) then
         
@@ -255,7 +253,7 @@ InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
         
     fi;
     
-    AUTODOC_SetIfMissing( title_rec, "Title", package_name );
+    AUTODOC_SetIfMissing( title_rec, "Title", package_info.PackageName );
     
     AUTODOC_SetIfMissing( title_rec, "Subtitle", ReplacedString( package_info.Subtitle, "GAP", "&GAP;" ) );
     
