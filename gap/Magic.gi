@@ -53,22 +53,22 @@ end );
 # filenames, as relative paths (relative to the package dir).
 #
 # For example, the invocation
-#   AUTODOC_FindMatchingFiles("AutoDoc", [ "gap/" ], [ "gi", "gd" ]);
+#   AUTODOC_FindMatchingFiles(pkg_dir, [ "gap/" ], [ "gi", "gd" ]);
 # might return a list looking like
 #  [ "gap/AutoDocMainFunction.gd", "gap/AutoDocMainFunction.gi", ... ]
 BindGlobal( "AUTODOC_FindMatchingFiles",
-function (pkg, subdirs, extensions)
+function (pkg_dir, subdirs, extensions)
     local d_rel, d, tmp, files, result;
 
     result := [];
 
     for d_rel in subdirs do
         # Get the absolute path to the directory in side the package...
-        d := DirectoriesPackageLibrary( pkg, d_rel );
-        if IsEmpty( d ) then
+        d := Filename( pkg_dir, d_rel );
+        if not IsDirectoryPath( d ) then
             continue;
         fi;
-        d := d[1];
+        d := Directory( d );
         # ... but also keep the relative path (such as "gap")
         d_rel := Directory( d_rel );
 
@@ -234,7 +234,7 @@ function( arg )
 #         PushOptions( rec( level_value := autodoc.level ) );
         
         if not is_worksheet then
-            Append( autodoc.files, AUTODOC_FindMatchingFiles(pkg, autodoc.scan_dirs, [ "g", "gi", "gd" ]) );
+            Append( autodoc.files, AUTODOC_FindMatchingFiles(pkg_dir, autodoc.scan_dirs, [ "g", "gi", "gd" ]) );
         fi;
     fi;
 
@@ -300,7 +300,7 @@ function( arg )
         fi;
         
         if not is_worksheet then
-            Append( gapdoc.files, AUTODOC_FindMatchingFiles(pkg, gapdoc.scan_dirs, [ "g", "gi", "gd" ]) );
+            Append( gapdoc.files, AUTODOC_FindMatchingFiles(pkg_dir, gapdoc.scan_dirs, [ "g", "gi", "gd" ]) );
         fi;
 
         # Attempt to weed out duplicates as they may confuse GAPDoc (this
