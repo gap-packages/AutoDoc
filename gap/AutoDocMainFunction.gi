@@ -17,7 +17,7 @@ InstallValue( AUTODOC_XML_HEADER,
     )
 );
 
-InstallGlobalFunction( AUTODOC_WriteOnce,
+InstallGlobalFunction( AUTODOC_SetIfMissing,
             
   function( record, name, val )
     
@@ -276,11 +276,11 @@ InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
         
     fi;
     
-    AUTODOC_WriteOnce( title_rec, "Title", package_name );
+    AUTODOC_SetIfMissing( title_rec, "Title", package_name );
     
-    AUTODOC_WriteOnce( title_rec, "Subtitle", ReplacedString( package_info.Subtitle, "GAP", "&GAP;" ) );
+    AUTODOC_SetIfMissing( title_rec, "Subtitle", ReplacedString( package_info.Subtitle, "GAP", "&GAP;" ) );
     
-    AUTODOC_WriteOnce( title_rec, "Version", package_info.Version );
+    AUTODOC_SetIfMissing( title_rec, "Version", package_info.Version );
     
     ## Sanitize author info
     
@@ -334,7 +334,7 @@ InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
         
     fi;
     
-    AUTODOC_WriteOnce( title_rec, "Date", package_info.Date );
+    AUTODOC_SetIfMissing( title_rec, "Date", package_info.Date );
     
     return title_rec;
     
@@ -548,7 +548,7 @@ InstallGlobalFunction( AutoDocWorksheet,
         
     fi;
     
-    AUTODOC_WriteOnce( scaffold_rec, "index", false );
+    AUTODOC_SetIfMissing( scaffold_rec, "index", false );
     
     if Length( arg ) = 2 then
         

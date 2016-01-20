@@ -13,7 +13,7 @@
 
 DeclareGlobalVariable( "AUTODOC_XML_HEADER" );
 
-DeclareGlobalFunction( "AUTODOC_WriteOnce" );
+DeclareGlobalFunction( "AUTODOC_SetIfMissing" );
 
 DeclareGlobalFunction( "AUTODOC_APPEND_STRING_ITERATIVE" );
 

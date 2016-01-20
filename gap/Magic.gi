@@ -193,8 +193,8 @@ function( arg )
     fi;
     
     if IsBound( scaffold ) then
-        AUTODOC_WriteOnce( scaffold, "TitlePage", true );
-        AUTODOC_WriteOnce( scaffold, "MainPage", true );
+        AUTODOC_SetIfMissing( scaffold, "TitlePage", true );
+        AUTODOC_SetIfMissing( scaffold, "MainPage", true );
     fi;
 
     
@@ -438,7 +438,7 @@ function( arg )
             fi;
         fi;
         
-        AUTODOC_WriteOnce( scaffold, "index", true );
+        AUTODOC_SetIfMissing( scaffold, "index", true );
 
         if IsBound( gapdoc ) then
             if AUTODOC_GetSuffix( gapdoc.main ) = "xml" then
@@ -456,7 +456,7 @@ function( arg )
                 title_page := rec( );
             fi;
             
-            AUTODOC_WriteOnce( title_page, "dir", doc_dir );
+            AUTODOC_SetIfMissing( title_page, "dir", doc_dir );
             AUTODOC_APPEND_RECORD_WRITEONCE( title_page, tree!.TitlePage );
             
             if not is_worksheet then
@@ -517,10 +517,10 @@ function( arg )
     
     if IsBound( maketest ) then
         
-        AUTODOC_WriteOnce( maketest, "filename", "maketest.g" );
-        AUTODOC_WriteOnce( maketest, "folder", pkg_dir );
-        AUTODOC_WriteOnce( maketest, "scan_dir", doc_dir );
-        AUTODOC_WriteOnce( maketest, "files_to_scan", gapdoc.files );
+        AUTODOC_SetIfMissing( maketest, "filename", "maketest.g" );
+        AUTODOC_SetIfMissing( maketest, "folder", pkg_dir );
+        AUTODOC_SetIfMissing( maketest, "scan_dir", doc_dir );
+        AUTODOC_SetIfMissing( maketest, "files_to_scan", gapdoc.files );
 
         if IsString( maketest.folder ) then
             maketest.folder := Directory( maketest.folder );
@@ -530,8 +530,8 @@ function( arg )
             maketest.scan_dir := Directory( maketest.scan_dir );
         fi;
         
-        AUTODOC_WriteOnce( maketest, "commands", [ ] );
-        AUTODOC_WriteOnce( maketest, "book_name", gapdoc.main );
+        AUTODOC_SetIfMissing( maketest, "commands", [ ] );
+        AUTODOC_SetIfMissing( maketest, "book_name", gapdoc.main );
         
         CreateMakeTest( maketest );
     fi;
