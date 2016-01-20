@@ -236,27 +236,6 @@ InstallGlobalFunction( CreateMainPage,
     
 end );
 
-##
-InstallGlobalFunction( ExtractMainInfoFromPackageInfo,
-                       
-  function( package_name )
-    local package_info, return_record;
-    
-    package_info := PackageInfo( package_name )[ 1 ];
-    
-    if IsBound( package_info.AutoDoc ) then
-        
-        return_record := package_info.AutoDoc;
-        
-    else
-        
-        return_record := rec( );
-        
-    fi;
-    
-    return return_record;
-    
-end );
 
 ##
 InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
