@@ -107,7 +107,7 @@ function( arg )
     else
         is_worksheet := false;
         package_info := PackageInfo( pkg )[ 1 ];
-        pkg_dir := DirectoriesPackageLibrary( pkg, "" )[1];
+        pkg_dir := Directory(package_info.InstallationPath);
     fi;
 
     if Length(arg) >= 2 then
