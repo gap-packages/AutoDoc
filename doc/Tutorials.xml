@@ -14,20 +14,25 @@ is called &SomePackage;.
 <Heading>Creating a package manual from scratch</Heading>
 
 Suppose your package is already up and running, but so far has no
-manual. Then you can rapidly generate a <Q>scaffold</Q> for a manual using the
-<Ref Func="AutoDoc"/> command like this:
+manual. Then you can rapidly generate a <Q>scaffold</Q> for a package manual
+using the <Ref Func="AutoDoc"/> command like this,
+while running &GAP; from within your package's directory (the
+one containing the <F>PackageInfo.g</F>:
 <Listing>
 LoadPackage( "AutoDoc" );
-AutoDoc( "SomePackage" : scaffold := true );
+AutoDoc( : scaffold := true );
 </Listing>
-This creates two XML files <F>doc/SomePackage.xml</F> and
-<F>doc/title.xml</F> insider the package directory and then runs
+This first reads the <F>PackageInfo.g</F> file from the current
+directory. It extracts information about package from it
+(such as its name and version, see Section <Ref Sect="Tut:PackageInfo"/>).
+It then creates two XML files <F>doc/SomePackage.xml</F> and
+<F>doc/title.xml</F> insider the package directory. Finally, it runs
 &GAPDoc; on them to produce a nice initial PDF and HTML version of your
 fresh manual.
 <P/>
 
 To ensure that the &GAP; help system picks up your package manual, you
-should also add the following (or a variation of it) to your
+should also add something like the following to your
 <F>PackageInfo.g</F>:
 <Listing>
 PackageDoc := rec(
@@ -125,8 +130,8 @@ Then the following &GAP; command will regenerate the manual and automatically
 include all newly documented functions, operations etc.:
 
 <Listing>
-LoadPackage("AutoDoc");
-AutoDoc("SomePackage" : scaffold := true, autodoc := true );
+LoadPackage( "AutoDoc" );
+AutoDoc( : scaffold := true, autodoc := true );
 </Listing>
 
 If you are not using the scaffolding feature, e.g. because you already
@@ -145,14 +150,10 @@ still scans the package code for &AutoDoc; documentation comments
 and the runs &GAPDoc; to produce HTML and PDF output, but does not
 touch your documentation XML files otherwise.
 <Listing>
-LoadPackage("AutoDoc");
-AutoDoc("SomePackage" : autodoc := true );
+LoadPackage( "AutoDoc" );
+AutoDoc( : autodoc := true );
 </Listing>
 
-
-<!--
-TODO: Explain how to mix this with existing &GAPDoc; XML files.
--->
 
 </Section>
 
@@ -160,12 +161,29 @@ TODO: Explain how to mix this with existing &GAPDoc; XML files.
 <Section Label="Tut:IntegrateExisting">
 <Heading>Using &AutoDoc; in an existing &GAPDoc; manual</Heading>
 
-TODO: Explain that it might still be interesting to switch to using scaffolding?
+Even if you already have an existing &GAPDoc; manual, it might be
+interesting for you to use &AutoDoc; for two purposes:
 <P/>
 
-TODO: Demonstrate how to add / mix your own XML files, &AutoDoc; generated
-XML files, and &GAPDoc; stuff...
+First off, with  &AutoDoc; is very convenient to regenerate your
+documentation.
+<P/>
 
+Secondly, the scaffolding feature which generates a title package
+with all the metadata of your package in a uniform way is very
+handy. The somewhat tedious process of keeping your title page in
+sync with your <F>PackageInfo.g</F> is fully automated this way
+(including the correct version, release data, author information
+and so on).
+<P/>
+
+There are various examples of packages using &AutoDoc; for only
+this purpose, e.g. <Package>IO</Package> and <Package>orb</Package>.
+<P/>
+
+<!--
+TODO: Explain how to mix AutoDoc content with existing &GAPDoc; XML files.
+-->
 
 </Section>
 
@@ -177,8 +195,14 @@ You will probably want to re-run the  <Ref Func="AutoDoc"/> command
 frequently, e.g. whenever you modified your documentation or your
 <F>PackageInfo.g</F>. To make this more convenient and reproducible, we
 recommend putting its invocation into a file <F>makedoc.g</F> in your package
-directory. Then you can regenerate the manual from the command line with the
-following simple command (assuming you are in the package directory):
+directory, with content based on the following example:
+<Listing>
+LoadPackage( "AutoDoc" );
+AutoDoc( : autodoc := true );
+QUIT;
+</Listing>
+Then you can regenerate the package manual from the command line with the
+following command, executed from within in the package directory:
 <Listing>
 gap makedoc.g
 </Listing>
