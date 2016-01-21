@@ -48,9 +48,17 @@
 #! The parameters have the following meanings:
 #! <List>
 #!
-#! <Mark><A>package_name</A></Mark>
+#! <Mark><A>package</A></Mark>
 #! <Item>
-#!     The name of the package whose documentation should be(re)generated.
+#!     This is either the name of package, or an <C>IsDirectory</C> object.
+#!     In the former case, &AutoDoc; uses the metadata of the first package
+#!     with that name known to &GAP;. In the latter case, it checks whether
+#!     the given directory contains a <F>PackageInfo.g</F> file, and extracts
+#!     all needed metadata from that. This is for example useful if you have
+#!     multiple versions of the package around and want to make sure the
+#!     documentation of the correct version is built.
+#!     <P/>
+#!     If this argument is omitted, &AutoDoc; uses the <C>DirectoryCurrent()</C>.
 #! </Item>
 #!
 #!
@@ -70,7 +78,7 @@
 #!     <Mark><A>scaffold</A></Mark>
 #!     <Item>
 #!         This controls whether and how to generate scaffold XML files
-#!         for the main and title page of the package's documentation. 
+#!         for the main and title page of the package's documentation.
 #!         <P/>
 #!         The value should be either <K>true</K>, <K>false</K> or a
 #!         record. If it is a record or <K>true</K> (the latter is
@@ -301,7 +309,7 @@
 #! </List>
 #!
 #! @Returns nothing
-#! @Arguments package_name[, option_record ]
+#! @Arguments [package[, option_record ]]
 #! @ChapterInfo AutoDoc, The AutoDoc() function
 DeclareGlobalFunction( "AutoDoc" );
 

@@ -97,23 +97,52 @@ function( arg )
     local pkg, package_info, opt, scaffold, gapdoc, maketest,
           autodoc, pkg_dir, doc_dir, doc_dir_rel, d, tmp,
           title_page, tree, is_worksheet, position_document_class, i, gapdoc_latex_option_record;
-    
-    pkg := arg[1];
-    
-    if LowercaseString( pkg ) = "autodocworksheet" then
+
+    if Length( arg ) >= 3 then
+        Error( "too many arguments" );
+    fi;
+
+    # check whether the last argument is an options record
+    if Length( arg ) > 0 and IsRecord( arg[Length(arg)] ) then
+        opt := Remove( arg );
+    else
+        opt := rec();
+    fi;
+
+    # check the first argument
+    if Length(arg) = 0 then
+        pkg_dir := DirectoryCurrent( );
+    elif IsString( arg[1] ) then
+        pkg := Remove( arg, 1 );
+    elif IsDirectory( arg[1] ) then
+        pkg_dir := Remove( arg, 1 );
+    fi;
+
+    # if there are any arguments left, at least one was of unsupported type
+    if Length(arg) > 0 then
+        Error( "wrong arguments" );
+    fi;
+
+    if IsBound( pkg_dir ) then
+        is_worksheet := false;
+        tmp := Filename( pkg_dir, "PackageInfo.g" );
+        if not IsExistingFile( tmp ) then
+            Error( "no package name given and no PackageInfo.g file found" );
+        elif not IsReadableFile( tmp ) then
+            Error( "cannot read PackageInfo.g" );
+        fi;
+        Read( tmp );
+        package_info := GAPInfo.PackageInfoCurrent;
+        pkg := package_info.PackageName;
+    elif pkg = "AutoDocWorksheet" then
+        # For internal use only (the AutoDocWorksheet() function)
         is_worksheet := true;
         package_info := rec( );
         pkg_dir := DirectoryCurrent( );
     else
         is_worksheet := false;
         package_info := PackageInfo( pkg )[ 1 ];
-        pkg_dir := Directory(package_info.InstallationPath);
-    fi;
-
-    if Length(arg) >= 2 then
-        opt := arg[2];
-    else
-        opt := rec();
+        pkg_dir := Directory( package_info.InstallationPath );
     fi;
 
     # Check for certain user supplied options, and if present, add them
@@ -268,9 +297,18 @@ function( arg )
             gapdoc.main := pkg;
         fi;
 
-        # FIXME: the following may break if a package uses more than one book
-        if IsBound( package_info.PackageDoc ) and IsBound( package_info.PackageDoc[1].BookName ) then
-            gapdoc.bookname := package_info.PackageDoc[1].BookName;
+        if IsBound( package_info.PackageDoc ) then
+            if IsRecord( package_info.PackageDoc ) then
+                # this case happens if we read the PackageInfo.g directly
+                tmp := package_info.PackageDoc;
+            else
+                # this case happens if we get the package info record from
+                # GAP's list of packages.
+                # FIXME: this may break if multiple versions of a package are
+                # installed...
+                tmp := package_info.PackageDoc[1];
+            fi;
+            gapdoc.bookname := tmp.BookName;
         elif not is_worksheet then
             # Default: book name = package name
             gapdoc.bookname := pkg;

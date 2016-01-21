@@ -1,7 +1,6 @@
 LoadPackage("AutoDoc");
 
-AutoDoc(
-    "AutoDoc" : 
+AutoDoc(rec( 
     autodoc := true,
     scaffold := rec(
         includes := [
@@ -13,9 +12,9 @@ AutoDoc(
             "SomePackage",
         ],
     )
-);
+));
 
 # Create VERSION file for "make towww"
-PrintTo( "VERSION", PackageInfo( "AutoDoc" )[1].Version );
+PrintTo( "VERSION", GAPInfo.PackageInfoCurrent.Version );
 
 QUIT;
