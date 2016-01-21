@@ -1,0 +1,8 @@
+This file describes changes in the AutoDoc package.
+
+2016-01-21:
+  - The AutoDoc() function now accepts IsDirectory() objects
+    as first argument, and you can omit the first argument
+    (it then defaults to the current directory).
+    Packages using AutoDoc may want to adapt their makedoc.g
+    to use this new facility for improved robustness.
