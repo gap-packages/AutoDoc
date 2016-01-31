@@ -491,7 +491,7 @@ function( arg )
         fi;
 
         if IsBound( scaffold.MainPage ) and scaffold.MainPage <> false then
-            CreateMainPage( pkgname, doc_dir, scaffold );
+            CreateMainPage( gapdoc.bookname, doc_dir, scaffold );
         fi;
     fi;
 
