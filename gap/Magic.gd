@@ -91,10 +91,13 @@
 #!         In all other cases (in particular if <A>opt.scaffold</A> is
 #!         <K>false</K>), scaffolding is disabled.
 #!         <P/>
+#!         If scaffolding is enabled, and <A>PackageInfo.AutoDoc</A> exists, then it is
+#!         assumed to be a record, and its contents are used as default values for
+#!         the scaffold settings.
+#!         <P/>
 #!
 #!         If <A>opt.scaffold</A> is a record, it may contain the following entries.
 #!
-#### TODO: mention merging with PackageInfo.AutoDoc!
 #!         <List>
 #!
 #!         <Mark><A>includes</A></Mark>
