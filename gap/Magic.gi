@@ -95,7 +95,7 @@ InstallGlobalFunction( AutoDoc,
 function( arg )
     local pkgname, pkginfo, pkgdir,
           opt, scaffold, gapdoc, maketest, autodoc,
-          doc_dir, doc_dir_rel, d, tmp, file, i,
+          doc_dir, doc_dir_rel, tmp, key, val, file, i,
           title_page, tree, is_worksheet,
           position_document_class, gapdoc_latex_option_record;
 
@@ -155,19 +155,12 @@ function( arg )
 
     # Check for certain user supplied options, and if present, add them
     # to the opt record.
-    tmp := function( key )
-        local val;
+    for key in [ "dir", "scaffold", "autodoc", "gapdoc", "maketest" ] do
         val := ValueOption( key );
         if val <> fail then
             opt.(key) := val;
         fi;
-    end;
-
-    tmp( "dir" );
-    tmp( "scaffold" );
-    tmp( "autodoc" );
-    tmp( "gapdoc" );
-    tmp( "maketest" );
+    od;
 
     #
     # Setup the output directory
@@ -309,9 +302,8 @@ function( arg )
             if Length( pkginfo.PackageDoc ) > 1 then
                 Print("WARNING: Package contains multiple books, only using the first one\n");
             fi;
-            tmp := pkginfo.PackageDoc[1];
-            gapdoc.bookname := tmp.BookName;
-            gapdoc.SixFile := tmp.SixFile;
+            gapdoc.bookname := pkginfo.PackageDoc[1].BookName;
+            gapdoc.SixFile := pkginfo.PackageDoc[1].SixFile;
         elif not is_worksheet then
             # Default: book name = package name
             gapdoc.bookname := pkgname;
@@ -353,9 +345,9 @@ function( arg )
         # the package directory, to paths which are relative to the doc directory.
         # For this, we assume that doc_dir_rel is normalized (e.g.
         # it does not contains '//') and relative.
-        d := Number( Filename( doc_dir_rel, "" ), x -> x = '/' );
-        d := Concatenation( ListWithIdenticalEntries(d, "../") );
-        gapdoc.files := List( gapdoc.files, f -> Concatenation( d, f ) );
+        tmp := Number( Filename( doc_dir_rel, "" ), x -> x = '/' );
+        tmp := Concatenation( ListWithIdenticalEntries(tmp, "../") );
+        gapdoc.files := List( gapdoc.files, f -> Concatenation( tmp, f ) );
     fi;
 
 
