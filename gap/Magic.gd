@@ -160,8 +160,7 @@
 #!             <Listing><![CDATA[
 #!             rec( Acknowledgements := "Many thanks to ..." )]]></Listing>
 #!             For a list of valid entries in the titlepage, please refer to the
-#!             &GAPDoc; manual, specifically section <Ref Subsect='Title' BookName='gapdoc'/>
-#!             and following.
+#!             &GAPDoc; manual, specifically section <Ref Subsect='TitlePage' BookName='gapdoc'/>.
 #!         </Item>
 #!         <Mark><A>MainPage</A></Mark>
 #!         <Item>
