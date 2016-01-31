@@ -213,15 +213,9 @@ end );
 ## Please note that entities will be treatened
 ## seperately.
 InstallGlobalFunction( CreateTitlePage,
-  function( argument_rec )
-    local indent, tag, names, filestream, dir, entity_list, OutWithTag, Out, i;
+  function( dir, argument_rec )
+    local indent, tag, names, filestream, entity_list, OutWithTag, Out, i;
 
-    if not IsBound( argument_rec.dir ) then
-        Error( "directory must be given" );
-    fi;
-
-    dir := argument_rec.dir;
-    Unbind( argument_rec.dir );
     filestream := AUTODOC_OutputTextFile( dir, "title.xml" );
     indent := 0;
 

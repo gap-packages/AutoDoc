@@ -491,7 +491,7 @@ function( arg )
                 AUTODOC_MergeRecords( title_page, ExtractTitleInfoFromPackageInfo( pkginfo ) );
             fi;
 
-            CreateTitlePage( title_page );
+            CreateTitlePage( doc_dir, title_page );
         fi;
 
         if IsBound( scaffold.MainPage ) and scaffold.MainPage <> false then
