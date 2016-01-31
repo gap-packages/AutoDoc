@@ -286,13 +286,8 @@ InstallGlobalFunction( CreateTitlePage,
 end );
 
 InstallGlobalFunction( AUTODOC_PROCESS_INTRO_STRINGS,
-  function( introduction_list )
-    local tree, intro, intro_string, i;
-
-    tree := ValueOption( "Tree" );
-    if tree = fail then
-        tree := DocumentationTree( );
-    fi;
+  function( introduction_list, tree )
+    local intro, intro_string, i;
 
     for intro in introduction_list do
         if Length( intro ) = 2 then

@@ -358,7 +358,7 @@ function( arg )
 
     if IsBound( autodoc ) then
         if IsBound( autodoc.section_intros ) then
-            AUTODOC_PROCESS_INTRO_STRINGS( autodoc.section_intros : Tree := tree );
+            AUTODOC_PROCESS_INTRO_STRINGS( autodoc.section_intros, tree );
         fi;
 
         AutoDocScanFiles( autodoc.files : PackageName := pkgname, Tree := tree );
