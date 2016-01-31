@@ -487,6 +487,10 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentation, IsDirectory ],
         ## FIXME: If there is anything else than a chapter, this will break!
         WriteDocumentation( i, stream, path_to_xmlfiles );
     od;
+    # Workaround for issue #65
+    if IsEmpty( tree!.nodes ) then
+        AppendTo( stream, "&nbsp;\n" );
+    fi;
     CloseStream( stream );
 end );
 
