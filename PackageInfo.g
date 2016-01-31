@@ -1,3 +1,15 @@
+#############################################################################
+##
+##  AutoDoc package
+##
+##  Copyright 2012-2016
+##    Sebastian Gutsche, University of Kaiserslautern
+##    Max Horn, Justus-Liebig-Universität Gießen
+##
+## Licensed under the GPL 2 or later.
+##
+#############################################################################
+
 
 SetPackageInfo( rec(
 
@@ -8,7 +20,7 @@ Subtitle := "Generate documentation from GAP source code",
 Version := Maximum( [
   "2015.12.03", ## Sebas' version
 ## This line prevents merge conflicts
-  "2016.01.21", ## Max' version
+  "2016.01.31", ## Max' version
 ## This line prevents merge conflicts
   "2013.11.01", ## Mohamed's version
 ] ),
