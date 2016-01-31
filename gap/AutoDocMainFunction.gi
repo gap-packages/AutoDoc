@@ -38,15 +38,14 @@ InstallGlobalFunction( AUTODOC_APPEND_STRING_ITERATIVE,
 end );
 
 ##
-InstallGlobalFunction( AUTODOC_APPEND_RECORD_WRITEONCE,
-  function( rec_1, rec_2 )
-    local names_list, i;
-
-    names_list := RecNames( rec_2 );
-    for i in names_list do
-        if not IsBound( rec_1.( i ) ) then
-            rec_1.( i ) := rec_2.( i );
-        fi;
+## Given two records, this adds all key/values pairs of the
+## second record to the first record, unless the first record already
+## has an entry for that key.
+InstallGlobalFunction( AUTODOC_MergeRecords,
+  function( dst, src )
+    local key;
+    for key in RecNames( src ) do
+        AUTODOC_SetIfMissing( dst, key, src.( key ) );
     od;
 end );
 

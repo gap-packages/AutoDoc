@@ -14,7 +14,7 @@
 DeclareGlobalVariable( "AUTODOC_XML_HEADER" );
 DeclareGlobalFunction( "AUTODOC_SetIfMissing" );
 DeclareGlobalFunction( "AUTODOC_APPEND_STRING_ITERATIVE" );
-DeclareGlobalFunction( "AUTODOC_APPEND_RECORD_WRITEONCE" );
+DeclareGlobalFunction( "AUTODOC_MergeRecords" );
 DeclareGlobalFunction( "AUTODOC_PROCESS_INTRO_STRINGS" );
 DeclareGlobalFunction( "AutoDocScanFiles" );
 

@@ -219,7 +219,7 @@ function( arg )
 
     # Merge pkginfo.AutoDoc into scaffold
     if IsBound(scaffold) and IsBound( pkginfo.AutoDoc ) then
-        AUTODOC_APPEND_RECORD_WRITEONCE( scaffold, pkginfo.AutoDoc );
+        AUTODOC_MergeRecords( scaffold, pkginfo.AutoDoc );
     fi;
 
     if IsBound( scaffold ) then
@@ -491,10 +491,10 @@ function( arg )
             fi;
 
             AUTODOC_SetIfMissing( title_page, "dir", doc_dir );
-            AUTODOC_APPEND_RECORD_WRITEONCE( title_page, tree!.TitlePage );
+            AUTODOC_MergeRecords( title_page, tree!.TitlePage );
 
             if not is_worksheet then
-                AUTODOC_APPEND_RECORD_WRITEONCE( title_page, ExtractTitleInfoFromPackageInfo( pkginfo ) );
+                AUTODOC_MergeRecords( title_page, ExtractTitleInfoFromPackageInfo( pkginfo ) );
             fi;
 
             CreateTitlePage( title_page );
