@@ -137,6 +137,9 @@ function( arg )
             Error( "reading PackageInfo.g failed" );
         fi;
         package_info := GAPInfo.PackageInfoCurrent;
+        if IsRecord( package_info.PackageDoc ) then
+            package_info.PackageDoc:= [ package_info.PackageDoc ];
+        fi;
         pkg := package_info.PackageName;
     elif pkg = "AutoDocWorksheet" then
         # For internal use only (the AutoDocWorksheet() function)
@@ -301,17 +304,11 @@ function( arg )
             gapdoc.main := pkg;
         fi;
 
-        if IsBound( package_info.PackageDoc ) then
-            if IsRecord( package_info.PackageDoc ) then
-                # this case happens if we read the PackageInfo.g directly
-                tmp := package_info.PackageDoc;
-            else
-                # this case happens if we get the package info record from
-                # GAP's list of packages.
-                # FIXME: this may break if multiple versions of a package are
-                # installed...
-                tmp := package_info.PackageDoc[1];
+        if IsBound( package_info.PackageDoc ) and not IsEmpty( package_info.PackageDoc ) then
+            if Length( package_info.PackageDoc ) > 1 then
+                Print("WARNING: Package contains multiple books, only using the first one\n");
             fi;
+            tmp := package_info.PackageDoc[1];
             gapdoc.bookname := tmp.BookName;
         elif not is_worksheet then
             # Default: book name = package name
