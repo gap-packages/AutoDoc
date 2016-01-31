@@ -95,7 +95,7 @@ end );
 InstallGlobalFunction( AutoDoc,
 function( arg )
     local pkg, package_info, opt, scaffold, gapdoc, maketest,
-          autodoc, pkg_dir, doc_dir, doc_dir_rel, d, tmp,
+          autodoc, pkg_dir, doc_dir, doc_dir_rel, d, tmp, file,
           title_page, tree, is_worksheet, position_document_class, i, gapdoc_latex_option_record;
 
     if Length( arg ) >= 3 then
@@ -310,9 +310,11 @@ function( arg )
             fi;
             tmp := package_info.PackageDoc[1];
             gapdoc.bookname := tmp.BookName;
+            gapdoc.SixFile := tmp.SixFile;
         elif not is_worksheet then
             # Default: book name = package name
             gapdoc.bookname := pkg;
+            gapdoc.SixFile := "doc/manual.six";
 
             Print("\n");
             Print("WARNING: PackageInfo.g is missing a PackageDoc entry!\n");
@@ -548,8 +550,12 @@ function( arg )
         # FIXME: It seems that this command does not work if pdflatex
         #        is not present. Maybe we should remove it.
         
-        if not is_worksheet then
-            GAPDocManualLab( pkg );
+        if IsBound( gapdoc.SixFile ) then
+            file := Filename(pkg_dir, gapdoc.SixFile);
+            if file = fail or not IsReadableFile(file) then
+                Error("could not open `manual.six' file of package `", pkg, "'.\n");
+            fi;
+            GAPDocManualLabFromSixFile( gapdoc.bookname, file );
         fi;
 
     fi;
