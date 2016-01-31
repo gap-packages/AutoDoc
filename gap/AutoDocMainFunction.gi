@@ -170,7 +170,7 @@ end );
 ##
 InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
   function( pkginfo )
-    local title_rec, author_list, i, tmp_list, j, author_rec, author_string;
+    local title_rec, i, tmp_list, j, author_rec, author_string;
 
     if IsBound( pkginfo.AutoDoc ) then
         title_rec := ShallowCopy( pkginfo.AutoDoc.TitlePage );
@@ -184,7 +184,7 @@ InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
 
     ## Sanitize author info
     if not IsBound( title_rec.Author ) then
-        author_list := [ ];
+        title_rec.Author := [ ];
         i := 1;
         for author_rec in pkginfo.Persons do
             author_string := "";
@@ -205,10 +205,9 @@ InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
             if IsBound( author_rec.WWWHome ) then
                 AUTODOC_APPEND_STRING_ITERATIVE( author_string, "<Homepage>", author_rec.WWWHome, "</Homepage>" );
             fi;
-            author_list[ i ] := author_string;
+            title_rec.Author[ i ] := author_string;
             i := i + 1;
         od;
-        title_rec.Author := author_list;
     fi;
     AUTODOC_SetIfMissing( title_rec, "Date", pkginfo.Date );
     return title_rec;
