@@ -72,16 +72,9 @@ end );
 
 ##
 InstallGlobalFunction( CreateMainPage,
-  function( opt )
-    local pkgname, dir, filename, filestream, i, pkginfo, book_name;
+  function( book_name, dir, opt )
+    local filename, filestream, i;
 
-    if not IsBound( opt.book_name ) then
-        Error( "book name must be given" );
-    fi;
-
-    book_name := opt.book_name;
-
-    dir := opt.dir;
     if IsString(dir) then
         dir := Directory(dir);
     fi;

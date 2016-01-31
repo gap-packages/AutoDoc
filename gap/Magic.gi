@@ -501,9 +501,7 @@ function( arg )
         fi;
 
         if IsBound( scaffold.MainPage ) and scaffold.MainPage <> false then
-            scaffold.dir := doc_dir;
-            scaffold.book_name := pkgname;
-            CreateMainPage( scaffold );
+            CreateMainPage( pkgname, doc_dir, scaffold );
         fi;
     fi;
 
