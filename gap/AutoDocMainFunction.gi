@@ -83,8 +83,8 @@ InstallGlobalFunction( CreateMainPage,
         opt.entities := [];
     fi;
 
-    # TODO: and if we do that, then do not add pkgname unconditionally to the list,
-    # to allow the package author to define this entity slightly differently...
+    # add book_name unconditionally to the list of entities
+    # FIXME: stop doing that, to allow package authors to define this entity differently?
     Add( opt.entities, book_name );
 
     if IsBound( opt.main_xml_file ) then

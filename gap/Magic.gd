@@ -263,7 +263,7 @@
 #### that have existing documentation using a different XML name,
 #### and which do not wish to use scaffolding.
 ####
-#### This explain why we only allow specifying gapdoc.main.
+#### This explains why we only allow specifying gapdoc.main.
 #### The scaffolding code will still honor it, though, just in case.
 #!         <Mark><A>main</A></Mark>
 #!         <Item>

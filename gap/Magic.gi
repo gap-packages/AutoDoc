@@ -142,19 +142,23 @@ function( arg )
             pkginfo.PackageDoc:= [ pkginfo.PackageDoc ];
         fi;
         pkgname := pkginfo.PackageName;
+
     elif pkgname = "AutoDocWorksheet" then
         # For internal use only -- for details, refer to the AutoDocWorksheet() function.
         is_worksheet := true;
         pkginfo := rec( );
         pkgdir := DirectoryCurrent( );
+
     else
         is_worksheet := false;
         pkginfo := PackageInfo( pkgname )[ 1 ];
         pkgdir := Directory( pkginfo.InstallationPath );
     fi;
 
-    # Check for certain user supplied options, and if present, add them
-    # to the opt record.
+    #
+    # Check for user supplied options. If present, they take
+    # precedence over any defaults as well as the opt record.
+    #
     for key in [ "dir", "scaffold", "autodoc", "gapdoc", "maketest" ] do
         val := ValueOption( key );
         if val <> fail then
@@ -280,18 +284,6 @@ function( arg )
         gapdoc := rec();
     fi;
 
-    #
-    # Extract test settings
-    #
-
-    if IsBound( opt.maketest ) then
-        if IsRecord( opt.maketest ) then
-            maketest := opt.maketest;
-        elif opt.maketest = true then
-            maketest := rec( );
-        fi;
-    fi;
-
     if IsBound( gapdoc ) then
 
         if not IsBound( gapdoc.main ) then
@@ -315,7 +307,6 @@ function( arg )
             Print("You can correct this by adding the following to your PackageInfo.g:\n");
             Print("PackageDoc := rec(\n");
             Print("  BookName  := ~.PackageName,\n");
-            #Print("  BookName  := \"", pkgname, "\",\n");
             Print("  ArchiveURLSubset := [\"doc\"],\n");
             Print("  HTMLStart := \"doc/chap0.html\",\n");
             Print("  PDFFile   := \"doc/manual.pdf\",\n");
@@ -468,8 +459,9 @@ function( arg )
             fi;
         elif not IsBound( scaffold.bib ) then
             # If there is a doc/PKG.bib file, assume that we want to reference it in the scaffold.
-            if IsReadableFile( Filename( doc_dir, Concatenation( pkgname, ".bib" ) ) ) then
-                scaffold.bib := Concatenation( pkgname, ".bib" );
+            tmp := Concatenation( pkgname, ".bib" );
+            if IsReadableFile( Filename( doc_dir, tmp ) ) then
+                scaffold.bib := tmp;
             fi;
         fi;
 
@@ -506,7 +498,7 @@ function( arg )
     fi;
 
     #
-    # Run AutoDoc
+    # Write AutoDoc XML files
     #
     if IsBound( autodoc ) then
         WriteDocumentation( tree, doc_dir : level_value := autodoc.level );
@@ -550,7 +542,21 @@ function( arg )
 
     fi;
 
+    #
+    # Handle maketest
+    #
+
+    if IsBound( opt.maketest ) then
+        if IsRecord( opt.maketest ) then
+            maketest := opt.maketest;
+        elif opt.maketest = true then
+            maketest := rec( );
+        fi;
+    fi;
+
     if IsBound( maketest ) then
+    
+        maketest := opt.maketest;
 
         AUTODOC_SetIfMissing( maketest, "filename", "maketest.g" );
         AUTODOC_SetIfMissing( maketest, "folder", pkgdir );
