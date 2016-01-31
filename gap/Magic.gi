@@ -95,7 +95,7 @@ InstallGlobalFunction( AutoDoc,
 function( arg )
     local pkgname, pkginfo, pkgdir,
           opt, scaffold, gapdoc, maketest, autodoc,
-          doc_dir, doc_dir_rel, tmp, key, val, file, i,
+          doc_dir, doc_dir_rel, tmp, key, val, file,
           title_page, tree, is_worksheet,
           position_document_class, gapdoc_latex_option_record;
 
@@ -434,11 +434,11 @@ function( arg )
 
         if IsBound( scaffold.gapdoc_latex_options ) then
             if IsRecord( scaffold.gapdoc_latex_options ) then
-                for i in RecNames( scaffold.gapdoc_latex_options ) do
-                    if not IsString( scaffold.gapdoc_latex_options.( i ) )
-                       and IsList( scaffold.gapdoc_latex_options.( i ) )
-                       and LowercaseString( scaffold.gapdoc_latex_options.( i )[ 1 ] ) = "file" then
-                        scaffold.gapdoc_latex_options.( i ) := StringFile( scaffold.gapdoc_latex_options.( i )[ 2 ] );
+                for key in RecNames( scaffold.gapdoc_latex_options ) do
+                    if not IsString( scaffold.gapdoc_latex_options.( key ) )
+                       and IsList( scaffold.gapdoc_latex_options.( key ) )
+                       and LowercaseString( scaffold.gapdoc_latex_options.( key )[ 1 ] ) = "file" then
+                        scaffold.gapdoc_latex_options.( key ) := StringFile( scaffold.gapdoc_latex_options.( key )[ 2 ] );
                     fi;
                 od;
 
