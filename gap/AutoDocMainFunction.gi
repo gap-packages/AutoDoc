@@ -319,22 +319,10 @@ end );
 ## Default chapter record. This is not availible for
 ## worksheets.
 InstallGlobalFunction( AutoDocScanFiles,
-  function( files_to_scan )
-    local pkgname, default_chapter_record, tree;
+  function( files_to_scan, pkgname, tree )
+    local default_chapter_record;
 
-    pkgname := ValueOption( "PackageName" );
-
-    if IsString( pkgname ) then
-        default_chapter_record := CreateDefaultChapterData( pkgname );
-    else
-        default_chapter_record := rec( );
-    fi;
-
-    tree := ValueOption( "Tree" );
-    if tree = fail then
-        tree := DocumentationTree( );
-    fi;
-
+    default_chapter_record := CreateDefaultChapterData( pkgname );
     AutoDoc_Parser_ReadFiles( files_to_scan, tree, default_chapter_record );
     return tree;
 end );

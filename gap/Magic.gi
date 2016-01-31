@@ -361,7 +361,7 @@ function( arg )
             AUTODOC_PROCESS_INTRO_STRINGS( autodoc.section_intros, tree );
         fi;
 
-        AutoDocScanFiles( autodoc.files : PackageName := pkgname, Tree := tree );
+        AutoDocScanFiles( autodoc.files, pkgname, tree );
     fi;
 
     if is_worksheet then
