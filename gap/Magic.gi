@@ -131,7 +131,11 @@ function( arg )
         elif not IsReadableFile( tmp ) then
             Error( "cannot read PackageInfo.g" );
         fi;
+        Unbind( GAPInfo.PackageInfoCurrent );
         Read( tmp );
+        if not IsBound( GAPInfo.PackageInfoCurrent ) then
+            Error( "reading PackageInfo.g failed" );
+        fi;
         package_info := GAPInfo.PackageInfoCurrent;
         pkg := package_info.PackageName;
     elif pkg = "AutoDocWorksheet" then
