@@ -330,7 +330,7 @@ end );
 ##
 InstallGlobalFunction( AutoDocWorksheet,
   function( arg )
-    local arg_list, autodoc_rec, scaffold_rec;
+    local autodoc_rec, scaffold_rec;
 
     if Length( arg ) = 1 then
         arg[ 2 ] := rec( );
@@ -343,7 +343,6 @@ InstallGlobalFunction( AutoDocWorksheet,
     AUTODOC_SetIfMissing( scaffold_rec, "index", false );
 
     if Length( arg ) = 2 then
-        arg_list := [ "AutoDocWorksheet", arg[ 2 ] ];
         autodoc_rec := ValueOption( "autodoc" );
         if autodoc_rec = fail then
             autodoc_rec := rec( );
