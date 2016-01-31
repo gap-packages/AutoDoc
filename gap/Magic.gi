@@ -143,7 +143,7 @@ function( arg )
         fi;
         pkgname := pkginfo.PackageName;
     elif pkgname = "AutoDocWorksheet" then
-        # For internal use only -- for details, referto the AutoDocWorksheet() function.
+        # For internal use only -- for details, refer to the AutoDocWorksheet() function.
         is_worksheet := true;
         pkginfo := rec( );
         pkgdir := DirectoryCurrent( );
