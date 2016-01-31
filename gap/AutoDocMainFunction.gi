@@ -52,14 +52,14 @@ end );
 
 ##
 InstallGlobalFunction( CreateDefaultChapterData,
-  function( package_name )
+  function( pkgname )
     local chapter_name, default_chapter_record, list_of_types, i;
 
-    if not IsString( package_name ) then
+    if not IsString( pkgname ) then
         Error( "CreateDefaultChapterData must be called with a possible package name\n" );
     fi;
 
-    chapter_name := Concatenation( package_name, "_automatic_generated_documentation" );
+    chapter_name := Concatenation( pkgname, "_automatic_generated_documentation" );
     default_chapter_record := rec();
     list_of_types := [ "categories", "methods", "attributes", "properties",
                        "global_functions", "global_variables" ];
@@ -75,7 +75,7 @@ end );
 ## Call this with the packagename. It creates a simple main file. Call it with package name and maybe a list of entities.
 InstallGlobalFunction( CreateMainPage,
   function( opt )
-    local package_name, dir, filename, filestream, i, package_info, book_name;
+    local pkgname, dir, filename, filestream, i, pkginfo, book_name;
 
     if not IsBound( opt.book_name ) then
         Error( "book name must be given" );
@@ -92,7 +92,7 @@ InstallGlobalFunction( CreateMainPage,
         opt.entities := [];
     fi;
 
-    # TODO: and if we do that, then do not add package_name unconditionally to the list,
+    # TODO: and if we do that, then do not add pkgname unconditionally to the list,
     # to allow the package author to define this entity slightly differently...
     Add( opt.entities, book_name );
 
@@ -171,24 +171,24 @@ end );
 
 ##
 InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
-  function( package_info )
+  function( pkginfo )
     local title_rec, author_list, i, tmp_list, j, author_rec, author_string;
 
-    if IsBound( package_info.AutoDoc ) then
-        title_rec := ShallowCopy( package_info.AutoDoc.TitlePage );
+    if IsBound( pkginfo.AutoDoc ) then
+        title_rec := ShallowCopy( pkginfo.AutoDoc.TitlePage );
     else
         title_rec := rec( );
     fi;
 
-    AUTODOC_SetIfMissing( title_rec, "Title", package_info.PackageName );
-    AUTODOC_SetIfMissing( title_rec, "Subtitle", ReplacedString( package_info.Subtitle, "GAP", "&GAP;" ) );
-    AUTODOC_SetIfMissing( title_rec, "Version", package_info.Version );
+    AUTODOC_SetIfMissing( title_rec, "Title", pkginfo.PackageName );
+    AUTODOC_SetIfMissing( title_rec, "Subtitle", ReplacedString( pkginfo.Subtitle, "GAP", "&GAP;" ) );
+    AUTODOC_SetIfMissing( title_rec, "Version", pkginfo.Version );
 
     ## Sanitize author info
     if not IsBound( title_rec.Author ) then
         author_list := [ ];
         i := 1;
-        for author_rec in package_info.Persons do
+        for author_rec in pkginfo.Persons do
             author_string := "";
             AUTODOC_APPEND_STRING_ITERATIVE( author_string,
                     author_rec.FirstNames, " ", author_rec.LastName,
@@ -212,7 +212,7 @@ InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
         od;
         title_rec.Author := author_list;
     fi;
-    AUTODOC_SetIfMissing( title_rec, "Date", package_info.Date );
+    AUTODOC_SetIfMissing( title_rec, "Date", pkginfo.Date );
     return title_rec;
 end );
 
@@ -327,12 +327,12 @@ end );
 ## worksheets.
 InstallGlobalFunction( AutoDocScanFiles,
   function( files_to_scan )
-    local package_name, default_chapter_record, tree;
+    local pkgname, default_chapter_record, tree;
 
-    package_name := ValueOption( "PackageName" );
+    pkgname := ValueOption( "PackageName" );
 
-    if IsString( package_name ) then
-        default_chapter_record := CreateDefaultChapterData( package_name );
+    if IsString( pkgname ) then
+        default_chapter_record := CreateDefaultChapterData( pkgname );
     else
         default_chapter_record := rec( );
     fi;

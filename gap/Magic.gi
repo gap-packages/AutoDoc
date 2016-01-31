@@ -56,18 +56,18 @@ end );
 # filenames, as relative paths (relative to the package dir).
 #
 # For example, the invocation
-#   AUTODOC_FindMatchingFiles(pkg_dir, [ "gap/" ], [ "gi", "gd" ]);
+#   AUTODOC_FindMatchingFiles(pkgdir, [ "gap/" ], [ "gi", "gd" ]);
 # might return a list looking like
 #  [ "gap/AutoDocMainFunction.gd", "gap/AutoDocMainFunction.gi", ... ]
 BindGlobal( "AUTODOC_FindMatchingFiles",
-function (pkg_dir, subdirs, extensions)
+function (pkgdir, subdirs, extensions)
     local d_rel, d, tmp, files, result;
 
     result := [];
 
     for d_rel in subdirs do
         # Get the absolute path to the directory in side the package...
-        d := Filename( pkg_dir, d_rel );
+        d := Filename( pkgdir, d_rel );
         if not IsDirectoryPath( d ) then
             continue;
         fi;
@@ -90,16 +90,14 @@ function (pkg_dir, subdirs, extensions)
     return result;
 end );
 
-
-# AutoDoc(pkg[, opt])
 #
-## Make this function callable with the package_name AutoDocWorksheet.
-## Which will then create a worksheet!
 InstallGlobalFunction( AutoDoc,
 function( arg )
-    local pkg, package_info, opt, scaffold, gapdoc, maketest,
-          autodoc, pkg_dir, doc_dir, doc_dir_rel, d, tmp, file,
-          title_page, tree, is_worksheet, position_document_class, i, gapdoc_latex_option_record;
+    local pkgname, pkginfo, pkgdir,
+          opt, scaffold, gapdoc, maketest, autodoc,
+          doc_dir, doc_dir_rel, d, tmp, file, i,
+          title_page, tree, is_worksheet,
+          position_document_class, gapdoc_latex_option_record;
 
     if Length( arg ) >= 3 then
         Error( "too many arguments" );
@@ -114,11 +112,11 @@ function( arg )
 
     # check the first argument
     if Length(arg) = 0 then
-        pkg_dir := DirectoryCurrent( );
+        pkgdir := DirectoryCurrent( );
     elif IsString( arg[1] ) then
-        pkg := Remove( arg, 1 );
+        pkgname := Remove( arg, 1 );
     elif IsDirectory( arg[1] ) then
-        pkg_dir := Remove( arg, 1 );
+        pkgdir := Remove( arg, 1 );
     fi;
 
     # if there are any arguments left, at least one was of unsupported type
@@ -126,33 +124,33 @@ function( arg )
         Error( "wrong arguments" );
     fi;
 
-    if IsBound( pkg_dir ) then
+    if IsBound( pkgdir ) then
         is_worksheet := false;
-        tmp := Filename( pkg_dir, "PackageInfo.g" );
-        if not IsExistingFile( tmp ) then
+        file := Filename( pkgdir, "PackageInfo.g" );
+        if not IsExistingFile( file ) then
             Error( "no package name given and no PackageInfo.g file found" );
-        elif not IsReadableFile( tmp ) then
+        elif not IsReadableFile( file ) then
             Error( "cannot read PackageInfo.g" );
         fi;
         Unbind( GAPInfo.PackageInfoCurrent );
-        Read( tmp );
+        Read( file );
         if not IsBound( GAPInfo.PackageInfoCurrent ) then
             Error( "reading PackageInfo.g failed" );
         fi;
-        package_info := GAPInfo.PackageInfoCurrent;
-        if IsRecord( package_info.PackageDoc ) then
-            package_info.PackageDoc:= [ package_info.PackageDoc ];
+        pkginfo := GAPInfo.PackageInfoCurrent;
+        if IsRecord( pkginfo.PackageDoc ) then
+            pkginfo.PackageDoc:= [ pkginfo.PackageDoc ];
         fi;
-        pkg := package_info.PackageName;
-    elif pkg = "AutoDocWorksheet" then
-        # For internal use only (the AutoDocWorksheet() function)
+        pkgname := pkginfo.PackageName;
+    elif pkgname = "AutoDocWorksheet" then
+        # For internal use only -- for details, referto the AutoDocWorksheet() function.
         is_worksheet := true;
-        package_info := rec( );
-        pkg_dir := DirectoryCurrent( );
+        pkginfo := rec( );
+        pkgdir := DirectoryCurrent( );
     else
         is_worksheet := false;
-        package_info := PackageInfo( pkg )[ 1 ];
-        pkg_dir := Directory( package_info.InstallationPath );
+        pkginfo := PackageInfo( pkgname )[ 1 ];
+        pkgdir := Directory( pkginfo.InstallationPath );
     fi;
 
     # Check for certain user supplied options, and if present, add them
@@ -187,10 +185,10 @@ function( arg )
         doc_dir_rel := Directory( doc_dir );
 
         # We intentionally do not use
-        #   DirectoriesPackageLibrary( pkg, "doc" )
+        #   DirectoriesPackageLibrary( pkgname, "doc" )
         # because it returns an empty list if the subdirectory is missing.
         # But we want to handle that case by creating the directory.
-        doc_dir := Filename(pkg_dir, doc_dir);
+        doc_dir := Filename(pkgdir, doc_dir);
         doc_dir := Directory(doc_dir);
 
     else
@@ -209,11 +207,11 @@ function( arg )
 
     #
     # Extract scaffolding settings, which can be controlled via
-    # opt.scaffold or package_info.AutoDoc. The former has precedence.
+    # opt.scaffold or pkginfo.AutoDoc. The former has precedence.
     #
     if not IsBound(opt.scaffold) then
-        # Default: enable scaffolding if and only if package_info.AutoDoc is present
-        if IsBound( package_info.AutoDoc ) then
+        # Default: enable scaffolding if and only if pkginfo.AutoDoc is present
+        if IsBound( pkginfo.AutoDoc ) then
             scaffold := rec( );
         fi;
     elif IsRecord(opt.scaffold) then
@@ -226,9 +224,9 @@ function( arg )
         Error("opt.scaffold must be a bool or a record");
     fi;
 
-    # Merge package_info.AutoDoc into scaffold
-    if IsBound(scaffold) and IsBound( package_info.AutoDoc ) then
-        AUTODOC_APPEND_RECORD_WRITEONCE( scaffold, package_info.AutoDoc );
+    # Merge pkginfo.AutoDoc into scaffold
+    if IsBound(scaffold) and IsBound( pkginfo.AutoDoc ) then
+        AUTODOC_APPEND_RECORD_WRITEONCE( scaffold, pkginfo.AutoDoc );
     fi;
 
     if IsBound( scaffold ) then
@@ -242,8 +240,8 @@ function( arg )
     #
     if not IsBound(opt.autodoc) and not is_worksheet then
         # Enable AutoDoc support if the package depends on AutoDoc.
-        tmp := Concatenation( package_info.Dependencies.NeededOtherPackages,
-                              package_info.Dependencies.SuggestedOtherPackages );
+        tmp := Concatenation( pkginfo.Dependencies.NeededOtherPackages,
+                              pkginfo.Dependencies.SuggestedOtherPackages );
         if ForAny( tmp, x -> LowercaseString(x[1]) = "autodoc" ) then
             autodoc := rec();
         fi;
@@ -273,7 +271,7 @@ function( arg )
 #         PushOptions( rec( level_value := autodoc.level ) );
 
         if not is_worksheet then
-            Append( autodoc.files, AUTODOC_FindMatchingFiles(pkg_dir, autodoc.scan_dirs, [ "g", "gi", "gd" ]) );
+            Append( autodoc.files, AUTODOC_FindMatchingFiles(pkgdir, autodoc.scan_dirs, [ "g", "gi", "gd" ]) );
         fi;
     fi;
 
@@ -304,19 +302,19 @@ function( arg )
     if IsBound( gapdoc ) then
 
         if not IsBound( gapdoc.main ) then
-            gapdoc.main := pkg;
+            gapdoc.main := pkgname;
         fi;
 
-        if IsBound( package_info.PackageDoc ) and not IsEmpty( package_info.PackageDoc ) then
-            if Length( package_info.PackageDoc ) > 1 then
+        if IsBound( pkginfo.PackageDoc ) and not IsEmpty( pkginfo.PackageDoc ) then
+            if Length( pkginfo.PackageDoc ) > 1 then
                 Print("WARNING: Package contains multiple books, only using the first one\n");
             fi;
-            tmp := package_info.PackageDoc[1];
+            tmp := pkginfo.PackageDoc[1];
             gapdoc.bookname := tmp.BookName;
             gapdoc.SixFile := tmp.SixFile;
         elif not is_worksheet then
             # Default: book name = package name
-            gapdoc.bookname := pkg;
+            gapdoc.bookname := pkgname;
             gapdoc.SixFile := "doc/manual.six";
 
             Print("\n");
@@ -325,7 +323,7 @@ function( arg )
             Print("You can correct this by adding the following to your PackageInfo.g:\n");
             Print("PackageDoc := rec(\n");
             Print("  BookName  := ~.PackageName,\n");
-            #Print("  BookName  := \"", pkg, "\",\n");
+            #Print("  BookName  := \"", pkgname, "\",\n");
             Print("  ArchiveURLSubset := [\"doc\"],\n");
             Print("  HTMLStart := \"doc/chap0.html\",\n");
             Print("  PDFFile   := \"doc/manual.pdf\",\n");
@@ -344,7 +342,7 @@ function( arg )
         fi;
 
         if not is_worksheet then
-            Append( gapdoc.files, AUTODOC_FindMatchingFiles(pkg_dir, gapdoc.scan_dirs, [ "g", "gi", "gd" ]) );
+            Append( gapdoc.files, AUTODOC_FindMatchingFiles(pkgdir, gapdoc.scan_dirs, [ "g", "gi", "gd" ]) );
         fi;
 
         # Attempt to weed out duplicates as they may confuse GAPDoc (this
@@ -370,39 +368,39 @@ function( arg )
             AUTODOC_PROCESS_INTRO_STRINGS( autodoc.section_intros : Tree := tree );
         fi;
 
-        AutoDocScanFiles( autodoc.files : PackageName := pkg, Tree := tree );
+        AutoDocScanFiles( autodoc.files : PackageName := pkgname, Tree := tree );
     fi;
 
     if is_worksheet then
         # FIXME: We use scaffold and autodoc here without checking whether
         # they are bound. Does that mean worksheets always use them?
         if IsRecord( scaffold.TitlePage ) and IsBound( scaffold.TitlePage.Title ) then
-            pkg := scaffold.TitlePage.Title;
+            pkgname := scaffold.TitlePage.Title;
 
         elif IsBound( tree!.TitlePage.Title ) then
-            pkg := tree!.TitlePage.Title;
+            pkgname := tree!.TitlePage.Title;
 
         elif IsBound( autodoc.files ) and Length( autodoc.files ) > 0  then
-            pkg := autodoc.files[ 1 ];
+            pkgname := autodoc.files[ 1 ];
 
-            while Position( pkg, '/' ) <> fail do
-                Remove( pkg, 1 );
+            while Position( pkgname, '/' ) <> fail do
+                Remove( pkgname, 1 );
             od;
 
-            while Position( pkg, '.' ) <> fail do
-                Remove( pkg, Length( pkg ) );
+            while Position( pkgname, '.' ) <> fail do
+                Remove( pkgname, Length( pkgname ) );
             od;
 
         else
             Error( "could not figure out a title." );
         fi;
 
-        if not IsString( pkg ) then
-            pkg := JoinStringsWithSeparator( pkg, " " );
+        if not IsString( pkgname ) then
+            pkgname := JoinStringsWithSeparator( pkgname, " " );
         fi;
 
-        gapdoc.main := ReplacedString( pkg, " ", "_" );
-        gapdoc.bookname := ReplacedString( pkg, " ", "_" );
+        gapdoc.main := ReplacedString( pkgname, " ", "_" );
+        gapdoc.bookname := ReplacedString( pkgname, " ", "_" );
     fi;
 
     #
@@ -471,14 +469,14 @@ function( arg )
 
         if IsBound( scaffold.bib ) and IsBool( scaffold.bib ) then
             if scaffold.bib = true then
-                scaffold.bib := Concatenation( pkg, ".bib" );
+                scaffold.bib := Concatenation( pkgname, ".bib" );
             else
                 Unbind( scaffold.bib );
             fi;
         elif not IsBound( scaffold.bib ) then
             # If there is a doc/PKG.bib file, assume that we want to reference it in the scaffold.
-            if IsReadableFile( Filename( doc_dir, Concatenation( pkg, ".bib" ) ) ) then
-                scaffold.bib := Concatenation( pkg, ".bib" );
+            if IsReadableFile( Filename( doc_dir, Concatenation( pkgname, ".bib" ) ) ) then
+                scaffold.bib := Concatenation( pkgname, ".bib" );
             fi;
         fi;
 
@@ -504,7 +502,7 @@ function( arg )
             AUTODOC_APPEND_RECORD_WRITEONCE( title_page, tree!.TitlePage );
 
             if not is_worksheet then
-                AUTODOC_APPEND_RECORD_WRITEONCE( title_page, ExtractTitleInfoFromPackageInfo( package_info ) );
+                AUTODOC_APPEND_RECORD_WRITEONCE( title_page, ExtractTitleInfoFromPackageInfo( pkginfo ) );
             fi;
 
             CreateTitlePage( title_page );
@@ -512,7 +510,7 @@ function( arg )
 
         if IsBound( scaffold.MainPage ) and scaffold.MainPage <> false then
             scaffold.dir := doc_dir;
-            scaffold.book_name := pkg;
+            scaffold.book_name := pkgname;
             CreateMainPage( scaffold );
         fi;
     fi;
@@ -554,9 +552,9 @@ function( arg )
         #        is not present. Maybe we should remove it.
 
         if IsBound( gapdoc.SixFile ) then
-            file := Filename(pkg_dir, gapdoc.SixFile);
+            file := Filename(pkgdir, gapdoc.SixFile);
             if file = fail or not IsReadableFile(file) then
-                Error("could not open `manual.six' file of package `", pkg, "'.\n");
+                Error("could not open `manual.six' file of package `", pkgname, "'.\n");
             fi;
             GAPDocManualLabFromSixFile( gapdoc.bookname, file );
         fi;
@@ -566,7 +564,7 @@ function( arg )
     if IsBound( maketest ) then
 
         AUTODOC_SetIfMissing( maketest, "filename", "maketest.g" );
-        AUTODOC_SetIfMissing( maketest, "folder", pkg_dir );
+        AUTODOC_SetIfMissing( maketest, "folder", pkgdir );
         AUTODOC_SetIfMissing( maketest, "scan_dir", doc_dir );
         AUTODOC_SetIfMissing( maketest, "files_to_scan", gapdoc.files );
 
