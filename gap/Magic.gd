@@ -108,6 +108,12 @@
 #!             of your own XML files.
 #!         </Item>
 #!
+#!         <Mark><A>index</A></Mark>
+#!         <Item>
+#!             By default, the scaffold creates an index. If you do not want an index,
+#!             set this to <K>false</K>.
+#!         </Item>
+#!
 #!         <Mark><A>appendix</A></Mark>
 #!         <Item>
 #!             This entry is similar to <A>opt.scaffold.includes</A> but is used
