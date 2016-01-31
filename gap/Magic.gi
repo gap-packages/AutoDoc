@@ -227,7 +227,7 @@ function( arg )
     fi;
 
     if IsBound( scaffold ) then
-        AUTODOC_SetIfMissing( scaffold, "TitlePage", true );
+        AUTODOC_SetIfMissing( scaffold, "TitlePage", rec() );
         AUTODOC_SetIfMissing( scaffold, "MainPage", true );
     fi;
 
@@ -358,7 +358,7 @@ function( arg )
     if is_worksheet then
         # FIXME: We use scaffold and autodoc here without checking whether
         # they are bound. Does that mean worksheets always use them?
-        if IsRecord( scaffold.TitlePage ) and IsBound( scaffold.TitlePage.Title ) then
+        if IsBound( scaffold.TitlePage.Title ) then
             pkgname := scaffold.TitlePage.Title;
 
         elif IsBound( tree!.TitlePage.Title ) then
@@ -478,11 +478,7 @@ function( arg )
         fi;
 
         if IsBound( scaffold.TitlePage ) then
-            if IsRecord( scaffold.TitlePage ) then
-                title_page := ShallowCopy( scaffold.TitlePage );
-            else
-                title_page := rec( );
-            fi;
+            title_page := ShallowCopy( scaffold.TitlePage );
 
             AUTODOC_SetIfMissing( title_page, "dir", doc_dir );
             AUTODOC_MergeRecords( title_page, tree!.TitlePage );
