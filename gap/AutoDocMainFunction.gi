@@ -72,7 +72,6 @@ InstallGlobalFunction( CreateDefaultChapterData,
 end );
 
 ##
-## Call this with the packagename. It creates a simple main file. Call it with package name and maybe a list of entities.
 InstallGlobalFunction( CreateMainPage,
   function( opt )
     local pkgname, dir, filename, filestream, i, pkginfo, book_name;

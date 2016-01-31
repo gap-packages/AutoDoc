@@ -175,6 +175,7 @@ function( arg )
 
     if IsString( doc_dir ) then
         # Record the relative version of the path
+        # FIXME: this assumes that doc_dir contains a relative path in the first place...
         doc_dir_rel := Directory( doc_dir );
 
         # We intentionally do not use
@@ -195,7 +196,6 @@ function( arg )
     # This helps diagnose problems where multiple instances of a package
     # are visible to GAP and the wrong one is used for generating the
     # documentation.
-    # TODO: Using Info() instead of Print?
     Print( "Generating documentation in ", doc_dir, "\n" );
 
     #
@@ -345,6 +345,7 @@ function( arg )
         # the package directory, to paths which are relative to the doc directory.
         # For this, we assume that doc_dir_rel is normalized (e.g.
         # it does not contains '//') and relative.
+        # FIXME: this is an ugly hack, can't we do something better?
         tmp := Number( Filename( doc_dir_rel, "" ), x -> x = '/' );
         tmp := Concatenation( ListWithIdenticalEntries(tmp, "../") );
         gapdoc.files := List( gapdoc.files, f -> Concatenation( tmp, f ) );
@@ -482,7 +483,6 @@ function( arg )
             fi;
         fi;
 
-        # TODO: It should be possible to only rebuild the title page. (Perhaps also only the main page? but this is less important)
         if IsBound( scaffold.TitlePage ) then
             if IsRecord( scaffold.TitlePage ) then
                 title_page := ShallowCopy( scaffold.TitlePage );
@@ -511,7 +511,6 @@ function( arg )
     # Run AutoDoc
     #
     if IsBound( autodoc ) then
-
         WriteDocumentation( tree, doc_dir : level_value := autodoc.level );
     fi;
 
