@@ -365,15 +365,17 @@ function( arg )
             pkgname := tree!.TitlePage.Title;
 
         elif IsBound( autodoc.files ) and Length( autodoc.files ) > 0  then
-            pkgname := autodoc.files[ 1 ];
+            tmp := autodoc.files[ 1 ];
 
-            while Position( pkgname, '/' ) <> fail do
-                Remove( pkgname, 1 );
-            od;
+            # Remove everything before the last '/'
+            tmp := SplitString(tmp, "/");
+            tmp := tmp[Length(tmp)];
 
-            while Position( pkgname, '.' ) <> fail do
-                Remove( pkgname, Length( pkgname ) );
-            od;
+            # Remove everything after the first '.'
+            tmp := SplitString(tmp, ".");
+            tmp := tmp[1];
+
+            pkgname := tmp;
 
         else
             Error( "could not figure out a title." );
