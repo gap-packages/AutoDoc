@@ -1,14 +1,14 @@
 #############################################################################
 ##
-##  compat.gi                                         AutoDoc package
+##  AutoDoc package
 ##
-##  Copyright 2013, Max Horn, JLU Giessen
-##                  Sebastian Gutsche, University of Kaiserslautern
+##  Copyright 2012-2016
+##    Sebastian Gutsche, University of Kaiserslautern
+##    Max Horn, Justus-Liebig-Universität Gießen
 ##
-##  Compatability layer for old AutoDoc style.
+## Licensed under the GPL 2 or later.
 ##
 #############################################################################
-
 
 DeclareGlobalFunction( "DeclareCategoryWithDocumentation" );
 

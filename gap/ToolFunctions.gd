@@ -1,11 +1,12 @@
 #############################################################################
 ##
-##  ToolFunctions.gd                      AutoDoc package
+##  AutoDoc package
 ##
-##  Copyright 2007-2013,   Mohamed Barakat, University of Kaiserslautern
-##                       Sebastian Gutsche, University of Kaiserslautern
+##  Copyright 2012-2016
+##    Sebastian Gutsche, University of Kaiserslautern
+##    Max Horn, Justus-Liebig-Universität Gießen
 ##
-##  Some tools
+## Licensed under the GPL 2 or later.
 ##
 #############################################################################
 

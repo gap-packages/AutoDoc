@@ -2,14 +2,13 @@
 ##
 ##  AutoDoc package
 ##
-##  Copyright 2007-2013,   Sebastian Gutsche, University of Kaiserslautern
-##                         Max Horn, Justus-Liebig-Universität Gießen
+##  Copyright 2012-2016
+##    Sebastian Gutsche, University of Kaiserslautern
+##    Max Horn, Justus-Liebig-Universität Gießen
 ##
-##  
+## Licensed under the GPL 2 or later.
 ##
 #############################################################################
-
-
 
 DeclareGlobalVariable( "AUTODOC_XML_HEADER" );
 

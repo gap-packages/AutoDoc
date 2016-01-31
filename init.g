@@ -1,12 +1,12 @@
-  #############################################################################
+#############################################################################
 ##
-##  init.g                                    AutoDoc package
+##  AutoDoc package
 ##
-##  Copyright 2007-2012, Mohamed Barakat, University of Kaiserslautern
-##                       Sebastian Gutsche, RWTH-Aachen University
+##  Copyright 2012-2016
+##    Sebastian Gutsche, University of Kaiserslautern
+##    Max Horn, Justus-Liebig-Universität Gießen
 ##
-##
-##  Reading the declaration part of the AutoDoc package.
+## Licensed under the GPL 2 or later.
 ##
 #############################################################################
 

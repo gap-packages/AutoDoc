@@ -1,8 +1,12 @@
 #############################################################################
 ##
-##                                                           AutoDoc package
+##  AutoDoc package
 ##
-##  Copyright 2014, Sebastian Gutsche, TU Kaiserslautern
+##  Copyright 2012-2016
+##    Sebastian Gutsche, University of Kaiserslautern
+##    Max Horn, Justus-Liebig-Universität Gießen
+##
+## Licensed under the GPL 2 or later.
 ##
 #############################################################################
 
