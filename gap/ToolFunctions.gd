@@ -11,7 +11,5 @@
 #############################################################################
 
 DeclareGlobalFunction( "AUTODOC_OutputTextFile" );
-
 DeclareGlobalFunction( "AutoDoc_WriteDocEntry" );
-
 DeclareGlobalFunction( "AutoDoc_MakeGAPDocDoc_WithoutLatex" );

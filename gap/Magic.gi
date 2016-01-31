@@ -164,13 +164,13 @@ function( arg )
             opt.(key) := val;
         fi;
     end;
-    
+
     tmp( "dir" );
     tmp( "scaffold" );
     tmp( "autodoc" );
     tmp( "gapdoc" );
     tmp( "maketest" );
-    
+
     #
     # Setup the output directory
     #
@@ -181,7 +181,7 @@ function( arg )
     else
         Error( "opt.dir must be a string containing a path, or a directory object" );
     fi;
-    
+
     if IsString( doc_dir ) then
         # Record the relative version of the path
         doc_dir_rel := Directory( doc_dir );
@@ -199,7 +199,7 @@ function( arg )
 
     # Ensure the output directory exists, create it if necessary
     AUTODOC_CreateDirIfMissing(Filename(doc_dir, ""));
-    
+
     # Let the developer know where we are generating the documentation.
     # This helps diagnose problems where multiple instances of a package
     # are visible to GAP and the wrong one is used for generating the
@@ -230,13 +230,13 @@ function( arg )
     if IsBound(scaffold) and IsBound( package_info.AutoDoc ) then
         AUTODOC_APPEND_RECORD_WRITEONCE( scaffold, package_info.AutoDoc );
     fi;
-    
+
     if IsBound( scaffold ) then
         AUTODOC_SetIfMissing( scaffold, "TitlePage", true );
         AUTODOC_SetIfMissing( scaffold, "MainPage", true );
     fi;
 
-    
+
     #
     # Extract AutoDoc settings
     #
@@ -252,26 +252,26 @@ function( arg )
     elif IsBool(opt.autodoc) and opt.autodoc = true then
         autodoc := rec();
     fi;
-    
+
     if IsBound(autodoc) then
         if not IsBound( autodoc.files ) then
             autodoc.files := [ ];
         fi;
-        
+
         if not IsBound( autodoc.scan_dirs ) and not is_worksheet then
             autodoc.scan_dirs := [ "gap", "lib", "examples", "examples/doc" ];
         elif not IsBound( autodoc.scan_dirs ) and is_worksheet then
             autodoc.scan_dirs := [ ];
         fi;
-        
+
         if not IsBound( autodoc.level ) then
             autodoc.level := 0;
         fi;
-        
+
         # This causes a bug. If a new layer is pushed to the option stack in a function that is called with options,
         # this layer will be deleted at the end of the method, not the layer which was created when the method was called.
 #         PushOptions( rec( level_value := autodoc.level ) );
-        
+
         if not is_worksheet then
             Append( autodoc.files, AUTODOC_FindMatchingFiles(pkg_dir, autodoc.scan_dirs, [ "g", "gi", "gd" ]) );
         fi;
@@ -288,11 +288,11 @@ function( arg )
     elif IsBool( opt.gapdoc ) and opt.gapdoc = true then
         gapdoc := rec();
     fi;
-    
+
     #
     # Extract test settings
     #
-    
+
     if IsBound( opt.maketest ) then
         if IsRecord( opt.maketest ) then
             maketest := opt.maketest;
@@ -300,7 +300,7 @@ function( arg )
             maketest := rec( );
         fi;
     fi;
-    
+
     if IsBound( gapdoc ) then
 
         if not IsBound( gapdoc.main ) then
@@ -342,7 +342,7 @@ function( arg )
         if not IsBound( gapdoc.scan_dirs ) and not is_worksheet then
             gapdoc.scan_dirs := [ "gap", "lib", "examples", "examples/doc" ];
         fi;
-        
+
         if not is_worksheet then
             Append( gapdoc.files, AUTODOC_FindMatchingFiles(pkg_dir, gapdoc.scan_dirs, [ "g", "gi", "gd" ]) );
         fi;
@@ -350,7 +350,7 @@ function( arg )
         # Attempt to weed out duplicates as they may confuse GAPDoc (this
         # won't work if there are any non-normalized paths in the list).
         gapdoc.files := Set( gapdoc.files );
-        
+
         # Convert the file paths in gapdoc.files, which are relative to
         # the package directory, to paths which are relative to the doc directory.
         # For this, we assume that doc_dir_rel is normalized (e.g.
@@ -359,20 +359,20 @@ function( arg )
         d := Concatenation( ListWithIdenticalEntries(d, "../") );
         gapdoc.files := List( gapdoc.files, f -> Concatenation( d, f ) );
     fi;
-    
-    
+
+
     # read tree
     # FIXME: shouldn't tree be declared inside of an 'if IsBound(autodoc)' section?
     tree := DocumentationTree( );
-    
+
     if IsBound( autodoc ) then
         if IsBound( autodoc.section_intros ) then
             AUTODOC_PROCESS_INTRO_STRINGS( autodoc.section_intros : Tree := tree );
         fi;
-    
+
         AutoDocScanFiles( autodoc.files : PackageName := pkg, Tree := tree );
     fi;
-    
+
     if is_worksheet then
         # FIXME: We use scaffold and autodoc here without checking whether
         # they are bound. Does that mean worksheets always use them?
@@ -384,11 +384,11 @@ function( arg )
 
         elif IsBound( autodoc.files ) and Length( autodoc.files ) > 0  then
             pkg := autodoc.files[ 1 ];
-            
+
             while Position( pkg, '/' ) <> fail do
                 Remove( pkg, 1 );
             od;
-            
+
             while Position( pkg, '.' ) <> fail do
                 Remove( pkg, Length( pkg ) );
             od;
@@ -396,51 +396,51 @@ function( arg )
         else
             Error( "could not figure out a title." );
         fi;
-        
+
         if not IsString( pkg ) then
             pkg := JoinStringsWithSeparator( pkg, " " );
         fi;
-        
+
         gapdoc.main := ReplacedString( pkg, " ", "_" );
         gapdoc.bookname := ReplacedString( pkg, " ", "_" );
     fi;
-    
+
     #
     # Generate scaffold
     #
     gapdoc_latex_option_record := rec( );
-    
+
     if IsBound( scaffold ) then
         ## Syntax is [ "class", [ "options" ] ]
         if IsBound( scaffold.document_class ) then
             position_document_class := PositionSublist( GAPDoc2LaTeXProcs.Head, "documentclass" );
-            
+
             if IsString( scaffold.document_class ) then
                 scaffold.document_class := [ scaffold.document_class ];
             fi;
-            
+
             if position_document_class = fail then
                 Error( "something is wrong with the LaTeX header" );
             fi;
-            
+
             GAPDoc2LaTeXProcs.Head := Concatenation(
                   GAPDoc2LaTeXProcs.Head{[ 1 .. PositionSublist( GAPDoc2LaTeXProcs.Head, "{", position_document_class ) ]},
                   scaffold.document_class[ 1 ],
                   GAPDoc2LaTeXProcs.Head{[ PositionSublist( GAPDoc2LaTeXProcs.Head, "}", position_document_class ) .. Length( GAPDoc2LaTeXProcs.Head ) ]} );
-            
+
             if Length( scaffold.document_class ) = 2 then
-                
+
                 GAPDoc2LaTeXProcs.Head := Concatenation(
                       GAPDoc2LaTeXProcs.Head{[ 1 .. PositionSublist( GAPDoc2LaTeXProcs.Head, "[", position_document_class ) ]},
                       scaffold.document_class[ 2 ],
                       GAPDoc2LaTeXProcs.Head{[ PositionSublist( GAPDoc2LaTeXProcs.Head, "]", position_document_class ) .. Length( GAPDoc2LaTeXProcs.Head ) ]} );
             fi;
         fi;
-        
+
         if IsBound( scaffold.latex_header_file ) then
             GAPDoc2LaTeXProcs.Head := StringFile( scaffold.latex_header_file );
         fi;
-        
+
         if IsBound( scaffold.gapdoc_latex_options ) then
             if IsRecord( scaffold.gapdoc_latex_options ) then
                 for i in RecNames( scaffold.gapdoc_latex_options ) do
@@ -450,11 +450,11 @@ function( arg )
                         scaffold.gapdoc_latex_options.( i ) := StringFile( scaffold.gapdoc_latex_options.( i )[ 2 ] );
                     fi;
                 od;
-                
+
                 gapdoc_latex_option_record := scaffold.gapdoc_latex_options;
             fi;
         fi;
-        
+
         if not IsBound( scaffold.includes ) then
             scaffold.includes := [ ];
         fi;
@@ -481,7 +481,7 @@ function( arg )
                 scaffold.bib := Concatenation( pkg, ".bib" );
             fi;
         fi;
-        
+
         AUTODOC_SetIfMissing( scaffold, "index", true );
 
         if IsBound( gapdoc ) then
@@ -499,33 +499,33 @@ function( arg )
             else
                 title_page := rec( );
             fi;
-            
+
             AUTODOC_SetIfMissing( title_page, "dir", doc_dir );
             AUTODOC_APPEND_RECORD_WRITEONCE( title_page, tree!.TitlePage );
-            
+
             if not is_worksheet then
                 AUTODOC_APPEND_RECORD_WRITEONCE( title_page, ExtractTitleInfoFromPackageInfo( package_info ) );
             fi;
-            
+
             CreateTitlePage( title_page );
         fi;
-        
+
         if IsBound( scaffold.MainPage ) and scaffold.MainPage <> false then
             scaffold.dir := doc_dir;
             scaffold.book_name := pkg;
             CreateMainPage( scaffold );
         fi;
     fi;
-    
+
     #
     # Run AutoDoc
     #
     if IsBound( autodoc ) then
-        
+
         WriteDocumentation( tree, doc_dir : level_value := autodoc.level );
     fi;
-    
-    
+
+
     #
     # Run GAPDoc
     #
@@ -549,10 +549,10 @@ function( arg )
         # they wish to link to things in the manual we are currently
         # generating. This can probably be removed eventually, but for
         # now, doing it does not hurt.
-        
+
         # FIXME: It seems that this command does not work if pdflatex
         #        is not present. Maybe we should remove it.
-        
+
         if IsBound( gapdoc.SixFile ) then
             file := Filename(pkg_dir, gapdoc.SixFile);
             if file = fail or not IsReadableFile(file) then
@@ -562,9 +562,9 @@ function( arg )
         fi;
 
     fi;
-    
+
     if IsBound( maketest ) then
-        
+
         AUTODOC_SetIfMissing( maketest, "filename", "maketest.g" );
         AUTODOC_SetIfMissing( maketest, "folder", pkg_dir );
         AUTODOC_SetIfMissing( maketest, "scan_dir", doc_dir );
@@ -573,14 +573,14 @@ function( arg )
         if IsString( maketest.folder ) then
             maketest.folder := Directory( maketest.folder );
         fi;
-        
+
         if IsString( maketest.scan_dir ) then
             maketest.scan_dir := Directory( maketest.scan_dir );
         fi;
-        
+
         AUTODOC_SetIfMissing( maketest, "commands", [ ] );
         AUTODOC_SetIfMissing( maketest, "book_name", gapdoc.main );
-        
+
         CreateMakeTest( maketest );
     fi;
 

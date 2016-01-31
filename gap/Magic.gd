@@ -315,4 +315,3 @@
 #! @Arguments [package[, option_record ]]
 #! @ChapterInfo AutoDoc, The AutoDoc() function
 DeclareGlobalFunction( "AutoDoc" );
-
