@@ -529,9 +529,8 @@ end );
 ##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSectionRep, IsStream ],
   function( node, filestream )
-    local name, replaced_name, i;
+    local replaced_name;
 
-    name := Name( node );
     if node!.level > ValueOption( "level_value" ) then
         return;
     fi;
@@ -548,7 +547,7 @@ end );
 ##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSubsectionRep, IsStream ],
   function( node, filestream )
-    local i, name, replaced_name;
+    local replaced_name;
 
     if node!.level > ValueOption( "level_value" ) then
         return;
@@ -566,8 +565,6 @@ end );
 ##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForManItemRep, IsStream ],
   function( node, filestream )
-    local entry_record;
-
     if node!.level > ValueOption( "level_value" ) then
         return;
     fi;
@@ -577,8 +574,6 @@ end );
 ##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForGroupRep, IsStream ],
   function( node, filestream )
-    local entry_list;
-
     if node!.level > ValueOption( "level_value" ) then
         return;
     fi;
@@ -588,8 +583,6 @@ end );
 ##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationDummyNodeRep, IsStream ],
   function( node, filestream )
-    local i;
-
     if IsBound( node!.content ) then
         WriteDocumentation( node!.content, filestream );
     fi;
