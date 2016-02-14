@@ -153,7 +153,7 @@ InstallMethod( DocumentationTree, [ ],
     local tree;
 
     tree := rec(
-                  nodes := [ ],
+                  content := [ ],   # a list of nodes
                   nodes_by_label := rec( ),
                   node_name_iterator := 0,
                   current_level := 0,
@@ -391,7 +391,7 @@ InstallMethod( ChapterInTree, [ IsTreeForDocumentation, IsString ],
     fi;
     parent := tree;
     chapter := DocumentationStructurePart( tree, context );
-    Add( parent!.nodes, chapter );
+    Add( parent!.content, chapter );
     return chapter;
 end );
 
@@ -440,7 +440,7 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentation, IsDirectory ],
 
     stream := AUTODOC_OutputTextFile( path_to_xmlfiles, "AutoDocMainFile.xml" );
     AppendTo( stream, AUTODOC_XML_HEADER );
-    for i in tree!.nodes do
+    for i in tree!.content do
         if not IsTreeForDocumentationNodeForChapterRep( i ) then
             Error( "this should never happen" );
         fi;
@@ -448,7 +448,7 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentation, IsDirectory ],
         WriteDocumentation( i, stream, path_to_xmlfiles );
     od;
     # Workaround for issue #65
-    if IsEmpty( tree!.nodes ) then
+    if IsEmpty( tree!.content ) then
         AppendTo( stream, "&nbsp;\n" );
     fi;
     CloseStream( stream );
