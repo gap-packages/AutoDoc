@@ -155,7 +155,6 @@ InstallMethod( DocumentationTree, [ ],
     tree := rec(
                   nodes := [ ],
                   nodes_by_label := rec( ),
-                  contents_for_dummies := rec( ),
                   node_name_iterator := 0,
                   current_level := 0,
                   TitlePage := rec( )
@@ -352,12 +351,6 @@ InstallMethod( Add, [ IsTreeForDocumentation, IsTreeForDocumentationNode, IsList
     label := AUTODOC_LABEL_OF_CONTEXT( context );
     context_node := tree!.nodes_by_label.(label);
     Add( context_node, node );
-end );
-
-##
-InstallMethod( Add, [ IsTreeForDocumentation, IsString ],
-  function( tree, string )
-    Add( tree!.content, string );
 end );
 
 ##
