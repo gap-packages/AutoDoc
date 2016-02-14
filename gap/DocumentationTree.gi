@@ -199,7 +199,7 @@ InstallMethod( DocumentationStructurePart, [ IsTreeForDocumentation, IsRecord ],
     structure_obj.name := name;
     structure_obj.content := [ ];
     ObjectifyWithAttributes( structure_obj, type, Name, obj_name );
-    tree!.nodes_by_name.( Name( structure_obj ) ) := structure_obj;
+    tree!.nodes_by_name.( obj_name ) := structure_obj;
     return structure_obj;
 end );
 
@@ -216,13 +216,14 @@ end );
 ##
 InstallMethod( DocumentationExample, [ IsTreeForDocumentation ],
   function( tree )
-    local node;
+    local node, name;
 
     node := rec( content := [ ],
                  level := tree!.current_level );
+    name := Concatenation( "Example_", String( AUTODOC_TREE_NODE_NAME_ITERATOR( tree ) ) );
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeExampleNodes,
-                             Name, Concatenation( "Example_", String( AUTODOC_TREE_NODE_NAME_ITERATOR( tree ) ) ) );
-    tree!.nodes_by_name.( Name( node ) ) := node;
+                             Name, name );
+    tree!.nodes_by_name.( name ) := node;
     return node;
 end );
 
