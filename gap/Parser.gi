@@ -118,7 +118,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           Scan_for_Declaration_part, flush_and_prepare_for_item, current_line, filestream,
           level_scope, scope_group, read_example, command_function_record, autodoc_read_line,
           current_command, was_declaration, filename, system_scope, groupnumber, chunk_list, rest_of_file_skipped,
-          context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,install_tmp_func,
+          context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,
           current_line_unedited;
     groupnumber := 0;
     level_scope := 0;
@@ -570,7 +570,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             plain_text_mode := false;
         end,
         @URL := function( )
-            SetTreeToTitleComment( tree );
+            if not IsBound( tree!.TitlePage.TitleComment ) then
+                tree!.TitlePage.TitleComment := [ ];
+            fi;
+            tree!.content := tree!.TitlePage.TitleComment;
+
             Add( tree, "<URL>" );
             Add( tree, current_command[ 2 ] );
             Add( tree, "</URL>" );
@@ -578,15 +582,17 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     );
     title_item_list := [ "Title", "Subtitle", "Version", "TitleComment", "Author",
                          "Date", "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon" ];
-    install_tmp_func := function( title_item )
+    for title_item in title_item_list do
         command_function_record.( Concatenation( "@", title_item ) ) := function( )
             current_item := tree;
-            ValueGlobal( Concatenation( "SetTreeTo", title_item ) )( tree );
+
+            if not IsBound( tree!.TitlePage.( title_item ) ) then
+                tree!.TitlePage.( title_item ) := [ ];
+            fi;
+            tree!.content := tree!.TitlePage.( title_item );
+
             Add( tree, current_command[ 2 ] );
         end;
-    end;
-    for title_item in title_item_list do
-        install_tmp_func( title_item );
     od;
     rest_of_file_skipped := false;
     ##Now read the files.

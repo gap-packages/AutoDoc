@@ -368,37 +368,6 @@ InstallMethod( Add, [ IsTreeForDocumentation, IsString ],
 end );
 
 ##
-InstallGlobalFunction( AUTODOC_INSTALL_TREE_SETTERS,
-  function( )
-    local method_installer, current_string, string_list;
-
-    string_list := [ "Title", "Subtitle", "Version", "TitleComment", "Author",
-                     "Date", "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon" ];
-
-    method_installer := function( current_string )
-        local method_name_part, method_name;
-
-        method_name_part := "SetTreeTo";
-        method_name := Concatenation( method_name_part, current_string );
-        DeclareOperation( method_name, [ IsTreeForDocumentation ] );
-        method_name := ValueGlobal( method_name );
-        InstallMethod( method_name, [ IsTreeForDocumentation ],
-          function( tree )
-            if not IsBound( tree!.TitlePage.( current_string ) ) then
-                tree!.TitlePage.( current_string ) := [ ];
-            fi;
-            tree!.content := tree!.TitlePage.( current_string );
-        end );
-    end;
-
-    for current_string in string_list do
-        method_installer( current_string );
-    od;
-end );
-
-AUTODOC_INSTALL_TREE_SETTERS();
-
-##
 InstallMethod( IsEmptyNode, [ IsTreeForDocumentationNode ],
   function( node )
     if IsBound( node!.content ) then
