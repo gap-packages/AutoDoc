@@ -163,34 +163,39 @@ InstallMethod( DocumentationTree, [ ],
     return tree;
 end );
 
-##
-InstallMethod( DocumentationStructurePart, [ IsTreeForDocumentation, IsList ],
-  function( tree, chapter_info )
-    local structure_obj, name, label, type;
-
-    if IsEmpty( chapter_info ) then
-        Error( "name of chapter must be given" );
-    fi;
-    if not ForAll( chapter_info, IsString ) then
-        Error( "chapter info must be list of strings" );
+## create a chapter, section or subsection
+InstallMethod( StructurePartInTree, [ IsTreeForDocumentation, IsList ],
+  function( tree, context )
+    local label, parent, new_node, type;
+    
+    if IsEmpty( context ) then
+        return tree;
     fi;
 
-    structure_obj := rec( chapter_info := chapter_info );
-    structure_obj.level := tree!.current_level;
-    if Length( chapter_info ) = 1 then
+    # if the part already exist, use that
+    label := AUTODOC_LABEL_OF_CONTEXT( context );
+    if IsBound( tree!.nodes_by_label.( label ) ) then
+        return tree!.nodes_by_label.( label );
+    fi;
+
+    parent := StructurePartInTree( tree, context{[1..Length(context)-1]} );
+
+    new_node := rec( content := [ ],
+                     level := tree!.current_level,
+                     name := context[ Length( context ) ],
+                     chapter_info := context );
+    if Length( context ) = 1 then
         type := TheTypeOfDocumentationTreeNodesForChapter;
-    elif Length( chapter_info ) = 2 then
+    elif Length( context ) = 2 then
         type := TheTypeOfDocumentationTreeNodesForSection;
-    elif Length( chapter_info ) = 3 then
+    elif Length( context ) = 3 then
         type := TheTypeOfDocumentationTreeNodesForSubsection;
     fi;
-    label := AUTODOC_LABEL_OF_CONTEXT( chapter_info );
-    name := chapter_info[ Length( chapter_info ) ];
-    structure_obj.name := name;
-    structure_obj.content := [ ];
-    ObjectifyWithAttributes( structure_obj, type, Label, label );
-    tree!.nodes_by_label.( label ) := structure_obj;
-    return structure_obj;
+    ObjectifyWithAttributes( new_node, type, Label, label );
+
+    tree!.nodes_by_label.( label ) := new_node;
+    Add( parent!.content, new_node );
+    return new_node;
 end );
 
 ##
@@ -237,7 +242,7 @@ InstallMethod( DocumentationDummy, [ IsTreeForDocumentation, IsString ],
         return tree!.nodes_by_label.( name );
     fi;
     node := rec( content := [ ],
-                  level := tree!.current_level );
+                 level := tree!.current_level );
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeDummyNodes,
                               Label, name );
     tree!.nodes_by_label.( name ) := node;
@@ -380,51 +385,22 @@ end );
 ##
 ####################################
 
+## 
 InstallMethod( ChapterInTree, [ IsTreeForDocumentation, IsString ],
   function( tree, name )
-    local context, label, parent, chapter;
-
-    context := [ name ];
-    label := AUTODOC_LABEL_OF_CONTEXT( context );
-    if IsBound( tree!.nodes_by_label.( label ) ) then
-        return tree!.nodes_by_label.( label );
-    fi;
-    parent := tree;
-    chapter := DocumentationStructurePart( tree, context );
-    Add( parent!.content, chapter );
-    return chapter;
+    return StructurePartInTree( tree, [ name ] );
 end );
 
 ##
 InstallMethod( SectionInTree, [ IsTreeForDocumentation, IsString, IsString ],
   function( tree, chapter_name, section_name )
-    local context, label, parent, section;
-
-    context := [ chapter_name, section_name ];
-    label := AUTODOC_LABEL_OF_CONTEXT( context );
-    if IsBound( tree!.nodes_by_label.( label ) ) then
-        return tree!.nodes_by_label.( label );
-    fi;
-    parent := ChapterInTree( tree, chapter_name );
-    section := DocumentationStructurePart( tree, context );
-    Add( parent!.content, section );
-    return section;
+    return StructurePartInTree( tree, [ chapter_name, section_name ] );
 end );
 
 ##
 InstallMethod( SubsectionInTree, [ IsTreeForDocumentation, IsString, IsString, IsString ],
   function( tree, chapter_name, section_name, subsection_name )
-    local context, label, parent, subsection;
-
-    context := [ chapter_name, section_name, subsection_name ];
-    label := AUTODOC_LABEL_OF_CONTEXT( context );
-    if IsBound( tree!.nodes_by_label.( label ) ) then
-        return tree!.nodes_by_label.( label );
-    fi;
-    parent := SectionInTree( tree, chapter_name, section_name );
-    subsection := DocumentationStructurePart( tree, context );
-    Add( parent!.content, subsection );
-    return subsection;
+    return StructurePartInTree( tree, [ chapter_name, section_name, subsection_name ] );
 end );
 
 #############################################

@@ -49,7 +49,7 @@ DeclareAttribute( "GroupName", IsTreeForDocumentationNode );
 ######################################
 
 DeclareOperation( "DocumentationTree", [ ] );
-DeclareOperation( "DocumentationStructurePart", [ IsTreeForDocumentation, IsList ] );
+DeclareOperation( "StructurePartInTree", [ IsTreeForDocumentation, IsList ] );
 DeclareOperation( "ChapterInTree", [ IsTreeForDocumentation, IsString ] );
 DeclareOperation( "SectionInTree", [ IsTreeForDocumentation, IsString, IsString ] );
 DeclareOperation( "SubsectionInTree", [ IsTreeForDocumentation, IsString, IsString, IsString ] );
