@@ -11,18 +11,6 @@
 #############################################################################
 
 ##
-InstallGlobalFunction( Normalized_ReadLine,
-  function( stream )
-    local string;
-    string := ReadLine( stream );
-    if string = fail then
-        return fail;
-    fi;
-    NormalizeWhitespace( string );
-    return string;
-end );
-
-##
 InstallGlobalFunction( Scan_for_AutoDoc_Part,
   function( line, plain_text_mode )
     local position, whitespace_position, command, argument;
@@ -118,13 +106,30 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           Scan_for_Declaration_part, flush_and_prepare_for_item, current_line, filestream,
           level_scope, scope_group, read_example, command_function_record, autodoc_read_line,
           current_command, was_declaration, filename, system_scope, groupnumber, chunk_list, rest_of_file_skipped,
-          context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,install_tmp_func,
-          current_line_unedited;
+          context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,
+          current_line_unedited,
+          ReadLineWithLineCount, Normalized_ReadLine, line_number;
     groupnumber := 0;
     level_scope := 0;
     autodoc_read_line := false;
     context_stack := [ ];
     chapter_info := [ ];
+    line_number := 0;
+
+    ReadLineWithLineCount := function( stream )
+        line_number := line_number + 1;
+        return ReadLine( stream );
+    end;
+    Normalized_ReadLine := function( stream )
+        local string;
+        string := ReadLineWithLineCount( stream );
+        if string = fail then
+            return fail;
+        fi;
+        NormalizeWhitespace( string );
+        return string;
+    end;
+
     new_man_item := function( )
         local man_item;
         if IsBound( current_item ) and IsTreeForDocumentationNodeForManItemRep( current_item ) then
@@ -151,6 +156,10 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         fi;
         if IsBound( man_item!.chapter_info ) then
             SetChapterInfo( man_item, man_item!.chapter_info );
+        fi;
+        if Length( ChapterInfo( man_item ) ) <> 2 then
+            Error("function documentation must be within a section, not within a chapter or a subsection,\n",
+                  "at ", filename, ":", line_number);
         fi;
         Add( tree, man_item );
     end;
@@ -196,7 +205,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 for i in [ 1 .. has_filters ] do
                     while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
                         Append( filter_string, StripBeginEnd( current_line, " " ) );
-                        current_line := ReadLine( filestream );
+                        current_line := ReadLineWithLineCount( filestream );
                         NormalizeWhitespace( current_line );
                     od;
                     Append( filter_string, StripBeginEnd( current_line{ [ 1 .. Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) - 1 ] }, " " ) );
@@ -206,13 +215,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 od;
             elif has_filters = "List" then
                 while PositionSublist( current_line, "[" ) = fail do
-                    current_line := ReadLine( filestream );
+                    current_line := ReadLineWithLineCount( filestream );
                     NormalizeWhitespace( current_line );
                 od;
                 current_line := current_line{ [ PositionSublist( current_line, "[" ) + 1 .. Length( current_line ) ] };
                 while PositionSublist( current_line, "]" ) = fail do
                     Append( filter_string, StripBeginEnd( current_line, " " ) );
-                    current_line := ReadLine( filestream );
+                    current_line := ReadLineWithLineCount( filestream );
                     NormalizeWhitespace( current_line );
                 od;
                 Append( filter_string, StripBeginEnd( current_line{[ 1 .. PositionSublist( current_line, "]" ) - 1 ]}, " " ) );
@@ -320,7 +329,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         code := [ ];
         Add( code, "<Listing Type=\"Code\"><![CDATA[" );
         while true do
-            temp_curr_line := ReadLine( filestream );
+            temp_curr_line := ReadLineWithLineCount( filestream );
             if temp_curr_line[ Length( temp_curr_line )] = '\n' then
                 temp_curr_line := temp_curr_line{[ 1 .. Length( temp_curr_line ) - 1 ]};
             fi;
@@ -339,7 +348,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         temp_string_list := example_node!.content;
         is_following_line := false;
         while true do
-            temp_curr_line := ReadLine( filestream );
+            temp_curr_line := ReadLineWithLineCount( filestream );
             if temp_curr_line[ Length( temp_curr_line )] = '\n' then
                 temp_curr_line := temp_curr_line{[ 1 .. Length( temp_curr_line ) - 1 ]};
             fi;
@@ -378,7 +387,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         ##       The lines where the AutoDoc comments are
         ##       searched cause problems otherwise.
         @DONT_SCAN_NEXT_LINE := function()
-            ReadLine( filestream );
+            ReadLineWithLineCount( filestream );
         end,
         @DoNotReadRestOfFile := function()
             Reset();
@@ -570,7 +579,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             plain_text_mode := false;
         end,
         @URL := function( )
-            SetTreeToTitleComment( tree );
+            if not IsBound( tree!.TitlePage.TitleComment ) then
+                tree!.TitlePage.TitleComment := [ ];
+            fi;
+            tree!.content := tree!.TitlePage.TitleComment;
+
             Add( tree, "<URL>" );
             Add( tree, current_command[ 2 ] );
             Add( tree, "</URL>" );
@@ -578,15 +591,17 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     );
     title_item_list := [ "Title", "Subtitle", "Version", "TitleComment", "Author",
                          "Date", "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon" ];
-    install_tmp_func := function( title_item )
+    for title_item in title_item_list do
         command_function_record.( Concatenation( "@", title_item ) ) := function( )
             current_item := tree;
-            ValueGlobal( Concatenation( "SetTreeTo", title_item ) )( tree );
+
+            if not IsBound( tree!.TitlePage.( title_item ) ) then
+                tree!.TitlePage.( title_item ) := [ ];
+            fi;
+            tree!.content := tree!.TitlePage.( title_item );
+
             Add( tree, current_command[ 2 ] );
         end;
-    end;
-    for title_item in title_item_list do
-        install_tmp_func( title_item );
     od;
     rest_of_file_skipped := false;
     ##Now read the files.
@@ -597,12 +612,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             plain_text_mode := true;
         fi;
         filestream := InputTextFile( filename );
+        line_number := 0;
         while true do
             if rest_of_file_skipped = true then
                 rest_of_file_skipped := false;
                 break;
             fi;
-            current_line := ReadLine( filestream );
+            current_line := ReadLineWithLineCount( filestream );
             if current_line = fail then
                 break;
             fi;

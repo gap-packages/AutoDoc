@@ -17,7 +17,7 @@
 ######################################
 
 DeclareGlobalFunction( "AUTODOC_TREE_NODE_NAME_ITERATOR" );
-DeclareGlobalFunction( "AUTODOC_TRANSLATE_CONTEXT" );
+DeclareGlobalFunction( "AUTODOC_LABEL_OF_CONTEXT" );
 DeclareGlobalFunction( "AUTODOC_INSTALL_TREE_SETTERS" );
 
 ######################################
@@ -37,7 +37,7 @@ DeclareCategory( "IsTreeForDocumentationNode", IsObject );
 
 DeclareOperation( "IsEmptyNode", [ IsTreeForDocumentationNode ] );
 DeclareOperation( "IsEmptyNode", [ IsString ] );
-DeclareAttribute( "Name", IsTreeForDocumentationNode );
+DeclareAttribute( "Label", IsTreeForDocumentationNode );
 DeclareAttribute( "ChapterInfo", IsTreeForDocumentationNode );
 DeclareAttribute( "DummyName", IsTreeForDocumentationNode );
 DeclareAttribute( "GroupName", IsTreeForDocumentationNode );
@@ -49,8 +49,7 @@ DeclareAttribute( "GroupName", IsTreeForDocumentationNode );
 ######################################
 
 DeclareOperation( "DocumentationTree", [ ] );
-DeclareOperation( "DocumentationStructurePart", [ IsTreeForDocumentation, IsList ] );
-DeclareOperation( "DocumentationStructurePart", [ IsTreeForDocumentation, IsRecord ] );
+DeclareOperation( "StructurePartInTree", [ IsTreeForDocumentation, IsList ] );
 DeclareOperation( "ChapterInTree", [ IsTreeForDocumentation, IsString ] );
 DeclareOperation( "SectionInTree", [ IsTreeForDocumentation, IsString, IsString ] );
 DeclareOperation( "SubsectionInTree", [ IsTreeForDocumentation, IsString, IsString, IsString ] );
