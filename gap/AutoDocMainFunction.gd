@@ -18,6 +18,9 @@ DeclareGlobalFunction( "AUTODOC_MergeRecords" );
 DeclareGlobalFunction( "AUTODOC_PROCESS_INTRO_STRINGS" );
 DeclareGlobalFunction( "AutoDocScanFiles" );
 
+## Global option record
+DeclareGlobalVariable( "_AUTODOC_GLOBAL_OPTION_RECORD" );
+
 ##
 ## This function creates a title file. It must be called with the package name and the path to doc files.
 DeclareGlobalFunction( "CreateTitlePage" );

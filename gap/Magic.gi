@@ -448,8 +448,8 @@ function( arg )
             # AutoDocMainFile.xml to it, but *only* if it not already
             # there. This way, package authors can control where
             # it is put in their includes list.
-            if not "AutoDocMainFile.xml" in scaffold.includes then
-                Add( scaffold.includes, "AutoDocMainFile.xml" );
+            if not _AUTODOC_GLOBAL_OPTION_RECORD.AutoDocMainFile in scaffold.includes then
+                Add( scaffold.includes, _AUTODOC_GLOBAL_OPTION_RECORD.AutoDocMainFile );
             fi;
         fi;
 

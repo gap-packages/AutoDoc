@@ -18,6 +18,10 @@ InstallValue( AUTODOC_XML_HEADER,
     )
 );
 
+InstallValue( _AUTODOC_GLOBAL_OPTION_RECORD,
+              rec( AutoDocMainFile := "_AutoDocMainFile.xml" ) );
+
+
 InstallGlobalFunction( AUTODOC_SetIfMissing,
   function( record, name, val )
     if not IsBound( record.(name) ) then
@@ -134,9 +138,7 @@ InstallGlobalFunction( CreateMainPage,
             AppendTo( filestream, "<#Include SYSTEM \"", i, "\">\n" );
         od;
     else
-        # TODO: Move "AutoDocMainFile.xml" to a global constant, and/or make it customizable?
-        # It is also referenced in AutoDoc()
-        AppendTo( filestream, "<#Include SYSTEM \"AutoDocMainFile.xml\">\n" );
+        AppendTo( filestream, "<#Include SYSTEM \"", _AUTODOC_GLOBAL_OPTION_RECORD.AutoDocMainFile, "\">\n" );
     fi;
 
     AppendTo( filestream, "</Body>\n" );

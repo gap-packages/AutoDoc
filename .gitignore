@@ -23,8 +23,8 @@
 /doc/*Bib.xml
 /doc/*Bib.xml.bib
 /doc/AutoDoc.xml
-/doc/AutoDocMainFile.xml
-/doc/Chapter*xml
+/doc/_AutoDocMainFile.xml
+/doc/_Chapter*xml
 /doc/maketest.g
 /doc/manual.lab
 /doc/manual.six

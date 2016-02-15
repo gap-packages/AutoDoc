@@ -414,7 +414,7 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentation, IsDirectory ],
   function( tree, path_to_xmlfiles )
     local stream, i;
 
-    stream := AUTODOC_OutputTextFile( path_to_xmlfiles, "AutoDocMainFile.xml" );
+    stream := AUTODOC_OutputTextFile( path_to_xmlfiles, _AUTODOC_GLOBAL_OPTION_RECORD.AutoDocMainFile );
     AppendTo( stream, AUTODOC_XML_HEADER );
     for i in tree!.content do
         if not IsTreeForDocumentationNodeForChapterRep( i ) then
@@ -442,7 +442,7 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForChapterRep, Is
         return;
     fi;
     label := Label( node );
-    filename := Concatenation( label, ".xml" );
+    filename := Concatenation( "_", label, ".xml" );
     chapter_stream := AUTODOC_OutputTextFile( path_to_xmlfiles, filename );
     AppendTo( stream, "<#Include SYSTEM \"", filename, "\">\n" );
     AppendTo( chapter_stream, AUTODOC_XML_HEADER );

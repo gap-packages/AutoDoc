@@ -17,8 +17,7 @@ AutoDoc(rec(
     scaffold := rec(
         includes := [
             "Tutorials.xml",
-            "Comments.xml",
-            "AutoDocMainFile.xml",
+            "Comments.xml"
             ],
         entities := [
             "SomePackage",

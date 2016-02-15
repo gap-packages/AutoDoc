@@ -105,7 +105,7 @@
 #!             A list of XML files to be included in the body of the main XML file.
 #!             If you specify this list and also are using &AutoDoc; to document
 #!             your operations with &AutoDoc; comments,
-#!             you can add <F>AutoDocMainFile.xml</F> to this list
+#!             you can add <F>_AutoDocMainFile.xml</F> to this list
 #!             to control at which point the documentation produced by &AutoDoc;
 #!             is inserted. If you do not do this, it will be added after the last
 #!             of your own XML files.
