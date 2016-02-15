@@ -431,6 +431,10 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentation, IsDirectory ],
 end );
 
 ##
+BindGlobal( "AUTODOC_IdentifierLetters",
+            "+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz" );
+
+##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForChapterRep, IsStream, IsDirectory ],
   function( node, stream, path_to_xmlfiles )
     local filename, chapter_stream, label, replaced_name;
@@ -442,7 +446,12 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForChapterRep, Is
         return;
     fi;
     label := Label( node );
-    filename := Concatenation( "_", label, ".xml" );
+
+    # Remove any characters outside of A-Za-z0-9 and -, +, _ from the filename.
+    # See issues #77 and #78
+    filename := Filtered(label, x -> x in AUTODOC_IdentifierLetters);
+    filename := Concatenation( "_", filename, ".xml" );
+
     chapter_stream := AUTODOC_OutputTextFile( path_to_xmlfiles, filename );
     AppendTo( stream, "<#Include SYSTEM \"", filename, "\">\n" );
     AppendTo( chapter_stream, AUTODOC_XML_HEADER );
