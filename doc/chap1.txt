@@ -105,7 +105,7 @@
   your documentation, and insert the line[133X
   
   [4X[32X[104X
-    [4X#Include SYSTEM "AutoDocMainFile.xml"[104X
+    [4X#Include SYSTEM "_AutoDocMainFile.xml"[104X
   [4X[32X[104X
   
   [33X[0;0Yin  a  suitable  place.  This  means  that you can mix [5XAutoDoc[105X documentation

@@ -118,7 +118,7 @@ AutoDoc( : scaffold := true, autodoc := true );
 
 
 <div class="example"><pre>
-#Include SYSTEM "AutoDocMainFile.xml"
+#Include SYSTEM "_AutoDocMainFile.xml"
 </pre></div>
 
 <p>in a suitable place. This means that you can mix <strong class="pkg">AutoDoc</strong> documentation comment freely with your existing documentation; you can even still make use of any existing <strong class="pkg">GAPDoc</strong> documentation comments in your code. The following command should be useful for you in this case; it still scans the package code for <strong class="pkg">AutoDoc</strong> documentation comments and the runs <strong class="pkg">GAPDoc</strong> to produce HTML and PDF output, but does not touch your documentation XML files otherwise.</p>

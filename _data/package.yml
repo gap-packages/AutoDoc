@@ -1,6 +1,6 @@
 name: AutoDoc
-version: 2016.01.31
-date: 31/01/2016
+version: 2016.02.16
+date: 16/02/2016
 description: Generate documentation from GAP source code
 
 authors:
@@ -28,7 +28,7 @@ packageinfo: https://gap-packages.github.io/AutoDoc/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/AutoDoc/releases/download/v2016.01.31/AutoDoc-2016.01.31.tar.gz
+      url: https://github.com/gap-packages/AutoDoc/releases/download/v2016.02.16/AutoDoc-2016.02.16.tar.gz
 
 abstract: 
 

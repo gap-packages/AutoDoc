@@ -84,8 +84,8 @@
                     [33X[0;18YA list of XML files to be included in the body of the main
                     XML  file.  If  you  specify  this list and also are using
                     [5XAutoDoc[105X to document your operations with [5XAutoDoc[105X comments,
-                    you can add [11XAutoDocMainFile.xml[111X to this list to control at
-                    which  point  the  documentation  produced  by  [5XAutoDoc[105X is
+                    you  can  add [11X_AutoDocMainFile.xml[111X to this list to control
+                    at  which  point  the documentation produced by [5XAutoDoc[105X is
                     inserted.  If  you  do not do this, it will be added after
                     the last of your own XML files.[133X
   
