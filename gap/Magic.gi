@@ -151,7 +151,13 @@ function( arg )
 
     else
         is_worksheet := false;
-        pkginfo := PackageInfo( pkgname )[ 1 ];
+        pkginfo := PackageInfo( pkgname );
+        if IsEmpty( pkginfo ) then
+            Error( "Could not find package ", pkgname );
+        elif Length( pkginfo ) > 1 then
+            Info(InfoWarning, 1, "multiple versions of package ", pkgname, " are present, using the first one");
+        fi;
+        pkginfo := pkginfo[ 1 ];
         pkgdir := Directory( pkginfo.InstallationPath );
     fi;
 
