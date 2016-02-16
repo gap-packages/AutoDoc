@@ -108,7 +108,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           current_command, was_declaration, filename, system_scope, groupnumber, chunk_list, rest_of_file_skipped,
           context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,
           current_line_unedited,
-          ReadLineWithLineCount, Normalized_ReadLine, line_number;
+          ReadLineWithLineCount, Normalized_ReadLine, line_number, ErrorWithPos;
     groupnumber := 0;
     level_scope := 0;
     autodoc_read_line := false;
@@ -129,7 +129,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         NormalizeWhitespace( string );
         return string;
     end;
-
+    ErrorWithPos := function(arg)
+        local list;
+        list := Concatenation(arg, [ ",\n", "at ", filename, ":", line_number]);
+        CallFuncList(Error, list);
+    end;
     new_man_item := function( )
         local man_item;
         if IsBound( current_item ) and IsTreeForDocumentationNodeForManItemRep( current_item ) then
@@ -158,8 +162,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             SetChapterInfo( man_item, man_item!.chapter_info );
         fi;
         if Length( ChapterInfo( man_item ) ) <> 2 then
-            Error("function documentation must be within a section, not within a chapter or a subsection,\n",
-                  "at ", filename, ":", line_number);
+            ErrorWithPos( "declarations must be documented within a section" );
         fi;
         Add( tree, man_item );
     end;
@@ -180,12 +183,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             current_line := current_line{[ declare_position .. Length( current_line ) ]};
             position_parentesis := PositionSublist( current_line, "(" );
             if position_parentesis = fail then
-                Error( "Something went wrong" );
+                ErrorWithPos( "Something went wrong" );
             fi;
             current_type := current_line{ [ 1 .. position_parentesis - 1 ] };
             has_filters := AutoDoc_Type_Of_Item( current_item, current_type, default_chapter_data );
             if has_filters = fail then
-                Error( "Unrecognized scan type" );
+                ErrorWithPos( "Unrecognized scan type" );
                 return false;
             fi;
             current_line := current_line{ [ position_parentesis + 1 .. Length( current_line ) ] };
@@ -409,7 +412,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @Section := function()
             local scope_section;
             if not IsBound( chapter_info[ 1 ] ) then
-                Error( "Chapter must be given" );
+                ErrorWithPos( "found @Section with no active chapter" );
             fi;
             scope_section := ReplacedString( current_command[ 2 ], " ", "_" );
             current_item := SectionInTree( tree, chapter_info[ 1 ], scope_section );
@@ -424,7 +427,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @Subsection := function()
             local scope_subsection;
             if not IsBound( chapter_info[ 1 ] ) or not IsBound( chapter_info[ 2 ] ) then
-                Error( "no subsection without chapter and section" );
+                ErrorWithPos( "found @Subsection with no active section" );
             fi;
             scope_subsection := ReplacedString( current_command[ 2 ], " ", "_" );
             current_item := SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], scope_subsection );
@@ -482,7 +485,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             SetChapterInfo( current_item, current_chapter_info );
         end,
         @BREAK := function()
-            Error( current_command[ 2 ] );
+            ErrorWithPos( current_command[ 2 ] );
         end,
         @SetLevel := function()
             level_scope := Int( current_command[ 2 ] );
@@ -628,6 +631,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             if current_command[ 1 ] <> false then
                 if autodoc_read_line <> fail then
                     autodoc_read_line := true;
+                fi;
+                if not IsBound( command_function_record.(current_command[ 1 ]) ) then
+                    ErrorWithPos("unknown AutoDoc command ", current_command[ 1 ]);
                 fi;
                 command_function_record.(current_command[ 1 ])();
                 continue;
