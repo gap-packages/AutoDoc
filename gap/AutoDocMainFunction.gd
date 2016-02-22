@@ -44,9 +44,11 @@ DeclareGlobalFunction( "CreateMakeTest" );
 #! @Section Worksheets
 
 #! @Description
-#!  This function works exactly like the AutoDoc command, except that no package is needed to create a
-#!  worksheet. It takes the sampe optional records as the AutoDoc-command, so please refer this command
-#!  for a full list.
-#!  It's only optional argument is a (list of) filenames, which are then scanned by the AutoDoc parser.
+#!  The intention of these function is to create stand-alone pdf and html files
+#!  using AutoDoc without having them associated to a package.
+#!  It uses the same optional records as the &AutoDoc; command itself, but instead of
+#!  a package name there should be a filename or a list of filenames containing AutoDoc
+#!  text from which the documents are created. Please see the &AutoDoc; command for more
+#!  information about this and have a look at <Ref Label="Tut:AutoDocWorksheet"/> for a simple worksheet example.
 #! @Arguments list_of_filenames : options
 DeclareGlobalFunction( "AutoDocWorksheet" );

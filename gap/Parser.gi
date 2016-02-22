@@ -108,7 +108,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           current_command, was_declaration, filename, system_scope, groupnumber, chunk_list, rest_of_file_skipped,
           context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,
           current_line_unedited,
-          ReadLineWithLineCount, Normalized_ReadLine, line_number, ErrorWithPos;
+          ReadLineWithLineCount, Normalized_ReadLine, line_number, ErrorWithPos, create_title_item_function;
     groupnumber := 0;
     level_scope := 0;
     autodoc_read_line := false;
@@ -592,20 +592,32 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             Add( tree, "</URL>" );
         end
     );
+    
+    ## The following commands are specific for worksheets. They do not have a packageinfo,
+    ## and no place to extract those infos. So these commands are needed to make insert the
+    ## information directly into the document.
     title_item_list := [ "Title", "Subtitle", "Version", "TitleComment", "Author",
                          "Date", "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon" ];
-    for title_item in title_item_list do
-        command_function_record.( Concatenation( "@", title_item ) ) := function( )
-            current_item := tree;
-
-            if not IsBound( tree!.TitlePage.( title_item ) ) then
-                tree!.TitlePage.( title_item ) := [ ];
+    
+    create_title_item_function := function( name )
+        return function()
+            if not IsBound( tree!.TitlePage.( name ) ) then
+                tree!.TitlePage.( name ) := [ ];
             fi;
-            tree!.content := tree!.TitlePage.( title_item );
-
-            Add( tree, current_command[ 2 ] );
+            current_item := tree!.TitlePage.( name );
+            Add( current_item, current_command[ 2 ] );
         end;
+    end;
+    
+    ## Note that we need to create these functions in the helper function
+    ## create_title_item_function to ensure that the <name> variable is bound properly.
+    ## Without this intermediate helper, the wrong closure is taken,
+    ## and later, when the function is executed, the value for <name> will be the last
+    ## value <title_item> had, i.e., the last entry of <title_item_list>.
+    for title_item in title_item_list do
+        command_function_record.( Concatenation( "@", title_item ) ) := create_title_item_function( title_item );
     od;
+
     rest_of_file_skipped := false;
     ##Now read the files.
     for filename in filename_list do
