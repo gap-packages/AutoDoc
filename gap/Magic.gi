@@ -291,10 +291,8 @@ function( arg )
     fi;
 
     if IsBound( gapdoc ) then
-
-        if not IsBound( gapdoc.main ) then
-            gapdoc.main := pkgname;
-        fi;
+        
+        AUTODOC_SetIfMissing( gapdoc, "main", pkgname );
 
         if IsBound( pkginfo.PackageDoc ) and not IsEmpty( pkginfo.PackageDoc ) then
             if Length( pkginfo.PackageDoc ) > 1 then
@@ -445,9 +443,7 @@ function( arg )
             fi;
         fi;
 
-        if not IsBound( scaffold.includes ) then
-            scaffold.includes := [ ];
-        fi;
+        AUTODOC_SetIfMissing( scaffold, "includes", [ ] );
 
         if IsBound( autodoc ) then
             # If scaffold.includes is already set, then we add

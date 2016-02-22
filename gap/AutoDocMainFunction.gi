@@ -304,7 +304,7 @@ end );
 
 ##
 ## Optional argument is PackageName, which creates a
-## Default chapter record. This is not availible for
+## Default chapter record. This is not available for
 ## worksheets.
 InstallGlobalFunction( AutoDocScanFiles,
   function( files_to_scan, pkgname, tree )

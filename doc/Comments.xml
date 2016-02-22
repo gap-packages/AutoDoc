@@ -428,13 +428,12 @@ the document, in case the scaffolding is enabled.
   <Item>
     @Colophon
   </Item>
-  <Item>
-    @URL
-  </Item>
 </List>
 Those add the following lines at the corresponding point of the titlepage. Please note that many of those
 things can be (better) extracted from the PackageInfo.g. In case you set some of those,
-the extracted or in scaffold defined items will be overwritten.
+the extracted or in scaffold defined items will be overwritten. While this is not very useful for
+documenting packages, they are necessary for worksheets created with <Ref Func="AutoDocWorksheet"/>,
+since they do not have a PackageInfo to extract those information.
 </Section>
 
  <Section Label="PlainText">
