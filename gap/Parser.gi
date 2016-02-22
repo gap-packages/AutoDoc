@@ -581,16 +581,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @EndAutoDocPlainText := function()
             plain_text_mode := false;
         end,
-        @URL := function( )
-            if not IsBound( tree!.TitlePage.TitleComment ) then
-                tree!.TitlePage.TitleComment := [ ];
-            fi;
-            tree!.content := tree!.TitlePage.TitleComment;
-
-            Add( tree, "<URL>" );
-            Add( tree, current_command[ 2 ] );
-            Add( tree, "</URL>" );
-        end
     );
     
     ## The following commands are specific for worksheets. They do not have a packageinfo,
