@@ -128,11 +128,6 @@ InstallGlobalFunction( CreateMainPage,
     fi;
     AppendTo( filestream, "<Body>\n" );
 
-    if IsBound( opt.index ) and opt.index = true then
-        # FIXME: Why is this here??
-        AppendTo( filestream, "<Index>&", book_name, ";</Index>\n" );
-    fi;
-
     if IsBound( opt.includes ) then
         for i in opt.includes do
             AppendTo( filestream, "<#Include SYSTEM \"", i, "\">\n" );
