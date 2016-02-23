@@ -260,7 +260,7 @@ function( arg )
         fi;
 
         if not IsBound( autodoc.scan_dirs ) and not is_worksheet then
-            autodoc.scan_dirs := [ "gap", "lib", "examples", "examples/doc" ];
+            autodoc.scan_dirs := [ ".", "gap", "lib", "examples", "examples/doc" ];
         elif not IsBound( autodoc.scan_dirs ) and is_worksheet then
             autodoc.scan_dirs := [ ];
         fi;
@@ -325,7 +325,7 @@ function( arg )
         fi;
 
         if not IsBound( gapdoc.scan_dirs ) and not is_worksheet then
-            gapdoc.scan_dirs := [ "gap", "lib", "examples", "examples/doc" ];
+            gapdoc.scan_dirs := [ ".", "gap", "lib", "examples", "examples/doc" ];
         fi;
 
         if not is_worksheet then

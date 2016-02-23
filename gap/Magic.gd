@@ -225,7 +225,7 @@
 #!             which &AutoDoc; then scans for .gi, .gd and .g files; all of these files
 #!             are then scanned for &AutoDoc; documentation comments.
 #!             <Br/>
-#!             <E>Default value: <C>[ "gap", "lib", "examples", "examples/doc" ]</C>.</E>
+#!             <E>Default value: <C>[ ".", "gap", "lib", "examples", "examples/doc" ]</C>.</E>
 #!         </Item>
 #!
 #!         <Mark><A>level</A></Mark>
@@ -298,7 +298,7 @@
 #!             which &AutoDoc; then scans for .gi, .gd and .g files; all of these files
 #!             are then scanned for &GAPDoc; documentation comments.
 #!             <Br/>
-#!             <E>Default value: <C>[ "gap", "lib", "examples", "examples/doc" ]</C>.</E>
+#!             <E>Default value: <C>[ ".", "gap", "lib", "examples", "examples/doc" ]</C>.</E>
 #!         </Item>
 #!
 #!         </List>
