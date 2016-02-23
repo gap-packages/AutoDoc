@@ -318,20 +318,23 @@ not finished or temporary files.
 <Subsection Label="@BeginChunk">
 <Index Key="@BeginChunk"><C>@BeginChunk, @EndChunk, and @InsertChunk</C></Index>
 <Heading>@BeginChunk <A>name</A>, @EndChunk, and @InsertChunk <A>name</A></Heading>
-@BeginChunk causes the next documentation parts
-not to be inserted in the documentation at it's point in the file, but at the point
-where the @InsertChunk <A>name</A> command is.
-This can be used to insert examples from
-different files at a specific point in the documentation.
-A normal chunk ends at the end of the file. You can also end a system with @EndChunk.
+Text insider of a @BeginChunk / @EndChunk part will not be inserted into
+the final documentation directly. Instead, the text is stored in an internal buffer.
+
+That chunk of text can then later on be inserted in any other place by using the
+@InsertChunk <A>name</A> command.
+
+If you do not provide an @EndChunk, the chunk ends at the end of the file.
 <Listing><![CDATA[
 #! @BeginChunk MyChunk
-#! This is some text.
+#! Hello, world.
 #! @EndChunk
 
 #! @InsertChunk MyChunk
-## Text is inserted here.
+## The text "Hello, world." is inserted right before this.
 ]]></Listing>
+
+You can use this to define an example like this in one file:
 
 <Listing><![CDATA[
 #! @BeginChunk Example_Symmetric_Group
@@ -343,6 +346,8 @@ Order(S5);
 #! @EndExample
 #! @EndChunk
 ]]></Listing>
+
+And then later, insert the example in a different file, like this:
 
 <Listing><![CDATA[
 #! @InsertChunk Example_Symmetric_Group
