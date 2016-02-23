@@ -10,6 +10,9 @@
 ##
 #############################################################################
 
+#! @Chapter AutoDoc
+
+#! @Section The AutoDoc() function
 
 #! @Description
 #! This is the main function of the &AutoDoc; package. It can perform
@@ -329,5 +332,12 @@
 #!
 #! @Returns nothing
 #! @Arguments [package[, option_record ]]
-#! @ChapterInfo AutoDoc, The AutoDoc() function
 DeclareGlobalFunction( "AutoDoc" );
+
+
+#! @Section Examples
+#!
+#! Some basic examples for using <C>AutoDoc</C> were already shown in
+#! Chapter <Ref Label='Tutorials'/>.
+
+## TODO: add more examples, showing at least some of the other options
