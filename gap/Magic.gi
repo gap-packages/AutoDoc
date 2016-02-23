@@ -341,7 +341,7 @@ function( arg )
         fi;
 
         # Attempt to weed out duplicates as they may confuse GAPDoc (this
-        # won't work if there are any non-normalized paths in the list).
+        # will not work if there are any non-normalized paths in the list).
         gapdoc.files := Set( gapdoc.files );
 
         # Convert the file paths in gapdoc.files, which are relative to

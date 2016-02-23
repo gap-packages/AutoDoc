@@ -166,7 +166,7 @@
 #!         <Item>
 #!             If scaffolding is enabled, by default a main XML file is generated (this
 #!             is the file which contains the XML doctype and more). If you do not
-#!             want this (e.g. because you have a hand written main XML file), but
+#!             want this (e.g. because you have a handwritten main XML file), but
 #!             still want &AutoDoc; to generate a title page for you, you can set this
 #!             option to <K>false</K>
 #!         </Item>
