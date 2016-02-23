@@ -195,6 +195,7 @@ You will probably want to re-run the  <Ref Func="AutoDoc"/> command
 frequently, e.g. whenever you modified your documentation or your
 <F>PackageInfo.g</F>. To make this more convenient and reproducible, we
 recommend putting its invocation into a file <F>makedoc.g</F> in your package
+<Index Key="makedoc.g"><F>makedoc.g</F></Index>
 directory, with content based on the following example:
 <Listing>
 LoadPackage( "AutoDoc" );
