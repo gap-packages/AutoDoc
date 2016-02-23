@@ -73,7 +73,11 @@ function (pkgdir, subdirs, extensions)
         fi;
         d := Directory( d );
         # ... but also keep the relative path (such as "gap")
-        d_rel := Directory( d_rel );
+        if d_rel = "" or d_rel = "." then
+            d_rel := "";
+        else
+            d_rel := Directory( d_rel );
+        fi;
 
         files := DirectoryContents( d );
         Sort( files );
@@ -84,7 +88,11 @@ function (pkgdir, subdirs, extensions)
             if not IsReadableFile( Filename( d, tmp ) ) then
                 continue;
             fi;
-            Add( result, Filename( d_rel, tmp ) );
+            if d_rel = "" then
+                Add( result, tmp );
+            else
+                Add( result, Filename( d_rel, tmp ) );
+            fi;
         od;
     od;
     return result;
