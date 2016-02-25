@@ -360,9 +360,9 @@ DeclareOperation( "GroupedOperation",
 
 <div class="example"><pre>
 #! @BeginExample
-S3 := SymmetricGroup(5);
+S5 := SymmetricGroup(5);
 #! Sym( [ 1 .. 5 ] )
-Order(S3);
+Order(S5);
 #! 120
 #! @EndExample
 </pre></div>
@@ -371,7 +371,7 @@ Order(S3);
 
 <h5>2.2-13 <span class="Heading">@BeginLog and @EndLog</span></h5>
 
-<p>Works just like the @BeginExample command, but the example wont be testet. See the GAPDoc manual for more information.</p>
+<p>Works just like the @BeginExample command, but the example will not be tested. See the GAPDoc manual for more information.</p>
 
 <p><a id="X78DC644E8519280C" name="X78DC644E8519280C"></a></p>
 
@@ -385,36 +385,40 @@ Order(S3);
 
 #! @DoNotReadRestOfFile
 
-#! This wont.
+#! This will not appear in the manual.
 </pre></div>
 
 <p><a id="X84F96D3E7BD5F617" name="X84F96D3E7BD5F617"></a></p>
 
 <h5>2.2-15 <span class="Heading">@BeginChunk <var class="Arg">name</var>, @EndChunk, and @InsertChunk <var class="Arg">name</var></span></h5>
 
-<p>@BeginChunk causes the next documentation parts not to be inserted in the documentation at it's point in the file, but at the point where the @InsertChunk <var class="Arg">name</var> command is. This can be used to insert examples from different files at a specific point in the documentation. A normal chunk ends at the end of the file. You can also end a system with @EndChunk.</p>
+<p>Text insider of a @BeginChunk / @EndChunk part will not be inserted into the final documentation directly. Instead, the text is stored in an internal buffer. That chunk of text can then later on be inserted in any other place by using the @InsertChunk <var class="Arg">name</var> command. If you do not provide an @EndChunk, the chunk ends at the end of the file.</p>
 
 
 <div class="example"><pre>
 #! @BeginChunk MyChunk
-#! This is some text.
+#! Hello, world.
 #! @EndChunk
 
 #! @InsertChunk MyChunk
-## Text is inserted here.
+## The text "Hello, world." is inserted right before this.
 </pre></div>
+
+<p>You can use this to define an example like this in one file:</p>
 
 
 <div class="example"><pre>
 #! @BeginChunk Example_Symmetric_Group
 #! @BeginExample
-S3 := SymmetricGroup(5);
+S5 := SymmetricGroup(5);
 #! Sym( [ 1 .. 5 ] )
-Order(S3);
+Order(S5);
 #! 120
 #! @EndExample
 #! @EndChunk
 </pre></div>
+
+<p>And then later, insert the example in a different file, like this:</p>
 
 
 <div class="example"><pre>
@@ -431,7 +435,7 @@ Order(S3);
 
 <h5>2.2-17 <span class="Heading">@BeginCode <var class="Arg">name</var>, @EndCode, and @InsertCode <var class="Arg">name</var></span></h5>
 
-<p>Inserts the code between @BeginCode and @EndCode verbatim at the point where @InsertCode is called. This is useful to insert your programm code directly into the manual.</p>
+<p>Inserts the text between @BeginCode and @EndCode verbatim at the point where @InsertCode is called. This is useful to insert code excerpts directly into the manual.</p>
 
 
 <div class="example"><pre>
@@ -499,11 +503,8 @@ i := i + 1;
 <li><p>@Colophon</p>
 
 </li>
-<li><p>@URL</p>
-
-</li>
 </ul>
-<p>Those add the following lines at the corresponding point of the titlepage. Please note that many of those things can be (better) extracted from the PackageInfo.g. In case you set some of those, the extracted or in scaffold defined items will be overwritten.</p>
+<p>Those add the following lines at the corresponding point of the titlepage. Please note that many of those things can be (better) extracted from the PackageInfo.g. In case you set some of those, the extracted or in scaffold defined items will be overwritten. While this is not very useful for documenting packages, they are necessary for worksheets created with <code class="func">AutoDocWorksheet</code> (<a href="chap3.html#X809FE4137C08B28D"><span class="RefLink">3.1-1</span></a>), since they do not have a PackageInfo to extract those information.</p>
 
 <p><a id="X828AE38F80CB02E7" name="X828AE38F80CB02E7"></a></p>
 
@@ -575,13 +576,13 @@ KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
 
 <h4>2.7 <span class="Heading">Some syntax for <strong class="pkg">AutoDoc</strong> text</span></h4>
 
-<p><strong class="pkg">AutoDoc</strong> offers some useful syntax extensions which can be used in <strong class="pkg">AutoDoc</strong> plain text files and <strong class="pkg">AutoDoc</strong> comments. The syntax is inspired by the Markdown language, but it does not implement all features, neither is strict Markdown, but tries to be as straight as possible. The following constructions are possible right now:</p>
+<p><strong class="pkg">AutoDoc</strong> offers some useful syntax extensions which can be used in <strong class="pkg">AutoDoc</strong> plain text files and <strong class="pkg">AutoDoc</strong> comments. The syntax is inspired by the Markdown language, but it does not implement all features, neither is it strict Markdown, but tries to be as straight as possible. The following constructions are possible right now:</p>
 
 <p><a id="X7B256AE5780F140A" name="X7B256AE5780F140A"></a></p>
 
 <h5>2.7-1 <span class="Heading">Lists</span></h5>
 
-<p>One can create items lists by beginning a new line with *, +, -, followed by one space. The first item starts the list. When items are longer than one line, the following lines have to be indented by at least two spaces. The list ends when a line which does not start a new item is not indented by two spaces. Of curse lists can be nested. Here is an example:</p>
+<p>One can create lists of items by beginning a new line with *, +, -, followed by one space. The first item starts the list. When items are longer than one line, the following lines have to be indented by at least two spaces. The list ends when a line which does not start a new item is not indented by two spaces. Of course lists can be nested. Here is an example:</p>
 
 
 <div class="example"><pre>
@@ -641,7 +642,7 @@ KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
 
 <h5>2.7-3 <span class="Heading">Emphasize</span></h5>
 
-<p>One can emphasize text by using two asteriks (**) or two underscores (__) at the beginning and the end of the text which should be emphasized. Example:</p>
+<p>One can emphasize text by using two asterisks (**) or two underscores (__) at the beginning and the end of the text which should be emphasized. Example:</p>
 
 
 <div class="example"><pre>

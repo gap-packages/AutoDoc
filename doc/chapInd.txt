@@ -27,11 +27,11 @@
   [10X@Subsection[110X  2.2-4
   [2XAProperty[102X (testlabel)  2.1-6
   [2XAProperty[102X (for IsObject)  2.1-7
-  [5XAutoDoc[105X  .-2
   [2XAutoDoc[102X  4.1-1
   [2XAutoDocWorksheet[102X  3.1-1
   [10X@DoNotReadRestOfFile[110X  2.2-14
   [2XFirstOperation[102X (for IsInt)  2.5-1
+  [11Xmakedoc.g[111X  1.4
   [2XSecondOperation[102X (for IsInt, IsGroup)  2.5-1
   [2XThirdOperation[102X (for IsGroupIsGroup, )  2.5-1
   

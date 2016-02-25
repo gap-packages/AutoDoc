@@ -6,10 +6,10 @@
                  [1X Generate documentation from [5XGAP[105X source code [101X
   
   
-                                   2016.02.16
+                                   2016.02.24
   
   
-                                   16/02/2016
+                                   24/02/2016
   
   
                                Sebastian Gutsche
@@ -58,6 +58,7 @@
     1.3 [33X[0;0YUsing [5XAutoDoc[105X in an existing [5XGAPDoc[105X manual[133X
     1.4 [33X[0;0YAutomatic regeneration of the manual[133X
     1.5 [33X[0;0YWhat is taken from [11XPackageInfo.g[111X[133X
+    1.6 [33X[0;0YAutoDoc worksheets[133X
   2 [33X[0;0Y[5XAutoDoc[105X documentation comments[133X
     2.1 [33X[0;0YDocumenting declarations[133X
       2.1-1 [33X[0;0Y@Description [3Xdescr[103X[133X
@@ -102,6 +103,7 @@
   4 [33X[0;0YAutoDoc[133X
     4.1 [33X[0;0YThe AutoDoc() function[133X
       4.1-1 AutoDoc
+    4.2 [33X[0;0YExamples[133X
   
   
   [32X

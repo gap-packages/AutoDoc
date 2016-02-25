@@ -8,9 +8,11 @@
   
   [29X[2XAutoDocWorksheet[102X( [3Xlist_of_filenames:[103X [3Xoptions[103X ) [32X function
   
-  [33X[0;0YThis function works exactly like the AutoDoc command, except that no package
-  is  needed to create a worksheet. It takes the sampe optional records as the
-  AutoDoc-command,  so  please  refer  this command for a full list. It's only
-  optional  argument  is  a (list of) filenames, which are then scanned by the
-  AutoDoc parser.[133X
+  [33X[0;0YThe  intention of these function is to create stand-alone pdf and html files
+  using  AutoDoc without having them associated to a package. It uses the same
+  optional  records  as  the  [5XAutoDoc[105X command itself, but instead of a package
+  name  there  should  be a filename or a list of filenames containing AutoDoc
+  text  from  which  the documents are created. Please see the [5XAutoDoc[105X command
+  for  more  information  about  this  and  have  a  look  at [14X1.6[114X for a simple
+  worksheet example.[133X
   

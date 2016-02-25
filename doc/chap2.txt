@@ -256,9 +256,9 @@
   
   [4X[32X[104X
     [4X#! @BeginExample[104X
-    [4XS3 := SymmetricGroup(5);[104X
+    [4XS5 := SymmetricGroup(5);[104X
     [4X#! Sym( [ 1 .. 5 ] )[104X
-    [4XOrder(S3);[104X
+    [4XOrder(S5);[104X
     [4X#! 120[104X
     [4X#! @EndExample[104X
   [4X[32X[104X
@@ -266,8 +266,8 @@
   
   [1X2.2-13 [33X[0;0Y@BeginLog and @EndLog[133X[101X
   
-  [33X[0;0YWorks  just  like the @BeginExample command, but the example wont be testet.
-  See the GAPDoc manual for more information.[133X
+  [33X[0;0YWorks  just  like  the  @BeginExample  command,  but the example will not be
+  tested. See the GAPDoc manual for more information.[133X
   
   
   [1X2.2-14 [33X[0;0Y@DoNotReadRestOfFile[133X[101X
@@ -280,37 +280,41 @@
     [4X[104X
     [4X#! @DoNotReadRestOfFile[104X
     [4X[104X
-    [4X#! This wont.[104X
+    [4X#! This will not appear in the manual.[104X
   [4X[32X[104X
   
   
   [1X2.2-15 [33X[0;0Y@BeginChunk [3Xname[103X[101X[1X, @EndChunk, and @InsertChunk [3Xname[103X[101X[1X[133X[101X
   
-  [33X[0;0Y@BeginChunk  causes  the  next documentation parts not to be inserted in the
-  documentation  at  it's  point  in  the  file,  but  at  the point where the
-  @InsertChunk  [3Xname[103X  command  is.  This  can  be used to insert examples from
-  different  files  at  a  specific point in the documentation. A normal chunk
-  ends at the end of the file. You can also end a system with @EndChunk.[133X
+  [33X[0;0YText insider of a @BeginChunk / @EndChunk part will not be inserted into the
+  final  documentation  directly.  Instead,  the text is stored in an internal
+  buffer.  That chunk of text can then later on be inserted in any other place
+  by  using the @InsertChunk [3Xname[103X command. If you do not provide an @EndChunk,
+  the chunk ends at the end of the file.[133X
   
   [4X[32X[104X
     [4X#! @BeginChunk MyChunk[104X
-    [4X#! This is some text.[104X
+    [4X#! Hello, world.[104X
     [4X#! @EndChunk[104X
     [4X[104X
     [4X#! @InsertChunk MyChunk[104X
-    [4X## Text is inserted here.[104X
+    [4X## The text "Hello, world." is inserted right before this.[104X
   [4X[32X[104X
+  
+  [33X[0;0YYou can use this to define an example like this in one file:[133X
   
   [4X[32X[104X
     [4X#! @BeginChunk Example_Symmetric_Group[104X
     [4X#! @BeginExample[104X
-    [4XS3 := SymmetricGroup(5);[104X
+    [4XS5 := SymmetricGroup(5);[104X
     [4X#! Sym( [ 1 .. 5 ] )[104X
-    [4XOrder(S3);[104X
+    [4XOrder(S5);[104X
     [4X#! 120[104X
     [4X#! @EndExample[104X
     [4X#! @EndChunk[104X
   [4X[32X[104X
+  
+  [33X[0;0YAnd then later, insert the example in a different file, like this:[133X
   
   [4X[32X[104X
     [4X#! @InsertChunk Example_Symmetric_Group[104X
@@ -325,9 +329,9 @@
   
   [1X2.2-17 [33X[0;0Y@BeginCode [3Xname[103X[101X[1X, @EndCode, and @InsertCode [3Xname[103X[101X[1X[133X[101X
   
-  [33X[0;0YInserts the code between @BeginCode and @EndCode verbatim at the point where
-  @InsertCode  is called. This is useful to insert your programm code directly
-  into the manual.[133X
+  [33X[0;0YInserts the text between @BeginCode and @EndCode verbatim at the point where
+  @InsertCode  is called. This is useful to insert code excerpts directly into
+  the manual.[133X
   
   [4X[32X[104X
     [4X#! @BeginCode Increment[104X
@@ -381,12 +385,13 @@
   
   [30X    [33X[0;6Y@Colophon[133X
   
-  [30X    [33X[0;6Y@URL[133X
-  
   [33X[0;0YThose  add  the following lines at the corresponding point of the titlepage.
   Please  note  that  many  of those things can be (better) extracted from the
   PackageInfo.g.  In  case you set some of those, the extracted or in scaffold
-  defined items will be overwritten.[133X
+  defined  items  will  be  overwritten.  While  this  is  not very useful for
+  documenting  packages,  they  are  necessary  for  worksheets  created  with
+  [2XAutoDocWorksheet[102X  ([14X3.1-1[114X),  since  they do not have a PackageInfo to extract
+  those information.[133X
   
   
   [1X2.4 [33X[0;0YPlain text files[133X[101X
@@ -470,18 +475,18 @@
   
   [33X[0;0Y[5XAutoDoc[105X  offers  some  useful syntax extensions which can be used in [5XAutoDoc[105X
   plain  text  files  and  [5XAutoDoc[105X  comments.  The  syntax  is inspired by the
-  Markdown language, but it does not implement all features, neither is strict
-  Markdown,   but   tries  to  be  as  straight  as  possible.  The  following
+  Markdown  language,  but  it  does not implement all features, neither is it
+  strict  Markdown,  but  tries  to  be as straight as possible. The following
   constructions are possible right now:[133X
   
   
   [1X2.7-1 [33X[0;0YLists[133X[101X
   
-  [33X[0;0YOne can create items lists by beginning a new line with *, +, -, followed by
-  one  space.  The  first item starts the list. When items are longer than one
+  [33X[0;0YOne can create lists of items by beginning a new line with *, +, -, followed
+  by one space. The first item starts the list. When items are longer than one
   line,  the  following  lines have to be indented by at least two spaces. The
   list ends when a line which does not start a new item is not indented by two
-  spaces. Of curse lists can be nested. Here is an example:[133X
+  spaces. Of course lists can be nested. Here is an example:[133X
   
   [4X[32X[104X
     [4X#! The list starts in the next line[104X
@@ -534,8 +539,9 @@
   
   [1X2.7-3 [33X[0;0YEmphasize[133X[101X
   
-  [33X[0;0YOne can emphasize text by using two asteriks (**) or two underscores (__) at
-  the beginning and the end of the text which should be emphasized. Example:[133X
+  [33X[0;0YOne  can  emphasize text by using two asterisks (**) or two underscores (__)
+  at  the  beginning  and  the  end  of  the  text which should be emphasized.
+  Example:[133X
   
   [4X[32X[104X
     [4X#! **This** is very important.[104X

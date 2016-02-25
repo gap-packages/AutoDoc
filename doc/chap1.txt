@@ -198,3 +198,64 @@
         [33X[0;6YNote   that   [10XAutoDoc.TitlePage[110X   behaves  exactly  the  same  as  the
         [10Xscaffold.TitlePage[110X parameter of the [2XAutoDoc[102X ([14X4.1-1[114X) function.[133X
   
+  
+  [1X1.6 [33X[0;0YAutoDoc worksheets[133X[101X
+  
+  [33X[0;0Y[5XAutoDoc[105X  worksheets  can  be  used  to  create  html and pdf documents using
+  AutoDoc  syntax  and  possibly  including  [5XGAP[105X  examples and implementations
+  without  having  them  associated to a package. A file for a worksheet could
+  look like this:[133X
+  
+  [4X[32X[104X
+    [4X#! @Title My first worksheet[104X
+    [4X#! @Author Charlie Brown[104X
+    [4X[104X
+    [4X#! @Chapter Some groups[104X
+    [4X[104X
+    [4X#! @BeginExample[104X
+    [4XS3 := SymmetricGroup( 3 );;[104X
+    [4XS4 := SymmetricGroup( 4 );;[104X
+    [4X#! @EndExample[104X
+  [4X[32X[104X
+  
+  [33X[0;0YNow,  one  can  create a pdf and html document, like a package documentation
+  out  of  it.  Suppose the document above is saved as [11Xworksheet.g[111X. Then, when
+  GAP is started in the folder of this file, the command[133X
+  
+  [4X[32X[104X
+    [4XAutoDocWorksheet( "worksheet.g" );[104X
+  [4X[32X[104X
+  
+  [33X[0;0Ywill create a subfolder called [11Xdoc[111X of the current directory in which it will
+  create  the documentation. There are several options to configure the output
+  of  the worksheet command, which are identical to the options of the [2XAutoDoc[102X
+  ([14X4.1-1[114X)  command.  It is even possible to test the examples in the worksheet
+  using the maketest option from the AutoDoc command.[133X
+  
+  [33X[0;0YSince the worksheets do not have a [11XPackageInfo.g[111X to extract information, all
+  possible  tags  that  [5XGAPDoc[105X supports for the title page can be set into the
+  document. A fully typed titlepage can look like this:[133X
+  
+  [4X[32X[104X
+    [4X#! @Title My first worksheet[104X
+    [4X#! @Subtitle Some small examples[104X
+    [4X#! @Author Charlie Brown[104X
+    [4X[104X
+    [4X#! @Version 0.1[104X
+    [4X#! @TitleComment Some worksheet[104X
+    [4X#! @Date 01/01/2016[104X
+    [4X#! @Address TU Kaiserslautern[104X
+    [4X#! @Abstract[104X
+    [4X#!  A worksheet showing some small examples about groups.[104X
+    [4X#! @Copyright 2016 Charlie Brown[104X
+    [4X#! @Acknowledgements Woodstock[104X
+    [4X#! @Colophon Some colophon[104X
+    [4X[104X
+    [4X#! @Chapter Some groups[104X
+    [4X[104X
+    [4X#! @BeginExample[104X
+    [4XS3 := SymmetricGroup( 3 );;[104X
+    [4XS4 := SymmetricGroup( 4 );;[104X
+    [4X#! @EndExample[104X
+  [4X[32X[104X
+  

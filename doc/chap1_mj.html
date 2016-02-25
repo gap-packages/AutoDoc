@@ -40,6 +40,9 @@
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap1_mj.html#X7B903EAE86BB1C28">1.5 <span class="Heading">What is taken from <code class="file">PackageInfo.g</code></span></a>
 </span>
 </div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap1_mj.html#X80ED3C2A78146AD1">1.6 <span class="Heading">AutoDoc worksheets</span></a>
+</span>
+</div>
 </div>
 
 <h3>1 <span class="Heading">Getting started using <strong class="pkg">AutoDoc</strong></span></h3>
@@ -196,6 +199,60 @@ gap makedoc.g
 
 </dd>
 </dl>
+<p><a id="X80ED3C2A78146AD1" name="X80ED3C2A78146AD1"></a></p>
+
+<h4>1.6 <span class="Heading">AutoDoc worksheets</span></h4>
+
+<p><strong class="pkg">AutoDoc</strong> worksheets can be used to create html and pdf documents using AutoDoc syntax and possibly including <strong class="pkg">GAP</strong> examples and implementations without having them associated to a package. A file for a worksheet could look like this:</p>
+
+
+<div class="example"><pre>
+#! @Title My first worksheet
+#! @Author Charlie Brown
+
+#! @Chapter Some groups
+
+#! @BeginExample
+S3 := SymmetricGroup( 3 );;
+S4 := SymmetricGroup( 4 );;
+#! @EndExample
+</pre></div>
+
+<p>Now, one can create a pdf and html document, like a package documentation out of it. Suppose the document above is saved as <code class="file">worksheet.g</code>. Then, when GAP is started in the folder of this file, the command</p>
+
+
+<div class="example"><pre>
+AutoDocWorksheet( "worksheet.g" );
+</pre></div>
+
+<p>will create a subfolder called <code class="file">doc</code> of the current directory in which it will create the documentation. There are several options to configure the output of the worksheet command, which are identical to the options of the <code class="func">AutoDoc</code> (<a href="chap4_mj.html#X7CBD8AAF7DCEF352"><span class="RefLink">4.1-1</span></a>) command. It is even possible to test the examples in the worksheet using the maketest option from the AutoDoc command.</p>
+
+<p>Since the worksheets do not have a <code class="file">PackageInfo.g</code> to extract information, all possible tags that <strong class="pkg">GAPDoc</strong> supports for the title page can be set into the document. A fully typed titlepage can look like this:</p>
+
+
+<div class="example"><pre>
+#! @Title My first worksheet
+#! @Subtitle Some small examples
+#! @Author Charlie Brown
+
+#! @Version 0.1
+#! @TitleComment Some worksheet
+#! @Date 01/01/2016
+#! @Address TU Kaiserslautern
+#! @Abstract
+#!  A worksheet showing some small examples about groups.
+#! @Copyright 2016 Charlie Brown
+#! @Acknowledgements Woodstock
+#! @Colophon Some colophon
+
+#! @Chapter Some groups
+
+#! @BeginExample
+S3 := SymmetricGroup( 3 );;
+S4 := SymmetricGroup( 4 );;
+#! @EndExample
+</pre></div>
+
 
 <div class="chlinkprevnextbot">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap0_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap2_mj.html">[Next Chapter]</a>&nbsp;  </div>
 

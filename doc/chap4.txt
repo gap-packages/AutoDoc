@@ -126,7 +126,7 @@
                     [33X[0;18YIf  scaffolding  is enabled, by default a main XML file is
                     generated (this is the file which contains the XML doctype
                     and  more). If you do not want this (e.g. because you have
-                    a  hand  written main XML file), but still want [5XAutoDoc[105X to
+                    a  handwritten  main  XML file), but still want [5XAutoDoc[105X to
                     generate  a title page for you, you can set this option to
                     [9Xfalse[109X[133X
   
@@ -178,8 +178,8 @@
                     as  relative  paths) which [5XAutoDoc[105X then scans for .gi, .gd
                     and  .g  files;  all  of  these files are then scanned for
                     [5XAutoDoc[105X documentation comments.[133X
-                    [33X[0;18Y[13XDefault  value: [10X[ "gap", "lib", "examples", "examples/doc"
-                    ][110X.[113X[133X
+                    [33X[0;18Y[13XDefault   value:   [10X[   ".",   "gap",   "lib",  "examples",
+                    "examples/doc" ][110X.[113X[133X
   
               [8X[3Xlevel[103X[108X
                     [33X[0;18YThis  defines  the level of the created documentation. The
@@ -218,8 +218,8 @@
                     as  relative  paths) which [5XAutoDoc[105X then scans for .gi, .gd
                     and  .g  files;  all  of  these files are then scanned for
                     [5XGAPDoc[105X documentation comments.[133X
-                    [33X[0;18Y[13XDefault  value: [10X[ "gap", "lib", "examples", "examples/doc"
-                    ][110X.[113X[133X
+                    [33X[0;18Y[13XDefault   value:   [10X[   ".",   "gap",   "lib",  "examples",
+                    "examples/doc" ][110X.[113X[133X
   
         [8X[3Xmaketest[103X[108X
               [33X[0;12YThe  maketest  item  can be true or a record. When it is true, a
@@ -234,4 +234,9 @@
               [8Xcommands[108X
                     [33X[0;18YA  list  of  strings,  each  one  a command, which will be
                     executed at the beginning of the test file.[133X
+  
+  
+  [1X4.2 [33X[0;0YExamples[133X[101X
+  
+  [33X[0;0YSome basic examples for using [10XAutoDoc[110X were already shown in Chapter [14X1[114X.[133X
   
