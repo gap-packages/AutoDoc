@@ -105,7 +105,8 @@ function( arg )
           opt, scaffold, gapdoc, maketest, autodoc,
           doc_dir, doc_dir_rel, tmp, key, val, file,
           title_page, tree, is_worksheet,
-          position_document_class, gapdoc_latex_option_record;
+          position_document_class, gapdoc_latex_option_record,
+          makeDocFun, args;
 
     if Length( arg ) >= 3 then
         Error( "too many arguments" );
@@ -518,11 +519,30 @@ function( arg )
         # of the documentation are also in UTF-8 encoding, and may contain characters
         # not contained in the default Latin 1 encoding.
         SetGapDocLaTeXOptions( "utf8", gapdoc_latex_option_record );
+
+        # Choose how we call GAPDoc
         if Filename(DirectoriesSystemPrograms(), "pdflatex") <> fail then
-            MakeGAPDocDoc( doc_dir, gapdoc.main, gapdoc.files, gapdoc.bookname, "MathJax" );
+            makeDocFun := MakeGAPDocDoc;
         else
-            AutoDoc_MakeGAPDocDoc_WithoutLatex( doc_dir, gapdoc.main, gapdoc.files, gapdoc.bookname, "MathJax" );
+            makeDocFun := AutoDoc_MakeGAPDocDoc_WithoutLatex;
         fi;
+
+        # Default parameters for MakeGAPDocDoc
+        args := [ doc_dir, gapdoc.main, gapdoc.files, gapdoc.bookname, "MathJax" ];
+
+        # The global option "relativePath" can be set to ensure the manual
+        # is built in such a way that all references to the GAP reference manual
+        # are using relative file paths. This is mainly useful when building
+        # a package manual for use in a distribution tarball.
+        tmp := ValueOption( "relativePath" );
+        if tmp = true then
+            Add( args, "../.." );
+        elif IsString( tmp ) then
+            Add( args, tmp );
+        fi;
+
+        # Finally, invoke GAPDoc
+        CallFuncList( makeDocFun, args );
 
         CopyHTMLStyleFiles( Filename( doc_dir, "" ) );
 
