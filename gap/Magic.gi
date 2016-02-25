@@ -267,10 +267,11 @@ function( arg )
             autodoc.files := [ ];
         fi;
 
-        if not IsBound( autodoc.scan_dirs ) and not is_worksheet then
-            autodoc.scan_dirs := [ ".", "gap", "lib", "examples", "examples/doc" ];
-        elif not IsBound( autodoc.scan_dirs ) and is_worksheet then
-            autodoc.scan_dirs := [ ];
+        if not is_worksheet then
+            if not IsBound( autodoc.scan_dirs ) then
+                autodoc.scan_dirs := [ ".", "gap", "lib", "examples", "examples/doc" ];
+            fi;
+            Append( autodoc.files, AUTODOC_FindMatchingFiles(pkgdir, autodoc.scan_dirs, [ "g", "gi", "gd" ]) );
         fi;
 
         if not IsBound( autodoc.level ) then
@@ -280,10 +281,6 @@ function( arg )
         # This causes a bug. If a new layer is pushed to the option stack in a function that is called with options,
         # this layer will be deleted at the end of the method, not the layer which was created when the method was called.
 #         PushOptions( rec( level_value := autodoc.level ) );
-
-        if not is_worksheet then
-            Append( autodoc.files, AUTODOC_FindMatchingFiles(pkgdir, autodoc.scan_dirs, [ "g", "gi", "gd" ]) );
-        fi;
     fi;
 
     #
@@ -332,11 +329,10 @@ function( arg )
             gapdoc.files := [];
         fi;
 
-        if not IsBound( gapdoc.scan_dirs ) and not is_worksheet then
-            gapdoc.scan_dirs := [ ".", "gap", "lib", "examples", "examples/doc" ];
-        fi;
-
         if not is_worksheet then
+            if not IsBound( gapdoc.scan_dirs ) then
+                gapdoc.scan_dirs := [ ".", "gap", "lib", "examples", "examples/doc" ];
+            fi;
             Append( gapdoc.files, AUTODOC_FindMatchingFiles(pkgdir, gapdoc.scan_dirs, [ "g", "gi", "gd" ]) );
         fi;
 
