@@ -536,7 +536,7 @@ function( arg )
         # a package manual for use in a distribution tarball.
         tmp := ValueOption( "relativePath" );
         if tmp = true then
-            Add( args, "../.." );
+            Add( args, "../../.." );
         elif IsString( tmp ) then
             Add( args, tmp );
         fi;
