@@ -225,7 +225,7 @@
 #!         <Mark><A>scan_dirs</A></Mark>
 #!         <Item>
 #!             A list of subdirectories of the package directory (given as relative paths)
-#!             which &AutoDoc; then scans for .gi, .gd and .g files; all of these files
+#!             which &AutoDoc; then scans for .gi, .gd, .g, and .autodoc files; all of these files
 #!             are then scanned for &AutoDoc; documentation comments.
 #!             <Br/>
 #!             <E>Default value: <C>[ ".", "gap", "lib", "examples", "examples/doc" ]</C>.</E>

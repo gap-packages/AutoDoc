@@ -272,7 +272,7 @@ function( arg )
             if not IsBound( autodoc.scan_dirs ) then
                 autodoc.scan_dirs := [ ".", "gap", "lib", "examples", "examples/doc" ];
             fi;
-            Append( autodoc.files, AUTODOC_FindMatchingFiles(pkgdir, autodoc.scan_dirs, [ "g", "gi", "gd" ]) );
+            Append( autodoc.files, AUTODOC_FindMatchingFiles(pkgdir, autodoc.scan_dirs, [ "g", "gi", "gd", "autodoc" ]) );
         fi;
 
         if not IsBound( autodoc.level ) then

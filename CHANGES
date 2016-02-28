@@ -4,6 +4,7 @@ XXX:
   - AutoDoc can now be instructed to invoke GAPDoc in such a way that links
     in the generated documentation to the GAP reference manual use relative
     paths. To do this, use TODO
+  - Also scan for .autodoc files (Issue #104)
 
 2016.02.24:
   - Again improved the error messages produced by the parser.
