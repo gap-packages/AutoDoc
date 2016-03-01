@@ -54,9 +54,9 @@ Persons := [
        PostalAddress := Concatenation(
                "AG Algebra\n",
                "Mathematisches Institut\n",
-               "JLU Gießen\n",
+               "Justus-Liebig-Universität Gießen\n",
                "Arndtstraße 2\n",
-               "D-35392 Gießen\n",
+               "35392 Gießen\n",
                "Germany" ),
        Place := "Gießen",
        Institution := "Justus-Liebig-Universität Gießen"
