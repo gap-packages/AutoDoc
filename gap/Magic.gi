@@ -539,7 +539,13 @@ function( arg )
         # is built in such a way that all references to the GAP reference manual
         # are using relative file paths. This is mainly useful when building
         # a package manual for use in a distribution tarball.
+        
         tmp := ValueOption( "relativePath" );
+        
+        if IsBound( gapdoc.gap_root_relative_path ) and tmp = fail then ## the option overides the settings in the call.
+            tmp := gapdoc.gap_root_relative_path;
+        fi;
+        
         if tmp = true then
             Add( args, "../../.." );
         elif IsString( tmp ) then

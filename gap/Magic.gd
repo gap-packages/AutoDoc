@@ -303,6 +303,25 @@
 #!             <Br/>
 #!             <E>Default value: <C>[ ".", "gap", "lib", "examples", "examples/doc" ]</C>.</E>
 #!         </Item>
+#!         <Mark><A>gap_root_relative_path</A></Mark>
+#!         <Item>
+#!             Either a boolean, or a string containing a relative path.
+#!             By default (if this option is not set, or is set to <K>false</K>),
+#!             references in the generated documentation referring to external documentation
+#!             (such as the GAP manual) are encoded using absolute paths.
+#!             This is fine as long as the documentation stays on only a single
+#!             computer, but is problematic when preparing documentation that should be
+#!             used on multiple computers, e.g., when creating a distribution archive of
+#!             a GAP package.<Br/>
+#!             Thus, if a relative path is provided via this option (or if it is set to true,
+#!             in which case the relative path <F>../../..</F> is used), then &AutoDoc;
+#!             and &GAPDoc; attempt to replace all absolute paths in references to GAP
+#!             manuals by paths based on this relative path.<P/>
+#!             
+#!             On a technical level, &AutoDoc; passes the relative path to the
+#!             <A>gaproot</A> parameter of <Ref Func='MakeGAPDocDoc'
+#!             BookName='gapdoc'/><P/>
+#!         </Item>
 #!
 #!         </List>
 #!     </Item>
