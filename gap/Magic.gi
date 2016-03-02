@@ -266,6 +266,10 @@ function( arg )
     if IsBound(autodoc) then
         if not IsBound( autodoc.files ) then
             autodoc.files := [ ];
+        elif not IsList( autodoc.files ) then
+            Error("autodoc.files must be a list");
+        elif Length(autodoc.files) >0 and IsString( autodoc.files ) then
+            Error("autodoc.files must be a list of strings, not a string");
         fi;
 
         if not is_worksheet then
@@ -328,6 +332,10 @@ function( arg )
 
         if not IsBound( gapdoc.files ) then
             gapdoc.files := [];
+        elif not IsList( gapdoc.files ) then
+            Error("gapdoc.files must be a list");
+        elif Length(gapdoc.files) >0 and IsString( gapdoc.files ) then
+            Error("gapdoc.files must be a list of strings, not a string");
         fi;
 
         if not is_worksheet then
