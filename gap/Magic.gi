@@ -580,8 +580,6 @@ function( arg )
 
     if IsBound( maketest ) then
     
-        maketest := opt.maketest;
-
         AUTODOC_SetIfMissing( maketest, "filename", "maketest.g" );
         AUTODOC_SetIfMissing( maketest, "folder", pkgdir );
         AUTODOC_SetIfMissing( maketest, "scan_dir", doc_dir );
