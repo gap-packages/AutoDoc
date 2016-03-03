@@ -57,6 +57,8 @@ DeclareOperation( "DocumentationExample", [ IsTreeForDocumentation, IsList ] );
 DeclareOperation( "DocumentationExample", [ IsTreeForDocumentation ] );
 DeclareOperation( "DocumentationDummy", [ IsTreeForDocumentation, IsString, IsList ] );
 DeclareOperation( "DocumentationDummy", [ IsTreeForDocumentation, IsString ] );
+DeclareOperation( "DocumentationCode", [ IsTreeForDocumentation, IsString, IsList ] );
+DeclareOperation( "DocumentationCode", [ IsTreeForDocumentation, IsString ] );
 DeclareOperation( "DocumentationManItem", [ IsTreeForDocumentation ] );
 DeclareOperation( "SetManItemToDescription", [ IsTreeForDocumentationNode ] );
 DeclareOperation( "SetManItemToReturnValue", [ IsTreeForDocumentationNode ] );

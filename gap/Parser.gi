@@ -328,20 +328,27 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         return false;
     end;
     read_code := function( )
-        local code, temp_curr_line;
+        local code, temp_curr_line, comment_pos, before_comment;
         code := [ ];
-        Add( code, "<Listing Type=\"Code\"><![CDATA[" );
         while true do
             temp_curr_line := ReadLineWithLineCount( filestream );
             if temp_curr_line[ Length( temp_curr_line )] = '\n' then
                 temp_curr_line := temp_curr_line{[ 1 .. Length( temp_curr_line ) - 1 ]};
+            fi;
+            if plain_text_mode = false then
+                comment_pos := PositionSublist( temp_curr_line, "#!" );
+                if comment_pos <> fail then
+                    before_comment := NormalizedWhitespace( temp_curr_line{ [ 1 .. comment_pos - 1 ] } );
+                    if before_comment = "" then
+                        temp_curr_line := temp_curr_line{[ comment_pos + 2 .. Length( temp_curr_line ) ]};
+                    fi;
+                fi;
             fi;
             if filestream = fail or PositionSublist( temp_curr_line, "@EndCode" ) <> fail then
                 break;
             fi;
             Add( code, temp_curr_line );
         od;
-        Add( code, "]]></Listing>" );
         return code;
     end;
     read_example := function( is_tested_example )
@@ -511,7 +518,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @BeginSystem := ~.@BeginChunk,
         @BeginCode := function()
             local tmp_system;
-            tmp_system := DocumentationDummy( tree, current_command[ 2 ] );
+            tmp_system := DocumentationCode( tree, current_command[ 2 ] );
             Append( tmp_system!.content, read_code() );
         end,
         @Code := ~.@BeginCode,

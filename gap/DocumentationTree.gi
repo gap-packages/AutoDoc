@@ -109,6 +109,14 @@ BindGlobal( "TheTypeOfDocumentationTreeExampleNodes",
         NewType( TheFamilyOfDocumentationTreeNodes,
                 IsTreeForDocumentationExampleNodeRep ) );
 
+DeclareRepresentation( "IsTreeForDocumentationCodeNodeRep",
+                       IsTreeForDocumentationNodeRep,
+                       [ ] );
+
+BindGlobal( "TheTypeOfDocumentationTreeCodeNodes",
+        NewType( TheFamilyOfDocumentationTreeNodes,
+                IsTreeForDocumentationCodeNodeRep ) );
+
 ###################################
 ##
 ## Tools
@@ -251,6 +259,34 @@ InstallMethod( DocumentationDummy, [ IsTreeForDocumentation, IsString ],
                  level := tree!.current_level );
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeDummyNodes,
                               Label, name );
+    tree!.nodes_by_label.( name ) := node;
+    return node;
+end );
+
+##
+InstallMethod( DocumentationCode, [ IsTreeForDocumentation, IsString, IsList ],
+  function( tree, name, context )
+    local node;
+    
+    node := DocumentationGroup( tree, name );
+    Add( tree, node, context );
+    return node;
+end );
+
+##
+InstallMethod( DocumentationCode, [ IsTreeForDocumentation, IsString ],
+  function( tree, name )
+    local node;
+    
+    name := Concatenation( "System_", name );
+    if IsBound( tree!.nodes_by_label.( name ) ) then
+        return tree!.nodes_by_label.( name );
+    fi;
+    node := rec( content := [ ],
+                 level := tree!.current_level );
+    
+    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeCodeNodes,
+                             Label, name );
     tree!.nodes_by_label.( name ) := node;
     return node;
 end );
@@ -588,4 +624,26 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationExampleNodeRep, IsStr
         AppendTo( filestream, i, "\n" );
     od;
     AppendTo( filestream, "]]></", inserted_string, ">\n\n" );
+end );
+
+##
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationCodeNodeRep, IsStream ],
+  function( node, filestream )
+    local content, i;
+    
+    if node!.level > ValueOption( "level_value" ) then
+        return;
+    fi;
+    
+    content := node!.content;
+    
+    if content = [ ] then
+        return;
+    fi;
+    
+    AppendTo( filestream, "<Listing Type=\"Code\"><![CDATA[\n" );
+    for i in content do
+        AppendTo( filestream, i, "\n" );
+    od;
+    AppendTo( filestream, "]]></Listing>\n" );
 end );
