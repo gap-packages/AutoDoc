@@ -227,6 +227,60 @@ gap maketest.g
 test the examples from your manual.
 </Subsection>
 
+<Subsection Label="Tut:IntegrateExisting:GapDocOptions">
+<Heading>Setting different &GAPDoc; options</Heading>
+
+Sometimes, the default values for the &GAPDoc; command used by &AutoDoc;
+may not be suitable for your manual.
+<P/>
+ Suppose your main xml file is <E>not</E> named <F>PACKAGENAME.xml</F>, but rather something else, e.g. <F>main.xml</F>.
+Then you can tell &AutoDoc; to use this file as the main xml file via
+<Listing>
+LoadPackage( "AutoDoc" );
+AutoDoc( rec( gapdoc := rec( main := "main" ) ) );
+</Listing>
+<P/>
+As explained above, by default &AutoDoc; scans all <F>.g</F>, <F>.gd</F> and <F>.gi</F> files
+it can find inside of your package root directory, and in the subdirectories <F>gap</F>,
+<F>lib</F>, <F>examples</F> and <F>examples/doc</F> as well.
+If you keep source files with documentation in other directories,
+you can adjust the list of directories AutoDoc scans via the <C>scan_dirs</C> option.
+The following example illustrates this by instructing &AutoDoc; to only search in the subdirectory <F>package_sources</F>
+of the packages root directory.
+<Listing>
+LoadPackage( "AutoDoc" );
+AutoDoc( rec( gapdoc := rec( scan_dirs := [ "package_source" ] ) ) );
+</Listing>
+You can also specify an explicit list of files containing documentation,
+which will be searched in addition to any files located within the scan directories:
+<Listing>
+LoadPackage( "AutoDoc" );
+AutoDoc( rec( gapdoc := rec( files := [ "path/to/some/hidden/file.gds" ] ) ) );
+</Listing>
+Giving such a file does not prevent the standard <C>scan_dirs</C> from being scanned for
+other files.
+<P/>
+Next, &GAPDoc; supports the documentation to be built with relative paths.
+This means, links to manuals of other packages or the &GAP; library will
+not be absolute, but relative from your documentation. This can be particulary useful
+if you want to build a release tarball or move your &GAP; installation around later.
+Suppose you are starting &GAP; in the root path of your package as always,
+and the standard call of <Ref Func="AutoDoc"/> will then build the documentation in the <F>doc</F> subfolder of your package.
+From this folder, the gap root directory has the relative path <F>../../..</F>.
+Then you can enable the relative paths by
+<Listing>
+LoadPackage( "AutoDoc" );
+AutoDoc( rec( gapdoc := rec( gap_root_relative_path := "../../.." ) ) );
+</Listing>
+or, since <F>../../..</F> is the standard option for <C>gap_root_relative_path</C>, by
+<Listing>
+LoadPackage( "AutoDoc" );
+AutoDoc( rec( gapdoc := rec( gap_root_relative_path := true ) ) );
+</Listing>
+
+
+</Subsection>
+
 <Subsection Label="Tut:IntegrateExisting:TitlePage">
   <Heading>Using &AutoDoc;s scaffold for regenerating the title page</Heading>
 
