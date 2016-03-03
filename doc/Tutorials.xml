@@ -181,9 +181,51 @@ There are various examples of packages using &AutoDoc; for only
 this purpose, e.g. <Package>IO</Package> and <Package>orb</Package>.
 <P/>
 
-<!--
-TODO: Explain how to mix AutoDoc content with existing &GAPDoc; XML files.
--->
+<Subsection Label="Tut:IntegrateExisting:EverythingThere">
+  <Heading>Using &AutoDoc; on a complete &GAPDoc; manual</Heading>
+
+Suppose you already have a complete XML manual, with some main and title
+XML files and some documentation for operations distributed over
+all your <F>.g</F>, <F>.gd</F>, and <F>.gi</F> files. Even then &AutoDoc; can do something for you.
+Suppose your main xml file is named <F>PACKAGENAME.xml</F> and is in the
+<F>/doc</F> subfolder of your package. Then calling following the from a GAP started in the root directory
+of your package
+<Listing>
+LoadPackage( "AutoDoc" );
+AutoDoc( );
+</Listing>
+will rebuild your manual. As you can see, the <Ref Func="AutoDoc"/> does not take any
+arguments here, which is really convenient.
+<P/>
+To emphasize this even more, the following is taken from the <F>makedoc.g</F> file
+of <Package>RingsForHomalg</Package>.
+<Listing>
+LoadPackage( "GAPDoc" );
+SetGapDocLaTeXOptions( "utf8" );
+bib := ParseBibFiles( "doc/RingsForHomalg.bib" );
+WriteBibXMLextFile( "doc/RingsForHomalgBib.xml", bib );
+Read( "ListOfDocFiles.g" );
+MakeGAPDocDoc( "doc", "RingsForHomalg", list_of_files, "RingsForHomalg" );
+GAPDocManualLab( "RingsForHomalg" );
+</Listing>
+The <C>Read</C> command reads a manually created list of filesnames, which contain
+the names of the implementation files containing parts of the &GAPDoc; manual, and stores them in <C>list_of_files</C>.
+<Br/>
+Calling <Ref Func="AutoDoc"/> like displayed above without any arguments will do the same as the whole <F>makedoc.g</F>
+script, and you do not even have to keep a list of your implementation files.
+<P/>
+But there is more. &AutoDoc; can create a <F>maketest.g</F> file, which uses the
+examples in your manual to test your package. This can be achieved via
+<Listing>
+LoadPackage( "AutoDoc" );
+AutoDoc( rec( maketest := true ) );
+</Listing>
+Now the file <F>maketest.g</F> appears in your package directory, and
+<Listing>
+gap maketest.g
+</Listing>
+test the examples from your manual.
+</Subsection>
 
 </Section>
 
