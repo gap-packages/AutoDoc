@@ -227,8 +227,26 @@ gap maketest.g
 test the examples from your manual.
 </Subsection>
 
-</Section>
+<Subsection Label="Tut:IntegrateExisting:TitlePage">
+  <Heading>Using &AutoDoc;s scaffold for regenerating the title page</Heading>
 
+Suppose the same as above, i.e., a complete manual. Then your title page
+might contain information that can change with every build of the manual, e.g.,
+date, package version, and so on. All of these versions are in the <F>PackageInfo.g</F>
+of the package, and only need to be extracted into a proper title page. &AutoDoc; can do this
+for you. Suppose your title page is <F>doc/title.xml</F> and you want it to be overriden with a
+fresh version everytime you build your manual. Then you can achieve it by telling &AutoDoc;s scaffold
+option to only rebuild the title page.
+<Listing>
+LoadPackage( "AutoDoc" );
+AutoDoc( : scaffold := rec( MainPage := false ),
+           autodoc := false );
+</Listing>
+This command will extract information about, title, subtitle, authors, etc from your <F>PackageInfo.g</F>
+and puts them into <F>doc/title.xml</F>. However, no other files from your manual are touched.
+</Subsection>
+
+</Section>
 
 <Section Label="Tut:AutoRegenerate">
 <Heading>Automatic regeneration of the manual</Heading>
