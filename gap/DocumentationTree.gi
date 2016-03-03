@@ -10,6 +10,10 @@
 ##
 #############################################################################
 
+##
+BindGlobal( "AUTODOC_IdentifierLetters",
+            "+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz" );
+
 DeclareRepresentation( "IsTreeForDocumentationRep",
         IsAttributeStoringRep and IsTreeForDocumentation,
         [ ] );
@@ -124,21 +128,23 @@ end );
 ##
 InstallGlobalFunction( AUTODOC_LABEL_OF_CONTEXT,
   function( context )
+    local label;
     if not IsList( context ) then
         Error( "wrong type of context" );
     fi;
     if IsString( context ) then
-        return context;
-    fi;
-    if Length( context ) = 1 then
-        return Concatenation( "Chapter_", context[ 1 ] );
+        label := context;
+    elif Length( context ) = 1 then
+        label := Concatenation( "Chapter_", context[ 1 ] );
     elif Length( context ) = 2 then
-        return Concatenation( "Chapter_", context[ 1 ], "_Section_", context[ 2 ] );
+        label := Concatenation( "Chapter_", context[ 1 ], "_Section_", context[ 2 ] );
     elif Length( context ) = 3 then
-        return Concatenation( "Chapter_", context[ 1 ], "_Section_", context[ 2 ], "_Subsection_", context[ 3 ] );
+        label := Concatenation( "Chapter_", context[ 1 ], "_Section_", context[ 2 ], "_Subsection_", context[ 3 ] );
     else
         Error( "wrong type of context" );
     fi;
+    label := Filtered(label, x -> x in AUTODOC_IdentifierLetters);
+    return label;
 end );
 
 ###################################
@@ -429,10 +435,6 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentation, IsDirectory ],
     fi;
     CloseStream( stream );
 end );
-
-##
-BindGlobal( "AUTODOC_IdentifierLetters",
-            "+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz" );
 
 ##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForChapterRep, IsStream, IsDirectory ],

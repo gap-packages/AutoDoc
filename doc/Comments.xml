@@ -2,7 +2,7 @@
 <Heading>&AutoDoc; documentation comments</Heading>
 
 You can document declarations of global functions and variables, operations,
-attributes etc. by inserting &AutoDoc; comments into your sources before these declaration.
+attributes etc. by inserting <E>&AutoDoc;</E> comments into your sources before these declaration.
 An &AutoDoc; comment always starts with <C>#!</C>. This is also the smallest possible
 &AutoDoc; command. If you want your declaration documented, just write
 <C>#!</C> at the line before the documentation. For example:
@@ -14,6 +14,10 @@ DeclareOperation( "AnOperation",
 ]]></Listing>
 
 This will produce a manual entry for the operation <C>AnOperation</C>.
+<P/>
+
+Inside of &AutoDoc; comments, <E>&AutoDoc; commands</E>
+starting with <C>@</C> can be used to control the output &AutoDoc; produces.
 
 
 <Section>

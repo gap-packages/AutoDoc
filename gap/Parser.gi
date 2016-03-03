@@ -617,6 +617,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             plain_text_mode := true;
         fi;
         filestream := InputTextFile( filename );
+        if filestream = fail then
+            Error( "could not open ", filename );
+        fi;
         line_number := 0;
         while true do
             if rest_of_file_skipped = true then
