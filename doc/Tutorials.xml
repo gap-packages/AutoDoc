@@ -3,12 +3,24 @@
 
 &AutoDoc; is a &GAP; package which is meant to aid &GAP; package
 authors in creating and maintaing the documentation of their packages.
-In this capacity it builds upon &GAPDoc; (and hence is not a replacement
-for it, but rather a complement).
+In this capacity it builds upon &GAPDoc;, and is not a replacement
+for &GAPDoc;, but rather complements it.<P/>
 
-In this chapter we describe how you can get started using &AutoDoc; for
-your package. To this end, we will assume from now on that your package
-is called &SomePackage;.
+In this chapter we describe how to get started using &AutoDoc; for your
+package. First, we explain in Section <Ref Sect="Tut:Scratch"/> how to write a
+new package manual from scratch.<P/>
+
+Then we show in Section <Ref Sect="Tut:IntegrateExisting"/> how you might
+benefit from &AutoDoc; even if you already have a complete manual written
+using &GAPDoc;.<P/>
+
+In Section <Ref Sect="Tut:Scaffolds"/>, we explain how you may use &AutoDoc;
+to generate a title page and the main XML file for your manual.
+<P/>
+
+Finally, Section <Ref Sect="Tut:AutoDocWorksheet"/>, explains what
+&AutoDoc; worksheets are and how to use them.
+<P/>
 
 <Section Label="Tut:Scratch">
 <Heading>Creating a package manual from scratch</Heading>
@@ -17,15 +29,15 @@ Suppose your package is already up and running, but so far has no
 manual. Then you can rapidly generate a <Q>scaffold</Q> for a package manual
 using the <Ref Func="AutoDoc"/> command like this,
 while running &GAP; from within your package's directory (the
-one containing the <F>PackageInfo.g</F>:
+one containing the <F>PackageInfo.g</F> file):
 <Listing>
 LoadPackage( "AutoDoc" );
 AutoDoc( rec( scaffold := true ) );
 </Listing>
 This first reads the <F>PackageInfo.g</F> file from the current
 directory. It extracts information about package from it
-(such as its name and version, see Section <Ref Sect="Tut:PackageInfo"/>).
-It then creates two XML files <F>doc/SomePackage.xml</F> and
+(such as its name and version, see Section <Ref Sect="Tut:Scaffolds:Title"/>).
+It then creates two XML files <F>doc/NAME_OF_YOUR_PACKAGE.xml</F> and
 <F>doc/title.xml</F> insider the package directory. Finally, it runs
 &GAPDoc; on them to produce a nice initial PDF and HTML version of your
 fresh manual.
@@ -299,11 +311,17 @@ LoadPackage( "AutoDoc" );
 AutoDoc( rec( gapdoc := rec( gap_root_relative_path := true ) ) );
 </Listing>
 
-
 </Subsection>
 
-<Subsection Label="Tut:IntegrateExisting:TitlePage">
-<Heading>Using &AutoDoc; scaffolds for regenerating the title page</Heading>
+</Section>
+
+<Section Label="Tut:Scaffolds">
+<Heading>Scaffolds</Heading>
+
+<!-- TODO: insert an introduction here -->
+
+<Subsection Label="Tut:Scaffolds:Title">
+<Heading>Generating a title page</Heading>
 
 For most (if not all) &GAP; packages, the title page of the package manual
 lists information such as the release date, version, names and contact details
@@ -342,13 +360,25 @@ AutoDoc( rec( scaffold := rec( MainPage := false ) ) );
 </Listing>
 Note that this only outputs <F>doc/title.xml</F> but does not
 touch any other files of your documentation. In particular, you need
-to explicitly include <F>doc/title.xml</F> from your main XML file.
+to explicitly include <F>doc/title.xml</F> from your main XML file.<P/>
+
+However, you can also tell &AutoDoc; to maintain the main XML file for you,
+in which case this is automatic. In fact, this is the default if you
+enabling scaffolding; the above example command explicitly told &AutoDoc;
+not to generate a main page. More o
 
 </Subsection>
 
-</Section>
+<Subsection Label="Tut:Scaffolds:Main">
+<Heading>Generating the main XML file</Heading>
 
-<Section Label="Tut:PackageInfo">
+TODO
+<!-- TODO: insert an introduction here -->
+
+</Subsection>
+
+
+<Subsection Label="Tut:PackageInfo">
 <Heading>What data is extracted from <F>PackageInfo.g</F>?</Heading>
 
 &AutoDoc; can extract data from <F>PackageInfo.g</F> in order to
@@ -400,6 +430,8 @@ function.
 </Item>
 
 </List>
+
+</Subsection>
 
 </Section>
 
