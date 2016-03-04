@@ -65,8 +65,22 @@ Or you could use the special documentation facilities &AutoDoc; provides (see Se
 <Ref Sect="Tut:AdvancedAutoDoc"/>).
 <P/>
 
-You may also wish to consult Section <Ref Sect="Tut:AutoRegenerate"/> for hints
-on automatically re-generating your package manual when necessary.
+You will probably want to re-run the  <Ref Func="AutoDoc"/> command
+frequently, e.g. whenever you modified your documentation or your
+<F>PackageInfo.g</F>. To make this more convenient and reproducible, we
+recommend putting its invocation into a file <F>makedoc.g</F> in your package
+<Index Key="makedoc.g"><F>makedoc.g</F></Index>
+directory, with content based on the following example:
+<Listing>
+LoadPackage( "AutoDoc" );
+AutoDoc( rec( autodoc := true ) );
+QUIT;
+</Listing>
+Then you can regenerate the package manual from the command line with the
+following command, executed from within in the package directory:
+<Listing>
+gap makedoc.g
+</Listing>
 
 </Section>
 
@@ -331,28 +345,6 @@ touch any other files of your documentation. In particular, you need
 to explicitly include <F>doc/title.xml</F> from your main XML file.
 
 </Subsection>
-
-</Section>
-
-<Section Label="Tut:AutoRegenerate">
-<Heading>Automatic regeneration of the manual</Heading>
-
-You will probably want to re-run the  <Ref Func="AutoDoc"/> command
-frequently, e.g. whenever you modified your documentation or your
-<F>PackageInfo.g</F>. To make this more convenient and reproducible, we
-recommend putting its invocation into a file <F>makedoc.g</F> in your package
-<Index Key="makedoc.g"><F>makedoc.g</F></Index>
-directory, with content based on the following example:
-<Listing>
-LoadPackage( "AutoDoc" );
-AutoDoc( rec( autodoc := true ) );
-QUIT;
-</Listing>
-Then you can regenerate the package manual from the command line with the
-following command, executed from within in the package directory:
-<Listing>
-gap makedoc.g
-</Listing>
 
 </Section>
 
