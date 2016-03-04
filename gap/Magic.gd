@@ -175,7 +175,7 @@
 #!         </Item>
 #!         <Mark><A>document_class</A></Mark>
 #!         <Item>
-#!             Sets the document class of the resulting pdf. The value can either be a string
+#!             Sets the document class of the resulting PDF. The value can either be a string
 #!             which has to be the name of the new document class, a list containing this string, or
 #!             a list of two strings. Then the first one has to be the document class name, the second one
 #!             the option string ( contained in [ ] ) in LaTeX.

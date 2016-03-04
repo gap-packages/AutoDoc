@@ -387,7 +387,7 @@ function.
 
 <Section Label="Tut:AutoDocWorksheet">
   <Heading>AutoDoc worksheets</Heading>
-&AutoDoc; worksheets can be used to create html and pdf documents using AutoDoc syntax and possibly
+&AutoDoc; worksheets can be used to create HTML and PDF documents using AutoDoc syntax and possibly
 including &GAP; examples and implementations without having them associated to a package.
 A file for a worksheet could look like this:
 <Listing>
@@ -401,7 +401,7 @@ S3 := SymmetricGroup( 3 );;
 S4 := SymmetricGroup( 4 );;
 #! @EndExample
 </Listing>
-Now, one can create a pdf and html document, like a package documentation out of it. Suppose the document above
+Now, one can create a PDF and HTML document, like a package documentation out of it. Suppose the document above
 is saved as <F>worksheet.g</F>. Then, when GAP is started in the folder of this file, the command
 <Listing>
 AutoDocWorksheet( "worksheet.g" );
