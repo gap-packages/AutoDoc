@@ -124,7 +124,7 @@ rec( Acknowledgements := "Many thanks to ..." )</pre></div>
 
 </dd>
 <dt><strong class="Mark"><var class="Arg">document_class</var></strong></dt>
-<dd><p>Sets the document class of the resulting pdf. The value can either be a string which has to be the name of the new document class, a list containing this string, or a list of two strings. Then the first one has to be the document class name, the second one the option string ( contained in [ ] ) in LaTeX.</p>
+<dd><p>Sets the document class of the resulting PDF. The value can either be a string which has to be the name of the new document class, a list containing this string, or a list of two strings. Then the first one has to be the document class name, the second one the option string ( contained in [ ] ) in LaTeX.</p>
 
 </dd>
 <dt><strong class="Mark"><var class="Arg">latex_header_file</var></strong></dt>
@@ -151,7 +151,7 @@ rec( Acknowledgements := "Many thanks to ..." )</pre></div>
 
 </dd>
 <dt><strong class="Mark"><var class="Arg">scan_dirs</var></strong></dt>
-<dd><p>A list of subdirectories of the package directory (given as relative paths) which <strong class="pkg">AutoDoc</strong> then scans for .gi, .gd and .g files; all of these files are then scanned for <strong class="pkg">AutoDoc</strong> documentation comments. <br /> <em>Default value: <code class="code">[ ".", "gap", "lib", "examples", "examples/doc" ]</code>.</em></p>
+<dd><p>A list of subdirectories of the package directory (given as relative paths) which <strong class="pkg">AutoDoc</strong> then scans for .gi, .gd, .g, and .autodoc files; all of these files are then scanned for <strong class="pkg">AutoDoc</strong> documentation comments. <br /> <em>Default value: <code class="code">[ ".", "gap", "lib", "examples", "examples/doc" ]</code>.</em></p>
 
 </dd>
 <dt><strong class="Mark"><var class="Arg">level</var></strong></dt>
@@ -179,6 +179,12 @@ rec( Acknowledgements := "Many thanks to ..." )</pre></div>
 </dd>
 <dt><strong class="Mark"><var class="Arg">scan_dirs</var></strong></dt>
 <dd><p>A list of subdirectories of the package directory (given as relative paths) which <strong class="pkg">AutoDoc</strong> then scans for .gi, .gd and .g files; all of these files are then scanned for <strong class="pkg">GAPDoc</strong> documentation comments. <br /> <em>Default value: <code class="code">[ ".", "gap", "lib", "examples", "examples/doc" ]</code>.</em></p>
+
+</dd>
+<dt><strong class="Mark"><var class="Arg">gap_root_relative_path</var></strong></dt>
+<dd><p>Either a boolean, or a string containing a relative path. By default (if this option is not set, or is set to <code class="keyw">false</code>), references in the generated documentation referring to external documentation (such as the GAP manual) are encoded using absolute paths. This is fine as long as the documentation stays on only a single computer, but is problematic when preparing documentation that should be used on multiple computers, e.g., when creating a distribution archive of a GAP package.<br /> Thus, if a relative path is provided via this option (or if it is set to true, in which case the relative path <code class="file">../../..</code> is used), then <strong class="pkg">AutoDoc</strong> and <strong class="pkg">GAPDoc</strong> attempt to replace all absolute paths in references to GAP manuals by paths based on this relative path.</p>
+
+<p>On a technical level, <strong class="pkg">AutoDoc</strong> passes the relative path to the <var class="Arg">gaproot</var> parameter of <code class="func">MakeGAPDocDoc</code> (<a href="/Users/mhorn/Projekte/GAP/repos/pkg/GAPDoc/doc/chap5_mj.html#X826F530686F4D052"><span class="RefLink">GAPDoc: MakeGAPDocDoc</span></a>)</p>
 
 </dd>
 </dl>

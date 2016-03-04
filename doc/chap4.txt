@@ -131,7 +131,7 @@
                     [9Xfalse[109X[133X
   
               [8X[3Xdocument_class[103X[108X
-                    [33X[0;18YSets  the  document  class of the resulting pdf. The value
+                    [33X[0;18YSets  the  document  class of the resulting PDF. The value
                     can either be a string which has to be the name of the new
                     document  class,  a list containing this string, or a list
                     of  two strings. Then the first one has to be the document
@@ -175,9 +175,9 @@
   
               [8X[3Xscan_dirs[103X[108X
                     [33X[0;18YA  list  of subdirectories of the package directory (given
-                    as  relative  paths) which [5XAutoDoc[105X then scans for .gi, .gd
-                    and  .g  files;  all  of  these files are then scanned for
-                    [5XAutoDoc[105X documentation comments.[133X
+                    as  relative paths) which [5XAutoDoc[105X then scans for .gi, .gd,
+                    .g,  and  .autodoc  files;  all  of  these  files are then
+                    scanned for [5XAutoDoc[105X documentation comments.[133X
                     [33X[0;18Y[13XDefault   value:   [10X[   ".",   "gap",   "lib",  "examples",
                     "examples/doc" ][110X.[113X[133X
   
@@ -220,6 +220,26 @@
                     [5XGAPDoc[105X documentation comments.[133X
                     [33X[0;18Y[13XDefault   value:   [10X[   ".",   "gap",   "lib",  "examples",
                     "examples/doc" ][110X.[113X[133X
+  
+              [8X[3Xgap_root_relative_path[103X[108X
+                    [33X[0;18YEither  a boolean, or a string containing a relative path.
+                    By  default  (if  this  option  is  not  set, or is set to
+                    [9Xfalse[109X),   references   in   the   generated  documentation
+                    referring  to  external  documentation  (such  as  the GAP
+                    manual)  are encoded using absolute paths. This is fine as
+                    long as the documentation stays on only a single computer,
+                    but  is  problematic  when  preparing  documentation  that
+                    should  be used on multiple computers, e.g., when creating
+                    a distribution archive of a GAP package.[133X
+                    [33X[0;18YThus,  if  a relative path is provided via this option (or
+                    if  it  is  set  to  true, in which case the relative path
+                    [11X../../..[111X  is  used),  then  [5XAutoDoc[105X  and [5XGAPDoc[105X attempt to
+                    replace all absolute paths in references to GAP manuals by
+                    paths based on this relative path.[133X
+  
+                    [33X[0;18YOn  a technical level, [5XAutoDoc[105X passes the relative path to
+                    the    [3Xgaproot[103X   parameter   of   [2XMakeGAPDocDoc[102X   ([14XGAPDoc:
+                    MakeGAPDocDoc[114X)[133X
   
         [8X[3Xmaketest[103X[108X
               [33X[0;12YThe  maketest  item  can be true or a record. When it is true, a

@@ -18,9 +18,9 @@ PackageName := "AutoDoc",
 Subtitle := "Generate documentation from GAP source code",
 
 Version := Maximum( [
-  "2016.02.23", ## Sebas' version
+  "2016.03.03", ## Sebas' version
 ## This line prevents merge conflicts
-  "2016.02.24", ## Max' version
+  "2016.03.04", ## Max' version
 ## This line prevents merge conflicts
   "2013.11.01", ## Mohamed's version
 ] ),
@@ -54,9 +54,9 @@ Persons := [
        PostalAddress := Concatenation(
                "AG Algebra\n",
                "Mathematisches Institut\n",
-               "JLU Gießen\n",
+               "Justus-Liebig-Universität Gießen\n",
                "Arndtstraße 2\n",
-               "D-35392 Gießen\n",
+               "35392 Gießen\n",
                "Germany" ),
        Place := "Gießen",
        Institution := "Justus-Liebig-Universität Gießen"
@@ -77,7 +77,7 @@ README_URL      := Concatenation( ~.PackageWWWHome, "/README" ),
 PackageInfoURL  := Concatenation( ~.PackageWWWHome, "/PackageInfo.g" ),
 ArchiveURL      := Concatenation( ~.SourceRepository.URL,
                                  "/releases/download/v", ~.Version,
-                                 "/", ~.PackageName ,"-", ~.Version ),
+                                 "/", ~.PackageName, "-", ~.Version ),
 ArchiveFormats := ".tar.gz",
 
 AbstractHTML := 

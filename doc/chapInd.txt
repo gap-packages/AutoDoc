@@ -31,7 +31,7 @@
   [2XAutoDocWorksheet[102X  3.1-1
   [10X@DoNotReadRestOfFile[110X  2.2-14
   [2XFirstOperation[102X (for IsInt)  2.5-1
-  [11Xmakedoc.g[111X  1.4
+  [11Xmakedoc.g[111X  1.1
   [2XSecondOperation[102X (for IsInt, IsGroup)  2.5-1
   [2XThirdOperation[102X (for IsGroupIsGroup, )  2.5-1
   

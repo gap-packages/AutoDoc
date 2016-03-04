@@ -1,12 +1,23 @@
   
   [1X1 [33X[0;0YGetting started using [5XAutoDoc[105X[101X[1X[133X[101X
   
-  [33X[0;0Y[5XAutoDoc[105X  is  a  [5XGAP[105X  package  which  is meant to aide [5XGAP[105X package authors in
+  [33X[0;0Y[5XAutoDoc[105X  is  a  [5XGAP[105X  package  which  is  meant to aid [5XGAP[105X package authors in
   creating and maintaing the documentation of their packages. In this capacity
-  it  builds  upon [5XGAPDoc[105X (and hence is not a replacement for it, but rather a
-  complement).  In  this  chapter  we  describe  how you can get started using
-  [5XAutoDoc[105X  for your package. To this end, we will assume from now on that your
-  package is called [5XSomePackage[105X.[133X
+  it  builds  upon  [5XGAPDoc[105X,  and  is  not a replacement for [5XGAPDoc[105X, but rather
+  complements it.[133X
+  
+  [33X[0;0YIn  this  chapter  we  describe  how  to  get started using [5XAutoDoc[105X for your
+  package.  First, we explain in Section [14X1.1[114X how to write a new package manual
+  from scratch.[133X
+  
+  [33X[0;0YThen  we  show in Section [14X1.3[114X how you might benefit from [5XAutoDoc[105X even if you
+  already have a complete manual written using [5XGAPDoc[105X.[133X
+  
+  [33X[0;0YIn  Section [14X1.4[114X, we explain how you may use [5XAutoDoc[105X to generate a title page
+  and the main XML file for your manual.[133X
+  
+  [33X[0;0YFinally,  Section  [14X1.5[114X,  explains what [5XAutoDoc[105X worksheets are and how to use
+  them.[133X
   
   
   [1X1.1 [33X[0;0YCreating a package manual from scratch[133X[101X
@@ -14,18 +25,19 @@
   [33X[0;0YSuppose  your  package  is already up and running, but so far has no manual.
   Then  you  can  rapidly  generate  a [21Xscaffold[121X for a package manual using the
   [2XAutoDoc[102X  ([14X4.1-1[114X)  command  like  this,  while  running  [5XGAP[105X from within your
-  package's directory (the one containing the [11XPackageInfo.g[111X:[133X
+  package's directory (the one containing the [11XPackageInfo.g[111X file):[133X
   
   [4X[32X[104X
     [4XLoadPackage( "AutoDoc" );[104X
-    [4XAutoDoc( : scaffold := true );[104X
+    [4XAutoDoc( rec( scaffold := true ) );[104X
   [4X[32X[104X
   
   [33X[0;0YThis  first  reads  the  [11XPackageInfo.g[111X  file  from the current directory. It
   extracts  information  about  package from it (such as its name and version,
-  see  Section  [14X1.5[114X).  It  then  creates two XML files [11Xdoc/SomePackage.xml[111X and
-  [11Xdoc/title.xml[111X insider the package directory. Finally, it runs [5XGAPDoc[105X on them
-  to produce a nice initial PDF and HTML version of your fresh manual.[133X
+  see     Section     [14X1.4-1[114X).     It    then    creates    two    XML    files
+  [11Xdoc/NAME_OF_YOUR_PACKAGE.xml[111X   and   [11Xdoc/title.xml[111X   insider   the   package
+  directory. Finally, it runs [5XGAPDoc[105X on them to produce a nice initial PDF and
+  HTML version of your fresh manual.[133X
   
   [33X[0;0YTo  ensure that the [5XGAP[105X help system picks up your package manual, you should
   also add something like the following to your [11XPackageInfo.g[111X:[133X
@@ -58,8 +70,24 @@
   extra  documentation). Or you could use the special documentation facilities
   [5XAutoDoc[105X provides (see Section [14X1.2[114X).[133X
   
-  [33X[0;0YYou  may  also  wish  to  consult  Section  [14X1.4[114X  for  hints on automatically
-  re-generating your package manual when necessary.[133X
+  [33X[0;0YYou  will  probably  want  to re-run the [2XAutoDoc[102X ([14X4.1-1[114X) command frequently,
+  e.g. whenever you modified your documentation or your [11XPackageInfo.g[111X. To make
+  this  more  convenient and reproducible, we recommend putting its invocation
+  into  a  file [11Xmakedoc.g[111X in your package directory, with content based on the
+  following example:[133X
+  
+  [4X[32X[104X
+    [4XLoadPackage( "AutoDoc" );[104X
+    [4XAutoDoc( rec( autodoc := true ) );[104X
+    [4XQUIT;[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThen  you  can  regenerate the package manual from the command line with the
+  following command, executed from within in the package directory:[133X
+  
+  [4X[32X[104X
+    [4Xgap makedoc.g[104X
+  [4X[32X[104X
   
   
   [1X1.2 [33X[0;0YDocumenting code with [5XAutoDoc[105X[101X[1X[133X[101X
@@ -96,7 +124,8 @@
   
   [4X[32X[104X
     [4XLoadPackage( "AutoDoc" );[104X
-    [4XAutoDoc( : scaffold := true, autodoc := true );[104X
+    [4XAutoDoc( rec( scaffold := true,[104X
+    [4X              autodoc := true ) );[104X
   [4X[32X[104X
   
   [33X[0;0YIf  you are not using the scaffolding feature, e.g. because you already have
@@ -117,7 +146,7 @@
   
   [4X[32X[104X
     [4XLoadPackage( "AutoDoc" );[104X
-    [4XAutoDoc( : autodoc := true );[104X
+    [4XAutoDoc( rec( autodoc := true ) );[104X
   [4X[32X[104X
   
   
@@ -138,29 +167,206 @@
   e.g. [5XIO[105X and [5Xorb[105X.[133X
   
   
-  [1X1.4 [33X[0;0YAutomatic regeneration of the manual[133X[101X
+  [1X1.3-1 [33X[0;0YUsing [5XAutoDoc[105X[101X[1X on a complete [5XGAPDoc[105X[101X[1X manual[133X[101X
   
-  [33X[0;0YYou  will  probably  want  to re-run the [2XAutoDoc[102X ([14X4.1-1[114X) command frequently,
-  e.g. whenever you modified your documentation or your [11XPackageInfo.g[111X. To make
-  this  more  convenient and reproducible, we recommend putting its invocation
-  into  a  file [11Xmakedoc.g[111X in your package directory, with content based on the
-  following example:[133X
+  [33X[0;0YSuppose you already have a complete XML manual, with some main and title XML
+  files  and  some  documentation for operations distributed over all your [11X.g[111X,
+  [11X.gd[111X,  and  [11X.gi[111X files. Suppose the main XML file is named [11XPACKAGENAME.xml[111X and
+  is  in  the [11X/doc[111X subfolder of your package. Then you can rebuild your manual
+  by  executing  the  following  two  GAP commands from a GAP sessions started
+  started in the root directory of your package:[133X
   
   [4X[32X[104X
     [4XLoadPackage( "AutoDoc" );[104X
-    [4XAutoDoc( : autodoc := true );[104X
-    [4XQUIT;[104X
+    [4XAutoDoc( );[104X
   [4X[32X[104X
   
-  [33X[0;0YThen  you  can  regenerate the package manual from the command line with the
-  following command, executed from within in the package directory:[133X
+  [33X[0;0YIn  contrast,  the  [5XRingsForHomalg[105X  currently uses essentially the following
+  code in its [11Xmakedoc.g[111X file to achieve the same result[133X
   
   [4X[32X[104X
-    [4Xgap makedoc.g[104X
+    [4XLoadPackage( "GAPDoc" );[104X
+    [4XSetGapDocLaTeXOptions( "utf8" );[104X
+    [4Xbib := ParseBibFiles( "doc/RingsForHomalg.bib" );[104X
+    [4XWriteBibXMLextFile( "doc/RingsForHomalgBib.xml", bib );[104X
+    [4Xlist := [[104X
+    [4X         "../gap/RingsForHomalg.gd",[104X
+    [4X         "../gap/RingsForHomalg.gi",[104X
+    [4X         "../gap/Singular.gi",[104X
+    [4X         "../gap/SingularBasic.gi",[104X
+    [4X         "../examples/RingConstructionsExternalGAP.g",[104X
+    [4X         "../examples/RingConstructionsSingular.g",[104X
+    [4X         "../examples/RingConstructionsMAGMA.g",[104X
+    [4X         "../examples/RingConstructionsMacaulay2.g",[104X
+    [4X         "../examples/RingConstructionsSage.g",[104X
+    [4X         "../examples/RingConstructionsMaple.g",[104X
+    [4X         ];[104X
+    [4XMakeGAPDocDoc( "doc", "RingsForHomalg", list, "RingsForHomalg" );[104X
+    [4XGAPDocManualLab( "RingsForHomalg" );[104X
+  [4X[32X[104X
+  
+  [33X[0;0YNote  that  in  particular, you do not have to worry about keeping a list of
+  your implementation files up-to-date.[133X
+  
+  [33X[0;0YBut  there  is  more.  [5XAutoDoc[105X  can create a [11Xmaketest.g[111X file, which uses the
+  examples in your manual to test your package. This can be achieved via[133X
+  
+  [4X[32X[104X
+    [4XLoadPackage( "AutoDoc" );[104X
+    [4XAutoDoc( rec( maketest := true ) );[104X
+  [4X[32X[104X
+  
+  [33X[0;0YNow the file [11Xmaketest.g[111X appears in your package directory, and[133X
+  
+  [4X[32X[104X
+    [4Xgap maketest.g[104X
+  [4X[32X[104X
+  
+  [33X[0;0Ytest the examples from your manual.[133X
+  
+  
+  [1X1.3-2 [33X[0;0YSetting different [5XGAPDoc[105X[101X[1X options[133X[101X
+  
+  [33X[0;0YSometimes, the default values for the [5XGAPDoc[105X command used by [5XAutoDoc[105X may not
+  be suitable for your manual.[133X
+  
+  [33X[0;0YSuppose  your  main  XML  file  is  [13Xnot[113X  named  [11XPACKAGENAME.xml[111X,  but rather
+  something else, e.g. [11Xmain.xml[111X. Then you can tell [5XAutoDoc[105X to use this file as
+  the main XML file via[133X
+  
+  [4X[32X[104X
+    [4XLoadPackage( "AutoDoc" );[104X
+    [4XAutoDoc( rec( gapdoc := rec( main := "main" ) ) );[104X
+  [4X[32X[104X
+  
+  [33X[0;0YAs  explained  above,  by default [5XAutoDoc[105X scans all [11X.g[111X, [11X.gd[111X and [11X.gi[111X files it
+  can  find  inside  of your package root directory, and in the subdirectories
+  [11Xgap[111X,  [11Xlib[111X,  [11Xexamples[111X and [11Xexamples/doc[111X as well. If you keep source files with
+  documentation  in  other directories, you can adjust the list of directories
+  AutoDoc  scans  via  the [10Xscan_dirs[110X option. The following example illustrates
+  this   by   instructing   [5XAutoDoc[105X   to   only  search  in  the  subdirectory
+  [11Xpackage_sources[111X of the packages root directory.[133X
+  
+  [4X[32X[104X
+    [4XLoadPackage( "AutoDoc" );[104X
+    [4XAutoDoc( rec( gapdoc := rec( scan_dirs := [ "package_source" ] ) ) );[104X
+  [4X[32X[104X
+  
+  [33X[0;0YYou  can  also  specify  an explicit list of files containing documentation,
+  which  will  be  searched  in  addition to any files located within the scan
+  directories:[133X
+  
+  [4X[32X[104X
+    [4XLoadPackage( "AutoDoc" );[104X
+    [4XAutoDoc( rec( gapdoc := rec( files := [ "path/to/some/hidden/file.gds" ] ) ) );[104X
+  [4X[32X[104X
+  
+  [33X[0;0YGiving  such  a  file  does  not  prevent  the standard [10Xscan_dirs[110X from being
+  scanned for other files.[133X
+  
+  [33X[0;0YNext,  [5XGAPDoc[105X  supports  the  documentation to be built with relative paths.
+  This  means,  links to manuals of other packages or the [5XGAP[105X library will not
+  be  absolute,  but relative from your documentation. This can be particulary
+  useful  if you want to build a release tarball or move your [5XGAP[105X installation
+  around  later. Suppose you are starting [5XGAP[105X in the root path of your package
+  as  always,  and  the  standard  call of [2XAutoDoc[102X ([14X4.1-1[114X) will then build the
+  documentation  in  the  [11Xdoc[111X subfolder of your package. From this folder, the
+  gap  root  directory has the relative path [11X../../..[111X. Then you can enable the
+  relative paths by[133X
+  
+  [4X[32X[104X
+    [4XLoadPackage( "AutoDoc" );[104X
+    [4XAutoDoc( rec( gapdoc := rec( gap_root_relative_path := "../../.." ) ) );[104X
+  [4X[32X[104X
+  
+  [33X[0;0Yor, since [11X../../..[111X is the standard option for [10Xgap_root_relative_path[110X, by[133X
+  
+  [4X[32X[104X
+    [4XLoadPackage( "AutoDoc" );[104X
+    [4XAutoDoc( rec( gapdoc := rec( gap_root_relative_path := true ) ) );[104X
   [4X[32X[104X
   
   
-  [1X1.5 [33X[0;0YWhat is taken from [11XPackageInfo.g[111X[101X[1X[133X[101X
+  [1X1.4 [33X[0;0YScaffolds[133X[101X
+  
+  
+  [1X1.4-1 [33X[0;0YGenerating a title page[133X[101X
+  
+  [33X[0;0YFor  most  (if  not  all) [5XGAP[105X packages, the title page of the package manual
+  lists  information  such  as  the  release  date, version, names and contact
+  details  of  the authors, and so on. All this data is also contained in your
+  [11XPackageInfo.g[111X,  and whenever you make a change to that file, there is a risk
+  that you forget to update your manual to match. And even if you don't forget
+  it,  you  of course have to spend some time to adjust the manual. [5XGAPDoc[105X can
+  help  to  a degree with this via entities. Thus, you will sometimes see code
+  like this in [11XPackageInfo.g[111X files:[133X
+  
+  [4X[32X[104X
+    [4XVersion        := "1.2.3",[104X
+    [4XDate           := "20/01/2015",[104X
+    [4X##  <#GAPDoc Label="PKGVERSIONDATA">[104X
+    [4X##  <!ENTITY VERSION "1.2.3">[104X
+    [4X##  <!ENTITY RELEASEDATE "20 January 2015">[104X
+    [4X##  <!ENTITY RELEASEYEAR "2015">[104X
+    [4X##  <#/GAPDoc>[104X
+  [4X[32X[104X
+  
+  [33X[0;0YHowever,  it  is still easy to forget both of these versions. And it doesn't
+  solve the problem of updating package authors addresses. Neither of these is
+  a  big  issue,  of  course,  but there have been plenty examples in the past
+  where  people  forget  either  of  these  two things, and it can be slightly
+  embarrassing.  It may even require you to make a new release just to fix the
+  issue, which in our opinion is a sad waste of your valuable time.[133X
+  
+  [33X[0;0YSo  instead  of  worrying about manually synchronising these things, you can
+  instruct  [5XAutoDoc[105X  to  generate  a  title  page for your manual based on the
+  information  in  your [11XPackageInfo.g[111X. The following commands do just that (in
+  addition   to   building   your   manual),   by  generating  a  file  called
+  [11Xdoc/title.xml[111X.[133X
+  
+  [4X[32X[104X
+    [4XLoadPackage( "AutoDoc" );[104X
+    [4XAutoDoc( rec( scaffold := rec( MainPage := false ) ) );[104X
+  [4X[32X[104X
+  
+  [33X[0;0YNote that this only outputs [11Xdoc/title.xml[111X but does not touch any other files
+  of  your  documentation.  In  particular,  you  need  to  explicitly include
+  [11Xdoc/title.xml[111X from your main XML file.[133X
+  
+  [33X[0;0YHowever, you can also tell [5XAutoDoc[105X to maintain the main XML file for you, in
+  which  case  this is automatic. In fact, this is the default if you enabling
+  scaffolding;  the  above  example  command  explicitly  told  [5XAutoDoc[105X not to
+  generate a main page. More o[133X
+  
+  
+  [1X1.4-2 [33X[0;0YGenerating the main XML file[133X[101X
+  
+  [33X[0;0YThe  following  generates a main XML file for your documentation in addition
+  to  the title page. The main XML file includes the title page by default, as
+  well as any documentation generated from [5XAutoDoc[105X documentation comments.[133X
+  
+  [4X[32X[104X
+    [4XLoadPackage( "AutoDoc" );[104X
+    [4XAutoDoc( rec( scaffold := true ) );[104X
+  [4X[32X[104X
+  
+  [33X[0;0YYou can instruct [5XAutoDoc[105X to include additional XML files by giving it a list
+  of filenames, as in the following example:[133X
+  
+  [4X[32X[104X
+    [4XLoadPackage( "AutoDoc" );[104X
+    [4XAutoDoc(rec([104X
+    [4X    scaffold := rec([104X
+    [4X        includes := [ "somefile.xml", "anotherfile.xml" ][104X
+    [4X    )[104X
+    [4X));[104X
+  [4X[32X[104X
+  
+  [33X[0;0YFor  more  information,  please  consult  the  documentation  of the [2XAutoDoc[102X
+  ([14X4.1-1[114X) function.[133X
+  
+  
+  [1X1.4-3 [33X[0;0YWhat data is extracted from [11XPackageInfo.g[111X[101X[1X?[133X[101X
   
   [33X[0;0Y[5XAutoDoc[105X  can  extract  data  from [11XPackageInfo.g[111X in order to generate a title
   page.  Specifically, the following components of the package info record are
@@ -199,9 +405,9 @@
         [10Xscaffold.TitlePage[110X parameter of the [2XAutoDoc[102X ([14X4.1-1[114X) function.[133X
   
   
-  [1X1.6 [33X[0;0YAutoDoc worksheets[133X[101X
+  [1X1.5 [33X[0;0YAutoDoc worksheets[133X[101X
   
-  [33X[0;0Y[5XAutoDoc[105X  worksheets  can  be  used  to  create  html and pdf documents using
+  [33X[0;0Y[5XAutoDoc[105X  worksheets  can  be  used  to  create  HTML and PDF documents using
   AutoDoc  syntax  and  possibly  including  [5XGAP[105X  examples and implementations
   without  having  them  associated to a package. A file for a worksheet could
   look like this:[133X
@@ -218,7 +424,7 @@
     [4X#! @EndExample[104X
   [4X[32X[104X
   
-  [33X[0;0YNow,  one  can  create a pdf and html document, like a package documentation
+  [33X[0;0YNow,  one  can  create a PDF and HTML document, like a package documentation
   out  of  it.  Suppose the document above is saved as [11Xworksheet.g[111X. Then, when
   GAP is started in the folder of this file, the command[133X
   

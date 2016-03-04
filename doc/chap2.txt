@@ -2,7 +2,7 @@
   [1X2 [33X[0;0Y[5XAutoDoc[105X[101X[1X documentation comments[133X[101X
   
   [33X[0;0YYou can document declarations of global functions and variables, operations,
-  attributes etc. by inserting [5XAutoDoc[105X comments into your sources before these
+  attributes etc. by inserting [13X[5XAutoDoc[105X[113X comments into your sources before these
   declaration.  An  [5XAutoDoc[105X  comment  always  starts with [10X#![110X. This is also the
   smallest  possible [5XAutoDoc[105X command. If you want your declaration documented,
   just write [10X#![110X at the line before the documentation. For example:[133X
@@ -14,6 +14,9 @@
   [4X[32X[104X
   
   [33X[0;0YThis will produce a manual entry for the operation [10XAnOperation[110X.[133X
+  
+  [33X[0;0YInside  of [5XAutoDoc[105X comments, [13X[5XAutoDoc[105X commands[113X starting with [10X@[110X can be used to
+  control the output [5XAutoDoc[105X produces.[133X
   
   
   [1X2.1 [33X[0;0YDocumenting declarations[133X[101X
@@ -406,8 +409,14 @@
   
   [1X2.5 [33X[0;0YGrouping[133X[101X
   
-  [33X[0;0YTODO:  explain  more  about  groups  and  what they do, how they look in the
-  generated output etc.[133X
+  [33X[0;0YIn [5XGAPDoc[105X, it is possible to make groups of ManItems, i.e., when documenting
+  a  function,  operation,  etc.,  it  is possible to group them into suitable
+  chunks.  This  can be particulary useful if there are several definitions of
+  an  operation  with  several differen argument types, all doing more or less
+  the  same  to the arguments. Then their manual items can be grouped, sharing
+  the  same description and return type information. Note that it is currently
+  not  possible to give a header to the Group in the manual, but the generated
+  ManItem heading of the first entry will be used.[133X
   
   [33X[0;0YNote  that group names are globally unique throughout the whole manual. That
   is,  groups  with the same name are in fact merged into a single group, even
@@ -471,13 +480,13 @@
   [4X[32X[104X
   
   
-  [1X2.7 [33X[0;0YSome syntax for [5XAutoDoc[105X[101X[1X text[133X[101X
+  [1X2.7 [33X[0;0YMarkdown-like formatting of text in [5XAutoDoc[105X[101X[1X[133X[101X
   
-  [33X[0;0Y[5XAutoDoc[105X  offers  some  useful syntax extensions which can be used in [5XAutoDoc[105X
-  plain  text  files  and  [5XAutoDoc[105X  comments.  The  syntax  is inspired by the
-  Markdown  language,  but  it  does not implement all features, neither is it
-  strict  Markdown,  but  tries  to  be as straight as possible. The following
-  constructions are possible right now:[133X
+  [33X[0;0Y[5XAutoDoc[105X  has  some  convenient ways to insert special format into text, like
+  math  formulas  and  lists. The syntax for them are inspired by Markdown and
+  LaTeX,  but  do  not  follow  them strictly. Neither are all features of the
+  Markdown  language  supported.  The  following  subsections describe what is
+  possible.[133X
   
   
   [1X2.7-1 [33X[0;0YLists[133X[101X

@@ -13,6 +13,6 @@
   optional  records  as  the  [5XAutoDoc[105X command itself, but instead of a package
   name  there  should  be a filename or a list of filenames containing AutoDoc
   text  from  which  the documents are created. Please see the [5XAutoDoc[105X command
-  for  more  information  about  this  and  have  a  look  at [14X1.6[114X for a simple
+  for  more  information  about  this  and  have  a  look  at [14X1.5[114X for a simple
   worksheet example.[133X
   
