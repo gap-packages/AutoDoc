@@ -1,10 +1,14 @@
 This file describes changes in the AutoDoc package.
 
 XXX:
+  - Improved the manual.
   - AutoDoc can now be instructed to invoke GAPDoc in such a way that links
     in the generated documentation to the GAP reference manual use relative
     paths.
   - Also scan for .autodoc files (Issue #104)
+  - Workaround a problem with GAPDoc where an empty index could lead to an error.
+  - Allow entities in chapter and section titles.
+  - Fix a bug where the indentation for code blocks was not preserved.
 
 2016.02.24:
   - Again improved the error messages produced by the parser.
