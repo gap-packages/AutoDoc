@@ -372,8 +372,29 @@ not to generate a main page. More o
 <Subsection Label="Tut:Scaffolds:Main">
 <Heading>Generating the main XML file</Heading>
 
-TODO
-<!-- TODO: insert an introduction here -->
+The following generates a main XML file for your documentation in
+addition to the title page. The main XML file includes
+the title page by default, as well as any documentation generated
+from &AutoDoc; documentation comments.
+<Listing>
+LoadPackage( "AutoDoc" );
+AutoDoc( rec( scaffold := true ) );
+</Listing>
+
+You can instruct &AutoDoc; to include additional XML files by giving it
+a list of filenames, as in the following example:
+<Listing>
+LoadPackage( "AutoDoc" );
+AutoDoc(rec(
+    scaffold := rec(
+        includes := [ "somefile.xml", "anotherfile.xml" ]
+    )
+));
+</Listing>
+
+For more information, please consult the documentation
+of the <Ref Func="AutoDoc"/> function.
+
 
 </Subsection>
 
