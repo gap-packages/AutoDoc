@@ -20,7 +20,7 @@ while running &GAP; from within your package's directory (the
 one containing the <F>PackageInfo.g</F>:
 <Listing>
 LoadPackage( "AutoDoc" );
-AutoDoc( : scaffold := true );
+AutoDoc( rec( scaffold := true ) );
 </Listing>
 This first reads the <F>PackageInfo.g</F> file from the current
 directory. It extracts information about package from it
@@ -131,7 +131,8 @@ include all newly documented functions, operations etc.:
 
 <Listing>
 LoadPackage( "AutoDoc" );
-AutoDoc( : scaffold := true, autodoc := true );
+AutoDoc( rec( scaffold := true, 
+              autodoc := true ) );
 </Listing>
 
 If you are not using the scaffolding feature, e.g. because you already
@@ -151,7 +152,7 @@ and the runs &GAPDoc; to produce HTML and PDF output, but does not
 touch your documentation XML files otherwise.
 <Listing>
 LoadPackage( "AutoDoc" );
-AutoDoc( : autodoc := true );
+AutoDoc( rec( autodoc := true ) );
 </Listing>
 
 
@@ -293,8 +294,7 @@ fresh version everytime you build your manual. Then you can achieve it by tellin
 option to only rebuild the title page.
 <Listing>
 LoadPackage( "AutoDoc" );
-AutoDoc( : scaffold := rec( MainPage := false ),
-           autodoc := false );
+AutoDoc( rec( scaffold := rec( MainPage := false ) ) );
 </Listing>
 This command will extract information about, title, subtitle, authors, etc from your <F>PackageInfo.g</F>
 and puts them into <F>doc/title.xml</F>. However, no other files from your manual are touched.
@@ -313,7 +313,7 @@ recommend putting its invocation into a file <F>makedoc.g</F> in your package
 directory, with content based on the following example:
 <Listing>
 LoadPackage( "AutoDoc" );
-AutoDoc( : autodoc := true );
+AutoDoc( rec( autodoc := true ) );
 QUIT;
 </Listing>
 Then you can regenerate the package manual from the command line with the
