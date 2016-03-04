@@ -188,7 +188,7 @@ this purpose, e.g. <Package>IO</Package> and <Package>orb</Package>.
 Suppose you already have a complete XML manual, with some main and title
 XML files and some documentation for operations distributed over
 all your <F>.g</F>, <F>.gd</F>, and <F>.gi</F> files. Even then &AutoDoc; can do something for you.
-Suppose your main xml file is named <F>PACKAGENAME.xml</F> and is in the
+Suppose the main XML file is named <F>PACKAGENAME.xml</F> and is in the
 <F>/doc</F> subfolder of your package. Then calling following the from a GAP started in the root directory
 of your package
 <Listing>
@@ -234,8 +234,8 @@ test the examples from your manual.
 Sometimes, the default values for the &GAPDoc; command used by &AutoDoc;
 may not be suitable for your manual.
 <P/>
- Suppose your main xml file is <E>not</E> named <F>PACKAGENAME.xml</F>, but rather something else, e.g. <F>main.xml</F>.
-Then you can tell &AutoDoc; to use this file as the main xml file via
+ Suppose your main XML file is <E>not</E> named <F>PACKAGENAME.xml</F>, but rather something else, e.g. <F>main.xml</F>.
+Then you can tell &AutoDoc; to use this file as the main XML file via
 <Listing>
 LoadPackage( "AutoDoc" );
 AutoDoc( rec( gapdoc := rec( main := "main" ) ) );
