@@ -1,7 +1,7 @@
 <Chapter Label="Tutorials">
 <Heading>Getting started using &AutoDoc;</Heading>
 
-&AutoDoc; is a &GAP; package which is meant to aide &GAP; package
+&AutoDoc; is a &GAP; package which is meant to aid &GAP; package
 authors in creating and maintaing the documentation of their packages.
 In this capacity it builds upon &GAPDoc; (and hence is not a replacement
 for it, but rather a complement).
