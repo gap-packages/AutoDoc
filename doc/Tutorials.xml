@@ -187,33 +187,39 @@ this purpose, e.g. <Package>IO</Package> and <Package>orb</Package>.
 
 Suppose you already have a complete XML manual, with some main and title
 XML files and some documentation for operations distributed over
-all your <F>.g</F>, <F>.gd</F>, and <F>.gi</F> files. Even then &AutoDoc; can do something for you.
+all your <F>.g</F>, <F>.gd</F>, and <F>.gi</F> files.
 Suppose the main XML file is named <F>PACKAGENAME.xml</F> and is in the
-<F>/doc</F> subfolder of your package. Then calling following the from a GAP started in the root directory
-of your package
+<F>/doc</F> subfolder of your package. Then you can rebuild your manual
+by executing the following two GAP commands from a GAP sessions started
+started in the root directory of your package:
 <Listing>
 LoadPackage( "AutoDoc" );
 AutoDoc( );
 </Listing>
-will rebuild your manual. As you can see, the <Ref Func="AutoDoc"/> does not take any
-arguments here, which is really convenient.
-<P/>
-To emphasize this even more, the following is taken from the <F>makedoc.g</F> file
-of <Package>RingsForHomalg</Package>.
+In contrast, the <Package>RingsForHomalg</Package> currently uses
+essentially the following code in its <F>makedoc.g</F> file to achieve the same result
 <Listing>
 LoadPackage( "GAPDoc" );
 SetGapDocLaTeXOptions( "utf8" );
 bib := ParseBibFiles( "doc/RingsForHomalg.bib" );
 WriteBibXMLextFile( "doc/RingsForHomalgBib.xml", bib );
-Read( "ListOfDocFiles.g" );
-MakeGAPDocDoc( "doc", "RingsForHomalg", list_of_files, "RingsForHomalg" );
+list := [
+         "../gap/RingsForHomalg.gd",
+         "../gap/RingsForHomalg.gi",
+         "../gap/Singular.gi",
+         "../gap/SingularBasic.gi",
+         "../examples/RingConstructionsExternalGAP.g",
+         "../examples/RingConstructionsSingular.g",
+         "../examples/RingConstructionsMAGMA.g",
+         "../examples/RingConstructionsMacaulay2.g",
+         "../examples/RingConstructionsSage.g",
+         "../examples/RingConstructionsMaple.g",
+         ];
+MakeGAPDocDoc( "doc", "RingsForHomalg", list, "RingsForHomalg" );
 GAPDocManualLab( "RingsForHomalg" );
 </Listing>
-The <C>Read</C> command reads a manually created list of filesnames, which contain
-the names of the implementation files containing parts of the &GAPDoc; manual, and stores them in <C>list_of_files</C>.
-<Br/>
-Calling <Ref Func="AutoDoc"/> like displayed above without any arguments will do the same as the whole <F>makedoc.g</F>
-script, and you do not even have to keep a list of your implementation files.
+Note that in particular, you do not have to worry about keeping a list of your
+implementation files up-to-date.
 <P/>
 But there is more. &AutoDoc; can create a <F>maketest.g</F> file, which uses the
 examples in your manual to test your package. This can be achieved via
