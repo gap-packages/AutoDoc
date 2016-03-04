@@ -131,7 +131,7 @@ include all newly documented functions, operations etc.:
 
 <Listing>
 LoadPackage( "AutoDoc" );
-AutoDoc( rec( scaffold := true, 
+AutoDoc( rec( scaffold := true,
               autodoc := true ) );
 </Listing>
 
@@ -289,21 +289,47 @@ AutoDoc( rec( gapdoc := rec( gap_root_relative_path := true ) ) );
 </Subsection>
 
 <Subsection Label="Tut:IntegrateExisting:TitlePage">
-  <Heading>Using &AutoDoc;s scaffold for regenerating the title page</Heading>
+<Heading>Using &AutoDoc; scaffolds for regenerating the title page</Heading>
 
-Suppose the same as above, i.e., a complete manual. Then your title page
-might contain information that can change with every build of the manual, e.g.,
-date, package version, and so on. All of these versions are in the <F>PackageInfo.g</F>
-of the package, and only need to be extracted into a proper title page. &AutoDoc; can do this
-for you. Suppose your title page is <F>doc/title.xml</F> and you want it to be overriden with a
-fresh version everytime you build your manual. Then you can achieve it by telling &AutoDoc;s scaffold
-option to only rebuild the title page.
+For most (if not all) &GAP; packages, the title page of the package manual
+lists information such as the release date, version, names and contact details
+of the authors, and so on.
+
+All this data is also contained in your <F>PackageInfo.g</F>, and whenever
+you make a change to that file, there is a risk that you forget to update
+your manual to match. And even if you don't forget it, you of course
+have to spend some time to adjust the manual. &GAPDoc; can help to a degree with
+this via entities. Thus, you will sometimes see code like this in <F>PackageInfo.g</F>
+files:
+<Listing><![CDATA[
+Version        := "1.2.3",
+Date           := "20/01/2015",
+##  <#GAPDoc Label="PKGVERSIONDATA">
+##  <!ENTITY VERSION "1.2.3">
+##  <!ENTITY RELEASEDATE "20 January 2015">
+##  <!ENTITY RELEASEYEAR "2015">
+##  <#/GAPDoc>
+]]></Listing>
+However, it is still easy to forget both of these versions. And it doesn't
+solve the problem of updating package authors addresses. Neither of these is a
+big issue, of course, but there have been plenty examples in the past where
+people forget either of these two things, and it can be slightly embarrassing.
+It may even require you to make a new release just to fix the issue, which in
+our opinion is a sad waste of your valuable time. <P/>
+
+So instead of worrying about manually synchronising these things, you can
+instruct &AutoDoc; to generate a title page for your manual based on the
+information in your <F>PackageInfo.g</F>. The following commands do just that
+(in addition to building your manual), by generating a file called
+<F>doc/title.xml</F>.
 <Listing>
 LoadPackage( "AutoDoc" );
 AutoDoc( rec( scaffold := rec( MainPage := false ) ) );
 </Listing>
-This command will extract information about, title, subtitle, authors, etc from your <F>PackageInfo.g</F>
-and puts them into <F>doc/title.xml</F>. However, no other files from your manual are touched.
+Note that this only outputs <F>doc/title.xml</F> but does not
+touch any other files of your documentation. In particular, you need
+to explicitly include <F>doc/title.xml</F> from your main XML file.
+
 </Subsection>
 
 </Section>
@@ -331,7 +357,7 @@ gap makedoc.g
 </Section>
 
 <Section Label="Tut:PackageInfo">
-<Heading>What is taken from <F>PackageInfo.g</F></Heading>
+<Heading>What data is extracted from <F>PackageInfo.g</F>?</Heading>
 
 &AutoDoc; can extract data from <F>PackageInfo.g</F> in order to
 generate a title page. Specifically, the following components
