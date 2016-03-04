@@ -1,5 +1,8 @@
 This file describes changes in the AutoDoc package.
 
+YYY.MM.DD:
+  - Use english month names on title pages
+
 2016.03.08:
   - Fix the "empty index" workaround from the previous release
 
