@@ -600,22 +600,9 @@ function( arg )
     if IsBound( maketest ) then
     
         AUTODOC_SetIfMissing( maketest, "filename", "maketest.g" );
-        AUTODOC_SetIfMissing( maketest, "folder", pkgdir );
-        AUTODOC_SetIfMissing( maketest, "scan_dir", doc_dir );
-        AUTODOC_SetIfMissing( maketest, "files_to_scan", gapdoc.files );
-
-        if IsString( maketest.folder ) then
-            maketest.folder := Directory( maketest.folder );
-        fi;
-
-        if IsString( maketest.scan_dir ) then
-            maketest.scan_dir := Directory( maketest.scan_dir );
-        fi;
-
         AUTODOC_SetIfMissing( maketest, "commands", [ ] );
-        AUTODOC_SetIfMissing( maketest, "book_name", gapdoc.main );
 
-        CreateMakeTest( maketest );
+        CreateMakeTest( pkgdir, doc_dir, gapdoc.main, gapdoc.files, maketest );
     fi;
 
     return true;
