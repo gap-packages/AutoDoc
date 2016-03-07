@@ -397,7 +397,9 @@ InstallGlobalFunction( CreateMakeTest,
         Error( "No book name given to extract the examples." );
     fi;
 
-    AppendTo( filestream, "example_tree := ExtractExamples( ", scan_dir, ", \"", Concatenation( book_name, ".xml" ),"\", AUTODOC_file_scan_list, 500 );\n\n" );
+    AppendTo( filestream, "example_tree := ExtractExamples( ", scan_dir, ", ",
+                          "\"", Concatenation( book_name, ".xml" ), "\", ",
+                          "AUTODOC_file_scan_list, 500 );\n\n" );
     AppendTo( filestream, "RunExamples( example_tree, rec( compareFunction := \"uptowhitespace\" ) );\n\n" );
     AppendTo( filestream, "QUIT;\n" );
 
