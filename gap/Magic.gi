@@ -531,7 +531,9 @@ function( arg )
         ## HACK: If there is an empty index, MakeGAPDocDoc throws an error when creating the pdf.
         ## this addition prevents this by fake adding the index to the page number log. See issue 106.
         ## FIXME: Once an empty index is allowed in GapDoc, this should be removed.
-        Append( GAPDoc2LaTeXProcs.Tail, "\\immediate\\write\\pagenrlog{[\"Ind\", 0, 0], \\arabic{page},}\n" );
+        GAPDoc2LaTeXProcs.Tail := Concatenation(
+            "\\immediate\\write\\pagenrlog{[\"Ind\", 0, 0], \\arabic{page},}\n",
+            GAPDoc2LaTeXProcs.Tail );
         
         # Choose how we call GAPDoc
         if Filename(DirectoriesSystemPrograms(), "pdflatex") <> fail then
