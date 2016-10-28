@@ -254,6 +254,8 @@ function( arg )
         # Enable AutoDoc support if the package depends on AutoDoc.
         tmp := Concatenation( pkginfo.Dependencies.NeededOtherPackages,
                               pkginfo.Dependencies.SuggestedOtherPackages );
+        ## Empty entries are allowed in Dependencies
+        tmp := Filtered( tmp, i -> i <> [ ] );
         if ForAny( tmp, x -> LowercaseString(x[1]) = "autodoc" ) then
             autodoc := rec();
         fi;
