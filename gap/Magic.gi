@@ -582,7 +582,7 @@ function( arg )
         if IsBound( gapdoc.SixFile ) then
             file := Filename(pkgdir, gapdoc.SixFile);
             if file = fail or not IsReadableFile(file) then
-                Error("could not open `manual.six' file of package `", pkgname, "'.\n");
+                Error("could not open `", file, "' for package `", pkgname, "'.\n");
             fi;
             GAPDocManualLabFromSixFile( gapdoc.bookname, file );
         fi;
