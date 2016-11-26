@@ -1,7 +1,9 @@
 This file describes changes in the AutoDoc package.
 
-YYY.MM.DD:
+2016.11.26:
   - Use english month names on title pages
+  - Ignore empty dependency lists in PackageInfo.g files
+  - Better error message when .six file is not available
 
 2016.03.08:
   - Fix the "empty index" workaround from the previous release
