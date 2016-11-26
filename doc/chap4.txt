@@ -6,7 +6,7 @@
   
   [1X4.1-1 AutoDoc[101X
   
-  [29X[2XAutoDoc[102X( [[3Xpackage[103X[, [3Xoption_record[103X]] ) [32X function
+  [29X[2XAutoDoc[102X( [[3Xpackage[103X[, [3Xoptrec[103X]] ) [32X function
   [6XReturns:[106X  [33X[0;10Ynothing[133X
   
   [33X[0;0YThis  is  the  main  function  of  the  [5XAutoDoc[105X  package. It can perform any
@@ -52,9 +52,9 @@
   
         [33X[0;6YIf this argument is omitted, [5XAutoDoc[105X uses the [10XDirectoryCurrent()[110X.[133X
   
-  [8X[3Xoption_record[103X[108X
-        [33X[0;6Y[3Xoption_record[103X  can  be  a  record  with  some  additional options. The
-        following are currently supported:[133X
+  [8X[3Xoptrec[103X[108X
+        [33X[0;6Y[3Xoptrec[103X can be a record with some additional options. The following are
+        currently supported:[133X
   
         [8X[3Xdir[103X[108X
               [33X[0;12YThis  should  be  a  string  containing  a  (relative) path or a
