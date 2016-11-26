@@ -68,9 +68,9 @@
 #! </Item>
 #!
 #!
-#! <Mark><A>option_record</A></Mark>
+#! <Mark><A>optrec</A></Mark>
 #! <Item>
-#!     <A>option_record</A> can be a record with some additional options.
+#!     <A>optrec</A> can be a record with some additional options.
 #!     The following are currently supported:
 #!     <List>
 #!     <Mark><A>dir</A></Mark>
@@ -350,7 +350,7 @@
 #! </List>
 #!
 #! @Returns nothing
-#! @Arguments [package[, option_record ]]
+#! @Arguments [package[, optrec ]]
 DeclareGlobalFunction( "AutoDoc" );
 
 
