@@ -77,19 +77,24 @@ end );
 ##
 InstallGlobalFunction( CreateMainPage,
   function( book_name, dir, opt )
-    local filename, filestream, i;
+    local filename, filestream, i, ent, val;
 
     if IsString(dir) then
         dir := Directory(dir);
     fi;
 
     if not IsBound( opt.entities ) then
-        opt.entities := [];
+        opt.entities := rec();
     fi;
 
     # add book_name unconditionally to the list of entities
-    # FIXME: stop doing that, to allow package authors to define this entity differently?
-    Add( opt.entities, book_name );
+    if IsRecord( opt.entities ) then
+        if not IsBound(opt.entities.(book_name)) then
+            opt.entities.(book_name) := Concatenation( "<Package>", book_name, "</Package>" );
+        fi;
+    else
+        Add( opt.entities, book_name );
+    fi;
 
     if IsBound( opt.main_xml_file ) then
         filename := opt.main_xml_file;
@@ -103,22 +108,31 @@ InstallGlobalFunction( CreateMainPage,
     AppendTo( filestream, "<!DOCTYPE Book SYSTEM \"gapdoc.dtd\"\n[\n" );
     AppendTo( filestream, "<!ENTITY see '<Alt Only=\"LaTeX\">$\to$</Alt><Alt Not=\"LaTeX\">--&gt;</Alt>'>\n" );
 
-    for i in opt.entities do
-        ## allow generic entities.
-        if IsString( i ) and PositionSublist( i, "!ENTITY" ) <> fail then
-            AppendTo( filestream, i );
-            AppendTo( filestream, "\n" );
-            continue;
-        fi;
+    if IsList( opt.entities ) then
+        for i in opt.entities do
+            ## allow generic entities.
+            if IsString( i ) and PositionSublist( i, "!ENTITY" ) <> fail then
+                AppendTo( filestream, i );
+                AppendTo( filestream, "\n" );
+                continue;
+            fi;
 
-        if IsString( i ) then
-            i := [ "Package", i ];
-        fi;
+            if IsString( i ) then
+                i := [ "Package", i ];
+            fi;
 
-        AppendTo( filestream, "<!ENTITY ",
-                  ReplacedString( i[ 2 ], " ", "_" ),
-                  " '<", i[ 1 ], ">", i[ 2 ], "</", i[ 1 ], ">'>\n" );
-    od;
+            AppendTo( filestream, "<!ENTITY ",
+                      ReplacedString( i[ 2 ], " ", "_" ),
+                      " '<", i[ 1 ], ">", i[ 2 ], "</", i[ 1 ], ">'>\n" );
+        od;
+    else
+        for ent in RecNames(opt.entities) do
+            val := String(opt.entities.(ent));
+            # escape single quotes, if any
+            val := ReplacedString( val, "'", "\\\'" );
+            AppendTo( filestream, "<!ENTITY ", ent, " '", val, "'>\n" );
+        od;
+    fi;
 
     AppendTo( filestream, "]\n>\n" );
     AppendTo( filestream, "<Book Name=\"", ReplacedString( book_name, " ", "_" ), "\">\n" );
@@ -207,8 +221,8 @@ end );
 ## This creates a titlepage out of an argument record.
 ## Please make sure that every entry in the record
 ## has the name of its tag, even title etc.
-## Please note that entities will be treatened
-## seperately.
+## Please note that entities will be treated
+## separately.
 InstallGlobalFunction( CreateTitlePage,
   function( dir, argument_rec )
     local indent, tag, names, filestream, entity_list, OutWithTag, Out, i,
