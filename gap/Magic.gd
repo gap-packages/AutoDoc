@@ -134,22 +134,20 @@
 #!             then it is assumed that you want to use this as your bibliography.
 #!         </Item>
 #!
-#### TODO: The 'entities' param is a bit strange. We should probably change it to be a bit more
-#### general, as one might want to define other entities... For now, we do not document it
-#### to leave us the choice of revising how it works.
-####
-####                 <Mark><A>entities</A></Mark>
-####                 <Item>
-####                     A list of package names or other entities which are used to define corresponding XML entities.
-####                     For example, if set to a list containing the string <Q>SomePackage</Q>,
-####                     then the following is added to the XML preamble:
-####                     <Listing><![CDATA[<!ENTITY SomePackage '<Package>SomePackage</Package>'>]]></Listing>
-####                     This allows you to write <Q>&amp;SomePackage;</Q> in your documentation
-####                     to reference that package. If another type of entity is desired, one can simply add,
-####                     instead of a string, add a two entry list <A>a</A> to the list. It will be handled as
-####                     <Listing><![CDATA[<!ENTITY a[ 2 ] '<a[ 1 ]>a[ 2 ]</a[ 1 ]>'>]]></Listing>,
-####                     so please be careful.
-####                 </Item>
+#!         <Mark><A>entities</A></Mark>
+#!         <Item>
+#!             A record whose keys are taken as entity names, set to the corresponding
+#!             (string) values. For example, if you pass the record <Q>SomePackage</Q>,
+#!             <Listing><![CDATA[
+#!             rec( SomePackage := "<Package>SomePackage</Package>",
+#!                  RELEASEYEAR := "2015" )]]></Listing>
+#!             then the following entity definitions are added to the XML preamble:
+#!             <Listing><![CDATA[<!ENTITY SomePackage '<Package>SomePackage</Package>'>
+#!             <!ENTITY RELEASEYEAR '2015'>]]></Listing>
+#!             This allows you to write <Q>&amp;SomePackage;</Q> and <Q>&amp;RELEASEYEAR;</Q>
+#!             in your documentation, which will be replaced by respective values specified
+#!             in the entities definition.
+#!         </Item>
 #!
 #!         <Mark><A>TitlePage</A></Mark>
 #!         <Item>
