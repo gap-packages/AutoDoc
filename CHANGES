@@ -1,5 +1,8 @@
 This file describes changes in the AutoDoc package.
 
+2016.12.04:
+  - Revise and officially document the `entities` option for AutoDoc()
+
 2016.11.26:
   - Use english month names on title pages
   - Ignore empty dependency lists in PackageInfo.g files
