@@ -106,6 +106,23 @@
 <dd><p>The name of a bibliography file, in Bibtex or XML format. If this key is not set, but there is a file <code class="file">doc/PACKAGENAME.bib</code> then it is assumed that you want to use this as your bibliography.</p>
 
 </dd>
+<dt><strong class="Mark"><var class="Arg">entities</var></strong></dt>
+<dd><p>A record whose keys are taken as entity names, set to the corresponding (string) values. For example, if you pass the record "SomePackage",</p>
+
+
+<div class="example"><pre>
+rec( SomePackage := "&lt;Package&gt;SomePackage&lt;/Package&gt;",
+RELEASEYEAR := "2015" )</pre></div>
+
+<p>then the following entity definitions are added to the XML preamble:</p>
+
+
+<div class="example"><pre>&lt;!ENTITY SomePackage '&lt;Package&gt;SomePackage&lt;/Package&gt;'&gt;
+&lt;!ENTITY RELEASEYEAR '2015'&gt;</pre></div>
+
+<p>This allows you to write "&amp;SomePackage;" and "&amp;RELEASEYEAR;" in your documentation, which will be replaced by respective values specified in the entities definition.</p>
+
+</dd>
 <dt><strong class="Mark"><var class="Arg">TitlePage</var></strong></dt>
 <dd><p>A record whose entries are used to embellish the generated titlepage for the package manual with extra information, such as a copyright statement or acknowledgments. To this end, the names of the record components are used as XML element names, and the values of the components are outputted as content of these XML elements. For example, you could pass the following record to set a custom acknowledgements text:</p>
 

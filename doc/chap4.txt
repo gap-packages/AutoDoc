@@ -104,6 +104,28 @@
                     [11Xdoc/PACKAGENAME.bib[111X  then  it  is assumed that you want to
                     use this as your bibliography.[133X
   
+              [8X[3Xentities[103X[108X
+                    [33X[0;18YA  record whose keys are taken as entity names, set to the
+                    corresponding  (string)  values.  For example, if you pass
+                    the record [21XSomePackage[121X,[133X
+  
+  [4X                  [32X[104X
+                      [4Xrec( SomePackage := "<Package>SomePackage</Package>",[104X
+                      [4XRELEASEYEAR := "2015" )[104X
+                    [4X[32X[104X
+  
+                    [33X[0;18Ythen the following entity definitions are added to the XML
+                    preamble:[133X
+  
+  [4X                  [32X[104X
+                      [4X<!ENTITY SomePackage '<Package>SomePackage</Package>'>[104X
+                      [4X<!ENTITY RELEASEYEAR '2015'>[104X
+                    [4X[32X[104X
+  
+                    [33X[0;18YThis  allows  you to write [21X&SomePackage;[121X and [21X&RELEASEYEAR;[121X
+                    in   your   documentation,   which  will  be  replaced  by
+                    respective values specified in the entities definition.[133X
+  
               [8X[3XTitlePage[103X[108X
                     [33X[0;18YA record whose entries are used to embellish the generated
                     titlepage  for  the package manual with extra information,
