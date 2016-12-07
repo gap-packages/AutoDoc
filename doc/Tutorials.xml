@@ -2,7 +2,7 @@
 <Heading>Getting started using &AutoDoc;</Heading>
 
 &AutoDoc; is a &GAP; package which is meant to aid &GAP; package
-authors in creating and maintaing the documentation of their packages.
+authors in creating and maintaining the documentation of their packages.
 In this capacity it builds upon &GAPDoc;, and is not a replacement
 for &GAPDoc;, but rather complements it.<P/>
 
@@ -295,7 +295,7 @@ other files.
 <P/>
 Next, &GAPDoc; supports the documentation to be built with relative paths.
 This means, links to manuals of other packages or the &GAP; library will
-not be absolute, but relative from your documentation. This can be particulary useful
+not be absolute, but relative from your documentation. This can be particularly useful
 if you want to build a release tarball or move your &GAP; installation around later.
 Suppose you are starting &GAP; in the root path of your package as always,
 and the standard call of <Ref Func="AutoDoc"/> will then build the documentation in the <F>doc</F> subfolder of your package.
@@ -483,7 +483,7 @@ options of the <Ref Func="AutoDoc"/> command. It is even possible to test the ex
 from the AutoDoc command.
 <P/>
 Since the worksheets do not have a <F>PackageInfo.g</F> to extract information, all possible tags that &GAPDoc; supports for
-the title page can be set into the document. A fully typed titlepage can look like this:
+the title page can be set into the document. A fully typed title page can look like this:
 <Listing>
 #! @Title My first worksheet
 #! @Subtitle Some small examples

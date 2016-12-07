@@ -129,7 +129,7 @@
 #!
 #!         <Mark><A>bib</A></Mark>
 #!         <Item>
-#!             The name of a bibliography file, in Bibtex or XML format.
+#!             The name of a bibliography file, in BibTeX or XML format.
 #!             If this key is not set, but there is a file <F>doc/PACKAGENAME.bib</F>
 #!             then it is assumed that you want to use this as your bibliography.
 #!         </Item>
@@ -151,7 +151,7 @@
 #!
 #!         <Mark><A>TitlePage</A></Mark>
 #!         <Item>
-#!             A record whose entries are used to embellish the generated titlepage
+#!             A record whose entries are used to embellish the generated title page
 #!             for the package manual with extra information, such as a copyright
 #!             statement or acknowledgments. To this end, the names of the record
 #!             components are used as XML element names, and the values of the
@@ -160,7 +160,7 @@
 #!             acknowledgements text:
 #!             <Listing><![CDATA[
 #!             rec( Acknowledgements := "Many thanks to ..." )]]></Listing>
-#!             For a list of valid entries in the titlepage, please refer to the
+#!             For a list of valid entries in the title page, please refer to the
 #!             &GAPDoc; manual, specifically section <Ref Subsect='TitlePage' BookName='gapdoc'/>.
 #!         </Item>
 #!         <Mark><A>MainPage</A></Mark>
@@ -356,5 +356,3 @@ DeclareGlobalFunction( "AutoDoc" );
 #!
 #! Some basic examples for using <C>AutoDoc</C> were already shown in
 #! Chapter <Ref Label='Tutorials'/>.
-
-## TODO: add more examples, showing at least some of the other options

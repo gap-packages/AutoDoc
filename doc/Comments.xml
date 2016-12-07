@@ -139,7 +139,7 @@ text in your documentation, examples, mathematical chapters, etc..
 <Subsection Label="@Chapter">
 <Index Key="@Chapter"><C>@Chapter</C></Index>
 <Heading>@Chapter <A>name</A></Heading>
-Sets a chapter, all functions without seperate info will be added to this chapter.
+Sets a chapter, all functions without separate info will be added to this chapter.
 Also all text comments, i.e. lines that begin with #! without a command, and which do not
 follow after @description, will be added to the chapter as regular text.
 
@@ -283,7 +283,7 @@ Resets the current level to 0.
 <Subsection Label="@BeginExample">
 <Index Key="@BeginExample"><C>@BeginExample and @EndExample</C></Index>
 <Heading>@BeginExample and @EndExample</Heading>
-@BeginExample inserts an example into the manual. The syntax is like the example enviroment
+@BeginExample inserts an example into the manual. The syntax is like the example environment
 in GAPDoc. This examples can be tested by GAPDoc, and also stay readable by GAP.
 The GAP prompt is added by AutoDoc.
 @EndExample ends the example block.
@@ -438,7 +438,7 @@ the document, in case the scaffolding is enabled.
     @Colophon
   </Item>
 </List>
-Those add the following lines at the corresponding point of the titlepage. Please note that many of those
+Those add the following lines at the corresponding point of the title page. Please note that many of those
 things can be (better) extracted from the PackageInfo.g. In case you set some of those,
 the extracted or in scaffold defined items will be overwritten. While this is not very useful for
 documenting packages, they are necessary for worksheets created with <Ref Func="AutoDocWorksheet"/>,
@@ -461,8 +461,8 @@ since they do not have a PackageInfo to extract those information.
 
 In &GAPDoc;, it is possible to make groups of ManItems, i.e., when documenting
 a function, operation, etc., it is possible to group them into suitable chunks.
-This can be particulary useful if there are several definitions of an operation
-with several differen argument types, all doing more or less the same to the arguments.
+This can be particularly useful if there are several definitions of an operation
+with several different argument types, all doing more or less the same to the arguments.
 Then their manual items can be grouped, sharing the same description and return type information.
 Note that it is currently not possible to give a header to the Group in the manual,
 but the generated ManItem heading of the first entry will be used.
@@ -596,7 +596,7 @@ The *, -, and + are fully interchangeable and can even be used mixed, but this i
    <Heading>Math modes</Heading>
    
    One can start an inline formula with a $, and also end it with $, just like in &LaTeX;. This will translate into
-   &GAPDoc;s inline math enviroment. For display mode one can use $$, also like &LaTeX;.
+   &GAPDoc;s inline math environment. For display mode one can use $$, also like &LaTeX;.
    
 <Listing><![CDATA[
 #! This is an inline formula: $1+1 = 2$.
