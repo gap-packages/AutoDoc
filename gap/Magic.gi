@@ -82,7 +82,7 @@ function (pkgdir, subdirs, extensions)
         files := DirectoryContents( d );
         Sort( files );
         for tmp in files do
-            if not AUTODOC_GetSuffix( tmp ) in [ "g", "gi", "gd", "autodoc" ] then
+            if not AUTODOC_GetSuffix( tmp ) in extensions then
                 continue;
             fi;
             if not IsReadableFile( Filename( d, tmp ) ) then
