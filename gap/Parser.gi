@@ -108,7 +108,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           current_command, was_declaration, filename, system_scope, groupnumber, chunk_list, rest_of_file_skipped,
           context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,
           current_line_unedited,
-          ReadLineWithLineCount, Normalized_ReadLine, line_number, ErrorWithPos, create_title_item_function;
+          ReadLineWithLineCount, Normalized_ReadLine, line_number, ErrorWithPos, create_title_item_function,
+          current_line_positition_for_filter;
     groupnumber := 0;
     level_scope := 0;
     autodoc_read_line := false;
@@ -206,12 +207,22 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             ## FIXME: The next two if's can be merged at some point
             if IsInt( has_filters ) then
                 for i in [ 1 .. has_filters ] do
+                    ## We now search for the filters. A filter is either followed by a ',', if there is more than one,
+                    ## or by ');' if it is the only or last one. So we search for the next delimiter.
                     while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
                         Append( filter_string, StripBeginEnd( current_line, " " ) );
                         current_line := ReadLineWithLineCount( filestream );
                         NormalizeWhitespace( current_line );
                     od;
-                    Append( filter_string, StripBeginEnd( current_line{ [ 1 .. Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) - 1 ] }, " " ) );
+                    current_line_positition_for_filter := Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) - 1;
+                    Append( filter_string, StripBeginEnd( current_line{ [ 1 .. current_line_positition_for_filter ] }, " " ) );
+                    current_line := current_line{[ current_line_positition_for_filter + 1 .. Length( current_line ) ]};
+                    if current_line[ 1 ] = ',' then
+                        current_line := current_line{[ 2 .. Length( current_line ) ]};
+                    elif current_line[ 1 ] = ')' then
+                        current_line := current_line{[ 3 .. Length( current_line ) ]};
+                    fi;
+                    ## FIXME: Refactor this whole if IsInt( has_filters ) case!
                     if has_filters - i > 0 then
                         Append( filter_string, ", " );
                     fi;
