@@ -65,7 +65,7 @@ Persons := [
 ],
 
 Status := "deposited",
-PackageWWWHome := "http://gap-packages.github.io/AutoDoc/",
+PackageWWWHome := "https://gap-packages.github.io/AutoDoc/",
 
 SourceRepository := rec(
     Type := "git",
