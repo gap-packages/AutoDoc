@@ -567,6 +567,10 @@ function( arg )
         # Finally, invoke GAPDoc
         CallFuncList( makeDocFun, args );
 
+        # NOTE: We cannot just write CopyHTMLStyleFiles(doc_dir) here, as
+        # CopyHTMLStyleFiles its argument directly to Directory(), leading
+        # to an error in all GAP versions up to and including 4.8.6. This
+        # will be fixed with GAP 4.9, where Directory() is made idempotent.
         CopyHTMLStyleFiles( Filename( doc_dir, "" ) );
 
         # The following (undocumented) API is there for compatibility
