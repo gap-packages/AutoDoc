@@ -279,14 +279,17 @@ InstallMethod( DocumentationCode, [ IsTreeForDocumentation, IsString ],
     local node;
     
     name := Concatenation( "System_", name );
-    if IsBound( tree!.nodes_by_label.( name ) ) then
-        return tree!.nodes_by_label.( name );
-    fi;
+    
     node := rec( content := [ ],
                  level := tree!.current_level );
     
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeCodeNodes,
                              Label, name );
+    
+    if IsBound( tree!.nodes_by_label.( name ) ) then
+        Add( tree!.nodes_by_label.( name )!.content, node );
+    fi;
+    
     tree!.nodes_by_label.( name ) := node;
     return node;
 end );
