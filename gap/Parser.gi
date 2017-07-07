@@ -249,6 +249,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 if current_item!.tester_names = fail and StripBeginEnd( filter_string, " " ) <> "for" then
                     current_item!.tester_names := filter_string;
                 fi;
+                if StripBeginEnd( filter_string, " " ) = "for" then
+                    has_filters := "empty_argument_list";
+                fi;
                 ##Adjust arguments
                 if not IsBound( current_item!.arguments ) then
                     if IsInt( has_filters ) then
@@ -264,6 +267,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                         else
                             current_item!.arguments := JoinStringsWithSeparator( current_item!.arguments, "," );
                         fi;
+                    elif has_filters = "empty_argument_list" then
+                        current_item!.arguments := "";
                     fi;
                 fi;
             fi;
