@@ -246,7 +246,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 filter_string := ReplacedString( filter_string, "\"", "" );
             fi;
             if filter_string <> false then
-                if current_item!.tester_names = fail then
+                if current_item!.tester_names = fail and StripBeginEnd( filter_string, " " ) <> "for" then
                     current_item!.tester_names := filter_string;
                 fi;
                 ##Adjust arguments
