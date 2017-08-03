@@ -300,9 +300,11 @@ Resets the current level to 0.
 <Subsection Label="@BeginExample">
 <Index Key="@BeginExample"><C>@BeginExample and @EndExample</C></Index>
 <Heading>@BeginExample and @EndExample</Heading>
-@BeginExample inserts an example into the manual. The syntax is like the example environment
-in GAPDoc. This examples can be tested by GAPDoc, and also stay readable by GAP.
-The GAP prompt is added by AutoDoc.
+@BeginExample inserts an example into the manual. The syntax for examples is different from
+GAPDocs example syntax in order to have a
+file that contains the example and is GAP readable. To achieve this, GAP commands are not preceded by a comment,
+while output has to be preceded by an &AutoDoc; comment.
+The GAP prompt for the display in the manual is added by AutoDoc.
 @EndExample ends the example block.
 <Listing><![CDATA[
 #! @BeginExample
