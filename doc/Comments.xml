@@ -314,11 +314,49 @@ Order(S5);
 ]]></Listing>
 </Subsection>
 
+
+<Subsection Label="@ExampleSession">
+<Index Key="@ExampleSession"><C>@ExampleSession, @BeginExampleSession, and @EndExampleSession</C></Index>
+<Heading>@ExampleSession and @EndExampleSession</Heading>
+@ExampleSession inserts an example into the manual, but in a different syntax.
+For example, consider
+<Listing><![CDATA[
+#! @BeginExample
+S5 := SymmetricGroup(5);
+#! Sym( [ 1 .. 5 ] )
+Order(S5);
+#! 120
+#! @EndExample
+]]></Listing>
+As you can see, the commands are not commented and hence are executed when the file containing
+the example block is read. To insert examples directly into source code files, one can instead
+use @ExampleSession:
+<Listing><![CDATA[
+#! @ExampleSession
+#! gap> S5 := SymmetricGroup(5);
+#! Sym( [ 1 .. 5 ] )
+#! gap> Order(S5);
+#! 120
+#! @EndExampleSession
+]]></Listing>
+It inserts an example into the manual just as @Example would do, but all lines are commented
+and therefore not executed when the file is read.
+</Subsection>
+
+
+
 <Subsection Label="@BeginLog">
 <Index Key="@BeginLog"><C>@BeginLog and @EndLog</C></Index>
 <Heading>@BeginLog and @EndLog</Heading>
 Works just like the @BeginExample command, but the example
 will not be tested. See the GAPDoc manual for more information.
+</Subsection>
+
+<Subsection Label="@BeginLogSession">
+<Index Key="@BeginLogSession"><C>@BeginLogSession and @EndLogSession</C></Index>
+<Heading>@BeginLogSession and @EndLogSession</Heading>
+Works just like the @BeginExampleSession command, but the example
+will not be tested if manual examples are run. See the GAPDoc manual for more information.
 </Subsection>
 
 <Subsection Label="@DoNotReadRestOfFile">
