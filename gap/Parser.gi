@@ -439,6 +439,15 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             current_item := ChapterInTree( tree, scope_chapter );
             chapter_info[ 1 ] := scope_chapter;
         end,
+        @ChapterLabel := function()
+            local scope_chapter, label_name;
+            if not IsBound( chapter_info[ 1 ] ) then
+                ErrorWithPos( "found @ChapterLabel with no active chapter" );
+            fi;
+            label_name := ReplacedString( current_command[ 2 ], " ", "_" );
+            scope_chapter := ChapterInTree( tree, chapter_info[ 1 ] );
+            scope_chapter!.additional_label := Concatenation( "Chapter_", label_name );
+        end,
         @Section := function()
             local scope_section;
             if not IsBound( chapter_info[ 1 ] ) then
@@ -448,6 +457,15 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             current_item := SectionInTree( tree, chapter_info[ 1 ], scope_section );
             Unbind( chapter_info[ 3 ] );
             chapter_info[ 2 ] := scope_section;
+        end,
+        @SectionLabel := function()
+            local scope_section, label_name;
+            if not IsBound( chapter_info[ 2 ] ) then
+                ErrorWithPos( "found @SectionLabel with no active section" );
+            fi;
+            label_name := ReplacedString( current_command[ 2 ], " ", "_" );
+            scope_section := SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] );
+            scope_section!.additional_label := Concatenation( "Section_", label_name );
         end,
         @EndSection := function()
             Unbind( chapter_info[ 2 ] );
@@ -462,6 +480,15 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             scope_subsection := ReplacedString( current_command[ 2 ], " ", "_" );
             current_item := SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], scope_subsection );
             chapter_info[ 3 ] := scope_subsection;
+        end,
+        @SubsectionLabel := function()
+            local scope_subsection, label_name;
+            if not IsBound( chapter_info[ 3 ] ) then
+                ErrorWithPos( "found @SubsectionLabel with no active Subsection" );
+            fi;
+            label_name := ReplacedString( current_command[ 2 ], " ", "_" );
+            scope_subsection := SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], chapter_info[ 3 ] );
+            scope_subsection!.additional_label := Concatenation( "Subsection_", label_name );
         end,
         @EndSubsection := function()
             Unbind( chapter_info[ 3 ] );
