@@ -138,6 +138,7 @@ text in your documentation, examples, mathematical chapters, etc..
 
 <Subsection Label="@Chapter">
 <Index Key="@Chapter"><C>@Chapter</C></Index>
+<Index Key="@ChapterLabel"><C>@ChapterLabel</C></Index>
 <Heading>@Chapter <A>name</A></Heading>
 Sets a chapter, all functions without separate info will be added to this chapter.
 Also all text comments, i.e. lines that begin with #! without a command, and which do not
@@ -150,10 +151,18 @@ Example:
 #!  This is my chapter.
 #!  I document my stuff in it.
 ]]></Listing>
+
+The <C>@ChapterLabel</C> <A>label</A> command
+can be used to set the label of the chapter to <C>Chapter_</C><A>label</A>.
+
+Additionally, the chapter will be stored as <C>_Chapter_</C><A>label</A><C>.xml</C>.
+
+
 </Subsection>
 
 <Subsection Label="@Section">
 <Index Key="@Section"><C>@Section</C></Index>
+<Index Key="@SectionLabel"><C>@SectionLabel</C></Index>
 <Heading>@Section <A>name</A></Heading>
 Sets a section like chapter sets a chapter.
 
@@ -161,6 +170,9 @@ Sets a section like chapter sets a chapter.
 #! @Section My first manual section
 #!  In this section I am going to document my first method.
 ]]></Listing>
+
+The <C>@SectionLabel</C> <A>label</A> command
+can be used to set the label of the section to <C>Section_</C><A>label</A>.
 </Subsection>
 
 <Subsection Label="@EndSection">
@@ -178,6 +190,7 @@ opening it might cause unexpected errors.
 
 <Subsection Label="@Subsection">
 <Index Key="@Subsection"><C>@Subsection</C></Index>
+<Index Key="@SubsectionLabel"><C>@SubsectionLabel</C></Index>
 <Heading>@Subsection <A>name</A></Heading>
 Sets a subsection like chapter sets a chapter.
 
@@ -185,6 +198,10 @@ Sets a subsection like chapter sets a chapter.
 #! @Subsection My first manual subsection
 #!  In this subsection I am going to document my first example.
 ]]></Listing>
+
+The <C>@SubsectionLabel</C> <A>label</A> command
+can be used to set the label of the subsection to <C>Subsection_</C><A>label</A>.
+
 </Subsection>
 
 <Subsection Label="@EndSubsection">
