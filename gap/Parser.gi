@@ -61,6 +61,13 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
     elif PositionSublist( type, "DeclareOperation" ) <> fail then
         entries := [ "Oper", "methods" ];
         has_filters := "List";
+    elif PositionSublist( type, "DeclareConstructor" ) <> fail then
+        ## FIXME: there should be a Constructor tag, but it is unfortunately not possible, since GAPDoc
+        ##        does not offer such a tag. Issue for this is filed here:
+        ##        https://github.com/frankluebeck/GAPDoc/issues/23
+        ##        Once this is fixed, the next line needs to be changed accordingly.
+        entries := [ "Oper", "methods" ];
+        has_filters := "List";
     elif PositionSublist( type, "DeclareGlobalFunction" ) <> fail then
         entries := [ "Func", "global_functions" ];
         has_filters := "No";
