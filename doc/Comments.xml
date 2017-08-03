@@ -318,6 +318,25 @@ Order(S5);
 ]]></Listing>
 </Subsection>
 
+
+<Subsection Label="@Listing">
+<Index Key="@Listing"><C>@Listing, @BeginListing, and @EndListing</C></Index>
+<Heading>@BeginListing <A>tested</A> and @EndListing</Heading>
+@BeginListing inserts an example into the manual. Opposed to @Example they have
+the same Syntax as GAPDoc examples and each line has to begin with a GAPDoc comment.
+@EndListing ends the example block.
+If <A>tested</A> is <C>false</C>, the example will not be tested if the manual examples are tested.
+<Listing><![CDATA[
+#! @BeginListing
+#! gap> S5 := SymmetricGroup(5);
+#! Sym( [ 1 .. 5 ] )
+#! gap> Order(S5);
+#! 120
+#! @EndListing
+]]></Listing>
+</Subsection>
+
+
 <Subsection Label="@BeginLog">
 <Index Key="@BeginLog"><C>@BeginLog and @EndLog</C></Index>
 <Heading>@BeginLog and @EndLog</Heading>

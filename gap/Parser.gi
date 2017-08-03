@@ -116,7 +116,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,
           current_line_unedited,
           ReadLineWithLineCount, Normalized_ReadLine, line_number, ErrorWithPos, create_title_item_function,
-          current_line_positition_for_filter;
+          current_line_positition_for_filter, read_listing;
     groupnumber := 0;
     level_scope := 0;
     autodoc_read_line := false;
@@ -415,6 +415,32 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         od;
         return example_node;
     end;
+    read_listing := function( is_tested_example )
+        local temp_string_list, temp_curr_line, temp_pos_comment, is_following_line, item_temp, example_node;
+        example_node := DocumentationExample( tree );
+        if is_tested_example = "false" then
+            example_node!.is_tested_example := false;
+        else
+            example_node!.is_tested_example := true;
+        fi;
+        temp_string_list := example_node!.content;
+        while true do
+            temp_curr_line := ReadLineWithLineCount( filestream );
+            if temp_curr_line[ Length( temp_curr_line )] = '\n' then
+                temp_curr_line := temp_curr_line{[ 1 .. Length( temp_curr_line ) - 1 ]};
+            fi;
+            if filestream = fail or PositionSublist( temp_curr_line, "@EndListing" ) <> fail then
+                break;
+            fi;
+            #! @DONT_SCAN_NEXT_LINE
+            temp_pos_comment := PositionSublist( temp_curr_line, "#!" );
+            if temp_pos_comment <> fail then
+                temp_curr_line := temp_curr_line{[ temp_pos_comment + 2 .. Length( temp_curr_line ) ]};
+                Add( temp_string_list, temp_curr_line );
+            fi;
+        od;
+        return example_node;
+    end;
     command_function_record := rec(
         ## HACK: Needed for AutoDoc parser to be scanned savely.
         ##       The lines where the AutoDoc comments are
@@ -638,6 +664,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @EndAutoDocPlainText := function()
             plain_text_mode := false;
         end,
+        @Listing := function()
+            local example_node;
+            example_node := read_listing( current_command[ 2 ] );
+            Add( current_item, example_node );
+        end,
+        @BeginListing := ~.@Listing
     );
     
     ## The following commands are specific for worksheets. They do not have a packageinfo,
