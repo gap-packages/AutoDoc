@@ -42,7 +42,7 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
     od;
 
     if not IsBound( return_value ) then
-        return_value := "";
+        return_value := false;
     fi;
 
     if IsList( return_value ) and ( not IsString( return_value ) ) and return_value <> "" then

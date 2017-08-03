@@ -61,6 +61,13 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
     elif PositionSublist( type, "DeclareOperation" ) <> fail then
         entries := [ "Oper", "methods" ];
         has_filters := "List";
+    elif PositionSublist( type, "DeclareConstructor" ) <> fail then
+        ## FIXME: there should be a Constructor tag, but it is unfortunately not possible, since GAPDoc
+        ##        does not offer such a tag. Issue for this is filed here:
+        ##        https://github.com/frankluebeck/GAPDoc/issues/23
+        ##        Once this is fixed, the next line needs to be changed accordingly.
+        entries := [ "Oper", "methods" ];
+        has_filters := "List";
     elif PositionSublist( type, "DeclareGlobalFunction" ) <> fail then
         entries := [ "Func", "global_functions" ];
         has_filters := "No";
@@ -108,7 +115,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           current_command, was_declaration, filename, system_scope, groupnumber, chunk_list, rest_of_file_skipped,
           context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,
           current_line_unedited,
-          ReadLineWithLineCount, Normalized_ReadLine, line_number, ErrorWithPos, create_title_item_function;
+          ReadLineWithLineCount, Normalized_ReadLine, line_number, ErrorWithPos, create_title_item_function,
+          current_line_positition_for_filter, read_listing;
     groupnumber := 0;
     level_scope := 0;
     autodoc_read_line := false;
@@ -206,12 +214,22 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             ## FIXME: The next two if's can be merged at some point
             if IsInt( has_filters ) then
                 for i in [ 1 .. has_filters ] do
+                    ## We now search for the filters. A filter is either followed by a ',', if there is more than one,
+                    ## or by ');' if it is the only or last one. So we search for the next delimiter.
                     while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
                         Append( filter_string, StripBeginEnd( current_line, " " ) );
                         current_line := ReadLineWithLineCount( filestream );
                         NormalizeWhitespace( current_line );
                     od;
-                    Append( filter_string, StripBeginEnd( current_line{ [ 1 .. Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) - 1 ] }, " " ) );
+                    current_line_positition_for_filter := Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) - 1;
+                    Append( filter_string, StripBeginEnd( current_line{ [ 1 .. current_line_positition_for_filter ] }, " " ) );
+                    current_line := current_line{[ current_line_positition_for_filter + 1 .. Length( current_line ) ]};
+                    if current_line[ 1 ] = ',' then
+                        current_line := current_line{[ 2 .. Length( current_line ) ]};
+                    elif current_line[ 1 ] = ')' then
+                        current_line := current_line{[ 3 .. Length( current_line ) ]};
+                    fi;
+                    ## FIXME: Refactor this whole if IsInt( has_filters ) case!
                     if has_filters - i > 0 then
                         Append( filter_string, ", " );
                     fi;
@@ -235,8 +253,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 filter_string := ReplacedString( filter_string, "\"", "" );
             fi;
             if filter_string <> false then
-                if current_item!.tester_names = fail then
+                if current_item!.tester_names = fail and StripBeginEnd( filter_string, " " ) <> "for" then
                     current_item!.tester_names := filter_string;
+                fi;
+                if StripBeginEnd( filter_string, " " ) = "for" then
+                    has_filters := "empty_argument_list";
                 fi;
                 ##Adjust arguments
                 if not IsBound( current_item!.arguments ) then
@@ -253,6 +274,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                         else
                             current_item!.arguments := JoinStringsWithSeparator( current_item!.arguments, "," );
                         fi;
+                    elif has_filters = "empty_argument_list" then
+                        current_item!.arguments := "";
                     fi;
                 fi;
             fi;
@@ -392,6 +415,32 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         od;
         return example_node;
     end;
+    read_listing := function( is_tested_example )
+        local temp_string_list, temp_curr_line, temp_pos_comment, is_following_line, item_temp, example_node;
+        example_node := DocumentationExample( tree );
+        if is_tested_example = "false" then
+            example_node!.is_tested_example := false;
+        else
+            example_node!.is_tested_example := true;
+        fi;
+        temp_string_list := example_node!.content;
+        while true do
+            temp_curr_line := ReadLineWithLineCount( filestream );
+            if temp_curr_line[ Length( temp_curr_line )] = '\n' then
+                temp_curr_line := temp_curr_line{[ 1 .. Length( temp_curr_line ) - 1 ]};
+            fi;
+            if filestream = fail or PositionSublist( temp_curr_line, "@EndListing" ) <> fail then
+                break;
+            fi;
+            #! @DONT_SCAN_NEXT_LINE
+            temp_pos_comment := PositionSublist( temp_curr_line, "#!" );
+            if temp_pos_comment <> fail then
+                temp_curr_line := temp_curr_line{[ temp_pos_comment + 2 .. Length( temp_curr_line ) ]};
+                Add( temp_string_list, temp_curr_line );
+            fi;
+        od;
+        return example_node;
+    end;
     command_function_record := rec(
         ## HACK: Needed for AutoDoc parser to be scanned savely.
         ##       The lines where the AutoDoc comments are
@@ -416,6 +465,15 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             current_item := ChapterInTree( tree, scope_chapter );
             chapter_info[ 1 ] := scope_chapter;
         end,
+        @ChapterLabel := function()
+            local scope_chapter, label_name;
+            if not IsBound( chapter_info[ 1 ] ) then
+                ErrorWithPos( "found @ChapterLabel with no active chapter" );
+            fi;
+            label_name := ReplacedString( current_command[ 2 ], " ", "_" );
+            scope_chapter := ChapterInTree( tree, chapter_info[ 1 ] );
+            scope_chapter!.additional_label := Concatenation( "Chapter_", label_name );
+        end,
         @Section := function()
             local scope_section;
             if not IsBound( chapter_info[ 1 ] ) then
@@ -425,6 +483,15 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             current_item := SectionInTree( tree, chapter_info[ 1 ], scope_section );
             Unbind( chapter_info[ 3 ] );
             chapter_info[ 2 ] := scope_section;
+        end,
+        @SectionLabel := function()
+            local scope_section, label_name;
+            if not IsBound( chapter_info[ 2 ] ) then
+                ErrorWithPos( "found @SectionLabel with no active section" );
+            fi;
+            label_name := ReplacedString( current_command[ 2 ], " ", "_" );
+            scope_section := SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] );
+            scope_section!.additional_label := Concatenation( "Section_", label_name );
         end,
         @EndSection := function()
             Unbind( chapter_info[ 2 ] );
@@ -439,6 +506,15 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             scope_subsection := ReplacedString( current_command[ 2 ], " ", "_" );
             current_item := SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], scope_subsection );
             chapter_info[ 3 ] := scope_subsection;
+        end,
+        @SubsectionLabel := function()
+            local scope_subsection, label_name;
+            if not IsBound( chapter_info[ 3 ] ) then
+                ErrorWithPos( "found @SubsectionLabel with no active Subsection" );
+            fi;
+            label_name := ReplacedString( current_command[ 2 ], " ", "_" );
+            scope_subsection := SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], chapter_info[ 3 ] );
+            scope_subsection!.additional_label := Concatenation( "Subsection_", label_name );
         end,
         @EndSubsection := function()
             Unbind( chapter_info[ 3 ] );
@@ -588,6 +664,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @EndAutoDocPlainText := function()
             plain_text_mode := false;
         end,
+        @Listing := function()
+            local example_node;
+            example_node := read_listing( current_command[ 2 ] );
+            Add( current_item, example_node );
+        end,
+        @BeginListing := ~.@Listing
     );
     
     ## The following commands are specific for worksheets. They do not have a packageinfo,
