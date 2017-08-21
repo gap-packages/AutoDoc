@@ -625,7 +625,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @Log := ~.@BeginLog,
         STRING := function()
             local comment_pos;
-            if not IsBound( current_item ) or current_command[ 2 ] = "" then
+            if not IsBound( current_item ) then
                 return;
             fi;
             comment_pos := PositionSublist( current_line_unedited, "#!" );
