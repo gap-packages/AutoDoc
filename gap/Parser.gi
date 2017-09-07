@@ -38,6 +38,10 @@ InstallGlobalFunction( Scan_for_AutoDoc_Part,
     return [ command, argument ];
 end );
 
+
+BindGlobal( "AutoDoc_PrintWarningForConstructor",
+            AutoDoc_CreatePrintOnceFunction( "Installed GAPDoc version does not support constructors" ) );
+
 ##
 InstallGlobalFunction( AutoDoc_Type_Of_Item,
   function( current_item, type, default_chapter_data )
@@ -62,11 +66,12 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         entries := [ "Oper", "methods" ];
         has_filters := "List";
     elif PositionSublist( type, "DeclareConstructor" ) <> fail then
-        ## FIXME: there should be a Constructor tag, but it is unfortunately not possible, since GAPDoc
-        ##        does not offer such a tag. Issue for this is filed here:
-        ##        https://github.com/frankluebeck/GAPDoc/issues/23
-        ##        Once this is fixed, the next line needs to be changed accordingly.
-        entries := [ "Oper", "methods" ];
+        if IsPackageMarkedForLoading( "GAPDoc", ">=1.6.1" ) then
+            entries := [ "Constr", "methods" ];
+        else
+            AutoDoc_PrintWarningForConstructor();
+            entries := [ "Oper", "methods" ];
+        fi;
         has_filters := "List";
     elif PositionSublist( type, "DeclareGlobalFunction" ) <> fail then
         entries := [ "Func", "global_functions" ];
