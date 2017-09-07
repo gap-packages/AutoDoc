@@ -185,3 +185,18 @@ InstallGlobalFunction( AutoDoc_MakeGAPDocDoc_WithoutLatex,
 
   return r;
 end);
+
+InstallGlobalFunction( AutoDoc_CreatePrintOnceFunction,
+  function( message )
+    local x;
+    
+    x := true;
+    return function( )
+        if x then
+            Print( message, "\n" );
+        fi;
+        x := false;
+    end;
+end );
+
+

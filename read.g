@@ -10,13 +10,13 @@
 ##
 #############################################################################
 
+ReadPackage( "AutoDoc", "gap/ToolFunctions.gi" );
+
 ReadPackage( "AutoDoc", "gap/DocumentationTree.gi" );
 
 ReadPackage( "AutoDoc", "gap/Parser.gi" );
 
 ReadPackage( "AutoDoc", "gap/AutoDocMainFunction.gi" );
-
-ReadPackage( "AutoDoc", "gap/ToolFunctions.gi" );
 
 ReadPackage( "AutoDoc", "gap/Magic.gi" );
 
