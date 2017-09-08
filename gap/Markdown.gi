@@ -26,7 +26,7 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
     local i, current_list, current_string, max_line_length,
           current_position, already_in_list, command_list_with_translation, beginning,
           commands, position_of_command, insert, beginning_whitespaces, temp, string_list_temp, skipped,
-          already_inserted_paragraph;
+          already_inserted_paragraph, in_list, in_item;
 
     ## Check for paragraphs by turning an empty string into <P/>
     
@@ -113,6 +113,31 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
             Add( string_list, "</List>" );
         fi;
         current_position := current_position + 1;
+    od;
+    
+    # Remove <P/> if in List but not in item
+    in_list := 0;
+    in_item := 0;
+    for current_position in [ 1 .. Length( string_list ) ] do
+        if PositionSublist( string_list[ current_position ], "<List>" ) <> fail then
+            in_list := in_list + 1;
+        fi;
+        
+        if PositionSublist( string_list[ current_position ], "</List>" ) <> fail  then
+            in_list := in_list - 1;
+        fi;
+        
+        if PositionSublist( string_list[ current_position ], "<Item>" ) <> fail then
+            in_item := in_item + 1;
+        fi;
+        
+        if PositionSublist( string_list[ current_position ], "</Item>" ) <> fail then
+            in_item := in_item - 1;
+        fi;
+        
+        if in_item < in_list and string_list[ current_position ] = "<P/>" then
+            string_list[ current_position ] := "";
+        fi;
     od;
 
     ## Find commands
