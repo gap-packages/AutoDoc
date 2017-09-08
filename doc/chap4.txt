@@ -99,7 +99,7 @@
                     manual, i.e. typically appendices.[133X
   
               [8X[3Xbib[103X[108X
-                    [33X[0;18YThe  name of a bibliography file, in Bibtex or XML format.
+                    [33X[0;18YThe  name of a bibliography file, in BibTeX or XML format.
                     If   this   key   is   not   set,  but  there  is  a  file
                     [11Xdoc/PACKAGENAME.bib[111X  then  it  is assumed that you want to
                     use this as your bibliography.[133X
@@ -128,7 +128,7 @@
   
               [8X[3XTitlePage[103X[108X
                     [33X[0;18YA record whose entries are used to embellish the generated
-                    titlepage  for  the package manual with extra information,
+                    title  page for the package manual with extra information,
                     such  as a copyright statement or acknowledgments. To this
                     end,  the  names  of the record components are used as XML
                     element  names,  and  the  values  of  the  components are
@@ -140,8 +140,8 @@
                       [4Xrec( Acknowledgements := "Many thanks to ..." )[104X
                     [4X[32X[104X
   
-                    [33X[0;18YFor a list of valid entries in the titlepage, please refer
-                    to   the  [5XGAPDoc[105X  manual,  specifically  section  [14X'GAPDoc:
+                    [33X[0;18YFor  a  list  of  valid  entries in the title page, please
+                    refer  to the [5XGAPDoc[105X manual, specifically section [14X'GAPDoc:
                     TitlePage'[114X.[133X
   
               [8X[3XMainPage[103X[108X

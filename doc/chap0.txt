@@ -6,10 +6,10 @@
                  [1X Generate documentation from [5XGAP[105X source code [101X
   
   
-                                   2016.12.04
+                                   2017.09.08
   
   
-                                4 December 2016
+                                8 September 2017
   
   
                                Sebastian Gutsche
@@ -86,12 +86,14 @@
       2.2-10 [33X[0;0Y@Level [3Xlvl[103X[133X
       2.2-11 [33X[0;0Y@ResetLevel[133X
       2.2-12 [33X[0;0Y@BeginExample and @EndExample[133X
-      2.2-13 [33X[0;0Y@BeginLog and @EndLog[133X
-      2.2-14 [33X[0;0Y@DoNotReadRestOfFile[133X
-      2.2-15 [33X[0;0Y@BeginChunk [3Xname[103X, @EndChunk, and @InsertChunk [3Xname[103X[133X
-      2.2-16 [33X[0;0Y@BeginSystem [3Xname[103X, @EndSystem, and @InsertSystem [3Xname[103X[133X
-      2.2-17 [33X[0;0Y@BeginCode [3Xname[103X, @EndCode, and @InsertCode [3Xname[103X[133X
-      2.2-18 [33X[0;0Y@LatexOnly [3Xtext[103X, @BeginLatexOnly , and @EndLatexOnly[133X
+      2.2-13 [33X[0;0Y@ExampleSession and @EndExampleSession[133X
+      2.2-14 [33X[0;0Y@BeginLog and @EndLog[133X
+      2.2-15 [33X[0;0Y@BeginLogSession and @EndLogSession[133X
+      2.2-16 [33X[0;0Y@DoNotReadRestOfFile[133X
+      2.2-17 [33X[0;0Y@BeginChunk [3Xname[103X, @EndChunk, and @InsertChunk [3Xname[103X[133X
+      2.2-18 [33X[0;0Y@BeginSystem [3Xname[103X, @EndSystem, and @InsertSystem [3Xname[103X[133X
+      2.2-19 [33X[0;0Y@BeginCode [3Xname[103X, @EndCode, and @InsertCode [3Xname[103X[133X
+      2.2-20 [33X[0;0Y@LatexOnly [3Xtext[103X, @BeginLatexOnly , and @EndLatexOnly[133X
     2.3 [33X[0;0YTitle page commands[133X
     2.4 [33X[0;0YPlain text files[133X
     2.5 [33X[0;0YGrouping[133X

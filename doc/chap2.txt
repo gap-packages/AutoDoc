@@ -126,7 +126,7 @@
   
   [1X2.2-1 [33X[0;0Y@Chapter [3Xname[103X[101X[1X[133X[101X
   
-  [33X[0;0YSets  a  chapter,  all functions without seperate info will be added to this
+  [33X[0;0YSets  a  chapter,  all functions without separate info will be added to this
   chapter.  Also  all  text  comments, i.e. lines that begin with #! without a
   command,  and  which  do not follow after @description, will be added to the
   chapter as regular text. Example:[133X
@@ -137,6 +137,10 @@
     [4X#!  I document my stuff in it.[104X
   [4X[32X[104X
   
+  [33X[0;0YThe  [10X@ChapterLabel[110X [3Xlabel[103X command can be used to set the label of the chapter
+  to   [10XChapter_[110X[3Xlabel[103X.   Additionally,   the   chapter   will   be   stored  as
+  [10X_Chapter_[110X[3Xlabel[103X[10X.xml[110X.[133X
+  
   
   [1X2.2-2 [33X[0;0Y@Section [3Xname[103X[101X[1X[133X[101X
   
@@ -146,6 +150,9 @@
     [4X#! @Section My first manual section[104X
     [4X#!  In this section I am going to document my first method.[104X
   [4X[32X[104X
+  
+  [33X[0;0YThe  [10X@SectionLabel[110X [3Xlabel[103X command can be used to set the label of the section
+  to [10XSection_[110X[3Xlabel[103X.[133X
   
   
   [1X2.2-3 [33X[0;0Y@EndSection[133X[101X
@@ -168,6 +175,9 @@
     [4X#! @Subsection My first manual subsection[104X
     [4X#!  In this subsection I am going to document my first example.[104X
   [4X[32X[104X
+  
+  [33X[0;0YThe  [10X@SubsectionLabel[110X  [3Xlabel[103X  command  can  be  used to set the label of the
+  subsection to [10XSubsection_[110X[3Xlabel[103X.[133X
   
   
   [1X2.2-5 [33X[0;0Y@EndSubsection[133X[101X
@@ -252,10 +262,12 @@
   
   [1X2.2-12 [33X[0;0Y@BeginExample and @EndExample[133X[101X
   
-  [33X[0;0Y@BeginExample  inserts  an  example  into the manual. The syntax is like the
-  example  enviroment  in  GAPDoc.  This examples can be tested by GAPDoc, and
-  also  stay  readable by GAP. The GAP prompt is added by AutoDoc. @EndExample
-  ends the example block.[133X
+  [33X[0;0Y@BeginExample inserts an example into the manual. The syntax for examples is
+  different  from GAPDocs example syntax in order to have a file that contains
+  the  example  and  is  GAP  readable.  To achieve this, GAP commands are not
+  preceded  by  a  comment,  while  output  has  to  be preceded by an [5XAutoDoc[105X
+  comment.  The  GAP prompt for the display in the manual is added by AutoDoc.
+  @EndExample ends the example block.[133X
   
   [4X[32X[104X
     [4X#! @BeginExample[104X
@@ -267,13 +279,51 @@
   [4X[32X[104X
   
   
-  [1X2.2-13 [33X[0;0Y@BeginLog and @EndLog[133X[101X
+  [1X2.2-13 [33X[0;0Y@ExampleSession and @EndExampleSession[133X[101X
+  
+  [33X[0;0Y@ExampleSession  inserts  an  example  into  the  manual, but in a different
+  syntax. For example, consider[133X
+  
+  [4X[32X[104X
+    [4X#! @BeginExample[104X
+    [4XS5 := SymmetricGroup(5);[104X
+    [4X#! Sym( [ 1 .. 5 ] )[104X
+    [4XOrder(S5);[104X
+    [4X#! 120[104X
+    [4X#! @EndExample[104X
+  [4X[32X[104X
+  
+  [33X[0;0YAs  you  can see, the commands are not commented and hence are executed when
+  the  file  containing the example block is read. To insert examples directly
+  into source code files, one can instead use @ExampleSession:[133X
+  
+  [4X[32X[104X
+    [4X#! @ExampleSession[104X
+    [4X#! gap> S5 := SymmetricGroup(5);[104X
+    [4X#! Sym( [ 1 .. 5 ] )[104X
+    [4X#! gap> Order(S5);[104X
+    [4X#! 120[104X
+    [4X#! @EndExampleSession[104X
+  [4X[32X[104X
+  
+  [33X[0;0YIt  inserts  an  example  into the manual just as @Example would do, but all
+  lines are commented and therefore not executed when the file is read.[133X
+  
+  
+  [1X2.2-14 [33X[0;0Y@BeginLog and @EndLog[133X[101X
   
   [33X[0;0YWorks  just  like  the  @BeginExample  command,  but the example will not be
   tested. See the GAPDoc manual for more information.[133X
   
   
-  [1X2.2-14 [33X[0;0Y@DoNotReadRestOfFile[133X[101X
+  [1X2.2-15 [33X[0;0Y@BeginLogSession and @EndLogSession[133X[101X
+  
+  [33X[0;0YWorks  just  like the @BeginExampleSession command, but the example will not
+  be  tested  if  manual  examples  are  run.  See  the GAPDoc manual for more
+  information.[133X
+  
+  
+  [1X2.2-16 [33X[0;0Y@DoNotReadRestOfFile[133X[101X
   
   [33X[0;0YPrevents  the rest of the file from being read by the parser. Useful for not
   finished or temporary files.[133X
@@ -287,7 +337,7 @@
   [4X[32X[104X
   
   
-  [1X2.2-15 [33X[0;0Y@BeginChunk [3Xname[103X[101X[1X, @EndChunk, and @InsertChunk [3Xname[103X[101X[1X[133X[101X
+  [1X2.2-17 [33X[0;0Y@BeginChunk [3Xname[103X[101X[1X, @EndChunk, and @InsertChunk [3Xname[103X[101X[1X[133X[101X
   
   [33X[0;0YText insider of a @BeginChunk / @EndChunk part will not be inserted into the
   final  documentation  directly.  Instead,  the text is stored in an internal
@@ -324,13 +374,13 @@
   [4X[32X[104X
   
   
-  [1X2.2-16 [33X[0;0Y@BeginSystem [3Xname[103X[101X[1X, @EndSystem, and @InsertSystem [3Xname[103X[101X[1X[133X[101X
+  [1X2.2-18 [33X[0;0Y@BeginSystem [3Xname[103X[101X[1X, @EndSystem, and @InsertSystem [3Xname[103X[101X[1X[133X[101X
   
   [33X[0;0YSame  as  @BeginChunk  etc.  This  command  is  deprecated. Please use chunk
   instead.[133X
   
   
-  [1X2.2-17 [33X[0;0Y@BeginCode [3Xname[103X[101X[1X, @EndCode, and @InsertCode [3Xname[103X[101X[1X[133X[101X
+  [1X2.2-19 [33X[0;0Y@BeginCode [3Xname[103X[101X[1X, @EndCode, and @InsertCode [3Xname[103X[101X[1X[133X[101X
   
   [33X[0;0YInserts the text between @BeginCode and @EndCode verbatim at the point where
   @InsertCode  is called. This is useful to insert code excerpts directly into
@@ -346,7 +396,7 @@
   [4X[32X[104X
   
   
-  [1X2.2-18 [33X[0;0Y@LatexOnly [3Xtext[103X[101X[1X, @BeginLatexOnly , and @EndLatexOnly[133X[101X
+  [1X2.2-20 [33X[0;0Y@LatexOnly [3Xtext[103X[101X[1X, @BeginLatexOnly , and @EndLatexOnly[133X[101X
   
   [33X[0;0YCode  inserted between @BeginLatexOnly and @EndLatexOnly or after @LatexOnly
   is  only inserted in the PDF version of the manual or worksheet. It can hold
@@ -388,7 +438,7 @@
   
   [30X    [33X[0;6Y@Colophon[133X
   
-  [33X[0;0YThose  add  the following lines at the corresponding point of the titlepage.
+  [33X[0;0YThose  add the following lines at the corresponding point of the title page.
   Please  note  that  many  of those things can be (better) extracted from the
   PackageInfo.g.  In  case you set some of those, the extracted or in scaffold
   defined  items  will  be  overwritten.  While  this  is  not very useful for
@@ -411,8 +461,8 @@
   
   [33X[0;0YIn [5XGAPDoc[105X, it is possible to make groups of ManItems, i.e., when documenting
   a  function,  operation,  etc.,  it  is possible to group them into suitable
-  chunks.  This  can be particulary useful if there are several definitions of
-  an  operation  with  several differen argument types, all doing more or less
+  chunks.  This can be particularly useful if there are several definitions of
+  an  operation  with several different argument types, all doing more or less
   the  same  to the arguments. Then their manual items can be grouped, sharing
   the  same description and return type information. Note that it is currently
   not  possible to give a header to the Group in the manual, but the generated
@@ -529,7 +579,7 @@
   [1X2.7-2 [33X[0;0YMath modes[133X[101X
   
   [33X[0;0YOne  can start an inline formula with a $, and also end it with $, just like
-  in  LaTeX.  This  will  translate  into  [5XGAPDoc[105Xs inline math enviroment. For
+  in  LaTeX.  This  will  translate  into [5XGAPDoc[105Xs inline math environment. For
   display mode one can use $$, also like LaTeX.[133X
   
   [4X[32X[104X

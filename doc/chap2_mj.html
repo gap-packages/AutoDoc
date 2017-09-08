@@ -70,17 +70,21 @@
 </span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X83D6DA3B83D3436C">2.2-12 <span class="Heading">@BeginExample and @EndExample</span></a>
 </span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X81A2D44D834C0A17">2.2-13 <span class="Heading">@BeginLog and @EndLog</span></a>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7F07018582EA13D6">2.2-13 <span class="Heading">@ExampleSession and @EndExampleSession</span></a>
 </span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X78DC644E8519280C">2.2-14 <span class="Heading">@DoNotReadRestOfFile</span></a>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X81A2D44D834C0A17">2.2-14 <span class="Heading">@BeginLog and @EndLog</span></a>
 </span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X84F96D3E7BD5F617">2.2-15 <span class="Heading">@BeginChunk <var class="Arg">name</var>, @EndChunk, and @InsertChunk <var class="Arg">name</var></span></a>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7BADE876794FF309">2.2-15 <span class="Heading">@BeginLogSession and @EndLogSession</span></a>
 </span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X86B00B6A876D6E7C">2.2-16 <span class="Heading">@BeginSystem <var class="Arg">name</var>, @EndSystem, and @InsertSystem <var class="Arg">name</var></span></a>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X78DC644E8519280C">2.2-16 <span class="Heading">@DoNotReadRestOfFile</span></a>
 </span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X79B28EFE7C93E47D">2.2-17 <span class="Heading">@BeginCode <var class="Arg">name</var>, @EndCode, and @InsertCode <var class="Arg">name</var></span></a>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X84F96D3E7BD5F617">2.2-17 <span class="Heading">@BeginChunk <var class="Arg">name</var>, @EndChunk, and @InsertChunk <var class="Arg">name</var></span></a>
 </span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X828C684E8582A9D0">2.2-18 <span class="Heading">@LatexOnly <var class="Arg">text</var>, @BeginLatexOnly , and @EndLatexOnly</span></a>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X86B00B6A876D6E7C">2.2-18 <span class="Heading">@BeginSystem <var class="Arg">name</var>, @EndSystem, and @InsertSystem <var class="Arg">name</var></span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X79B28EFE7C93E47D">2.2-19 <span class="Heading">@BeginCode <var class="Arg">name</var>, @EndCode, and @InsertCode <var class="Arg">name</var></span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X828C684E8582A9D0">2.2-20 <span class="Heading">@LatexOnly <var class="Arg">text</var>, @BeginLatexOnly , and @EndLatexOnly</span></a>
 </span>
 </div></div>
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2_mj.html#X841E3AD584F5385C">2.3 <span class="Heading">Title page commands</span></a>
@@ -228,7 +232,7 @@ DeclareAttribute( "CharacterDegreesOfBlocks",
 
 <h5>2.2-1 <span class="Heading">@Chapter <var class="Arg">name</var></span></h5>
 
-<p>Sets a chapter, all functions without seperate info will be added to this chapter. Also all text comments, i.e. lines that begin with #! without a command, and which do not follow after @description, will be added to the chapter as regular text. Example:</p>
+<p>Sets a chapter, all functions without separate info will be added to this chapter. Also all text comments, i.e. lines that begin with #! without a command, and which do not follow after @description, will be added to the chapter as regular text. Example:</p>
 
 
 <div class="example"><pre>
@@ -236,6 +240,8 @@ DeclareAttribute( "CharacterDegreesOfBlocks",
 #!  This is my chapter.
 #!  I document my stuff in it.
 </pre></div>
+
+<p>The <code class="code">@ChapterLabel</code> <var class="Arg">label</var> command can be used to set the label of the chapter to <code class="code">Chapter_</code><var class="Arg">label</var>. Additionally, the chapter will be stored as <code class="code">_Chapter_</code><var class="Arg">label</var><code class="code">.xml</code>.</p>
 
 <p><a id="X83651A8B7EAE7F65" name="X83651A8B7EAE7F65"></a></p>
 
@@ -248,6 +254,8 @@ DeclareAttribute( "CharacterDegreesOfBlocks",
 #! @Section My first manual section
 #!  In this section I am going to document my first method.
 </pre></div>
+
+<p>The <code class="code">@SectionLabel</code> <var class="Arg">label</var> command can be used to set the label of the section to <code class="code">Section_</code><var class="Arg">label</var>.</p>
 
 <p><a id="X852C1B327A127225" name="X852C1B327A127225"></a></p>
 
@@ -273,6 +281,8 @@ DeclareAttribute( "CharacterDegreesOfBlocks",
 #! @Subsection My first manual subsection
 #!  In this subsection I am going to document my first example.
 </pre></div>
+
+<p>The <code class="code">@SubsectionLabel</code> <var class="Arg">label</var> command can be used to set the label of the subsection to <code class="code">Subsection_</code><var class="Arg">label</var>.</p>
 
 <p><a id="X83F70B0F85628361" name="X83F70B0F85628361"></a></p>
 
@@ -360,7 +370,7 @@ DeclareOperation( "GroupedOperation",
 
 <h5>2.2-12 <span class="Heading">@BeginExample and @EndExample</span></h5>
 
-<p>@BeginExample inserts an example into the manual. The syntax is like the example enviroment in GAPDoc. This examples can be tested by GAPDoc, and also stay readable by GAP. The GAP prompt is added by AutoDoc. @EndExample ends the example block.</p>
+<p>@BeginExample inserts an example into the manual. The syntax for examples is different from GAPDocs example syntax in order to have a file that contains the example and is GAP readable. To achieve this, GAP commands are not preceded by a comment, while output has to be preceded by an <strong class="pkg">AutoDoc</strong> comment. The GAP prompt for the display in the manual is added by AutoDoc. @EndExample ends the example block.</p>
 
 
 <div class="example"><pre>
@@ -372,15 +382,51 @@ Order(S5);
 #! @EndExample
 </pre></div>
 
+<p><a id="X7F07018582EA13D6" name="X7F07018582EA13D6"></a></p>
+
+<h5>2.2-13 <span class="Heading">@ExampleSession and @EndExampleSession</span></h5>
+
+<p>@ExampleSession inserts an example into the manual, but in a different syntax. For example, consider</p>
+
+
+<div class="example"><pre>
+#! @BeginExample
+S5 := SymmetricGroup(5);
+#! Sym( [ 1 .. 5 ] )
+Order(S5);
+#! 120
+#! @EndExample
+</pre></div>
+
+<p>As you can see, the commands are not commented and hence are executed when the file containing the example block is read. To insert examples directly into source code files, one can instead use @ExampleSession:</p>
+
+
+<div class="example"><pre>
+#! @ExampleSession
+#! gap&gt; S5 := SymmetricGroup(5);
+#! Sym( [ 1 .. 5 ] )
+#! gap&gt; Order(S5);
+#! 120
+#! @EndExampleSession
+</pre></div>
+
+<p>It inserts an example into the manual just as @Example would do, but all lines are commented and therefore not executed when the file is read.</p>
+
 <p><a id="X81A2D44D834C0A17" name="X81A2D44D834C0A17"></a></p>
 
-<h5>2.2-13 <span class="Heading">@BeginLog and @EndLog</span></h5>
+<h5>2.2-14 <span class="Heading">@BeginLog and @EndLog</span></h5>
 
 <p>Works just like the @BeginExample command, but the example will not be tested. See the GAPDoc manual for more information.</p>
 
+<p><a id="X7BADE876794FF309" name="X7BADE876794FF309"></a></p>
+
+<h5>2.2-15 <span class="Heading">@BeginLogSession and @EndLogSession</span></h5>
+
+<p>Works just like the @BeginExampleSession command, but the example will not be tested if manual examples are run. See the GAPDoc manual for more information.</p>
+
 <p><a id="X78DC644E8519280C" name="X78DC644E8519280C"></a></p>
 
-<h5>2.2-14 <span class="Heading">@DoNotReadRestOfFile</span></h5>
+<h5>2.2-16 <span class="Heading">@DoNotReadRestOfFile</span></h5>
 
 <p>Prevents the rest of the file from being read by the parser. Useful for not finished or temporary files.</p>
 
@@ -395,7 +441,7 @@ Order(S5);
 
 <p><a id="X84F96D3E7BD5F617" name="X84F96D3E7BD5F617"></a></p>
 
-<h5>2.2-15 <span class="Heading">@BeginChunk <var class="Arg">name</var>, @EndChunk, and @InsertChunk <var class="Arg">name</var></span></h5>
+<h5>2.2-17 <span class="Heading">@BeginChunk <var class="Arg">name</var>, @EndChunk, and @InsertChunk <var class="Arg">name</var></span></h5>
 
 <p>Text insider of a @BeginChunk / @EndChunk part will not be inserted into the final documentation directly. Instead, the text is stored in an internal buffer. That chunk of text can then later on be inserted in any other place by using the @InsertChunk <var class="Arg">name</var> command. If you do not provide an @EndChunk, the chunk ends at the end of the file.</p>
 
@@ -432,13 +478,13 @@ Order(S5);
 
 <p><a id="X86B00B6A876D6E7C" name="X86B00B6A876D6E7C"></a></p>
 
-<h5>2.2-16 <span class="Heading">@BeginSystem <var class="Arg">name</var>, @EndSystem, and @InsertSystem <var class="Arg">name</var></span></h5>
+<h5>2.2-18 <span class="Heading">@BeginSystem <var class="Arg">name</var>, @EndSystem, and @InsertSystem <var class="Arg">name</var></span></h5>
 
 <p>Same as @BeginChunk etc. This command is deprecated. Please use chunk instead.</p>
 
 <p><a id="X79B28EFE7C93E47D" name="X79B28EFE7C93E47D"></a></p>
 
-<h5>2.2-17 <span class="Heading">@BeginCode <var class="Arg">name</var>, @EndCode, and @InsertCode <var class="Arg">name</var></span></h5>
+<h5>2.2-19 <span class="Heading">@BeginCode <var class="Arg">name</var>, @EndCode, and @InsertCode <var class="Arg">name</var></span></h5>
 
 <p>Inserts the text between @BeginCode and @EndCode verbatim at the point where @InsertCode is called. This is useful to insert code excerpts directly into the manual.</p>
 
@@ -454,7 +500,7 @@ i := i + 1;
 
 <p><a id="X828C684E8582A9D0" name="X828C684E8582A9D0"></a></p>
 
-<h5>2.2-18 <span class="Heading">@LatexOnly <var class="Arg">text</var>, @BeginLatexOnly , and @EndLatexOnly</span></h5>
+<h5>2.2-20 <span class="Heading">@LatexOnly <var class="Arg">text</var>, @BeginLatexOnly , and @EndLatexOnly</span></h5>
 
 <p>Code inserted between @BeginLatexOnly and @EndLatexOnly or after @LatexOnly is only inserted in the PDF version of the manual or worksheet. It can hold arbitrary LaTeX-commands.</p>
 
@@ -509,7 +555,7 @@ i := i + 1;
 
 </li>
 </ul>
-<p>Those add the following lines at the corresponding point of the titlepage. Please note that many of those things can be (better) extracted from the PackageInfo.g. In case you set some of those, the extracted or in scaffold defined items will be overwritten. While this is not very useful for documenting packages, they are necessary for worksheets created with <code class="func">AutoDocWorksheet</code> (<a href="chap3_mj.html#X809FE4137C08B28D"><span class="RefLink">3.1-1</span></a>), since they do not have a PackageInfo to extract those information.</p>
+<p>Those add the following lines at the corresponding point of the title page. Please note that many of those things can be (better) extracted from the PackageInfo.g. In case you set some of those, the extracted or in scaffold defined items will be overwritten. While this is not very useful for documenting packages, they are necessary for worksheets created with <code class="func">AutoDocWorksheet</code> (<a href="chap3_mj.html#X809FE4137C08B28D"><span class="RefLink">3.1-1</span></a>), since they do not have a PackageInfo to extract those information.</p>
 
 <p><a id="X828AE38F80CB02E7" name="X828AE38F80CB02E7"></a></p>
 
@@ -521,7 +567,7 @@ i := i + 1;
 
 <h4>2.5 <span class="Heading">Grouping</span></h4>
 
-<p>In <strong class="pkg">GAPDoc</strong>, it is possible to make groups of ManItems, i.e., when documenting a function, operation, etc., it is possible to group them into suitable chunks. This can be particulary useful if there are several definitions of an operation with several differen argument types, all doing more or less the same to the arguments. Then their manual items can be grouped, sharing the same description and return type information. Note that it is currently not possible to give a header to the Group in the manual, but the generated ManItem heading of the first entry will be used.</p>
+<p>In <strong class="pkg">GAPDoc</strong>, it is possible to make groups of ManItems, i.e., when documenting a function, operation, etc., it is possible to group them into suitable chunks. This can be particularly useful if there are several definitions of an operation with several different argument types, all doing more or less the same to the arguments. Then their manual items can be grouped, sharing the same description and return type information. Note that it is currently not possible to give a header to the Group in the manual, but the generated ManItem heading of the first entry will be used.</p>
 
 <p>Note that group names are globally unique throughout the whole manual. That is, groups with the same name are in fact merged into a single group, even if they were declared in different source files. Thus you can have multiple <code class="code">@BeginGroup</code> / <code class="code">@EndGroup</code> pairs using the same group name, in different places, and these all will refer to the same group.</p>
 
@@ -630,7 +676,7 @@ KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
 
 <h5>2.7-2 <span class="Heading">Math modes</span></h5>
 
-<p>One can start an inline formula with a $, and also end it with $, just like in LaTeX. This will translate into <strong class="pkg">GAPDoc</strong>s inline math enviroment. For display mode one can use $$, also like LaTeX.</p>
+<p>One can start an inline formula with a $, and also end it with $, just like in LaTeX. This will translate into <strong class="pkg">GAPDoc</strong>s inline math environment. For display mode one can use $$, also like LaTeX.</p>
 
 
 <div class="example"><pre>

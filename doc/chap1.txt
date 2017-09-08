@@ -2,9 +2,9 @@
   [1X1 [33X[0;0YGetting started using [5XAutoDoc[105X[101X[1X[133X[101X
   
   [33X[0;0Y[5XAutoDoc[105X  is  a  [5XGAP[105X  package  which  is  meant to aid [5XGAP[105X package authors in
-  creating and maintaing the documentation of their packages. In this capacity
-  it  builds  upon  [5XGAPDoc[105X,  and  is  not a replacement for [5XGAPDoc[105X, but rather
-  complements it.[133X
+  creating  and  maintaining  the  documentation  of  their  packages. In this
+  capacity  it  builds  upon  [5XGAPDoc[105X, and is not a replacement for [5XGAPDoc[105X, but
+  rather complements it.[133X
   
   [33X[0;0YIn  this  chapter  we  describe  how  to  get started using [5XAutoDoc[105X for your
   package.  First, we explain in Section [14X1.1[114X how to write a new package manual
@@ -266,7 +266,7 @@
   
   [33X[0;0YNext,  [5XGAPDoc[105X  supports  the  documentation to be built with relative paths.
   This  means,  links to manuals of other packages or the [5XGAP[105X library will not
-  be  absolute,  but relative from your documentation. This can be particulary
+  be  absolute, but relative from your documentation. This can be particularly
   useful  if you want to build a release tarball or move your [5XGAP[105X installation
   around  later. Suppose you are starting [5XGAP[105X in the root path of your package
   as  always,  and  the  standard  call of [2XAutoDoc[102X ([14X4.1-1[114X) will then build the
@@ -440,7 +440,7 @@
   
   [33X[0;0YSince the worksheets do not have a [11XPackageInfo.g[111X to extract information, all
   possible  tags  that  [5XGAPDoc[105X supports for the title page can be set into the
-  document. A fully typed titlepage can look like this:[133X
+  document. A fully typed title page can look like this:[133X
   
   [4X[32X[104X
     [4X#! @Title My first worksheet[104X

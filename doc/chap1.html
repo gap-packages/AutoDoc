@@ -53,7 +53,7 @@
 
 <h3>1 <span class="Heading">Getting started using <strong class="pkg">AutoDoc</strong></span></h3>
 
-<p><strong class="pkg">AutoDoc</strong> is a <strong class="pkg">GAP</strong> package which is meant to aid <strong class="pkg">GAP</strong> package authors in creating and maintaing the documentation of their packages. In this capacity it builds upon <strong class="pkg">GAPDoc</strong>, and is not a replacement for <strong class="pkg">GAPDoc</strong>, but rather complements it.</p>
+<p><strong class="pkg">AutoDoc</strong> is a <strong class="pkg">GAP</strong> package which is meant to aid <strong class="pkg">GAP</strong> package authors in creating and maintaining the documentation of their packages. In this capacity it builds upon <strong class="pkg">GAPDoc</strong>, and is not a replacement for <strong class="pkg">GAPDoc</strong>, but rather complements it.</p>
 
 <p>In this chapter we describe how to get started using <strong class="pkg">AutoDoc</strong> for your package. First, we explain in Section <a href="chap1.html#X7BFBC6907B26AA95"><span class="RefLink">1.1</span></a> how to write a new package manual from scratch.</p>
 
@@ -260,7 +260,7 @@ AutoDoc( rec( gapdoc := rec( files := [ "path/to/some/hidden/file.gds" ] ) ) );
 
 <p>Giving such a file does not prevent the standard <code class="code">scan_dirs</code> from being scanned for other files.</p>
 
-<p>Next, <strong class="pkg">GAPDoc</strong> supports the documentation to be built with relative paths. This means, links to manuals of other packages or the <strong class="pkg">GAP</strong> library will not be absolute, but relative from your documentation. This can be particulary useful if you want to build a release tarball or move your <strong class="pkg">GAP</strong> installation around later. Suppose you are starting <strong class="pkg">GAP</strong> in the root path of your package as always, and the standard call of <code class="func">AutoDoc</code> (<a href="chap4.html#X7CBD8AAF7DCEF352"><span class="RefLink">4.1-1</span></a>) will then build the documentation in the <code class="file">doc</code> subfolder of your package. From this folder, the gap root directory has the relative path <code class="file">../../..</code>. Then you can enable the relative paths by</p>
+<p>Next, <strong class="pkg">GAPDoc</strong> supports the documentation to be built with relative paths. This means, links to manuals of other packages or the <strong class="pkg">GAP</strong> library will not be absolute, but relative from your documentation. This can be particularly useful if you want to build a release tarball or move your <strong class="pkg">GAP</strong> installation around later. Suppose you are starting <strong class="pkg">GAP</strong> in the root path of your package as always, and the standard call of <code class="func">AutoDoc</code> (<a href="chap4.html#X7CBD8AAF7DCEF352"><span class="RefLink">4.1-1</span></a>) will then build the documentation in the <code class="file">doc</code> subfolder of your package. From this folder, the gap root directory has the relative path <code class="file">../../..</code>. Then you can enable the relative paths by</p>
 
 
 <div class="example"><pre>
@@ -400,7 +400,7 @@ AutoDocWorksheet( "worksheet.g" );
 
 <p>will create a subfolder called <code class="file">doc</code> of the current directory in which it will create the documentation. There are several options to configure the output of the worksheet command, which are identical to the options of the <code class="func">AutoDoc</code> (<a href="chap4.html#X7CBD8AAF7DCEF352"><span class="RefLink">4.1-1</span></a>) command. It is even possible to test the examples in the worksheet using the maketest option from the AutoDoc command.</p>
 
-<p>Since the worksheets do not have a <code class="file">PackageInfo.g</code> to extract information, all possible tags that <strong class="pkg">GAPDoc</strong> supports for the title page can be set into the document. A fully typed titlepage can look like this:</p>
+<p>Since the worksheets do not have a <code class="file">PackageInfo.g</code> to extract information, all possible tags that <strong class="pkg">GAPDoc</strong> supports for the title page can be set into the document. A fully typed title page can look like this:</p>
 
 
 <div class="example"><pre>

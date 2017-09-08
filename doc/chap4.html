@@ -54,7 +54,7 @@
 <li><p>It can scan your package for <strong class="pkg">AutoDoc</strong> based documentation (by using <strong class="pkg">AutoDoc</strong> tags and the Autodoc command. This will produce further XML files to be used as part of the package manual.</p>
 
 </li>
-<li><p>It can use <strong class="pkg">GAPDoc</strong> to generate PDF, text and HTML (with MathJaX enabled) documentation from the <strong class="pkg">GAPDoc</strong> XML files it generated as well as additional such files provided by you. For this, it invokes <code class="func">MakeGAPDocDoc</code> (<a href="/Users/mhorn/Projekte/GAP/repos/pkg/GAPDoc/doc/chap5_mj.html#X826F530686F4D052"><span class="RefLink">GAPDoc: MakeGAPDocDoc</span></a>) to convert the XML sources, and it also instructs <strong class="pkg">GAPDoc</strong> to copy supplementary files (such as CSS style files) into your doc directory (see <code class="func">CopyHTMLStyleFiles</code> (<a href="/Users/mhorn/Projekte/GAP/repos/pkg/GAPDoc/doc/chap5_mj.html#X813599E982DE9B98"><span class="RefLink">GAPDoc: CopyHTMLStyleFiles</span></a>)).</p>
+<li><p>It can use <strong class="pkg">GAPDoc</strong> to generate PDF, text and HTML (with MathJaX enabled) documentation from the <strong class="pkg">GAPDoc</strong> XML files it generated as well as additional such files provided by you. For this, it invokes <code class="func">MakeGAPDocDoc</code> (<a href="../../../pkg/GAPDoc-1.5.1/doc/chap5.html#X826F530686F4D052"><span class="RefLink">GAPDoc: MakeGAPDocDoc</span></a>) to convert the XML sources, and it also instructs <strong class="pkg">GAPDoc</strong> to copy supplementary files (such as CSS style files) into your doc directory (see <code class="func">CopyHTMLStyleFiles</code> (<a href="../../../pkg/GAPDoc-1.5.1/doc/chap5.html#X813599E982DE9B98"><span class="RefLink">GAPDoc: CopyHTMLStyleFiles</span></a>)).</p>
 
 </li>
 </ol>
@@ -103,7 +103,7 @@
 
 </dd>
 <dt><strong class="Mark"><var class="Arg">bib</var></strong></dt>
-<dd><p>The name of a bibliography file, in Bibtex or XML format. If this key is not set, but there is a file <code class="file">doc/PACKAGENAME.bib</code> then it is assumed that you want to use this as your bibliography.</p>
+<dd><p>The name of a bibliography file, in BibTeX or XML format. If this key is not set, but there is a file <code class="file">doc/PACKAGENAME.bib</code> then it is assumed that you want to use this as your bibliography.</p>
 
 </dd>
 <dt><strong class="Mark"><var class="Arg">entities</var></strong></dt>
@@ -124,13 +124,13 @@ RELEASEYEAR := "2015" )</pre></div>
 
 </dd>
 <dt><strong class="Mark"><var class="Arg">TitlePage</var></strong></dt>
-<dd><p>A record whose entries are used to embellish the generated titlepage for the package manual with extra information, such as a copyright statement or acknowledgments. To this end, the names of the record components are used as XML element names, and the values of the components are outputted as content of these XML elements. For example, you could pass the following record to set a custom acknowledgements text:</p>
+<dd><p>A record whose entries are used to embellish the generated title page for the package manual with extra information, such as a copyright statement or acknowledgments. To this end, the names of the record components are used as XML element names, and the values of the components are outputted as content of these XML elements. For example, you could pass the following record to set a custom acknowledgements text:</p>
 
 
 <div class="example"><pre>
 rec( Acknowledgements := "Many thanks to ..." )</pre></div>
 
-<p>For a list of valid entries in the titlepage, please refer to the <strong class="pkg">GAPDoc</strong> manual, specifically section <a href="/Users/mhorn/Projekte/GAP/repos/pkg/GAPDoc/doc/chap3_mj.html#X8643EEF587FC8AD4"><span class="RefLink">GAPDoc: TitlePage</span></a>.</p>
+<p>For a list of valid entries in the title page, please refer to the <strong class="pkg">GAPDoc</strong> manual, specifically section <a href="../../../pkg/GAPDoc-1.5.1/doc/chap3.html#X8643EEF587FC8AD4"><span class="RefLink">GAPDoc: TitlePage</span></a>.</p>
 
 </dd>
 <dt><strong class="Mark"><var class="Arg">MainPage</var></strong></dt>
@@ -198,7 +198,7 @@ rec( Acknowledgements := "Many thanks to ..." )</pre></div>
 <dt><strong class="Mark"><var class="Arg">gap_root_relative_path</var></strong></dt>
 <dd><p>Either a boolean, or a string containing a relative path. By default (if this option is not set, or is set to <code class="keyw">false</code>), references in the generated documentation referring to external documentation (such as the GAP manual) are encoded using absolute paths. This is fine as long as the documentation stays on only a single computer, but is problematic when preparing documentation that should be used on multiple computers, e.g., when creating a distribution archive of a GAP package.<br /> Thus, if a relative path is provided via this option (or if it is set to true, in which case the relative path <code class="file">../../..</code> is used), then <strong class="pkg">AutoDoc</strong> and <strong class="pkg">GAPDoc</strong> attempt to replace all absolute paths in references to GAP manuals by paths based on this relative path.</p>
 
-<p>On a technical level, <strong class="pkg">AutoDoc</strong> passes the relative path to the <var class="Arg">gaproot</var> parameter of <code class="func">MakeGAPDocDoc</code> (<a href="/Users/mhorn/Projekte/GAP/repos/pkg/GAPDoc/doc/chap5_mj.html#X826F530686F4D052"><span class="RefLink">GAPDoc: MakeGAPDocDoc</span></a>)</p>
+<p>On a technical level, <strong class="pkg">AutoDoc</strong> passes the relative path to the <var class="Arg">gaproot</var> parameter of <code class="func">MakeGAPDocDoc</code> (<a href="../../../pkg/GAPDoc-1.5.1/doc/chap5.html#X826F530686F4D052"><span class="RefLink">GAPDoc: MakeGAPDocDoc</span></a>)</p>
 
 </dd>
 </dl>
