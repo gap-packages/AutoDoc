@@ -504,6 +504,11 @@ function( arg )
                 AUTODOC_MergeRecords( title_page, ExtractTitleInfoFromPackageInfo( pkginfo ) );
             fi;
 
+            # Worksheets get date as a list
+            if is_worksheet then
+                title_page!.Date := Concatenation( title_page!.Date );
+            fi;
+
             CreateTitlePage( doc_dir, title_page );
         fi;
 
