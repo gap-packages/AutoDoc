@@ -343,6 +343,12 @@ use @ExampleSession:
 ]]></Listing>
 It inserts an example into the manual just as @Example would do, but all lines are commented
 and therefore not executed when the file is read.
+All lines that should be part of the example displayed in the manual
+have to start with an &AutoDoc; comment (<C>#!</C>).
+The comment will be removed, and, if the following character is a space,
+this space will also be removed. There is never more than one space removed.
+To ensure examples are correctly colored in the manual, 
+there should be exactly one space between <C>#!</C> and the <C>gap</C> prompt.
 </Subsection>
 
 
