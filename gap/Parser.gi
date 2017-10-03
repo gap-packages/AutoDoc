@@ -442,6 +442,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             temp_pos_comment := PositionSublist( temp_curr_line, "#!" );
             if temp_pos_comment <> fail then
                 temp_curr_line := temp_curr_line{[ temp_pos_comment + 2 .. Length( temp_curr_line ) ]};
+                if Length( temp_curr_line ) >= 1 and temp_curr_line[ 1 ] = ' ' then
+                    Remove( temp_curr_line, 1 );
+                fi;
                 Add( temp_string_list, temp_curr_line );
             fi;
         od;
