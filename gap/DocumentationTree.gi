@@ -518,7 +518,7 @@ InstallMethod( WriteDocumentation, [ IsList, IsStream ],
     current_string_list := [ ];
     for i in [ 1 .. Length( node_list ) ] do
         if IsString( node_list[ i ] ) then
-            Add( current_string_list, node_list[ i ] );
+            Add( current_string_list, ShallowCopy( node_list[ i ] ) );
         else
             if current_string_list <> [ ] then
                 current_string_list := CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML( current_string_list );
@@ -541,7 +541,7 @@ InstallMethod( WriteDocumentation, [ IsString, IsStream ],
     ## In case the list is empty, do nothing.
     ## Once the empty string = empty list bug is fixed,
     ## this could be removed.
-    NormalizeWhitespace( text );
+    text := NormalizedWhitespace( text );
     if text = "" then
         return;
     fi;
