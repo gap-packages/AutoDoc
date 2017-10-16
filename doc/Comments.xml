@@ -139,10 +139,13 @@ text in your documentation, examples, mathematical chapters, etc..
 <Subsection Label="@Chapter">
 <Index Key="@Chapter"><C>@Chapter</C></Index>
 <Index Key="@ChapterLabel"><C>@ChapterLabel</C></Index>
+<Index Key="@ChapterTitle"><C>@ChapterTitle</C></Index>
 <Heading>@Chapter <A>name</A></Heading>
-Sets a chapter, all functions without separate info will be added to this chapter.
+Sets the active chapter, all subsequent functions which do not have an explicit chapter
+declared in their AutoDoc comment via <C>@ChapterInfo</C> will be added to this chapter.
 Also all text comments, i.e. lines that begin with #! without a command, and which do not
-follow after @description, will be added to the chapter as regular text.
+follow after <C>@Description</C>, will be added to the chapter as regular text. Additionally,
+the chapters label wil be set to <C>Chapter_</C><A>name</A>.
 
 Example:
 
@@ -153,18 +156,31 @@ Example:
 ]]></Listing>
 
 The <C>@ChapterLabel</C> <A>label</A> command
-can be used to set the label of the chapter to <C>Chapter_</C><A>label</A>.
+can be used to set the label of the chapter to <C>Chapter_</C><A>label</A> instead of
+<C>Chapter_</C><A>name</A>.
 
 Additionally, the chapter will be stored as <C>_Chapter_</C><A>label</A><C>.xml</C>.
 
+The <C>@ChapterTitle</C> <A>title</A> command
+can be used to set a heading for the chapter that is different from <A>name</A>.
+Note that the title does not affect the label.
 
+If you use all three commands, i.e.,
+<Listing><![CDATA[
+#! @Chapter name
+#! @ChapterLabel label
+#! @ChapterTitle title
+]]></Listing>
+<C>title</C> is used for the headline, <C>label</C> for cross-referencing, and <C>name</C>
+for setting the same chapter as active chapter again.
 </Subsection>
 
 <Subsection Label="@Section">
 <Index Key="@Section"><C>@Section</C></Index>
 <Index Key="@SectionLabel"><C>@SectionLabel</C></Index>
+<Index Key="@SectionTitle"><C>@SectionTitle</C></Index>
 <Heading>@Section <A>name</A></Heading>
-Sets a section like chapter sets a chapter.
+Sets an active section like <C>@Chapter</C> sets an active chapter.
 
 <Listing><![CDATA[
 #! @Section My first manual section
@@ -172,7 +188,11 @@ Sets a section like chapter sets a chapter.
 ]]></Listing>
 
 The <C>@SectionLabel</C> <A>label</A> command
-can be used to set the label of the section to <C>Section_</C><A>label</A>.
+can be used to set the label of the section to <C>Section_</C><A>label</A> instead of
+<C>Chapter_chaptername_Section_</C><A>name</A>.
+
+The <C>@SectionTitle</C> <A>title</A> command
+can be used to set a heading for the section that is different from <A>name</A>.
 </Subsection>
 
 <Subsection Label="@EndSection">
@@ -191,8 +211,9 @@ opening it might cause unexpected errors.
 <Subsection Label="@Subsection">
 <Index Key="@Subsection"><C>@Subsection</C></Index>
 <Index Key="@SubsectionLabel"><C>@SubsectionLabel</C></Index>
+<Index Key="@SubsectionTitle"><C>@SubsectionTitle</C></Index>
 <Heading>@Subsection <A>name</A></Heading>
-Sets a subsection like chapter sets a chapter.
+Sets an active subsection like <C>@Chapter</C> sets an active chapter.
 
 <Listing><![CDATA[
 #! @Subsection My first manual subsection
@@ -200,8 +221,11 @@ Sets a subsection like chapter sets a chapter.
 ]]></Listing>
 
 The <C>@SubsectionLabel</C> <A>label</A> command
-can be used to set the label of the subsection to <C>Subsection_</C><A>label</A>.
+can be used to set the label of the subsection to <C>Subsection_</C><A>label</A> instead of
+<C>Chapter_chaptername_Section_sectionname_Subsection_</C><A>name</A>.
 
+The <C>@SubsectionTitle</C> <A>title</A> command
+can be used to set a heading for the subsection that is different from <A>name</A>.
 </Subsection>
 
 <Subsection Label="@EndSubsection">
