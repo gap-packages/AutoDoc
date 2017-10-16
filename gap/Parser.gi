@@ -475,6 +475,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             scope_chapter := ChapterInTree( tree, chapter_info[ 1 ] );
             scope_chapter!.additional_label := Concatenation( "Chapter_", label_name );
         end,
+        @ChapterTitle := function()
+            local scope_chapter;
+            if not IsBound( chapter_info[ 1 ] ) then
+                ErrorWithPos( "found @ChapterTitle with no active chapter" );
+            fi;
+            scope_chapter := ChapterInTree( tree, chapter_info[ 1 ] );
+            scope_chapter!.title_string := current_command[ 2 ];
+        end,
         @Section := function()
             local scope_section;
             if not IsBound( chapter_info[ 1 ] ) then
@@ -493,6 +501,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             label_name := ReplacedString( current_command[ 2 ], " ", "_" );
             scope_section := SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] );
             scope_section!.additional_label := Concatenation( "Section_", label_name );
+        end,
+        @SectionTitle := function()
+            local scope_section;
+            if not IsBound( chapter_info[ 2 ] ) then
+                ErrorWithPos( "found @SectionTitle with no active section" );
+            fi;
+            scope_section := SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] );
+            scope_section!.title_string := current_command[ 2 ];
         end,
         @EndSection := function()
             Unbind( chapter_info[ 2 ] );
@@ -516,6 +532,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             label_name := ReplacedString( current_command[ 2 ], " ", "_" );
             scope_subsection := SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], chapter_info[ 3 ] );
             scope_subsection!.additional_label := Concatenation( "Subsection_", label_name );
+        end,
+        @SubsectionTitle := function()
+            local scope_subsection;
+            if not IsBound( chapter_info[ 3 ] ) then
+                ErrorWithPos( "found @SubsectionTitle with no active section" );
+            fi;
+            scope_subsection := SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], chapter_info[ 3 ] );
+            scope_subsection!.title_string := current_command[ 2 ];
         end,
         @EndSubsection := function()
             Unbind( chapter_info[ 3 ] );

@@ -492,6 +492,12 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForChapterRep, Is
     else
         additional_label := label;
     fi;
+    
+    if IsBound( node!.title_string ) then
+        replaced_name := NormalizedWhitespace( node!.title_string );
+    else
+        replaced_name := ReplacedString( node!.name, "_", " " );
+    fi;
 
     # Remove any characters outside of A-Za-z0-9 and -, +, _ from the filename.
     # See issues #77 and #78
@@ -502,7 +508,6 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForChapterRep, Is
     AppendTo( stream, "<#Include SYSTEM \"", filename, "\">\n" );
     AppendTo( chapter_stream, AUTODOC_XML_HEADER );
     AppendTo( chapter_stream, "<Chapter Label=\"", additional_label ,"\">\n" );
-    replaced_name := ReplacedString( node!.name, "_", " " );
     AppendTo( chapter_stream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
     WriteDocumentation( node!.content, chapter_stream );
     AppendTo( chapter_stream, "</Chapter>\n\n" );
@@ -564,8 +569,14 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSectionRep, Is
     else
         label := Label( node );;
     fi;
+    
+    if IsBound( node!.title_string ) then
+        replaced_name := NormalizedWhitespace( node!.title_string );
+    else
+        replaced_name := ReplacedString( node!.name, "_", " " );
+    fi;
+    
     AppendTo( filestream, "<Section Label=\"", label, "\">\n" );
-    replaced_name := ReplacedString( node!.name, "_", " " );
     AppendTo( filestream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
     WriteDocumentation( node!.content, filestream );
     AppendTo( filestream, "</Section>\n\n" );
@@ -587,8 +598,14 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSubsectionRep,
     else
         label := Label( node );
     fi;
+    
+    if IsBound( node!.title_string ) then
+        replaced_name := NormalizedWhitespace( node!.title_string );
+    else
+        replaced_name := ReplacedString( node!.name, "_", " " );
+    fi;
+    
     AppendTo( filestream, "<Subsection Label=\"", label, "\">\n" );
-    replaced_name := ReplacedString( node!.name, "_", " " );
     AppendTo( filestream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
     WriteDocumentation( node!.content, filestream );
     AppendTo( filestream, "</Subsection>\n\n" );
