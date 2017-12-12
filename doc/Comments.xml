@@ -341,9 +341,9 @@ Order(S5);
 </Subsection>
 
 
-<Subsection Label="@ExampleSession">
-<Index Key="@ExampleSession"><C>@ExampleSession, @BeginExampleSession, and @EndExampleSession</C></Index>
-<Heading>@ExampleSession and @EndExampleSession</Heading>
+<Subsection Label="@BeginExampleSession">
+<Index Key="@BeginExampleSession"><C>@BeginExampleSession and @EndExampleSession</C></Index>
+<Heading>@BeginExampleSession and @EndExampleSession</Heading>
 @ExampleSession inserts an example into the manual, but in a different syntax.
 For example, consider
 <Listing><![CDATA[
@@ -358,7 +358,7 @@ As you can see, the commands are not commented and hence are executed when the f
 the example block is read. To insert examples directly into source code files, one can instead
 use @ExampleSession:
 <Listing><![CDATA[
-#! @ExampleSession
+#! @BeginExampleSession
 #! gap> S5 := SymmetricGroup(5);
 #! Sym( [ 1 .. 5 ] )
 #! gap> Order(S5);
