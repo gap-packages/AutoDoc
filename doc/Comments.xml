@@ -338,6 +338,7 @@ Order(S5);
 #! 120
 #! @EndExample
 ]]></Listing>
+The &AutoDoc; command <C>@Example</C> is an alias of <C>@BeginExample</C>.
 </Subsection>
 
 
@@ -373,6 +374,7 @@ The comment will be removed, and, if the following character is a space,
 this space will also be removed. There is never more than one space removed.
 To ensure examples are correctly colored in the manual, 
 there should be exactly one space between <C>#!</C> and the <C>gap</C> prompt.
+The &AutoDoc; command <C>@ExampleSession</C> is an alias of <C>@BeginExampleSession</C>.
 </Subsection>
 
 
@@ -382,6 +384,7 @@ there should be exactly one space between <C>#!</C> and the <C>gap</C> prompt.
 <Heading>@BeginLog and @EndLog</Heading>
 Works just like the @BeginExample command, but the example
 will not be tested. See the GAPDoc manual for more information.
+The &AutoDoc; command <C>@Log</C> is an alias of <C>@BeginLog</C>.
 </Subsection>
 
 <Subsection Label="@BeginLogSession">
@@ -389,6 +392,7 @@ will not be tested. See the GAPDoc manual for more information.
 <Heading>@BeginLogSession and @EndLogSession</Heading>
 Works just like the @BeginExampleSession command, but the example
 will not be tested if manual examples are run. See the GAPDoc manual for more information.
+The &AutoDoc; command <C>@LogSession</C> is an alias of <C>@BeginLogSession</C>.
 </Subsection>
 
 <Subsection Label="@DoNotReadRestOfFile">
