@@ -16,6 +16,9 @@
 ##
 ######################################
 
+BindGlobal( "AUTODOC_IdentifierLetters",
+            "+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz" );
+
 DeclareGlobalFunction( "AUTODOC_TREE_NODE_NAME_ITERATOR" );
 DeclareGlobalFunction( "AUTODOC_LABEL_OF_CONTEXT" );
 DeclareGlobalFunction( "AUTODOC_INSTALL_TREE_SETTERS" );
@@ -57,6 +60,7 @@ DeclareOperation( "DocumentationExample", [ IsTreeForDocumentation, IsList ] );
 DeclareOperation( "DocumentationExample", [ IsTreeForDocumentation ] );
 DeclareOperation( "DocumentationDummy", [ IsTreeForDocumentation, IsString, IsList ] );
 DeclareOperation( "DocumentationDummy", [ IsTreeForDocumentation, IsString ] );
+DeclareOperation( "DocumentationDummyInstance", [ IsTreeForDocumentation, IsTreeForDocumentationNode ] );
 DeclareOperation( "DocumentationCode", [ IsTreeForDocumentation, IsString, IsList ] );
 DeclareOperation( "DocumentationCode", [ IsTreeForDocumentation, IsString ] );
 DeclareOperation( "DocumentationManItem", [ IsTreeForDocumentation ] );

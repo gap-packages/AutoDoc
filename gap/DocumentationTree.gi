@@ -10,10 +10,6 @@
 ##
 #############################################################################
 
-##
-BindGlobal( "AUTODOC_IdentifierLetters",
-            "+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz" );
-
 DeclareRepresentation( "IsTreeForDocumentationRep",
         IsAttributeStoringRep and IsTreeForDocumentation,
         [ ] );
@@ -116,6 +112,15 @@ DeclareRepresentation( "IsTreeForDocumentationCodeNodeRep",
 BindGlobal( "TheTypeOfDocumentationTreeCodeNodes",
         NewType( TheFamilyOfDocumentationTreeNodes,
                 IsTreeForDocumentationCodeNodeRep ) );
+
+## DocumentationDummyInstance
+DeclareRepresentation( "IsTreeForDocumentationDummyInstanceNodeRep",
+                       IsTreeForDocumentationNodeRep,
+                       [ ] );
+
+BindGlobal( "TheTypeOfDocumentationTreeDummyInstanceNodes",
+        NewType( TheFamilyOfDocumentationTreeNodes,
+                IsTreeForDocumentationDummyInstanceNodeRep ) );
 
 ###################################
 ##
@@ -260,6 +265,15 @@ InstallMethod( DocumentationDummy, [ IsTreeForDocumentation, IsString ],
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeDummyNodes,
                               Label, name );
     tree!.nodes_by_label.( name ) := node;
+    return node;
+end );
+
+InstallMethod( DocumentationDummyInstance, [ IsTreeForDocumentation, IsTreeForDocumentationDummyNodeRep ],
+  function( tree, dummy_node )
+    local node;
+    node := rec( dummy_node := dummy_node );
+    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeDummyInstanceNodes,
+                             Label, Concatenation( Label( dummy_node ), "_", String( AUTODOC_TREE_NODE_NAME_ITERATOR( tree ) ) ) );
     return node;
 end );
 
@@ -635,6 +649,36 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationDummyNodeRep, IsStrea
     if IsBound( node!.content ) then
         WriteDocumentation( node!.content, filestream );
     fi;
+end );
+
+##
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationDummyInstanceNodeRep, IsStream ],
+  function( node, filestream )
+    local dummy, variables, variable_values, new_content, current_variable, current_variable_value,
+          i, j, current_string, dummy_label;
+    
+    dummy := node!.dummy_node;
+    dummy_label := Label( dummy );
+    if not IsBound( dummy!.content ) then
+        return;
+    fi;
+    new_content := ShallowCopy( dummy!.content );
+    variables := dummy!.variable_names;
+    variables := List( variables, i -> Concatenation( "%{", i, "}" ) );
+    variable_values := node!.variable_values;
+    if Length( variables ) <> Length( variable_values ) then
+        Error( "While inserting chunk ", dummy_label, ": wrong number of parameter values" );
+    fi;
+    for i in [ 1 .. Length( variables ) ] do
+        current_variable := variables[ i ];
+        current_variable_value := variable_values[ i ];
+        for j in [ 1 .. Length( new_content ) ] do
+            new_content[ j ] := ReplacedString( new_content[ j ], current_variable, current_variable_value );
+        od;
+    od;
+    
+    WriteDocumentation( new_content, filestream );
+    
 end );
 
 ##
