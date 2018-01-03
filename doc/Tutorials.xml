@@ -196,7 +196,7 @@ First off, with  &AutoDoc; is very convenient to regenerate your
 documentation.
 <P/>
 
-Secondly, the scaffolding feature which generates a title package
+Secondly, the scaffolding feature which generates a title page
 with all the metadata of your package in a uniform way is very
 handy. The somewhat tedious process of keeping your title page in
 sync with your <F>PackageInfo.g</F> is fully automated this way
@@ -257,7 +257,7 @@ Now the file <F>maketest.g</F> appears in your package directory, and
 <Listing>
 gap maketest.g
 </Listing>
-test the examples from your manual.
+tests the examples from your manual.
 </Subsection>
 
 <Subsection Label="Tut:IntegrateExisting:GapDocOptions">
@@ -282,7 +282,7 @@ The following example illustrates this by instructing &AutoDoc; to only search i
 of the packages root directory.
 <Listing>
 LoadPackage( "AutoDoc" );
-AutoDoc( rec( gapdoc := rec( scan_dirs := [ "package_source" ] ) ) );
+AutoDoc( rec( gapdoc := rec( scan_dirs := [ "package_sources" ] ) ) );
 </Listing>
 You can also specify an explicit list of files containing documentation,
 which will be searched in addition to any files located within the scan directories:
@@ -364,8 +364,8 @@ to explicitly include <F>doc/title.xml</F> from your main XML file.<P/>
 
 However, you can also tell &AutoDoc; to maintain the main XML file for you,
 in which case this is automatic. In fact, this is the default if you
-enabling scaffolding; the above example command explicitly told &AutoDoc;
-not to generate a main page. More o
+enable scaffolding; the above example command explicitly told &AutoDoc;
+not to generate a main page. 
 
 </Subsection>
 

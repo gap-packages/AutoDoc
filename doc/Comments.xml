@@ -110,7 +110,7 @@ titles.
 </Subsection>
 
 
-As an example, a full &AutoDoc; comment for with all options could look like this:
+As an example, a full &AutoDoc; comment with all options could look like this:
 
 <Listing><![CDATA[
 #! @Description
@@ -409,7 +409,7 @@ not finished or temporary files.
 <Subsection Label="@BeginChunk">
 <Index Key="@BeginChunk"><C>@BeginChunk, @EndChunk, and @InsertChunk</C></Index>
 <Heading>@BeginChunk <A>name</A>, @EndChunk, and @InsertChunk <A>name</A></Heading>
-Text insider of a @BeginChunk / @EndChunk part will not be inserted into
+Text inside a @BeginChunk / @EndChunk part will not be inserted into
 the final documentation directly. Instead, the text is stored in an internal buffer.
 
 That chunk of text can then later on be inserted in any other place by using the
