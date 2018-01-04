@@ -412,21 +412,34 @@ not finished or temporary files.
 
 <Subsection Label="@BeginChunk">
 <Index Key="@BeginChunk"><C>@BeginChunk, @EndChunk, and @InsertChunk</C></Index>
-<Heading>@BeginChunk <A>name</A>, @EndChunk, and @InsertChunk <A>name</A></Heading>
-Text insider of a @BeginChunk / @EndChunk part will not be inserted into
+<Heading>@BeginChunk <A>name[ param1,...]</A>, @EndChunk, and @InsertChunk <A>name[ param1_value,...]</A></Heading>
+Text inside of a @BeginChunk / @EndChunk part will not be inserted into
 the final documentation directly. Instead, the text is stored in an internal buffer.
 
 That chunk of text can then later on be inserted in any other place by using the
 @InsertChunk <A>name</A> command.
 
+Chunks may optionally be parametrized, by specifying a comma-separated
+list of parameter names after the chunk name given to @BeginChunk.
+Each parameter name must be a valid &GAP; identifier
+(and hence may only contain letters, digits and underscores).
+When inserting a parametrized chunk, a comma-separated list of
+parameter values must follow the chunk name given to @InsertChunk.
+The number of parameter values must match the number of parameter names.
+When this is done, instead of directly inserting the chunk text,
+for every parameter <A>param</A>, every occurrence of the string <A>%{param}</A>
+is substituted by the corresponding parameter value.
+
 If you do not provide an @EndChunk, the chunk ends at the end of the file.
 <Listing><![CDATA[
-#! @BeginChunk MyChunk
-#! Hello, world.
+#! @BeginChunk MyChunk who
+#! Hello, %{who}.
 #! @EndChunk
 
-#! @InsertChunk MyChunk
+#! @InsertChunk MyChunk world
 ## The text "Hello, world." is inserted right before this.
+## The text "Hello, whole universe." is inserted right behind this comment
+#! @InsertChunk MyChunk whole universe
 ]]></Listing>
 
 You can use this to define an example like this in one file:

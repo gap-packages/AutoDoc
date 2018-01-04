@@ -613,14 +613,50 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             current_item!.level := Int( current_command[ 2 ] );
         end,
         @InsertChunk := function()
-            Add( current_item, DocumentationDummy( tree, current_command[ 2 ] ) );
+            local parameters, vars, title, inserted_dummy, position_first_space;
+            parameters := current_command[ 2 ];
+            position_first_space := Position( parameters, ' ' );
+            if position_first_space = fail then
+                title := parameters;
+                vars := [ ];
+            elif IsInt( position_first_space ) then
+                title := parameters{[ 1 .. position_first_space - 1 ]};
+                vars := parameters{[ position_first_space + 1 .. Length( parameters )  ]};
+                vars := SplitString( vars, "," );
+            else
+                ErrorWithPos( Concatenation( "Wrong InsertChunk parameters: ", parameters ) );
+            fi;
+            inserted_dummy := DocumentationDummyInstance( tree, DocumentationDummy( tree, title ) );
+            inserted_dummy!.variable_values := vars;
+            Add( current_item, inserted_dummy );
         end,
         @InsertSystem := ~.@InsertChunk,
         @BeginChunk := function()
+            local parameters, title, vars, current_var;
             if IsBound( current_item ) then
                 Add( context_stack, current_item );
             fi;
-            current_item := DocumentationDummy( tree, current_command[ 2 ] );
+            parameters := SplitString( current_command[ 2 ], " " );
+            if Length( parameters ) = 1 then
+                vars := [ ];
+                title := parameters[ 1 ];
+            elif Length( parameters ) = 2 then
+                vars := parameters[ 2 ];
+                vars := SplitString( vars, "," );
+                title := parameters[ 1 ];
+            else
+                ErrorWithPos( Concatenation( "Wrong chunk parameters: ", current_command[ 2 ] ) );
+            fi;
+            if not ForAll( title, i -> i in AUTODOC_IdentifierLetters ) then
+                ErrorWithPos( Concatenation( "Wrong character in chunk title: ", title ) );
+            fi;
+            for current_var in vars do
+                if not ForAll( current_var, i -> i in AUTODOC_IdentifierLetters ) then
+                    ErrorWithPos( Concatenation( "Wrong character in chunk parameter: ", current_var ) );
+                fi;
+            od;
+            current_item := DocumentationDummy( tree, title );
+            current_item!.variable_names := vars;
         end,
         @Chunk := ~.@BeginChunk,
         @System := ~.@BeginChunk,
