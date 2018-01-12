@@ -111,18 +111,14 @@ Keywords := [ "Automatic documentation, GAP, GAPDoc" ],
 AutoDoc := rec(
     TitlePage := rec(
         Copyright := Concatenation(
-            "&copyright; 2012-2014 by Sebastian Gutsche and Max Horn<P/>\n\n",
+            "&copyright; 2012-2017 by Sebastian Gutsche and Max Horn<P/>\n\n",
             "This package may be distributed under the terms and conditions ", 
             "of the GNU Public License Version 2.\n"
             ), 
         Abstract := Concatenation( 
             "&AutoDoc; is a &GAP; package which is meant to aid ", 
             "&GAP; package authors in creating and maintaining the ", 
-            "documentation of their packages.\n", 
-            "<P/>\n", 
-            "(If an abstract is considered necessary, it should be included ", 
-            "in <File>PackageInfo.g</File> as a string in the ", 
-            "<C>TitlePage</C> record.\n" 
+            "documentation of their packages.\n" 
             ), 
         Acknowledgements := Concatenation( 
             "This documentation was prepared using the ", 

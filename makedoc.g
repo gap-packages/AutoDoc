@@ -17,12 +17,13 @@ AutoDoc(rec(
     scaffold := rec(
         includes := [ "Tutorials.xml", 
                       "Comments.xml" ],
+        bib := "bib.xml", 
         gapdoc_latex_options := rec( EarlyExtraPreamble := """
             \usepackage[all]{xy} 
             \newcommand{\bbZ} {\mathbb{Z}}
         """ ),  
         entities := rec( 
-            orb := "<Package>orb</Package>", 
+            io := "<Package>io</Package>", 
             PackageName := "<Package>PackageName</Package>" 
         )
     )
