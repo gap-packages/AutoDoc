@@ -313,6 +313,97 @@ AutoDoc( rec( gapdoc := rec( gap_root_relative_path := true ) ) );
 
 </Subsection>
 
+<Subsection Label="Tut:Checklist">
+<Heading>Checklist for converting an existing manual to use &AutoDoc;</Heading>
+
+Here is a checklist for authors of a package &PackageName;, 
+which already has a manual, who wish to use &AutoDoc; 
+to build the manual from now on. 
+We assume that the manual is currently built by reading a file 
+<File>makedoc.g</File> and that the main <File>.xml</File> file 
+is named <File> manual.xml</File>. 
+<P/> 
+The files <File>PackageInfo.g</File>, <File>makedoc.g</File>, 
+<File>doc/title.xml</File> and <File>doc/PackageName.xml</File> 
+(if it exists) will be altered by this procedure, 
+so it may be wise to keep backup copies. 
+<P/> 
+You should have copies of the &AutoDoc; files <File>PackageIngo.g</File> 
+and <File>makedoc.g</File> to hand when reading these instructions. 
+<P/> 
+<List>
+<Item> 
+Copy <File>AutoDoc/makedoc.g</File> to <File>PackageName/makedoc.g</File>. 
+</Item>
+<Item>
+Edit <File>PackageName/makedoc.g</File> as follows. 
+  <List>
+  <Item> 
+  Change the header to anything suitable. 
+  </Item> 
+  <Item> 
+  Replace <Code>LoadPackage("AutoDoc");</Code> 
+  with <Code>LoadPackage("PackageName");</Code>. 
+  </Item> 
+  <Item> 
+  In the <Code>AutoDoc</Code> record delete <Code>AutoDoc := true;</Code>. 
+  </Item>
+  <Item> 
+  In the <Code>scaffold</Code> record change the <Code>includes</Code> list 
+  to be the list of your <Code>.xml</Code> files previously 
+  in <File>manual.xml</File>. 
+  </Item> 
+  <Item> 
+  In the <Code>gapdoc_latex_options</Code> record enter any 
+  &LaTeX; <Code>newcommands</Code> previously in <File>manual.xml</File>. 
+  (If there are none you may safely delete this record.) 
+  </Item>
+  <Item> 
+  In the <Code>entities</Code> record enter any entities 
+  previously in <File>manual.xml</File>. 
+  </Item> 
+  </List> 
+</Item> 
+<Item> 
+Now edit your <File>PackageInfo.g</File> as follows. 
+  <List>
+  <Item> 
+  Delete any <Code>PKGVERSIONDATA</Code> chunk that may be there. 
+  </Item>
+  <Item>
+  Add <Code>[ "AutoDoc", ">= 2017.09.15" ]</Code>  
+  to your <Code>SuggestedOtherPackages</Code>. 
+  </Item>
+  <Item> 
+  Copy the <Code>AutoDoc</Code> record from <File>AutoDoc/PackageInfo.g</File> 
+  to the end of your file (just before the final <Code>"));"</Code>. 
+  </Item>
+  <Item> 
+  Replace the <Code>Copyright</Code>, <Code>Abstract</Code> and 
+  <Code>Acknowledgements</Code> fields of the <Code>TitlePage</Code> 
+  record with the corresponding material from your <File>manual.xml</File>. 
+  </Item>
+  </List> 
+</Item>
+<Item> 
+There should be a <Code>.bib</Code> file in your <Code>doc/</Code> folder  
+(possibly <Code>manual.bib</Code> or <Code>bib.xml.bib</Code>) 
+containing the information for your list of references.
+Rename this file <File>PackageName.bib</File>. 
+</Item> 
+<Item> 
+If you are using a GitHub repository, as well as running 
+<Code>git add</Code> on files <File>makedoc.g</File>, 
+<File>PackageInfo.g</File> and <File>doc/PackageName.bib</File>, 
+you should run <Code>git rm -f</Code> on files <File>doc/manual.xml</File>, 
+and <File>doc/title.xml</File>. 
+</Item> 
+</List>
+You should now be ready to run &GAP; and <Code>Read("makedoc.g");</Code> 
+in your package root directory. 
+
+</Subsection> 
+
 </Section>
 
 <Section Label="Tut:Scaffolds">

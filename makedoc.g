@@ -22,7 +22,8 @@ AutoDoc(rec(
             \newcommand{\bbZ} {\mathbb{Z}}
         """ ),  
         entities := rec( 
-            orb := "<Package>orb</Package>"
+            orb := "<Package>orb</Package>", 
+            PackageName := "<Package>PackageName</Package>" 
         )
     )
 ));
