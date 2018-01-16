@@ -23,6 +23,7 @@ AutoDoc(rec(
             \newcommand{\bbZ} {\mathbb{Z}}
         """ ),  
         entities := rec( 
+            VERSION := "2017.09.15", 
             io := "<Package>io</Package>", 
             PackageName := "<Package>PackageName</Package>" 
         )

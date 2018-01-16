@@ -24,6 +24,8 @@ Version := Maximum( [
 ## This line prevents merge conflicts
   "2013.11.01", ## Mohamed's version
 ] ),
+## entity &VERSION; in makedoc.g needs updating when these are changed 
+## since it is used in subsection 1.3.3 
 
 Date := ~.Version{[ 1 .. 10 ]},
 Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1 .. 4 ]} ),
@@ -116,7 +118,7 @@ AutoDoc := rec(
             "of the GNU Public License Version 2.\n"
             ), 
         Abstract := Concatenation( 
-            "&AutoDoc; is a &GAP; package which is meant to aid ", 
+            "&AutoDoc; is a &GAP; package whose purpose is to aid ", 
             "&GAP; package authors in creating and maintaining the ", 
             "documentation of their packages.\n" 
             ), 

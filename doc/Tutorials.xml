@@ -351,11 +351,13 @@ Edit <File>PackageName/makedoc.g</File> as follows.
   In the <Code>AutoDoc</Code> record delete <Code>AutoDoc := true;</Code>. 
   </Item>
   <Item> 
+  <Index Key="Scaffold record in makedoc.g"></Index> 
   In the <Code>scaffold</Code> record change the <Code>includes</Code> list 
   to be the list of your <Code>.xml</Code> files that are contained in  
   <File>manual.xml</File>. 
   </Item> 
   <Item>
+  <Index Key="Bibliography field in makedoc.g"></Index> 
   If you do not have a bibliography you may delete the 
   <Code>bib := "bib.xml",</Code> field in the scaffold. 
   Otherwise, edit the file name if you have a different file. 
@@ -372,8 +374,9 @@ Edit <File>PackageName/makedoc.g</File> as follows.
   the &LaTeX; formula <M>f : \bbZ^2 \to \bbZ</M>. 
   </Item>
   <Item> 
+  <Index Key="Entities record in makedoc.g"></Index> 
   In the <Code>entities</Code> record enter any entities 
-  previously in <File>manual.xml</File>. 
+  previously stored in <File>manual.xml</File>. 
   (Again, if you have none, you may safely delete this record.) 
   </Item> 
   </List>
@@ -387,7 +390,7 @@ Now edit <File>PackageName/PackageInfo.g</File> as follows.
   using entities such as <Code>PACKAGENAMEVERSION</Code>. 
   </Item>
   <Item>
-  Add <Code>[ "AutoDoc", ">= 2017.09.15" ]</Code>  
+  Add <Code>[ "AutoDoc", ">= &VERSION;" ]</Code>  
   to your <Code>SuggestedOtherPackages</Code> list. 
   </Item>
   <Item> 
@@ -395,19 +398,24 @@ Now edit <File>PackageName/PackageInfo.g</File> as follows.
   to the end of your file (just before the final <Code>"));"</Code>. 
   </Item>
   <Item> 
+  <Index Key="Copyright field in PackageInfo.g"></Index> 
+  <Index Key="Abstract field in PackageInfo.g"></Index> 
+  <Index Key="Acknowledgements field in PackageInfo.g"></Index> 
   Replace the <Code>Copyright</Code>, <Code>Abstract</Code> and 
   <Code>Acknowledgements</Code> fields of the <Code>TitlePage</Code> 
   record with the corresponding material from your <File>manual.xml</File>. 
   (If you do not have an abstract, then delete the 
   <Code>Abstract</Code> field, etc.) 
+  For other introductory components, such as <Code>Colophon</Code>, 
+  consult the file <File>gap/Magic.gd</File>. 
   </Item>
   </List> 
 </Item>
 <Item> 
 If you are using a GitHub repository, as well as running 
-<Code>git add</Code> on files <File>makedoc.g</File>, 
+"<Code>git add</Code>" on files <File>makedoc.g</File>, 
 <File>PackageInfo.g</File> and <File>doc/PackageName.bib</File>, 
-you should run <Code>git rm -f</Code> on files <File>doc/manual.xml</File>, 
+you should run "<Code>git rm -f</Code>" on files <File>doc/manual.xml</File>, 
 and <File>doc/title.xml</File>. 
 </Item> 
 </List>
