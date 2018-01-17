@@ -6,7 +6,7 @@
 ##    Sebastian Gutsche, University of Kaiserslautern
 ##    Max Horn, Justus-Liebig-Universität Gießen
 ##
-## Licensed under the GPL 2 or later.
+##  Licensed under the GPL 2 or later.
 ##
 #############################################################################
 
@@ -24,8 +24,6 @@ Version := Maximum( [
 ## This line prevents merge conflicts
   "2013.11.01", ## Mohamed's version
 ] ),
-## entity &VERSION; in makedoc.g needs updating when these are changed 
-## since it is used in subsection 1.3.3 
 
 Date := ~.Version{[ 1 .. 10 ]},
 Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1 .. 4 ]} ),

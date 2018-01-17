@@ -19,18 +19,14 @@ AutoDoc(rec(
                       "Comments.xml" ],
         bib := "bib.xml", 
         gapdoc_latex_options := rec( EarlyExtraPreamble := """
-            \usepackage[all]{xy} 
+            \usepackage{a4wide} 
             \newcommand{\bbZ} {\mathbb{Z}}
         """ ),  
         entities := rec( 
-            VERSION := "2017.09.15", 
             io := "<Package>io</Package>", 
             PackageName := "<Package>PackageName</Package>" 
         )
     )
 ));
-
-# Create VERSION file for "make towww"
-PrintTo( "VERSION", GAPInfo.PackageInfoCurrent.Version );
 
 QUIT;
