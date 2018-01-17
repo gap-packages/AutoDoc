@@ -196,7 +196,7 @@ First off, with  &AutoDoc; is very convenient to regenerate your
 documentation.
 <P/>
 
-Secondly, the scaffolding feature which generates a title package
+Secondly, the scaffolding feature which generates a title page
 with all the metadata of your package in a uniform way is very
 handy. The somewhat tedious process of keeping your title page in
 sync with your <F>PackageInfo.g</F> is fully automated this way
@@ -205,7 +205,7 @@ and so on).
 <P/>
 
 There are various examples of packages using &AutoDoc; for only
-this purpose, e.g. <Package>IO</Package> and <Package>orb</Package>.
+this purpose, e.g. &io; and <Package>orb</Package>.
 <P/>
 
 <Subsection Label="Tut:IntegrateExisting:EverythingThere">
@@ -257,7 +257,7 @@ Now the file <F>maketest.g</F> appears in your package directory, and
 <Listing>
 gap maketest.g
 </Listing>
-test the examples from your manual.
+tests the examples from your manual.
 </Subsection>
 
 <Subsection Label="Tut:IntegrateExisting:GapDocOptions">
@@ -282,7 +282,7 @@ The following example illustrates this by instructing &AutoDoc; to only search i
 of the packages root directory.
 <Listing>
 LoadPackage( "AutoDoc" );
-AutoDoc( rec( gapdoc := rec( scan_dirs := [ "package_source" ] ) ) );
+AutoDoc( rec( gapdoc := rec( scan_dirs := [ "package_sources" ] ) ) );
 </Listing>
 You can also specify an explicit list of files containing documentation,
 which will be searched in addition to any files located within the scan directories:
@@ -312,6 +312,115 @@ AutoDoc( rec( gapdoc := rec( gap_root_relative_path := true ) ) );
 </Listing>
 
 </Subsection>
+
+<Subsection Label="Tut:Checklist">
+<Heading>
+Checklist for converting an existing &GAPDoc; manual to use &AutoDoc;
+</Heading>
+
+Here is a checklist for authors of a package &PackageName;, 
+<E>which already has a &GAPDoc; based manual</E>, who wish to use &AutoDoc; 
+to build the manual from now on. 
+We assume that the manual is currently built by reading a file 
+<File>makedoc.g</File> and that the main <File>.xml</File> file 
+is named <File>manual.xml</File>. 
+<P/> 
+The files <File>PackageInfo.g</File>, <File>makedoc.g</File>, 
+<File>doc/title.xml</File> and <File>doc/PackageName.xml</File> 
+(if it exists) will be altered by this procedure, 
+so it may be wise to keep backup copies. 
+<P/> 
+You should have copies of the &AutoDoc; files <File>PackageInfo.g</File> 
+and <File>makedoc.g</File> to hand when reading these instructions. 
+<P/> 
+<List>
+<Item> 
+Copy <File>AutoDoc/makedoc.g</File> to <File>PackageName/makedoc.g</File>. 
+</Item>
+<Item>
+Edit <File>PackageName/makedoc.g</File> as follows. 
+  <List>
+  <Item> 
+  Change the header comment to match other files in your package. 
+  </Item> 
+  <Item> 
+  After <Code>LoadPackage("AutoDoc");</Code> 
+  add <Code>LoadPackage("PackageName");</Code>. 
+  </Item> 
+  <Item> 
+  In the <Code>AutoDoc</Code> record delete <Code>AutoDoc := true;</Code>. 
+  </Item>
+  <Item> 
+  <Index Key="Scaffold record in makedoc.g"></Index> 
+  In the <Code>scaffold</Code> record change the <Code>includes</Code> list 
+  to be the list of your <Code>.xml</Code> files that are contained in  
+  <File>manual.xml</File>. 
+  </Item> 
+  <Item>
+  <Index Key="Bibliography field in makedoc.g"></Index> 
+  If you do not have a bibliography you may delete the 
+  <Code>bib := "bib.xml",</Code> field in the scaffold. 
+  Otherwise, edit the file name if you have a different file. 
+  If you only have a <Code>.bib</Code> file  
+  (<Code>manual.bib</Code> or <Code>bib.xml.bib</Code> say) 
+  you should rename this file <File>PackageName.bib</File>. 
+  </Item>
+  <Item> 
+  In the <Code>gapdoc_latex_options</Code> record enter any 
+  &LaTeX; <Code>newcommands</Code> previously in <File>manual.xml</File>. 
+  (If there are none you may safely delete this record.) 
+  To illustrate this option the &AutoDoc; file <File>makedoc.g</File> 
+  defines the command <Code>\bbZ</Code> which may be used to produce 
+  the &LaTeX; formula <M>f : \bbZ^2 \to \bbZ</M>. 
+  </Item>
+  <Item> 
+  <Index Key="Entities record in makedoc.g"></Index> 
+  In the <Code>entities</Code> record enter any entities 
+  previously stored in <File>manual.xml</File>. 
+  (Again, if you have none, you may safely delete this record.) 
+  To illustrate this option the &AutoDoc; file <File>makedoc.g</File> 
+  defines entities for the names of packages &io; and &PackageName;. 
+  </Item> 
+  </List>
+</Item> 
+<Item> 
+Now edit <File>PackageName/PackageInfo.g</File> as follows. 
+  <List>
+  <Item> 
+  Delete any <Code>PKGVERSIONDATA</Code> chunk that may be there. 
+  The main reason for converting your manual to use &AutoDoc; is to stop 
+  using entities such as <Code>PACKAGENAMEVERSION</Code>. 
+  </Item>
+  <Item> 
+  Copy the <Code>AutoDoc</Code> record from <File>AutoDoc/PackageInfo.g</File> 
+  to the end of your file (just before the final <Code>"));"</Code>. 
+  </Item>
+  <Item> 
+  <Index Key="Copyright field in PackageInfo.g"></Index> 
+  <Index Key="Abstract field in PackageInfo.g"></Index> 
+  <Index Key="Acknowledgements field in PackageInfo.g"></Index> 
+  Replace the <Code>Copyright</Code>, <Code>Abstract</Code> and 
+  <Code>Acknowledgements</Code> fields of the <Code>TitlePage</Code> 
+  record with the corresponding material from your <File>manual.xml</File>. 
+  (If you do not have an abstract, then delete the 
+  <Code>Abstract</Code> field, etc.) 
+  For other introductory components, such as <Code>Colophon</Code>, 
+  consult the file <File>gap/Magic.gd</File>. 
+  </Item>
+  </List> 
+</Item>
+<Item> 
+If you are using a GitHub repository, as well as running 
+"<Code>git add</Code>" on files <File>makedoc.g</File>, 
+<File>PackageInfo.g</File> and <File>doc/PackageName.bib</File>, 
+you should run "<Code>git rm -f</Code>" on files <File>doc/manual.xml</File>, 
+and <File>doc/title.xml</File>. 
+</Item> 
+</List>
+You should now be ready to run &GAP; and <Code>Read("makedoc.g");</Code> 
+in your package root directory. 
+
+</Subsection> 
 
 </Section>
 
@@ -364,8 +473,8 @@ to explicitly include <F>doc/title.xml</F> from your main XML file.<P/>
 
 However, you can also tell &AutoDoc; to maintain the main XML file for you,
 in which case this is automatic. In fact, this is the default if you
-enabling scaffolding; the above example command explicitly told &AutoDoc;
-not to generate a main page. More o
+enable scaffolding; the above example command explicitly told &AutoDoc;
+not to generate a main page. 
 
 </Subsection>
 
