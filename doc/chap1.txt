@@ -157,14 +157,14 @@
   
   [33X[0;0YFirst off, with [5XAutoDoc[105X is very convenient to regenerate your documentation.[133X
   
-  [33X[0;0YSecondly,  the  scaffolding feature which generates a title package with all
-  the  metadata  of  your package in a uniform way is very handy. The somewhat
+  [33X[0;0YSecondly,  the scaffolding feature which generates a title page with all the
+  metadata  of  your  package  in  a  uniform  way is very handy. The somewhat
   tedious  process  of keeping your title page in sync with your [11XPackageInfo.g[111X
   is  fully  automated  this way (including the correct version, release data,
   author information and so on).[133X
   
   [33X[0;0YThere  are various examples of packages using [5XAutoDoc[105X for only this purpose,
-  e.g. [5XIO[105X and [5Xorb[105X.[133X
+  e.g. [5Xio[105X and [5Xorb[105X.[133X
   
   
   [1X1.3-1 [33X[0;0YUsing [5XAutoDoc[105X[101X[1X on a complete [5XGAPDoc[105X[101X[1X manual[133X[101X
@@ -222,7 +222,7 @@
     [4Xgap maketest.g[104X
   [4X[32X[104X
   
-  [33X[0;0Ytest the examples from your manual.[133X
+  [33X[0;0Ytests the examples from your manual.[133X
   
   
   [1X1.3-2 [33X[0;0YSetting different [5XGAPDoc[105X[101X[1X options[133X[101X
@@ -249,7 +249,7 @@
   
   [4X[32X[104X
     [4XLoadPackage( "AutoDoc" );[104X
-    [4XAutoDoc( rec( gapdoc := rec( scan_dirs := [ "package_source" ] ) ) );[104X
+    [4XAutoDoc( rec( gapdoc := rec( scan_dirs := [ "package_sources" ] ) ) );[104X
   [4X[32X[104X
   
   [33X[0;0YYou  can  also  specify  an explicit list of files containing documentation,
@@ -285,6 +285,73 @@
     [4XLoadPackage( "AutoDoc" );[104X
     [4XAutoDoc( rec( gapdoc := rec( gap_root_relative_path := true ) ) );[104X
   [4X[32X[104X
+  
+  
+  [1X1.3-3 [33X[0;0YChecklist for converting an existing [5XGAPDoc[105X[101X[1X manual to use [5XAutoDoc[105X[101X[1X[133X[101X
+  
+  [33X[0;0YHere  is a checklist for authors of a package [5XPackageName[105X, [13Xwhich already has
+  a  [5XGAPDoc[105X based manual[113X, who wish to use [5XAutoDoc[105X to build the manual from now
+  on. We assume that the manual is currently built by reading a file [11Xmakedoc.g[111X
+  and that the main [11X.xml[111X file is named [11Xmanual.xml[111X.[133X
+  
+  [33X[0;0YThe  files  [11XPackageInfo.g[111X,  [11Xmakedoc.g[111X, [11Xdoc/title.xml[111X and [11Xdoc/PackageName.xml[111X
+  (if  it exists) will be altered by this procedure, so it may be wise to keep
+  backup copies.[133X
+  
+  [33X[0;0YYou  should  have copies of the [5XAutoDoc[105X files [11XPackageInfo.g[111X and [11Xmakedoc.g[111X to
+  hand when reading these instructions.[133X
+  
+  [30X    [33X[0;6YCopy [11XAutoDoc/makedoc.g[111X to [11XPackageName/makedoc.g[111X.[133X
+  
+  [30X    [33X[0;6YEdit [11XPackageName/makedoc.g[111X as follows.[133X
+  
+        [30X    [33X[0;12YChange the header comment to match other files in your package.[133X
+  
+        [30X    [33X[0;12YAfter [10XLoadPackage("AutoDoc");[110X add [10XLoadPackage("PackageName");[110X.[133X
+  
+        [30X    [33X[0;12YIn the [10XAutoDoc[110X record delete [10XAutoDoc := true;[110X.[133X
+  
+        [30X    [33X[0;12YIn  the  [10Xscaffold[110X record change the [10Xincludes[110X list to be the list
+              of your [10X.xml[110X files that are contained in [11Xmanual.xml[111X.[133X
+  
+        [30X    [33X[0;12YIf  you  do  not  have  a bibliography you may delete the [10Xbib :=
+              "bib.xml",[110X  field in the scaffold. Otherwise, edit the file name
+              if  you  have  a  different  file.  If you only have a [10X.bib[110X file
+              ([10Xmanual.bib[110X  or  [10Xbib.xml.bib[110X  say)  you  should rename this file
+              [11XPackageName.bib[111X.[133X
+  
+        [30X    [33X[0;12YIn  the  [10Xgapdoc_latex_options[110X record enter any LaTeX [10Xnewcommands[110X
+              previously  in  [11Xmanual.xml[111X.  (If  there  are none you may safely
+              delete  this record.) To illustrate this option the [5XAutoDoc[105X file
+              [11Xmakedoc.g[111X  defines the command [10X\bbZ[110X which may be used to produce
+              the LaTeX formula [22Xf : bbZ^2 -> bbZ[122X.[133X
+  
+        [30X    [33X[0;12YIn  the  [10Xentities[110X record enter any entities previously stored in
+              [11Xmanual.xml[111X. (Again, if you have none, you may safely delete this
+              record.)  To  illustrate  this option the [5XAutoDoc[105X file [11Xmakedoc.g[111X
+              defines entities for the names of packages [5Xio[105X and [5XPackageName[105X.[133X
+  
+  [30X    [33X[0;6YNow edit [11XPackageName/PackageInfo.g[111X as follows.[133X
+  
+        [30X    [33X[0;12YDelete  any  [10XPKGVERSIONDATA[110X  chunk  that  may be there. The main
+              reason  for  converting  your  manual  to use [5XAutoDoc[105X is to stop
+              using entities such as [10XPACKAGENAMEVERSION[110X.[133X
+  
+        [30X    [33X[0;12YCopy the [10XAutoDoc[110X record from [11XAutoDoc/PackageInfo.g[111X to the end of
+              your file (just before the final [10X"));"[110X.[133X
+  
+        [30X    [33X[0;12YReplace  the  [10XCopyright[110X, [10XAbstract[110X and [10XAcknowledgements[110X fields of
+              the  [10XTitlePage[110X  record with the corresponding material from your
+              [11Xmanual.xml[111X.  (If  you  do  not have an abstract, then delete the
+              [10XAbstract[110X field, etc.) For other introductory components, such as
+              [10XColophon[110X, consult the file [11Xgap/Magic.gd[111X.[133X
+  
+  [30X    [33X[0;6YIf  you are using a GitHub repository, as well as running "[10Xgit add[110X" on
+        files [11Xmakedoc.g[111X, [11XPackageInfo.g[111X and [11Xdoc/PackageName.bib[111X, you should run
+        "[10Xgit rm -f[110X" on files [11Xdoc/manual.xml[111X, and [11Xdoc/title.xml[111X.[133X
+  
+  [33X[0;0YYou  should  now  be ready to run [5XGAP[105X and [10XRead("makedoc.g");[110X in your package
+  root directory.[133X
   
   
   [1X1.4 [33X[0;0YScaffolds[133X[101X
@@ -334,9 +401,9 @@
   [11Xdoc/title.xml[111X from your main XML file.[133X
   
   [33X[0;0YHowever, you can also tell [5XAutoDoc[105X to maintain the main XML file for you, in
-  which  case  this is automatic. In fact, this is the default if you enabling
+  which  case  this  is  automatic. In fact, this is the default if you enable
   scaffolding;  the  above  example  command  explicitly  told  [5XAutoDoc[105X not to
-  generate a main page. More o[133X
+  generate a main page.[133X
   
   
   [1X1.4-2 [33X[0;0YGenerating the main XML file[133X[101X

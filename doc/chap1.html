@@ -15,7 +15,7 @@
 <body class="chap1"  onload="jscontent()">
 
 
-<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chapInd.html">Ind</a>  </div>
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
 
 <div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap0.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap2.html">[Next Chapter]</a>&nbsp;  </div>
 
@@ -34,6 +34,10 @@
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7CBB12E77F2F63A0">1.3-1 <span class="Heading">Using <strong class="pkg">AutoDoc</strong> on a complete <strong class="pkg">GAPDoc</strong> manual</span></a>
 </span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X8206F787869B1645">1.3-2 <span class="Heading">Setting different <strong class="pkg">GAPDoc</strong> options</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X843AF27A78751CBD">1.3-3 <span class="Heading">
+Checklist for converting an existing <strong class="pkg">GAPDoc</strong> manual to use <strong class="pkg">AutoDoc</strong>
+</span></a>
 </span>
 </div></div>
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap1.html#X8524193D824CDE0D">1.4 <span class="Heading">Scaffolds</span></a>
@@ -169,9 +173,9 @@ AutoDoc( rec( autodoc := true ) );
 
 <p>First off, with <strong class="pkg">AutoDoc</strong> is very convenient to regenerate your documentation.</p>
 
-<p>Secondly, the scaffolding feature which generates a title package with all the metadata of your package in a uniform way is very handy. The somewhat tedious process of keeping your title page in sync with your <code class="file">PackageInfo.g</code> is fully automated this way (including the correct version, release data, author information and so on).</p>
+<p>Secondly, the scaffolding feature which generates a title page with all the metadata of your package in a uniform way is very handy. The somewhat tedious process of keeping your title page in sync with your <code class="file">PackageInfo.g</code> is fully automated this way (including the correct version, release data, author information and so on).</p>
 
-<p>There are various examples of packages using <strong class="pkg">AutoDoc</strong> for only this purpose, e.g. <strong class="pkg">IO</strong> and <strong class="pkg">orb</strong>.</p>
+<p>There are various examples of packages using <strong class="pkg">AutoDoc</strong> for only this purpose, e.g. <strong class="pkg">io</strong> and <strong class="pkg">orb</strong>.</p>
 
 <p><a id="X7CBB12E77F2F63A0" name="X7CBB12E77F2F63A0"></a></p>
 
@@ -226,7 +230,7 @@ AutoDoc( rec( maketest := true ) );
 gap maketest.g
 </pre></div>
 
-<p>test the examples from your manual.</p>
+<p>tests the examples from your manual.</p>
 
 <p><a id="X8206F787869B1645" name="X8206F787869B1645"></a></p>
 
@@ -247,7 +251,7 @@ AutoDoc( rec( gapdoc := rec( main := "main" ) ) );
 
 <div class="example"><pre>
 LoadPackage( "AutoDoc" );
-AutoDoc( rec( gapdoc := rec( scan_dirs := [ "package_source" ] ) ) );
+AutoDoc( rec( gapdoc := rec( scan_dirs := [ "package_sources" ] ) ) );
 </pre></div>
 
 <p>You can also specify an explicit list of files containing documentation, which will be searched in addition to any files located within the scan directories:</p>
@@ -275,6 +279,71 @@ AutoDoc( rec( gapdoc := rec( gap_root_relative_path := "../../.." ) ) );
 LoadPackage( "AutoDoc" );
 AutoDoc( rec( gapdoc := rec( gap_root_relative_path := true ) ) );
 </pre></div>
+
+<p><a id="X843AF27A78751CBD" name="X843AF27A78751CBD"></a></p>
+
+<h5>1.3-3 <span class="Heading">
+Checklist for converting an existing <strong class="pkg">GAPDoc</strong> manual to use <strong class="pkg">AutoDoc</strong>
+</span></h5>
+
+<p>Here is a checklist for authors of a package <strong class="pkg">PackageName</strong>, <em>which already has a <strong class="pkg">GAPDoc</strong> based manual</em>, who wish to use <strong class="pkg">AutoDoc</strong> to build the manual from now on. We assume that the manual is currently built by reading a file <code class="file">makedoc.g</code> and that the main <code class="file">.xml</code> file is named <code class="file">manual.xml</code>.</p>
+
+<p>The files <code class="file">PackageInfo.g</code>, <code class="file">makedoc.g</code>, <code class="file">doc/title.xml</code> and <code class="file">doc/PackageName.xml</code> (if it exists) will be altered by this procedure, so it may be wise to keep backup copies.</p>
+
+<p>You should have copies of the <strong class="pkg">AutoDoc</strong> files <code class="file">PackageInfo.g</code> and <code class="file">makedoc.g</code> to hand when reading these instructions.</p>
+
+
+<ul>
+<li><p>Copy <code class="file">AutoDoc/makedoc.g</code> to <code class="file">PackageName/makedoc.g</code>.</p>
+
+</li>
+<li><p>Edit <code class="file">PackageName/makedoc.g</code> as follows.</p>
+
+
+<ul>
+<li><p>Change the header comment to match other files in your package.</p>
+
+</li>
+<li><p>After <code class="code">LoadPackage("AutoDoc");</code> add <code class="code">LoadPackage("PackageName");</code>.</p>
+
+</li>
+<li><p>In the <code class="code">AutoDoc</code> record delete <code class="code">AutoDoc := true;</code>.</p>
+
+</li>
+<li><p>In the <code class="code">scaffold</code> record change the <code class="code">includes</code> list to be the list of your <code class="code">.xml</code> files that are contained in <code class="file">manual.xml</code>.</p>
+
+</li>
+<li><p>If you do not have a bibliography you may delete the <code class="code">bib := "bib.xml",</code> field in the scaffold. Otherwise, edit the file name if you have a different file. If you only have a <code class="code">.bib</code> file (<code class="code">manual.bib</code> or <code class="code">bib.xml.bib</code> say) you should rename this file <code class="file">PackageName.bib</code>.</p>
+
+</li>
+<li><p>In the <code class="code">gapdoc_latex_options</code> record enter any LaTeX <code class="code">newcommands</code> previously in <code class="file">manual.xml</code>. (If there are none you may safely delete this record.) To illustrate this option the <strong class="pkg">AutoDoc</strong> file <code class="file">makedoc.g</code> defines the command <code class="code">\bbZ</code> which may be used to produce the LaTeX formula <span class="SimpleMath">f : bbZ^2 -&gt; bbZ</span>.</p>
+
+</li>
+<li><p>In the <code class="code">entities</code> record enter any entities previously stored in <code class="file">manual.xml</code>. (Again, if you have none, you may safely delete this record.) To illustrate this option the <strong class="pkg">AutoDoc</strong> file <code class="file">makedoc.g</code> defines entities for the names of packages <strong class="pkg">io</strong> and <strong class="pkg">PackageName</strong>.</p>
+
+</li>
+</ul>
+</li>
+<li><p>Now edit <code class="file">PackageName/PackageInfo.g</code> as follows.</p>
+
+
+<ul>
+<li><p>Delete any <code class="code">PKGVERSIONDATA</code> chunk that may be there. The main reason for converting your manual to use <strong class="pkg">AutoDoc</strong> is to stop using entities such as <code class="code">PACKAGENAMEVERSION</code>.</p>
+
+</li>
+<li><p>Copy the <code class="code">AutoDoc</code> record from <code class="file">AutoDoc/PackageInfo.g</code> to the end of your file (just before the final <code class="code">"));"</code>.</p>
+
+</li>
+<li><p>Replace the <code class="code">Copyright</code>, <code class="code">Abstract</code> and <code class="code">Acknowledgements</code> fields of the <code class="code">TitlePage</code> record with the corresponding material from your <code class="file">manual.xml</code>. (If you do not have an abstract, then delete the <code class="code">Abstract</code> field, etc.) For other introductory components, such as <code class="code">Colophon</code>, consult the file <code class="file">gap/Magic.gd</code>.</p>
+
+</li>
+</ul>
+</li>
+<li><p>If you are using a GitHub repository, as well as running "<code class="code">git add</code>" on files <code class="file">makedoc.g</code>, <code class="file">PackageInfo.g</code> and <code class="file">doc/PackageName.bib</code>, you should run "<code class="code">git rm -f</code>" on files <code class="file">doc/manual.xml</code>, and <code class="file">doc/title.xml</code>.</p>
+
+</li>
+</ul>
+<p>You should now be ready to run <strong class="pkg">GAP</strong> and <code class="code">Read("makedoc.g");</code> in your package root directory.</p>
 
 <p><a id="X8524193D824CDE0D" name="X8524193D824CDE0D"></a></p>
 
@@ -309,7 +378,7 @@ AutoDoc( rec( scaffold := rec( MainPage := false ) ) );
 
 <p>Note that this only outputs <code class="file">doc/title.xml</code> but does not touch any other files of your documentation. In particular, you need to explicitly include <code class="file">doc/title.xml</code> from your main XML file.</p>
 
-<p>However, you can also tell <strong class="pkg">AutoDoc</strong> to maintain the main XML file for you, in which case this is automatic. In fact, this is the default if you enabling scaffolding; the above example command explicitly told <strong class="pkg">AutoDoc</strong> not to generate a main page. More o</p>
+<p>However, you can also tell <strong class="pkg">AutoDoc</strong> to maintain the main XML file for you, in which case this is automatic. In fact, this is the default if you enable scaffolding; the above example command explicitly told <strong class="pkg">AutoDoc</strong> not to generate a main page.</p>
 
 <p><a id="X7CD72CC780874FD5" name="X7CD72CC780874FD5"></a></p>
 
@@ -430,7 +499,7 @@ S4 := SymmetricGroup( 4 );;
 <div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap0.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap2.html">[Next Chapter]</a>&nbsp;  </div>
 
 
-<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chapInd.html">Ind</a>  </div>
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
 
 <hr />
 <p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>

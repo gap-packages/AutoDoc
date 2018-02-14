@@ -98,8 +98,7 @@
   [33X[0;0YAdds  the  entry to the given chapter and section. Here, [3Xchapter[103X and [3Xsection[103X
   are the respective titles.[133X
   
-  [33X[0;0YAs  an  example, a full [5XAutoDoc[105X comment for with all options could look like
-  this:[133X
+  [33X[0;0YAs an example, a full [5XAutoDoc[105X comment with all options could look like this:[133X
   
   [4X[32X[104X
     [4X#! @Description[104X
@@ -126,10 +125,12 @@
   
   [1X2.2-1 [33X[0;0Y@Chapter [3Xname[103X[101X[1X[133X[101X
   
-  [33X[0;0YSets  a  chapter,  all functions without separate info will be added to this
-  chapter.  Also  all  text  comments, i.e. lines that begin with #! without a
-  command,  and  which  do not follow after @description, will be added to the
-  chapter as regular text. Example:[133X
+  [33X[0;0YSets  the  active  chapter,  all  subsequent  functions which do not have an
+  explicit  chapter declared in their AutoDoc comment via [10X@ChapterInfo[110X will be
+  added to this chapter. Also all text comments, i.e. lines that begin with #!
+  without a command, and which do not follow after [10X@Description[110X, will be added
+  to  the chapter as regular text. Additionally, the chapters label wil be set
+  to [10XChapter_[110X[3Xname[103X. Example:[133X
   
   [4X[32X[104X
     [4X#! @Chapter My chapter[104X
@@ -138,13 +139,24 @@
   [4X[32X[104X
   
   [33X[0;0YThe  [10X@ChapterLabel[110X [3Xlabel[103X command can be used to set the label of the chapter
-  to   [10XChapter_[110X[3Xlabel[103X.   Additionally,   the   chapter   will   be   stored  as
-  [10X_Chapter_[110X[3Xlabel[103X[10X.xml[110X.[133X
+  to  [10XChapter_[110X[3Xlabel[103X instead of [10XChapter_[110X[3Xname[103X. Additionally, the chapter will be
+  stored as [10X_Chapter_[110X[3Xlabel[103X[10X.xml[110X. The [10X@ChapterTitle[110X [3Xtitle[103X command can be used to
+  set  a  heading  for  the chapter that is different from [3Xname[103X. Note that the
+  title does not affect the label. If you use all three commands, i.e.,[133X
+  
+  [4X[32X[104X
+    [4X#! @Chapter name[104X
+    [4X#! @ChapterLabel label[104X
+    [4X#! @ChapterTitle title[104X
+  [4X[32X[104X
+  
+  [33X[0;0Y[10Xtitle[110X  is  used  for the headline, [10Xlabel[110X for cross-referencing, and [10Xname[110X for
+  setting the same chapter as active chapter again.[133X
   
   
   [1X2.2-2 [33X[0;0Y@Section [3Xname[103X[101X[1X[133X[101X
   
-  [33X[0;0YSets a section like chapter sets a chapter.[133X
+  [33X[0;0YSets an active section like [10X@Chapter[110X sets an active chapter.[133X
   
   [4X[32X[104X
     [4X#! @Section My first manual section[104X
@@ -152,7 +164,9 @@
   [4X[32X[104X
   
   [33X[0;0YThe  [10X@SectionLabel[110X [3Xlabel[103X command can be used to set the label of the section
-  to [10XSection_[110X[3Xlabel[103X.[133X
+  to    [10XSection_[110X[3Xlabel[103X   instead   of   [10XChapter_chaptername_Section_[110X[3Xname[103X.   The
+  [10X@SectionTitle[110X  [3Xtitle[103X  command  can  be used to set a heading for the section
+  that is different from [3Xname[103X.[133X
   
   
   [1X2.2-3 [33X[0;0Y@EndSection[133X[101X
@@ -169,7 +183,7 @@
   
   [1X2.2-4 [33X[0;0Y@Subsection [3Xname[103X[101X[1X[133X[101X
   
-  [33X[0;0YSets a subsection like chapter sets a chapter.[133X
+  [33X[0;0YSets an active subsection like [10X@Chapter[110X sets an active chapter.[133X
   
   [4X[32X[104X
     [4X#! @Subsection My first manual subsection[104X
@@ -177,7 +191,10 @@
   [4X[32X[104X
   
   [33X[0;0YThe  [10X@SubsectionLabel[110X  [3Xlabel[103X  command  can  be  used to set the label of the
-  subsection to [10XSubsection_[110X[3Xlabel[103X.[133X
+  subsection          to          [10XSubsection_[110X[3Xlabel[103X          instead         of
+  [10XChapter_chaptername_Section_sectionname_Subsection_[110X[3Xname[103X.                 The
+  [10X@SubsectionTitle[110X  [3Xtitle[103X  command  can  be  used  to  set  a  heading for the
+  subsection that is different from [3Xname[103X.[133X
   
   
   [1X2.2-5 [33X[0;0Y@EndSubsection[133X[101X
@@ -278,8 +295,10 @@
     [4X#! @EndExample[104X
   [4X[32X[104X
   
+  [33X[0;0YThe [5XAutoDoc[105X command [10X@Example[110X is an alias of [10X@BeginExample[110X.[133X
   
-  [1X2.2-13 [33X[0;0Y@ExampleSession and @EndExampleSession[133X[101X
+  
+  [1X2.2-13 [33X[0;0Y@BeginExampleSession and @EndExampleSession[133X[101X
   
   [33X[0;0Y@ExampleSession  inserts  an  example  into  the  manual, but in a different
   syntax. For example, consider[133X
@@ -298,7 +317,7 @@
   into source code files, one can instead use @ExampleSession:[133X
   
   [4X[32X[104X
-    [4X#! @ExampleSession[104X
+    [4X#! @BeginExampleSession[104X
     [4X#! gap> S5 := SymmetricGroup(5);[104X
     [4X#! Sym( [ 1 .. 5 ] )[104X
     [4X#! gap> Order(S5);[104X
@@ -307,20 +326,29 @@
   [4X[32X[104X
   
   [33X[0;0YIt  inserts  an  example  into the manual just as @Example would do, but all
-  lines are commented and therefore not executed when the file is read.[133X
+  lines  are  commented  and therefore not executed when the file is read. All
+  lines  that  should  be  part of the example displayed in the manual have to
+  start with an [5XAutoDoc[105X comment ([10X#![110X). The comment will be removed, and, if the
+  following  character  is  a space, this space will also be removed. There is
+  never  more than one space removed. To ensure examples are correctly colored
+  in  the  manual,  there  should  be exactly one space between [10X#![110X and the [10Xgap[110X
+  prompt.    The    [5XAutoDoc[105X   command   [10X@ExampleSession[110X   is   an   alias   of
+  [10X@BeginExampleSession[110X.[133X
   
   
   [1X2.2-14 [33X[0;0Y@BeginLog and @EndLog[133X[101X
   
   [33X[0;0YWorks  just  like  the  @BeginExample  command,  but the example will not be
-  tested. See the GAPDoc manual for more information.[133X
+  tested. See the GAPDoc manual for more information. The [5XAutoDoc[105X command [10X@Log[110X
+  is an alias of [10X@BeginLog[110X.[133X
   
   
   [1X2.2-15 [33X[0;0Y@BeginLogSession and @EndLogSession[133X[101X
   
   [33X[0;0YWorks  just  like the @BeginExampleSession command, but the example will not
   be  tested  if  manual  examples  are  run.  See  the GAPDoc manual for more
-  information.[133X
+  information.    The   [5XAutoDoc[105X   command   [10X@LogSession[110X   is   an   alias   of
+  [10X@BeginLogSession[110X.[133X
   
   
   [1X2.2-16 [33X[0;0Y@DoNotReadRestOfFile[133X[101X
@@ -339,7 +367,7 @@
   
   [1X2.2-17 [33X[0;0Y@BeginChunk [3Xname[103X[101X[1X, @EndChunk, and @InsertChunk [3Xname[103X[101X[1X[133X[101X
   
-  [33X[0;0YText insider of a @BeginChunk / @EndChunk part will not be inserted into the
+  [33X[0;0YText  inside  a  @BeginChunk  / @EndChunk part will not be inserted into the
   final  documentation  directly.  Instead,  the text is stored in an internal
   buffer.  That chunk of text can then later on be inserted in any other place
   by  using the @InsertChunk [3Xname[103X command. If you do not provide an @EndChunk,

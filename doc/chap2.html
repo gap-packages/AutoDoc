@@ -15,7 +15,7 @@
 <body class="chap2"  onload="jscontent()">
 
 
-<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chapInd.html">Ind</a>  </div>
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
 
 <div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap1.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap3.html">[Next Chapter]</a>&nbsp;  </div>
 
@@ -67,7 +67,7 @@
 </span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X83D6DA3B83D3436C">2.2-12 <span class="Heading">@BeginExample and @EndExample</span></a>
 </span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7F07018582EA13D6">2.2-13 <span class="Heading">@ExampleSession and @EndExampleSession</span></a>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X861E2E778510CAF7">2.2-13 <span class="Heading">@BeginExampleSession and @EndExampleSession</span></a>
 </span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X81A2D44D834C0A17">2.2-14 <span class="Heading">@BeginLog and @EndLog</span></a>
 </span>
@@ -201,7 +201,7 @@ DeclareProperty( "AProperty",
 
 <p>Adds the entry to the given chapter and section. Here, <var class="Arg">chapter</var> and <var class="Arg">section</var> are the respective titles.</p>
 
-<p>As an example, a full <strong class="pkg">AutoDoc</strong> comment for with all options could look like this:</p>
+<p>As an example, a full <strong class="pkg">AutoDoc</strong> comment with all options could look like this:</p>
 
 
 <div class="example"><pre>
@@ -229,7 +229,7 @@ DeclareAttribute( "CharacterDegreesOfBlocks",
 
 <h5>2.2-1 <span class="Heading">@Chapter <var class="Arg">name</var></span></h5>
 
-<p>Sets a chapter, all functions without separate info will be added to this chapter. Also all text comments, i.e. lines that begin with #! without a command, and which do not follow after @description, will be added to the chapter as regular text. Example:</p>
+<p>Sets the active chapter, all subsequent functions which do not have an explicit chapter declared in their AutoDoc comment via <code class="code">@ChapterInfo</code> will be added to this chapter. Also all text comments, i.e. lines that begin with #! without a command, and which do not follow after <code class="code">@Description</code>, will be added to the chapter as regular text. Additionally, the chapters label wil be set to <code class="code">Chapter_</code><var class="Arg">name</var>. Example:</p>
 
 
 <div class="example"><pre>
@@ -238,13 +238,22 @@ DeclareAttribute( "CharacterDegreesOfBlocks",
 #!  I document my stuff in it.
 </pre></div>
 
-<p>The <code class="code">@ChapterLabel</code> <var class="Arg">label</var> command can be used to set the label of the chapter to <code class="code">Chapter_</code><var class="Arg">label</var>. Additionally, the chapter will be stored as <code class="code">_Chapter_</code><var class="Arg">label</var><code class="code">.xml</code>.</p>
+<p>The <code class="code">@ChapterLabel</code> <var class="Arg">label</var> command can be used to set the label of the chapter to <code class="code">Chapter_</code><var class="Arg">label</var> instead of <code class="code">Chapter_</code><var class="Arg">name</var>. Additionally, the chapter will be stored as <code class="code">_Chapter_</code><var class="Arg">label</var><code class="code">.xml</code>. The <code class="code">@ChapterTitle</code> <var class="Arg">title</var> command can be used to set a heading for the chapter that is different from <var class="Arg">name</var>. Note that the title does not affect the label. If you use all three commands, i.e.,</p>
+
+
+<div class="example"><pre>
+#! @Chapter name
+#! @ChapterLabel label
+#! @ChapterTitle title
+</pre></div>
+
+<p><code class="code">title</code> is used for the headline, <code class="code">label</code> for cross-referencing, and <code class="code">name</code> for setting the same chapter as active chapter again.</p>
 
 <p><a id="X83651A8B7EAE7F65" name="X83651A8B7EAE7F65"></a></p>
 
 <h5>2.2-2 <span class="Heading">@Section <var class="Arg">name</var></span></h5>
 
-<p>Sets a section like chapter sets a chapter.</p>
+<p>Sets an active section like <code class="code">@Chapter</code> sets an active chapter.</p>
 
 
 <div class="example"><pre>
@@ -252,7 +261,7 @@ DeclareAttribute( "CharacterDegreesOfBlocks",
 #!  In this section I am going to document my first method.
 </pre></div>
 
-<p>The <code class="code">@SectionLabel</code> <var class="Arg">label</var> command can be used to set the label of the section to <code class="code">Section_</code><var class="Arg">label</var>.</p>
+<p>The <code class="code">@SectionLabel</code> <var class="Arg">label</var> command can be used to set the label of the section to <code class="code">Section_</code><var class="Arg">label</var> instead of <code class="code">Chapter_chaptername_Section_</code><var class="Arg">name</var>. The <code class="code">@SectionTitle</code> <var class="Arg">title</var> command can be used to set a heading for the section that is different from <var class="Arg">name</var>.</p>
 
 <p><a id="X852C1B327A127225" name="X852C1B327A127225"></a></p>
 
@@ -271,7 +280,7 @@ DeclareAttribute( "CharacterDegreesOfBlocks",
 
 <h5>2.2-4 <span class="Heading">@Subsection <var class="Arg">name</var></span></h5>
 
-<p>Sets a subsection like chapter sets a chapter.</p>
+<p>Sets an active subsection like <code class="code">@Chapter</code> sets an active chapter.</p>
 
 
 <div class="example"><pre>
@@ -279,7 +288,7 @@ DeclareAttribute( "CharacterDegreesOfBlocks",
 #!  In this subsection I am going to document my first example.
 </pre></div>
 
-<p>The <code class="code">@SubsectionLabel</code> <var class="Arg">label</var> command can be used to set the label of the subsection to <code class="code">Subsection_</code><var class="Arg">label</var>.</p>
+<p>The <code class="code">@SubsectionLabel</code> <var class="Arg">label</var> command can be used to set the label of the subsection to <code class="code">Subsection_</code><var class="Arg">label</var> instead of <code class="code">Chapter_chaptername_Section_sectionname_Subsection_</code><var class="Arg">name</var>. The <code class="code">@SubsectionTitle</code> <var class="Arg">title</var> command can be used to set a heading for the subsection that is different from <var class="Arg">name</var>.</p>
 
 <p><a id="X83F70B0F85628361" name="X83F70B0F85628361"></a></p>
 
@@ -379,9 +388,11 @@ Order(S5);
 #! @EndExample
 </pre></div>
 
-<p><a id="X7F07018582EA13D6" name="X7F07018582EA13D6"></a></p>
+<p>The <strong class="pkg">AutoDoc</strong> command <code class="code">@Example</code> is an alias of <code class="code">@BeginExample</code>.</p>
 
-<h5>2.2-13 <span class="Heading">@ExampleSession and @EndExampleSession</span></h5>
+<p><a id="X861E2E778510CAF7" name="X861E2E778510CAF7"></a></p>
+
+<h5>2.2-13 <span class="Heading">@BeginExampleSession and @EndExampleSession</span></h5>
 
 <p>@ExampleSession inserts an example into the manual, but in a different syntax. For example, consider</p>
 
@@ -399,7 +410,7 @@ Order(S5);
 
 
 <div class="example"><pre>
-#! @ExampleSession
+#! @BeginExampleSession
 #! gap&gt; S5 := SymmetricGroup(5);
 #! Sym( [ 1 .. 5 ] )
 #! gap&gt; Order(S5);
@@ -407,19 +418,19 @@ Order(S5);
 #! @EndExampleSession
 </pre></div>
 
-<p>It inserts an example into the manual just as @Example would do, but all lines are commented and therefore not executed when the file is read.</p>
+<p>It inserts an example into the manual just as @Example would do, but all lines are commented and therefore not executed when the file is read. All lines that should be part of the example displayed in the manual have to start with an <strong class="pkg">AutoDoc</strong> comment (<code class="code">#!</code>). The comment will be removed, and, if the following character is a space, this space will also be removed. There is never more than one space removed. To ensure examples are correctly colored in the manual, there should be exactly one space between <code class="code">#!</code> and the <code class="code">gap</code> prompt. The <strong class="pkg">AutoDoc</strong> command <code class="code">@ExampleSession</code> is an alias of <code class="code">@BeginExampleSession</code>.</p>
 
 <p><a id="X81A2D44D834C0A17" name="X81A2D44D834C0A17"></a></p>
 
 <h5>2.2-14 <span class="Heading">@BeginLog and @EndLog</span></h5>
 
-<p>Works just like the @BeginExample command, but the example will not be tested. See the GAPDoc manual for more information.</p>
+<p>Works just like the @BeginExample command, but the example will not be tested. See the GAPDoc manual for more information. The <strong class="pkg">AutoDoc</strong> command <code class="code">@Log</code> is an alias of <code class="code">@BeginLog</code>.</p>
 
 <p><a id="X7BADE876794FF309" name="X7BADE876794FF309"></a></p>
 
 <h5>2.2-15 <span class="Heading">@BeginLogSession and @EndLogSession</span></h5>
 
-<p>Works just like the @BeginExampleSession command, but the example will not be tested if manual examples are run. See the GAPDoc manual for more information.</p>
+<p>Works just like the @BeginExampleSession command, but the example will not be tested if manual examples are run. See the GAPDoc manual for more information. The <strong class="pkg">AutoDoc</strong> command <code class="code">@LogSession</code> is an alias of <code class="code">@BeginLogSession</code>.</p>
 
 <p><a id="X78DC644E8519280C" name="X78DC644E8519280C"></a></p>
 
@@ -440,7 +451,7 @@ Order(S5);
 
 <h5>2.2-17 <span class="Heading">@BeginChunk <var class="Arg">name</var>, @EndChunk, and @InsertChunk <var class="Arg">name</var></span></h5>
 
-<p>Text insider of a @BeginChunk / @EndChunk part will not be inserted into the final documentation directly. Instead, the text is stored in an internal buffer. That chunk of text can then later on be inserted in any other place by using the @InsertChunk <var class="Arg">name</var> command. If you do not provide an @EndChunk, the chunk ends at the end of the file.</p>
+<p>Text inside a @BeginChunk / @EndChunk part will not be inserted into the final documentation directly. Instead, the text is stored in an internal buffer. That chunk of text can then later on be inserted in any other place by using the @InsertChunk <var class="Arg">name</var> command. If you do not provide an @EndChunk, the chunk ends at the end of the file.</p>
 
 
 <div class="example"><pre>
@@ -706,7 +717,7 @@ KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
 <div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap1.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap3.html">[Next Chapter]</a>&nbsp;  </div>
 
 
-<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chapInd.html">Ind</a>  </div>
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
 
 <hr />
 <p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>

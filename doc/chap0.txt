@@ -6,10 +6,10 @@
                  [1X Generate documentation from [5XGAP[105X source code [101X
   
   
-                                   2017.09.08
+                                   2018.02.14
   
   
-                                8 September 2017
+                                14 February 2018
   
   
                                Sebastian Gutsche
@@ -40,11 +40,22 @@
   
   
   -------------------------------------------------------
+  [1XAbstract[101X
+  [33X[0;0Y[5XAutoDoc[105X  is  a  [5XGAP[105X  package  whose purpose is to aid [5XGAP[105X package authors in
+  creating and maintaining the documentation of their packages.[133X
+  
+  
+  -------------------------------------------------------
   [1XCopyright[101X
-  [33X[0;0Y© 2012-2014 by Sebastian Gutsche and Max Horn[133X
+  [33X[0;0Y© 2012-2017 by Sebastian Gutsche and Max Horn[133X
   
   [33X[0;0YThis  package  may  be distributed under the terms and conditions of the GNU
   Public License Version 2.[133X
+  
+  
+  -------------------------------------------------------
+  [1XAcknowledgements[101X
+  [33X[0;0YThis documentation was prepared using the [5XGAPDoc[105X package [LN12].[133X
   
   
   -------------------------------------------------------
@@ -58,6 +69,7 @@
     1.3 [33X[0;0YUsing [5XAutoDoc[105X in an existing [5XGAPDoc[105X manual[133X
       1.3-1 [33X[0;0YUsing [5XAutoDoc[105X on a complete [5XGAPDoc[105X manual[133X
       1.3-2 [33X[0;0YSetting different [5XGAPDoc[105X options[133X
+      1.3-3 [33X[0;0YChecklist for converting an existing [5XGAPDoc[105X manual to use [5XAutoDoc[105X[133X
     1.4 [33X[0;0YScaffolds[133X
       1.4-1 [33X[0;0YGenerating a title page[133X
       1.4-2 [33X[0;0YGenerating the main XML file[133X
@@ -86,7 +98,7 @@
       2.2-10 [33X[0;0Y@Level [3Xlvl[103X[133X
       2.2-11 [33X[0;0Y@ResetLevel[133X
       2.2-12 [33X[0;0Y@BeginExample and @EndExample[133X
-      2.2-13 [33X[0;0Y@ExampleSession and @EndExampleSession[133X
+      2.2-13 [33X[0;0Y@BeginExampleSession and @EndExampleSession[133X
       2.2-14 [33X[0;0Y@BeginLog and @EndLog[133X
       2.2-15 [33X[0;0Y@BeginLogSession and @EndLogSession[133X
       2.2-16 [33X[0;0Y@DoNotReadRestOfFile[133X
