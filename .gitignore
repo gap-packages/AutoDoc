@@ -1,8 +1,9 @@
-
 *.DS_Store
 *~
 
+/gh-pages/
 /tmp
+
 /doc/*.aux
 /doc/*.bbl
 /doc/*.blg
@@ -30,10 +31,4 @@
 /doc/manual.six
 /doc/QuickReference/*
 /doc/title.xml
-/gh-pages/
 VERSION
-
-ExampleIdeas
-make_dist_for_autodoc.sh
-public_html
-public_html.version
