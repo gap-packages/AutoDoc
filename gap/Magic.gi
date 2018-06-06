@@ -533,7 +533,8 @@ function( arg )
         # Ask GAPDoc to use UTF-8 as input encoding for LaTeX, as the XML files
         # of the documentation are also in UTF-8 encoding, and may contain characters
         # not contained in the default Latin 1 encoding.
-        SetGapDocLaTeXOptions( "utf8", gapdoc_latex_option_record );
+        AUTODOC_SetIfMissing( gapdoc_latex_option_record, "InputEncoding", "utf8" );
+        SetGapDocLaTeXOptions( gapdoc_latex_option_record );
         
         ## HACK: If there is an empty index, MakeGAPDocDoc throws an error when creating the pdf.
         ## this addition prevents this by fake adding the index to the page number log. See issue 106.
