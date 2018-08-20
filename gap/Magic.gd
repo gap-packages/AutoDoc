@@ -16,7 +16,7 @@
 
 #! @Description
 #! This is the main function of the &AutoDoc; package. It can perform
-#! any combination of the following three tasks:
+#! any combination of the following four tasks:
 #! <Enum>
 #! <Item>
 #!     It can (re)generate a scaffold for your package manual.
@@ -48,6 +48,10 @@
 #!     supplementary files (such as CSS style files) into your doc directory
 #!     (see <Ref Func='CopyHTMLStyleFiles' BookName='gapdoc'/>).
 #! </Item>
+#! <Item>
+#!     It can create a maketest.g file which tests that all of the examples
+#!     in the generated documentation perform as documented.
+#! </Item>
 #! </Enum>
 #! For more information and some examples, please refer to Chapter <Ref Label='Tutorials'/>.
 #! <P/>
@@ -56,15 +60,27 @@
 #!
 #! <Mark><A>package</A></Mark>
 #! <Item>
-#!     This is either the name of package, or an <C>IsDirectory</C> object.
-#!     In the former case, &AutoDoc; uses the metadata of the first package
-#!     with that name known to &GAP;. In the latter case, it checks whether
-#!     the given directory contains a <F>PackageInfo.g</F> file, and extracts
-#!     all needed metadata from that. This is for example useful if you have
-#!     multiple versions of the package around and want to make sure the
+#!     The purpose of this parameter is twofold: to determine the package
+#!     directory in which &AutoDoc; will operate, and to find the metadata
+#!     concerning the package being documented. The parameter is either a
+#!     string, an <C>IsDirectory</C> object, or omitted. 
+#!     In the first case, &AutoDoc; interprets the string as the name of a
+#!     package, uses the metadata of the first package known to &GAP;
+#!     with that name, and uses the <C>InstallationPath</C> specified in that
+#!     metadata as the package directory. The other cases directly specify the
+#!     package directory, either given by the <C>IsDirectory</C> object or as
+#!     the <C>DirectoryCurrent()</C> if the <A>package</A> parameter is
+#!     omitted. In these cases, the package directory must contain a
+#!     <F>PackageInfo.g</F> file, and &AutoDoc; extracts all needed metadata
+#!     from that. The <C>IsDirectory</C> form is for example useful if you
+#!     have multiple versions of the package around and want to make sure the
 #!     documentation of the correct version is built.
 #!     <P/>
-#!     If this argument is omitted, &AutoDoc; uses the <C>DirectoryCurrent()</C>.
+#!     Note that when using <C>AutoDocWorksheet</C>
+#!     (see <Ref Sect='Chapter_AutoDoc_worksheets_Section_Worksheets' />), there
+#!     is no parameter corresponding to <A>package</A> and so the "package
+#!     directory" is always the <C>DirectoryCurrent()</C> and there is no
+#!     metadata.
 #! </Item>
 #!
 #!
@@ -75,9 +91,13 @@
 #!     <List>
 #!     <Mark><A>dir</A></Mark>
 #!     <Item>
-#!         This should be a string containing a (relative) path or a
-#!         Directory() object specifying where the package documentation
-#!         (i.e. the &GAPDoc; XML files) are stored.
+#!         This should either be a string, in which case it must be a path
+#!         <E>relative</E> to the specified package directory, or a
+#!         <C>Directory()</C> object. (Thus, the only way to designate an
+#!         absolute directory is with a <C>Directory()</C> object.) This
+#!         option specifies where the package documentation
+#!         (e.g. the &GAPDoc; XML or the manual PDF, etc.) files are stored
+#!         and/or will be generated.
 #!         <Br/>
 #!         <E>Default value: <C>"doc/"</C>.</E>
 #!     </Item>
@@ -348,7 +368,7 @@
 #! </List>
 #!
 #! @Returns nothing
-#! @Arguments [package[, optrec ]]
+#! @Arguments [package], [optrec]
 DeclareGlobalFunction( "AutoDoc" );
 
 
