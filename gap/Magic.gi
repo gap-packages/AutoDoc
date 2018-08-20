@@ -104,6 +104,7 @@ function( arg )
     local pkgname, pkginfo, pkgdir,
           opt, scaffold, gapdoc, maketest, autodoc,
           doc_dir, doc_dir_rel, tmp, key, val, file,
+          pkgdirstr, docdirstr,
           title_page, tree, is_worksheet,
           position_document_class, gapdoc_latex_option_record,
           makeDocFun, args;
@@ -205,7 +206,16 @@ function( arg )
         doc_dir := Directory(doc_dir);
 
     else
-        # TODO: doc_dir_rel = ... ?
+        # In this case, if doc_dir happens to lie below pkgdir, we want the
+        # doc_dir_rel to be the difference; if not we avoid binding doc_dir_rel
+        # and leave MakeGAPDocDoc to muddle through with absolute paths.
+        pkgdirstr := Filename(pkgdir, "");
+        docdirstr := Filename(doc_dir, "");
+        if Length(pkgdirstr) <= Length(docdirstr) and
+           docdirstr{[1..Length(pkgdirstr)]} = pkgdirstr then
+            doc_dir_rel :=
+            Directory(docdirstr{[(Length(pkgdirstr)+1)..Length(docdirstr)]});
+        fi;
     fi;
 
     # Ensure the output directory exists, create it if necessary
@@ -215,7 +225,7 @@ function( arg )
     # This helps diagnose problems where multiple instances of a package
     # are visible to GAP and the wrong one is used for generating the
     # documentation.
-    Print( "Generating documentation in ", doc_dir, "\n" );
+    Info(InfoGAPDoc, 1, "Generating documentation in ", doc_dir, "\n" );
 
     #
     # Extract scaffolding settings, which can be controlled via
@@ -351,14 +361,25 @@ function( arg )
         # will not work if there are any non-normalized paths in the list).
         gapdoc.files := Set( gapdoc.files );
 
-        # Convert the file paths in gapdoc.files, which are relative to
-        # the package directory, to paths which are relative to the doc directory.
-        # For this, we assume that doc_dir_rel is normalized (e.g.
-        # it does not contains '//') and relative.
-        # FIXME: this is an ugly hack, can't we do something better?
-        tmp := Number( Filename( doc_dir_rel, "" ), x -> x = '/' );
-        tmp := Concatenation( ListWithIdenticalEntries(tmp, "../") );
-        gapdoc.files := List( gapdoc.files, f -> Concatenation( tmp, f ) );
+        # If possible, convert the file paths in gapdoc.files, which are
+        # relative to the package directory, to paths which are relative to
+        # the doc directory.
+
+        if IsBound( doc_dir_rel) then
+            # For this, we assume that doc_dir_rel is normalized (e.g.
+            # it does not contains '//') and relative.
+            # FIXME: this is an ugly hack, can't we do something better?
+            tmp := Number( Filename( doc_dir_rel, "" ), x -> x = '/' );
+            tmp := Concatenation( ListWithIdenticalEntries(tmp, "../") );
+            gapdoc.files := List( gapdoc.files, f -> Concatenation( tmp, f ) );
+        else
+            # Here presumably the doc_dir was given by an absolute path that
+            # does not lie below the package dir. In that case, we can't make
+            # the gapdoc.files relative to the doc dir, but rather we have no
+            # choice but to make them absolute, which MakeGAPDocDoc can handle,
+            # even if perhaps less gracefully/portably.
+            gapdoc.files := List( gapdoc.files, f -> Filename( pkgdir, f ) );
+        fi;
     fi;
 
 
