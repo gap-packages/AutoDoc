@@ -77,7 +77,11 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         entries := [ "Func", "global_functions" ];
         has_filters := "No";
         if not IsBound( item_rec!.arguments ) then
-            item_rec!.arguments := "arg";
+            if IsBound( item_rec!.initial_args ) then
+                item_rec!.arguments := item_rec!.initial_args;
+            else
+                item_rec!.arguments := "arg";
+            fi;
         fi;
     elif PositionSublist( type, "DeclareGlobalVariable" ) <> fail then
         entries := [ "Var", "global_variables" ];
@@ -116,7 +120,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
   function( filename_list, tree, default_chapter_data )
     local current_item, flush_and_recover, chapter_info, current_string_list,
           Scan_for_Declaration_part, flush_and_prepare_for_item, current_line, filestream,
-          level_scope, scope_group, read_example, command_function_record, autodoc_read_line,
+          level_scope, scope_group, scope_initial_args, read_example, command_function_record, autodoc_read_line,
           current_command, was_declaration, filename, system_scope, groupnumber, chunk_list, rest_of_file_skipped,
           context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,
           current_line_unedited,
@@ -158,6 +162,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         fi;
         if IsBound( scope_group ) then
             SetGroupName( man_item, scope_group );
+        fi;
+        if IsBound( scope_initial_args ) then
+            man_item!.initial_args := scope_initial_args;
         fi;
         man_item!.chapter_info := ShallowCopy( chapter_info );
         man_item!.tester_names := fail;
@@ -267,7 +274,10 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 ##Adjust arguments
                 if not IsBound( current_item!.arguments ) then
                     if IsInt( has_filters ) then
-                        if has_filters = 1 then
+                        if IsBound( current_item!.initial_args ) then
+                            current_item!.arguments :=
+                               current_item!.initial_args;
+                        elif has_filters = 1 then
                             current_item!.arguments := "arg";
                         else
                             current_item!.arguments := JoinStringsWithSeparator( List( [ 1 .. has_filters ], i -> Concatenation( "arg", String( i ) ) ), "," );
@@ -561,8 +571,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
             scope_group := ReplacedString( current_command[ 2 ], " ", "_" );
         end,
+        @GroupInitialArguments := function()
+            scope_initial_args := current_command[ 2 ];
+            current_item := new_man_item();
+            current_item!.initial_args := current_command[ 2 ];
+        end,
         @EndGroup := function()
             Unbind( scope_group );
+            Unbind( scope_initial_args );
         end,
         @Description := function()
             current_item := new_man_item();
@@ -580,8 +596,16 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
         end,
         @Arguments := function()
+            local composed_arguments;
+            if IsBound( scope_initial_args ) and
+               Length( scope_initial_args ) > 0 then
+                composed_arguments :=
+                Concatenation( scope_initial_args, ", ", current_command[ 2 ] );
+            else
+                composed_arguments := current_command[ 2 ];
+            fi;
             current_item := new_man_item();
-            current_item!.arguments := current_command[ 2 ];
+            current_item!.arguments := composed_arguments;
         end,
         @Label := function()
             current_item := new_man_item();
@@ -592,6 +616,28 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             current_item := new_man_item();
             group_name := ReplacedString( current_command[ 2 ], " ", "_" );
             SetGroupName( current_item, group_name );
+        end,
+        @GroupTitle := function()
+            local group_name, chap_info, group_obj;
+            current_item := new_man_item();
+            if not HasGroupName( current_item ) then
+                ErrorWithPos( "found @GroupTitle with no Group set" );
+            fi;
+            group_name := GroupName( current_item );
+            chap_info := fail;
+            if HasChapterInfo( current_item ) then
+                chap_info := ChapterInfo( current_item );
+            elif IsBound( current_item!.chapter_info ) then
+                chap_info := current_item!.chapter_info;
+            fi;
+            if (chap_info = fail or chap_info = [ ]) then
+                chap_info := chapter_info;
+            fi;
+            if Length( chap_info ) <> 2 then
+                ErrorWithPos( "can only set @GroupTitle within a Chapter and Section.");
+            fi;
+            group_obj := DocumentationGroup( tree, group_name, chap_info );
+            group_obj!.title_string := current_command[ 2 ];
         end,
         @ChapterInfo := function()
             local current_chapter_info;

@@ -25,7 +25,7 @@ end );
 
 ##
 InstallGlobalFunction( AutoDoc_WriteDocEntry,
-  function( filestream, list_of_records )
+  function( filestream, list_of_records, maybe_heading... )
     local return_value, description, current_description, labels, i;
 
     # look for a good return value (it should be the same everywhere)
@@ -78,7 +78,15 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
     od;
     AppendTo( filestream, ">\n" );
 
-    # Function heades
+    # Next possibly the heading for the entry
+    if Length( maybe_heading ) > 0 then
+        maybe_heading := maybe_heading[ 1 ];
+        if IsString( maybe_heading ) then
+            AppendTo( filestream, "<Heading>", maybe_heading, "</Heading>\n" );
+        fi;
+    fi;
+
+    # Function headers
     for i in list_of_records do
          AppendTo( filestream, "  <", i!.item_type, " " );
         if i!.arguments <> fail and i!.item_type <> "Var" then

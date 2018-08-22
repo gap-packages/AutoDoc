@@ -623,10 +623,15 @@ end );
 ##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForGroupRep, IsStream ],
   function( node, filestream )
+    local head;
     if node!.level > ValueOption( "level_value" ) then
         return;
     fi;
-    AutoDoc_WriteDocEntry( filestream, node!.content );
+    head := fail;
+    if IsBound( node!.title_string ) then
+        head := node!.title_string;
+    fi;
+    AutoDoc_WriteDocEntry( filestream, node!.content, head );
 end );
 
 ##

@@ -302,6 +302,25 @@ DeclareOperation( "GroupedOperation",
 ]]></Listing>
 </Subsection>
 
+<Subsection Label="@GroupTitle">
+<Index Key="@GroupTitle"><C>@GroupTitle</C></Index>
+<Heading>@GroupTitle <A>title</A></Heading>
+Sets the subsection heading for the current group to <A>title</A>. In the
+absence of any <C>@GroupTitle</C> command, the heading will be the name of the
+first entry in the group. See <Ref Sect="Groups" /> for more information.
+</Subsection>
+
+<Subsection Label="@GroupInitialArguments">
+<Index Key="@GroupInitialArgumentss"><C>@GroupInitialArguments</C></Index>
+<Heading>@GroupInitialArguments <A>args</A></Heading>
+Sets the common initial arguments for the entries in the current group to be
+<A>args</A>. The argument list for any function subsequently added to the
+group without any args specified will be <A>args</A>, and <A>args</A> will be
+prepended to any arguments specified for a particular function. The setting is
+cleared by an <C>@EndGroup</C> command. See <Ref Sect="Groups" /> for more
+information.
+</Subsection>
+
 <Subsection Label="@Level">
 <Index Key="@Level"><C>@Level</C></Index>
 <Heading>@Level <A>lvl</A></Heading>
@@ -556,8 +575,9 @@ a function, operation, etc., it is possible to group them into suitable chunks.
 This can be particularly useful if there are several definitions of an operation
 with several different argument types, all doing more or less the same to the arguments.
 Then their manual items can be grouped, sharing the same description and return type information.
-Note that it is currently not possible to give a header to the Group in the manual,
-but the generated ManItem heading of the first entry will be used.
+You can give a heading to the Group in the manual with the <C>@GroupTitle</C>
+command; if that is not supplied, then the generated ManItem heading of the
+first entry will be used as the heading.
 <P/>
 
 Note that group names are globally unique throughout the whole manual.
@@ -570,9 +590,19 @@ same group name, in different places, and these all will refer to the same group
 Moreover, this means that you can add items to a group via the <C>@Group</C> command
 in the &AutoDoc; comment of an arbitrary declaration, at any time.
 
+<P/>
+Since often the functions in a Group share common initial arguments, you can
+set a list of common arguments to be prepended to all declarations within a
+given <C>@BeginGroup/@EndGroup</C> pair with the <C>@GroupInitialArguments</C>
+command.
+
+<P/>
+
 The following code
 <Listing><![CDATA[
 #! @BeginGroup Group1
+#! @GroupTitle A family of operations
+#! @GroupInitialArguments order
 
 #! @Description
 #!  First sentence.
@@ -580,6 +610,7 @@ DeclareOperation( "FirstOperation", [ IsInt ] );
 
 #! @Description
 #!  Second sentence.
+#! @Arguments ambient_group 
 DeclareOperation( "SecondOperation", [ IsInt, IsGroup ] );
 
 #! @EndGroup
@@ -595,8 +626,9 @@ KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
 produces the following:
 
 <ManSection Label="Group1">
-  <Oper Arg="arg" Name="FirstOperation" Label="for IsInt"/>
-  <Oper Arg="arg1,arg2" Name="SecondOperation" Label="for IsInt, IsGroup"/>
+  <Heading>A family of operations</Heading>
+  <Oper Arg="order" Name="FirstOperation" Label="for IsInt"/>
+  <Oper Arg="order,ambient_group" Name="SecondOperation" Label="for IsInt, IsGroup"/>
   <Oper Arg="arg1,arg2" Name="ThirdOperation" Label="for IsGroup, IsInt"/>
  <Returns></Returns>
  <Description>
