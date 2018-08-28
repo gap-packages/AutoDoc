@@ -12,6 +12,7 @@
 
 DeclareGlobalFunction( "Scan_for_AutoDoc_Part" );
 DeclareGlobalFunction( "AutoDoc_Type_Of_Item" );
+DeclareGlobalFunction( "AutoDoc_Mask_Line" );
 
 ## Argument should be a filename
 DeclareGlobalFunction( "AutoDoc_Parser_ReadFiles" );

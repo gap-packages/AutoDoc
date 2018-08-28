@@ -215,9 +215,20 @@
 #!
 #!         <Mark><A>files</A></Mark>
 #!         <Item>
+#!             <Label Name="AutodocFilesOption"/>
 #!             A list of files (given by paths relative to the package directory)
 #!             to be scanned for &AutoDoc; documentation comments.
 #!             Usually it is more convenient to use <A>autodoc.scan_dirs</A>, see below.
+#!             However, the files in this list are always scanned **before**
+#!             the ones found by <A>scan_dirs</A>, and they are scanned in
+#!             the order listed, so this option can be useful for controlling
+#!             the order that &AutoDoc; processes files, which in turn
+#!             can be useful to ensure that your manual is presented in the
+#!             desired order. For example, you might use this option to
+#!             designate a "master file" which declares all chapters in the
+#!             desired order. Those chapters can then be filled in by
+#!             documentation in your source files, which may be processed in an
+#!             order not relevant to the flow of your documentation.
 #!         </Item>
 #!
 #!         <Mark><A>scan_dirs</A></Mark>

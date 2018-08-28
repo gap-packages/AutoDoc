@@ -22,7 +22,7 @@
 /doc/*.toc
 /doc/*.txt
 /doc/*Bib.xml
-/doc/*Bib.xml.bib
+/doc/*.xml.bib
 /doc/AutoDoc.xml
 /doc/_AutoDocMainFile.xml
 /doc/_Chapter*xml
