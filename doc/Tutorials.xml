@@ -122,7 +122,7 @@ DeclareOperation( "ToricVariety", [ IsConvexObject ] );
 ]]></Listing>
 
 For a thorough description of what you can do with &AutoDoc;
-documentation comments, please refer to chapter <Ref Chap="Comments"/>.
+documentation comments, please refer to chapter <Ref Chap="Chapter_Comments"/>.
 <P/>
 
 <!--
@@ -326,7 +326,7 @@ is named <File>manual.xml</File>.
 The files <File>PackageInfo.g</File>, <File>makedoc.g</File>, 
 <File>doc/title.xml</File> and <File>doc/PackageName.xml</File> 
 (if it exists) will be altered by this procedure, 
-so it may be wise to keep backup copies. 
+so it may be wise to keep backup copies.
 <P/> 
 You should have copies of the &AutoDoc; files <File>PackageInfo.g</File> 
 and <File>makedoc.g</File> to hand when reading these instructions. 

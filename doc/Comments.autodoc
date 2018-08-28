@@ -1,0 +1,173 @@
+@Chapter Comments
+@ChapterTitle &AutoDoc; documentation comments
+
+You can document declarations of global functions and variables, operations,
+attributes etc. by inserting **&AutoDoc; comments** into your sources
+before these declarations.
+An &AutoDoc; comment always starts with `#!`.
+This is also the smallest possible &AutoDoc; command.
+If you want your declaration documented, just write
+`#!` at the line before the documentation. For example:
+
+@BeginLogSession
+#!
+DeclareOperation( "AnOperation",
+                  [ IsList ] );
+@EndLogSession
+
+This will produce a manual entry for the operation `AnOperation`.
+<P/>
+
+Inside of &AutoDoc; comments, **&AutoDoc; commands**
+starting with `@` can be used to control the output &AutoDoc; produces.
+
+
+@Section Declarations
+@SectionTitle Documenting declarations
+
+In the bare form above, the manual entry for `AnOperation` will not
+contain much more than the name of the operation. In order to change
+this, there are several commands you can put into the &AutoDoc; comment
+before the declaration. Currently, the following commands are provided:
+
+@InsertChunk documenting_declaration_commands
+&nbsp;<Br/>&nbsp;<Br/>
+As an example, a full &AutoDoc; comment with all the most common options could
+look like this:
+
+@BeginLogSession
+#! @Description
+#! Computes the list of lists of degrees of ordinary characters
+#! associated to the <A>p</A>-blocks of the group <A>G</A>
+#! with <A>p</A>-modular character table <A>modtbl</A>
+#! and underlying ordinary character table <A>ordtbl</A>.
+#! @Returns a list
+#! @Arguments modtbl
+#! @Group CharacterDegreesOfBlocks
+#! @FunctionLabel chardegblocks
+#! @ChapterInfo Blocks, Attributes
+DeclareAttribute( "CharacterDegreesOfBlocks",
+        IsBrauerTable );
+@EndLogSession
+
+@Section Recognized declarations
+@InsertChunk recognized_declarators
+
+Note that in the particular case of `DeclareSynonym`, &AutoDoc; has no way to
+infer the argument list, so when documenting such a declaration, you must use
+the `@Arguments` command to supply that information.
+
+@Section Others
+@SectionTitle Other documentation comments
+
+There are also some commands which can be used in &AutoDoc; comments
+that are not associated to any one particular declaration. This is useful for
+additional text in your documentation, examples, mathematical chapters, etc..
+
+@InsertChunk other_commands
+@EndSection
+
+@InsertChunk titlepage_commands
+
+@Section PlainText
+@SectionLabel Plain
+@SectionTitle Plain text files
+
+AutoDoc plain text files work exactly like AutoDoc comments, except that the
+`#!` is unnecessary at the beginning of a line which should be documented.
+Files that have the suffix .autodoc will automatically regarded as plain text files,
+while the commands `@AutoDocPlainText` and `@EndAutoDocPlainText`
+(<Ref Subsect="Subsection_PlainCommands"/>) mark regions in other files which
+should be regarded as plain text &AutoDoc; parts. All commands can be used
+in a plain text section of a file, without the leading `#!`.
+
+@Section Groups
+@SectionLabel Groups
+@SectionTitle Grouping
+
+In &GAPDoc;, it is possible to make groups of ManItems, i.e., when documenting
+a function, operation, etc., it is possible to group them into suitable chunks.
+This can be particularly useful if there are several definitions of an operation
+with several different argument types, all doing more or less the same to the arguments.
+Then their manual items can be grouped, sharing the same description and return type information.
+Note that it is currently not possible to give a header to the Group in the manual,
+but the generated ManItem heading of the first entry will be used.
+
+Note that group names are globally unique throughout the whole manual.
+That is, groups with the same name are in fact merged into a single group, even if they
+were declared in different source files.
+Thus you can have multiple `@BeginGroup/@EndGroup` pairs using the
+same group name, in different places, and these all will refer to the same group.
+
+Moreover, this means that you can add items to a group via the `@Group` command
+in the &AutoDoc; comment of an arbitrary declaration, at any time.
+
+The following code
+@BeginLogSession
+#! @BeginGroup Group1
+
+#! @Description
+#!  First sentence.
+DeclareOperation( "FirstOperation", [ IsInt ] );
+
+#! @Description
+#!  Second sentence.
+DeclareOperation( "SecondOperation", [ IsInt, IsGroup ] );
+
+#! @EndGroup
+
+## .. Stuff ..
+
+#! @Description
+#!  Third sentence.
+#! @Group Group1
+KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
+@EndLogSession
+
+produces the following:
+
+<ManSection Label="Group1">
+  <Oper Arg="arg" Name="FirstOperation" Label="for IsInt"/>
+  <Oper Arg="arg1,arg2" Name="SecondOperation" Label="for IsInt, IsGroup"/>
+  <Oper Arg="arg1,arg2" Name="ThirdOperation" Label="for IsGroup, IsInt"/>
+ <Returns></Returns>
+ <Description>
+ First sentence.
+ Second sentence.
+ Third sentence.
+ </Description>
+</ManSection>
+
+@Section Level
+@SectionLabel Level
+
+Levels can be set to not write certain parts in the manual by default.
+Every entry has by default the level 0. The command `@Level` can
+be used to set the level of the following part to a higher level, for
+example 1, and prevent it from being printed to the manual by default.
+However, if one sets the level to a higher value in the autodoc option of
+<C>AutoDoc()</C>, the parts will be included in the manual at the specific
+place.
+
+@BeginLogSession
+#! This text will be printed to the manual.
+#! @Level 1
+#! This text will be printed to the manual if created with level 1 or higher.
+#! @Level 2
+#! This text will be printed to the manual if created with level 2 or higher.
+#! @ResetLevel
+#! This text will be printed to the manual.
+@EndLogSession
+
+@Section MarkdownExtension
+@SectionTitle Markdown-like formatting of text in &AutoDoc;
+
+&AutoDoc; has some convenient ways to insert special format into text, like
+math formulas and lists. The syntax for them are inspired by Markdown and LaTeX,
+but do not follow them strictly. Neither are all features of the Markdown
+language supported. The following subsections describe the Markdown-like
+conventions that may be used.
+
+@InsertChunk markdown_conventions
+
+@EndSection
