@@ -10,13 +10,10 @@
 ##
 #############################################################################
 
-LoadPackage("AutoDoc");
-
-AutoDoc(rec( 
-    autodoc := true,
+autodoc_args_rec := rec(
+    autodoc := rec( files := [ "doc/Comments.autodoc" ] ),
     scaffold := rec(
-        includes := [ "Tutorials.xml", 
-                      "Comments.xml" ],
+        includes := [ "Tutorials.xml" ],
         bib := "bib.xml", 
         gapdoc_latex_options := rec( EarlyExtraPreamble := """
             \usepackage{a4wide} 
@@ -24,9 +21,13 @@ AutoDoc(rec(
         """ ),  
         entities := rec( 
             io := "<Package>io</Package>", 
-            PackageName := "<Package>PackageName</Package>" 
+            PackageName := "<Package>PackageName</Package>",
         )
     )
-));
+);
 
-QUIT;
+if not IsBound(AutoDoc_just_a_test) then
+    LoadPackage("AutoDoc");
+    AutoDoc(autodoc_args_rec);
+    QUIT_GAP();
+fi;
