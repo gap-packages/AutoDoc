@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_AutoDoc_worksheets">
+<Heading>AutoDoc worksheets</Heading>
+
+<Section Label="Chapter_AutoDoc_worksheets_Section_Worksheets">
+<Heading>Worksheets</Heading>
+
+<ManSection>
+  <Func Arg="list_of_filenames : options" Name="AutoDocWorksheet" />
+ <Description>
+The intention of these function is to create stand-alone pdf and html files
+using AutoDoc without having them associated to a package.
+It uses the same optional records as the &AutoDoc; command itself, but instead of
+a package name there should be a filename or a list of filenames containing AutoDoc
+text from which the documents are created. Please see the &AutoDoc; command for more
+information about this and have a look at <Ref Label="Tut:AutoDocWorksheet"/> for a simple worksheet example.
+ </Description>
+</ManSection>
+
+
+</Section>
+
+
+</Chapter>
+
