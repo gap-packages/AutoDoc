@@ -38,6 +38,27 @@ InstallGlobalFunction( Scan_for_AutoDoc_Part,
     return [ command, argument ];
 end );
 
+## Scans a string for <element> after <element_not_before_element> appeared.
+## This is necessary to scan the filter list for method declarations
+## that contain \[\]. 
+BindGlobal( "AUTODOC_PositionElementIfNotAfter",
+  function( list, element, element_not_before_element )
+    local current_pos;
+    if not IsList( list ) then
+        Error( "<list> must be a list" );
+    fi;
+    if Length( list ) > 0 and list[ 1 ] = element then
+        return 1;
+    fi;
+ 
+    for current_pos in [ 2 .. Length( list ) ] do
+        if list[ current_pos ] = element and list[ current_pos - 1 ] <> element_not_before_element then
+            return current_pos;
+        fi;
+    od;
+    return fail;
+end );
+
 
 BindGlobal( "AutoDoc_PrintWarningForConstructor",
             AutoDoc_CreatePrintOnceFunction( "Installed GAPDoc version does not support constructors" ) );
@@ -240,17 +261,17 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                     fi;
                 od;
             elif has_filters = "List" then
-                while PositionSublist( current_line, "[" ) = fail do
+                while AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' ) = fail do
                     current_line := ReadLineWithLineCount( filestream );
                     NormalizeWhitespace( current_line );
                 od;
-                current_line := current_line{ [ PositionSublist( current_line, "[" ) + 1 .. Length( current_line ) ] };
-                while PositionSublist( current_line, "]" ) = fail do
+                current_line := current_line{ [ AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' ) + 1 .. Length( current_line ) ] };
+                while AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' ) = fail do
                     Append( filter_string, StripBeginEnd( current_line, " " ) );
                     current_line := ReadLineWithLineCount( filestream );
                     NormalizeWhitespace( current_line );
                 od;
-                Append( filter_string, StripBeginEnd( current_line{[ 1 .. PositionSublist( current_line, "]" ) - 1 ]}, " " ) );
+                Append( filter_string, StripBeginEnd( current_line{[ 1 .. AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' ) - 1 ]}, " " ) );
             else
                 filter_string := false;
             fi;
@@ -306,16 +327,16 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             Append( current_item!.name, current_line{[ 1 .. position_parentesis - 1 ]} );
             NormalizeWhitespace( current_item!.name );
             current_item!.name := StripBeginEnd( current_item!.name, " " );
-            while PositionSublist( current_line, "[" ) = fail do
+            while AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' ) = fail do
                 current_line := Normalized_ReadLine( filestream );
             od;
-            position_parentesis := PositionSublist( current_line, "[" );
+            position_parentesis := AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' );
             current_line := current_line{[ position_parentesis + 1 .. Length( current_line ) ]};
             filter_string := "for ";
             while PositionSublist( current_line, "]" ) = fail do
                 Append( filter_string, current_line );
             od;
-            position_parentesis := PositionSublist( current_line, "]" );
+            position_parentesis := AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' );
             Append( filter_string, current_line{[ 1 .. position_parentesis - 1 ]} );
             current_line := current_line{[ position_parentesis + 1 .. Length( current_line )]};
             NormalizeWhitespace( filter_string );
