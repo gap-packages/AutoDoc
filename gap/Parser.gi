@@ -38,6 +38,9 @@ InstallGlobalFunction( Scan_for_AutoDoc_Part,
     return [ command, argument ];
 end );
 
+## Scans a string for <element> after <element_not_before_element> appeared.
+## This is necessary to scan the filter list for method declarations
+## that contain \[\]. 
 BindGlobal( "AUTODOC_PositionElementIfNotAfter",
   function( list, element, element_not_before_element )
     local current_pos;
