@@ -10,9 +10,7 @@
 ##
 #############################################################################
 
-LoadPackage("AutoDoc");
-
-AutoDoc(rec( 
+autodoc_args_rec := rec(
     autodoc := true,
     scaffold := rec(
         includes := [ "Tutorials.xml", 
@@ -24,9 +22,13 @@ AutoDoc(rec(
         """ ),  
         entities := rec( 
             io := "<Package>io</Package>", 
-            PackageName := "<Package>PackageName</Package>" 
+            PackageName := "<Package>PackageName</Package>",
         )
     )
-));
+);
 
-QUIT;
+if not IsBound( AutoDoc_just_a_test ) or not AutoDoc_just_a_test then
+    LoadPackage( "AutoDoc" );
+    AutoDoc( "AutoDoc", autodoc_args_rec );
+    QUIT_GAP();
+fi;
