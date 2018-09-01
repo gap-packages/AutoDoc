@@ -23,6 +23,7 @@ gap> if IsWritableFile( Filename( tstdir, "" ) ) then
 gap> if IsExistingFile( Filename( outdir, "" ) ) then
 > for fn in DirectoryContents( outdir ) do RemoveFile( Filename ( outdir, fn ) );
 > od; fi;
+gap> AUTODOC_CreateDirIfMissing( Filename( outdir, "" ) );;
 gap> AutoDoc_just_a_test := true;
 true
 gap> mdf := Filename( DirectoriesPackageLibrary( "AutoDoc", "")[ 1 ], "makedoc.g" );;
