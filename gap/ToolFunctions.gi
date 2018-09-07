@@ -10,6 +10,35 @@
 ##
 #############################################################################
 
+# Check whether the given directory exists, and if not, attempt
+# to create it.
+InstallGlobalFunction( "AUTODOC_CreateDirIfMissing",
+function(d)
+    local tmp;
+    if not IsDirectoryPath(d) then
+        tmp := CreateDir(d); # Note: CreateDir is currently undocumented
+        if tmp = fail then
+            Error("Cannot create directory ", d, "\n",
+                  "Error message: ", LastSystemError().message, "\n");
+            return false;
+        fi;
+    fi;
+    return true;
+end );
+
+InstallGlobalFunction( "AUTODOC_CurrentDirectory",
+function(args...)
+    local pwd, result;
+    pwd := Filename( DirectoriesSystemPrograms(), "pwd" );
+    if pwd = fail then
+        Error("failed to locate 'pwd' tool");
+    fi;
+    result := "";
+    Process(DirectoryCurrent(), pwd, InputTextNone(), OutputTextString(result, true), []);
+    return Chomp(result);
+end);
+
+
 InstallGlobalFunction( "AUTODOC_OutputTextFile",
 function( arg )
     local filename, filestream;
@@ -199,4 +228,12 @@ InstallGlobalFunction( AutoDoc_CreatePrintOnceFunction,
     end;
 end );
 
-
+InstallGlobalFunction( AUTODOC_Diff,
+function(args...)
+    local diff;
+    diff := Filename( DirectoriesSystemPrograms(), "diff" );
+    if diff = fail then
+        Error("failed to locate 'diff' tool");
+    fi;
+    return Process(DirectoryCurrent(), diff, InputTextUser(), OutputTextUser(), args);
+end);

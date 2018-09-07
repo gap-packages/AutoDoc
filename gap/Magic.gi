@@ -10,18 +10,6 @@
 ##
 #############################################################################
 
-# Check if a string has the given suffix or not. Another
-# name for this would "StringEndsWithOtherString".
-# For example, AUTODOC_HasSuffix("file.gi", ".gi") returns
-# true while AUTODOC_HasSuffix("file.txt", ".gi") returns false.
-BindGlobal( "AUTODOC_HasSuffix",
-function(str, suffix)
-    local n, m;
-    n := Length(str);
-    m := Length(suffix);
-    return n >= m and str{[n-m+1..n]} = suffix;
-end );
-
 # Given a string containing a ".", , return its suffix,
 # i.e. the bit after the last ".". For example, given "test.txt",
 # it returns "txt".
@@ -33,23 +21,6 @@ function(str)
     if i = 0 then return ""; fi;
     return str{[i+1..Length(str)]};
 end );
-
-# Check whether the given directory exists, and if not, attempt
-# to create it.
-BindGlobal( "AUTODOC_CreateDirIfMissing",
-function(d)
-    local tmp;
-    if not IsDirectoryPath(d) then
-        tmp := CreateDir(d); # Note: CreateDir is currently undocumented
-        if tmp = fail then
-            Error("Cannot create directory ", d, "\n",
-                  "Error message: ", LastSystemError().message, "\n");
-            return false;
-        fi;
-    fi;
-    return true;
-end );
-
 
 # Scan the given (by name) subdirs of a package dir for
 # files with one of the given extensions, and return the corresponding
