@@ -10,53 +10,50 @@
 ## Licensed under the GPL 2 or later.
 ##
 #############################################################################
-#### Note: we set InfoWarning to 0 temporarily below because we have to
-#### suppress a message from GAPDocManualLabFromSixFile
-#### (which function is in the core lib/package.gi)
 
-gap> START_TEST( "AutoDoc package: dogfood.tst" );
-gap> tstdir := DirectoriesPackageLibrary( "AutoDoc", "tst" )[ 1 ];;
-gap> if IsWritableFile( Filename( tstdir, "" ) ) then
-> outdir := Directory( Filename( tstdir, "manual.actual" ) );
-> else outdir := DirectoryTemporary();
-> fi;
-gap> if IsExistingFile( Filename( outdir, "" ) ) then
-> for fn in DirectoryContents( outdir ) do RemoveFile( Filename ( outdir, fn ) );
-> od; fi;
-gap> AUTODOC_CreateDirIfMissing( Filename( outdir, "" ) );;
-gap> AutoDoc_just_a_test := true;
+gap> START_TEST( "dogfood.tst" );
+
+# need IO package for ChangeDirectoryCurrent
+gap> LoadPackage("io", false);
 true
-gap> mdf := Filename( DirectoriesPackageLibrary( "AutoDoc", "")[ 1 ], "makedoc.g" );;
-gap> Read(mdf);
-gap> autodoc_args_rec.dir := outdir;;
-gap> docdir := DirectoriesPackageLibrary( "AutoDoc", "doc" )[ 1 ];;
-gap> for fn in [ "Tutorials.xml", "Comments.xml", "bib.xml" ] do
-> contents := ReadAll( InputTextFile( Filename( docdir, fn ) ) );
-> WriteAll( OutputTextFile( Filename( outdir, fn ), false ), contents );
-> od;
+
+# temporarily change info levels to suppress all GAPDoc output
+gap> oldGAPDocLevel := InfoLevel( InfoGAPDoc );;
+gap> oldWarningLevel := InfoLevel( InfoWarning );;
 gap> SetInfoLevel( InfoGAPDoc, 0 );
 gap> SetInfoLevel( InfoWarning, 0 );
-gap> AutoDoc( "AutoDoc", autodoc_args_rec);
+
+# change into the package directory
+gap> olddir := AUTODOC_CurrentDirectory();;
+gap> pkgdir := DirectoriesPackageLibrary( "AutoDoc", "");;
+gap> ChangeDirectoryCurrent(Filename(pkgdir, ""));
 true
-gap> SetInfoLevel( InfoWarning, 1 );
-gap> ex_dir := Directory( Filename( tstdir, "manual.expected" ) );;
-gap> chap3 := Filename( outdir, "_Chapter_AutoDoc_worksheets.xml" );;
+
+# regenerate the manual using AutoDoc
+gap> Read("makedoc.g");
+
+# restore info levels and current director
+gap> SetInfoLevel( InfoGAPDoc, oldGAPDocLevel );
+gap> SetInfoLevel( InfoWarning, oldWarningLevel );
+gap> ChangeDirectoryCurrent(olddir);
+true
+
+# prepare to compare the output to the reference output
+# No point in testing chapters 1 or 2 unless/until they are converted to autodoc
+gap> docdir := DirectoriesPackageLibrary( "AutoDoc", "doc" );;
+gap> ex_dir := DirectoriesPackageLibrary( "AutoDoc", "tst/manual.expected" );;
+
+# check chapter 3
+gap> chap3 := Filename( docdir, "_Chapter_AutoDoc_worksheets.xml" );;
 gap> chap3ref := Filename( ex_dir, "_Chapter_AutoDoc_worksheets.xml" );;
-gap> chap3diffout := Filename( outdir, "chap3.diff");;
-gap> command := Concatenation( "diff -s -c ", chap3ref, " ", chap3, " > ", chap3diffout );;
-gap> Exec( command );
-gap> chap3diff := ReadAll( InputTextFile( chap3diffout ) );;
-gap> chap3good := chap3diff = Concatenation( "Files ", chap3ref, " and ", chap3, " are identical\n" );
-true
-gap> if not chap3good then Print( chap3diff ); fi;
-gap> chap4 := Filename( outdir, "_Chapter_AutoDoc.xml" );;
+gap> AUTODOC_Diff("-u", chap3ref, chap3);
+0
+
+# check chapter 4
+gap> chap4 := Filename( docdir, "_Chapter_AutoDoc.xml" );;
 gap> chap4ref := Filename( ex_dir, "_Chapter_AutoDoc.xml" );;
-gap> chap4diffout := Filename( outdir, "chap4.diff");;
-gap> command := Concatenation( "diff -s -c ", chap4ref, " ", chap4, " > ", chap4diffout );;
-gap> Exec( command );
-gap> chap4diff := ReadAll( InputTextFile( chap4diffout ) );;
-gap> chap4good := chap4diff = Concatenation( "Files ", chap4ref, " and ", chap4, " are identical\n" );
-true
-gap> if not chap4good then Print( chap4diff ); fi;
-gap> STOP_TEST( "dogfood.tst", 10000 );
-## No point in testing chapters 1 or 2 unless/until they are converted to autodoc
+gap> AUTODOC_Diff("-u", chap4ref, chap4);
+0
+
+#
+gap> STOP_TEST( "dogfood.tst" );
