@@ -19,3 +19,5 @@ DeclareGlobalFunction( "AutoDoc_MakeGAPDocDoc_WithoutLatex" );
 DeclareGlobalFunction( "AutoDoc_CreatePrintOnceFunction" );
 
 DeclareGlobalFunction( "AUTODOC_Diff" );
+
+DeclareGlobalFunction( "AUTODOC_TestWorkSheet" );
