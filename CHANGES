@@ -1,6 +1,10 @@
 This file describes changes in the AutoDoc package.
 
 YYYY.MM.DD
+  - Scan bracket `\[\]` declarations correctly (PR #162)
+  - Removed the hardcoded utf8 option, make it overrideable via gapdoc_latex_option
+
+2018.02.14
   - Added @*Title commands to specify titles for Chapters etc.
   - Document @BeginExampleSession instead of @ExampleSession
   - Document the aliases @Example, @ExampleSession, @Log, and @LogSession
