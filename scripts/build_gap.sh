@@ -28,24 +28,7 @@ make -j4 V=1
 
 # download packages; instruct wget to retry several times if the
 # connection is refused, to work around intermittent failures
-make bootstrap-pkg-minimal WGET="wget -N --no-check-certificate --tries=5 --waitretry=5 --retry-connrefused"
-
-cd pkg
-
-wget -N --no-check-certificate --tries=5 --waitretry=5 --retry-connrefused https://github.com/gap-packages/io/releases/download/v4.5.1/io-4.5.1.tar.bz2
-wget -N --no-check-certificate --tries=5 --waitretry=5 --retry-connrefused https://github.com/gap-packages/Digraphs/releases/download/v0.12.0/digraphs-0.12.0.tar.gz
-wget -N --no-check-certificate --tries=5 --waitretry=5 --retry-connrefused https://github.com/gap-packages/profiling/releases/download/v2.0.0/profiling-2.0.0.tar.gz
-wget -N --no-check-certificate --tries=5 --waitretry=5 --retry-connrefused https://github.com/gap-packages/kbmag/releases/download/v1.5.5/kbmag-1.5.5.tar.gz
-wget -N --no-check-certificate --tries=5 --waitretry=5 --retry-connrefused https://github.com/gap-packages/orb/releases/download/v4.8.0/orb-4.8.0.tar.bz2
-
-tar xvf io-*
-tar xvf digraphs-*
-tar xvf profiling-*
-tar xvf kbmag-*
-tar xvf orb-*
-
-
-git clone https://github.com/gap-packages/datastructures
+make bootstrap-pkg-full WGET="wget -N --no-check-certificate --tries=5 --waitretry=5 --retry-connrefused"
 
 # build some packages; default is to build 'io' and 'profiling', in order to
 # generate coverage results. If you need to build additional packages (or for
@@ -53,7 +36,7 @@ git clone https://github.com/gap-packages/datastructures
 # the GAP_PKGS_TO_BUILD environment variable (e.g. in your .travis.yml), or
 # directly call BuildPackages.sh from .travis.yml. For an example of the
 # former, take a look at the cvec package.
-
+cd pkg
 for pkg in ${GAP_PKGS_TO_BUILD-io profiling}; do
     ../bin/BuildPackages.sh --strict $pkg*
 done
