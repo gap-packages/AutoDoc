@@ -106,6 +106,8 @@ AvailabilityTest := function()
 
 Autoload := false,
 
+TestFile := "tst/testall.g",
+
 Keywords := [ "Automatic documentation, GAP, GAPDoc" ],
 
 AutoDoc := rec(
