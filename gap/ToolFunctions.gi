@@ -237,3 +237,64 @@ function(args...)
     fi;
     return Process(DirectoryCurrent(), diff, InputTextUser(), OutputTextUser(), args);
 end);
+
+# AUTODOC_TestWorkSheet is used by AutoDocs test suite to test the worksheets
+# feature. Its single argument <ws> should be a string, and then
+# `tst/worksheets/<ws>` should be a directory containing a worksheet, and
+# `tst/worksheets/<ws>.expected` a directory containing the output of
+# AutoDocWorksheet for that worksheet.
+#
+# Then AUTODOC_TestWorkSheet will again run AutoDocWorksheet, put storing the
+# output into `tst/worksheets/<ws>.actual`; it then runs diff on all files in
+# order to find any differences that may have crept in. If no differences
+# exist, it outputs nothing.
+InstallGlobalFunction( AUTODOC_TestWorkSheet,
+function(ws)
+    local wsdir, sheetdir, expecteddir, actualdir, filenames, old, f, expected, actual;
+
+    # check worksheets dir exists
+    wsdir := DirectoriesPackageLibrary("AutoDoc", "tst/worksheets");
+    wsdir := wsdir[1];
+    if not IsDirectoryPath(wsdir) then
+      Error("could not access tst/worksheets/");
+    fi;
+
+    # check input dir exists
+    sheetdir := Filename(wsdir, Concatenation(ws, ".sheet"));
+    if not IsString(sheetdir) or not IsDirectoryPath(sheetdir) then
+      Error("could not access tst/", ws, ".sheet/");
+    fi;
+    sheetdir := Directory(sheetdir);
+
+    # check dir with expected output
+    expecteddir := Filename(wsdir, Concatenation(ws, ".expected"));
+    if not IsString(expecteddir) or not IsDirectoryPath(expecteddir) then
+      Error("could not access tst/", ws, ".expected/");
+    fi;
+    expecteddir := Directory(expecteddir);
+
+    # create and clear the output directory
+    actualdir := Filename(wsdir, Concatenation(ws, ".actual"));
+    Exec(Concatenation("rm -rf \"", actualdir, "\""));
+    AUTODOC_CreateDirIfMissing(actualdir);
+    actualdir := Directory(actualdir);
+
+    # Run the worksheet
+    filenames := DirectoryContents(sheetdir);
+    filenames := Filtered(filenames, f -> f <> "." and f <> "..");
+    filenames := List(filenames, f -> Filename(sheetdir, f));
+
+    old := InfoLevel(InfoGAPDoc);
+    SetInfoLevel(InfoGAPDoc, 0);
+    AutoDocWorksheet(filenames, rec(dir := actualdir));
+    SetInfoLevel(InfoGAPDoc, old);
+
+    # Check the results
+    filenames := DirectoryContents(expecteddir);
+    filenames := Filtered(filenames, f -> f <> "." and f <> "..");
+    for f in filenames do
+        expected := Filename(expecteddir, f);
+        actual := Filename(actualdir, f);
+        AUTODOC_Diff("-u", expected, actual);
+    od;
+end);
