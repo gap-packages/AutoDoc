@@ -65,7 +65,7 @@ InstallGlobalFunction( CreateDefaultChapterData,
     chapter_name := Concatenation( pkgname, "_automatic_generated_documentation" );
     default_chapter_record := rec();
     list_of_types := [ "categories", "methods", "attributes", "properties",
-                       "global_functions", "global_variables" ];
+                       "global_functions", "global_variables", "info_classes" ];
 
     for i in list_of_types do
         default_chapter_record.(i) := [ chapter_name, Concatenation( chapter_name, "_of_", i ) ];
