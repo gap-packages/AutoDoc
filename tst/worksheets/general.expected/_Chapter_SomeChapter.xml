@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_SomeChapter">
+<Heading>SomeChapter</Heading>
+
+This is dummy text
+<Example><![CDATA[
+gap> S5 := SymmetricGroup(5);
+Sym( [ 1 .. 5 ] )
+gap> Size(S5);
+120
+]]></Example>
+
+
+And we wrap up with some dummy text
+<Section Label="Chapter_SomeChapter_Section_SomeSection">
+<Heading>SomeSection</Heading>
+
+<ManSection>
+  <InfoClass Name="InfoTESTCLASS" />
+ <Description>
+An info class
+ </Description>
+</ManSection>
+
+
+</Section>
+
+
+</Chapter>
+
