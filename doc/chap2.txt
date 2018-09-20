@@ -74,7 +74,7 @@
   
   [1X2.1-6 AProperty[101X
   
-  [29X[2XAProperty[102X( [3Xarg[103X ) [32X property
+  [33X[1;0Y[29X[2XAProperty[102X( [3Xarg[103X ) [32X property[133X
   [6XReturns:[106X  [33X[0;10Y[10Xtrue[110X or [10Xfalse[110X[133X
   
   [33X[0;0Ywhile[133X
@@ -89,7 +89,7 @@
   
   [1X2.1-7 AProperty[101X
   
-  [29X[2XAProperty[102X( [3Xarg[103X ) [32X property
+  [33X[1;0Y[29X[2XAProperty[102X( [3Xarg[103X ) [32X property[133X
   [6XReturns:[106X  [33X[0;10Y[10Xtrue[110X or [10Xfalse[110X[133X
   
   
@@ -531,9 +531,9 @@
   
   [1X2.5-1 FirstOperation[101X
   
-  [29X[2XFirstOperation[102X( [3Xarg[103X ) [32X operation
-  [29X[2XSecondOperation[102X( [3Xarg1[103X, [3Xarg2[103X ) [32X operation
-  [29X[2XThirdOperation[102X( [3Xarg1[103X, [3Xarg2[103X ) [32X operation
+  [33X[1;0Y[29X[2XFirstOperation[102X( [3Xarg[103X ) [32X operation[133X
+  [33X[1;0Y[29X[2XSecondOperation[102X( [3Xarg1[103X, [3Xarg2[103X ) [32X operation[133X
+  [33X[1;0Y[29X[2XThirdOperation[102X( [3Xarg1[103X, [3Xarg2[103X ) [32X operation[133X
   
   [33X[0;0YFirst sentence. Second sentence. Third sentence.[133X
   
@@ -620,8 +620,9 @@
   [33X[0;0YThis is an inline formula: [23X1+1 = 2[123X. This is a display formula:[133X
   
   
-        [33X[1;6Y[24X[33X[0;0Y\sum_{i=1}^n i.[133X [124X[133X
+  [24X[33X[0;6Y\sum_{i=1}^n i.[133X
   
+  [124X
   
   
   [1X2.7-3 [33X[0;0YEmphasize[133X[101X
