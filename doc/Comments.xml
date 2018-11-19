@@ -723,6 +723,22 @@ This is <E>also important</E>.
 can be important.</E>
 
 </Subsection>
+
+ <Subsection Label="MarkdownExtensionInlineCode">
+   <Heading>Inline code</Heading>
+
+   One can mark inline code snippets by using backticks (`) at the
+   beginning and the end of the text which should be marked as code. Example:
+
+<Listing><![CDATA[
+#! Call function `foobar()` at the start.
+]]></Listing>
+
+    This produces the following output:<Br/>
+    Call function <C>foobar()</C> at the start.
+
+</Subsection>
+
 </Section>
 
 </Chapter>

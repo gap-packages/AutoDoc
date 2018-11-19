@@ -143,6 +143,7 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
     ## Find commands
     command_list_with_translation := [ [ "$$", "Display" ],
                                        [ "$", "Math" ],
+                                       [ "`", "Code" ],
                                        [ "**", "Emph" ],
                                        [ "__", "Emph" ] ];
     ## special handling for \$
