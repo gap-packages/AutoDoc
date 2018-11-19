@@ -24,6 +24,17 @@ Print( "(Even though we never use it that way.\n" );
 
 #! @Section SomeSection
 
+#! Some test just inside a section. We can use test some markdown features here:
+#! * This is a list item.
+#!   * This is a subitem
+#!   * We can also use math mode here: $a^2+b^2=c^2$.
+#! * This is __emphasized__ text in a list item.
+#! * This is also **emphasized** text in a list item.
+#! * This is `inline code` in a list item.
+#!
+#! All of this can **also** be __used__ outside of a `list`.
+
 #! @Description
 #!   An info class
 DeclareInfoClass("InfoTESTCLASS");
+

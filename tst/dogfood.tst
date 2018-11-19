@@ -32,7 +32,7 @@ true
 # regenerate the manual using AutoDoc
 gap> Read("makedoc.g");
 
-# restore info levels and current director
+# restore info levels and current directory
 gap> SetInfoLevel( InfoGAPDoc, oldGAPDocLevel );
 gap> SetInfoLevel( InfoWarning, oldWarningLevel );
 gap> ChangeDirectoryCurrent(olddir);

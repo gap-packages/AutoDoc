@@ -17,6 +17,31 @@ And we wrap up with some dummy text
 <Section Label="Chapter_SomeChapter_Section_SomeSection">
 <Heading>SomeSection</Heading>
 
+Some test just inside a section. We can use test some markdown features here:
+<List>
+<Item>
+This is a list item.
+<List>
+<Item>
+This is a subitem
+</Item>
+<Item>
+We can also use math mode here: <Math>a^2+b^2=c^2</Math>.
+</Item>
+</List>
+</Item>
+<Item>
+This is <Emph>emphasized</Emph> text in a list item.
+</Item>
+<Item>
+This is also <Emph>emphasized</Emph> text in a list item.
+</Item>
+<Item>
+This is <Code>inline code</Code> in a list item.
+</Item>
+</List>
+<P/>
+All of this can <Emph>also</Emph> be <Emph>used</Emph> outside of a <Code>list</Code>.
 <ManSection>
   <InfoClass Name="InfoTESTCLASS" />
  <Description>

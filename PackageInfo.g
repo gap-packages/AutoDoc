@@ -14,16 +14,8 @@
 SetPackageInfo( rec(
 
 PackageName := "AutoDoc",
-
 Subtitle := "Generate documentation from GAP source code",
-
-Version := Maximum( [
-  "2018.07.03", ## Sebas' version
-## This line prevents merge conflicts
-  "2018.09.20", ## Max' version
-## This line prevents merge conflicts
-  "2013.11.01", ## Mohamed's version
-] ),
+Version := "2018.11.19dev",
 
 Date := ~.Version{[ 1 .. 10 ]},
 Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1 .. 4 ]} ),
