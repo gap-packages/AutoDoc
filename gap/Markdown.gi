@@ -26,7 +26,7 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
     local i, current_list, current_string, max_line_length,
           current_position, already_in_list, command_list_with_translation, beginning,
           commands, position_of_command, insert, beginning_whitespaces, temp, string_list_temp, skipped,
-          already_inserted_paragraph, in_list, in_item;
+          already_inserted_paragraph, in_list, in_item, index_for_command;
 
     ## Check for paragraphs by turning an empty string into <P/>
     
@@ -141,16 +141,18 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
     od;
 
     ## Find commands
-    command_list_with_translation := [ [ "$$", "Display" ],
-                                       [ "$", "Math" ],
-                                       [ "`", "Code" ],
-                                       [ "**", "Emph" ],
-                                       [ "__", "Emph" ] ];
+    command_list_with_translation := [ [ [ "$$", "$$" ], "Display" ],
+                                       [ [ "$", "$", ], "Math" ],
+                                       [ [ "`", "`" ], "Code" ],
+                                       [ [ "**", "**" ], "Emph" ],
+                                       [ [ "__", "__" ], "Emph" ],
+                                       [ [ "{", "}" ], "A"] ];
     ## special handling for \$
     for i in [ 1 .. Length( string_list ) ] do
         string_list[ i ] := ReplacedString( string_list[ i ], "\\$", "&#36;" );
     od;
 
+    index_for_command := 1;
     for commands in command_list_with_translation do
         beginning := true;
         skipped := false;
@@ -165,15 +167,20 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
                 continue;
             fi;
 
-            while PositionSublist( string_list[ i ], commands[ 1 ] ) <> fail do
-                position_of_command := PositionSublist( string_list[ i ], commands[ 1 ] );
+            while PositionSublist( string_list[ i ], commands[ 1 ][ index_for_command ] ) <> fail do
+                position_of_command := PositionSublist( string_list[ i ], commands[ 1 ][ index_for_command ] );
                 if beginning = true then
                     insert := Concatenation( "<", commands[ 2 ], ">" );
                 else
                     insert := Concatenation( "</", commands[ 2 ], ">" );
                 fi;
-                string_list[ i ] := INSERT_IN_STRING_WITH_REPLACE( string_list[ i ], insert, position_of_command, Length( commands[ 1 ] ) );
+                string_list[ i ] := INSERT_IN_STRING_WITH_REPLACE( string_list[ i ], insert, position_of_command, Length( commands[ 1 ][ index_for_command ] ) );
                 beginning := not beginning;
+                if index_for_command = 1 then
+                    index_for_command := 2;
+                else
+                    index_for_command := 1;
+                fi;
             od;
         od;
 

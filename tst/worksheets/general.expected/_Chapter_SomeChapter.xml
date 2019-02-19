@@ -39,6 +39,9 @@ This is also <Emph>emphasized</Emph> text in a list item.
 <Item>
 This is <Code>inline code</Code> in a list item.
 </Item>
+<Item>
+<A>A</A> is an argument.
+</Item>
 </List>
 <P/>
 All of this can <Emph>also</Emph> be <Emph>used</Emph> outside of a <Code>list</Code>.
