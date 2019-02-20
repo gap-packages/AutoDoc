@@ -1,5 +1,9 @@
 This file describes changes in the AutoDoc package.
 
+2019.02.20
+  - Accept single backticks to indicate inline code spans
+  - Added possibility to mark function arguments via curly braces, as {A}
+
 2018.09.20
   - Scan bracket `\[\]` declarations correctly (PR #162)
   - Removed the hardcoded utf8 option, make it overrideable via gapdoc_latex_option
