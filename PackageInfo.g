@@ -14,19 +14,12 @@
 SetPackageInfo( rec(
 
 PackageName := "AutoDoc",
-
 Subtitle := "Generate documentation from GAP source code",
-
-Version := Maximum( [
-  "2018.07.03", ## Sebas' version
-## This line prevents merge conflicts
-  "2018.09.20", ## Max' version
-## This line prevents merge conflicts
-  "2013.11.01", ## Mohamed's version
-] ),
+Version := "2019.02.20",
 
 Date := ~.Version{[ 1 .. 10 ]},
 Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1 .. 4 ]} ),
+License := "GPL-2.0-or-later",
 
 Persons := [
   rec(
@@ -50,7 +43,7 @@ Persons := [
        IsAuthor := true,
        IsMaintainer := true,
        Email := "max.horn@math.uni-giessen.de",
-       WWWHome := "http://www.quendi.de/math",
+       WWWHome := "https://www.quendi.de/math",
        PostalAddress := Concatenation(
                "AG Algebra\n",
                "Mathematisches Institut\n",

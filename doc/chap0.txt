@@ -6,10 +6,10 @@
                  [1X Generate documentation from [5XGAP[105X source code [101X
   
   
-                                   2018.09.20
+                                   2019.02.20
   
   
-                               20 September 2018
+                                20 February 2019
   
   
                                Sebastian Gutsche
@@ -29,7 +29,7 @@
   
   Max Horn
       Email:    [7Xmailto:max.horn@math.uni-giessen.de[107X
-      Homepage: [7Xhttp://www.quendi.de/math[107X
+      Homepage: [7Xhttps://www.quendi.de/math[107X
       Address:  [33X[0;14YAG Algebra[133X
                 [33X[0;14YMathematisches Institut[133X
                 [33X[0;14YJustus-Liebig-Universität Gießen[133X
@@ -115,6 +115,8 @@
       2.7-1 [33X[0;0YLists[133X
       2.7-2 [33X[0;0YMath modes[133X
       2.7-3 [33X[0;0YEmphasize[133X
+      2.7-4 [33X[0;0YInline code[133X
+      2.7-5 [33X[0;0YFunction arguments[133X
   3 [33X[0;0YAutoDoc worksheets[133X
     3.1 [33X[0;0YWorksheets[133X
       3.1-1 AutoDocWorksheet

@@ -642,3 +642,29 @@
   [33X[0;0Y[13XThis[113X  is  very  important.  This is [13Xalso important[113X. [13XNaturally, more than one
   line can be important.[113X[133X
   
+  
+  [1X2.7-4 [33X[0;0YInline code[133X[101X
+  
+  [33X[0;0YOne  can  mark  inline code snippets by using backticks (`) at the beginning
+  and the end of the text which should be marked as code. Example:[133X
+  
+  [4X[32X[104X
+    [4X#! Call function `foobar()` at the start.[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis produces the following output:[133X
+  [33X[0;0YCall function [10Xfoobar()[110X at the start.[133X
+  
+  
+  [1X2.7-5 [33X[0;0YFunction arguments[133X[101X
+  
+  [33X[0;0YOne can mark function parameters by using curly braces ({}) at the beginning
+  and the end of the text which should be marked as a parameter. Example:[133X
+  
+  [4X[32X[104X
+    [4X#! The function takes one parameter {a}[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis produces the following output:[133X
+  [33X[0;0YThe function takes one parameter [3Xa[103X[133X
+  
