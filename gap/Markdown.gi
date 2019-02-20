@@ -146,7 +146,7 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
                                        [ [ "`", "`" ], "Code" ],
                                        [ [ "**", "**" ], "Emph" ],
                                        [ [ "__", "__" ], "Emph" ],
-                                       [ [ "{", "}" ], "A"] ];
+                                       [ [ "§", "§" ], "A"] ];
     ## special handling for \$
     for i in [ 1 .. Length( string_list ) ] do
         string_list[ i ] := ReplacedString( string_list[ i ], "\\$", "&#36;" );
