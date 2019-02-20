@@ -6,13 +6,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <script type="text/javascript"
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 <title>GAP (AutoDoc) - Chapter 2: AutoDoc documentation comments</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <meta name="generator" content="GAPDoc2HTML" />
 <link rel="stylesheet" type="text/css" href="manual.css" />
-<script src="manual.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script><script type="text/javascript" src="https://unpkg.com/thebelab@0.0.3"></script><script src="manual.js" type="text/javascript"></script>
 <script type="text/javascript">overwriteStyle();</script>
 </head>
 <body class="chap2"  onload="jscontent()">
@@ -23,7 +23,8 @@
 <div class="chlinkprevnexttop">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap1_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap3_mj.html">[Next Chapter]</a>&nbsp;  </div>
 
 <p id="mathjaxlink" class="pcenter"><a href="chap2.html">[MathJax off]</a></p>
-<p><a id="X87668C487B1A2094" name="X87668C487B1A2094"></a></p>
+
+<div style="text-align: center;"><input type="button" onclick="convert_examples();start_kernel()" value="Make this live!"></div><p><a id="X87668C487B1A2094" name="X87668C487B1A2094"></a></p>
 <div class="ChapSects"><a href="chap2_mj.html#X87668C487B1A2094">2 <span class="Heading"><strong class="pkg">AutoDoc</strong> documentation comments</span></a>
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2_mj.html#X871482CE838C68F6">2.1 <span class="Heading">Documenting declarations</span></a>
 </span>
@@ -112,8 +113,6 @@
 </span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X838CCDEB7E0ECEE2">2.7-4 <span class="Heading">Inline code</span></a>
 </span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2_mj.html#X7B9B9D6187A26A41">2.7-5 <span class="Heading">Function arguments</span></a>
-</span>
 </div></div>
 </div>
 
@@ -181,7 +180,7 @@ DeclareProperty( "AProperty",
 
 <h5>2.1-6 AProperty</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AProperty</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;property&nbsp;)</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AProperty</code>( <var class="Arg">arg</var> )</td><td class="tdright">( property )</td></tr></table></div>
 <p>Returns: <code class="code">true</code> or <code class="code">false</code></p>
 
 <p>while</p>
@@ -199,7 +198,7 @@ DeclareProperty( "AProperty",
 
 <h5>2.1-7 AProperty</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AProperty</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;property&nbsp;)</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AProperty</code>( <var class="Arg">arg</var> )</td><td class="tdright">( property )</td></tr></table></div>
 <p>Returns: <code class="code">true</code> or <code class="code">false</code></p>
 
 <p><a id="X78938EE37A532FFA" name="X78938EE37A532FFA"></a></p>
@@ -616,9 +615,9 @@ KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
 
 <h5>2.5-1 FirstOperation</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FirstOperation</code>( <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SecondOperation</code>( <var class="Arg">arg1</var>, <var class="Arg">arg2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ThirdOperation</code>( <var class="Arg">arg1</var>, <var class="Arg">arg2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FirstOperation</code>( <var class="Arg">arg</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SecondOperation</code>( <var class="Arg">arg1</var>, <var class="Arg">arg2</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ThirdOperation</code>( <var class="Arg">arg1</var>, <var class="Arg">arg2</var> )</td><td class="tdright">( operation )</td></tr></table></div>
 <p>First sentence. Second sentence. Third sentence.</p>
 
 <p><a id="X8209AFDE8209AFDE" name="X8209AFDE8209AFDE"></a></p>
@@ -732,19 +731,6 @@ KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
 </pre></div>
 
 <p>This produces the following output:<br /> Call function <code class="code">foobar()</code> at the start.</p>
-
-<p><a id="X7B9B9D6187A26A41" name="X7B9B9D6187A26A41"></a></p>
-
-<h5>2.7-5 <span class="Heading">Function arguments</span></h5>
-
-<p>One can mark function parameters by using curly braces ({}) at the beginning and the end of the text which should be marked as a parameter. Example:</p>
-
-
-<div class="example"><pre>
-#! The function takes one parameter {a}
-</pre></div>
-
-<p>This produces the following output:<br /> The function takes one parameter <var class="Arg">a</var></p>
 
 
 <div class="chlinkprevnextbot">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap1_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap3_mj.html">[Next Chapter]</a>&nbsp;  </div>

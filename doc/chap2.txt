@@ -74,7 +74,7 @@
   
   [1X2.1-6 AProperty[101X
   
-  [33X[1;0Y[29X[2XAProperty[102X( [3Xarg[103X ) [32X property[133X
+  [29X[2XAProperty[102X( [3Xarg[103X ) [32X property
   [6XReturns:[106X  [33X[0;10Y[10Xtrue[110X or [10Xfalse[110X[133X
   
   [33X[0;0Ywhile[133X
@@ -89,7 +89,7 @@
   
   [1X2.1-7 AProperty[101X
   
-  [33X[1;0Y[29X[2XAProperty[102X( [3Xarg[103X ) [32X property[133X
+  [29X[2XAProperty[102X( [3Xarg[103X ) [32X property
   [6XReturns:[106X  [33X[0;10Y[10Xtrue[110X or [10Xfalse[110X[133X
   
   
@@ -531,9 +531,9 @@
   
   [1X2.5-1 FirstOperation[101X
   
-  [33X[1;0Y[29X[2XFirstOperation[102X( [3Xarg[103X ) [32X operation[133X
-  [33X[1;0Y[29X[2XSecondOperation[102X( [3Xarg1[103X, [3Xarg2[103X ) [32X operation[133X
-  [33X[1;0Y[29X[2XThirdOperation[102X( [3Xarg1[103X, [3Xarg2[103X ) [32X operation[133X
+  [29X[2XFirstOperation[102X( [3Xarg[103X ) [32X operation
+  [29X[2XSecondOperation[102X( [3Xarg1[103X, [3Xarg2[103X ) [32X operation
+  [29X[2XThirdOperation[102X( [3Xarg1[103X, [3Xarg2[103X ) [32X operation
   
   [33X[0;0YFirst sentence. Second sentence. Third sentence.[133X
   
@@ -654,17 +654,4 @@
   
   [33X[0;0YThis produces the following output:[133X
   [33X[0;0YCall function [10Xfoobar()[110X at the start.[133X
-  
-  
-  [1X2.7-5 [33X[0;0YFunction arguments[133X[101X
-  
-  [33X[0;0YOne can mark function parameters by using curly braces ({}) at the beginning
-  and the end of the text which should be marked as a parameter. Example:[133X
-  
-  [4X[32X[104X
-    [4X#! The function takes one parameter {a}[104X
-  [4X[32X[104X
-  
-  [33X[0;0YThis produces the following output:[133X
-  [33X[0;0YThe function takes one parameter [3Xa[103X[133X
   

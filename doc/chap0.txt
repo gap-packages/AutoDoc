@@ -6,10 +6,10 @@
                  [1X Generate documentation from [5XGAP[105X source code [101X
   
   
-                                   2019.02.20
+                                   2019.02.21
   
   
-                                20 February 2019
+                                21 February 2019
   
   
                                Sebastian Gutsche
@@ -116,7 +116,6 @@
       2.7-2 [33X[0;0YMath modes[133X
       2.7-3 [33X[0;0YEmphasize[133X
       2.7-4 [33X[0;0YInline code[133X
-      2.7-5 [33X[0;0YFunction arguments[133X
   3 [33X[0;0YAutoDoc worksheets[133X
     3.1 [33X[0;0YWorksheets[133X
       3.1-1 AutoDocWorksheet

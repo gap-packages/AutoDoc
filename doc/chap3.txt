@@ -6,7 +6,7 @@
   
   [1X3.1-1 AutoDocWorksheet[101X
   
-  [33X[1;0Y[29X[2XAutoDocWorksheet[102X( [3Xlist_of_filenames:[103X [3Xoptions[103X ) [32X function[133X
+  [29X[2XAutoDocWorksheet[102X( [3Xlist_of_filenames:[103X [3Xoptions[103X ) [32X function
   
   [33X[0;0YThe  intention of these function is to create stand-alone pdf and html files
   using  AutoDoc without having them associated to a package. It uses the same
