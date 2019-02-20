@@ -31,7 +31,6 @@ Print( "(Even though we never use it that way.\n" );
 #! * This is __emphasized__ text in a list item.
 #! * This is also **emphasized** text in a list item.
 #! * This is `inline code` in a list item.
-#! * {A} is an argument.
 #!
 #! All of this can **also** be __used__ outside of a `list`.
 

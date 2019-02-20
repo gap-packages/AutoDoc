@@ -739,21 +739,6 @@ can be important.</E>
 
 </Subsection>
 
- <Subsection Label="MarkdownExtensionArgument">
-   <Heading>Function arguments</Heading>
-
-   One can mark function parameters by using curly braces ({}) at the
-   beginning and the end of the text which should be marked as a parameter. Example:
-
-<Listing><![CDATA[
-#! The function takes one parameter {a}
-]]></Listing>
-
-    This produces the following output:<Br/>
-    The function takes one parameter <A>a</A>
-
-</Subsection>
-
 </Section>
 
 </Chapter>
