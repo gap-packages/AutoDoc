@@ -1,5 +1,12 @@
 This file describes changes in the AutoDoc package.
 
+2019.02.22
+  - Updated changes file
+
+2019.02.21
+  - Removed possibility to mark function arguments via curly braces, as {A},
+    as it caused problems with writing {} in math mode.
+
 2019.02.20
   - Accept single backticks to indicate inline code spans
   - Added possibility to mark function arguments via curly braces, as {A}
