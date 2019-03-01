@@ -77,7 +77,7 @@ end );
 ##
 InstallGlobalFunction( CreateMainPage,
   function( book_name, dir, opt )
-    local filename, filestream, i, ent, val;
+    local filename, filestream, i, ent, val, entities;
 
     if IsString(dir) then
         dir := Directory(dir);
@@ -109,6 +109,7 @@ InstallGlobalFunction( CreateMainPage,
     AppendTo( filestream, "<!ENTITY see '<Alt Only=\"LaTeX\">$\to$</Alt><Alt Not=\"LaTeX\">--&gt;</Alt>'>\n" );
 
     if IsList( opt.entities ) then
+        entities := rec();
         for i in opt.entities do
             ## allow generic entities.
             if IsString( i ) and PositionSublist( i, "!ENTITY" ) <> fail then
@@ -118,21 +119,28 @@ InstallGlobalFunction( CreateMainPage,
             fi;
 
             if IsString( i ) then
-                i := [ "Package", i ];
+                ent := i;
+                val := Concatenation("<Package>", ent, "</Package>");
+            else
+                ent := i[2];
+                val := Concatenation("<", i[1], ">", ent, "</", i[1], ">");
             fi;
-
-            AppendTo( filestream, "<!ENTITY ",
-                      ReplacedString( i[ 2 ], " ", "_" ),
-                      " '<", i[ 1 ], ">", i[ 2 ], "</", i[ 1 ], ">'>\n" );
+            entities.(ent) := val;
         od;
     else
-        for ent in RecNames(opt.entities) do
-            val := String(opt.entities.(ent));
-            # escape single quotes, if any
-            val := ReplacedString( val, "'", "\\\'" );
-            AppendTo( filestream, "<!ENTITY ", ent, " '", val, "'>\n" );
-        od;
+        entities := opt.entities;
     fi;
+
+    for ent in RecNames(entities) do
+        val := String(entities.(ent));
+
+        # escape single quotes, if any
+        val := ReplacedString( val, "'", "\\\'" );
+        # convert spaces in entity name to underscores
+        ent := ReplacedString( ent, " ", "_" );
+
+        AppendTo( filestream, "<!ENTITY ", ent, " '", val, "'>\n" );
+    od;
 
     AppendTo( filestream, "]\n>\n" );
     AppendTo( filestream, "<Book Name=\"", ReplacedString( book_name, " ", "_" ), "\">\n" );
