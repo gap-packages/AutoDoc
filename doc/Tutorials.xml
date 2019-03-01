@@ -215,7 +215,7 @@ Suppose you already have a complete XML manual, with some main and title
 XML files and some documentation for operations distributed over
 all your <F>.g</F>, <F>.gd</F>, and <F>.gi</F> files.
 Suppose the main XML file is named <F>PACKAGENAME.xml</F> and is in the
-<F>/doc</F> subfolder of your package. Then you can rebuild your manual
+<F>/doc</F> subdirectory of your package. Then you can rebuild your manual
 by executing the following two GAP commands from a GAP sessions started
 started in the root directory of your package:
 <Listing>
@@ -298,8 +298,8 @@ This means, links to manuals of other packages or the &GAP; library will
 not be absolute, but relative from your documentation. This can be particularly useful
 if you want to build a release tarball or move your &GAP; installation around later.
 Suppose you are starting &GAP; in the root path of your package as always,
-and the standard call of <Ref Func="AutoDoc"/> will then build the documentation in the <F>doc</F> subfolder of your package.
-From this folder, the gap root directory has the relative path <F>../../..</F>.
+and the standard call of <Ref Func="AutoDoc"/> will then build the documentation in the <F>doc</F> subdirectory of your package.
+From this directory, the gap root directory has the relative path <F>../../..</F>.
 Then you can enable the relative paths by
 <Listing>
 LoadPackage( "AutoDoc" );
@@ -582,11 +582,11 @@ S4 := SymmetricGroup( 4 );;
 #! @EndExample
 </Listing>
 Now, one can create a PDF and HTML document, like a package documentation out of it. Suppose the document above
-is saved as <F>worksheet.g</F>. Then, when GAP is started in the folder of this file, the command
+is saved as <F>worksheet.g</F>. Then, when GAP is started in the directory of this file, the command
 <Listing>
 AutoDocWorksheet( "worksheet.g" );
 </Listing>
-will create a subfolder called <F>doc</F> of the current directory in which it will create the documentation.
+will create a subdirectory called <F>doc</F> of the current directory in which it will create the documentation.
 There are several options to configure the output of the worksheet command, which are identical to the
 options of the <Ref Func="AutoDoc"/> command. It is even possible to test the examples in the worksheet using the maketest option
 from the AutoDoc command.
