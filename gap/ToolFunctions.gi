@@ -295,7 +295,9 @@ function(ws)
     for f in filenames do
         expected := Filename(expecteddir, f);
         actual := Filename(actualdir, f);
-        AUTODOC_Diff("-u", expected, actual);
+        if 0 <> AUTODOC_Diff("-u", expected, actual) then
+            Error("diff detected");
+        fi;
     od;
 end);
 
