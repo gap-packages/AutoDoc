@@ -298,3 +298,70 @@ function(ws)
         AUTODOC_Diff("-u", expected, actual);
     od;
 end);
+
+
+BindGlobal("AUTODOC_months", MakeImmutable([
+    "January", "February", "March",
+    "April", "May", "June",
+    "July", "August", "September",
+    "October", "November", "December"
+]));
+
+
+# Format a date into a human readable string; a date may consist of only
+# a year; or a year and a month; or a year, month and day. Dates are
+# formatted as "2019", resp. "February 2019" resp. "5 February 2019".
+#
+# The input can be one of the following:
+#  - AUTODOC_FormatDate(rec), where <rec> is a record with entries year, month, day;
+#  - AUTODOC_FormatDate(year[, month[, day]])
+# In each case, the year, month or day may be given as either an
+# integer, or as a string representing an integer.
+InstallGlobalFunction( AUTODOC_FormatDate,
+function(arg)
+    local date, key, val, result;
+    if Length(arg) = 1 and IsRecord(arg[1]) then
+        date := ShallowCopy(arg[1]);
+    elif Length(arg) in [1..3] then
+        date := rec();
+        date.year := arg[1];
+        if Length(arg) >= 2 then
+            date.month := arg[2];
+        fi;
+        if Length(arg) >= 3 then
+            date.day := arg[3];
+        fi;
+    fi;
+    if not IsBound(date) then
+        Error("Invalid arguments");
+    fi;
+
+    # convert string values to integers
+    for key in [ "day", "month", "year" ] do
+        if IsBound(date.(key)) then
+            val := date.(key);
+            if IsString(val) and Length(val) > 0 and ForAll(val, IsDigitChar) then
+                date.(key) := Int(val);
+            fi;
+        fi;
+    od;
+
+    if not IsInt(date.year) or date.year < 2000 then
+        Error("<year> must be an integer >= 2000, or a string representing such an integer");
+    fi;
+    result := String(date.year);
+    if IsBound(date.month) then
+        if not date.month in [1..12] then
+            Error("<month> must be an integer in the range [1..12], or a string representing such an integer");
+        fi;
+        result := Concatenation(AUTODOC_months[date.month], " ", result);
+        if IsBound(date.day) then
+            if not date.day in [1..31] then
+                # TODO: also account for differing length of months
+                Error("<day> must be an integer in the range [1..31], or a string representing such an integer");
+            fi;
+            result := Concatenation(String(date.day), " ", result);
+        fi;
+    fi;
+    return result;
+end);

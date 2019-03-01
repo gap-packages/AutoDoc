@@ -21,3 +21,5 @@ DeclareGlobalFunction( "AutoDoc_CreatePrintOnceFunction" );
 DeclareGlobalFunction( "AUTODOC_Diff" );
 
 DeclareGlobalFunction( "AUTODOC_TestWorkSheet" );
+
+DeclareGlobalFunction( "AUTODOC_FormatDate" );

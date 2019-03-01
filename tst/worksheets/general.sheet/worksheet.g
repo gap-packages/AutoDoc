@@ -11,7 +11,7 @@
 Print( "Pretend this is a code file.\n" );
 Print( "(Even though we never use it that way.\n" );
 #! @Title General Test
-#! @Date 2018/08/30
+#! @Date 30/08/2018
 #! @Chapter SomeChapter
 #! This is dummy text
 #! @BeginExampleSession
