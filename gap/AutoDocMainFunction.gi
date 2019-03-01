@@ -233,8 +233,7 @@ end );
 ## separately.
 InstallGlobalFunction( CreateTitlePage,
   function( dir, argument_rec )
-    local indent, tag, names, filestream, entity_list, OutWithTag, Out, i,
-          months;
+    local indent, tag, names, filestream, entity_list, OutWithTag, Out, i;
 
     filestream := AUTODOC_OutputTextFile( dir, "title.xml" );
     indent := 0;
@@ -282,17 +281,11 @@ InstallGlobalFunction( CreateTitlePage,
     fi;
 
     if IsBound( argument_rec.Date ) then
-        # try to parse the date
-        months := [ "January", "February", "March",
-                    "April", "May", "June",
-                    "July", "August", "September",
-                    "October", "November", "December" ];
+        # try to parse the date in format DD/MM/YYYY
         i := SplitString( argument_rec.Date, "/" );
         if Length( argument_rec.Date ) in [8..10] and Length( i ) = 3 then
-            OutWithTag( "Date", Concatenation(
-                String( Int( i[1] ) ), " ", # remove leading 0, if any
-                months[Int(i[2])], " ",
-                i[3] ) );
+            i := List(i, Int);
+            OutWithTag( "Date", AUTODOC_FormatDate(i[3], i[2], i[1]) );
         else
             Print("Warning: could not parse package date '", argument_rec.Date, "\n");
             OutWithTag( "Date", argument_rec.Date );
