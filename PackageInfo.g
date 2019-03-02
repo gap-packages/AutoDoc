@@ -106,7 +106,7 @@ Keywords := [ "Automatic documentation, GAP, GAPDoc" ],
 AutoDoc := rec(
     TitlePage := rec(
         Copyright := Concatenation(
-            "&copyright; 2012-2017 by Sebastian Gutsche and Max Horn<P/>\n\n",
+            "&copyright; 2012-2019 by Sebastian Gutsche and Max Horn<P/>\n\n",
             "This package may be distributed under the terms and conditions ", 
             "of the GNU Public License Version 2.\n"
             ), 
