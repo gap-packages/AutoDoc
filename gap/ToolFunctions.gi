@@ -286,7 +286,7 @@ function(ws)
 
     old := InfoLevel(InfoGAPDoc);
     SetInfoLevel(InfoGAPDoc, 0);
-    AutoDocWorksheet(filenames, rec(dir := actualdir));
+    AutoDocWorksheet(filenames, rec(dir := actualdir, extract_examples := true));
     SetInfoLevel(InfoGAPDoc, old);
 
     # Check the results

@@ -602,7 +602,7 @@ function( arg )
     fi;
 
     #
-    # Handle maketest
+    # Handle maketest (deprecated; consider using extract_examples instead)
     #
 
     if IsBound( opt.maketest ) then
@@ -619,6 +619,19 @@ function( arg )
         AUTODOC_SetIfMissing( maketest, "commands", [ ] );
 
         CreateMakeTest( pkgdir, doc_dir, gapdoc.main, gapdoc.files, maketest );
+    fi;
+
+    #
+    # Handle extract_examples
+    #
+
+    if IsBound( opt.extract_examples ) and opt.extract_examples = true then
+        if is_worksheet then
+            # HACK: not even sure this is really what we want for worksheets, but
+            # it is useful for our "dogfood" test suite
+            pkgdir := doc_dir;
+        fi;
+        AUTODOC_ExtractMyManualExamples( pkgname, pkgdir, doc_dir, gapdoc.main, gapdoc.files );
     fi;
 
     return true;

@@ -1,5 +1,8 @@
 This file describes changes in the AutoDoc package.
 
+2019.MM.DD
+  - Add opt.extract_examples to AutoDoc function
+
 2019.02.22
   - Updated changes file
 
