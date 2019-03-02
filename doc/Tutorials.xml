@@ -247,17 +247,15 @@ GAPDocManualLab( "RingsForHomalg" );
 Note that in particular, you do not have to worry about keeping a list of your
 implementation files up-to-date.
 <P/>
-But there is more. &AutoDoc; can create a <F>maketest.g</F> file, which uses the
+But there is more. &AutoDoc; can create <F>.tst</F> files from the
 examples in your manual to test your package. This can be achieved via
 <Listing>
 LoadPackage( "AutoDoc" );
-AutoDoc( rec( maketest := true ) );
+AutoDoc( rec( extract_examples := true ) );
 </Listing>
-Now the file <F>maketest.g</F> appears in your package directory, and
-<Listing>
-gap maketest.g
-</Listing>
-tests the examples from your manual.
+Now files <F>PACKAGENAME01.tst</F>, <F>PACKAGENAME02.tst</F> and so appear in the
+<F>tst/</F> subdirectory of your package, and can be tested as usual using
+<Ref Func="Test"/> respectively <Ref Func="TestDirectory"/>.
 </Subsection>
 
 <Subsection Label="Tut:IntegrateExisting:GapDocOptions">
@@ -588,8 +586,8 @@ AutoDocWorksheet( "worksheet.g" );
 </Listing>
 will create a subfolder called <F>doc</F> of the current directory in which it will create the documentation.
 There are several options to configure the output of the worksheet command, which are identical to the
-options of the <Ref Func="AutoDoc"/> command. It is even possible to test the examples in the worksheet using the maketest option
-from the AutoDoc command.
+options of the <Ref Func="AutoDoc"/> command. It is even possible to test the examples in the worksheet using the
+<C>extract_examples</C> option of the <Ref Func="AutoDoc"/> command.
 <P/>
 Since the worksheets do not have a <F>PackageInfo.g</F> to extract information, all possible tags that &GAPDoc; supports for
 the title page can be set into the document. A fully typed title page can look like this:
