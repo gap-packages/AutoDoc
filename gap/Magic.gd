@@ -323,15 +323,30 @@
 #!
 #!         </List>
 #!     </Item>
-#!     <Mark><A>example_test</A></Mark>
+#!     <Mark><A>extract_examples</A></Mark>
 #!     <Item>
+#!         Either <K>true</K> or a record.
 #!         If set to <K>true</K>, then all manual examples are extracted and placed
 #!         into files <F>tst/PACKAGENAME01.tst</F>,  <F>tst/PACKAGENAME02.tst</F>, ...
 #!         and so on, with one file for each chapter.
+#!         As a record, the entry can have the following entries itself, to specify some options.
+#!         <List>
+#!         <Mark>units</Mark>
+#!         <Item>
+#!             This controls how examples are grouped into files. Recognized values are
+#!             "Chapter" (default), "Section", "Subsection" or "Single". Depending on the value,
+#!             one file is created for each chapter, each section, each subsection or each example.
+#!             For all other values only a single file is created.
+#!             
+#!             On a technical level, &AutoDoc; passes the value to the
+#!             <A>units</A> parameter of <Ref Func='ExtractExamples'
+#!             BookName='gapdoc'/>.<P/>
+#!         </Item>
+#!         </List>
 #!     </Item>
 #!        <Mark><A>maketest</A></Mark>
 #!        <Item>
-#!          <Emph>This option is deprecated. Please use <C>example_test</C> instead.</Emph>
+#!          <Emph>This option is deprecated. Please use <C>extract_examples</C> instead.</Emph>
 #!          <P/>
 #!          Either <K>true</K> or a record. When it is <K>true</K>,
 #!          a simple <F>maketest.g</F> file is created in the main package directory,
