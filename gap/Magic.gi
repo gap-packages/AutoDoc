@@ -73,7 +73,7 @@ end );
 InstallGlobalFunction( AutoDoc,
 function( arg )
     local pkgname, pkginfo, pkgdir,
-          opt, scaffold, gapdoc, maketest, autodoc, i,
+          opt, scaffold, gapdoc, maketest, extract_examples, autodoc, i,
           doc_dir, doc_dir_rel, tmp, key, val, file,
           pkgdirstr, docdirstr,
           title_page, tree, is_worksheet,
@@ -146,7 +146,7 @@ function( arg )
     # Check for user supplied options. If present, they take
     # precedence over any defaults as well as the opt record.
     #
-    for key in [ "dir", "scaffold", "autodoc", "gapdoc", "maketest" ] do
+    for key in [ "dir", "scaffold", "autodoc", "gapdoc", "maketest", "extract_examples" ] do
         val := ValueOption( key );
         if val <> fail then
             opt.(key) := val;
@@ -625,13 +625,24 @@ function( arg )
     # Handle extract_examples
     #
 
-    if IsBound( opt.extract_examples ) and opt.extract_examples = true then
+    if IsBound( opt.extract_examples ) then
+        if IsRecord( opt.extract_examples ) then
+            extract_examples := opt.extract_examples;
+        elif opt.extract_examples = true then
+            extract_examples := rec( );
+        fi;
+        if IsBound( extract_examples ) and not IsBound( extract_examples.units ) then
+            extract_examples.units := "Chapter";
+        fi;
+    fi;
+
+    if IsBound( extract_examples ) then
         if is_worksheet then
             # HACK: not even sure this is really what we want for worksheets, but
             # it is useful for our "dogfood" test suite
             pkgdir := doc_dir;
         fi;
-        AUTODOC_ExtractMyManualExamples( pkgname, pkgdir, doc_dir, gapdoc.main, gapdoc.files );
+        AUTODOC_ExtractMyManualExamples( pkgname, pkgdir, doc_dir, gapdoc.main, gapdoc.files, extract_examples.units );
     fi;
 
     return true;
