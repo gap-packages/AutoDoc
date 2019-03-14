@@ -474,7 +474,7 @@ i := i + 1;
 </Subsection>
 
 <Subsection Label="@LatexOnly">
-<Index Key="@LatexOnly"><C>@@LatexOnly, @BeginLatexOnly, and @EndLatexOnly</C></Index>
+<Index Key="@LatexOnly"><C>@LatexOnly, @BeginLatexOnly, and @EndLatexOnly</C></Index>
 <Heading>@LatexOnly <A>text</A>, @BeginLatexOnly , and @EndLatexOnly</Heading>
 Code inserted between @BeginLatexOnly and @EndLatexOnly or after @LatexOnly is only inserted
 in the PDF version of the manual or worksheet. It can hold arbitrary LaTeX-commands.
@@ -484,6 +484,20 @@ in the PDF version of the manual or worksheet. It can hold arbitrary LaTeX-comma
 #! @EndLatexOnly
 
 #! @LatexOnly \include{picture.tex}
+]]></Listing>
+</Subsection>
+
+<Subsection Label="@NotLatex">
+<Index Key="@NotLatex"><C>@NotLatex, @BeginNotLatex, and @EndNotLatex</C></Index>
+<Heading>@NotLatex <A>text</A>, @BeginNotLatex , and @EndNotLatex</Heading>
+Code inserted between @BeginNotLatex and @EndNotLatex or after @NotLatex is inserted
+in the HTML and text versions of the manual or worksheet, but not in the PDF version.
+<Listing><![CDATA[
+#! @BeginNotLatex
+#! For further information see the PDF version of this manual.
+#! @EndNotLatex
+
+#! @NotLatex For further information see the PDF version of this manual.
 ]]></Listing>
 </Subsection>
 
