@@ -704,6 +704,23 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             Add( current_item, current_command[ 2 ] );
             Add( current_item, "]]></Alt>" );
         end,
+        @BeginNotLatex := function()
+            Add( current_item, "<Alt Not=\"LaTeX\"><![CDATA[" );
+            if current_command[ 2 ] <> "" then
+                Add( current_item, current_command[ 2 ] );
+            fi;
+        end,
+        @EndNotLatex := function()
+            if autodoc_read_line = true then
+                autodoc_read_line := false;
+            fi;
+            Add( current_item, "]]></Alt>" );
+        end,
+        @NotLatex := function()
+            Add( current_item, "<Alt Not=\"LaTeX\"><![CDATA[" );
+            Add( current_item, current_command[ 2 ] );
+            Add( current_item, "]]></Alt>" );
+        end,
         @Dependency := function()
             if not IsBound( tree!.worksheet_dependencies ) then
                 tree!.worksheet_dependencies := [ ];
