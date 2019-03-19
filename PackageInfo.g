@@ -108,7 +108,7 @@ AutoDoc := rec(
         Copyright := Concatenation(
             "&copyright; 2012-2019 by Sebastian Gutsche and Max Horn<P/>\n\n",
             "This package may be distributed under the terms and conditions ", 
-            "of the GNU Public License Version 2.\n"
+            "of the GNU Public License Version 2 or later (at your convenience).\n"
             ), 
         Abstract := Concatenation( 
             "&AutoDoc; is a &GAP; package whose purpose is to aid ", 
