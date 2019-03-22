@@ -146,7 +146,7 @@ function( arg )
     # Check for user supplied options. If present, they take
     # precedence over any defaults as well as the opt record.
     #
-    for key in [ "dir", "scaffold", "autodoc", "gapdoc", "maketest" ] do
+    for key in [ "dir", "scaffold", "autodoc", "gapdoc", "maketest", "extract_examples" ] do
         val := ValueOption( key );
         if val <> fail then
             opt.(key) := val;
