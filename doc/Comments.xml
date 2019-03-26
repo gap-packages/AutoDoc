@@ -739,6 +739,34 @@ can be important.</E>
 
 </Subsection>
 
+<Subsection Label="MarkdownExtensionRef">
+  <Heading>References</Heading>
+
+  One can create a reference to a documented declaration (function, operation, etc)
+  by writing a hash symbol (#) in front of the name.  Example:
+
+<Listing><![CDATA[
+#! See also #AutoDocWorksheet.
+]]></Listing>
+
+  This produces the following output:<Br/>
+  See also <Ref Func="AutoDocWorksheet" />.
+  <P/>
+
+  For references to operations, attributes and properties,
+  the argument filters must be included,
+  as a comma-separated list in square brackets.
+  For example, if an operation is declared as
+<Listing><![CDATA[
+DeclareOperation( "DoSomething", [ IsInt, IsRat ] );
+]]></Listing>
+  then we can refer to it by writing
+<Listing><![CDATA[
+#! See also #DoSomething[IsInt,IsRat].
+]]></Listing>
+
+</Subsection>
+
 </Section>
 
 </Chapter>

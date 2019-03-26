@@ -33,8 +33,20 @@ Print( "(Even though we never use it that way.\n" );
 #! * This is `inline code` in a list item.
 #!
 #! All of this can **also** be __used__ outside of a `list`.
+#!
+#! We can refer to #AnOperation[IsInt,IsList]
+#! or to #AnOperation[IsRat].
 
 #! @Description
 #!   An info class
 DeclareInfoClass("InfoTESTCLASS");
 
+#! @Description
+#!  An operation.
+#! @Arguments x, y
+DeclareOperation( "AnOperation", [ IsInt, IsList ] );
+
+#! @Description
+#!  An operation.
+#! @Arguments r
+DeclareOperation( "AnOperation", [ IsRat ] );

@@ -26,7 +26,9 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
     local i, current_list, current_string, max_line_length,
           current_position, already_in_list, command_list_with_translation, beginning,
           commands, position_of_command, insert, beginning_whitespaces, temp, string_list_temp, skipped,
-          already_inserted_paragraph, in_list, in_item;
+          already_inserted_paragraph, in_list, in_item,
+          str, pos, replace_start, replace_end, symbol_start, symbol_end, escape, symbol,
+          args_start, args_end, args, j, ref_tag;
 
     ## Check for paragraphs by turning an empty string into <P/>
     
@@ -180,6 +182,51 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
         if beginning = false then
             Error( "did you forget some ", commands[ 1 ] );
         fi;
+    od;
+    
+    # #foo -> <Ref Subsect="foo" />
+    for i in [ 1 .. Length( string_list ) ] do
+        str := string_list[ i ];
+        pos := Position( str, '#' );
+        while pos <> fail do
+            replace_start := pos;
+            symbol_start := pos + 1;
+            escape := false;
+            for j in [ symbol_start .. Length( str ) ] do
+                if escape then
+                    escape := false;
+                elif str[ j ] = '\\' then
+                    escape := true;
+                elif not ( IsDigitChar( str[ j ] ) or IsAlphaChar( str[ j ] ) or str[ j ] in "@_" ) then
+                    break;
+                fi;
+            od;
+            symbol_end := j - 1;
+            symbol := str{ [ symbol_start .. symbol_end ] };
+            if str[ j ] = '[' then
+                args_start := j + 1;
+                j := Position( str, ']', args_start );
+                if j = fail then
+                    Error( "missing ']'" );
+                fi;
+                args_end := j - 1;
+                args := SplitString( str{ [ args_start .. args_end ] }, "," );
+            else
+                args := fail;
+            fi;
+            replace_end := j;
+            ref_tag := Concatenation( "<Ref Func=\"", symbol, "\" " );
+            if args <> fail then
+                ref_tag := Concatenation( ref_tag, "Label=\"for ",
+                                          JoinStringsWithSeparator( args, ", " ),
+                                          "\" " );
+            fi;
+            ref_tag := Concatenation( ref_tag, "/>" );
+            str := INSERT_IN_STRING_WITH_REPLACE( str, ref_tag, replace_start,
+                                                  replace_end - replace_start + 1 );
+            pos := Position( str, '#' );
+        od;
+        string_list[ i ] := str;
     od;
 
     return string_list;
