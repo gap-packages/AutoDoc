@@ -54,7 +54,43 @@ Persons := [
        Place := "Gießen",
        Institution := "Justus-Liebig-Universität Gießen"
      ),
-  
+
+  # Contributors:
+  rec( LastName := "Barakat",
+       FirstNames := "Mohamed",
+       IsAuthor := false,
+       IsMaintainer := false,
+     ),
+
+  rec( LastName := "Pfeiffer",
+       FirstNames := "Markus",
+       IsAuthor := false,
+       IsMaintainer := false,
+     ),
+
+  rec( LastName := "Skartsæterhagen",
+       FirstNames := "Øystein",
+       IsAuthor := false,
+       IsMaintainer := false,
+     ),
+
+  rec( LastName := "Wensley",
+       FirstNames := "Chris",
+       IsAuthor := false,
+       IsMaintainer := false,
+     ),
+
+  rec( LastName := "Whitney",
+       FirstNames := "Glen",
+       IsAuthor := false,
+       IsMaintainer := false,
+     ),
+
+  rec( LastName := "Zickgraf",
+       FirstNames := "Fabian",
+       IsAuthor := false,
+       IsMaintainer := false,
+     ),
 ],
 
 Status := "deposited",
