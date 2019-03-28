@@ -2,6 +2,7 @@ This file describes changes in the AutoDoc package.
 
 2019.MM.DD
   - Add opt.extract_examples to AutoDoc function
+  - Add @NotLatex command to complement @LatexOnly
   - Allow disabling title page creation, by teaching `AutoDoc()` to correctly
     handle `scaffold := rec( TitlePage := false )` instead of raising an error
   - When generating a manual title page, only include persons as authors
