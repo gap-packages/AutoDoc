@@ -50,6 +50,18 @@ An info class
 </ManSection>
 
 
+<Alt Only="LaTeX"><![CDATA[
+This text will only appear in the \LaTeX version.
+]]></Alt>
+<Alt Only="LaTeX"><![CDATA[
+This text will only appear in the \LaTeX version, too.
+]]></Alt>
+<Alt Not="LaTeX"><![CDATA[
+This text will only appear in the HTML version and the text version.
+]]></Alt>
+<Alt Not="LaTeX"><![CDATA[
+This text will only appear in the HTML version and the text version, too.
+]]></Alt>
 </Section>
 
 

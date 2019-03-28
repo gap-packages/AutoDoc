@@ -38,3 +38,12 @@ Print( "(Even though we never use it that way.\n" );
 #!   An info class
 DeclareInfoClass("InfoTESTCLASS");
 
+#! @LatexOnly This text will only appear in the \LaTeX version.
+#! @BeginLatexOnly
+#! This text will only appear in the \LaTeX version, too.
+#! @EndLatexOnly
+
+#! @NotLatex This text will only appear in the HTML version and the text version.
+#! @BeginNotLatex
+#! This text will only appear in the HTML version and the text version, too.
+#! @EndNotLatex
