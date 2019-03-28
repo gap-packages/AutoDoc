@@ -42,10 +42,29 @@ This is <Code>inline code</Code> in a list item.
 </List>
 <P/>
 All of this can <Emph>also</Emph> be <Emph>used</Emph> outside of a <Code>list</Code>.
+<P/>
+We can refer to <Ref Func="AnOperation" Label="for IsInt, IsList" />
+or to <Ref Func="AnOperation" Label="for IsRat" />.
 <ManSection>
   <InfoClass Name="InfoTESTCLASS" />
  <Description>
 An info class
+ </Description>
+</ManSection>
+
+
+<ManSection>
+  <Oper Arg="x, y" Name="AnOperation" Label="for IsInt, IsList"/>
+ <Description>
+An operation.
+ </Description>
+</ManSection>
+
+
+<ManSection>
+  <Oper Arg="r" Name="AnOperation" Label="for IsRat"/>
+ <Description>
+An operation.
  </Description>
 </ManSection>
 
