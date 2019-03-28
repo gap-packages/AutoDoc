@@ -496,7 +496,7 @@ function( arg )
             fi;
         fi;
 
-        if IsBound( scaffold.TitlePage ) then
+        if IsBound( scaffold.TitlePage ) and scaffold.TitlePage <> false then
             title_page := ShallowCopy( scaffold.TitlePage );
 
             AUTODOC_SetIfMissing( title_page, "dir", doc_dir );
