@@ -199,6 +199,9 @@ InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
         title_rec.Author := [ ];
         i := 1;
         for author_rec in pkginfo.Persons do
+            if not author_rec.IsAuthor then
+                continue;
+            fi;
             author_string := "";
             AUTODOC_APPEND_STRING_ITERATIVE( author_string,
                     author_rec.FirstNames, " ", author_rec.LastName,
