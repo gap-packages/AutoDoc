@@ -30,24 +30,24 @@ this, there are several commands you can put into the &AutoDoc; comment
 before the declaration. Currently, the following commands are provided:
 
 <Subsection Label="@Description">
-<Index Key="@Description"><C>@Description</C></Index>
-<Heading>@Description <A>descr</A></Heading>
+<Index Key="@Description"><C>@Description <A>descr</A></C></Index>
+<Heading><C>@Description <A>descr</A></C></Heading>
 Adds the text in the following lines of the &AutoDoc; to the description
 of the declaration in the manual. Lines are until the next &AutoDoc; command
 or until the declaration is reached.
 </Subsection>
 
 <Subsection Label="@Returns">
-<Index Key="@Returns"><C>@Returns</C></Index>
-<Heading>@Returns <A>ret_val</A></Heading>
+<Index Key="@Returns"><C>@Returns <A>ret_val</A></C></Index>
+<Heading><C>@Returns <A>ret_val</A></C></Heading>
 The string <A>ret_val</A> is added to the documentation, with the text <Q>Returns: </Q>
 put in front of it. This should usually give a brief hint about the type or meaning
 of the value retuned by the documented function.
 </Subsection>
 
 <Subsection Label="@Arguments">
-<Index Key="@Arguments"><C>@Arguments</C></Index>
-<Heading>@Arguments <A>args</A></Heading>
+<Index Key="@Arguments"><C>@Arguments <A>args</A></C></Index>
+<Heading><C>@Arguments <A>args</A></C></Heading>
 The string <A>args</A> contains a description of the arguments the
 function expects, including optional parts, which are denoted by square
 brackets. The argument names can be separated by whitespace, commas or
@@ -57,15 +57,15 @@ and one or more assignments, like <Q>n[, r]: tries := 100</Q>.
 </Subsection>
 
 <Subsection Label="@Group">
-<Index Key="@Group"><C>@Group</C></Index>
-<Heading>@Group <A>grpname</A></Heading>
+<Index Key="@Group"><C>@Group <A>grpname</A></C></Index>
+<Heading><C>@Group <A>grpname</A></C></Heading>
 Adds the following method to a group with the given name.
 See section <Ref Sect="Groups"/> for more information about groups.
 </Subsection>
 
 <Subsection Label="@Label">
-<Index Key="@Label"><C>@Label</C></Index>
-<Heading>@Label <A>label</A></Heading>
+<Index Key="@Label"><C>@Label <A>label</A></C></Index>
+<Heading><C>@Label <A>label</A></C></Heading>
 Adds label to the function as label.
 
 If this is not specified, then for declarations that involve a list of input filters
@@ -116,9 +116,9 @@ As an example, a full &AutoDoc; comment with all options could look like this:
 <Listing><![CDATA[
 #! @Description
 #! Computes the list of lists of degrees of ordinary characters
-#! associated to the <A>p</A>-blocks of the group <A>G</A>
-#! with <A>p</A>-modular character table <A>modtbl</A>
-#! and underlying ordinary character table <A>ordtbl</A>.
+#! associated to the $p$-blocks of the group $G$
+#! with $p$-modular character table <A>modtbl</A>
+#! and underlying ordinary character table `ordtbl`.
 #! @Returns a list
 #! @Arguments modtbl
 #! @Group CharacterDegreesOfBlocks
@@ -141,9 +141,9 @@ text in your documentation, examples, mathematical chapters, etc..
 <Index Key="@Chapter"><C>@Chapter</C></Index>
 <Index Key="@ChapterLabel"><C>@ChapterLabel</C></Index>
 <Index Key="@ChapterTitle"><C>@ChapterTitle</C></Index>
-<Heading>@Chapter <A>name</A></Heading>
+<Heading><C>@Chapter <A>name</A></C></Heading>
 Sets the active chapter, all subsequent functions which do not have an explicit chapter
-declared in their AutoDoc comment via <C>@ChapterInfo</C> will be added to this chapter.
+declared in their &AutoDoc; comment via <C>@ChapterInfo</C> will be added to this chapter.
 Also all text comments, i.e. lines that begin with #! without a command, and which do not
 follow after <C>@Description</C>, will be added to the chapter as regular text. Additionally,
 the chapters label wil be set to <C>Chapter_</C><A>name</A>.
@@ -180,7 +180,7 @@ for setting the same chapter as active chapter again.
 <Index Key="@Section"><C>@Section</C></Index>
 <Index Key="@SectionLabel"><C>@SectionLabel</C></Index>
 <Index Key="@SectionTitle"><C>@SectionTitle</C></Index>
-<Heading>@Section <A>name</A></Heading>
+<Heading><C>@Section <A>name</A></C></Heading>
 Sets an active section like <C>@Chapter</C> sets an active chapter.
 
 <Listing><![CDATA[
@@ -213,7 +213,7 @@ opening it might cause unexpected errors.
 <Index Key="@Subsection"><C>@Subsection</C></Index>
 <Index Key="@SubsectionLabel"><C>@SubsectionLabel</C></Index>
 <Index Key="@SubsectionTitle"><C>@SubsectionTitle</C></Index>
-<Heading>@Subsection <A>name</A></Heading>
+<Heading><C>@Subsection <A>name</A></C></Heading>
 Sets an active subsection like <C>@Chapter</C> sets an active chapter.
 
 <Listing><![CDATA[
@@ -252,7 +252,7 @@ them or not.
 <Subsection Label="@EndAutoDoc">
 <Index Key="@EndAutoDoc"><C>@EndAutoDoc</C></Index>
 <Heading>@EndAutoDoc</Heading>
-Ends the affect of <C>@BeginAutoDoc</C>. So from here on, again only declarations
+Ends the effect of <C>@BeginAutoDoc</C>. So from here on, again only declarations
 with an explicit &AutoDoc; comment in front are added to the manual.
 
 <Listing><![CDATA[
@@ -304,33 +304,34 @@ DeclareOperation( "GroupedOperation",
 
 <Subsection Label="@Level">
 <Index Key="@Level"><C>@Level</C></Index>
-<Heading>@Level <A>lvl</A></Heading>
+<Heading><C>@Level <A>lvl</A></C></Heading>
 Sets the current level of the documentation. All items created after this,
 chapters, sections, and items, are given the level <A>lvl</A>,
 until the <C>@ResetLevel</C> command resets the level to 0 or another level
 is set.
 <P/>
 
-See section <Ref Sect="Level"/> for more information about groups.
+See section <Ref Sect="Level"/> for more information about levels.
 </Subsection>
 
 <Subsection Label="@ResetLevel">
 <Index Key="@ResetLevel"><C>@ResetLevel</C></Index>
-<Heading>@ResetLevel</Heading>
+<Heading><C>@ResetLevel</C></Heading>
 Resets the current level to 0.
 <P/>
 </Subsection>
 
 
 <Subsection Label="@BeginExample">
-<Index Key="@BeginExample"><C>@BeginExample and @EndExample</C></Index>
-<Heading>@BeginExample and @EndExample</Heading>
-@BeginExample inserts an example into the manual. The syntax for examples is different from
+<Index Key="@BeginExample"><C>@BeginExample</C></Index>
+<Index Key="@EndExample"><C>@EndExample</C></Index>
+<Heading><C>@BeginExample</C> and <C>@EndExample</C></Heading>
+<C>@BeginExample</C> inserts an example into the manual. The syntax for examples is different from
 GAPDocs example syntax in order to have a
 file that contains the example and is GAP readable. To achieve this, GAP commands are not preceded by a comment,
 while output has to be preceded by an &AutoDoc; comment.
-The GAP prompt for the display in the manual is added by AutoDoc.
-@EndExample ends the example block.
+The GAP prompt for the display in the manual is added by &AutoDoc;.
+<C>@EndExample</C> ends the example block.
 <Listing><![CDATA[
 #! @BeginExample
 S5 := SymmetricGroup(5);
@@ -344,9 +345,10 @@ The &AutoDoc; command <C>@Example</C> is an alias of <C>@BeginExample</C>.
 
 
 <Subsection Label="@BeginExampleSession">
-<Index Key="@BeginExampleSession"><C>@BeginExampleSession and @EndExampleSession</C></Index>
-<Heading>@BeginExampleSession and @EndExampleSession</Heading>
-@ExampleSession inserts an example into the manual, but in a different syntax.
+<Index Key="@BeginExampleSession"><C>@BeginExampleSession</C></Index>
+<Index Key="@EndExampleSession"><C>@EndExampleSession</C></Index>
+<Heading><C>@BeginExampleSession</C> and <C>@EndExampleSession</C></Heading>
+<C>@BeginExampleSession</C> inserts an example into the manual, but in a different syntax.
 For example, consider
 <Listing><![CDATA[
 #! @BeginExample
@@ -358,7 +360,7 @@ Order(S5);
 ]]></Listing>
 As you can see, the commands are not commented and hence are executed when the file containing
 the example block is read. To insert examples directly into source code files, one can instead
-use @ExampleSession:
+use <C>@BeginExampleSession</C>:
 <Listing><![CDATA[
 #! @BeginExampleSession
 #! gap> S5 := SymmetricGroup(5);
@@ -367,7 +369,7 @@ use @ExampleSession:
 #! 120
 #! @EndExampleSession
 ]]></Listing>
-It inserts an example into the manual just as @Example would do, but all lines are commented
+It inserts an example into the manual just as <C>@Example</C> would do, but all lines are commented
 and therefore not executed when the file is read.
 All lines that should be part of the example displayed in the manual
 have to start with an &AutoDoc; comment (<C>#!</C>).
@@ -381,24 +383,26 @@ The &AutoDoc; command <C>@ExampleSession</C> is an alias of <C>@BeginExampleSess
 
 
 <Subsection Label="@BeginLog">
-<Index Key="@BeginLog"><C>@BeginLog and @EndLog</C></Index>
-<Heading>@BeginLog and @EndLog</Heading>
-Works just like the @BeginExample command, but the example
+<Index Key="@BeginLog"><C>@BeginLog</C></Index>
+<Index Key="@EndLog"><C>@EndLog</C></Index>
+<Heading><C>@BeginLog</C> and <C>@EndLog</C></Heading>
+Works just like the <C>@BeginExample</C> command, but the example
 will not be tested. See the GAPDoc manual for more information.
 The &AutoDoc; command <C>@Log</C> is an alias of <C>@BeginLog</C>.
 </Subsection>
 
 <Subsection Label="@BeginLogSession">
-<Index Key="@BeginLogSession"><C>@BeginLogSession and @EndLogSession</C></Index>
-<Heading>@BeginLogSession and @EndLogSession</Heading>
-Works just like the @BeginExampleSession command, but the example
+<Index Key="@BeginLogSession"><C>@BeginLogSession</C></Index>
+<Index Key="@EndLogSession"><C>@EndLogSession</C></Index>
+<Heading><C>@BeginLogSession</C> and <C>@EndLogSession</C></Heading>
+Works just like the <C>@BeginExampleSession</C> command, but the example
 will not be tested if manual examples are run. See the GAPDoc manual for more information.
 The &AutoDoc; command <C>@LogSession</C> is an alias of <C>@BeginLogSession</C>.
 </Subsection>
 
 <Subsection Label="@DoNotReadRestOfFile">
-<Index Key="DoNotReadRestOfFile"><C>@DoNotReadRestOfFile</C></Index>
-<Heading>@DoNotReadRestOfFile</Heading>
+<Index Key="@DoNotReadRestOfFile"><C>@DoNotReadRestOfFile</C></Index>
+<Heading><C>@DoNotReadRestOfFile</C></Heading>
 Prevents the rest of the file from being read by the parser. Useful for
 not finished or temporary files.
 
@@ -412,15 +416,17 @@ not finished or temporary files.
 </Subsection>
 
 <Subsection Label="@BeginChunk">
-<Index Key="@BeginChunk"><C>@BeginChunk, @EndChunk, and @InsertChunk</C></Index>
-<Heading>@BeginChunk <A>name</A>, @EndChunk, and @InsertChunk <A>name</A></Heading>
-Text inside a @BeginChunk / @EndChunk part will not be inserted into
+<Index Key="@BeginChunk"><C>@BeginChunk <A>name</A></C></Index>
+<Index Key="@EndChunk"><C>@EndChunk</C></Index>
+<Index Key="@EndChunk"><C>@InsertChunk <A>name</A></C></Index>
+<Heading><C>@BeginChunk <A>name</A></C>, <C>@EndChunk</C>, and <C>@InsertChunk <A>name</A></C></Heading>
+Text inside a <C>@BeginChunk</C> / <C>@EndChunk</C> part will not be inserted into
 the final documentation directly. Instead, the text is stored in an internal buffer.
 
 That chunk of text can then later on be inserted in any other place by using the
-@InsertChunk <A>name</A> command.
+<C>@InsertChunk <A>name</A></C> command.
 
-If you do not provide an @EndChunk, the chunk ends at the end of the file.
+If you do not provide an <C>@EndChunk</C>, the chunk ends at the end of the file.
 <Listing><![CDATA[
 #! @BeginChunk MyChunk
 #! Hello, world.
@@ -452,16 +458,20 @@ And then later, insert the example in a different file, like this:
 </Subsection>
 
 <Subsection Label="@BeginSystem">
-<Index Key="@BeginSystem"><C>@BeginSystem, @EndSystem, and @InsertSystem</C></Index>
-<Heading>@BeginSystem <A>name</A>, @EndSystem, and @InsertSystem <A>name</A></Heading>
-Same as @BeginChunk etc. This command is deprecated. Please use chunk instead.
+<Index Key="@BeginSystem"><C>@BeginSystem <A>name</A></C></Index>
+<Index Key="@EndSystem"><C>@EndSystem</C></Index>
+<Index Key="@InsertSystem"><C>@InsertSystem <A>name</A></C></Index>
+<Heading><C>@BeginSystem <A>name</A></C>, <C>@EndSystem</C>, and <C>@InsertSystem <A>name</A></C></Heading>
+Same as <C>@BeginChunk</C> etc. This command is deprecated. Please use the chunk commands instead.
 </Subsection>
 
 <Subsection Label="@BeginCode">
-<Index Key="@BeginCode"><C>@BeginCode, @EndCode, and @InsertCode</C></Index>
-<Heading>@BeginCode <A>name</A>, @EndCode, and @InsertCode <A>name</A></Heading>
-Inserts the text between @BeginCode and @EndCode verbatim at the point where
-@InsertCode is called. This is useful to insert code excerpts
+<Index Key="@BeginCode"><C>@BeginCode <A>name</A></C></Index>
+<Index Key="@EndCode"><C>@EndCode</C></Index>
+<Index Key="@InsertCode"><C>@InsertCode <A>name</A></C></Index>
+<Heading><C>@BeginCode <A>name</A></C>, @EndCode, and <C>@InsertCode <A>name</A></C></Heading>
+Inserts the text between <C>@BeginCode</C> and <C>@EndCode</C> verbatim at the point where
+<C>@InsertCode</C> is called. This is useful to insert code excerpts
 directly into the manual.
 <Listing><![CDATA[
 #! @BeginCode Increment
@@ -474,9 +484,11 @@ i := i + 1;
 </Subsection>
 
 <Subsection Label="@LatexOnly">
-<Index Key="@LatexOnly"><C>@LatexOnly, @BeginLatexOnly, and @EndLatexOnly</C></Index>
-<Heading>@LatexOnly <A>text</A>, @BeginLatexOnly , and @EndLatexOnly</Heading>
-Code inserted between @BeginLatexOnly and @EndLatexOnly or after @LatexOnly is only inserted
+<Index Key="@LatexOnly"><C>@LatexOnly <A>text</A></C></Index>
+<Index Key="@BeginLatexOnly"><C>@BeginLatexOnly</C></Index>
+<Index Key="@EndLatexOnly"><C>@EndLatexOnly</C></Index>
+<Heading><C>@LatexOnly <A>text</A></C>, <C>@BeginLatexOnly</C>, and <C>@EndLatexOnly</C></Heading>
+Code inserted between <C>@BeginLatexOnly</C> and <C>@EndLatexOnly</C> or after <C>@LatexOnly</C> is only inserted
 in the PDF version of the manual or worksheet. It can hold arbitrary LaTeX-commands.
 <Listing><![CDATA[
 #! @BeginLatexOnly
@@ -488,9 +500,11 @@ in the PDF version of the manual or worksheet. It can hold arbitrary LaTeX-comma
 </Subsection>
 
 <Subsection Label="@NotLatex">
-<Index Key="@NotLatex"><C>@NotLatex, @BeginNotLatex, and @EndNotLatex</C></Index>
-<Heading>@NotLatex <A>text</A>, @BeginNotLatex , and @EndNotLatex</Heading>
-Code inserted between @BeginNotLatex and @EndNotLatex or after @NotLatex is inserted
+<Index Key="@NotLatex"><C>@NotLatex <A>text</A></C></Index>
+<Index Key="@BeginNotLatex"><C>@BeginNotLatex</C></Index>
+<Index Key="@EndNotLatex"><C>@EndNotLatex</C></Index>
+<Heading>@NotLatex <A>text</A>, <C>@BeginNotLatex</C> , and <C>@EndNotLatex</C></Heading>
+Code inserted between <C>@BeginNotLatex</C> and <C>@EndNotLatex</C> or after <C>@NotLatex</C> is inserted
 in the HTML and text versions of the manual or worksheet, but not in the PDF version.
 <Listing><![CDATA[
 #! @BeginNotLatex
@@ -508,57 +522,58 @@ in the HTML and text versions of the manual or worksheet, but not in the PDF ver
 <Heading>Title page commands</Heading>
 
 The following commands can be used to add the corresponding parts to the title page of
-the document, in case the scaffolding is enabled.
+the document which generated by &AutoDoc; if scaffolding is enabled.
 <List>
   <Item>
-    @Title
+    <C>@Title</C>
   </Item>
   <Item>
-    @Subtitle
+    <C>@Subtitle</C>
   </Item>
   <Item>
-    @Version
+    <C>@Version</C>
   </Item>
   <Item>
-    @TitleComment
+    <C>@TitleComment</C>
   </Item>
   <Item>
-    @Author
+    <C>@Author</C>
   </Item>
   <Item>
-    @Date
+    <C>@Date</C>
   </Item>
   <Item>
-    @Address
+    <C>@Address</C>
   </Item>
   <Item>
-    @Abstract
+    <C>@Abstract</C>
   </Item>
   <Item>
-    @Copyright
+    <C>@Copyright</C>
   </Item>
   <Item>
-    @Acknowledgements
+    <C>@Acknowledgements</C>
   </Item>
   <Item>
-    @Colophon
+    <C>@Colophon</C>
   </Item>
 </List>
 Those add the following lines at the corresponding point of the title page. Please note that many of those
-things can be (better) extracted from the PackageInfo.g. In case you set some of those,
+things can be (better) extracted from the <F>PackageInfo.g</F>. In case you set some of those,
 the extracted or in scaffold defined items will be overwritten. While this is not very useful for
 documenting packages, they are necessary for worksheets created with <Ref Func="AutoDocWorksheet"/>,
-since they do not have a PackageInfo to extract those information.
+since worksheets do not have a <F>PackageInfo.g</F> file from which this information could be extracted.
 </Section>
 
- <Section Label="PlainText">
-   <Heading>Plain text files</Heading>
-   
-   AutoDoc plain text files work exactly like AutoDoc comments, except that the
-   #! is unnecessary at the beginning of a line which should be documented.
-   Files that have the suffix .autodoc will automatically regarded as plain text files
-   while the commands @AutoDocPlainText and @EndAutoDocPlainText mark parts in plain text files which
-   should be regarded as AutoDoc parts. All commands can be used like before.
+<Section Label="PlainText">
+<Heading>Plain text files</Heading>
+
+&AutoDoc; plain text files work exactly like &AutoDoc; comments, except that
+the <C>#!</C> is unnecessary at the beginning of a line which should be
+documented. Files that have the suffix <C>.autodoc</C> will automatically
+regarded as plain text files while the commands <C>@AutoDocPlainText</C> and
+<C>@EndAutoDocPlainText</C> mark parts in plain text files which should be
+regarded as &AutoDoc; parts. All commands can be used like before.
 
 </Section>
 
@@ -629,7 +644,7 @@ produces the following:
   be used to set the level of the following part to a higher level, for
   example 1, and prevent it from being printed to the manual by default.
   However, if one sets the level to a higher value in the autodoc option of
-  <C>AutoDoc</C>, the parts will be included in the manual at the specific place.
+  &AutoDoc;, the parts will be included in the manual at the specific place.
 
 <Listing><![CDATA[
 #! This text will be printed to the manual.
