@@ -4,7 +4,7 @@
 ##
 ##  Copyright 2012-2016
 ##    Sebastian Gutsche, University of Kaiserslautern
-##    Max Horn, Justus-Liebig-Universität Gießen
+##    Max Horn, Universität Siegen
 ##
 ## Licensed under the GPL 2 or later.
 ##
