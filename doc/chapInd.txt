@@ -2,31 +2,47 @@
   
   [1XIndex[101X
   
-  [10X@Arguments[110X 2.1-3 
+  [10X@Arguments [3Xargs[103X[10X[110X 2.1-3 
   [10X@BeginAutoDoc[110X 2.2-6 
-  [10X@BeginChunk, @EndChunk, and @InsertChunk[110X 2.2-17 
-  [10X@BeginCode, @EndCode, and @InsertCode[110X 2.2-19 
-  [10X@BeginExample and @EndExample[110X 2.2-12 
-  [10X@BeginExampleSession and @EndExampleSession[110X 2.2-13 
+  [10X@BeginChunk [3Xname[103X[10X[110X 2.2-17 
+  [10X@BeginCode [3Xname[103X[10X[110X 2.2-19 
+  [10X@BeginExample[110X 2.2-12 
+  [10X@BeginExampleSession[110X 2.2-13 
   [10X@BeginGroup[110X 2.2-8 
-  [10X@BeginLog and @EndLog[110X 2.2-14 
-  [10X@BeginLogSession and @EndLogSession[110X 2.2-15 
-  [10X@BeginSystem, @EndSystem, and @InsertSystem[110X 2.2-18 
+  [10X@BeginLatexOnly[110X 2.2-20 
+  [10X@BeginLog[110X 2.2-14 
+  [10X@BeginLogSession[110X 2.2-15 
+  [10X@BeginNotLatex[110X 2.2-21 
+  [10X@BeginSystem [3Xname[103X[10X[110X 2.2-18 
   [10X@Chapter[110X 2.2-1 
   [10X@ChapterInfo[110X 2.1-8 
   [10X@ChapterLabel[110X 2.2-1 
   [10X@ChapterTitle[110X 2.2-1 
-  [10X@Description[110X 2.1-1 
+  [10X@Description [3Xdescr[103X[10X[110X 2.1-1 
+  [10X@DoNotReadRestOfFile[110X 2.2-16 
   [10X@EndAutoDoc[110X 2.2-7 
+  [10X@EndChunk[110X 2.2-17 
+  [10X@InsertChunk [3Xname[103X[10X[110X 2.2-17 
+  [10X@EndCode[110X 2.2-19 
+  [10X@EndExample[110X 2.2-12 
+  [10X@EndExampleSession[110X 2.2-13 
   [10X@EndGroup[110X 2.2-9 
+  [10X@EndLatexOnly[110X 2.2-20 
+  [10X@EndLog[110X 2.2-14 
+  [10X@EndLogSession[110X 2.2-15 
+  [10X@EndNotLatex[110X 2.2-21 
   [10X@EndSection[110X 2.2-3 
   [10X@EndSubsection[110X 2.2-5 
-  [10X@Group[110X 2.1-4 
-  [10X@Label[110X 2.1-5 
-  [10X@@LatexOnly, @BeginLatexOnly, and @EndLatexOnly[110X 2.2-20 
+  [10X@EndSystem[110X 2.2-18 
+  [10X@Group [3Xgrpname[103X[10X[110X 2.1-4 
+  [10X@InsertCode [3Xname[103X[10X[110X 2.2-19 
+  [10X@InsertSystem [3Xname[103X[10X[110X 2.2-18 
+  [10X@Label [3Xlabel[103X[10X[110X 2.1-5 
+  [10X@LatexOnly [3Xtext[103X[10X[110X 2.2-20 
   [10X@Level[110X 2.2-10 
+  [10X@NotLatex [3Xtext[103X[10X[110X 2.2-21 
   [10X@ResetLevel[110X 2.2-11 
-  [10X@Returns[110X 2.1-2 
+  [10X@Returns [3Xret_val[103X[10X[110X 2.1-2 
   [10X@Section[110X 2.2-2 
   [10X@SectionLabel[110X 2.2-2 
   [10X@SectionTitle[110X 2.2-2 
@@ -38,9 +54,7 @@
       testlabel 2.1-6 
   [2XAutoDoc[102X 4.1-1 
   [2XAutoDocWorksheet[102X 3.1-1 
-   1.3-3  1.3-3 
-  [10X@DoNotReadRestOfFile[110X 2.2-16 
-   1.3-3 
+   1.3-3  1.3-3  1.3-3 
   [2XFirstOperation[102X, for IsInt 2.5-1 
   [11Xmakedoc.g[111X 1.1 
    1.3-3 

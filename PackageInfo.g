@@ -4,7 +4,7 @@
 ##
 ##  Copyright 2012-2016
 ##    Sebastian Gutsche, University of Kaiserslautern
-##    Max Horn, Justus-Liebig-Universität Gießen
+##    Max Horn, Universität Siegen
 ##
 ##  Licensed under the GPL 2 or later.
 ##
@@ -15,7 +15,7 @@ SetPackageInfo( rec(
 
 PackageName := "AutoDoc",
 Subtitle := "Generate documentation from GAP source code",
-Version := "2019.02.22",
+Version := "2019.04.10",
 
 Date := ~.Version{[ 1 .. 10 ]},
 Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1 .. 4 ]} ),
@@ -42,19 +42,54 @@ Persons := [
        FirstNames := "Max",
        IsAuthor := true,
        IsMaintainer := true,
-       Email := "max.horn@math.uni-giessen.de",
+       Email := "max.horn@uni-siegen.de",
        WWWHome := "https://www.quendi.de/math",
        PostalAddress := Concatenation(
-               "AG Algebra\n",
-               "Mathematisches Institut\n",
-               "Justus-Liebig-Universität Gießen\n",
-               "Arndtstraße 2\n",
-               "35392 Gießen\n",
+               "Department Mathematik\n",
+               "Universität Siegen\n",
+               "Walter-Flex-Straße 3\n",
+               "57072 Siegen\n",
                "Germany" ),
-       Place := "Gießen",
-       Institution := "Justus-Liebig-Universität Gießen"
+       Place := "Siegen",
+       Institution := "Universität Siegen"
      ),
-  
+
+  # Contributors:
+  rec( LastName := "Barakat",
+       FirstNames := "Mohamed",
+       IsAuthor := false,
+       IsMaintainer := false,
+     ),
+
+  rec( LastName := "Pfeiffer",
+       FirstNames := "Markus",
+       IsAuthor := false,
+       IsMaintainer := false,
+     ),
+
+  rec( LastName := "Skartsæterhagen",
+       FirstNames := "Øystein",
+       IsAuthor := false,
+       IsMaintainer := false,
+     ),
+
+  rec( LastName := "Wensley",
+       FirstNames := "Chris",
+       IsAuthor := false,
+       IsMaintainer := false,
+     ),
+
+  rec( LastName := "Whitney",
+       FirstNames := "Glen",
+       IsAuthor := false,
+       IsMaintainer := false,
+     ),
+
+  rec( LastName := "Zickgraf",
+       FirstNames := "Fabian",
+       IsAuthor := false,
+       IsMaintainer := false,
+     ),
 ],
 
 Status := "deposited",
@@ -106,9 +141,9 @@ Keywords := [ "Automatic documentation, GAP, GAPDoc" ],
 AutoDoc := rec(
     TitlePage := rec(
         Copyright := Concatenation(
-            "&copyright; 2012-2017 by Sebastian Gutsche and Max Horn<P/>\n\n",
+            "&copyright; 2012-2019 by Sebastian Gutsche and Max Horn<P/>\n\n",
             "This package may be distributed under the terms and conditions ", 
-            "of the GNU Public License Version 2.\n"
+            "of the GNU Public License Version 2 or (at your option) any later version.\n"
             ), 
         Abstract := Concatenation( 
             "&AutoDoc; is a &GAP; package whose purpose is to aid ", 

@@ -6,13 +6,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <script type="text/javascript"
-  src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 <title>GAP (AutoDoc) - Chapter 4: AutoDoc</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <meta name="generator" content="GAPDoc2HTML" />
 <link rel="stylesheet" type="text/css" href="manual.css" />
-<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script><script type="text/javascript" src="https://unpkg.com/thebelab@0.0.3"></script><script src="manual.js" type="text/javascript"></script>
+<script src="manual.js" type="text/javascript"></script>
 <script type="text/javascript">overwriteStyle();</script>
 </head>
 <body class="chap4"  onload="jscontent()">
@@ -23,8 +23,7 @@
 <div class="chlinkprevnexttop">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap3_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chapBib_mj.html">[Next Chapter]</a>&nbsp;  </div>
 
 <p id="mathjaxlink" class="pcenter"><a href="chap4.html">[MathJax off]</a></p>
-
-<div style="text-align: center;"><input type="button" onclick="convert_examples();start_kernel()" value="Make this live!"></div><p><a id="X7CBD8AAF7DCEF352" name="X7CBD8AAF7DCEF352"></a></p>
+<p><a id="X7CBD8AAF7DCEF352" name="X7CBD8AAF7DCEF352"></a></p>
 <div class="ChapSects"><a href="chap4_mj.html#X7CBD8AAF7DCEF352">4 <span class="Heading">AutoDoc</span></a>
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4_mj.html#X863584DB8497D8BA">4.1 <span class="Heading">The AutoDoc() function</span></a>
 </span>
@@ -46,7 +45,7 @@
 
 <h5>4.1-1 AutoDoc</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AutoDoc</code>( [<var class="Arg">package</var>[, <var class="Arg">optrec</var>]] )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AutoDoc</code>( [<var class="Arg">package</var>[, <var class="Arg">optrec</var>]] )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: nothing</p>
 
 <p>This is the main function of the <strong class="pkg">AutoDoc</strong> package. It can perform any combination of the following three tasks:</p>
@@ -58,7 +57,7 @@
 <li><p>It can scan your package for <strong class="pkg">AutoDoc</strong> based documentation (by using <strong class="pkg">AutoDoc</strong> tags and the Autodoc command. This will produce further XML files to be used as part of the package manual.</p>
 
 </li>
-<li><p>It can use <strong class="pkg">GAPDoc</strong> to generate PDF, text and HTML (with MathJaX enabled) documentation from the <strong class="pkg">GAPDoc</strong> XML files it generated as well as additional such files provided by you. For this, it invokes <code class="func">MakeGAPDocDoc</code> (<span class="RefLink">???</span>) to convert the XML sources, and it also instructs <strong class="pkg">GAPDoc</strong> to copy supplementary files (such as CSS style files) into your doc directory (see <code class="func">CopyHTMLStyleFiles</code> (<span class="RefLink">???</span>)).</p>
+<li><p>It can use <strong class="pkg">GAPDoc</strong> to generate PDF, text and HTML (with MathJaX enabled) documentation from the <strong class="pkg">GAPDoc</strong> XML files it generated as well as additional such files provided by you. For this, it invokes <code class="func">MakeGAPDocDoc</code> (<a href="../../../pkg/GAPDoc-1.6.2/doc/chap5_mj.html#X826F530686F4D052"><span class="RefLink">GAPDoc: MakeGAPDocDoc</span></a>) to convert the XML sources, and it also instructs <strong class="pkg">GAPDoc</strong> to copy supplementary files (such as CSS style files) into your doc directory (see <code class="func">CopyHTMLStyleFiles</code> (<a href="../../../pkg/GAPDoc-1.6.2/doc/chap5_mj.html#X813599E982DE9B98"><span class="RefLink">GAPDoc: CopyHTMLStyleFiles</span></a>)).</p>
 
 </li>
 </ol>
@@ -134,7 +133,7 @@ RELEASEYEAR := "2015" )</pre></div>
 <div class="example"><pre>
 rec( Acknowledgements := "Many thanks to ..." )</pre></div>
 
-<p>For a list of valid entries in the title page, please refer to the <strong class="pkg">GAPDoc</strong> manual, specifically section <span class="RefLink">???</span>.</p>
+<p>For a list of valid entries in the title page, please refer to the <strong class="pkg">GAPDoc</strong> manual, specifically section <a href="../../../pkg/GAPDoc-1.6.2/doc/chap3_mj.html#X842B421A7FBCDD2C"><span class="RefLink">GAPDoc: TitlePage</span></a>.</p>
 
 </dd>
 <dt><strong class="Mark"><var class="Arg">MainPage</var></strong></dt>
@@ -200,15 +199,30 @@ rec( Acknowledgements := "Many thanks to ..." )</pre></div>
 
 </dd>
 <dt><strong class="Mark"><var class="Arg">gap_root_relative_path</var></strong></dt>
-<dd><p>Either a boolean, or a string containing a relative path. By default (if this option is not set, or is set to <code class="keyw">false</code>), references in the generated documentation referring to external documentation (such as the GAP manual) are encoded using absolute paths. This is fine as long as the documentation stays on only a single computer, but is problematic when preparing documentation that should be used on multiple computers, e.g., when creating a distribution archive of a GAP package.<br /> Thus, if a relative path is provided via this option (or if it is set to true, in which case the relative path <code class="file">../../..</code> is used), then <strong class="pkg">AutoDoc</strong> and <strong class="pkg">GAPDoc</strong> attempt to replace all absolute paths in references to GAP manuals by paths based on this relative path.</p>
+<dd><p>Either a boolean, or a string containing a relative path. By default (if this option is not set, or is set to <code class="keyw">false</code>), references in the generated documentation referring to external documentation (such as the GAP manual) are encoded using absolute paths. This is fine as long as the documentation stays on only a single computer, but is problematic when preparing documentation that should be used on multiple computers, e.g., when creating a distribution archive of a GAP package.<br /> Thus, if a relative path is provided via this option (or if it is set to <code class="keyw">true</code>, in which case the relative path <code class="file">../../..</code> is used), then <strong class="pkg">AutoDoc</strong> and <strong class="pkg">GAPDoc</strong> attempt to replace all absolute paths in references to GAP manuals by paths based on this relative path.</p>
 
-<p>On a technical level, <strong class="pkg">AutoDoc</strong> passes the relative path to the <var class="Arg">gaproot</var> parameter of <code class="func">MakeGAPDocDoc</code> (<span class="RefLink">???</span>)</p>
+<p>On a technical level, <strong class="pkg">AutoDoc</strong> passes the relative path to the <var class="Arg">gaproot</var> parameter of <code class="func">MakeGAPDocDoc</code> (<a href="../../../pkg/GAPDoc-1.6.2/doc/chap5_mj.html#X826F530686F4D052"><span class="RefLink">GAPDoc: MakeGAPDocDoc</span></a>)</p>
+
+</dd>
+</dl>
+</dd>
+<dt><strong class="Mark"><var class="Arg">extract_examples</var></strong></dt>
+<dd><p>Either <code class="keyw">true</code> or a record. If set to <code class="keyw">true</code>, then all manual examples are extracted and placed into files <code class="file">tst/PACKAGENAME01.tst</code>, <code class="file">tst/PACKAGENAME02.tst</code>, ... and so on, with one file for each chapter. As a record, the entry can have the following entries itself, to specify some options.</p>
+
+
+<dl>
+<dt><strong class="Mark">units</strong></dt>
+<dd><p>This controls how examples are grouped into files. Recognized values are "Chapter" (default), "Section", "Subsection" or "Single". Depending on the value, one file is created for each chapter, each section, each subsection or each example. For all other values only a single file is created.</p>
+
+<p>On a technical level, <strong class="pkg">AutoDoc</strong> passes the value to the <var class="Arg">units</var> parameter of <code class="func">ExtractExamples</code> (<a href="../../../pkg/GAPDoc-1.6.2/doc/chap5_mj.html#X8337B2BC79253B3F"><span class="RefLink">GAPDoc: ExtractExamples</span></a>).</p>
 
 </dd>
 </dl>
 </dd>
 <dt><strong class="Mark"><var class="Arg">maketest</var></strong></dt>
-<dd><p>The maketest item can be true or a record. When it is true, a simple maketest.g is created in the main package directory, which can be used to test the examples from the manual. As a record, the entry can have the following entries itself, to specify some options.</p>
+<dd><p><em>This option is deprecated. Please use <code class="code">extract_examples</code> instead.</em></p>
+
+<p>Either <code class="keyw">true</code> or a record. When it is <code class="keyw">true</code>, a simple <code class="file">maketest.g</code> file is created in the main package directory, which can be used to test the examples from the manual. As a record, the entry can have the following entries itself, to specify some options.</p>
 
 
 <dl>

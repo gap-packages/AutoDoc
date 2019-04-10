@@ -6,7 +6,7 @@
   
   [1X4.1-1 AutoDoc[101X
   
-  [29X[2XAutoDoc[102X( [[3Xpackage[103X[, [3Xoptrec[103X]] ) [32X function
+  [33X[1;0Y[29X[2XAutoDoc[102X( [[3Xpackage[103X[, [3Xoptrec[103X]] ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ynothing[133X
   
   [33X[0;0YThis  is  the  main  function  of  the  [5XAutoDoc[105X  package. It can perform any
@@ -32,10 +32,10 @@
   [31X3[131X   [33X[0;6YIt  can  use  [5XGAPDoc[105X  to  generate  PDF,  text  and HTML (with MathJaX
         enabled)  documentation from the [5XGAPDoc[105X XML files it generated as well
         as  additional  such  files  provided  by  you.  For  this, it invokes
-        [2XMakeGAPDocDoc[102X  ([14XMakeGAPDocDoc???[114X)  to  convert the XML sources, and it
-        also  instructs  [5XGAPDoc[105X to copy supplementary files (such as CSS style
-        files)    into    your    doc    directory   (see   [2XCopyHTMLStyleFiles[102X
-        ([14XCopyHTMLStyleFiles???[114X)).[133X
+        [2XMakeGAPDocDoc[102X  ([14XGAPDoc: MakeGAPDocDoc[114X) to convert the XML sources, and
+        it  also  instructs  [5XGAPDoc[105X  to  copy supplementary files (such as CSS
+        style  files) into your doc directory (see [2XCopyHTMLStyleFiles[102X ([14XGAPDoc:
+        CopyHTMLStyleFiles[114X)).[133X
   
   [33X[0;0YFor more information and some examples, please refer to Chapter [14X1[114X.[133X
   
@@ -141,8 +141,8 @@
                     [4X[32X[104X
   
                     [33X[0;18YFor  a  list  of  valid  entries in the title page, please
-                    refer   to   the   [5XGAPDoc[105X   manual,  specifically  section
-                    [14XTitlePage???[114X.[133X
+                    refer  to the [5XGAPDoc[105X manual, specifically section [14X'GAPDoc:
+                    TitlePage'[114X.[133X
   
               [8X[3XMainPage[103X[8X[108X
                     [33X[0;18YIf  scaffolding  is enabled, by default a main XML file is
@@ -254,20 +254,41 @@
                     should  be used on multiple computers, e.g., when creating
                     a distribution archive of a GAP package.[133X
                     [33X[0;18YThus,  if  a relative path is provided via this option (or
-                    if  it  is  set  to  true, in which case the relative path
+                    if  it  is  set  to  [9Xtrue[109X, in which case the relative path
                     [11X../../..[111X  is  used),  then  [5XAutoDoc[105X  and [5XGAPDoc[105X attempt to
                     replace all absolute paths in references to GAP manuals by
                     paths based on this relative path.[133X
   
                     [33X[0;18YOn  a technical level, [5XAutoDoc[105X passes the relative path to
-                    the [3Xgaproot[103X parameter of [2XMakeGAPDocDoc[102X ([14XMakeGAPDocDoc???[114X)[133X
+                    the    [3Xgaproot[103X   parameter   of   [2XMakeGAPDocDoc[102X   ([14XGAPDoc:
+                    MakeGAPDocDoc[114X)[133X
+  
+        [8X[3Xextract_examples[103X[8X[108X
+              [33X[0;12YEither  [9Xtrue[109X  or  a  record.  If  set  to  [9Xtrue[109X, then all manual
+              examples     are     extracted    and    placed    into    files
+              [11Xtst/PACKAGENAME01.tst[111X,  [11Xtst/PACKAGENAME02.tst[111X,  ...  and  so on,
+              with  one file for each chapter. As a record, the entry can have
+              the following entries itself, to specify some options.[133X
+  
+              [8Xunits[108X
+                    [33X[0;18YThis   controls  how  examples  are  grouped  into  files.
+                    Recognized  values  are  "Chapter"  (default),  "Section",
+                    "Subsection" or "Single". Depending on the value, one file
+                    is created for each chapter, each section, each subsection
+                    or  each  example. For all other values only a single file
+                    is created.[133X
+  
+                    [33X[0;18YOn  a  technical  level,  [5XAutoDoc[105X  passes the value to the
+                    [3Xunits[103X     parameter     of     [2XExtractExamples[102X    ([14XGAPDoc:
+                    ExtractExamples[114X).[133X
   
         [8X[3Xmaketest[103X[8X[108X
-              [33X[0;12YThe  maketest  item  can be true or a record. When it is true, a
-              simple  maketest.g  is  created  in  the main package directory,
-              which  can  be  used  to test the examples from the manual. As a
-              record,  the  entry  can  have  the following entries itself, to
-              specify some options.[133X
+              [33X[0;12Y[13XThis option is deprecated. Please use [10Xextract_examples[110X instead.[113X[133X
+  
+              [33X[0;12YEither  [9Xtrue[109X  or  a record. When it is [9Xtrue[109X, a simple [11Xmaketest.g[111X
+              file is created in the main package directory, which can be used
+              to test the examples from the manual. As a record, the entry can
+              have the following entries itself, to specify some options.[133X
   
               [8Xfilename[108X
                     [33X[0;18YSets the name of the test file.[133X

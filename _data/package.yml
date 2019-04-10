@@ -1,6 +1,6 @@
 name: AutoDoc
-version: 2019.02.22
-date: 2019-02-22
+version: 2019.04.10
+date: 2019-04-10
 description: |
     Generate documentation from GAP source code
 
@@ -16,6 +16,14 @@ maintainers:
     - name: Max Horn
       url: https://www.quendi.de/math
 
+contributors:
+    - name: Mohamed Barakat
+    - name: Markus Pfeiffer
+    - name: Øystein Skartsæterhagen
+    - name: Chris Wensley
+    - name: Glen Whitney
+    - name: Fabian Zickgraf
+
 GAP: ">= 4.5"
 
 needed-pkgs:
@@ -29,7 +37,7 @@ packageinfo: https://gap-packages.github.io/AutoDoc/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/AutoDoc/releases/download/v2019.02.22/AutoDoc-2019.02.22.tar.gz
+      url: https://github.com/gap-packages/AutoDoc/releases/download/v2019.04.10/AutoDoc-2019.04.10.tar.gz
 
 abstract: |
 

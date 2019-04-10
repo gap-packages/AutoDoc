@@ -172,9 +172,9 @@
   [33X[0;0YSuppose you already have a complete XML manual, with some main and title XML
   files  and  some  documentation for operations distributed over all your [11X.g[111X,
   [11X.gd[111X,  and  [11X.gi[111X files. Suppose the main XML file is named [11XPACKAGENAME.xml[111X and
-  is  in  the [11X/doc[111X subfolder of your package. Then you can rebuild your manual
-  by  executing  the  following  two  GAP commands from a GAP sessions started
-  started in the root directory of your package:[133X
+  is  in  the  [11X/doc[111X  subdirectory  of  your package. Then you can rebuild your
+  manual  by  executing  the  following  two  GAP commands from a GAP sessions
+  started started in the root directory of your package:[133X
   
   [4X[32X[104X
     [4XLoadPackage( "AutoDoc" );[104X
@@ -208,21 +208,17 @@
   [33X[0;0YNote  that  in  particular, you do not have to worry about keeping a list of
   your implementation files up-to-date.[133X
   
-  [33X[0;0YBut  there  is  more.  [5XAutoDoc[105X  can create a [11Xmaketest.g[111X file, which uses the
-  examples in your manual to test your package. This can be achieved via[133X
+  [33X[0;0YBut  there  is more. [5XAutoDoc[105X can create [11X.tst[111X files from the examples in your
+  manual to test your package. This can be achieved via[133X
   
   [4X[32X[104X
     [4XLoadPackage( "AutoDoc" );[104X
-    [4XAutoDoc( rec( maketest := true ) );[104X
+    [4XAutoDoc( rec( extract_examples := true ) );[104X
   [4X[32X[104X
   
-  [33X[0;0YNow the file [11Xmaketest.g[111X appears in your package directory, and[133X
-  
-  [4X[32X[104X
-    [4Xgap maketest.g[104X
-  [4X[32X[104X
-  
-  [33X[0;0Ytests the examples from your manual.[133X
+  [33X[0;0YNow  files  [11XPACKAGENAME01.tst[111X,  [11XPACKAGENAME02.tst[111X  and so appear in the [11Xtst/[111X
+  subdirectory  of  your  package,  and  can  be  tested  as  usual using [2XTest[102X
+  ([14X???Test???[114X) respectively [2XTestDirectory[102X ([14X???TestDirectory???[114X).[133X
   
   
   [1X1.3-2 [33X[0;0YSetting different [5XGAPDoc[105X[101X[1X options[133X[101X
@@ -270,9 +266,9 @@
   useful  if you want to build a release tarball or move your [5XGAP[105X installation
   around  later. Suppose you are starting [5XGAP[105X in the root path of your package
   as  always,  and  the  standard  call of [2XAutoDoc[102X ([14X4.1-1[114X) will then build the
-  documentation  in  the  [11Xdoc[111X subfolder of your package. From this folder, the
-  gap  root  directory has the relative path [11X../../..[111X. Then you can enable the
-  relative paths by[133X
+  documentation  in the [11Xdoc[111X subdirectory of your package. From this directory,
+  the  gap  root directory has the relative path [11X../../..[111X. Then you can enable
+  the relative paths by[133X
   
   [4X[32X[104X
     [4XLoadPackage( "AutoDoc" );[104X
@@ -493,17 +489,17 @@
   
   [33X[0;0YNow,  one  can  create a PDF and HTML document, like a package documentation
   out  of  it.  Suppose the document above is saved as [11Xworksheet.g[111X. Then, when
-  GAP is started in the folder of this file, the command[133X
+  GAP is started in the directory of this file, the command[133X
   
   [4X[32X[104X
     [4XAutoDocWorksheet( "worksheet.g" );[104X
   [4X[32X[104X
   
-  [33X[0;0Ywill create a subfolder called [11Xdoc[111X of the current directory in which it will
-  create  the documentation. There are several options to configure the output
-  of  the worksheet command, which are identical to the options of the [2XAutoDoc[102X
-  ([14X4.1-1[114X)  command.  It is even possible to test the examples in the worksheet
-  using the maketest option from the AutoDoc command.[133X
+  [33X[0;0Ywill  create  a subdirectory called [11Xdoc[111X of the current directory in which it
+  will  create  the  documentation. There are several options to configure the
+  output  of  the worksheet command, which are identical to the options of the
+  [2XAutoDoc[102X  ([14X4.1-1[114X)  command.  It  is even possible to test the examples in the
+  worksheet using the [10Xextract_examples[110X option of the [2XAutoDoc[102X ([14X4.1-1[114X) command.[133X
   
   [33X[0;0YSince the worksheets do not have a [11XPackageInfo.g[111X to extract information, all
   possible  tags  that  [5XGAPDoc[105X supports for the title page can be set into the
