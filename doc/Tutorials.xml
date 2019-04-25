@@ -255,7 +255,7 @@ AutoDoc( rec( extract_examples := true ) );
 </Listing>
 Now files <F>PACKAGENAME01.tst</F>, <F>PACKAGENAME02.tst</F> and so appear in the
 <F>tst/</F> subdirectory of your package, and can be tested as usual using
-<Ref Func="Test"/> respectively <Ref Func="TestDirectory"/>.
+<Ref BookName="ref" Func="Test"/> respectively <Ref BookName="ref" Func="TestDirectory"/>.
 </Subsection>
 
 <Subsection Label="Tut:IntegrateExisting:GapDocOptions">
