@@ -462,7 +462,7 @@ And then later, insert the example in a different file, like this:
 <Index Key="@EndSystem"><C>@EndSystem</C></Index>
 <Index Key="@InsertSystem"><C>@InsertSystem <A>name</A></C></Index>
 <Heading><C>@BeginSystem <A>name</A></C>, <C>@EndSystem</C>, and <C>@InsertSystem <A>name</A></C></Heading>
-Same as <C>@BeginChunk</C> etc. This command is deprecated. Please use the chunk commands instead.
+Same as <C>@BeginChunk</C> etc. These command are deprecated. Please use the chunk commands instead.
 </Subsection>
 
 <Subsection Label="@BeginCode">
