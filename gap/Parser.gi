@@ -411,7 +411,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             if temp_curr_line[ Length( temp_curr_line )] = '\n' then
                 temp_curr_line := temp_curr_line{[ 1 .. Length( temp_curr_line ) - 1 ]};
             fi;
-            if filestream = fail or PositionSublist( temp_curr_line, "@EndExample" ) <> fail or PositionSublist( temp_curr_line, "@EndLog" ) <> fail then
+            if filestream = fail or PositionSublist( temp_curr_line, "@EndExample" ) <> fail
+                                 or PositionSublist( temp_curr_line, "@EndLog" ) <> fail then
                 break;
             fi;
             ##if is comment, simply remove comments.
@@ -633,10 +634,10 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @Level := function()
             current_item!.level := Int( current_command[ 2 ] );
         end,
+
         @InsertChunk := function()
             Add( current_item, DocumentationDummy( tree, current_command[ 2 ] ) );
         end,
-        @InsertSystem := ~.@InsertChunk,
         @BeginChunk := function()
             if IsBound( current_item ) then
                 Add( context_stack, current_item );
@@ -644,15 +645,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             current_item := DocumentationDummy( tree, current_command[ 2 ] );
         end,
         @Chunk := ~.@BeginChunk,
-        @System := ~.@BeginChunk,
-        @BeginSystem := ~.@BeginChunk,
-        @BeginCode := function()
-            local tmp_system;
-            tmp_system := DocumentationCode( tree, current_command[ 2 ] );
-            Append( tmp_system!.content, read_code() );
-        end,
-        @Code := ~.@BeginCode,
-        @InsertCode := ~.@InsertSystem,
         @EndChunk := function()
             if autodoc_read_line = true then
                 autodoc_read_line := false;
@@ -663,12 +655,26 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 Unbind( current_item );
             fi;
         end,
-        @EndSystem := ~.@EndChunk,
+
+        @InsertSystem := ~.@InsertChunk, # deprecated
+        @System := ~.@BeginChunk, # deprecated
+        @BeginSystem := ~.@BeginChunk, # deprecated
+        @EndSystem := ~.@EndChunk, # deprecated
+
+        @BeginCode := function()
+            local tmp_system;
+            tmp_system := DocumentationCode( tree, current_command[ 2 ] );
+            Append( tmp_system!.content, read_code() );
+        end,
+        @Code := ~.@BeginCode,
+        @InsertCode := ~.@InsertChunk,
+
         @BeginExample := function()
             local example_node;
             example_node := read_example( true );
             Add( current_item, example_node );
         end,
+
         @Example := ~.@BeginExample,
         @BeginLog := function()
             local example_node;
@@ -676,6 +682,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             Add( current_item, example_node );
         end,
         @Log := ~.@BeginLog,
+
         STRING := function()
             local comment_pos;
             if not IsBound( current_item ) then
