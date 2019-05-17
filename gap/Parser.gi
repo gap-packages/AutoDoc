@@ -135,7 +135,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           level_scope, scope_group, read_example, command_function_record, autodoc_read_line,
           current_command, was_declaration, filename, system_scope, groupnumber, chunk_list, rest_of_file_skipped,
           context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,
-          current_line_unedited,
+          current_line_unedited, deprecated,
           ReadLineWithLineCount, Normalized_ReadLine, line_number, ErrorWithPos, create_title_item_function,
           current_line_positition_for_filter, read_session_example;
     groupnumber := 0;
@@ -475,6 +475,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         od;
         return example_node;
     end;
+    deprecated := function(name, f)
+        return function(args...)
+            Info(InfoWarning, 1, TextAttr.1, "WARNING: ----------------------------------------------------------------------------", TextAttr.reset);
+            Info(InfoWarning, 1, TextAttr.1, "WARNING: ", name, " is deprecated; please refer to the AutoDoc manual for details", TextAttr.reset);
+            Info(InfoWarning, 1, TextAttr.1, "WARNING: ----------------------------------------------------------------------------", TextAttr.reset);
+            f();
+        end;
+    end;
     command_function_record := rec(
         ## HACK: Needed for AutoDoc parser to be scanned savely.
         ##       The lines where the AutoDoc comments are
@@ -543,11 +551,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             scope_section := SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] );
             scope_section!.title_string := current_command[ 2 ];
         end,
-        @EndSection := function()
+        @EndSection := deprecated("@EndSection", function()
             Unbind( chapter_info[ 2 ] );
             Unbind( chapter_info[ 3 ] );
             current_item := ChapterInTree( tree, chapter_info[ 1 ] );
-        end,
+        end),
         @Subsection := function()
             local scope_subsection;
             if not IsBound( chapter_info[ 1 ] ) or not IsBound( chapter_info[ 2 ] ) then
@@ -574,10 +582,10 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             scope_subsection := SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], chapter_info[ 3 ] );
             scope_subsection!.title_string := current_command[ 2 ];
         end,
-        @EndSubsection := function()
+        @EndSubsection := deprecated("@EndSubsection", function()
             Unbind( chapter_info[ 3 ] );
             current_item := SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] );
-        end,
+        end),
         @BeginGroup := function()
             local grp;
             if current_command[ 2 ] = "" then
@@ -659,10 +667,10 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
         end,
 
-        @InsertSystem := ~.@InsertChunk, # deprecated
-        @System := ~.@BeginChunk, # deprecated
-        @BeginSystem := ~.@BeginChunk, # deprecated
-        @EndSystem := ~.@EndChunk, # deprecated
+        @InsertSystem := deprecated("@InsertSystem", ~.@InsertChunk),
+        @System := deprecated("@System", ~.@BeginChunk),
+        @BeginSystem := ~.@System,
+        @EndSystem := deprecated("@EndSystem", ~.@EndChunk),
 
         @BeginCode := function()
             local tmp_system;
