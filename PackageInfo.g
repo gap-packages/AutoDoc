@@ -1,14 +1,9 @@
-#############################################################################
-##
-##  AutoDoc package
-##
-##  Copyright 2012-2016
-##    Sebastian Gutsche, University of Kaiserslautern
-##    Max Horn, Universität Siegen
-##
-##  Licensed under the GPL 2 or later.
-##
-#############################################################################
+# AutoDoc: Generate documentation from GAP source code
+#
+# Copyright of AutoDoc belongs to its developers.
+# Please refer to the COPYRIGHT file for details.
+#
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 
 SetPackageInfo( rec(
@@ -101,7 +96,7 @@ SourceRepository := rec(
 ),
 IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
 PackageWWWHome  := Concatenation( "https://gap-packages.github.io/", ~.PackageName ),
-README_URL      := Concatenation( ~.PackageWWWHome, "/README" ),
+README_URL      := Concatenation( ~.PackageWWWHome, "/README.md" ),
 PackageInfoURL  := Concatenation( ~.PackageWWWHome, "/PackageInfo.g" ),
 ArchiveURL      := Concatenation( ~.SourceRepository.URL,
                                  "/releases/download/v", ~.Version,

@@ -1,14 +1,9 @@
-#############################################################################
-##
-##  AutoDoc package
-##
-##  Copyright 2012-2016
-##    Sebastian Gutsche, University of Kaiserslautern
-##    Max Horn, Universität Siegen
-##
-## Licensed under the GPL 2 or later.
-##
-#############################################################################
+# AutoDoc: Generate documentation from GAP source code
+#
+# Copyright of AutoDoc belongs to its developers.
+# Please refer to the COPYRIGHT file for details.
+#
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 #! @Chapter AutoDoc
 
