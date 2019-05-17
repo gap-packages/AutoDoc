@@ -72,7 +72,7 @@ function( arg )
           doc_dir, doc_dir_rel, tmp, key, val, file,
           pkgdirstr, docdirstr,
           title_page, tree, is_worksheet,
-          position_document_class, gapdoc_latex_option_record,
+          position_document_class,
           makeDocFun, args;
 
     if Length( arg ) >= 3 then
@@ -408,8 +408,6 @@ function( arg )
     #
     # Generate scaffold
     #
-    gapdoc_latex_option_record := rec( );
-
     if IsBound( scaffold ) then
         ## Syntax is [ "class", [ "options" ] ]
         if IsBound( scaffold.document_class ) then
@@ -441,17 +439,13 @@ function( arg )
             GAPDoc2LaTeXProcs.Head := StringFile( scaffold.latex_header_file );
         fi;
 
+        # check for legacy gapdoc_latex_options
         if IsBound( scaffold.gapdoc_latex_options ) then
-            if IsRecord( scaffold.gapdoc_latex_options ) then
-                for key in RecNames( scaffold.gapdoc_latex_options ) do
-                    if not IsString( scaffold.gapdoc_latex_options.( key ) )
-                       and IsList( scaffold.gapdoc_latex_options.( key ) )
-                       and LowercaseString( scaffold.gapdoc_latex_options.( key )[ 1 ] ) = "file" then
-                        scaffold.gapdoc_latex_options.( key ) := StringFile( scaffold.gapdoc_latex_options.( key )[ 2 ] );
-                    fi;
-                od;
-
-                gapdoc_latex_option_record := scaffold.gapdoc_latex_options;
+            Info( InfoWarning, 1, TextAttr.1,
+                  "WARNING: Please replace the DEPRECATED option <scaffold.gapdoc_latex_options> ",
+                  "by <gapdoc.LaTeXOptions>", TextAttr.reset );
+            if not IsBound( gapdoc.LaTeXOptions ) then
+                gapdoc.LaTeXOptions := scaffold.gapdoc_latex_options;
             fi;
         fi;
 
@@ -527,11 +521,24 @@ function( arg )
     #
     if IsBound( gapdoc ) then
 
+        AUTODOC_SetIfMissing(gapdoc, "LaTeXOptions", rec() );
+        if not IsRecord( gapdoc.LaTeXOptions ) then
+            Error("gapdoc.LaTeXOptions must be a record");
+        fi;
+        for key in RecNames( gapdoc.LaTeXOptions ) do
+            if not IsString( gapdoc.LaTeXOptions.( key ) )
+               and IsList( gapdoc.LaTeXOptions.( key ) )
+               and LowercaseString( gapdoc.LaTeXOptions.( key )[ 1 ] ) = "file" then
+                gapdoc.LaTeXOptions.( key ) := StringFile( gapdoc.LaTeXOptions.( key )[ 2 ] );
+            fi;
+        od;
+
+
         # Ask GAPDoc to use UTF-8 as input encoding for LaTeX, as the XML files
         # of the documentation are also in UTF-8 encoding, and may contain characters
         # not contained in the default Latin 1 encoding.
-        AUTODOC_SetIfMissing( gapdoc_latex_option_record, "InputEncoding", "utf8" );
-        SetGapDocLaTeXOptions( gapdoc_latex_option_record );
+        AUTODOC_SetIfMissing( gapdoc.LaTeXOptions, "InputEncoding", "utf8" );
+        SetGapDocLaTeXOptions( gapdoc.LaTeXOptions );
         
         ## HACK: If there is an empty index, MakeGAPDocDoc throws an error when creating the pdf.
         ## this addition prevents this by fake adding the index to the page number log. See issue 106.

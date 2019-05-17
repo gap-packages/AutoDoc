@@ -7,16 +7,18 @@
 
 LoadPackage("AutoDoc");
 
-AutoDoc(rec( 
+AutoDoc( rec( 
     autodoc := true,
+    gapdoc := rec(
+        LaTeXOptions := rec( EarlyExtraPreamble := """
+            \usepackage{a4wide}
+            \newcommand{\bbZ}{\mathbb{Z}}
+        """ )
+    ),
     scaffold := rec(
         includes := [ "Tutorials.xml", 
                       "Comments.xml" ],
         bib := "bib.xml", 
-        gapdoc_latex_options := rec( EarlyExtraPreamble := """
-            \usepackage{a4wide} 
-            \newcommand{\bbZ} {\mathbb{Z}}
-        """ ),  
         entities := rec( 
             io := "<Package>io</Package>", 
             PackageName := "<Package>PackageName</Package>" 
