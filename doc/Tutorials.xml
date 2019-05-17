@@ -346,7 +346,7 @@ Edit <File>PackageName/makedoc.g</File> as follows.
   add <Code>LoadPackage("PackageName");</Code>. 
   </Item> 
   <Item> 
-  In the <Code>AutoDoc</Code> record delete <Code>AutoDoc := true;</Code>. 
+  In the <Code>AutoDoc</Code> record delete <Code>autodoc := true;</Code>. 
   </Item>
   <Item> 
   <Index Key="Scaffold record in makedoc.g"></Index> 
@@ -364,12 +364,16 @@ Edit <File>PackageName/makedoc.g</File> as follows.
   you should rename this file <File>PackageName.bib</File>. 
   </Item>
   <Item> 
-  In the <Code>gapdoc_latex_options</Code> record enter any 
+  <Index Key="LaTeXOptions record in makedoc.g"></Index>
+  In the <Code>LaTeXOptions</Code> record,
+  which is in the <Code>gapdoc</Code> record, enter any
   &LaTeX; <Code>newcommands</Code> previously in <File>manual.xml</File>. 
   (If there are none you may safely delete this record.) 
-  To illustrate this option the &AutoDoc; file <File>makedoc.g</File> 
-  defines the command <Code>\bbZ</Code> which may be used to produce 
-  the &LaTeX; formula <M>f : \bbZ^2 \to \bbZ</M>. 
+  To illustrate this option, the &AutoDoc; file <File>makedoc.g</File>
+  defines the command <Code>\bbZ</Code>
+  by <Code>\newcommand{\bbZ}{\mathbb{Z}}</Code>,
+  which may be used to produce
+  the &LaTeX; formula <M>f : \bbZ^2 \to \bbZ</M>.
   </Item>
   <Item> 
   <Index Key="Entities record in makedoc.g"></Index> 
