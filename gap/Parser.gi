@@ -168,10 +168,18 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         if IsBound( current_item ) and IsTreeForDocumentationNodeForManItemRep( current_item ) then
             return current_item;
         fi;
-        man_item := DocumentationManItem( tree );
+
+        # implicitly end any subsection
+        if IsBound( chapter_info[ 3 ] ) then
+            Unbind( chapter_info[ 3 ] );
+            current_item := SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] );
+        fi;
+
         if IsBound( current_item ) then
             Add( context_stack, current_item );
         fi;
+
+        man_item := DocumentationManItem( tree );
         if IsBound( scope_group ) then
             SetGroupName( man_item, scope_group );
         fi;

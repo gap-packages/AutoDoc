@@ -182,6 +182,7 @@ for setting the same chapter as active chapter again.
 <Index Key="@SectionTitle"><C>@SectionTitle</C></Index>
 <Heading><C>@Section <A>name</A></C></Heading>
 Sets an active section like <C>@Chapter</C> sets an active chapter.
+The section automatically ends with the next <C>@Section</C> or <C>@Chapter</C> command.
 
 <Listing><![CDATA[
 #! @Section My first manual section
@@ -214,7 +215,11 @@ opening it might cause unexpected errors.
 <Index Key="@SubsectionLabel"><C>@SubsectionLabel</C></Index>
 <Index Key="@SubsectionTitle"><C>@SubsectionTitle</C></Index>
 <Heading><C>@Subsection <A>name</A></C></Heading>
-Sets an active subsection like <C>@Chapter</C> sets an active chapter.
+Sets an active subsection like <C>@Section</C> sets an active section.
+The subsection automatically ends with the next <C>@Subsection</C>,
+<C>@Section</C> or <C>@Chapter</C> command. It also ends with the
+next documented function. Indeed, internally each function <Q>manpage</Q>
+is treated like a subsection.
 
 <Listing><![CDATA[
 #! @Subsection My first manual subsection
