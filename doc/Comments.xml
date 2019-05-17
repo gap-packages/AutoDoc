@@ -200,14 +200,7 @@ can be used to set a heading for the section that is different from <A>name</A>.
 <Subsection Label="@EndSection">
 <Index Key="@EndSection"><C>@EndSection</C></Index>
 <Heading><C>@EndSection</C></Heading>
-Closes the current section. Please be careful here. Closing a section before
-opening it might cause unexpected errors.
-
-<Listing><![CDATA[
-#! @EndSection
-#### The following text again belongs to the chapter
-#! Now we could start a second section if we want to.
-]]></Listing>
+<Emph>This command is deprecated.</Emph> You can simply remove any use of it.
 </Subsection>
 
 <Subsection Label="@Subsection">
@@ -237,13 +230,7 @@ can be used to set a heading for the subsection that is different from <A>name</
 <Subsection Label="@EndSubsection">
 <Index Key="@EndSubsection"><C>@EndSubsection</C></Index>
 <Heading><C>@EndSubsection</C></Heading>
-Closes the current subsection. Please be careful here. Closing a subsection before
-opening it might cause unexpected errors.
-<Listing><![CDATA[
-#! @EndSubsection
-#### The following text again belongs to the section
-#! Now we are in the section again
-]]></Listing>
+<Emph>This command is deprecated.</Emph> You can simply remove any use of it.
 </Subsection>
 
 <Subsection Label="@BeginAutoDoc">
@@ -467,7 +454,8 @@ And then later, insert the example in a different file, like this:
 <Index Key="@EndSystem"><C>@EndSystem</C></Index>
 <Index Key="@InsertSystem"><C>@InsertSystem <A>name</A></C></Index>
 <Heading><C>@BeginSystem <A>name</A></C>, <C>@EndSystem</C>, and <C>@InsertSystem <A>name</A></C></Heading>
-Same as <C>@BeginChunk</C> etc. These command are deprecated. Please use the chunk commands instead.
+<Emph>These command are deprecated.</Emph> Please use the chunk commands from subsection
+<Ref Subsect="@BeginCode"/> instead.
 </Subsection>
 
 <Subsection Label="@BeginCode">

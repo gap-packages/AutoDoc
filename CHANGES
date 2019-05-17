@@ -1,5 +1,10 @@
 This file describes changes in the AutoDoc package.
 
+TODO
+  - Add deprecation warnings for @InsertSystem, @System, @BeginSystem, @EndSystem
+    (use @Chunk etc. instead), and also @EndSection, @EndSubsection
+  - Minor fixes in the manual
+
 2019.04.10
   - Add opt.extract_examples to AutoDoc function
   - Add @NotLatex command to complement @LatexOnly
