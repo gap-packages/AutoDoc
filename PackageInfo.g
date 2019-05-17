@@ -27,15 +27,16 @@ Persons := [
     FirstNames    := "Sebastian",
     IsAuthor      := true,
     IsMaintainer  := true,
-    Email         := "gutsche@mathematik.uni-kl.de",
-    WWWHome       := "http://wwwb.math.rwth-aachen.de/~gutsche/",
-    PostalAddress := Concatenation( [
-                       "Department of Mathematics\n",
-                       "University of Kaiserslautern\n",
-                       "67653 Kaiserslautern\n",
-                       "Germany" ] ),
-    Place         := "Kaiserslautern",
-    Institution   := "University of Kaiserslautern"
+    Email         := "gutsche@mathematik.uni-siegen.de",
+    WWWHome       := "https://algebra.mathematik.uni-siegen.de/gutsche/",
+       PostalAddress := Concatenation(
+               "Department Mathematik\n",
+               "Universität Siegen\n",
+               "Walter-Flex-Straße 3\n",
+               "57072 Siegen\n",
+               "Germany" ),
+       Place := "Siegen",
+       Institution := "Universität Siegen"
   ),
   
   rec( LastName := "Horn",
