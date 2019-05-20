@@ -145,10 +145,6 @@ rec( Acknowledgements := "Many thanks to ..." )</pre></div>
 <dd><p>Replaces the standard header from <strong class="pkg">GAPDoc</strong> completely with the header in this LaTeX file. Please be careful here, and look at GAPDoc's latexheader.tex file for an example.</p>
 
 </dd>
-<dt><strong class="Mark"><var class="Arg">gapdoc_latex_options</var></strong></dt>
-<dd><p>Must be a record with entries which can be understood by SetGapDocLaTeXOptions. Each entry can be a string, which will be given to <strong class="pkg">GAPDoc</strong> directly, or a list containing of two entries: The first one must be the string "file", the second one a filename. This file will be read and then its content is passed to <strong class="pkg">GAPDoc</strong> as option with the name of the entry.</p>
-
-</dd>
 </dl>
 </dd>
 <dt><strong class="Mark"><var class="Arg">autodoc</var></strong></dt>
@@ -193,6 +189,10 @@ rec( Acknowledgements := "Many thanks to ..." )</pre></div>
 </dd>
 <dt><strong class="Mark"><var class="Arg">scan_dirs</var></strong></dt>
 <dd><p>A list of subdirectories of the package directory (given as relative paths) which <strong class="pkg">AutoDoc</strong> then scans for .gi, .gd and .g files; all of these files are then scanned for <strong class="pkg">GAPDoc</strong> documentation comments. <br /> <em>Default value: <code class="code">[ ".", "gap", "lib", "examples", "examples/doc" ]</code>.</em></p>
+
+</dd>
+<dt><strong class="Mark"><var class="Arg">LaTeXOptions</var></strong></dt>
+<dd><p>Must be a record with entries which can be understood by <code class="func">SetGapDocLaTeXOptions</code> (<a href="../../../pkg/GAPDoc-1.6.2/doc/chap5_mj.html#X85BE6DF178423EF5"><span class="RefLink">GAPDoc: SetGapDocLaTeXOptions</span></a>). Each entry can be a string, which will be given to <strong class="pkg">GAPDoc</strong> directly, or a list containing of two entries: The first one must be the string "file", the second one a filename. This file will be read and then its content is passed to <strong class="pkg">GAPDoc</strong> as option with the name of the entry.</p>
 
 </dd>
 <dt><strong class="Mark"><var class="Arg">gap_root_relative_path</var></strong></dt>

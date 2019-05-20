@@ -1,18 +1,18 @@
 name: AutoDoc
-version: 2019.04.10
-date: 2019-04-10
+version: 2019.05.20
+date: 2019-05-20
 description: |
     Generate documentation from GAP source code
 
 authors:
     - name: Sebastian Gutsche
-      url: http://wwwb.math.rwth-aachen.de/~gutsche/
+      url: https://algebra.mathematik.uni-siegen.de/gutsche/
     - name: Max Horn
       url: https://www.quendi.de/math
 
 maintainers:
     - name: Sebastian Gutsche
-      url: http://wwwb.math.rwth-aachen.de/~gutsche/
+      url: https://algebra.mathematik.uni-siegen.de/gutsche/
     - name: Max Horn
       url: https://www.quendi.de/math
 
@@ -32,12 +32,12 @@ needed-pkgs:
       url: "http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc"
 
 www: https://gap-packages.github.io/AutoDoc
-readme: README
+readme: README.md
 packageinfo: https://gap-packages.github.io/AutoDoc/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/AutoDoc/releases/download/v2019.04.10/AutoDoc-2019.04.10.tar.gz
+      url: https://github.com/gap-packages/AutoDoc/releases/download/v2019.05.20/AutoDoc-2019.05.20.tar.gz
 
 abstract: |
 

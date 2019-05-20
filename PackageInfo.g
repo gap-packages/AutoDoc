@@ -1,21 +1,16 @@
-#############################################################################
-##
-##  AutoDoc package
-##
-##  Copyright 2012-2016
-##    Sebastian Gutsche, University of Kaiserslautern
-##    Max Horn, Universität Siegen
-##
-##  Licensed under the GPL 2 or later.
-##
-#############################################################################
+# AutoDoc: Generate documentation from GAP source code
+#
+# Copyright of AutoDoc belongs to its developers.
+# Please refer to the COPYRIGHT file for details.
+#
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 
 SetPackageInfo( rec(
 
 PackageName := "AutoDoc",
 Subtitle := "Generate documentation from GAP source code",
-Version := "2019.04.10",
+Version := "2019.05.20",
 
 Date := ~.Version{[ 1 .. 10 ]},
 Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1 .. 4 ]} ),
@@ -27,15 +22,16 @@ Persons := [
     FirstNames    := "Sebastian",
     IsAuthor      := true,
     IsMaintainer  := true,
-    Email         := "gutsche@mathematik.uni-kl.de",
-    WWWHome       := "http://wwwb.math.rwth-aachen.de/~gutsche/",
-    PostalAddress := Concatenation( [
-                       "Department of Mathematics\n",
-                       "University of Kaiserslautern\n",
-                       "67653 Kaiserslautern\n",
-                       "Germany" ] ),
-    Place         := "Kaiserslautern",
-    Institution   := "University of Kaiserslautern"
+    Email         := "gutsche@mathematik.uni-siegen.de",
+    WWWHome       := "https://algebra.mathematik.uni-siegen.de/gutsche/",
+       PostalAddress := Concatenation(
+               "Department Mathematik\n",
+               "Universität Siegen\n",
+               "Walter-Flex-Straße 3\n",
+               "57072 Siegen\n",
+               "Germany" ),
+       Place := "Siegen",
+       Institution := "Universität Siegen"
   ),
   
   rec( LastName := "Horn",
@@ -101,7 +97,7 @@ SourceRepository := rec(
 ),
 IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
 PackageWWWHome  := Concatenation( "https://gap-packages.github.io/", ~.PackageName ),
-README_URL      := Concatenation( ~.PackageWWWHome, "/README" ),
+README_URL      := Concatenation( ~.PackageWWWHome, "/README.md" ),
 PackageInfoURL  := Concatenation( ~.PackageWWWHome, "/PackageInfo.g" ),
 ArchiveURL      := Concatenation( ~.SourceRepository.URL,
                                  "/releases/download/v", ~.Version,

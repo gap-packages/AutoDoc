@@ -223,7 +223,7 @@ LoadPackage( "AutoDoc" );
 AutoDoc( rec( extract_examples := true ) );
 </pre></div>
 
-<p>Now files <code class="file">PACKAGENAME01.tst</code>, <code class="file">PACKAGENAME02.tst</code> and so appear in the <code class="file">tst/</code> subdirectory of your package, and can be tested as usual using <code class="func">Test</code> (<span class="RefLink">???</span>) respectively <code class="func">TestDirectory</code> (<span class="RefLink">???</span>).</p>
+<p>Now files <code class="file">PACKAGENAME01.tst</code>, <code class="file">PACKAGENAME02.tst</code> and so appear in the <code class="file">tst/</code> subdirectory of your package, and can be tested as usual using <code class="func">Test</code> (<a href="../../../doc/ref/chap7_mj.html#X87712F9D8732193C"><span class="RefLink">Reference: Test</span></a>) respectively <code class="func">TestDirectory</code> (<a href="../../../doc/ref/chap7_mj.html#X87AF67528799481F"><span class="RefLink">Reference: TestDirectory</span></a>).</p>
 
 <p><a id="X7D0DDF2284F2D24A" name="X7D0DDF2284F2D24A"></a></p>
 
@@ -300,7 +300,7 @@ Checklist for converting an existing <strong class="pkg">GAPDoc</strong> manual 
 <li><p>After <code class="code">LoadPackage("AutoDoc");</code> add <code class="code">LoadPackage("PackageName");</code>.</p>
 
 </li>
-<li><p>In the <code class="code">AutoDoc</code> record delete <code class="code">AutoDoc := true;</code>.</p>
+<li><p>In the <code class="code">AutoDoc</code> record delete <code class="code">autodoc := true;</code>.</p>
 
 </li>
 <li><p>In the <code class="code">scaffold</code> record change the <code class="code">includes</code> list to be the list of your <code class="code">.xml</code> files that are contained in <code class="file">manual.xml</code>.</p>
@@ -309,7 +309,7 @@ Checklist for converting an existing <strong class="pkg">GAPDoc</strong> manual 
 <li><p>If you do not have a bibliography you may delete the <code class="code">bib := "bib.xml",</code> field in the scaffold. Otherwise, edit the file name if you have a different file. If you only have a <code class="code">.bib</code> file (<code class="code">manual.bib</code> or <code class="code">bib.xml.bib</code> say) you should rename this file <code class="file">PackageName.bib</code>.</p>
 
 </li>
-<li><p>In the <code class="code">gapdoc_latex_options</code> record enter any LaTeX <code class="code">newcommands</code> previously in <code class="file">manual.xml</code>. (If there are none you may safely delete this record.) To illustrate this option the <strong class="pkg">AutoDoc</strong> file <code class="file">makedoc.g</code> defines the command <code class="code">\bbZ</code> which may be used to produce the LaTeX formula <span class="SimpleMath">f : bbZ^2 -&gt; bbZ</span>.</p>
+<li><p>In the <code class="code">LaTeXOptions</code> record, which is in the <code class="code">gapdoc</code> record, enter any LaTeX <code class="code">newcommands</code> previously in <code class="file">manual.xml</code>. (If there are none you may safely delete this record.) To illustrate this option, the <strong class="pkg">AutoDoc</strong> file <code class="file">makedoc.g</code> defines the command <code class="code">\bbZ</code> by <code class="code">\newcommand{\bbZ}{\mathbb{Z}}</code>, which may be used to produce the LaTeX formula <span class="SimpleMath">f : bbZ^2 -&gt; bbZ</span>.</p>
 
 </li>
 <li><p>In the <code class="code">entities</code> record enter any entities previously stored in <code class="file">manual.xml</code>. (Again, if you have none, you may safely delete this record.) To illustrate this option the <strong class="pkg">AutoDoc</strong> file <code class="file">makedoc.g</code> defines entities for the names of packages <strong class="pkg">io</strong> and <strong class="pkg">PackageName</strong>.</p>
