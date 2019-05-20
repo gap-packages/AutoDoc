@@ -1,8 +1,14 @@
 This file describes changes in the AutoDoc package.
 
 TODO
+  - Ensure that starting a "manpage" (= documentation for a filter, function, property,
+    ...) ends any active subsection (in GAPDoc, manpages are equivalent to subsections
+    internally, and hence cannot be nested in each other)
   - Add deprecation warnings for @InsertSystem, @System, @BeginSystem, @EndSystem
     (use @Chunk etc. instead), and also @EndSection, @EndSubsection
+  - Rename scaffold.gapdoc_latex_options to gapdoc.LaTeXOptions. The old name is still
+    supported, but triggers a deprecation warning.
+  - Update copyright information and author's contact data
   - Minor fixes in the manual
 
 2019.04.10
