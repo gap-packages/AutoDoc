@@ -1,6 +1,6 @@
 This file describes changes in the AutoDoc package.
 
-TODO
+2019.05.20
   - Ensure that starting a "manpage" (= documentation for a filter, function, property,
     ...) ends any active subsection (in GAPDoc, manpages are equivalent to subsections
     internally, and hence cannot be nested in each other)
