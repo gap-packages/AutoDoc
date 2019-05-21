@@ -474,14 +474,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         od;
         return example_node;
     end;
-    read_session_example := function( is_tested_example )
-        local temp_string_list, temp_curr_line, temp_pos_comment, is_following_line, item_temp, example_node;
+    read_session_example := function( is_tested_example, plain_text_mode )
+        local temp_string_list, temp_curr_line, temp_pos_comment,
+              is_following_line, item_temp, example_node,
+              incorporate_this_line;
         example_node := DocumentationExample( tree );
-        if is_tested_example = false then
-            example_node!.is_tested_example := false;
-        else
-            example_node!.is_tested_example := true;
-        fi;
+        example_node!.is_tested_example := is_tested_example;
         temp_string_list := example_node!.content;
         while true do
             temp_curr_line := ReadLineWithLineCount( filestream );
@@ -492,13 +490,19 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                                  or PositionSublist( temp_curr_line, "@EndLogSession" ) <> fail then
                 break;
             fi;
-            #! @DONT_SCAN_NEXT_LINE
-            temp_pos_comment := PositionSublist( temp_curr_line, "#!" );
-            if temp_pos_comment <> fail then
-                temp_curr_line := temp_curr_line{[ temp_pos_comment + 2 .. Length( temp_curr_line ) ]};
-                if Length( temp_curr_line ) >= 1 and temp_curr_line[ 1 ] = ' ' then
-                    Remove( temp_curr_line, 1 );
+            incorporate_this_line := plain_text_mode;
+            if not plain_text_mode then
+                #! @DONT_SCAN_NEXT_LINE
+                temp_pos_comment := PositionSublist( temp_curr_line, "#!" );
+                if temp_pos_comment <> fail then
+                    incorporate_this_line := true;
+                    temp_curr_line := temp_curr_line{[ temp_pos_comment + 2 .. Length( temp_curr_line ) ]};
+                    if Length( temp_curr_line ) >= 1 and temp_curr_line[ 1 ] = ' ' then
+                        Remove( temp_curr_line, 1 );
+                    fi;
                 fi;
+            fi;
+            if incorporate_this_line then
                 Add( temp_string_list, temp_curr_line );
             fi;
         od;
@@ -806,13 +810,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end,
         @ExampleSession := function()
             local example_node;
-            example_node := read_session_example( true );
+            example_node := read_session_example( true, plain_text_mode );
             Add( current_item, example_node );
         end,
         @BeginExampleSession := ~.@ExampleSession,
         @LogSession := function()
             local example_node;
-            example_node := read_session_example( false );
+            example_node := read_session_example( false, plain_text_mode );
             Add( current_item, example_node );
         end,
         @BeginLogSession := ~.@LogSession

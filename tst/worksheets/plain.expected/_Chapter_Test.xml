@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_Test">
+<Heading>Test</Heading>
+
+This is dummy text
+<Example><![CDATA[
+gap> S5 := SymmetricGroup(5);
+Sym( [ 1 .. 5 ] )
+gap> Size(S5);
+120
+]]></Example>
+
+
+And we wrap up with some dummy text
+But this should produce more text.
+</Chapter>
+
