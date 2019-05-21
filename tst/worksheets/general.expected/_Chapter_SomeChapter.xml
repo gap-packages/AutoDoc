@@ -14,6 +14,54 @@ gap> Size(S5);
 
 
 And we wrap up with some dummy text
+<Section Label="Chapter_SomeChapter_Section_Some_categories">
+<Heading>Some categories</Heading>
+
+Intro text
+<ManSection>
+  <Filt Arg="arg" Name="MyThings" Label="for IsObject"/>
+ <Returns><C>true</C> or <C>false</C>
+</Returns>
+ <Description>
+<P/>
+ </Description>
+</ManSection>
+
+
+<ManSection>
+  <Filt Arg="obj" Name="MyThingsCollection" />
+ <Returns><C>true</C> or <C>false</C>
+</Returns>
+ <Description>
+<P/>
+ </Description>
+</ManSection>
+
+
+<ManSection>
+  <Filt Arg="obj" Name="MyThingsCollColl" />
+ <Returns><C>true</C> or <C>false</C>
+</Returns>
+ <Description>
+<P/>
+ </Description>
+</ManSection>
+
+
+<ManSection>
+  <Filt Arg="obj" Name="MyThingsCollColl" />
+ <Returns><C>true</C> or <C>false</C>
+</Returns>
+ <Description>
+<P/>
+ </Description>
+</ManSection>
+
+
+Let's wrap up with something, though.
+</Section>
+
+
 <Section Label="Chapter_SomeChapter_Section_SomeSection">
 <Heading>SomeSection</Heading>
 

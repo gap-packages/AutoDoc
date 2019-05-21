@@ -63,7 +63,15 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
   function( current_item, type, default_chapter_data )
     local item_rec, entries, has_filters, ret_val;
     item_rec := current_item;
-    if PositionSublist( type, "DeclareCategory" ) <> fail then
+    if PositionSublist( type, "DeclareCategoryCollections") <> fail then
+        entries := [ "Filt", "categories" ];
+        ret_val := "<C>true</C> or <C>false</C>";
+        has_filters := "No";
+        if not IsBound( item_rec!.arguments ) then
+            item_rec!.arguments := "obj";
+        fi;
+        item_rec!.coll_suffix := true;
+    elif PositionSublist( type, "DeclareCategory" ) <> fail then
         entries := [ "Filt", "categories" ];
         ret_val := "<C>true</C> or <C>false</C>";
         has_filters := 1;
@@ -229,7 +237,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 return false;
             fi;
             current_line := current_line{ [ position_parentesis + 1 .. Length( current_line ) ] };
-            ## Not the funny part begins:
+            ## Now the funny part begins:
             ## try fetching the name:
             ## Assuming the name is in the same line as its
             while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
@@ -238,6 +246,27 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             current_line := StripBeginEnd( current_line, " " );
             current_item!.name := current_line{ [ 1 .. Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) - 1 ] };
             current_item!.name := StripBeginEnd( ReplacedString( current_item!.name, "\"", "" ), " " );
+
+            # Deal with DeclareCategoryCollections: this has some special
+            # rules on how the name of a new category is derived from the
+            # string given to it. Since the code for that is not available in
+            # a separate GAP function, we have to replicate this logic here.
+            # To understand what's going on, please refer to the
+            # DeclareCategoryCollections documentation and implementation.
+            if IsBound(current_item!.coll_suffix) then
+                if EndsWith(current_item!.name, "Collection") then
+                    current_item!.name :=
+                    current_item!.name{[1..Length(current_item!.name)-6]};
+                fi;
+                if EndsWith(current_item!.name, "Coll") then
+                    current_item!.coll_suffix := "Coll";
+                else
+                    current_item!.coll_suffix := "Collection";
+                fi;
+                current_item!.name := Concatenation(current_item!.name,
+                                                    current_item!.coll_suffix);
+            fi;
+
             current_line := current_line{ [ Minimum( [ PositionSublist( current_line, "," ), PositionSublist( current_line, ");" ) ] ) + 1 .. Length( current_line ) ] };
             filter_string := "for ";
             ## FIXME: The next two if's can be merged at some point
