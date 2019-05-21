@@ -1,0 +1,22 @@
+@Chapter Test
+#############################################################################
+##
+##  AutoDoc package
+##
+##  Test the behavior of AutoDoc on a .autodoc file
+##
+#############################################################################
+@Title Plain file.autodoc Test
+@Date 30/08/2018
+@Chapter Test
+Does AutoDoc have a way to allow that header block not to appear in
+the documentation generated from a <F>.autodoc</F> file like this?
+@BeginExampleSession
+gap> S5 := SymmetricGroup(5);
+Sym( [ 1 .. 5 ] )
+gap> Size(S5);
+120
+@EndExampleSession
+And we wrap up with some dummy text
+@EndAutoDocPlainText
+Print( "We can switch back to 'regular' mode even in a .autodoc file.\n" );

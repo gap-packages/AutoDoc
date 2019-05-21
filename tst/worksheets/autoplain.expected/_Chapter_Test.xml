@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_Test">
+<Heading>Test</Heading>
+
+#############################################################################
+##
+## AutoDoc package
+##
+## Test the behavior of AutoDoc on a .autodoc file
+##
+#############################################################################
+Does AutoDoc have a way to allow that header block not to appear in
+the documentation generated from a <F>.autodoc</F> file like this?
+<Example><![CDATA[
+gap> S5 := SymmetricGroup(5);
+Sym( [ 1 .. 5 ] )
+gap> Size(S5);
+120
+]]></Example>
+
+
+And we wrap up with some dummy text
+</Chapter>
+

@@ -2,11 +2,6 @@
 ##
 ##  AutoDoc package
 ##
-##  Copyright 2018
-##    Contributed by Glen Whitney, studioinfinity.org
-##
-##  Licensed under the GPL 2 or later.
-##
 #############################################################################
 Print( "Pretend this is a code file.\n" );
 Print( "(Even though we never use it that way.\n" );
