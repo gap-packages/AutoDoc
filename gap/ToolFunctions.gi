@@ -49,7 +49,7 @@ end );
 
 ##
 InstallGlobalFunction( AutoDoc_WriteDocEntry,
-  function( filestream, list_of_records )
+  function( filestream, list_of_records, heading )
     local return_value, description, current_description, labels, i;
 
     # look for a good return value (it should be the same everywhere)
@@ -102,7 +102,12 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
     od;
     AppendTo( filestream, ">\n" );
 
-    # Function heades
+    # Next possibly the heading for the entry
+    if IsString( heading ) then
+        AppendTo( filestream, "<Heading>", heading, "</Heading>\n" );
+    fi;
+
+    # Function headers
     for i in list_of_records do
          AppendTo( filestream, "  <", i!.item_type, " " );
         if i!.arguments <> fail and i!.item_type <> "Var" then

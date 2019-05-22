@@ -655,6 +655,28 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             group_name := ReplacedString( current_command[ 2 ], " ", "_" );
             SetGroupName( current_item, group_name );
         end,
+        @GroupTitle := function()
+            local group_name, chap_info, group_obj;
+            current_item := new_man_item();
+            if not HasGroupName( current_item ) then
+                ErrorWithPos( "found @GroupTitle with no Group set" );
+            fi;
+            group_name := GroupName( current_item );
+            chap_info := fail;
+            if HasChapterInfo( current_item ) then
+                chap_info := ChapterInfo( current_item );
+            elif IsBound( current_item!.chapter_info ) then
+                chap_info := current_item!.chapter_info;
+            fi;
+            if chap_info = fail or Length( chap_info ) = 0 then
+                chap_info := chapter_info;
+            fi;
+            if Length( chap_info ) <> 2 then
+                ErrorWithPos( "can only set @GroupTitle within a Chapter and Section.");
+            fi;
+            group_obj := DocumentationGroup( tree, group_name, chap_info );
+            group_obj!.title_string := current_command[ 2 ];
+        end,
         @ChapterInfo := function()
             local current_chapter_info;
             current_item := new_man_item();
