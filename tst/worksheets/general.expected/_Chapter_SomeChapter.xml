@@ -113,5 +113,24 @@ This text will only appear in the HTML version and the text version, too.
 </Section>
 
 
+<Section Label="Chapter_SomeChapter_Section_Testing_the_group_commands">
+<Heading>Testing the group commands</Heading>
+
+<ManSection Label="Group1">
+<Heading>A family of operations</Heading>
+  <Oper Arg="arg" Name="FirstOperation" Label="for IsInt"/>
+  <Oper Arg="arg1,arg2" Name="SecondOperation" Label="for IsInt, IsGroup"/>
+  <Oper Arg="arg1,arg2" Name="ThirdOperation" Label="for IsGroup, IsInt"/>
+ <Description>
+First sentence.
+Second sentence.
+Third sentence.
+ </Description>
+</ManSection>
+
+
+</Section>
+
+
 </Chapter>
 

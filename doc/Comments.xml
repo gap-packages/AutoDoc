@@ -294,6 +294,14 @@ DeclareOperation( "GroupedOperation",
 ]]></Listing>
 </Subsection>
 
+<Subsection Label="@GroupTitle">
+<Index Key="@GroupTitle"><C>@GroupTitle</C></Index>
+<Heading>@GroupTitle <A>title</A></Heading>
+Sets the subsection heading for the current group to <A>title</A>. In the
+absence of any <C>@GroupTitle</C> command, the heading will be the name of the
+first entry in the group. See <Ref Sect="Groups" /> for more information.
+</Subsection>
+
 <Subsection Label="@Level">
 <Index Key="@Level"><C>@Level</C></Index>
 <Heading><C>@Level <A>lvl</A></C></Heading>
@@ -573,13 +581,14 @@ regarded as &AutoDoc; parts. All commands can be used like before.
 <Section Label="Groups">
 <Heading>Grouping</Heading>
 
-In &GAPDoc;, it is possible to make groups of ManItems, i.e., when documenting
+In &GAPDoc;, it is possible to make groups of manual items, i.e., when documenting
 a function, operation, etc., it is possible to group them into suitable chunks.
 This can be particularly useful if there are several definitions of an operation
 with several different argument types, all doing more or less the same to the arguments.
 Then their manual items can be grouped, sharing the same description and return type information.
-Note that it is currently not possible to give a header to the Group in the manual,
-but the generated ManItem heading of the first entry will be used.
+You can give a heading to the group in the manual with the <C>@GroupTitle</C>
+command; if that is not supplied, then the heading of the first  manual item
+in the group will be used as the heading.
 <P/>
 
 Note that group names are globally unique throughout the whole manual.
@@ -592,9 +601,12 @@ same group name, in different places, and these all will refer to the same group
 Moreover, this means that you can add items to a group via the <C>@Group</C> command
 in the &AutoDoc; comment of an arbitrary declaration, at any time.
 
+<P/>
+
 The following code
 <Listing><![CDATA[
 #! @BeginGroup Group1
+#! @GroupTitle A family of operations
 
 #! @Description
 #!  First sentence.
@@ -617,14 +629,14 @@ KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
 produces the following:
 
 <ManSection Label="Group1">
+<Heading>A family of operations</Heading>
   <Oper Arg="arg" Name="FirstOperation" Label="for IsInt"/>
   <Oper Arg="arg1,arg2" Name="SecondOperation" Label="for IsInt, IsGroup"/>
   <Oper Arg="arg1,arg2" Name="ThirdOperation" Label="for IsGroup, IsInt"/>
- <Returns></Returns>
  <Description>
- First sentence.
- Second sentence.
- Third sentence.
+First sentence.
+Second sentence.
+Third sentence.
  </Description>
 </ManSection>
 

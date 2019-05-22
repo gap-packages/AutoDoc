@@ -22,6 +22,7 @@ Print( "(Even though we never use it that way.\n" );
 #! @EndExampleSession
 #! And we wrap up with some dummy text
 
+#############################################################################
 #! @Section Some categories
 #!  Intro text
 DeclareCategory("MyThings", IsObject);
@@ -32,6 +33,7 @@ Now here is some text with a bunch of &!$%*!/ weird things in it. But that
 should be OK, nothing should end up in a weird place.
 #! Let's wrap up with something, though.
 
+#############################################################################
 #! @Section SomeSection
 
 #! Some test just inside a section. We can use test some markdown features here:
@@ -57,3 +59,26 @@ DeclareInfoClass("InfoTESTCLASS");
 #! @BeginNotLatex
 #! This text will only appear in the HTML version and the text version, too.
 #! @EndNotLatex
+
+#############################################################################
+#! @Section Testing the group commands
+
+#! @BeginGroup Group1
+#! @GroupTitle A family of operations
+
+#! @Description
+#!  First sentence.
+DeclareOperation( "FirstOperation", [ IsInt ] );
+
+#! @Description
+#!  Second sentence.
+DeclareOperation( "SecondOperation", [ IsInt, IsGroup ] );
+
+#! @EndGroup
+
+## .. Stuff ..
+
+#! @Description
+#!  Third sentence.
+#! @Group Group1
+KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
