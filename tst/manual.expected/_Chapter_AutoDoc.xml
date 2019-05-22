@@ -8,12 +8,12 @@
 <Heading>The AutoDoc() function</Heading>
 
 <ManSection>
-  <Func Arg="[package[, optrec ]]" Name="AutoDoc" />
+  <Func Arg="[packageOrDirectory], [optrec]" Name="AutoDoc" />
  <Returns>nothing
 </Returns>
  <Description>
 This is the main function of the &AutoDoc; package. It can perform
-any combination of the following three tasks:
+any combination of the following tasks:
 <Enum>
 <Item>
 It can (re)generate a scaffold for your package manual.
@@ -50,17 +50,29 @@ For more information and some examples, please refer to Chapter <Ref Label='Tuto
 <P/>
 The parameters have the following meanings:
 <List>
-<Mark><A>package</A></Mark>
+<Mark><A>packageOrDirectory</A></Mark>
 <Item>
-This is either the name of package, or an <C>IsDirectory</C> object.
-In the former case, &AutoDoc; uses the metadata of the first package
-with that name known to &GAP;. In the latter case, it checks whether
-the given directory contains a <F>PackageInfo.g</F> file, and extracts
-all needed metadata from that. This is for example useful if you have
-multiple versions of the package around and want to make sure the
+The purpose of this parameter is twofold: to determine the package
+directory in which &AutoDoc; will operate, and to find the metadata
+concerning the package being documented. The parameter is either a
+string, an <C>IsDirectory</C> object, or omitted.
+If it is a string, &AutoDoc; interprets it as the name of a
+package, uses the metadata of the first package known to &GAP;
+with that name, and uses the <C>InstallationPath</C> specified in that
+metadata as the package directory. If <A>packageOrDirectory</A> is
+an <C>IsDirectory</C> object, this is used as package directory;
+if the argument is omitted, then the current directory is used.
+In the last two cases, the specified directory must contain a
+<F>PackageInfo.g</F> file, and &AutoDoc; extracts all needed metadata
+from that. The <C>IsDirectory</C> form is for example useful if you
+have multiple versions of the package around and want to make sure the
 documentation of the correct version is built.
 <P/>
-If this argument is omitted, &AutoDoc; uses the <C>DirectoryCurrent()</C>.
+Note that when using <C>AutoDocWorksheet</C> (see
+<Ref Sect='Chapter_AutoDoc_worksheets_Section_Worksheets'/>), there is
+no parameter corresponding to <A>packageOrDirectory</A> and so the
+<Q>package directory</Q> is always the current directory, and
+there is no metadata.
 </Item>
 <Mark><A>optrec</A></Mark>
 <Item>
@@ -69,9 +81,13 @@ The following are currently supported:
 <List>
 <Mark><A>dir</A></Mark>
 <Item>
-This should be a string containing a (relative) path or a
-Directory() object specifying where the package documentation
-(i.e. the &GAPDoc; XML files) are stored.
+This should either be a string, in which case it must be a path
+<E>relative</E> to the specified package directory, or a
+<C>Directory()</C> object. (Thus, the only way to designate an
+absolute directory is with a <C>Directory()</C> object.) This
+option specifies where the package documentation
+(e.g. the &GAPDoc; XML or the manual PDF, etc.) files are stored
+and/or will be generated.
 <Br/>
 <E>Default value: <C>"doc/"</C>.</E>
 </Item>
@@ -297,8 +313,7 @@ one file is created for each chapter, each section, each subsection or each exam
 For all other values only a single file is created.
 <P/>
 On a technical level, &AutoDoc; passes the value to the
-<A>units</A> parameter of <Ref Func='ExtractExamples'
-BookName='gapdoc'/>.<P/>
+<A>units</A> parameter of <Ref Func='ExtractExamples' BookName='gapdoc'/>.
 </Item>
 </List>
 </Item>
