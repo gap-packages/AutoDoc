@@ -534,6 +534,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @EndAutoDoc := function()
             autodoc_read_line := false;
         end,
+
         @Chapter := function()
             local scope_chapter;
             scope_chapter := ReplacedString( current_command[ 2 ], " ", "_" );
@@ -557,6 +558,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             scope_chapter := ChapterInTree( tree, chapter_info[ 1 ] );
             scope_chapter!.title_string := current_command[ 2 ];
         end,
+
         @Section := function()
             local scope_section;
             if not IsBound( chapter_info[ 1 ] ) then
@@ -585,10 +587,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             scope_section!.title_string := current_command[ 2 ];
         end,
         @EndSection := deprecated("@EndSection", function()
+            if not IsBound( chapter_info[ 2 ] ) then
+                ErrorWithPos( "found @EndSection with no active section" );
+            fi;
             Unbind( chapter_info[ 2 ] );
             Unbind( chapter_info[ 3 ] );
             current_item := ChapterInTree( tree, chapter_info[ 1 ] );
         end),
+
         @Subsection := function()
             local scope_subsection;
             if not IsBound( chapter_info[ 1 ] ) or not IsBound( chapter_info[ 2 ] ) then
@@ -601,7 +607,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @SubsectionLabel := function()
             local scope_subsection, label_name;
             if not IsBound( chapter_info[ 3 ] ) then
-                ErrorWithPos( "found @SubsectionLabel with no active Subsection" );
+                ErrorWithPos( "found @SubsectionLabel with no active subsection" );
             fi;
             label_name := ReplacedString( current_command[ 2 ], " ", "_" );
             scope_subsection := SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], chapter_info[ 3 ] );
@@ -610,15 +616,19 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @SubsectionTitle := function()
             local scope_subsection;
             if not IsBound( chapter_info[ 3 ] ) then
-                ErrorWithPos( "found @SubsectionTitle with no active section" );
+                ErrorWithPos( "found @SubsectionTitle with no active subsection" );
             fi;
             scope_subsection := SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], chapter_info[ 3 ] );
             scope_subsection!.title_string := current_command[ 2 ];
         end,
         @EndSubsection := deprecated("@EndSubsection", function()
+            if not IsBound( chapter_info[ 3 ] ) then
+                ErrorWithPos( "found @EndSubsection with no active subsection" );
+            fi;
             Unbind( chapter_info[ 3 ] );
             current_item := SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] );
         end),
+
         @BeginGroup := function()
             local grp;
             if current_command[ 2 ] = "" then
