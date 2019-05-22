@@ -112,6 +112,14 @@ BindGlobal( "TheTypeOfDocumentationTreeCodeNodes",
         NewType( TheFamilyOfDocumentationTreeNodes,
                 IsTreeForDocumentationCodeNodeRep ) );
 
+DeclareRepresentation( "IsTreeForDocumentationIndexNodeRep",
+                       IsTreeForDocumentationNodeRep,
+                       [ ] );
+
+BindGlobal( "TheTypeOfDocumentationTreeIndexNodes",
+            NewType( TheFamilyOfDocumentationTreeNodes,
+                     IsTreeForDocumentationIndexNodeRep ) );
+
 ###################################
 ##
 ## Tools
@@ -173,21 +181,25 @@ InstallMethod( DocumentationTree, [ ],
 end );
 
 ## create a chapter, section or subsection
-InstallMethod( StructurePartInTree, [ IsTreeForDocumentation, IsList ],
+## This first helper, given tree and context, returns a list of two entries.
+## The second entry is a node to represent the structure part at that context.
+## The first is true if that structure part did not yet exist, in which case the
+## node returned as the second entry is "floating," i.e., not yet added
+## anywhere in  the tree. If the first entry is false, the node existed in the
+## tree earlier (and is presumed to have been added in some appropriate place).
+StructurePartMaybeFloating@ :=
   function( tree, context )
-    local label, parent, new_node, type;
+    local label, new_node, type;
     
     if IsEmpty( context ) then
-        return tree;
+        return [ false, tree];
     fi;
 
     # if the part already exist, use that
     label := AUTODOC_LABEL_OF_CONTEXT( context );
     if IsBound( tree!.nodes_by_label.( label ) ) then
-        return tree!.nodes_by_label.( label );
+        return [false, tree!.nodes_by_label.( label )];
     fi;
-
-    parent := StructurePartInTree( tree, context{[1..Length(context)-1]} );
 
     new_node := rec( content := [ ],
                      level := tree!.current_level,
@@ -203,8 +215,20 @@ InstallMethod( StructurePartInTree, [ IsTreeForDocumentation, IsList ],
     ObjectifyWithAttributes( new_node, type, Label, label );
 
     tree!.nodes_by_label.( label ) := new_node;
-    Add( parent!.content, new_node );
-    return new_node;
+    return [true, new_node];
+end;
+
+# This method creates the structure part and adds it at the current position
+# in the next higher structure part.
+InstallMethod( StructurePartInTree, [ IsTreeForDocumentation, IsList ],
+  function( tree, context )
+    local parent, trial;
+    trial := StructurePartMaybeFloating@( tree, context );
+    if trial[ 1 ] then
+        parent := StructurePartInTree( tree, context{[ 1..Length(context)-1 ]} );
+        Add( parent!.content, trial[ 2 ] );
+    fi;
+    return trial[ 2 ];
 end );
 
 ##
@@ -226,6 +250,22 @@ InstallMethod( DocumentationExample, [ IsTreeForDocumentation ],
                  level := tree!.current_level );
     label := Concatenation( "Example_", String( AUTODOC_TREE_NODE_NAME_ITERATOR( tree ) ) );
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeExampleNodes,
+                             Label, label );
+    tree!.nodes_by_label.( label ) := node;
+    return node;
+end );
+
+##
+InstallMethod( DocumentationIndexEntry,
+               [ IsTreeForDocumentation, IsString, IsString ],
+  function( tree, ikey, entry )
+    local node, label;
+
+    node := rec( content := [ entry ],
+                 key := ikey,
+                 level := tree!.current_level );
+    label := Concatenation( "Index_", String( AUTODOC_TREE_NODE_NAME_ITERATOR( tree ) ) );
+    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeIndexNodes,
                              Label, label );
     tree!.nodes_by_label.( label ) := node;
     return node;
@@ -437,10 +477,44 @@ InstallMethod( SectionInTree, [ IsTreeForDocumentation, IsString, IsString ],
     return StructurePartInTree( tree, [ chapter_name, section_name ] );
 end );
 
+## This method creates the section and if it is not already in the tree,
+## adds it as a child of the specified node (rather than as a child of its
+## chapter in the documentation tree). This is useful for implementing chunks,
+## which can move sections around.
+InstallMethod( SectionAsChildOf, [ IsTreeForDocumentation, IsList, IsObject ],
+  function( tree, context, parent )
+    local section_try;
+    if Length( context ) <> 2 then
+        Error( "Request for section at ill-formed context", String( context ) );
+    fi;
+    section_try := StructurePartMaybeFloating@( tree, context );
+    if section_try[ 1 ] then
+        Add(parent!.content, section_try[ 2 ]);
+    fi;
+    return section_try[ 2 ];
+end );
+
 ##
 InstallMethod( SubsectionInTree, [ IsTreeForDocumentation, IsString, IsString, IsString ],
   function( tree, chapter_name, section_name, subsection_name )
     return StructurePartInTree( tree, [ chapter_name, section_name, subsection_name ] );
+end );
+
+## This method creates the subsection and if it is not already in the tree,
+## adds it as a child of the specified node (rather than as a child of its
+## section in the documentation tree). This is useful for implementing chunks,
+## which can move subsections around.
+InstallMethod( SubsectionAsChildOf, [ IsTreeForDocumentation, IsList, IsObject ],
+  function( tree, context, parent )
+    local subsection_try;
+    if Length( context ) <> 3 then
+        Error( "Request for subsection at ill-formed context", String( context ) );
+    fi;
+    subsection_try := StructurePartMaybeFloating@( tree, context );
+    if subsection_try[ 1 ] then
+        Add(parent!.content, subsection_try[ 2 ]);
+    fi;
+    return subsection_try[ 2 ];
 end );
 
 #############################################
@@ -659,6 +733,15 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationExampleNodeRep, IsStr
         AppendTo( filestream, i, "\n" );
     od;
     AppendTo( filestream, "]]></", inserted_string, ">\n\n" );
+end );
+
+##
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationIndexNodeRep, IsStream ],
+  function( node, filestream )
+    if node!.level > ValueOption( "level_value" ) then return; fi;
+    AppendTo( filestream, "<Index Key=\"", node!.key, "\">" );
+    WriteDocumentation( node!.content, filestream );
+    AppendTo( filestream, "</Index>\n" );
 end );
 
 ##

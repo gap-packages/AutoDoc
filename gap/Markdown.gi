@@ -21,10 +21,9 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
     local i, current_list, current_string, max_line_length,
           current_position, already_in_list, command_list_with_translation, beginning,
           commands, position_of_command, insert, beginning_whitespaces, temp, string_list_temp, skipped,
-          already_inserted_paragraph, in_list, in_item;
+          already_inserted_paragraph, in_list, in_item, masked_string;
 
     ## Check for paragraphs by turning an empty string into <P/>
-    
     already_inserted_paragraph := false;
     for i in [ 1 ..  Length( string_list ) ] do
         if NormalizedWhitespace( string_list[ i ] ) = "" then
@@ -141,9 +140,10 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
                                        [ "`", "Code" ],
                                        [ "**", "Emph" ],
                                        [ "__", "Emph" ] ];
-    ## special handling for \$
+    ## special handling for \$ and \`
     for i in [ 1 .. Length( string_list ) ] do
         string_list[ i ] := ReplacedString( string_list[ i ], "\\$", "&#36;" );
+        string_list[ i ] := ReplacedString( string_list[ i ], "\\`", "&#96;" );
     od;
 
     for commands in command_list_with_translation do
@@ -160,14 +160,16 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
                 continue;
             fi;
 
-            while PositionSublist( string_list[ i ], commands[ 1 ] ) <> fail do
-                position_of_command := PositionSublist( string_list[ i ], commands[ 1 ] );
+            masked_string := AutoDoc_Mask_Line( string_list[ i ] );
+            while PositionSublist( masked_string, commands[ 1 ] ) <> fail do
+                position_of_command := PositionSublist( masked_string, commands[ 1 ] );
                 if beginning = true then
                     insert := Concatenation( "<", commands[ 2 ], ">" );
                 else
                     insert := Concatenation( "</", commands[ 2 ], ">" );
                 fi;
                 string_list[ i ] := INSERT_IN_STRING_WITH_REPLACE( string_list[ i ], insert, position_of_command, Length( commands[ 1 ] ) );
+                masked_string := AutoDoc_Mask_Line( string_list[ i ] );
                 beginning := not beginning;
             od;
         od;
