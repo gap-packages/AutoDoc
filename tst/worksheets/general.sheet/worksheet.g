@@ -77,3 +77,16 @@ DeclareOperation( "SecondOperation", [ IsInt, IsGroup ] );
 #!  Third sentence.
 #! @Group Group1
 KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
+
+#############################################################################
+#! @Section Testing chunks
+
+#! @BeginChunk MyChunk
+#! Hello, world.
+#! @EndChunk
+
+#! This test comes after the chunk is declared, but before it is inserted.
+
+#! @InsertChunk MyChunk
+
+#! The text "Hello, world." is inserted right before this.

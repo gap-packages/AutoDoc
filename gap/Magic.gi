@@ -348,6 +348,7 @@ function( arg )
             tmp := Number( Filename( doc_dir_rel, "" ), x -> x = '/' );
             tmp := Concatenation( ListWithIdenticalEntries(tmp, "../") );
             gapdoc.files := List( gapdoc.files, f -> Concatenation( tmp, f ) );
+            Add( gapdoc.files, "_Chunks.xml" );
         else
             # Here presumably the doc_dir was given by an absolute path that
             # does not lie below the package dir. In that case, we can't make
@@ -355,6 +356,7 @@ function( arg )
             # choice but to make them absolute, which MakeGAPDocDoc can handle,
             # even if perhaps less gracefully/portably.
             gapdoc.files := List( gapdoc.files, f -> Filename( pkgdir, f ) );
+            Add( gapdoc.files, Filename( doc_dir, "_Chunks.xml" ) );
         fi;
     fi;
 
