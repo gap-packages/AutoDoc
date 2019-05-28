@@ -166,7 +166,8 @@ InstallMethod( DocumentationTree, [ ],
                   nodes_by_label := rec( ),
                   node_name_iterator := 0,
                   current_level := 0,
-                  TitlePage := rec( )
+                  TitlePage := rec( ),
+                  chunks := rec( ),
             );
     ObjectifyWithAttributes( tree, TheTypeOfDocumentationTrees );
     return tree;
@@ -246,15 +247,14 @@ InstallMethod( DocumentationChunk, [ IsTreeForDocumentation, IsString ],
   function( tree, name )
     local node;
 
-    name := Concatenation( "System_", name );
-    if IsBound( tree!.nodes_by_label.( name ) ) then
-        return tree!.nodes_by_label.( name );
+    if IsBound( tree!.chunks.( name ) ) then
+        return tree!.chunks.( name );
     fi;
     node := rec( content := [ ],
                  level := tree!.current_level );
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeChunkNodes,
                               Label, name );
-    tree!.nodes_by_label.( name ) := node;
+    tree!.chunks.( name ) := node;
     return node;
 end );
 
@@ -449,6 +449,29 @@ end );
 ##
 #############################################
 
+BindGlobal( "WriteChunks",
+  function( tree, path_to_xmlfiles )
+    local chunks_stream, filename, chunk_names, current_chunk_name,
+          current_chunk;
+
+    filename := "_Chunks.xml";
+
+    chunks_stream := AUTODOC_OutputTextFile( path_to_xmlfiles, filename );
+    chunk_names := RecNames( tree!.chunks );
+
+    for current_chunk_name in chunk_names do
+        current_chunk := tree!.chunks.( current_chunk_name );
+        AppendTo( chunks_stream, "<#GAPDoc Label=\"", current_chunk_name, "\">\n" );
+        if IsBound( current_chunk!.content ) then
+            WriteDocumentation( current_chunk!.content, chunks_stream );
+        fi;
+        AppendTo( chunks_stream, "\n<#/GAPDoc>\n" );
+    od;
+
+    CloseStream( chunks_stream );
+
+end );
+
 ##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentation, IsDirectory ],
   function( tree, path_to_xmlfiles )
@@ -463,6 +486,9 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentation, IsDirectory ],
         ## FIXME: If there is anything else than a chapter, this will break!
         WriteDocumentation( i, stream, path_to_xmlfiles );
     od;
+
+    WriteChunks( tree, path_to_xmlfiles );
+
     # Workaround for issue #65
     if IsEmpty( tree!.content ) then
         AppendTo( stream, "&nbsp;\n" );
@@ -632,9 +658,10 @@ end );
 ##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationChunkNodeRep, IsStream ],
   function( node, filestream )
-    if IsBound( node!.content ) then
-        WriteDocumentation( node!.content, filestream );
+    if node!.level > ValueOption( "level_value" ) then
+        return;
     fi;
+    WriteDocumentation( Concatenation( "<#Include Label=\"", Label( node ), "\">" ), filestream );
 end );
 
 ##

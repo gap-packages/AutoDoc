@@ -21,11 +21,9 @@
 /doc/*.tex
 /doc/*.toc
 /doc/*.txt
-/doc/*Bib.xml
 /doc/*.xml.bib
 /doc/AutoDoc.xml
-/doc/_AutoDocMainFile.xml
-/doc/_Chapter*xml
+/doc/_*.xml
 /doc/maketest.g
 /doc/manual.lab
 /doc/manual.six

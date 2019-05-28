@@ -132,5 +132,15 @@ Third sentence.
 </Section>
 
 
+<Section Label="Chapter_SomeChapter_Section_Testing_chunks">
+<Heading>Testing chunks</Heading>
+
+This test comes after the chunk is declared, but before it is inserted.
+<#Include Label="MyChunk">
+
+The text "Hello, world." is inserted right before this.
+</Section>
+
+
 </Chapter>
 
