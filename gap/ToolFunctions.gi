@@ -49,7 +49,7 @@ end );
 
 ##
 InstallGlobalFunction( AutoDoc_WriteDocEntry,
-  function( filestream, list_of_records, heading )
+  function( filestream, list_of_records, heading, level_value )
     local return_value, description, current_description, labels, i;
 
     # look for a good return value (it should be the same everywhere)
@@ -125,12 +125,12 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
             return_value := [ return_value ];
         fi;
         AppendTo( filestream, " <Returns>" );
-        WriteDocumentation( return_value, filestream );
+        WriteDocumentation( return_value, filestream, level_value );
         AppendTo( filestream, "</Returns>\n" );
     fi;
 
     AppendTo( filestream, " <Description>\n" );
-    WriteDocumentation( description, filestream );
+    WriteDocumentation( description, filestream, level_value );
     AppendTo( filestream, " </Description>\n" );
 
     AppendTo( filestream, "</ManSection>\n\n" );
