@@ -322,7 +322,7 @@ function( arg )
             gapdoc.files := [];
         elif not IsList( gapdoc.files ) then
             Error("gapdoc.files must be a list");
-        elif Length(gapdoc.files) >0 and IsString( gapdoc.files ) then
+        elif not ForAll( gapdoc.files, IsString ) then
             Error("gapdoc.files must be a list of strings, not a string");
         fi;
 
