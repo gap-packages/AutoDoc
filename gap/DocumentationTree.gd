@@ -50,8 +50,8 @@ DeclareOperation( "SectionInTree", [ IsTreeForDocumentation, IsString, IsString 
 DeclareOperation( "SubsectionInTree", [ IsTreeForDocumentation, IsString, IsString, IsString ] );
 DeclareOperation( "DocumentationExample", [ IsTreeForDocumentation, IsList ] );
 DeclareOperation( "DocumentationExample", [ IsTreeForDocumentation ] );
-DeclareOperation( "DocumentationDummy", [ IsTreeForDocumentation, IsString, IsList ] );
-DeclareOperation( "DocumentationDummy", [ IsTreeForDocumentation, IsString ] );
+DeclareOperation( "DocumentationChunk", [ IsTreeForDocumentation, IsString, IsList ] );
+DeclareOperation( "DocumentationChunk", [ IsTreeForDocumentation, IsString ] );
 DeclareOperation( "DocumentationCode", [ IsTreeForDocumentation, IsString, IsList ] );
 DeclareOperation( "DocumentationCode", [ IsTreeForDocumentation, IsString ] );
 DeclareOperation( "DocumentationManItem", [ IsTreeForDocumentation ] );

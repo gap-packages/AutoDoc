@@ -87,13 +87,13 @@ BindGlobal( "TheTypeOfDocumentationTreeNodesForGroup",
                 IsTreeForDocumentationNodeForGroupRep ) );
 
 ## DeclareRepresentation
-DeclareRepresentation( "IsTreeForDocumentationDummyNodeRep",
+DeclareRepresentation( "IsTreeForDocumentationChunkNodeRep",
                        IsTreeForDocumentationNodeRep,
                        [ ] );
 
-BindGlobal( "TheTypeOfDocumentationTreeDummyNodes",
+BindGlobal( "TheTypeOfDocumentationTreeChunkNodes",
         NewType( TheFamilyOfDocumentationTreeNodes,
-                IsTreeForDocumentationDummyNodeRep ) );
+                IsTreeForDocumentationChunkNodeRep ) );
 
 ## DeclareRepresentation
 DeclareRepresentation( "IsTreeForDocumentationExampleNodeRep",
@@ -232,17 +232,17 @@ InstallMethod( DocumentationExample, [ IsTreeForDocumentation ],
 end );
 
 ##
-InstallMethod( DocumentationDummy, [ IsTreeForDocumentation, IsString, IsList ],
+InstallMethod( DocumentationChunk, [ IsTreeForDocumentation, IsString, IsList ],
   function( tree, name, context )
     local node;
 
-    node := DocumentationDummy( tree, name );
+    node := DocumentationChunk( tree, name );
     Add( tree, node, context );
     return node;
 end );
 
 ##
-InstallMethod( DocumentationDummy, [ IsTreeForDocumentation, IsString ],
+InstallMethod( DocumentationChunk, [ IsTreeForDocumentation, IsString ],
   function( tree, name )
     local node;
 
@@ -252,7 +252,7 @@ InstallMethod( DocumentationDummy, [ IsTreeForDocumentation, IsString ],
     fi;
     node := rec( content := [ ],
                  level := tree!.current_level );
-    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeDummyNodes,
+    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeChunkNodes,
                               Label, name );
     tree!.nodes_by_label.( name ) := node;
     return node;
@@ -630,7 +630,7 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForGroupRep, IsSt
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationDummyNodeRep, IsStream ],
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationChunkNodeRep, IsStream ],
   function( node, filestream )
     if IsBound( node!.content ) then
         WriteDocumentation( node!.content, filestream );

@@ -712,13 +712,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end,
 
         @InsertChunk := function()
-            Add( current_item, DocumentationDummy( tree, current_command[ 2 ] ) );
+            Add( current_item, DocumentationChunk( tree, current_command[ 2 ] ) );
         end,
         @BeginChunk := function()
             if IsBound( current_item ) then
                 Add( context_stack, current_item );
             fi;
-            current_item := DocumentationDummy( tree, current_command[ 2 ] );
+            current_item := DocumentationChunk( tree, current_command[ 2 ] );
         end,
         @Chunk := ~.@BeginChunk,
         @EndChunk := function()
