@@ -270,10 +270,6 @@ function( arg )
         if not IsBound( autodoc.level ) then
             autodoc.level := 0;
         fi;
-
-        # This causes a bug. If a new layer is pushed to the option stack in a function that is called with options,
-        # this layer will be deleted at the end of the method, not the layer which was created when the method was called.
-#         PushOptions( rec( level_value := autodoc.level ) );
     fi;
 
     #
@@ -514,7 +510,7 @@ function( arg )
     # Write AutoDoc XML files
     #
     if IsBound( autodoc ) then
-        WriteDocumentation( tree, doc_dir : level_value := autodoc.level );
+        WriteDocumentation( tree, doc_dir, autodoc.level );
     fi;
 
 

@@ -72,7 +72,7 @@ DeclareOperation( "Add", [ IsTreeForDocumentation, IsString ] );
 ##
 #######################################
 
-DeclareOperation( "WriteDocumentation", [ IsTreeForDocumentation, IsDirectory ] );
-DeclareOperation( "WriteDocumentation", [ IsTreeForDocumentationNode, IsStream ] );
-DeclareOperation( "WriteDocumentation", [ IsList, IsStream ] );
-DeclareOperation( "WriteDocumentation", [ IsTreeForDocumentationNode, IsStream, IsDirectory ] );
+DeclareOperation( "WriteDocumentation", [ IsTreeForDocumentation, IsDirectory, IsInt ] );
+DeclareOperation( "WriteDocumentation", [ IsTreeForDocumentationNode, IsStream, IsInt ] );
+DeclareOperation( "WriteDocumentation", [ IsList, IsStream, IsInt ] );
+DeclareOperation( "WriteDocumentation", [ IsTreeForDocumentationNode, IsStream, IsDirectory, IsInt ] );

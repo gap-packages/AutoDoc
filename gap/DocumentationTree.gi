@@ -450,7 +450,7 @@ end );
 #############################################
 
 BindGlobal( "WriteChunks",
-  function( tree, path_to_xmlfiles )
+  function( tree, path_to_xmlfiles, level_value )
     local chunks_stream, filename, chunk_names, current_chunk_name,
           current_chunk;
 
@@ -463,7 +463,7 @@ BindGlobal( "WriteChunks",
         current_chunk := tree!.chunks.( current_chunk_name );
         AppendTo( chunks_stream, "<#GAPDoc Label=\"", current_chunk_name, "\">\n" );
         if IsBound( current_chunk!.content ) then
-            WriteDocumentation( current_chunk!.content, chunks_stream );
+            WriteDocumentation( current_chunk!.content, chunks_stream, level_value );
         fi;
         AppendTo( chunks_stream, "\n<#/GAPDoc>\n" );
     od;
@@ -473,8 +473,8 @@ BindGlobal( "WriteChunks",
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentation, IsDirectory ],
-  function( tree, path_to_xmlfiles )
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentation, IsDirectory, IsInt ],
+  function( tree, path_to_xmlfiles, level_value )
     local stream, i;
 
     stream := AUTODOC_OutputTextFile( path_to_xmlfiles, _AUTODOC_GLOBAL_OPTION_RECORD.AutoDocMainFile );
@@ -484,10 +484,10 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentation, IsDirectory ],
             Error( "this should never happen" );
         fi;
         ## FIXME: If there is anything else than a chapter, this will break!
-        WriteDocumentation( i, stream, path_to_xmlfiles );
+        WriteDocumentation( i, stream, path_to_xmlfiles, level_value );
     od;
 
-    WriteChunks( tree, path_to_xmlfiles );
+    WriteChunks( tree, path_to_xmlfiles, level_value );
 
     # Workaround for issue #65
     if IsEmpty( tree!.content ) then
@@ -497,11 +497,11 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentation, IsDirectory ],
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForChapterRep, IsStream, IsDirectory ],
-  function( node, stream, path_to_xmlfiles )
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForChapterRep, IsStream, IsDirectory, IsInt ],
+  function( node, stream, path_to_xmlfiles, level_value )
     local filename, chapter_stream, label, replaced_name, additional_label;
 
-    if node!.level > ValueOption( "level_value" ) then
+    if node!.level > level_value then
         return;
     fi;
     if ForAll( node!.content, IsEmptyNode ) then
@@ -530,14 +530,14 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForChapterRep, Is
     AppendTo( chapter_stream, AUTODOC_XML_HEADER );
     AppendTo( chapter_stream, "<Chapter Label=\"", additional_label ,"\">\n" );
     AppendTo( chapter_stream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
-    WriteDocumentation( node!.content, chapter_stream );
+    WriteDocumentation( node!.content, chapter_stream, level_value );
     AppendTo( chapter_stream, "</Chapter>\n\n" );
     CloseStream( chapter_stream );
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsList, IsStream ],
-  function( node_list, filestream )
+InstallMethod( WriteDocumentation, [ IsList, IsStream, IsInt ],
+  function( node_list, filestream, level_value )
     local current_string_list, i, last_position;
 
     i := 1;
@@ -548,22 +548,22 @@ InstallMethod( WriteDocumentation, [ IsList, IsStream ],
         else
             if current_string_list <> [ ] then
                 current_string_list := CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML( current_string_list );
-                Perform( current_string_list, function( i ) WriteDocumentation( i, filestream ); end );
+                Perform( current_string_list, function( i ) WriteDocumentation( i, filestream, level_value ); end );
                 current_string_list := [ ];
             fi;
-            WriteDocumentation( node_list[ i ], filestream );
+            WriteDocumentation( node_list[ i ], filestream, level_value );
             AppendTo( filestream, "\n" );
         fi;
     od;
     if current_string_list <> [ ] then
         current_string_list := CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML( current_string_list );
-        Perform( current_string_list, function( i ) WriteDocumentation( i, filestream ); end );
+        Perform( current_string_list, function( i ) WriteDocumentation( i, filestream, level_value ); end );
     fi;
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsString, IsStream ],
-  function( text, filestream )
+InstallMethod( WriteDocumentation, [ IsString, IsStream, IsInt ],
+  function( text, filestream, level_value )
     ## In case the list is empty, do nothing.
     ## Once the empty string = empty list bug is fixed,
     ## this could be removed.
@@ -575,11 +575,11 @@ InstallMethod( WriteDocumentation, [ IsString, IsStream ],
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSectionRep, IsStream ],
-  function( node, filestream )
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSectionRep, IsStream, IsInt ],
+  function( node, filestream, level_value )
     local replaced_name, label, additional_label;
 
-    if node!.level > ValueOption( "level_value" ) then
+    if node!.level > level_value then
         return;
     fi;
     if ForAll( node!.content, IsEmptyNode ) then
@@ -599,16 +599,16 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSectionRep, Is
     
     AppendTo( filestream, "<Section Label=\"", label, "\">\n" );
     AppendTo( filestream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
-    WriteDocumentation( node!.content, filestream );
+    WriteDocumentation( node!.content, filestream, level_value );
     AppendTo( filestream, "</Section>\n\n" );
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSubsectionRep, IsStream ],
-  function( node, filestream )
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSubsectionRep, IsStream, IsInt ],
+  function( node, filestream, level_value )
     local replaced_name, label, additional_label;
 
-    if node!.level > ValueOption( "level_value" ) then
+    if node!.level > level_value then
         return;
     fi;
     if ForAll( node!.content, IsEmptyNode ) then
@@ -628,48 +628,48 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSubsectionRep,
     
     AppendTo( filestream, "<Subsection Label=\"", label, "\">\n" );
     AppendTo( filestream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
-    WriteDocumentation( node!.content, filestream );
+    WriteDocumentation( node!.content, filestream, level_value );
     AppendTo( filestream, "</Subsection>\n\n" );
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForManItemRep, IsStream ],
-  function( node, filestream )
-    if node!.level > ValueOption( "level_value" ) then
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForManItemRep, IsStream, IsInt ],
+  function( node, filestream, level_value )
+    if node!.level > level_value then
         return;
     fi;
-    AutoDoc_WriteDocEntry( filestream, [ node ], fail );
+    AutoDoc_WriteDocEntry( filestream, [ node ], fail, level_value );
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForGroupRep, IsStream ],
-  function( node, filestream )
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForGroupRep, IsStream, IsInt ],
+  function( node, filestream, level_value )
     local heading;
-    if node!.level > ValueOption( "level_value" ) then
+    if node!.level > level_value then
         return;
     fi;
     heading := fail;
     if IsBound( node!.title_string ) then
         heading := node!.title_string;
     fi;
-    AutoDoc_WriteDocEntry( filestream, node!.content, heading );
+    AutoDoc_WriteDocEntry( filestream, node!.content, heading, level_value );
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationChunkNodeRep, IsStream ],
-  function( node, filestream )
-    if node!.level > ValueOption( "level_value" ) then
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationChunkNodeRep, IsStream, IsInt ],
+  function( node, filestream, level_value )
+    if node!.level > level_value then
         return;
     fi;
-    WriteDocumentation( Concatenation( "<#Include Label=\"", Label( node ), "\">" ), filestream );
+    WriteDocumentation( Concatenation( "<#Include Label=\"", Label( node ), "\">" ), filestream, level_value );
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationExampleNodeRep, IsStream ],
-  function( node, filestream )
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationExampleNodeRep, IsStream, IsInt ],
+  function( node, filestream, level_value )
     local contents, i, tested, inserted_string;
 
-    if node!.level > ValueOption( "level_value" ) then
+    if node!.level > level_value then
         return;
     fi;
     contents := node!.content;
@@ -689,11 +689,11 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationExampleNodeRep, IsStr
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationCodeNodeRep, IsStream ],
-  function( node, filestream )
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationCodeNodeRep, IsStream, IsInt ],
+  function( node, filestream, level_value )
     local content, i;
     
-    if node!.level > ValueOption( "level_value" ) then
+    if node!.level > level_value then
         return;
     fi;
     
