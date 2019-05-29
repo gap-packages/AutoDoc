@@ -34,7 +34,6 @@ DeclareOperation( "IsEmptyNode", [ IsTreeForDocumentationNode ] );
 DeclareOperation( "IsEmptyNode", [ IsString ] );
 DeclareAttribute( "Label", IsTreeForDocumentationNode );
 DeclareAttribute( "ChapterInfo", IsTreeForDocumentationNode );
-DeclareAttribute( "DummyName", IsTreeForDocumentationNode );
 DeclareAttribute( "GroupName", IsTreeForDocumentationNode );
 
 ######################################
