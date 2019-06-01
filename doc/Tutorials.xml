@@ -216,7 +216,7 @@ XML files and some documentation for operations distributed over
 all your <F>.g</F>, <F>.gd</F>, and <F>.gi</F> files.
 Suppose the main XML file is named <F>PACKAGENAME.xml</F> and is in the
 <F>/doc</F> subdirectory of your package. Then you can rebuild your manual
-by executing the following two GAP commands from a GAP sessions started
+by executing the following two &GAP; commands from a &GAP; sessions started
 started in the root directory of your package:
 <Listing>
 LoadPackage( "AutoDoc" );
@@ -584,7 +584,7 @@ S4 := SymmetricGroup( 4 );;
 #! @EndExample
 </Listing>
 Now, one can create a PDF and HTML document, like a package documentation out of it. Suppose the document above
-is saved as <F>worksheet.g</F>. Then, when GAP is started in the directory of this file, the command
+is saved as <F>worksheet.g</F>. Then, when &GAP; is started in the directory of this file, the command
 <Listing>
 AutoDocWorksheet( "worksheet.g" );
 </Listing>
