@@ -327,10 +327,10 @@ Resets the current level to 0.
 <Index Key="@EndExample"><C>@EndExample</C></Index>
 <Heading><C>@BeginExample</C> and <C>@EndExample</C></Heading>
 <C>@BeginExample</C> inserts an example into the manual. The syntax for examples is different from
-GAPDocs example syntax in order to have a
-file that contains the example and is GAP readable. To achieve this, GAP commands are not preceded by a comment,
+&GAPDoc;'s example syntax in order to have a
+file that contains the example and is &GAP; readable. To achieve this, &GAP; commands are not preceded by a comment,
 while output has to be preceded by an &AutoDoc; comment.
-The GAP prompt for the display in the manual is added by &AutoDoc;.
+The &GAP; prompt for the display in the manual is added by &AutoDoc;.
 <C>@EndExample</C> ends the example block.
 <Listing><![CDATA[
 #! @BeginExample
@@ -387,7 +387,7 @@ The &AutoDoc; command <C>@ExampleSession</C> is an alias of <C>@BeginExampleSess
 <Index Key="@EndLog"><C>@EndLog</C></Index>
 <Heading><C>@BeginLog</C> and <C>@EndLog</C></Heading>
 Works just like the <C>@BeginExample</C> command, but the example
-will not be tested. See the GAPDoc manual for more information.
+will not be tested. See the &GAPDoc; manual for more information.
 The &AutoDoc; command <C>@Log</C> is an alias of <C>@BeginLog</C>.
 </Subsection>
 
@@ -396,7 +396,7 @@ The &AutoDoc; command <C>@Log</C> is an alias of <C>@BeginLog</C>.
 <Index Key="@EndLogSession"><C>@EndLogSession</C></Index>
 <Heading><C>@BeginLogSession</C> and <C>@EndLogSession</C></Heading>
 Works just like the <C>@BeginExampleSession</C> command, but the example
-will not be tested if manual examples are run. See the GAPDoc manual for more information.
+will not be tested if manual examples are run. See the &GAPDoc; manual for more information.
 The &AutoDoc; command <C>@LogSession</C> is an alias of <C>@BeginLogSession</C>.
 </Subsection>
 
@@ -490,7 +490,7 @@ i := i + 1;
 <Index Key="@EndLatexOnly"><C>@EndLatexOnly</C></Index>
 <Heading><C>@LatexOnly <A>text</A></C>, <C>@BeginLatexOnly</C>, and <C>@EndLatexOnly</C></Heading>
 Code inserted between <C>@BeginLatexOnly</C> and <C>@EndLatexOnly</C> or after <C>@LatexOnly</C> is only inserted
-in the PDF version of the manual or worksheet. It can hold arbitrary LaTeX-commands.
+in the PDF version of the manual or worksheet. It can hold arbitrary &LaTeX;-commands.
 <Listing><![CDATA[
 #! @BeginLatexOnly
 #! \include{picture.tex}
@@ -666,7 +666,7 @@ Third sentence.
 <Heading>Markdown-like formatting of text in &AutoDoc;</Heading>
 
 &AutoDoc; has some convenient ways to insert special format into text, like
-math formulas and lists. The syntax for them are inspired by Markdown and LaTeX,
+math formulas and lists. The syntax for them are inspired by Markdown and &LaTeX;,
 but do not follow them strictly. Neither are all features of the Markdown language
 supported. The following subsections describe what is possible.
 

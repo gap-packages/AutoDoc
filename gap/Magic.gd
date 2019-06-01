@@ -187,12 +187,12 @@
 #!             Sets the document class of the resulting PDF. The value can either be a string
 #!             which has to be the name of the new document class, a list containing this string, or
 #!             a list of two strings. Then the first one has to be the document class name, the second one
-#!             the option string ( contained in [ ] ) in LaTeX.
+#!             the option string ( contained in [ ] ) in &LaTeX;.
 #!         </Item>
 #!         <Mark><A>latex_header_file</A></Mark>
 #!         <Item>
-#!             Replaces the standard header from &GAPDoc; completely with the header in this LaTeX file.
-#!             Please be careful here, and look at GAPDoc's latexheader.tex file for an example.
+#!             Replaces the standard header from &GAPDoc; completely with the header in this &LaTeX; file.
+#!             Please be careful here, and look at &GAPDoc;'s <F>latexheader.tex</F> file for an example.
 #!         </Item>
 #!
 #!         </List>
@@ -321,14 +321,14 @@
 #!             Either a boolean, or a string containing a relative path.
 #!             By default (if this option is not set, or is set to <K>false</K>),
 #!             references in the generated documentation referring to external documentation
-#!             (such as the GAP manual) are encoded using absolute paths.
+#!             (such as the &GAP; manual) are encoded using absolute paths.
 #!             This is fine as long as the documentation stays on only a single
 #!             computer, but is problematic when preparing documentation that should be
 #!             used on multiple computers, e.g., when creating a distribution archive of
-#!             a GAP package.<Br/>
+#!             a &GAP; package.<Br/>
 #!             Thus, if a relative path is provided via this option (or if it is set to <K>true</K>,
 #!             in which case the relative path <F>../../..</F> is used), then &AutoDoc;
-#!             and &GAPDoc; attempt to replace all absolute paths in references to GAP
+#!             and &GAPDoc; attempt to replace all absolute paths in references to &GAP;
 #!             manuals by paths based on this relative path.<P/>
 #!             
 #!             On a technical level, &AutoDoc; passes the relative path to the
