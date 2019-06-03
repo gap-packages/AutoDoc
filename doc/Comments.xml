@@ -326,12 +326,17 @@ Resets the current level to 0.
 <Index Key="@BeginExample"><C>@BeginExample</C></Index>
 <Index Key="@EndExample"><C>@EndExample</C></Index>
 <Heading><C>@BeginExample</C> and <C>@EndExample</C></Heading>
-<C>@BeginExample</C> inserts an example into the manual. The syntax for examples is different from
-&GAPDoc;'s example syntax in order to have a
-file that contains the example and is &GAP; readable. To achieve this, &GAP; commands are not preceded by a comment,
+<C>@BeginExample</C> marks the start of an example to be put into the manual.
+It differs from &GAPDoc;'s <C>&lt;Example></C> (see <Ref Subsect="Log" BookName="gapdoc"/>),
+in that it expects actual code (not in a comment) interspersed with comments,
+to allow for examples files that can be both executed by &GAP;, and parsed
+by &AutoDoc;. To achieve this, &GAP; commands are not preceded by a comment,
 while output has to be preceded by an &AutoDoc; comment.
-The &GAP; prompt for the display in the manual is added by &AutoDoc;.
+The <C>gap&gt;</C> prompt for the display in the manual is added by &AutoDoc;.
 <C>@EndExample</C> ends the example block.
+<P/>
+
+To illustrate this command, consider this input:
 <Listing><![CDATA[
 #! @BeginExample
 S5 := SymmetricGroup(5);
@@ -340,6 +345,13 @@ Order(S5);
 #! 120
 #! @EndExample
 ]]></Listing>
+This results in the following output:
+<Example>
+gap> S5 := SymmetricGroup(5);
+Sym( [ 1 .. 5 ] )
+gap> Order(S5);
+120
+</Example>
 The &AutoDoc; command <C>@Example</C> is an alias of <C>@BeginExample</C>.
 </Subsection>
 
@@ -348,19 +360,12 @@ The &AutoDoc; command <C>@Example</C> is an alias of <C>@BeginExample</C>.
 <Index Key="@BeginExampleSession"><C>@BeginExampleSession</C></Index>
 <Index Key="@EndExampleSession"><C>@EndExampleSession</C></Index>
 <Heading><C>@BeginExampleSession</C> and <C>@EndExampleSession</C></Heading>
-<C>@BeginExampleSession</C> inserts an example into the manual, but in a different syntax.
-For example, consider
-<Listing><![CDATA[
-#! @BeginExample
-S5 := SymmetricGroup(5);
-#! Sym( [ 1 .. 5 ] )
-Order(S5);
-#! 120
-#! @EndExample
-]]></Listing>
-As you can see, the commands are not commented and hence are executed when the file containing
-the example block is read. To insert examples directly into source code files, one can instead
-use <C>@BeginExampleSession</C>:
+<C>@BeginExampleSession</C> marks the start of an example to be put into the manual,
+while <C>@EndExampleSession</C> ends the example block.
+It is the direct analog of &GAPDoc;'s <C>&lt;Example></C> (see <Ref Subsect="Log" BookName="gapdoc"/>).
+<P/>
+
+To illustrate this command, consider this input:
 <Listing><![CDATA[
 #! @BeginExampleSession
 #! gap> S5 := SymmetricGroup(5);
@@ -369,6 +374,14 @@ use <C>@BeginExampleSession</C>:
 #! 120
 #! @EndExampleSession
 ]]></Listing>
+This results in the following output:
+<Example>
+gap> S5 := SymmetricGroup(5);
+Sym( [ 1 .. 5 ] )
+gap> Order(S5);
+120
+</Example>
+
 It inserts an example into the manual just as <C>@Example</C> would do, but all lines are commented
 and therefore not executed when the file is read.
 All lines that should be part of the example displayed in the manual
@@ -376,10 +389,9 @@ have to start with an &AutoDoc; comment (<C>#!</C>).
 The comment will be removed, and, if the following character is a space,
 this space will also be removed. There is never more than one space removed.
 To ensure examples are correctly colored in the manual, 
-there should be exactly one space between <C>#!</C> and the <C>gap</C> prompt.
+there should be exactly one space between <C>#!</C> and the <C>gap&gt;</C> prompt.
 The &AutoDoc; command <C>@ExampleSession</C> is an alias of <C>@BeginExampleSession</C>.
 </Subsection>
-
 
 
 <Subsection Label="@BeginLog">
@@ -396,7 +408,8 @@ The &AutoDoc; command <C>@Log</C> is an alias of <C>@BeginLog</C>.
 <Index Key="@EndLogSession"><C>@EndLogSession</C></Index>
 <Heading><C>@BeginLogSession</C> and <C>@EndLogSession</C></Heading>
 Works just like the <C>@BeginExampleSession</C> command, but the example
-will not be tested if manual examples are run. See the &GAPDoc; manual for more information.
+will not be tested if manual examples are run. It is the direct analog of
+&GAPDoc;'s <C>&lt;Log></C> (see <Ref Subsect="Log" BookName="gapdoc"/>).
 The &AutoDoc; command <C>@LogSession</C> is an alias of <C>@BeginLogSession</C>.
 </Subsection>
 
@@ -404,7 +417,7 @@ The &AutoDoc; command <C>@LogSession</C> is an alias of <C>@BeginLogSession</C>.
 <Index Key="@DoNotReadRestOfFile"><C>@DoNotReadRestOfFile</C></Index>
 <Heading><C>@DoNotReadRestOfFile</C></Heading>
 Prevents the rest of the file from being read by the parser. Useful for
-not finished or temporary files.
+unfinished or temporary files.
 
 <Listing><![CDATA[
 #! This will appear in the manual

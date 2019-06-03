@@ -3,8 +3,9 @@
 
 &AutoDoc; is a &GAP; package which is meant to aid &GAP; package
 authors in creating and maintaining the documentation of their packages.
-In this capacity it builds upon &GAPDoc;, and is not a replacement
-for &GAPDoc;, but rather complements it.<P/>
+In this capacity it builds upon the &GAPDoc; package (see
+<URL>https://www.gap-system.org/Packages/gapdoc.html</URL>).
+As such, it is not a replacement for &GAPDoc;, but rather complements it.<P/>
 
 In this chapter we describe how to get started using &AutoDoc; for your
 package. First, we explain in Section <Ref Sect="Tut:Scratch"/> how to write a
@@ -70,11 +71,13 @@ Next of course you need to provide actual content (unfortunately, we were
 not yet able to automate <E>that</E> for you, more research on artificial intelligence
 is required).
 To add more content, you have several options: You could add further &GAPDoc;
-XML files containing extra chapters, sections and so on. Or you could use classic &GAPDoc;
-source comments (in either case, see Section <Ref Sect="Tut:IntegrateExisting"/> on
-how to teach the <Ref Func="AutoDoc"/> command to include this extra documentation).
-Or you could use the special documentation facilities &AutoDoc; provides (see Section
-<Ref Sect="Tut:AdvancedAutoDoc"/>).
+XML files containing extra chapters, sections and so on. Or you could use
+classic &GAPDoc; source comments. For details on either, please refer to
+<Ref Chap="Distributing" BookName="gapdoc"/>, as well as Section
+<Ref Sect="Tut:IntegrateExisting"/> of this manual on how to teach the
+<Ref Func="AutoDoc"/> command to include this extra documentation.
+Or you could use the special documentation facilities &AutoDoc; provides
+(see Section <Ref Sect="Tut:AdvancedAutoDoc"/>).
 <P/>
 
 You will probably want to re-run the  <Ref Func="AutoDoc"/> command
@@ -166,7 +169,7 @@ have an existing &GAPDoc; based manual, then you can still use &AutoDoc;
 documentation comments. Just make sure to first edit the main XML
 file of your documentation, and insert the line
 <Listing>
-#Include SYSTEM "_AutoDocMainFile.xml"
+&lt;#Include SYSTEM "_AutoDocMainFile.xml">
 </Listing>
 in a suitable place. This means that you can mix &AutoDoc; documentation
 comment freely with your existing documentation; you can even still make
