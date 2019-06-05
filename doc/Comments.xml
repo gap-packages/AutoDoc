@@ -476,7 +476,7 @@ And then later, insert the example in a different file, like this:
 <Index Key="@InsertSystem"><C>@InsertSystem <A>name</A></C></Index>
 <Heading><C>@BeginSystem <A>name</A></C>, <C>@EndSystem</C>, and <C>@InsertSystem <A>name</A></C></Heading>
 <Emph>These command are deprecated.</Emph> Please use the chunk commands from subsection
-<Ref Subsect="@BeginCode"/> instead.
+<Ref Subsect="@BeginChunk"/> instead.
 </Subsection>
 
 <Subsection Label="@BeginCode">
