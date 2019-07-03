@@ -1,5 +1,15 @@
 This file describes changes in the AutoDoc package.
 
+2019.07.03
+  - Make Chunks compatible with GAPDoc chunks
+  - Tweak two error messages, add two more error checks
+  - Check that gapdoc.files is a list of strings
+  - Add @GroupTitle command (thanks to Glen Whitney)
+  - Make @Begin.../@EndExampleSession respect plain_text_mode (thanks to Glen Whitney)
+  - Handle documentation of DeclareCategoryCollection declarations (thanks to Glen Whitney)
+  - Repair minor omissions/imprecisions in AutoDoc() function doc (thanks to Glen Whitney)
+  - Improve manual further
+
 2019.05.20
   - Ensure that starting a "manpage" (= documentation for a filter, function, property,
     ...) ends any active subsection (in GAPDoc, manpages are equivalent to subsections
