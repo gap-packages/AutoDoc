@@ -122,7 +122,7 @@ As an example, a full &AutoDoc; comment with all options could look like this:
 #! @Returns a list
 #! @Arguments modtbl
 #! @Group CharacterDegreesOfBlocks
-#! @FunctionLabel chardegblocks
+#! @Label chardegblocks
 #! @ChapterInfo Blocks, Attributes
 DeclareAttribute( "CharacterDegreesOfBlocks",
         IsBrauerTable );
