@@ -6,10 +6,10 @@
                  [1X Generate documentation from [5XGAP[105X source code [101X
   
   
-                                   2019.04.10
+                                   2019.07.03
   
   
-                                 10 April 2019
+                                  3 July 2019
   
   
                                Sebastian Gutsche
@@ -19,11 +19,12 @@
   
   
   Sebastian Gutsche
-      Email:    [7Xmailto:gutsche@mathematik.uni-kl.de[107X
-      Homepage: [7Xhttp://wwwb.math.rwth-aachen.de/~gutsche/[107X
-      Address:  [33X[0;14YDepartment of Mathematics[133X
-                [33X[0;14YUniversity of Kaiserslautern[133X
-                [33X[0;14Y67653 Kaiserslautern[133X
+      Email:    [7Xmailto:gutsche@mathematik.uni-siegen.de[107X
+      Homepage: [7Xhttps://algebra.mathematik.uni-siegen.de/gutsche/[107X
+      Address:  [33X[0;14YDepartment Mathematik[133X
+                [33X[0;14YUniversität Siegen[133X
+                [33X[0;14YWalter-Flex-Straße 3[133X
+                [33X[0;14Y57072 Siegen[133X
                 [33X[0;14YGermany[133X
   
   
@@ -83,33 +84,34 @@
       2.1-5 [33X[0;0Y[10X@Label [3Xlabel[103X[10X[110X[133X
       2.1-6 AProperty
       2.1-7 AProperty
-      2.1-8 [33X[0;0Y@ChapterInfo [3Xchapter, section[103X[133X
+      2.1-8 [33X[0;0Y[10X@ChapterInfo [3Xchapter[103X[10X, [3Xsection[103X[10X[110X[133X
     2.2 [33X[0;0YOther documentation comments[133X
       2.2-1 [33X[0;0Y[10X@Chapter [3Xname[103X[10X[110X[133X
       2.2-2 [33X[0;0Y[10X@Section [3Xname[103X[10X[110X[133X
-      2.2-3 [33X[0;0Y@EndSection[133X
+      2.2-3 [33X[0;0Y[10X@EndSection[110X[133X
       2.2-4 [33X[0;0Y[10X@Subsection [3Xname[103X[10X[110X[133X
-      2.2-5 [33X[0;0Y@EndSubsection[133X
-      2.2-6 [33X[0;0Y@BeginAutoDoc[133X
-      2.2-7 [33X[0;0Y@EndAutoDoc[133X
-      2.2-8 [33X[0;0Y@BeginGroup [3X[grpname][103X[133X
-      2.2-9 [33X[0;0Y@EndGroup[133X
-      2.2-10 [33X[0;0Y[10X@Level [3Xlvl[103X[10X[110X[133X
-      2.2-11 [33X[0;0Y[10X@ResetLevel[110X[133X
-      2.2-12 [33X[0;0Y[10X@BeginExample[110X and [10X@EndExample[110X[133X
-      2.2-13 [33X[0;0Y[10X@BeginExampleSession[110X and [10X@EndExampleSession[110X[133X
-      2.2-14 [33X[0;0Y[10X@BeginLog[110X and [10X@EndLog[110X[133X
-      2.2-15 [33X[0;0Y[10X@BeginLogSession[110X and [10X@EndLogSession[110X[133X
-      2.2-16 [33X[0;0Y[10X@DoNotReadRestOfFile[110X[133X
-      2.2-17 [33X[0;0Y[10X@BeginChunk [3Xname[103X[10X[110X, [10X@EndChunk[110X, and [10X@InsertChunk [3Xname[103X[10X[110X[133X
-      2.2-18 [33X[0;0Y[10X@BeginSystem [3Xname[103X[10X[110X, [10X@EndSystem[110X, and [10X@InsertSystem [3Xname[103X[10X[110X[133X
-      2.2-19 [33X[0;0Y[10X@BeginCode [3Xname[103X[10X[110X, @EndCode, and [10X@InsertCode [3Xname[103X[10X[110X[133X
-      2.2-20 [33X[0;0Y[10X@LatexOnly [3Xtext[103X[10X[110X, [10X@BeginLatexOnly[110X, and [10X@EndLatexOnly[110X[133X
-      2.2-21 [33X[0;0Y@NotLatex [3Xtext[103X, [10X@BeginNotLatex[110X , and [10X@EndNotLatex[110X[133X
+      2.2-5 [33X[0;0Y[10X@EndSubsection[110X[133X
+      2.2-6 [33X[0;0Y[10X@BeginAutoDoc[110X[133X
+      2.2-7 [33X[0;0Y[10X@EndAutoDoc[110X[133X
+      2.2-8 [33X[0;0Y[10X@BeginGroup [3X[grpname][103X[10X[110X[133X
+      2.2-9 [33X[0;0Y[10X@EndGroup[110X[133X
+      2.2-10 [33X[0;0Y@GroupTitle [3Xtitle[103X[133X
+      2.2-11 [33X[0;0Y[10X@Level [3Xlvl[103X[10X[110X[133X
+      2.2-12 [33X[0;0Y[10X@ResetLevel[110X[133X
+      2.2-13 [33X[0;0Y[10X@BeginExample[110X and [10X@EndExample[110X[133X
+      2.2-14 [33X[0;0Y[10X@BeginExampleSession[110X and [10X@EndExampleSession[110X[133X
+      2.2-15 [33X[0;0Y[10X@BeginLog[110X and [10X@EndLog[110X[133X
+      2.2-16 [33X[0;0Y[10X@BeginLogSession[110X and [10X@EndLogSession[110X[133X
+      2.2-17 [33X[0;0Y[10X@DoNotReadRestOfFile[110X[133X
+      2.2-18 [33X[0;0Y[10X@BeginChunk [3Xname[103X[10X[110X, [10X@EndChunk[110X, and [10X@InsertChunk [3Xname[103X[10X[110X[133X
+      2.2-19 [33X[0;0Y[10X@BeginSystem [3Xname[103X[10X[110X, [10X@EndSystem[110X, and [10X@InsertSystem [3Xname[103X[10X[110X[133X
+      2.2-20 [33X[0;0Y[10X@BeginCode [3Xname[103X[10X[110X, @EndCode, and [10X@InsertCode [3Xname[103X[10X[110X[133X
+      2.2-21 [33X[0;0Y[10X@LatexOnly [3Xtext[103X[10X[110X, [10X@BeginLatexOnly[110X, and [10X@EndLatexOnly[110X[133X
+      2.2-22 [33X[0;0Y[10X@NotLatex [3Xtext[103X[10X[110X, [10X@BeginNotLatex[110X, and [10X@EndNotLatex[110X[133X
     2.3 [33X[0;0YTitle page commands[133X
     2.4 [33X[0;0YPlain text files[133X
     2.5 [33X[0;0YGrouping[133X
-      2.5-1 FirstOperation
+      2.5-1 [33X[0;0YA family of operations[133X
     2.6 [33X[0;0YLevel[133X
     2.7 [33X[0;0YMarkdown-like formatting of text in [5XAutoDoc[105X[133X
       2.7-1 [33X[0;0YLists[133X

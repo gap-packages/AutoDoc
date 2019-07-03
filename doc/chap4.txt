@@ -6,11 +6,11 @@
   
   [1X4.1-1 AutoDoc[101X
   
-  [33X[1;0Y[29X[2XAutoDoc[102X( [[3Xpackage[103X[, [3Xoptrec[103X]] ) [32X function[133X
+  [33X[1;0Y[29X[2XAutoDoc[102X( [[3XpackageOrDirectory[103X, ][[3Xoptrec[103X] ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ynothing[133X
   
   [33X[0;0YThis  is  the  main  function  of  the  [5XAutoDoc[105X  package. It can perform any
-  combination of the following three tasks:[133X
+  combination of the following tasks:[133X
   
   [31X1[131X   [33X[0;6YIt  can  (re)generate  a scaffold for your package manual. That is, it
         can  produce two XML files in [5XGAPDoc[105X format to be used as part of your
@@ -41,25 +41,37 @@
   
   [33X[0;0YThe parameters have the following meanings:[133X
   
-  [8X[3Xpackage[103X[8X[108X
-        [33X[0;6YThis  is  either the name of package, or an [10XIsDirectory[110X object. In the
-        former  case, [5XAutoDoc[105X uses the metadata of the first package with that
-        name  known  to  [5XGAP[105X.  In the latter case, it checks whether the given
-        directory  contains  a  [11XPackageInfo.g[111X  file,  and  extracts all needed
-        metadata  from  that.  This is for example useful if you have multiple
+  [8X[3XpackageOrDirectory[103X[8X[108X
+        [33X[0;6YThe  purpose  of  this  parameter is twofold: to determine the package
+        directory  in  which  [5XAutoDoc[105X  will  operate, and to find the metadata
+        concerning  the  package  being  documented. The parameter is either a
+        string,  an [10XIsDirectory[110X object, or omitted. If it is a string, [5XAutoDoc[105X
+        interprets it as the name of a package, uses the metadata of the first
+        package  known  to  [5XGAP[105X  with that name, and uses the [10XInstallationPath[110X
+        specified   in   that   metadata   as   the   package   directory.  If
+        [3XpackageOrDirectory[103X  is  an [10XIsDirectory[110X object, this is used as package
+        directory;  if  the argument is omitted, then the current directory is
+        used.  In  the  last two cases, the specified directory must contain a
+        [11XPackageInfo.g[111X  file,  and  [5XAutoDoc[105X  extracts  all needed metadata from
+        that.  The [10XIsDirectory[110X form is for example useful if you have multiple
         versions of the package around and want to make sure the documentation
         of the correct version is built.[133X
   
-        [33X[0;6YIf this argument is omitted, [5XAutoDoc[105X uses the [10XDirectoryCurrent()[110X.[133X
+        [33X[0;6YNote that when using [10XAutoDocWorksheet[110X (see [14X3.1[114X), there is no parameter
+        corresponding  to  [3XpackageOrDirectory[103X  and so the [21Xpackage directory[121X is
+        always the current directory, and there is no metadata.[133X
   
   [8X[3Xoptrec[103X[8X[108X
         [33X[0;6Y[3Xoptrec[103X can be a record with some additional options. The following are
         currently supported:[133X
   
         [8X[3Xdir[103X[8X[108X
-              [33X[0;12YThis  should  be  a  string  containing  a  (relative) path or a
-              Directory()  object  specifying  where the package documentation
-              (i.e. the [5XGAPDoc[105X XML files) are stored.[133X
+              [33X[0;12YThis  should either be a string, in which case it must be a path
+              [13Xrelative[113X  to  the  specified package directory, or a [10XDirectory()[110X
+              object.  (Thus,  the only way to designate an absolute directory
+              is  with  a [10XDirectory()[110X object.) This option specifies where the
+              package  documentation  (e.g.  the [5XGAPDoc[105X XML or the manual PDF,
+              etc.) files are stored and/or will be generated.[133X
               [33X[0;12Y[13XDefault value: [10X"doc/"[110X.[113X[133X
   
         [8X[3Xscaffold[103X[8X[108X
@@ -163,16 +175,7 @@
               [8X[3Xlatex_header_file[103X[8X[108X
                     [33X[0;18YReplaces  the  standard header from [5XGAPDoc[105X completely with
                     the header in this LaTeX file. Please be careful here, and
-                    look at GAPDoc's latexheader.tex file for an example.[133X
-  
-              [8X[3Xgapdoc_latex_options[103X[8X[108X
-                    [33X[0;18YMust  be  a record with entries which can be understood by
-                    SetGapDocLaTeXOptions.  Each  entry can be a string, which
-                    will  be given to [5XGAPDoc[105X directly, or a list containing of
-                    two  entries: The first one must be the string "file", the
-                    second one a filename. This file will be read and then its
-                    content is passed to [5XGAPDoc[105X as option with the name of the
-                    entry.[133X
+                    look at [5XGAPDoc[105X's [11Xlatexheader.tex[111X file for an example.[133X
   
         [8X[3Xautodoc[103X[8X[108X
               [33X[0;12YThis   controls   whether  and  how  to  generate  addition  XML
@@ -243,20 +246,29 @@
                     [33X[0;18Y[13XDefault   value:   [10X[   ".",   "gap",   "lib",  "examples",
                     "examples/doc" ][110X.[113X[133X
   
+              [8X[3XLaTeXOptions[103X[8X[108X
+                    [33X[0;18YMust  be  a record with entries which can be understood by
+                    [2XSetGapDocLaTeXOptions[102X   ([14XGAPDoc:   SetGapDocLaTeXOptions[114X).
+                    Each  entry can be a string, which will be given to [5XGAPDoc[105X
+                    directly,  or  a list containing of two entries: The first
+                    one  must be the string "file", the second one a filename.
+                    This  file  will be read and then its content is passed to
+                    [5XGAPDoc[105X as option with the name of the entry.[133X
+  
               [8X[3Xgap_root_relative_path[103X[8X[108X
                     [33X[0;18YEither  a boolean, or a string containing a relative path.
                     By  default  (if  this  option  is  not  set, or is set to
                     [9Xfalse[109X),   references   in   the   generated  documentation
-                    referring  to  external  documentation  (such  as  the GAP
+                    referring  to  external  documentation  (such  as  the [5XGAP[105X
                     manual)  are encoded using absolute paths. This is fine as
                     long as the documentation stays on only a single computer,
                     but  is  problematic  when  preparing  documentation  that
                     should  be used on multiple computers, e.g., when creating
-                    a distribution archive of a GAP package.[133X
+                    a distribution archive of a [5XGAP[105X package.[133X
                     [33X[0;18YThus,  if  a relative path is provided via this option (or
                     if  it  is  set  to  [9Xtrue[109X, in which case the relative path
                     [11X../../..[111X  is  used),  then  [5XAutoDoc[105X  and [5XGAPDoc[105X attempt to
-                    replace all absolute paths in references to GAP manuals by
+                    replace all absolute paths in references to [5XGAP[105X manuals by
                     paths based on this relative path.[133X
   
                     [33X[0;18YOn  a technical level, [5XAutoDoc[105X passes the relative path to

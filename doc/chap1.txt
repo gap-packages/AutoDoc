@@ -3,8 +3,9 @@
   
   [33X[0;0Y[5XAutoDoc[105X  is  a  [5XGAP[105X  package  which  is  meant to aid [5XGAP[105X package authors in
   creating  and  maintaining  the  documentation  of  their  packages. In this
-  capacity  it  builds  upon  [5XGAPDoc[105X, and is not a replacement for [5XGAPDoc[105X, but
-  rather complements it.[133X
+  capacity      it     builds     upon     the     [5XGAPDoc[105X     package     (see
+  [7Xhttps://www.gap-system.org/Packages/gapdoc.html[107X).  As  such,  it  is  not  a
+  replacement for [5XGAPDoc[105X, but rather complements it.[133X
   
   [33X[0;0YIn  this  chapter  we  describe  how  to  get started using [5XAutoDoc[105X for your
   package.  First, we explain in Section [14X1.1[114X how to write a new package manual
@@ -65,10 +66,11 @@
   not  yet  able  to  automate  [13Xthat[113X  for  you,  more  research  on artificial
   intelligence  is  required).  To add more content, you have several options:
   You  could  add further [5XGAPDoc[105X XML files containing extra chapters, sections
-  and  so on. Or you could use classic [5XGAPDoc[105X source comments (in either case,
-  see  Section [14X1.3[114X on how to teach the [2XAutoDoc[102X ([14X4.1-1[114X) command to include this
-  extra  documentation). Or you could use the special documentation facilities
-  [5XAutoDoc[105X provides (see Section [14X1.2[114X).[133X
+  and  so  on. Or you could use classic [5XGAPDoc[105X source comments. For details on
+  either,  please  refer  to  [14X'GAPDoc:  Distributing  a  Document into Several
+  Files'[114X,  as  well  as Section [14X1.3[114X of this manual on how to teach the [2XAutoDoc[102X
+  ([14X4.1-1[114X)  command  to  include this extra documentation. Or you could use the
+  special documentation facilities [5XAutoDoc[105X provides (see Section [14X1.2[114X).[133X
   
   [33X[0;0YYou  will  probably  want  to re-run the [2XAutoDoc[102X ([14X4.1-1[114X) command frequently,
   e.g. whenever you modified your documentation or your [11XPackageInfo.g[111X. To make
@@ -134,7 +136,7 @@
   your documentation, and insert the line[133X
   
   [4X[32X[104X
-    [4X#Include SYSTEM "_AutoDocMainFile.xml"[104X
+    [4X<#Include SYSTEM "_AutoDocMainFile.xml">[104X
   [4X[32X[104X
   
   [33X[0;0Yin  a  suitable  place.  This  means  that you can mix [5XAutoDoc[105X documentation
@@ -173,7 +175,7 @@
   files  and  some  documentation for operations distributed over all your [11X.g[111X,
   [11X.gd[111X,  and  [11X.gi[111X files. Suppose the main XML file is named [11XPACKAGENAME.xml[111X and
   is  in  the  [11X/doc[111X  subdirectory  of  your package. Then you can rebuild your
-  manual  by  executing  the  following  two  GAP commands from a GAP sessions
+  manual  by  executing  the  following  two  [5XGAP[105X commands from a [5XGAP[105X sessions
   started started in the root directory of your package:[133X
   
   [4X[32X[104X
@@ -218,7 +220,7 @@
   
   [33X[0;0YNow  files  [11XPACKAGENAME01.tst[111X,  [11XPACKAGENAME02.tst[111X  and so appear in the [11Xtst/[111X
   subdirectory  of  your  package,  and  can  be  tested  as  usual using [2XTest[102X
-  ([14X???Test???[114X) respectively [2XTestDirectory[102X ([14X???TestDirectory???[114X).[133X
+  ([14XReference: Test[114X) respectively [2XTestDirectory[102X ([14XReference: TestDirectory[114X).[133X
   
   
   [1X1.3-2 [33X[0;0YSetting different [5XGAPDoc[105X[101X[1X options[133X[101X
@@ -305,7 +307,7 @@
   
         [30X    [33X[0;12YAfter [10XLoadPackage("AutoDoc");[110X add [10XLoadPackage("PackageName");[110X.[133X
   
-        [30X    [33X[0;12YIn the [10XAutoDoc[110X record delete [10XAutoDoc := true;[110X.[133X
+        [30X    [33X[0;12YIn the [10XAutoDoc[110X record delete [10Xautodoc := true;[110X.[133X
   
         [30X    [33X[0;12YIn  the  [10Xscaffold[110X record change the [10Xincludes[110X list to be the list
               of your [10X.xml[110X files that are contained in [11Xmanual.xml[111X.[133X
@@ -316,11 +318,12 @@
               ([10Xmanual.bib[110X  or  [10Xbib.xml.bib[110X  say)  you  should rename this file
               [11XPackageName.bib[111X.[133X
   
-        [30X    [33X[0;12YIn  the  [10Xgapdoc_latex_options[110X record enter any LaTeX [10Xnewcommands[110X
-              previously  in  [11Xmanual.xml[111X.  (If  there  are none you may safely
-              delete  this record.) To illustrate this option the [5XAutoDoc[105X file
-              [11Xmakedoc.g[111X  defines the command [10X\bbZ[110X which may be used to produce
-              the LaTeX formula [22Xf : bbZ^2 -> bbZ[122X.[133X
+        [30X    [33X[0;12YIn the [10XLaTeXOptions[110X record, which is in the [10Xgapdoc[110X record, enter
+              any  LaTeX  [10Xnewcommands[110X  previously in [11Xmanual.xml[111X. (If there are
+              none  you  may  safely  delete  this record.) To illustrate this
+              option,  the  [5XAutoDoc[105X file [11Xmakedoc.g[111X defines the command [10X\bbZ[110X by
+              [10X\newcommand{\bbZ}{\mathbb{Z}}[110X,  which may be used to produce the
+              LaTeX formula [22Xf : bbZ^2 -> bbZ[122X.[133X
   
         [30X    [33X[0;12YIn  the  [10Xentities[110X record enter any entities previously stored in
               [11Xmanual.xml[111X. (Again, if you have none, you may safely delete this
@@ -489,7 +492,7 @@
   
   [33X[0;0YNow,  one  can  create a PDF and HTML document, like a package documentation
   out  of  it.  Suppose the document above is saved as [11Xworksheet.g[111X. Then, when
-  GAP is started in the directory of this file, the command[133X
+  [5XGAP[105X is started in the directory of this file, the command[133X
   
   [4X[32X[104X
     [4XAutoDocWorksheet( "worksheet.g" );[104X
