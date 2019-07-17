@@ -1,6 +1,6 @@
 This file describes changes in the AutoDoc package.
 
-2019.07.xx
+2019.07.17
   - Fix bug in extract_examples option that could result in invalid .tst files
 
 2019.07.03
