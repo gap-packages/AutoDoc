@@ -464,7 +464,7 @@ function( pkgname, pkgdir, docdir, main, files, units )
 # from some other input.
 #
 """);
-        AppendTo(output, "gap> START_TEST( \"", basename, "\");\n");
+        AppendTo(output, "gap> START_TEST( \"", basename, "\");\n\n");
         for a in ch do
             location := a[2][1];
             if StartsWith(location, pkgdirString) then
@@ -482,7 +482,7 @@ function( pkgname, pkgdir, docdir, main, files, units )
                     fi;
                 fi;
             fi;
-            AppendTo(output, "\n# ", comment, ":", a[2][2], "-", a[2][3]);
+            AppendTo(output, "# ", comment, ":", a[2][2], "-", a[2][3]);
             if not StartsWith(a[1], "\n") then
                 AppendTo(output, "\n");
             fi;

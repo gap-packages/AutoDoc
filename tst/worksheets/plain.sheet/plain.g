@@ -18,6 +18,13 @@ Sym( [ 1 .. 5 ] )
 gap> Size(S5);
 120
 @EndExampleSession
+Some text between two examples
+@BeginExampleSession
+gap> A5 := AlternatingGroup(5);
+Alt( [ 1 .. 5 ] )
+gap> Size(A5);
+60
+@EndExampleSession
 And we wrap up with some dummy text
 @EndAutoDocPlainText
 Print( "This line in the file should not be processed.\n" );

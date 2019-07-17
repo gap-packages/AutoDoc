@@ -13,6 +13,15 @@ gap> Size(S5);
 ]]></Example>
 
 
+Some text between two examples
+<Example><![CDATA[
+gap> A5 := AlternatingGroup(5);
+Alt( [ 1 .. 5 ] )
+gap> Size(A5);
+60
+]]></Example>
+
+
 And we wrap up with some dummy text
 <Section Label="Chapter_SomeChapter_Section_Some_categories">
 <Heading>Some categories</Heading>
