@@ -15,4 +15,6 @@ gap> S5 := SymmetricGroup(5);
 Sym( [ 1 .. 5 ] )
 gap> Size(S5);
 120
+
+#
 gap> STOP_TEST("general_test01.tst", 1 );

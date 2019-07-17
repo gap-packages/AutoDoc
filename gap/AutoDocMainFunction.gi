@@ -482,8 +482,13 @@ function( pkgname, pkgdir, docdir, main, files, units )
                     fi;
                 fi;
             fi;
-            AppendTo(output, "\n# ", comment, ":", a[2][2], "-", a[2][3], "\n", a[1], "\n");
+            AppendTo(output, "\n# ", comment, ":", a[2][2], "-", a[2][3]);
+            if not StartsWith(a[1], "\n") then
+                AppendTo(output, "\n");
+            fi;
+            AppendTo(output, a[1], "\n");
         od;
+        AppendTo(output, "#\n");
         AppendTo(output, "gap> STOP_TEST(\"", basename, "\", 1 );\n");
         Print("extracted ", Length(ch), " examples\n");
     od;
