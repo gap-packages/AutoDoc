@@ -78,6 +78,15 @@ DeclareOperation( "SecondOperation", [ IsInt, IsGroup ] );
 #! @Group Group1
 KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
 
+#! @BeginGroup ConStabilize
+#! @Description
+#! This documentation should show the first two variants of the function,
+#! but not the third commented out one.
+DeclareOperation("ConStabilize", [IsObject]);
+DeclareOperation("ConStabilize", [IsObject, IsObject]);
+#DeclareOperation("ConStabilize", [IsTransformation, IsPosInt]); # should NOT be documented
+#! @EndGroup
+
 #############################################################################
 #! @Section Testing chunks
 

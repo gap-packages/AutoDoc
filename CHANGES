@@ -2,6 +2,7 @@ This file describes changes in the AutoDoc package.
 
 2019.07.xx
   - Fix bug in extract_examples option that could result in invalid .tst files
+  - Fix bug where commented out declarations still appeared in the manual.
 
 2019.07.03
   - Make Chunks compatible with GAPDoc chunks

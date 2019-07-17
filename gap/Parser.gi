@@ -5,12 +5,27 @@
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
+## Check if the string <line> starts with whitespaces followed by <prefix>; if
+## this is the case, returns the start position of <prefix>, otherwise fail.
+BindGlobal( "AUTODOC_PositionWhitespacePrefix",
+function( line, prefix )
+    local position;
+    # ignore leading whitespace
+    position := PositionProperty( line, x -> not x in " \t" );
+    if position = fail or position+Length(prefix)-1 > Length(line) then
+        return fail;
+    fi;
+    if line{[position..position+Length(prefix)-1]} = prefix then
+        return position;
+    fi;
+    return fail;
+end );
+
 ##
 InstallGlobalFunction( Scan_for_AutoDoc_Part,
   function( line, plain_text_mode )
     local position, whitespace_position, command, argument;
-    #! @DONT_SCAN_NEXT_LINE
-    position := PositionSublist( line, "#!" );
+    position := AUTODOC_PositionWhitespacePrefix( line, "#!" );
     if position = fail and plain_text_mode = false then
         return [ false, line ];
     fi;
@@ -63,7 +78,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
   function( current_item, type, default_chapter_data )
     local item_rec, entries, has_filters, ret_val;
     item_rec := current_item;
-    if PositionSublist( type, "DeclareCategoryCollections") <> fail then
+    if type = "DeclareCategoryCollections" then
         entries := [ "Filt", "categories" ];
         ret_val := "<C>true</C> or <C>false</C>";
         has_filters := "No";
@@ -71,25 +86,25 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
             item_rec!.arguments := "obj";
         fi;
         item_rec!.coll_suffix := true;
-    elif PositionSublist( type, "DeclareCategory" ) <> fail then
+    elif type = "DeclareCategory" then
         entries := [ "Filt", "categories" ];
         ret_val := "<C>true</C> or <C>false</C>";
         has_filters := 1;
-    elif PositionSublist( type, "DeclareRepresentation" ) <> fail then
+    elif type = "DeclareRepresentation" then
         entries := [ "Filt", "categories" ];
         ret_val := "<C>true</C> or <C>false</C>";
         has_filters := 1;
-    elif PositionSublist( type, "DeclareAttribute" ) <> fail then
+    elif type = "DeclareAttribute" then
         entries := [ "Attr", "attributes" ];
         has_filters := 1;
-    elif PositionSublist( type, "DeclareProperty" ) <> fail then
+    elif type = "DeclareProperty" then
         entries := [ "Prop", "properties" ];
         ret_val := "<C>true</C> or <C>false</C>";
         has_filters := 1;
-    elif PositionSublist( type, "DeclareOperation" ) <> fail then
+    elif type = "DeclareOperation" then
         entries := [ "Oper", "methods" ];
         has_filters := "List";
-    elif PositionSublist( type, "DeclareConstructor" ) <> fail then
+    elif type = "DeclareConstructor" then
         if IsPackageMarkedForLoading( "GAPDoc", ">=1.6.1" ) then
             entries := [ "Constr", "methods" ];
         else
@@ -97,28 +112,28 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
             entries := [ "Oper", "methods" ];
         fi;
         has_filters := "List";
-    elif PositionSublist( type, "DeclareGlobalFunction" ) <> fail then
+    elif type = "DeclareGlobalFunction" then
         entries := [ "Func", "global_functions" ];
         has_filters := "No";
         if not IsBound( item_rec!.arguments ) then
             item_rec!.arguments := "arg";
         fi;
-    elif PositionSublist( type, "DeclareGlobalVariable" ) <> fail then
+    elif type = "DeclareGlobalVariable" then
         entries := [ "Var", "global_variables" ];
         has_filters := "No";
         item_rec!.arguments := fail;
         item_rec!.return_value := false;
-    elif PositionSublist( type, "DeclareFilter" ) <> fail then
+    elif type = "DeclareFilter" then
         entries := [ "Filt", "properties" ];
         has_filters := "No";
         item_rec!.arguments := fail;
         item_rec!.return_value := false;
-    elif PositionSublist( type, "DeclareInfoClass" ) <> fail then
+    elif type = "DeclareInfoClass" then
         entries := [ "InfoClass", "info_classes" ];
         has_filters := "No";
         item_rec!.arguments := fail;
         item_rec!.return_value := false;
-    elif PositionSublist( type, "KeyDependentOperation" ) <> fail then
+    elif type = "KeyDependentOperation" then
         entries := [ "Oper", "methods" ];
         has_filters := 2;
     else
@@ -222,7 +237,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
               position_parentesis, nr_of_attr_loops, i;
 
         ## fail is bigger than every integer
-        declare_position := Minimum( [ PositionSublist( current_line, "Declare" ), PositionSublist( current_line, "KeyDependentOperation" ) ] );
+        declare_position := Minimum( [ AUTODOC_PositionWhitespacePrefix( current_line, "Declare" ),
+                                       AUTODOC_PositionWhitespacePrefix( current_line, "KeyDependentOperation" ) ] );
         if declare_position <> fail then
             current_item := new_man_item();
             current_line := current_line{[ declare_position .. Length( current_line ) ]};
@@ -417,7 +433,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 temp_curr_line := temp_curr_line{[ 1 .. Length( temp_curr_line ) - 1 ]};
             fi;
             if plain_text_mode = false then
-                comment_pos := PositionSublist( temp_curr_line, "#!" );
+                comment_pos := AUTODOC_PositionWhitespacePrefix( temp_curr_line, "#!" );
                 if comment_pos <> fail then
                     before_comment := NormalizedWhitespace( temp_curr_line{ [ 1 .. comment_pos - 1 ] } );
                     if before_comment = "" then
@@ -448,8 +464,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 break;
             fi;
             ##if is comment, simply remove comments.
-            #! @DONT_SCAN_NEXT_LINE
-            temp_pos_comment := PositionSublist( temp_curr_line, "#!" );
+            temp_pos_comment := AUTODOC_PositionWhitespacePrefix( temp_curr_line, "#!" );
             if temp_pos_comment <> fail then
                 temp_curr_line := temp_curr_line{[ temp_pos_comment + 3 .. Length( temp_curr_line ) ]};
                 Add( temp_string_list, temp_curr_line );
@@ -492,8 +507,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
             incorporate_this_line := plain_text_mode;
             if not plain_text_mode then
-                #! @DONT_SCAN_NEXT_LINE
-                temp_pos_comment := PositionSublist( temp_curr_line, "#!" );
+                temp_pos_comment := AUTODOC_PositionWhitespacePrefix( temp_curr_line, "#!" );
                 if temp_pos_comment <> fail then
                     incorporate_this_line := true;
                     temp_curr_line := temp_curr_line{[ temp_pos_comment + 2 .. Length( temp_curr_line ) ]};
@@ -517,12 +531,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end;
     end;
     command_function_record := rec(
-        ## HACK: Needed for AutoDoc parser to be scanned savely.
-        ##       The lines where the AutoDoc comments are
-        ##       searched cause problems otherwise.
-        @DONT_SCAN_NEXT_LINE := function()
-            ReadLineWithLineCount( filestream );
-        end,
         @DoNotReadRestOfFile := function()
             Reset();
             rest_of_file_skipped := true;
@@ -764,7 +772,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             if not IsBound( current_item ) then
                 return;
             fi;
-            comment_pos := PositionSublist( current_line_unedited, "#!" );
+            comment_pos := AUTODOC_PositionWhitespacePrefix( current_line_unedited, "#!" );
             if comment_pos <> fail then
                 current_line_unedited := current_line_unedited{[ comment_pos + 2 .. Length( current_line_unedited ) ]};
             fi;
