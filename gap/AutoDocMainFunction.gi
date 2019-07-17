@@ -486,7 +486,11 @@ function( pkgname, pkgdir, docdir, main, files, units )
             if not StartsWith(a[1], "\n") then
                 AppendTo(output, "\n");
             fi;
-            AppendTo(output, a[1], "\n");
+            if not EndsWith(a[1], "\n") then
+                AppendTo(output, a[1], "\n\n");
+            else
+                AppendTo(output, a[1], "\n");
+            fi;
         od;
         AppendTo(output, "#\n");
         AppendTo(output, "gap> STOP_TEST(\"", basename, "\", 1 );\n");
