@@ -5,6 +5,8 @@ TODO
     `<!ENTITY NAME CONTENT>` entity string
   - Fix the &see; entity we always generate (for legacy support) to display
     the correct output in LaTeX / PDF mode
+  - Add support for ISO 8601 dates in package metadata (to prepare for GAP adding
+    official support for this in the future)
 
 2019.07.17
   - Fix bug in extract_examples option that could result in invalid .tst files

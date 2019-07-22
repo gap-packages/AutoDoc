@@ -7,7 +7,7 @@
 ##
 #############################################################################
 @Title Plain file.autodoc Test
-@Date 30/08/2018
+@Date 2018-08-30
 @Chapter Test
 Does AutoDoc have a way to allow that header block not to appear in
 the documentation generated from a <F>.autodoc</F> file like this?
