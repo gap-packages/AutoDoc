@@ -201,7 +201,7 @@
 #!
 #!     <Mark><A>autodoc</A></Mark>
 #!     <Item>
-#!         This controls whether and how to generate addition XML documentation files
+#!         This controls whether and how to generate additional XML documentation files
 #!         by scanning for &AutoDoc; documentation comments.
 #!         <P/>
 #!         The value should be either <K>true</K>, <K>false</K> or a
