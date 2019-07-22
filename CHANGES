@@ -1,5 +1,9 @@
 This file describes changes in the AutoDoc package.
 
+TODO
+  - Remove undocumented and long-unused support entities specified using a raw
+    `<!ENTITY NAME CONTENT>` entity string
+
 2019.07.17
   - Fix bug in extract_examples option that could result in invalid .tst files
 

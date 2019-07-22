@@ -106,13 +106,6 @@ InstallGlobalFunction( CreateMainPage,
     if IsList( opt.entities ) then
         entities := rec();
         for i in opt.entities do
-            ## allow generic entities.
-            if IsString( i ) and PositionSublist( i, "!ENTITY" ) <> fail then
-                AppendTo( filestream, i );
-                AppendTo( filestream, "\n" );
-                continue;
-            fi;
-
             if IsString( i ) then
                 ent := i;
                 val := Concatenation("<Package>", ent, "</Package>");
