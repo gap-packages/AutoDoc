@@ -79,31 +79,8 @@ InstallGlobalFunction( CreateMainPage,
     fi;
 
     if not IsBound( opt.entities ) then
-        opt.entities := rec();
-    fi;
-
-    # add book_name unconditionally to the list of entities
-    if IsRecord( opt.entities ) then
-        if not IsBound(opt.entities.(book_name)) then
-            opt.entities.(book_name) := Concatenation( "<Package>", book_name, "</Package>" );
-        fi;
-    else
-        Add( opt.entities, book_name );
-    fi;
-
-    if IsBound( opt.main_xml_file ) then
-        filename := opt.main_xml_file;
-    else
-        filename := Concatenation( book_name, ".xml" );
-    fi;
-
-    filestream := AUTODOC_OutputTextFile( dir, filename );
-
-    AppendTo( filestream, AUTODOC_XML_HEADER );
-    AppendTo( filestream, "<!DOCTYPE Book SYSTEM \"gapdoc.dtd\"\n[\n" );
-    AppendTo( filestream, "<!ENTITY see '<Alt Only=\"LaTeX\">$\to$</Alt><Alt Not=\"LaTeX\">--&gt;</Alt>'>\n" );
-
-    if IsList( opt.entities ) then
+        entities := rec();
+    elif IsList( opt.entities ) then
         entities := rec();
         for i in opt.entities do
             if IsString( i ) then
@@ -115,10 +92,35 @@ InstallGlobalFunction( CreateMainPage,
             fi;
             entities.(ent) := val;
         od;
-    else
+    elif IsRecord( opt.entities ) then
         entities := opt.entities;
+    else
+        Error("CreateMainPage: <opt.entities> must be a list or a record");
     fi;
 
+    # add book_name unconditionally to the list of entities
+    if not IsBound(entities.(book_name)) then
+        entities.(book_name) := Concatenation( "<Package>", book_name, "</Package>" );
+    fi;
+
+    # for backwards compatibility: add &see; entity
+    if not IsBound(entities.see) then
+        entities.see := """<Alt Only="LaTeX">$\to$</Alt><Alt Not="LaTeX">--&gt;</Alt>""";
+    fi;
+
+    # open the target XML file
+    if IsBound( opt.main_xml_file ) then
+        filename := opt.main_xml_file;
+    else
+        filename := Concatenation( book_name, ".xml" );
+    fi;
+    filestream := AUTODOC_OutputTextFile( dir, filename );
+
+    # output the initial file header
+    AppendTo( filestream, AUTODOC_XML_HEADER );
+    AppendTo( filestream, "<!DOCTYPE Book SYSTEM \"gapdoc.dtd\"\n[\n" );
+
+    # output all entities
     for ent in RecNames(entities) do
         val := String(entities.(ent));
 
@@ -129,8 +131,9 @@ InstallGlobalFunction( CreateMainPage,
 
         AppendTo( filestream, "<!ENTITY ", ent, " '", val, "'>\n" );
     od;
-
     AppendTo( filestream, "]\n>\n" );
+
+    # now start the actual book
     AppendTo( filestream, "<Book Name=\"", ReplacedString( book_name, " ", "_" ), "\">\n" );
     AppendTo( filestream, "<#Include SYSTEM \"title.xml\">\n" );
     if not IsBound( opt.table_of_contents ) or opt.table_of_contents <> false then
