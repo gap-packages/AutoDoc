@@ -486,7 +486,6 @@ function( arg )
         if IsBound( scaffold.TitlePage ) and scaffold.TitlePage <> false then
             title_page := ShallowCopy( scaffold.TitlePage );
 
-            AUTODOC_SetIfMissing( title_page, "dir", doc_dir );
             AUTODOC_MergeRecords( title_page, tree!.TitlePage );
 
             if not is_worksheet then
