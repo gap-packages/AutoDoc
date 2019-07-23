@@ -141,7 +141,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     local current_item, flush_and_recover, chapter_info, current_string_list,
           Scan_for_Declaration_part, flush_and_prepare_for_item, current_line, filestream,
           level_scope, scope_group, read_example, command_function_record, autodoc_read_line,
-          current_command, was_declaration, filename, system_scope, groupnumber, chunk_list, rest_of_file_skipped,
+          current_command, was_declaration, filename, system_scope, groupnumber, rest_of_file_skipped,
           context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,
           current_line_unedited, deprecated,
           ReadLineWithLineCount, Normalized_ReadLine, line_number, ErrorWithPos, create_title_item_function,
@@ -712,13 +712,17 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end,
 
         @InsertChunk := function()
-            Add( current_item, DocumentationChunk( tree, current_command[ 2 ] ) );
+            local label_name;
+            label_name := ReplacedString( current_command[ 2 ], " ", "_" );
+            Add( current_item, DocumentationChunk( tree, label_name ) );
         end,
         @BeginChunk := function()
+            local label_name;
             if IsBound( current_item ) then
                 Add( context_stack, current_item );
             fi;
-            current_item := DocumentationChunk( tree, current_command[ 2 ] );
+            label_name := ReplacedString( current_command[ 2 ], " ", "_" );
+            current_item := DocumentationChunk( tree, label_name );
         end,
         @Chunk := ~.@BeginChunk,
         @EndChunk := function()
@@ -738,8 +742,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @EndSystem := deprecated("@EndSystem", ~.@EndChunk),
 
         @BeginCode := function()
-            local tmp_system;
-            tmp_system := DocumentationCode( tree, current_command[ 2 ] );
+            local label_name, tmp_system;
+            label_name := ReplacedString( current_command[ 2 ], " ", "_" );
+            tmp_system := DocumentationCode( tree, label_name );
             Append( tmp_system!.content, read_code() );
         end,
         @Code := ~.@BeginCode,
