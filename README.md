@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/gap-packages/AutoDoc.svg?branch=master)](https://travis-ci.org/gap-packages/AutoDoc)
+[![Code Coverage](https://codecov.io/github/gap-packages/AutoDoc/coverage.svg?branch=master&token=)](https://codecov.io/gh/gap-packages/AutoDoc)
+
 # AutoDoc: A GAP package to help creating a GAPDoc documentation.
 
 AutoDoc is a package for the [GAP](https://www.gap-system.org) computer

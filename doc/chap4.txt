@@ -178,7 +178,7 @@
                     look at [5XGAPDoc[105X's [11Xlatexheader.tex[111X file for an example.[133X
   
         [8X[3Xautodoc[103X[8X[108X
-              [33X[0;12YThis   controls   whether  and  how  to  generate  addition  XML
+              [33X[0;12YThis  controls  whether  and  how  to  generate  additional  XML
               documentation   files  by  scanning  for  [5XAutoDoc[105X  documentation
               comments.[133X
   
