@@ -1,12 +1,14 @@
 This file describes changes in the AutoDoc package.
 
-TODO
+2019.07.24
+  - Add support for ISO 8601 dates in package metadata (to prepare for GAP adding
+    official support for this in the future)
   - Remove undocumented and long-unused support entities specified using a raw
     `<!ENTITY NAME CONTENT>` entity string
   - Fix the &see; entity we always generate (for legacy support) to display
     the correct output in LaTeX / PDF mode
-  - Add support for ISO 8601 dates in package metadata (to prepare for GAP adding
-    official support for this in the future)
+  - Fix support for chunks with names / labels that contain spaces (GAPDoc does
+    not like these, so we replace the spaces by underscores)
 
 2019.07.17
   - Fix bug in extract_examples option that could result in invalid .tst files
