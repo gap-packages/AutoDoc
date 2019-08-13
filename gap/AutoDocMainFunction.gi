@@ -278,6 +278,7 @@ InstallGlobalFunction( CreateTitlePage,
         # try to parse the date in format DD/MM/YYYY (we also accept single
         # digit day or month, which is formally not allowed in PackageInfo.g,
         # but happens in a few legacy packages)
+        argument_rec.Date := Chomp( argument_rec.Date ); # remove trailing newlines, if present
         i := SplitString( argument_rec.Date, "/" );
         if Length( argument_rec.Date ) in [8..10] and Length( i ) = 3 then
             i := List(i, Int);
