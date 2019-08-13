@@ -7,6 +7,7 @@ Print( "Pretend this is a code file.\n" );
 Print( "(Even though we never use it that way.\n" );
 #! @Title General Test
 #! @Date 30/08/2018
+
 #! @Chapter SomeChapter
 #! This is dummy text
 #! @BeginExampleSession
@@ -38,7 +39,14 @@ should be OK, nothing should end up in a weird place.
 #############################################################################
 #! @Section SomeSection
 
-#! Some test just inside a section. We can use test some markdown features here:
+#! Some test just inside a section.
+
+#! @Subsection SomeSubsection
+#! This is a subsection!
+
+#! @Subsection MarkDown support
+#!
+#! We can use test some markdown features here:
 #! * This is a list item.
 #!   * This is a subitem
 #!   * We can also use math mode here: $a^2+b^2=c^2$.
