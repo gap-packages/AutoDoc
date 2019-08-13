@@ -1,5 +1,9 @@
 This file describes changes in the AutoDoc package.
 
+XXX
+  - Deprecate @BeginAutoDoc and @EndAutoDoc; they will be removed in a future
+    AutoDoc version
+
 2019.07.24
   - Add support for ISO 8601 dates in package metadata (to prepare for GAP adding
     official support for this in the future)

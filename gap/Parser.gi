@@ -527,13 +527,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             Reset();
             rest_of_file_skipped := true;
         end,
-        @BeginAutoDoc := function()
+        @BeginAutoDoc := deprecated("@BeginAutoDoc", function()
             autodoc_read_line := fail;
-        end,
+        end),
         @AutoDoc := ~.@BeginAutoDoc,
-        @EndAutoDoc := function()
+        @EndAutoDoc := deprecated("@EndAutoDoc", function()
             autodoc_read_line := false;
-        end,
+        end),
 
         @Chapter := function()
             local scope_chapter;
