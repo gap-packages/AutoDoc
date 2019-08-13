@@ -535,13 +535,11 @@ since worksheets do not have a <F>PackageInfo.g</F> file from which this informa
 <Section Label="PlainText">
 <Heading>Plain text files</Heading>
 
-&AutoDoc; plain text files work exactly like &AutoDoc; comments, except that
-the <C>#!</C> is unnecessary at the beginning of a line which should be
-documented. Files that have the suffix <C>.autodoc</C> will automatically
-regarded as plain text files while the commands <C>@AutoDocPlainText</C> and
-<C>@EndAutoDocPlainText</C> mark parts in plain text files which should be
-regarded as &AutoDoc; parts. All commands can be used like before.
-
+Files that have the suffix <C>.autodoc</C> and are listed in the
+<C>autodoc.files</C> option of <Ref Func="AutoDoc"/>, resp. are contained in
+one of the directories listed in <C>autodoc.scan_dirs</C>, are treated as
+&AutoDoc; plain text files. These work exactly like &AutoDoc; comments, except
+that lines do not need to (and in fact, should not) start with <C>#!</C>.
 </Section>
 
 <Section Label="Groups">
@@ -759,11 +757,10 @@ at the start of any new subsection, section or chapter.</Item>
     manual with a minimal &AutoDoc; comment <C>#!</C>.</Item>
 <Mark><C>@BeginSystem <A>name</A></C>, <C>@EndSystem</C>, and <C>@InsertSystem <A>name</A></C></Mark>
 <Item>Please use the chunk commands from subsection <Ref Subsect="@BeginChunk"/> instead.</Item>
-
+<Mark><C>@AutoDocPlainText</C> and <C>@EndAutoDocPlainText</C></Mark>
+<Item>Use <C>.autodoc</C> files or &AutoDoc; comments instead.</Item>
 </List>
 
-
 </Section>
-
 
 </Chapter>

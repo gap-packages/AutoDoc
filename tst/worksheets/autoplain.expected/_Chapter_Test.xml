@@ -4,13 +4,6 @@
 <Chapter Label="Chapter_Test">
 <Heading>Test</Heading>
 
-#############################################################################
-##
-## AutoDoc package
-##
-## Test the behavior of AutoDoc on a .autodoc file
-##
-#############################################################################
 Does AutoDoc have a way to allow that header block not to appear in
 the documentation generated from a <F>.autodoc</F> file like this?
 <Example><![CDATA[

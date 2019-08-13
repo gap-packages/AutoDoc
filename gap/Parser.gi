@@ -816,13 +816,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             NormalizeWhitespace( current_command[ 2 ] );
             Add( tree!.worksheet_dependencies, SplitString( current_command[ 2 ], " " ) );
         end,
-        @BeginAutoDocPlainText := function()
+        @BeginAutoDocPlainText := deprecated("@BeginAutoDocPlainText", function()
             plain_text_mode := true;
-        end,
+        end),
         @AutoDocPlainText := ~.@BeginAutoDocPlainText,
-        @EndAutoDocPlainText := function()
+        @EndAutoDocPlainText := deprecated("@EndAutoDocPlainText", function()
             plain_text_mode := false;
-        end,
+        end),
         @ExampleSession := function()
             local example_node;
             example_node := read_session_example( true, plain_text_mode );

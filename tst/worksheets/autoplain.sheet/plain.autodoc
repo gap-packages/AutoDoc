@@ -1,13 +1,6 @@
-@Chapter Test
-#############################################################################
-##
-##  AutoDoc package
-##
-##  Test the behavior of AutoDoc on a .autodoc file
-##
-#############################################################################
 @Title Plain file.autodoc Test
 @Date 2018-08-30
+
 @Chapter Test
 Does AutoDoc have a way to allow that header block not to appear in
 the documentation generated from a <F>.autodoc</F> file like this?
@@ -25,5 +18,3 @@ gap> Size(A5);
 60
 @EndExampleSession
 And we wrap up with some dummy text
-@EndAutoDocPlainText
-Print( "We can switch back to 'regular' mode even in a .autodoc file.\n" );
