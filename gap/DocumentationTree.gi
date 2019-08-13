@@ -209,16 +209,6 @@ InstallMethod( StructurePartInTree, [ IsTreeForDocumentation, IsList ],
 end );
 
 ##
-InstallMethod( DocumentationExample, [ IsTreeForDocumentation, IsList ],
-  function( tree, context )
-    local node;
-
-    node := DocumentationExample( tree );
-    Add( tree, node, context );
-    return node;
-end );
-
-##
 InstallMethod( DocumentationExample, [ IsTreeForDocumentation ],
   function( tree )
     local node, label;
@@ -229,16 +219,6 @@ InstallMethod( DocumentationExample, [ IsTreeForDocumentation ],
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeExampleNodes,
                              Label, label );
     tree!.nodes_by_label.( label ) := node;
-    return node;
-end );
-
-##
-InstallMethod( DocumentationChunk, [ IsTreeForDocumentation, IsString, IsList ],
-  function( tree, name, context )
-    local node;
-
-    node := DocumentationChunk( tree, name );
-    Add( tree, node, context );
     return node;
 end );
 
@@ -255,16 +235,6 @@ InstallMethod( DocumentationChunk, [ IsTreeForDocumentation, IsString ],
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeChunkNodes,
                               Label, name );
     tree!.chunks.( name ) := node;
-    return node;
-end );
-
-##
-InstallMethod( DocumentationCode, [ IsTreeForDocumentation, IsString, IsList ],
-  function( tree, name, context )
-    local node;
-    
-    node := DocumentationGroup( tree, name );
-    Add( tree, node, context );
     return node;
 end );
 
