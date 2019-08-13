@@ -197,12 +197,6 @@ The <C>@SectionTitle</C> <A>title</A> command
 can be used to set a heading for the section that is different from <A>name</A>.
 </Subsection>
 
-<Subsection Label="@EndSection">
-<Index Key="@EndSection"><C>@EndSection</C></Index>
-<Heading><C>@EndSection</C></Heading>
-<Emph>This command is deprecated.</Emph> You can simply remove any use of it.
-</Subsection>
-
 <Subsection Label="@Subsection">
 <Index Key="@Subsection"><C>@Subsection</C></Index>
 <Index Key="@SubsectionLabel"><C>@SubsectionLabel</C></Index>
@@ -225,30 +219,6 @@ can be used to set the label of the subsection to <C>Subsection_</C><A>label</A>
 
 The <C>@SubsectionTitle</C> <A>title</A> command
 can be used to set a heading for the subsection that is different from <A>name</A>.
-</Subsection>
-
-<Subsection Label="@EndSubsection">
-<Index Key="@EndSubsection"><C>@EndSubsection</C></Index>
-<Heading><C>@EndSubsection</C></Heading>
-<Emph>This command is deprecated.</Emph> You can simply remove any use of it.
-</Subsection>
-
-<Subsection Label="@BeginAutoDoc">
-<Index Key="@BeginAutoDoc"><C>@BeginAutoDoc</C></Index>
-<Index Key="@EndAutoDoc"><C>@EndAutoDoc</C></Index>
-<Heading><C>@BeginAutoDoc</C> and <C>@EndAutoDoc</C></Heading>
-<Emph>These commands are deprecated.</Emph>
-Please do not use them. Instead, it suffices to prepend each declaration
-that is meant to be appear in the manual with a minimal &AutoDoc; comment
-<C>#!</C>:
-<Listing><![CDATA[
-#!
-DeclareOperation( "Operation1", [ IsList ] );
-
-#!
-DeclareProperty( "IsProperty", IsList );
-]]></Listing>
-In this example, both <C>Operation1</C> and <C>IsProperty</C> would appear in the manual.
 </Subsection>
 
 <Subsection Label="@BeginGroup">
@@ -460,15 +430,6 @@ And then later, insert the example in a different file, like this:
 #! @InsertChunk Example_Symmetric_Group
 ]]></Listing>
 
-</Subsection>
-
-<Subsection Label="@BeginSystem">
-<Index Key="@BeginSystem"><C>@BeginSystem <A>name</A></C></Index>
-<Index Key="@EndSystem"><C>@EndSystem</C></Index>
-<Index Key="@InsertSystem"><C>@InsertSystem <A>name</A></C></Index>
-<Heading><C>@BeginSystem <A>name</A></C>, <C>@EndSystem</C>, and <C>@InsertSystem <A>name</A></C></Heading>
-<Emph>These command are deprecated.</Emph> Please use the chunk commands from subsection
-<Ref Subsect="@BeginChunk"/> instead.
 </Subsection>
 
 <Subsection Label="@BeginCode">
@@ -779,5 +740,30 @@ can be important.</E>
 </Subsection>
 
 </Section>
+
+<Section Label="Deprecated">
+<Heading>Deprecated commands</Heading>
+
+The following commands used to be supported, but should not generally be used anymore.
+They will be removed in a future version of &AutoDoc;.
+
+<List>
+<Mark><C>@EndSection</C></Mark>
+<Item>You can simply remove any use of this, &AutoDoc; ends sections automatically
+at the start of any new section or chapter.</Item>
+<Mark><C>@EndSubsection</C></Mark>
+<Item>You can simply remove any use of this, &AutoDoc; ends subsections automatically
+at the start of any new subsection, section or chapter.</Item>
+<Mark><C>@BeginAutoDoc</C> and <C>@EndAutoDoc</C></Mark>
+<Item>It suffices to prepend each declaration that is meant to be appear in the
+    manual with a minimal &AutoDoc; comment <C>#!</C>.</Item>
+<Mark><C>@BeginSystem <A>name</A></C>, <C>@EndSystem</C>, and <C>@InsertSystem <A>name</A></C></Mark>
+<Item>Please use the chunk commands from subsection <Ref Subsect="@BeginChunk"/> instead.</Item>
+
+</List>
+
+
+</Section>
+
 
 </Chapter>
