@@ -289,7 +289,7 @@ InstallGlobalFunction( CreateTitlePage,
                 i := List(i, Int);
                 OutWithTag( "Date", AUTODOC_FormatDate(i[1], i[2], i[3]) );
             else
-                Print("Warning: could not parse package date '", argument_rec.Date, "\n");
+                Print("Warning: could not parse package date '", argument_rec.Date, "'\n");
                 OutWithTag( "Date", argument_rec.Date );
             fi;
         fi;
