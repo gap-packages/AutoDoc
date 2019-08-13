@@ -74,7 +74,19 @@ Let's wrap up with something, though.
 <Section Label="Chapter_SomeChapter_Section_SomeSection">
 <Heading>SomeSection</Heading>
 
-Some test just inside a section. We can use test some markdown features here:
+Some test just inside a section.
+<Subsection Label="Chapter_SomeChapter_Section_SomeSection_Subsection_SomeSubsection">
+<Heading>SomeSubsection</Heading>
+
+This is a subsection!
+</Subsection>
+
+
+<Subsection Label="Chapter_SomeChapter_Section_SomeSection_Subsection_MarkDown_support">
+<Heading>MarkDown support</Heading>
+
+<P/>
+We can use test some markdown features here:
 <List>
 <Item>
 This is a list item.
@@ -99,6 +111,9 @@ This is <Code>inline code</Code> in a list item.
 </List>
 <P/>
 All of this can <Emph>also</Emph> be <Emph>used</Emph> outside of a <Code>list</Code>.
+</Subsection>
+
+
 <ManSection>
   <InfoClass Name="InfoTESTCLASS" />
  <Description>
