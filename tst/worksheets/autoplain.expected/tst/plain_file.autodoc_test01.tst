@@ -10,13 +10,13 @@
 #
 gap> START_TEST( "plain_file.autodoc_test01.tst");
 
-# _Chapter_Test.xml:16-21
+# _Chapter_Test.xml:9-14
 gap> S5 := SymmetricGroup(5);
 Sym( [ 1 .. 5 ] )
 gap> Size(S5);
 120
 
-# _Chapter_Test.xml:25-30
+# _Chapter_Test.xml:18-23
 gap> A5 := AlternatingGroup(5);
 Alt( [ 1 .. 5 ] )
 gap> Size(A5);
