@@ -105,3 +105,17 @@ KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
 #! @InsertChunk MyChunk
 
 #! The text "Hello, world." is inserted right before this.
+
+#############################################################################
+#! @Section Testing code chunks
+
+#! @BeginCode MyCode
+#! Hello, world.
+x := 1 + 1;
+#! @EndCode
+
+#! This test comes after the code chunk is declared, but before it is inserted.
+
+#! @InsertCode MyCode
+
+#! The text "Hello, world." is inserted right before this.

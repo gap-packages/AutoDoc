@@ -5,6 +5,7 @@ XXX
     AutoDoc version
   - Deprecate @BeginAutoDocPlainText and @EndAutoDocPlainText; they will be
     removed in a future AutoDoc version
+  - Fix @BeginCode / @EndCode / @InsertCode, which were broken in version 2019.07.03
 
 2019.07.24
   - Add support for ISO 8601 dates in package metadata (to prepare for GAP adding

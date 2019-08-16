@@ -166,5 +166,15 @@ The text "Hello, world." is inserted right before this.
 </Section>
 
 
+<Section Label="Chapter_SomeChapter_Section_Testing_code_chunks">
+<Heading>Testing code chunks</Heading>
+
+This test comes after the code chunk is declared, but before it is inserted.
+<#Include Label="MyCode">
+
+The text "Hello, world." is inserted right before this.
+</Section>
+
+
 </Chapter>
 

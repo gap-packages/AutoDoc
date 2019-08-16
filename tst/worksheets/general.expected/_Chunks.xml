@@ -2,3 +2,10 @@
 Hello, world.
 
 <#/GAPDoc>
+<#GAPDoc Label="MyCode">
+<Listing Type="Code"><![CDATA[
+Hello, world.
+x := 1 + 1;
+]]></Listing>
+
+<#/GAPDoc>
