@@ -49,7 +49,6 @@ DeclareOperation( "SectionInTree", [ IsTreeForDocumentation, IsString, IsString 
 DeclareOperation( "SubsectionInTree", [ IsTreeForDocumentation, IsString, IsString, IsString ] );
 DeclareOperation( "DocumentationExample", [ IsTreeForDocumentation ] );
 DeclareOperation( "DocumentationChunk", [ IsTreeForDocumentation, IsString ] );
-DeclareOperation( "DocumentationCode", [ IsTreeForDocumentation, IsString ] );
 DeclareOperation( "DocumentationManItem", [ IsTreeForDocumentation ] );
 DeclareOperation( "SetManItemToDescription", [ IsTreeForDocumentationNode ] );
 DeclareOperation( "SetManItemToReturnValue", [ IsTreeForDocumentationNode ] );
