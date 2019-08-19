@@ -98,6 +98,7 @@ KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
 
 #! @BeginChunk MyChunk
 #! Hello, world.
+#!   This line is indented!
 #! @EndChunk
 
 #! This test comes after the chunk is declared, but before it is inserted.
@@ -112,6 +113,11 @@ KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
 #! @BeginCode MyCode
 #! Hello, world.
 x := 1 + 1;
+if x = 2 then
+  Print("1 + 1 = 2 holds, all is good\n");
+else
+  Error("1+1 <> 2");
+fi;
 #! @EndCode
 
 #! This test comes after the code chunk is declared, but before it is inserted.

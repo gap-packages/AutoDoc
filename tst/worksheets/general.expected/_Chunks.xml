@@ -1,11 +1,17 @@
 <#GAPDoc Label="MyChunk">
-Hello, world.
+ Hello, world.
+   This line is indented!
 
 <#/GAPDoc>
 <#GAPDoc Label="MyCode">
 <Listing Type="Code"><![CDATA[
-Hello, world.
+ Hello, world.
 x := 1 + 1;
+if x = 2 then
+  Print("1 + 1 = 2 holds, all is good\n");
+else
+  Error("1+1 <> 2");
+fi;
 ]]></Listing>
 
 <#/GAPDoc>
