@@ -508,8 +508,8 @@ InstallMethod( WriteDocumentation, [ IsString, IsStream, IsInt ],
     ## In case the list is empty, do nothing.
     ## Once the empty string = empty list bug is fixed,
     ## this could be removed.
-    text := NormalizedWhitespace( text );
-    if text = "" then
+    text := Chomp( text );
+    if NormalizedWhitespace( text ) = "" then
         return;
     fi;
     AppendTo( filestream, text, "\n" );

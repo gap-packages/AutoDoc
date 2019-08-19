@@ -4,7 +4,7 @@
 <Chapter Label="Chapter_SomeChapter">
 <Heading>SomeChapter</Heading>
 
-This is dummy text
+ This is dummy text
 <Example><![CDATA[
 gap> S5 := SymmetricGroup(5);
 Sym( [ 1 .. 5 ] )
@@ -13,7 +13,7 @@ gap> Size(S5);
 ]]></Example>
 
 
-Some text between two examples
+ Some text between two examples
 <Example><![CDATA[
 gap> A5 := AlternatingGroup(5);
 Alt( [ 1 .. 5 ] )
@@ -22,11 +22,11 @@ gap> Size(A5);
 ]]></Example>
 
 
-And we wrap up with some dummy text
+ And we wrap up with some dummy text
 <Section Label="Chapter_SomeChapter_Section_Some_categories">
 <Heading>Some categories</Heading>
 
-Intro text
+  Intro text
 <ManSection>
   <Filt Arg="arg" Name="MyThings" Label="for IsObject"/>
  <Returns><C>true</C> or <C>false</C>
@@ -67,18 +67,18 @@ Intro text
 </ManSection>
 
 
-Let's wrap up with something, though.
+ Let's wrap up with something, though.
 </Section>
 
 
 <Section Label="Chapter_SomeChapter_Section_SomeSection">
 <Heading>SomeSection</Heading>
 
-Some test just inside a section.
+ Some test just inside a section.
 <Subsection Label="Chapter_SomeChapter_Section_SomeSection_Subsection_SomeSubsection">
 <Heading>SomeSubsection</Heading>
 
-This is a subsection!
+ This is a subsection!
 </Subsection>
 
 
@@ -86,7 +86,7 @@ This is a subsection!
 <Heading>MarkDown support</Heading>
 
 <P/>
-We can use test some markdown features here:
+ We can use test some markdown features here:
 <List>
 <Item>
 This is a list item.
@@ -110,14 +110,14 @@ This is <Code>inline code</Code> in a list item.
 </Item>
 </List>
 <P/>
-All of this can <Emph>also</Emph> be <Emph>used</Emph> outside of a <Code>list</Code>.
+ All of this can <Emph>also</Emph> be <Emph>used</Emph> outside of a <Code>list</Code>.
 </Subsection>
 
 
 <ManSection>
   <InfoClass Name="InfoTESTCLASS" />
  <Description>
-An info class
+   An info class
  </Description>
 </ManSection>
 
@@ -126,13 +126,13 @@ An info class
 This text will only appear in the \LaTeX version.
 ]]></Alt>
 <Alt Only="LaTeX"><![CDATA[
-This text will only appear in the \LaTeX version, too.
+ This text will only appear in the \LaTeX version, too.
 ]]></Alt>
 <Alt Not="LaTeX"><![CDATA[
 This text will only appear in the HTML version and the text version.
 ]]></Alt>
 <Alt Not="LaTeX"><![CDATA[
-This text will only appear in the HTML version and the text version, too.
+ This text will only appear in the HTML version and the text version, too.
 ]]></Alt>
 </Section>
 
@@ -146,9 +146,9 @@ This text will only appear in the HTML version and the text version, too.
   <Oper Arg="arg1,arg2" Name="SecondOperation" Label="for IsInt, IsGroup"/>
   <Oper Arg="arg1,arg2" Name="ThirdOperation" Label="for IsGroup, IsInt"/>
  <Description>
-First sentence.
-Second sentence.
-Third sentence.
+  First sentence.
+  Second sentence.
+  Third sentence.
  </Description>
 </ManSection>
 
@@ -159,20 +159,20 @@ Third sentence.
 <Section Label="Chapter_SomeChapter_Section_Testing_chunks">
 <Heading>Testing chunks</Heading>
 
-This test comes after the chunk is declared, but before it is inserted.
+ This test comes after the chunk is declared, but before it is inserted.
 <#Include Label="MyChunk">
 
-The text "Hello, world." is inserted right before this.
+ The text "Hello, world." is inserted right before this.
 </Section>
 
 
 <Section Label="Chapter_SomeChapter_Section_Testing_code_chunks">
 <Heading>Testing code chunks</Heading>
 
-This test comes after the code chunk is declared, but before it is inserted.
+ This test comes after the code chunk is declared, but before it is inserted.
 <#Include Label="MyCode">
 
-The text "Hello, world." is inserted right before this.
+ The text "Hello, world." is inserted right before this.
 </Section>
 
 
