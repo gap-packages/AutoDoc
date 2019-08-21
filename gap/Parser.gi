@@ -125,7 +125,6 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         return fail;
     fi;
     item_rec!.item_type := entries[ 1 ];
-    item_rec!.doc_stream_type := entries[ 2 ];
     if not IsBound( item_rec!.chapter_info ) or item_rec!.chapter_info = [ ] then
         item_rec!.chapter_info := default_chapter_data.( entries[ 2 ] );
     fi;
@@ -345,7 +344,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         if declare_position <> fail then
             current_item := new_man_item();
             current_item!.item_type := "Func";
-            current_item!.doc_stream_type := "operations";
             ##Find name
             position_parentesis := PositionSublist( current_line, "(" );
             current_line := current_line{ [ position_parentesis + 1 .. Length( current_line ) ] };
