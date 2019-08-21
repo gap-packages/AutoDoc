@@ -218,24 +218,24 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     end;
     Scan_for_Declaration_part := function()
         local declare_position, current_type, filter_string, has_filters,
-              position_parentesis, nr_of_attr_loops, i;
+              position_parenthesis, nr_of_attr_loops, i;
 
         ## fail is bigger than every integer
         declare_position := Minimum( [ PositionSublist( current_line, "Declare" ), PositionSublist( current_line, "KeyDependentOperation" ) ] );
         if declare_position <> fail then
             current_item := new_man_item();
             current_line := current_line{[ declare_position .. Length( current_line ) ]};
-            position_parentesis := PositionSublist( current_line, "(" );
-            if position_parentesis = fail then
+            position_parenthesis := PositionSublist( current_line, "(" );
+            if position_parenthesis = fail then
                 ErrorWithPos( "Something went wrong" );
             fi;
-            current_type := current_line{ [ 1 .. position_parentesis - 1 ] };
+            current_type := current_line{ [ 1 .. position_parenthesis - 1 ] };
             has_filters := AutoDoc_Type_Of_Item( current_item, current_type, default_chapter_data );
             if has_filters = fail then
                 ErrorWithPos( "Unrecognized scan type" );
                 return false;
             fi;
-            current_line := current_line{ [ position_parentesis + 1 .. Length( current_line ) ] };
+            current_line := current_line{ [ position_parenthesis + 1 .. Length( current_line ) ] };
             ## Now the funny part begins:
             ## try fetching the name:
             ## Assuming the name is in the same line as its
@@ -345,30 +345,30 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             current_item := new_man_item();
             current_item!.item_type := "Oper";
             ##Find name
-            position_parentesis := PositionSublist( current_line, "(" );
-            current_line := current_line{ [ position_parentesis + 1 .. Length( current_line ) ] };
+            position_parenthesis := PositionSublist( current_line, "(" );
+            current_line := current_line{ [ position_parenthesis + 1 .. Length( current_line ) ] };
             ## find next colon
             current_item!.name := "";
             while PositionSublist( current_line, "," ) = fail do
                 Append( current_item!.name, current_line );
                 current_line := Normalized_ReadLine( filestream );
             od;
-            position_parentesis := PositionSublist( current_line, "," );
-            Append( current_item!.name, current_line{[ 1 .. position_parentesis - 1 ]} );
+            position_parenthesis := PositionSublist( current_line, "," );
+            Append( current_item!.name, current_line{[ 1 .. position_parenthesis - 1 ]} );
             NormalizeWhitespace( current_item!.name );
             current_item!.name := StripBeginEnd( current_item!.name, " " );
             while AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' ) = fail do
                 current_line := Normalized_ReadLine( filestream );
             od;
-            position_parentesis := AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' );
-            current_line := current_line{[ position_parentesis + 1 .. Length( current_line ) ]};
+            position_parenthesis := AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' );
+            current_line := current_line{[ position_parenthesis + 1 .. Length( current_line ) ]};
             filter_string := "for ";
             while PositionSublist( current_line, "]" ) = fail do
                 Append( filter_string, current_line );
             od;
-            position_parentesis := AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' );
-            Append( filter_string, current_line{[ 1 .. position_parentesis - 1 ]} );
-            current_line := current_line{[ position_parentesis + 1 .. Length( current_line )]};
+            position_parenthesis := AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' );
+            Append( filter_string, current_line{[ 1 .. position_parenthesis - 1 ]} );
+            current_line := current_line{[ position_parenthesis + 1 .. Length( current_line )]};
             NormalizeWhitespace( filter_string );
             if IsString( filter_string ) then
                 filter_string := ReplacedString( filter_string, "\"", "" );
@@ -381,17 +381,17 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 while PositionSublist( current_line, "function(" ) = fail and PositionSublist( current_line, ");" ) = fail do
                     current_line := Normalized_ReadLine( filestream );
                 od;
-                position_parentesis := PositionSublist( current_line, "function(" );
-                if position_parentesis <> fail then
-                    current_line := current_line{[ position_parentesis + 9 .. Length( current_line ) ]};
+                position_parenthesis := PositionSublist( current_line, "function(" );
+                if position_parenthesis <> fail then
+                    current_line := current_line{[ position_parenthesis + 9 .. Length( current_line ) ]};
                     filter_string := "";
                     while PositionSublist( current_line, ")" ) = fail do;
                         current_line := StripBeginEnd( current_line, " " );
                         Append( filter_string, current_line );
                         current_line := Normalized_ReadLine( current_line );
                     od;
-                    position_parentesis := PositionSublist( current_line, ")" );
-                    Append( filter_string, current_line{[ 1 .. position_parentesis - 1 ]} );
+                    position_parenthesis := PositionSublist( current_line, ")" );
+                    Append( filter_string, current_line{[ 1 .. position_parenthesis - 1 ]} );
                     NormalizeWhitespace( filter_string );
                     filter_string := StripBeginEnd( filter_string, " " );
                     current_item!.arguments := filter_string;
