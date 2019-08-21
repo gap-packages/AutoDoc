@@ -343,7 +343,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                             ## Fail is larger than every integer.
         if declare_position <> fail then
             current_item := new_man_item();
-            current_item!.item_type := "Func";
+            current_item!.item_type := "Oper";
             ##Find name
             position_parentesis := PositionSublist( current_line, "(" );
             current_line := current_line{ [ position_parentesis + 1 .. Length( current_line ) ] };
