@@ -1,6 +1,6 @@
 This file describes changes in the AutoDoc package.
 
-XXX
+2019.09.04
   - Deprecate @BeginAutoDoc and @EndAutoDoc; they will be removed in a future
     AutoDoc version
   - Deprecate @BeginAutoDocPlainText and @EndAutoDocPlainText; they will be
