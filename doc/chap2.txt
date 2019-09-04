@@ -170,12 +170,7 @@
   that is different from [3Xname[103X.[133X
   
   
-  [1X2.2-3 [33X[0;0Y[10X@EndSection[110X[101X[1X[133X[101X
-  
-  [33X[0;0Y[13XThis command is deprecated.[113X You can simply remove any use of it.[133X
-  
-  
-  [1X2.2-4 [33X[0;0Y[10X@Subsection [3Xname[103X[101X[1X[10X[110X[101X[1X[133X[101X
+  [1X2.2-3 [33X[0;0Y[10X@Subsection [3Xname[103X[101X[1X[10X[110X[101X[1X[133X[101X
   
   [33X[0;0YSets  an  active  subsection  like  [10X@Section[110X  sets  an  active  section. The
   subsection  automatically  ends  with  the  next  [10X@Subsection[110X,  [10X@Section[110X  or
@@ -194,36 +189,7 @@
   subsection that is different from [3Xname[103X.[133X
   
   
-  [1X2.2-5 [33X[0;0Y[10X@EndSubsection[110X[101X[1X[133X[101X
-  
-  [33X[0;0Y[13XThis command is deprecated.[113X You can simply remove any use of it.[133X
-  
-  
-  [1X2.2-6 [33X[0;0Y[10X@BeginAutoDoc[110X[101X[1X[133X[101X
-  
-  [33X[0;0YCauses   all  subsequent  declarations  to  be  documented  in  the  manual,
-  regardless of whether they have an [5XAutoDoc[105X comment in front of them or not.[133X
-  
-  
-  [1X2.2-7 [33X[0;0Y[10X@EndAutoDoc[110X[101X[1X[133X[101X
-  
-  [33X[0;0YEnds  the  effect of [10X@BeginAutoDoc[110X. So from here on, again only declarations
-  with an explicit [5XAutoDoc[105X comment in front are added to the manual.[133X
-  
-  [4X[32X[104X
-    [4X#! @BeginAutoDoc[104X
-    [4X[104X
-    [4XDeclareOperation( "Operation1", [ IsList ] );[104X
-    [4X[104X
-    [4XDeclareProperty( "IsProperty", IsList );[104X
-    [4X[104X
-    [4X#! @EndAutoDoc[104X
-  [4X[32X[104X
-  
-  [33X[0;0YBoth, [10XOperation1[110X and [10XIsProperty[110X would appear in the manual.[133X
-  
-  
-  [1X2.2-8 [33X[0;0Y[10X@BeginGroup [3X[grpname][103X[101X[1X[10X[110X[101X[1X[133X[101X
+  [1X2.2-4 [33X[0;0Y[10X@BeginGroup [3X[grpname][103X[101X[1X[10X[110X[101X[1X[133X[101X
   
   [33X[0;0YStarts  a  group.  All following documented declarations without an explicit
   [10X@Group[110X  command  are grouped together in the same group with the given name.
@@ -233,7 +199,7 @@
   [33X[0;0YSee section [14X2.5[114X for more information about groups.[133X
   
   
-  [1X2.2-9 [33X[0;0Y[10X@EndGroup[110X[101X[1X[133X[101X
+  [1X2.2-5 [33X[0;0Y[10X@EndGroup[110X[101X[1X[133X[101X
   
   [33X[0;0YEnds the current group.[133X
   
@@ -253,14 +219,14 @@
   [4X[32X[104X
   
   
-  [1X2.2-10 [33X[0;0Y@GroupTitle [3Xtitle[103X[101X[1X[133X[101X
+  [1X2.2-6 [33X[0;0Y@GroupTitle [3Xtitle[103X[101X[1X[133X[101X
   
   [33X[0;0YSets  the  subsection heading for the current group to [3Xtitle[103X. In the absence
   of  any [10X@GroupTitle[110X command, the heading will be the name of the first entry
   in the group. See [14X2.5[114X for more information.[133X
   
   
-  [1X2.2-11 [33X[0;0Y[10X@Level [3Xlvl[103X[101X[1X[10X[110X[101X[1X[133X[101X
+  [1X2.2-7 [33X[0;0Y[10X@Level [3Xlvl[103X[101X[1X[10X[110X[101X[1X[133X[101X
   
   [33X[0;0YSets  the  current level of the documentation. All items created after this,
   chapters,   sections,  and  items,  are  given  the  level  [3Xlvl[103X,  until  the
@@ -269,12 +235,12 @@
   [33X[0;0YSee section [14X2.6[114X for more information about levels.[133X
   
   
-  [1X2.2-12 [33X[0;0Y[10X@ResetLevel[110X[101X[1X[133X[101X
+  [1X2.2-8 [33X[0;0Y[10X@ResetLevel[110X[101X[1X[133X[101X
   
   [33X[0;0YResets the current level to 0.[133X
   
   
-  [1X2.2-13 [33X[0;0Y[10X@BeginExample[110X[101X[1X and [10X@EndExample[110X[101X[1X[133X[101X
+  [1X2.2-9 [33X[0;0Y[10X@BeginExample[110X[101X[1X and [10X@EndExample[110X[101X[1X[133X[101X
   
   [33X[0;0Y[10X@BeginExample[110X  marks  the  start of an example to be put into the manual. It
   differs  from  [5XGAPDoc[105X's  [10X<Example>[110X  (see  [14X'GAPDoc: Log'[114X), in that it expects
@@ -307,7 +273,7 @@
   [33X[0;0YThe [5XAutoDoc[105X command [10X@Example[110X is an alias of [10X@BeginExample[110X.[133X
   
   
-  [1X2.2-14 [33X[0;0Y[10X@BeginExampleSession[110X[101X[1X and [10X@EndExampleSession[110X[101X[1X[133X[101X
+  [1X2.2-10 [33X[0;0Y[10X@BeginExampleSession[110X[101X[1X and [10X@EndExampleSession[110X[101X[1X[133X[101X
   
   [33X[0;0Y[10X@BeginExampleSession[110X  marks  the  start  of  an  example  to be put into the
   manual,  while  [10X@EndExampleSession[110X  ends the example block. It is the direct
@@ -344,14 +310,14 @@
   [10X@BeginExampleSession[110X.[133X
   
   
-  [1X2.2-15 [33X[0;0Y[10X@BeginLog[110X[101X[1X and [10X@EndLog[110X[101X[1X[133X[101X
+  [1X2.2-11 [33X[0;0Y[10X@BeginLog[110X[101X[1X and [10X@EndLog[110X[101X[1X[133X[101X
   
   [33X[0;0YWorks  just  like  the  [10X@BeginExample[110X  command,  but the example will not be
   tested. See the [5XGAPDoc[105X manual for more information. The [5XAutoDoc[105X command [10X@Log[110X
   is an alias of [10X@BeginLog[110X.[133X
   
   
-  [1X2.2-16 [33X[0;0Y[10X@BeginLogSession[110X[101X[1X and [10X@EndLogSession[110X[101X[1X[133X[101X
+  [1X2.2-12 [33X[0;0Y[10X@BeginLogSession[110X[101X[1X and [10X@EndLogSession[110X[101X[1X[133X[101X
   
   [33X[0;0YWorks  just  like the [10X@BeginExampleSession[110X command, but the example will not
   be  tested  if  manual examples are run. It is the direct analog of [5XGAPDoc[105X's
@@ -359,7 +325,7 @@
   [10X@BeginLogSession[110X.[133X
   
   
-  [1X2.2-17 [33X[0;0Y[10X@DoNotReadRestOfFile[110X[101X[1X[133X[101X
+  [1X2.2-13 [33X[0;0Y[10X@DoNotReadRestOfFile[110X[101X[1X[133X[101X
   
   [33X[0;0YPrevents  the  rest  of  the  file from being read by the parser. Useful for
   unfinished or temporary files.[133X
@@ -373,7 +339,7 @@
   [4X[32X[104X
   
   
-  [1X2.2-18 [33X[0;0Y[10X@BeginChunk [3Xname[103X[101X[1X[10X[110X[101X[1X, [10X@EndChunk[110X[101X[1X, and [10X@InsertChunk [3Xname[103X[101X[1X[10X[110X[101X[1X[133X[101X
+  [1X2.2-14 [33X[0;0Y[10X@BeginChunk [3Xname[103X[101X[1X[10X[110X[101X[1X, [10X@EndChunk[110X[101X[1X, and [10X@InsertChunk [3Xname[103X[101X[1X[10X[110X[101X[1X[133X[101X
   
   [33X[0;0YText  inside  a  [10X@BeginChunk[110X  / [10X@EndChunk[110X part will not be inserted into the
   final  documentation  directly.  Instead,  the text is stored in an internal
@@ -410,13 +376,7 @@
   [4X[32X[104X
   
   
-  [1X2.2-19 [33X[0;0Y[10X@BeginSystem [3Xname[103X[101X[1X[10X[110X[101X[1X, [10X@EndSystem[110X[101X[1X, and [10X@InsertSystem [3Xname[103X[101X[1X[10X[110X[101X[1X[133X[101X
-  
-  [33X[0;0Y[13XThese  command are deprecated.[113X Please use the chunk commands from subsection
-  [14X2.2-18[114X instead.[133X
-  
-  
-  [1X2.2-20 [33X[0;0Y[10X@BeginCode [3Xname[103X[101X[1X[10X[110X[101X[1X, @EndCode, and [10X@InsertCode [3Xname[103X[101X[1X[10X[110X[101X[1X[133X[101X
+  [1X2.2-15 [33X[0;0Y[10X@BeginCode [3Xname[103X[101X[1X[10X[110X[101X[1X, @EndCode, and [10X@InsertCode [3Xname[103X[101X[1X[10X[110X[101X[1X[133X[101X
   
   [33X[0;0YInserts the text between [10X@BeginCode[110X and [10X@EndCode[110X verbatim at the point where
   [10X@InsertCode[110X  is called. This is useful to insert code excerpts directly into
@@ -432,7 +392,7 @@
   [4X[32X[104X
   
   
-  [1X2.2-21 [33X[0;0Y[10X@LatexOnly [3Xtext[103X[101X[1X[10X[110X[101X[1X, [10X@BeginLatexOnly[110X[101X[1X, and [10X@EndLatexOnly[110X[101X[1X[133X[101X
+  [1X2.2-16 [33X[0;0Y[10X@LatexOnly [3Xtext[103X[101X[1X[10X[110X[101X[1X, [10X@BeginLatexOnly[110X[101X[1X, and [10X@EndLatexOnly[110X[101X[1X[133X[101X
   
   [33X[0;0YCode  inserted between [10X@BeginLatexOnly[110X and [10X@EndLatexOnly[110X or after [10X@LatexOnly[110X
   is  only inserted in the PDF version of the manual or worksheet. It can hold
@@ -447,7 +407,7 @@
   [4X[32X[104X
   
   
-  [1X2.2-22 [33X[0;0Y[10X@NotLatex [3Xtext[103X[101X[1X[10X[110X[101X[1X, [10X@BeginNotLatex[110X[101X[1X, and [10X@EndNotLatex[110X[101X[1X[133X[101X
+  [1X2.2-17 [33X[0;0Y[10X@NotLatex [3Xtext[103X[101X[1X[10X[110X[101X[1X, [10X@BeginNotLatex[110X[101X[1X, and [10X@EndNotLatex[110X[101X[1X[133X[101X
   
   [33X[0;0YCode  inserted between [10X@BeginNotLatex[110X and [10X@EndNotLatex[110X or after [10X@NotLatex[110X is
   inserted  in  the HTML and text versions of the manual or worksheet, but not
@@ -501,12 +461,11 @@
   
   [1X2.4 [33X[0;0YPlain text files[133X[101X
   
-  [33X[0;0Y[5XAutoDoc[105X plain text files work exactly like [5XAutoDoc[105X comments, except that the
-  [10X#![110X  is  unnecessary  at  the beginning of a line which should be documented.
-  Files  that  have  the  suffix [10X.autodoc[110X will automatically regarded as plain
-  text  files  while  the  commands [10X@AutoDocPlainText[110X and [10X@EndAutoDocPlainText[110X
-  mark  parts  in  plain text files which should be regarded as [5XAutoDoc[105X parts.
-  All commands can be used like before.[133X
+  [33X[0;0YFiles  that  have  the  suffix  [10X.autodoc[110X and are listed in the [10Xautodoc.files[110X
+  option  of  [2XAutoDoc[102X  ([14X4.1-1[114X),  resp. are contained in one of the directories
+  listed  in [10Xautodoc.scan_dirs[110X, are treated as [5XAutoDoc[105X plain text files. These
+  work exactly like [5XAutoDoc[105X comments, except that lines do not need to (and in
+  fact, should not) start with [10X#![110X.[133X
   
   
   [1X2.5 [33X[0;0YGrouping[133X[101X
@@ -682,4 +641,28 @@
   
   [33X[0;0YThis produces the following output:[133X
   [33X[0;0YCall function [10Xfoobar()[110X at the start.[133X
+  
+  
+  [1X2.8 [33X[0;0YDeprecated commands[133X[101X
+  
+  [33X[0;0YThe  following  commands  used  to be supported, but should not generally be
+  used anymore. They will be removed in a future version of [5XAutoDoc[105X.[133X
+  
+  [8X[10X@EndSection[110X[8X[108X
+        [33X[0;6YYou  can  simply  remove  any  use  of  this,  [5XAutoDoc[105X  ends  sections
+        automatically at the start of any new section or chapter.[133X
+  
+  [8X[10X@EndSubsection[110X[8X[108X
+        [33X[0;6YYou  can  simply  remove  any  use  of  this, [5XAutoDoc[105X ends subsections
+        automatically at the start of any new subsection, section or chapter.[133X
+  
+  [8X[10X@BeginAutoDoc[110X[8X and [10X@EndAutoDoc[110X[8X[108X
+        [33X[0;6YIt  suffices to prepend each declaration that is meant to be appear in
+        the manual with a minimal [5XAutoDoc[105X comment [10X#![110X.[133X
+  
+  [8X[10X@BeginSystem [3Xname[103X[8X[10X[110X[8X, [10X@EndSystem[110X[8X, and [10X@InsertSystem [3Xname[103X[8X[10X[110X[8X[108X
+        [33X[0;6YPlease use the chunk commands from subsection [14X2.2-14[114X instead.[133X
+  
+  [8X[10X@AutoDocPlainText[110X[8X and [10X@EndAutoDocPlainText[110X[8X[108X
+        [33X[0;6YUse [10X.autodoc[110X files or [5XAutoDoc[105X comments instead.[133X
   

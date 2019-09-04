@@ -6,10 +6,10 @@
                  [1X Generate documentation from [5XGAP[105X source code [101X
   
   
-                                   2019.07.24
+                                   2019.09.04
   
   
-                                  24 July 2019
+                                4 September 2019
   
   
                                Sebastian Gutsche
@@ -88,26 +88,21 @@
     2.2 [33X[0;0YOther documentation comments[133X
       2.2-1 [33X[0;0Y[10X@Chapter [3Xname[103X[10X[110X[133X
       2.2-2 [33X[0;0Y[10X@Section [3Xname[103X[10X[110X[133X
-      2.2-3 [33X[0;0Y[10X@EndSection[110X[133X
-      2.2-4 [33X[0;0Y[10X@Subsection [3Xname[103X[10X[110X[133X
-      2.2-5 [33X[0;0Y[10X@EndSubsection[110X[133X
-      2.2-6 [33X[0;0Y[10X@BeginAutoDoc[110X[133X
-      2.2-7 [33X[0;0Y[10X@EndAutoDoc[110X[133X
-      2.2-8 [33X[0;0Y[10X@BeginGroup [3X[grpname][103X[10X[110X[133X
-      2.2-9 [33X[0;0Y[10X@EndGroup[110X[133X
-      2.2-10 [33X[0;0Y@GroupTitle [3Xtitle[103X[133X
-      2.2-11 [33X[0;0Y[10X@Level [3Xlvl[103X[10X[110X[133X
-      2.2-12 [33X[0;0Y[10X@ResetLevel[110X[133X
-      2.2-13 [33X[0;0Y[10X@BeginExample[110X and [10X@EndExample[110X[133X
-      2.2-14 [33X[0;0Y[10X@BeginExampleSession[110X and [10X@EndExampleSession[110X[133X
-      2.2-15 [33X[0;0Y[10X@BeginLog[110X and [10X@EndLog[110X[133X
-      2.2-16 [33X[0;0Y[10X@BeginLogSession[110X and [10X@EndLogSession[110X[133X
-      2.2-17 [33X[0;0Y[10X@DoNotReadRestOfFile[110X[133X
-      2.2-18 [33X[0;0Y[10X@BeginChunk [3Xname[103X[10X[110X, [10X@EndChunk[110X, and [10X@InsertChunk [3Xname[103X[10X[110X[133X
-      2.2-19 [33X[0;0Y[10X@BeginSystem [3Xname[103X[10X[110X, [10X@EndSystem[110X, and [10X@InsertSystem [3Xname[103X[10X[110X[133X
-      2.2-20 [33X[0;0Y[10X@BeginCode [3Xname[103X[10X[110X, @EndCode, and [10X@InsertCode [3Xname[103X[10X[110X[133X
-      2.2-21 [33X[0;0Y[10X@LatexOnly [3Xtext[103X[10X[110X, [10X@BeginLatexOnly[110X, and [10X@EndLatexOnly[110X[133X
-      2.2-22 [33X[0;0Y[10X@NotLatex [3Xtext[103X[10X[110X, [10X@BeginNotLatex[110X, and [10X@EndNotLatex[110X[133X
+      2.2-3 [33X[0;0Y[10X@Subsection [3Xname[103X[10X[110X[133X
+      2.2-4 [33X[0;0Y[10X@BeginGroup [3X[grpname][103X[10X[110X[133X
+      2.2-5 [33X[0;0Y[10X@EndGroup[110X[133X
+      2.2-6 [33X[0;0Y@GroupTitle [3Xtitle[103X[133X
+      2.2-7 [33X[0;0Y[10X@Level [3Xlvl[103X[10X[110X[133X
+      2.2-8 [33X[0;0Y[10X@ResetLevel[110X[133X
+      2.2-9 [33X[0;0Y[10X@BeginExample[110X and [10X@EndExample[110X[133X
+      2.2-10 [33X[0;0Y[10X@BeginExampleSession[110X and [10X@EndExampleSession[110X[133X
+      2.2-11 [33X[0;0Y[10X@BeginLog[110X and [10X@EndLog[110X[133X
+      2.2-12 [33X[0;0Y[10X@BeginLogSession[110X and [10X@EndLogSession[110X[133X
+      2.2-13 [33X[0;0Y[10X@DoNotReadRestOfFile[110X[133X
+      2.2-14 [33X[0;0Y[10X@BeginChunk [3Xname[103X[10X[110X, [10X@EndChunk[110X, and [10X@InsertChunk [3Xname[103X[10X[110X[133X
+      2.2-15 [33X[0;0Y[10X@BeginCode [3Xname[103X[10X[110X, @EndCode, and [10X@InsertCode [3Xname[103X[10X[110X[133X
+      2.2-16 [33X[0;0Y[10X@LatexOnly [3Xtext[103X[10X[110X, [10X@BeginLatexOnly[110X, and [10X@EndLatexOnly[110X[133X
+      2.2-17 [33X[0;0Y[10X@NotLatex [3Xtext[103X[10X[110X, [10X@BeginNotLatex[110X, and [10X@EndNotLatex[110X[133X
     2.3 [33X[0;0YTitle page commands[133X
     2.4 [33X[0;0YPlain text files[133X
     2.5 [33X[0;0YGrouping[133X
@@ -118,6 +113,7 @@
       2.7-2 [33X[0;0YMath modes[133X
       2.7-3 [33X[0;0YEmphasize[133X
       2.7-4 [33X[0;0YInline code[133X
+    2.8 [33X[0;0YDeprecated commands[133X
   3 [33X[0;0YAutoDoc worksheets[133X
     3.1 [33X[0;0YWorksheets[133X
       3.1-1 AutoDocWorksheet

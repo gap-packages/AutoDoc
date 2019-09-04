@@ -122,8 +122,8 @@
                     the record [21XSomePackage[121X,[133X
   
   [4X                  [32X[104X
-                      [4Xrec( SomePackage := "<Package>SomePackage</Package>",[104X
-                      [4XRELEASEYEAR := "2015" )[104X
+                      [4X             rec( SomePackage := "<Package>SomePackage</Package>",[104X
+                      [4X                  RELEASEYEAR := "2015" )[104X
                     [4X[32X[104X
   
                     [33X[0;18Ythen the following entity definitions are added to the XML
@@ -131,7 +131,7 @@
   
   [4X                  [32X[104X
                       [4X<!ENTITY SomePackage '<Package>SomePackage</Package>'>[104X
-                      [4X<!ENTITY RELEASEYEAR '2015'>[104X
+                      [4X             <!ENTITY RELEASEYEAR '2015'>[104X
                     [4X[32X[104X
   
                     [33X[0;18YThis  allows  you to write [21X&SomePackage;[121X and [21X&RELEASEYEAR;[121X
@@ -149,7 +149,7 @@
                     acknowledgements text:[133X
   
   [4X                  [32X[104X
-                      [4Xrec( Acknowledgements := "Many thanks to ..." )[104X
+                      [4X             rec( Acknowledgements := "Many thanks to ..." )[104X
                     [4X[32X[104X
   
                     [33X[0;18YFor  a  list  of  valid  entries in the title page, please

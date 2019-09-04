@@ -1,6 +1,6 @@
 name: AutoDoc
-version: 2019.07.24
-date: 2019-07-24
+version: 2019.09.04
+date: 2019-09-04
 description: |
     Generate documentation from GAP source code
 
@@ -37,7 +37,7 @@ packageinfo: https://gap-packages.github.io/AutoDoc/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/AutoDoc/releases/download/v2019.07.24/AutoDoc-2019.07.24.tar.gz
+      url: https://github.com/gap-packages/AutoDoc/releases/download/v2019.09.04/AutoDoc-2019.09.04.tar.gz
 
 abstract: |
 
