@@ -630,9 +630,6 @@ function( arg )
         elif opt.extract_examples = true then
             extract_examples := rec( );
         fi;
-        if IsBound( extract_examples ) and not IsBound( extract_examples.units ) then
-            extract_examples.units := "Chapter";
-        fi;
     fi;
 
     if IsBound( extract_examples ) then
@@ -641,7 +638,13 @@ function( arg )
             # it is useful for our "dogfood" test suite
             pkgdir := doc_dir;
         fi;
-        AUTODOC_ExtractMyManualExamples( pkgname, pkgdir, doc_dir, gapdoc.main, gapdoc.files, extract_examples.units );
+        if not IsBound( extract_examples.units ) then
+            extract_examples.units := "Chapter";
+        fi;
+        if not IsBound( extract_examples.skip_empty_in_numbering ) then
+            extract_examples.skip_empty_in_numbering := true;
+        fi;
+        AUTODOC_ExtractMyManualExamples( pkgname, pkgdir, doc_dir, gapdoc.main, gapdoc.files, extract_examples );
     fi;
 
     return true;

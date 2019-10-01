@@ -1,5 +1,8 @@
 This file describes changes in the AutoDoc package.
 
+YYYY.MM.DD
+  - Add extract_examples.skip_empty_in_numbering option
+
 2019.09.04
   - Deprecate @BeginAutoDoc and @EndAutoDoc; they will be removed in a future
     AutoDoc version

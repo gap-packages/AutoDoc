@@ -302,7 +302,8 @@
          Either <K>true</K> or a record.
          If set to <K>true</K>, then all manual examples are extracted and placed
          into files <F>tst/PACKAGENAME01.tst</F>,  <F>tst/PACKAGENAME02.tst</F>, ...
-         and so on, with one file for each chapter.
+         and so on, with one file for each chapter. For chapters with no examples,
+         no file is created.<P/>
          As a record, the entry can have the following entries itself, to specify some options.
          <List>
          <Mark>units</Mark>
@@ -314,6 +315,17 @@
 <P/>
              On a technical level, &AutoDoc; passes the value to the
              <A>units</A> parameter of <Ref Func='ExtractExamples' BookName='gapdoc'/>.
+         </Item>
+         <Mark>skip_empty_in_numbering</Mark>
+         <Item>
+             If set to <K>true</K> (the default), the generated files use
+             filenames with strictly sequential numbering; that means that
+             if chapter 1 (or whatever units are being used) contains no
+             examples but chapter 2 does, then the examples for chapter 2
+             are put into the file <F>tst/PACKAGENAME01.tst</F>. If this
+             option is set to <K>false</K>, then the chapter numbers are
+             used to generate the filenames; so the examples for chapter 2
+             would be put into the file <F>tst/PACKAGENAME02.tst</F>.
          </Item>
          </List>
      </Item>
