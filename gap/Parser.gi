@@ -86,6 +86,11 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         entries := [ "Prop", "properties" ];
         ret_val := "<C>true</C> or <C>false</C>";
         has_filters := 1;
+    elif PositionSublist( type, "DeclareFamilyProperty" ) <> fail then
+        # a CAP-specific version of DeclareProperty
+        entries := [ "Prop", "properties" ];
+        ret_val := "<C>true</C> or <C>false</C>";
+        has_filters := 1;
     elif PositionSublist( type, "DeclareOperation" ) <> fail then
         entries := [ "Oper", "methods" ];
         has_filters := "List";
