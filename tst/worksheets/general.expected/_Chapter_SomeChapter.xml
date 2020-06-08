@@ -153,6 +153,17 @@ This text will only appear in the HTML version and the text version.
 </ManSection>
 
 
+<ManSection Label="ConStabilize">
+  <Oper Arg="arg" Name="ConStabilize" Label="for IsObject"/>
+  <Oper Arg="arg1,arg2" Name="ConStabilize" Label="for IsObject, IsObject"/>
+ <Description>
+This documentation should show the first two variants of the function,
+but not the third commented out one.
+<P/>
+ </Description>
+</ManSection>
+
+
 </Section>
 
 
