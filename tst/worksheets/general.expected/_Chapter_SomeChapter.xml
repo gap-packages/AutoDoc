@@ -19,6 +19,9 @@ gap> A5 := AlternatingGroup(5);
 Alt( [ 1 .. 5 ] )
 gap> Size(A5);
 60
+gap> # Test whether ]]]]><![CDATA[> can be used safely
+gap> [[2]]]]><![CDATA[>[[1]];
+true
 ]]></Example>
 
 

@@ -16,11 +16,14 @@ Sym( [ 1 .. 5 ] )
 gap> Size(S5);
 120
 
-# _Chapter_SomeChapter.xml:17-22
+# _Chapter_SomeChapter.xml:17-25
 gap> A5 := AlternatingGroup(5);
 Alt( [ 1 .. 5 ] )
 gap> Size(A5);
 60
+gap> # Test whether ]]> can be used safely
+gap> [[2]]>[[1]];
+true
 
 #
 gap> STOP_TEST("general_test01.tst", 1 );

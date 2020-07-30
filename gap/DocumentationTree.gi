@@ -624,6 +624,12 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationExampleNodeRep, IsStr
     fi;
     AppendTo( filestream, "<", inserted_string, "><![CDATA[\n" );
     for i in contents do
+        # We wrap the data into a CDATA section; make sure that the content
+        # of the example does not accidentally end the CDATA section prematurely;
+        # to do this, we concatenate multiple CDATA sections:
+        # first we insert ]], then we end the CDATA section, then we start
+        # a new CDATA section which starts with >.
+        i := ReplacedString(i, "]]>", "]]]]><![CDATA[>");
         AppendTo( filestream, i, "\n" );
     od;
     AppendTo( filestream, "]]></", inserted_string, ">\n\n" );

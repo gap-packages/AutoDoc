@@ -22,6 +22,9 @@ Print( "(Even though we never use it that way.\n" );
 #! Alt( [ 1 .. 5 ] )
 #! gap> Size(A5);
 #! 60
+#! gap> # Test whether ]]> can be used safely
+#! gap> [[2]]>[[1]];
+#! true
 #! @EndExampleSession
 #! And we wrap up with some dummy text
 
