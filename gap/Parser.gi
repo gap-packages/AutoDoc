@@ -108,6 +108,11 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         has_filters := "No";
         item_rec!.arguments := fail;
         item_rec!.return_value := false;
+    elif PositionSublist( type, "DeclareGlobalName" ) <> fail then
+        entries := [ "Var", "global_variables" ];
+        has_filters := "No";
+        item_rec!.arguments := fail;
+        item_rec!.return_value := false;
     elif PositionSublist( type, "DeclareFilter" ) <> fail then
         entries := [ "Filt", "properties" ];
         has_filters := "No";

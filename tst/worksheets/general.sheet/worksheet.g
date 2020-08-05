@@ -33,10 +33,9 @@ Print( "(Even though we never use it that way.\n" );
 #!  Intro text
 DeclareCategory("MyThings", IsObject);
 DeclareCategoryCollections("MyThings");
-DeclareCategoryCollections("MyThingsColl");
 DeclareCategoryCollections("MyThingsCollection");
-Now here is some text with a bunch of &!$%*!/ weird things in it. But that
-should be OK, nothing should end up in a weird place.
+# Now here is some text with a bunch of &!$%*!/ weird things in it. But that
+# should be OK, nothing should end up in a weird place.
 #! Let's wrap up with something, though.
 
 #############################################################################
@@ -59,10 +58,6 @@ should be OK, nothing should end up in a weird place.
 #!
 #! All of this can **also** be __used__ outside of a `list`.
 
-#! @Description
-#!   An info class
-DeclareInfoClass("InfoTESTCLASS");
-
 #! @LatexOnly This text will only appear in the \LaTeX version.
 #! @BeginLatexOnly
 #! This text will only appear in the \LaTeX version, too.
@@ -72,6 +67,74 @@ DeclareInfoClass("InfoTESTCLASS");
 #! @BeginNotLatex
 #! This text will only appear in the HTML version and the text version, too.
 #! @EndNotLatex
+
+
+#############################################################################
+#! @Section Testing various kinds of documentation
+
+#! @Description
+#! A category
+DeclareCategory( "SomeCategory", IsObject );
+
+#! @Description
+#! A collection category over the category we just created;
+# will appear as SomeCategoryCollection
+DeclareCategoryCollections( "SomeCategory" );
+
+#! @Description
+#! A collection category over the category we just created;
+# will appear as SomeCategoryCollColl
+DeclareCategoryCollections( "SomeCategoryCollection" );
+
+#! @Description
+#! A collection category over the category we just created;
+# will appear as SomeCategoryCollCollColl
+DeclareCategoryCollections( "SomeCategoryCollColl" );
+
+#! @Description
+#! A representation
+DeclareRepresentation( "SomeRepresentation",  IsAttributeStoringRep, [] );
+
+#! @Description
+#! An attribute
+DeclareAttribute( "SomeAttribute", IsGroup );
+
+#! @Description
+#! A property
+DeclareProperty( "SomeProperty", IsGroup );
+
+#! @Description
+#! An operation
+DeclareOperation( "SomeOperation", [ IsInt, IsGroup ] );
+
+#! @Description
+#! A cConstructor
+DeclareConstructor( "SomeConstructor", [ IsGroup, IsInt ] );
+
+#! @Description
+#! A global function
+DeclareGlobalFunction( "SomeGlobalFunction" );
+
+#! @Description
+#! A global variable
+DeclareGlobalVariable( "SomeGlobalVariable" );
+
+#! @Description
+#! A global name
+DeclareGlobalName( "SomeGlobalName" );
+
+#! @Description
+#! A filter
+DeclareFilter( "SomeFilter" );
+
+#! @Description
+#! An info class
+DeclareInfoClass( "SomeInfoClass");
+
+#! @Description
+#! A key dependent operation
+KeyDependentOperation( "SomeKeyDependentOperation", IsGroup, IsInt, "prime" );
+
 
 #############################################################################
 #! @Section Testing the group commands
@@ -94,7 +157,7 @@ DeclareOperation( "SecondOperation", [ IsInt, IsGroup ] );
 #! @Description
 #!  Third sentence.
 #! @Group Group1
-KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
+DeclareOperation( "ThirdOperation", [ IsGroup, IsInt ] );
 
 #############################################################################
 #! @Section Testing chunks
