@@ -60,16 +60,6 @@ true
 </ManSection>
 
 
-<ManSection>
-  <Filt Arg="obj" Name="MyThingsCollColl" />
- <Returns><C>true</C> or <C>false</C>
-</Returns>
- <Description>
-<P/>
- </Description>
-</ManSection>
-
-
  Let's wrap up with something, though.
 </Section>
 
@@ -114,17 +104,6 @@ This is <Code>inline code</Code> in a list item.
 </List>
 <P/>
  All of this can <Emph>also</Emph> be <Emph>used</Emph> outside of a <Code>list</Code>.
-</Subsection>
-
-
-<ManSection>
-  <InfoClass Name="InfoTESTCLASS" />
- <Description>
-   An info class
- </Description>
-</ManSection>
-
-
 <Alt Only="LaTeX"><![CDATA[
 This text will only appear in the \LaTeX version.
 ]]></Alt>
@@ -137,6 +116,120 @@ This text will only appear in the HTML version and the text version.
 <Alt Not="LaTeX"><![CDATA[
  This text will only appear in the HTML version and the text version, too.
 ]]></Alt>
+</Subsection>
+
+
+</Section>
+
+
+<Section Label="Chapter_SomeChapter_Section_Testing_various_kinds_of_documentation">
+<Heading>Testing various kinds of documentation</Heading>
+
+<ManSection>
+  <Filt Arg="arg" Name="SomeCategory" Label="for IsObject"/>
+ <Returns><C>true</C> or <C>false</C>
+</Returns>
+ <Description>
+ A category
+ </Description>
+</ManSection>
+
+
+<ManSection>
+  <Filt Arg="arg" Name="SomeRepresentation" Label="for IsAttributeStoringRep"/>
+ <Returns><C>true</C> or <C>false</C>
+</Returns>
+ <Description>
+ A collection category over the category we just created;
+ A collection category over the category we just created;
+ A collection category over the category we just created;
+ A representation
+ </Description>
+</ManSection>
+
+
+<ManSection>
+  <Attr Arg="arg" Name="SomeAttribute" Label="for IsGroup"/>
+ <Description>
+ An attribute
+ </Description>
+</ManSection>
+
+
+<ManSection>
+  <Prop Arg="arg" Name="SomeProperty" Label="for IsGroup"/>
+ <Returns><C>true</C> or <C>false</C>
+</Returns>
+ <Description>
+ A property
+ </Description>
+</ManSection>
+
+
+<ManSection>
+  <Oper Arg="arg1,arg2" Name="SomeOperation" Label="for IsInt, IsGroup"/>
+ <Description>
+ An operation
+ </Description>
+</ManSection>
+
+
+<ManSection>
+  <Constr Arg="arg1,arg2" Name="SomeConstructor" Label="for IsGroup, IsInt"/>
+ <Description>
+ A cConstructor
+ </Description>
+</ManSection>
+
+
+<ManSection>
+  <Func Arg="arg" Name="SomeGlobalFunction" />
+ <Description>
+ A global function
+ </Description>
+</ManSection>
+
+
+<ManSection>
+  <Var Name="SomeGlobalVariable" />
+ <Description>
+ A global variable
+ </Description>
+</ManSection>
+
+
+<ManSection>
+  <Var Name="SomeGlobalName" />
+ <Description>
+ A global name
+ </Description>
+</ManSection>
+
+
+<ManSection>
+  <Filt Name="SomeFilter" />
+ <Description>
+ A filter
+ </Description>
+</ManSection>
+
+
+<ManSection>
+  <InfoClass Name="SomeInfoClass" />
+ <Description>
+ An info class
+ </Description>
+</ManSection>
+
+
+<ManSection>
+  <Oper Arg="arg1,arg2" Name="SomeKeyDependentOperation" Label="for IsGroup, IsInt"/>
+ <Description>
+ A key dependent operation
+ </Description>
+</ManSection>
+
+
 </Section>
 
 
