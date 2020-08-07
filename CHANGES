@@ -1,6 +1,8 @@
 This file describes changes in the AutoDoc package.
 
 YYYY.MM.DD
+  - Add support for using the string `]]>` in examples
+  - Add support for `DeclareGlobalName` (new in GAP 4.12)
   - Add extract_examples.skip_empty_in_numbering option
 
 2019.09.04
