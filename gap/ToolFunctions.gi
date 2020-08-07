@@ -35,13 +35,9 @@ end);
 
 
 InstallGlobalFunction( "AUTODOC_OutputTextFile",
-function( arg )
-    local filename, filestream;
-    if Length( arg ) = 1 then
-        filename := arg[1];
-    else
-        filename := Filename( arg[1], arg[2] );
-    fi;
+function( dir, filename )
+    local filestream;
+    filename := Filename( dir, filename );
     filestream := OutputTextFile( filename, false );
     SetPrintFormattingStatus( filestream, false );
     return filestream;
