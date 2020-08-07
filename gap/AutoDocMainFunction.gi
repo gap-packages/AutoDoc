@@ -72,7 +72,7 @@ end );
 ##
 InstallGlobalFunction( CreateMainPage,
   function( book_name, dir, opt )
-    local filename, filestream, i, ent, val, entities;
+    local filestream, i, ent, val, entities;
 
     if IsString(dir) then
         dir := Directory(dir);
@@ -109,12 +109,7 @@ InstallGlobalFunction( CreateMainPage,
     fi;
 
     # open the target XML file
-    if IsBound( opt.main_xml_file ) then
-        filename := opt.main_xml_file;
-    else
-        filename := Concatenation( book_name, ".xml" );
-    fi;
-    filestream := AUTODOC_OutputTextFile( dir, filename );
+    filestream := AUTODOC_OutputTextFile( dir, opt.main_xml_file );
 
     # output the initial file header
     AppendTo( filestream, AUTODOC_XML_HEADER );
