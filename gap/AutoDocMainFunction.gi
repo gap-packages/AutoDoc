@@ -423,15 +423,36 @@ end );
 BindGlobal("AUTODOC_ExtractMyManualExamples",
 function( pkgname, pkgdir, docdir, main, files, opt )
     local tst, i, s, basename, name, output, ch, a, location, pos, comment, pkgdirString,
-      nonempty_units_found, number_of_digits;
+      nonempty_units_found, number_of_digits, lpkgname, tstdir;
     Print("Extracting manual examples for ", pkgname, " package ...\n" );
+
+    lpkgname := LowercaseString(pkgname);
+    lpkgname := ReplacedString(lpkgname, " ", "_");
+
     if not EndsWith(main, ".xml") then
         main := Concatenation( main, ".xml" );
     fi;
     tst:=ExtractExamples( docdir, main, files, opt.units );
     Print(Length(tst), " ", LowercaseString( opt.units ), "s detected\n");
     pkgdirString := Filename(pkgdir, "");
-    AUTODOC_CreateDirIfMissing( Filename(pkgdir, "tst") );
+
+    # ensure the 'tst' directory exists
+    tstdir := Filename(pkgdir, "tst");
+    AUTODOC_CreateDirIfMissing(tstdir);
+    tstdir := Directory(tstdir);
+
+    # first delete all old extracted tests in case chapter numbering etc. changed
+    for s in DirectoryContents(tstdir) do
+        # check prefix and suffix...
+        if StartsWith(s, lpkgname) and EndsWith(s, ".tst") then
+            # ... and between them, there should be only digits...
+            if ForAll(s{[1 + Length(lpkgname) .. Length(s) - 4]}, IsDigitChar) then
+                RemoveFile(Filename(tstdir, s));
+            fi;
+        fi;
+    od;
+
+    #
     nonempty_units_found := 0;
     number_of_digits := Length( String( Length( tst ) ) );
     if number_of_digits = 1 then
@@ -451,9 +472,8 @@ function( pkgname, pkgdir, docdir, main, files, opt )
         fi;
         # pad s to number_of_digits
         s := Concatenation( ListWithIdenticalEntries( number_of_digits - Length( s ), '0' ), s );
-        basename := Concatenation( LowercaseString(pkgname), s, ".tst" );
-        basename := ReplacedString( basename, " ", "_" );
-        name := Filename(pkgdir, Concatenation("tst/", basename) );
+        basename := Concatenation( lpkgname, s, ".tst" );
+        name := Filename( tstdir, basename );
         output := OutputTextFile( name, false ); # to empty the file first
         SetPrintFormattingStatus( output, false ); # to avoid line breaks
         ch := tst[i];

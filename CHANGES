@@ -3,6 +3,8 @@ This file describes changes in the AutoDoc package.
 YYYY.MM.DD
   - Add support for using the string `]]>` in examples
   - Add support for `DeclareGlobalName` (new in GAP 4.12)
+  - Enhance extract_examples to remove outdated .tst files (e.g. if chapter
+    number changes, we won't leave outdated extracted .tst examples behind)
   - Add extract_examples.skip_empty_in_numbering option
   - Fix a warning about a missing file `/doc/_Chunks.xml` which appeared
     when building the documentation of some packages
