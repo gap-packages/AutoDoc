@@ -4,6 +4,8 @@ YYYY.MM.DD
   - Add support for using the string `]]>` in examples
   - Add support for `DeclareGlobalName` (new in GAP 4.12)
   - Add extract_examples.skip_empty_in_numbering option
+  - Fix a warning about a missing file `/doc/_Chunks.xml` which appeared
+    when building the documentation of some packages
 
 2019.09.04
   - Deprecate @BeginAutoDoc and @EndAutoDoc; they will be removed in a future

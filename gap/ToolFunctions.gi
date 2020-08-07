@@ -22,15 +22,27 @@ function(d)
 end );
 
 InstallGlobalFunction( "AUTODOC_CurrentDirectory",
-function(args...)
+function()
+    return AUTODOC_AbsolutePath(DirectoryCurrent());
+end);
+
+# given a path (relative or absolute), return an absolute path pointing to the
+# same file or directory.
+InstallGlobalFunction( "AUTODOC_AbsolutePath",
+function( dir, filename... )
     local pwd, result;
     pwd := Filename( DirectoriesSystemPrograms(), "pwd" );
     if pwd = fail then
         Error("failed to locate 'pwd' tool");
     fi;
     result := "";
-    Process(DirectoryCurrent(), pwd, InputTextNone(), OutputTextString(result, true), []);
-    return Chomp(result);
+    Process(Directory(dir), pwd, InputTextNone(), OutputTextString(result, true), []);
+    result := Chomp(result);
+    if Length(filename) > 0 and Length(filename[1]) > 0 then
+        Append(result, "/");
+        Append(result, filename[1]);
+    fi;
+    return result;
 end);
 
 
