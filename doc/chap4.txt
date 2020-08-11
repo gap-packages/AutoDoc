@@ -279,8 +279,11 @@
               [33X[0;12YEither  [9Xtrue[109X  or  a  record.  If  set  to  [9Xtrue[109X, then all manual
               examples     are     extracted    and    placed    into    files
               [11Xtst/PACKAGENAME01.tst[111X,  [11Xtst/PACKAGENAME02.tst[111X,  ...  and  so on,
-              with  one file for each chapter. As a record, the entry can have
-              the following entries itself, to specify some options.[133X
+              with  one  file for each chapter. For chapters with no examples,
+              no file is created.[133X
+  
+              [33X[0;12YAs a record, the entry can have the following entries itself, to
+              specify some options.[133X
   
               [8Xunits[108X
                     [33X[0;18YThis   controls  how  examples  are  grouped  into  files.
@@ -293,6 +296,17 @@
                     [33X[0;18YOn  a  technical  level,  [5XAutoDoc[105X  passes the value to the
                     [3Xunits[103X     parameter     of     [2XExtractExamples[102X    ([14XGAPDoc:
                     ExtractExamples[114X).[133X
+  
+              [8Xskip_empty_in_numbering[108X
+                    [33X[0;18YIf  set  to  [9Xtrue[109X  (the  default), the generated files use
+                    filenames  with  strictly sequential numbering; that means
+                    that  if  chapter  1  (or  whatever  units are being used)
+                    contains no examples but chapter 2 does, then the examples
+                    for chapter 2 are put into the file [11Xtst/PACKAGENAME01.tst[111X.
+                    If  this  option is set to [9Xfalse[109X, then the chapter numbers
+                    are  used  to  generate the filenames; so the examples for
+                    chapter     2    would    be    put    into    the    file
+                    [11Xtst/PACKAGENAME02.tst[111X.[133X
   
         [8X[3Xmaketest[103X[8X[108X
               [33X[0;12Y[13XThis option is deprecated. Please use [10Xextract_examples[110X instead.[113X[133X

@@ -207,7 +207,9 @@
 </dl>
 </dd>
 <dt><strong class="Mark"><var class="Arg">extract_examples</var></strong></dt>
-<dd><p>Either <code class="keyw">true</code> or a record. If set to <code class="keyw">true</code>, then all manual examples are extracted and placed into files <code class="file">tst/PACKAGENAME01.tst</code>, <code class="file">tst/PACKAGENAME02.tst</code>, ... and so on, with one file for each chapter. As a record, the entry can have the following entries itself, to specify some options.</p>
+<dd><p>Either <code class="keyw">true</code> or a record. If set to <code class="keyw">true</code>, then all manual examples are extracted and placed into files <code class="file">tst/PACKAGENAME01.tst</code>, <code class="file">tst/PACKAGENAME02.tst</code>, ... and so on, with one file for each chapter. For chapters with no examples, no file is created.</p>
+
+<p>As a record, the entry can have the following entries itself, to specify some options.</p>
 
 
 <dl>
@@ -215,6 +217,10 @@
 <dd><p>This controls how examples are grouped into files. Recognized values are "Chapter" (default), "Section", "Subsection" or "Single". Depending on the value, one file is created for each chapter, each section, each subsection or each example. For all other values only a single file is created.</p>
 
 <p>On a technical level, <strong class="pkg">AutoDoc</strong> passes the value to the <var class="Arg">units</var> parameter of <code class="func">ExtractExamples</code> (<a href="../../../pkg/GAPDoc-1.6.3/doc/chap5_mj.html#X8337B2BC79253B3F"><span class="RefLink">GAPDoc: ExtractExamples</span></a>).</p>
+
+</dd>
+<dt><strong class="Mark">skip_empty_in_numbering</strong></dt>
+<dd><p>If set to <code class="keyw">true</code> (the default), the generated files use filenames with strictly sequential numbering; that means that if chapter 1 (or whatever units are being used) contains no examples but chapter 2 does, then the examples for chapter 2 are put into the file <code class="file">tst/PACKAGENAME01.tst</code>. If this option is set to <code class="keyw">false</code>, then the chapter numbers are used to generate the filenames; so the examples for chapter 2 would be put into the file <code class="file">tst/PACKAGENAME02.tst</code>.</p>
 
 </dd>
 </dl>

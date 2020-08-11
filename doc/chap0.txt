@@ -6,10 +6,10 @@
                  [1X Generate documentation from [5XGAP[105X source code [101X
   
   
-                                   2019.09.04
+                                   2020.08.11
   
   
-                                4 September 2019
+                                 11 August 2020
   
   
                                Sebastian Gutsche
@@ -29,12 +29,12 @@
   
   
   Max Horn
-      Email:    [7Xmailto:max.horn@uni-siegen.de[107X
+      Email:    [7Xmailto:horn@mathematik.uni-kl.de[107X
       Homepage: [7Xhttps://www.quendi.de/math[107X
-      Address:  [33X[0;14YDepartment Mathematik[133X
-                [33X[0;14YUniversität Siegen[133X
-                [33X[0;14YWalter-Flex-Straße 3[133X
-                [33X[0;14Y57072 Siegen[133X
+      Address:  [33X[0;14YFachbereich Mathematik[133X
+                [33X[0;14YTU Kaiserslautern[133X
+                [33X[0;14YGottlieb-Daimler-Straße 48[133X
+                [33X[0;14Y67663 Kaiserslautern[133X
                 [33X[0;14YGermany[133X
   
   
