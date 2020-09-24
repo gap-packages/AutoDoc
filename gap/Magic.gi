@@ -254,6 +254,7 @@ function( arg )
                 autodoc.scan_dirs := [ ".", "gap", "lib", "examples", "examples/doc" ];
             fi;
             Append( autodoc.files, AUTODOC_FindMatchingFiles(pkgdir, autodoc.scan_dirs, [ "g", "gi", "gd", "autodoc" ]) );
+            autodoc.files := DuplicateFreeList( autodoc.files );
         fi;
 
         # Make sure all of the files exist, making the file names absolute if
