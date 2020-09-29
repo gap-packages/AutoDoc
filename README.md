@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/gap-packages/AutoDoc.svg?branch=master)](https://travis-ci.org/gap-packages/AutoDoc)
+[![Build Status](https://travis-ci.com/gap-packages/AutoDoc.svg?branch=master)](https://travis-ci.com/gap-packages/AutoDoc)
 [![Code Coverage](https://codecov.io/github/gap-packages/AutoDoc/coverage.svg?branch=master&token=)](https://codecov.io/gh/gap-packages/AutoDoc)
 
 # AutoDoc: A GAP package to help creating a GAPDoc documentation.
