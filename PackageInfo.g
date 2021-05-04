@@ -124,11 +124,7 @@ Dependencies := rec(
                       
 ),
 
-AvailabilityTest := function()
-    return true;
-  end,
-
-Autoload := false,
+AvailabilityTest := ReturnTrue,
 
 TestFile := "tst/testall.g",
 
