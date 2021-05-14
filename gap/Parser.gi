@@ -415,10 +415,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         local code, temp_curr_line, comment_pos, before_comment;
         code := [ "<Listing Type=\"Code\"><![CDATA[\n" ];
         while true do
-            temp_curr_line := ReadLineWithLineCount( filestream );
-            if temp_curr_line[ Length( temp_curr_line )] = '\n' then
-                temp_curr_line := temp_curr_line{[ 1 .. Length( temp_curr_line ) - 1 ]};
-            fi;
+            temp_curr_line := Chomp( ReadLineWithLineCount( filestream ) );
             if plain_text_mode = false then
                 comment_pos := PositionSublist( temp_curr_line, "#!" );
                 if comment_pos <> fail then
@@ -428,7 +425,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                     fi;
                 fi;
             fi;
-            if filestream = fail or PositionSublist( temp_curr_line, "@EndCode" ) <> fail then
+            if PositionSublist( temp_curr_line, "@EndCode" ) <> fail then
                 break;
             fi;
             Add( code, temp_curr_line );
@@ -443,12 +440,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         temp_string_list := example_node!.content;
         is_following_line := false;
         while true do
-            temp_curr_line := ReadLineWithLineCount( filestream );
-            if temp_curr_line[ Length( temp_curr_line )] = '\n' then
-                temp_curr_line := temp_curr_line{[ 1 .. Length( temp_curr_line ) - 1 ]};
-            fi;
-            if filestream = fail or PositionSublist( temp_curr_line, "@EndExample" ) <> fail
-                                 or PositionSublist( temp_curr_line, "@EndLog" ) <> fail then
+            temp_curr_line := Chomp( ReadLineWithLineCount( filestream ) );
+            if PositionSublist( temp_curr_line, "@EndExample" ) <> fail or
+               PositionSublist( temp_curr_line, "@EndLog" ) <> fail then
                 break;
             fi;
             ##if is comment, simply remove comments.
@@ -486,12 +480,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         example_node!.is_tested_example := is_tested_example;
         temp_string_list := example_node!.content;
         while true do
-            temp_curr_line := ReadLineWithLineCount( filestream );
-            if temp_curr_line[ Length( temp_curr_line )] = '\n' then
-                temp_curr_line := temp_curr_line{[ 1 .. Length( temp_curr_line ) - 1 ]};
-            fi;
-            if filestream = fail or PositionSublist( temp_curr_line, "@EndExampleSession" ) <> fail
-                                 or PositionSublist( temp_curr_line, "@EndLogSession" ) <> fail then
+            temp_curr_line := Chomp( ReadLineWithLineCount( filestream ) );
+            if PositionSublist( temp_curr_line, "@EndExampleSession" ) <> fail or
+               PositionSublist( temp_curr_line, "@EndLogSession" ) <> fail then
                 break;
             fi;
             incorporate_this_line := plain_text_mode;
