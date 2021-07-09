@@ -39,7 +39,7 @@ This first reads the <F>PackageInfo.g</F> file from the current
 directory. It extracts information about package from it
 (such as its name and version, see Section <Ref Sect="Tut:Scaffolds:Title"/>).
 It then creates two XML files <F>doc/NAME_OF_YOUR_PACKAGE.xml</F> and
-<F>doc/title.xml</F> insider the package directory. Finally, it runs
+<F>doc/title.xml</F> inside the package directory. Finally, it runs
 &GAPDoc; on them to produce a nice initial PDF and HTML version of your
 fresh manual.
 <P/>

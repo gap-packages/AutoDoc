@@ -491,7 +491,7 @@ function( pkgname, pkgdir, docdir, main, files, opt )
 # from some other input.
 #
 """);
-        AppendTo(output, "gap> START_TEST( \"", basename, "\");\n\n");
+        AppendTo(output, "gap> START_TEST(\"", basename, "\");\n\n");
         for a in ch do
             location := a[2][1];
             if StartsWith(location, pkgdirString) then
@@ -522,7 +522,7 @@ function( pkgname, pkgdir, docdir, main, files, opt )
             fi;
         od;
         AppendTo(output, "#\n");
-        AppendTo(output, "gap> STOP_TEST(\"", basename, "\", 1 );\n");
+        AppendTo(output, "gap> STOP_TEST(\"", basename, "\", 1);\n");
         Print("extracted ", Length(ch), " examples\n");
     od;
 end);
