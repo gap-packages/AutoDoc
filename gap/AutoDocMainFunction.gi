@@ -446,11 +446,11 @@ function( pkgname, pkgdir, docdir, main, files, opt )
     # first delete all old extracted tests in case chapter numbering etc. changed
     for s in DirectoryContents(tstdir) do
         # check prefix and suffix...
-        if StartsWith(s, lpkgname) and EndsWith(s, ".tst") then
-            # ... and between them, there should be only digits...
-            if ForAll(s{[1 + Length(lpkgname) .. Length(s) - 4]}, IsDigitChar) then
+        if StartsWith(s, lpkgname) and EndsWith(s, ".tst")
+            # ... and between them, there should be only digits (at least 2)...
+            and Length(s) - Length(lpkgname) - 4 >= 2
+            and ForAll(s{[1 + Length(lpkgname) .. Length(s) - 4]}, IsDigitChar) then
                 RemoveFile(Filename(tstdir, s));
-            fi;
         fi;
     od;
 
