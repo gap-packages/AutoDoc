@@ -65,7 +65,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
     item_rec := current_item;
     if PositionSublist( type, "DeclareCategoryCollections") <> fail then
         entries := [ "Filt", "categories" ];
-        ret_val := "<C>true</C> or <C>false</C>";
+        ret_val := "<K>true</K> or <K>false</K>";
         has_filters := "No";
         if not IsBound( item_rec!.arguments ) then
             item_rec!.arguments := "obj";
@@ -73,18 +73,18 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         item_rec!.coll_suffix := true;
     elif PositionSublist( type, "DeclareCategory" ) <> fail then
         entries := [ "Filt", "categories" ];
-        ret_val := "<C>true</C> or <C>false</C>";
+        ret_val := "<K>true</K> or <K>false</K>";
         has_filters := 1;
     elif PositionSublist( type, "DeclareRepresentation" ) <> fail then
         entries := [ "Filt", "categories" ];
-        ret_val := "<C>true</C> or <C>false</C>";
+        ret_val := "<K>true</K> or <K>false</K>";
         has_filters := 1;
     elif PositionSublist( type, "DeclareAttribute" ) <> fail then
         entries := [ "Attr", "attributes" ];
         has_filters := 1;
     elif PositionSublist( type, "DeclareProperty" ) <> fail then
         entries := [ "Prop", "properties" ];
-        ret_val := "<C>true</C> or <C>false</C>";
+        ret_val := "<K>true</K> or <K>false</K>";
         has_filters := 1;
     elif PositionSublist( type, "DeclareOperation" ) <> fail then
         entries := [ "Oper", "methods" ];

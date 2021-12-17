@@ -32,7 +32,7 @@ true
   Intro text
 <ManSection>
   <Filt Arg="arg" Name="MyThings" Label="for IsObject"/>
- <Returns><C>true</C> or <C>false</C>
+ <Returns><K>true</K> or <K>false</K>
 </Returns>
  <Description>
 <P/>
@@ -42,7 +42,7 @@ true
 
 <ManSection>
   <Filt Arg="obj" Name="MyThingsCollection" />
- <Returns><C>true</C> or <C>false</C>
+ <Returns><K>true</K> or <K>false</K>
 </Returns>
  <Description>
 <P/>
@@ -52,7 +52,7 @@ true
 
 <ManSection>
   <Filt Arg="obj" Name="MyThingsCollColl" />
- <Returns><C>true</C> or <C>false</C>
+ <Returns><K>true</K> or <K>false</K>
 </Returns>
  <Description>
 <P/>
@@ -127,7 +127,7 @@ This text will only appear in the HTML version and the text version.
 
 <ManSection>
   <Filt Arg="arg" Name="SomeCategory" Label="for IsObject"/>
- <Returns><C>true</C> or <C>false</C>
+ <Returns><K>true</K> or <K>false</K>
 </Returns>
  <Description>
  A category
@@ -137,7 +137,7 @@ This text will only appear in the HTML version and the text version.
 
 <ManSection>
   <Filt Arg="arg" Name="SomeRepresentation" Label="for IsAttributeStoringRep"/>
- <Returns><C>true</C> or <C>false</C>
+ <Returns><K>true</K> or <K>false</K>
 </Returns>
  <Description>
  A collection category over the category we just created;
@@ -158,7 +158,7 @@ This text will only appear in the HTML version and the text version.
 
 <ManSection>
   <Prop Arg="arg" Name="SomeProperty" Label="for IsGroup"/>
- <Returns><C>true</C> or <C>false</C>
+ <Returns><K>true</K> or <K>false</K>
 </Returns>
  <Description>
  A property
