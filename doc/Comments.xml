@@ -81,7 +81,7 @@ DeclareProperty( "AProperty",
 leads to this:
 <ManSection>
   <Prop Arg="arg" Name="AProperty" Label="testlabel"/>
- <Returns> <C>true</C> or <C>false</C>
+ <Returns> <K>true</K> or <K>false</K>
 </Returns>
  <Description>
  </Description>
@@ -95,7 +95,7 @@ DeclareProperty( "AProperty",
 leads to this:
 <ManSection>
   <Prop Arg="arg" Name="AProperty" Label="for IsObject"/>
- <Returns> <C>true</C> or <C>false</C>
+ <Returns> <K>true</K> or <K>false</K>
 </Returns>
  <Description>
  </Description>
