@@ -75,7 +75,7 @@
   [1X2.1-6 AProperty[101X
   
   [33X[1;0Y[29X[2XAProperty[102X( [3Xarg[103X ) [32X property[133X
-  [6XReturns:[106X  [33X[0;10Y[10Xtrue[110X or [10Xfalse[110X[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
   [33X[0;0Ywhile[133X
   
@@ -90,7 +90,7 @@
   [1X2.1-7 AProperty[101X
   
   [33X[1;0Y[29X[2XAProperty[102X( [3Xarg[103X ) [32X property[133X
-  [6XReturns:[106X  [33X[0;10Y[10Xtrue[110X or [10Xfalse[110X[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
   
   [1X2.1-8 [33X[0;0Y[10X@ChapterInfo [3Xchapter[103X[101X[1X[10X, [3Xsection[103X[101X[1X[10X[110X[101X[1X[133X[101X

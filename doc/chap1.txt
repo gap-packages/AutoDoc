@@ -36,9 +36,9 @@
   [33X[0;0YThis  first  reads  the  [11XPackageInfo.g[111X  file  from the current directory. It
   extracts  information  about  package from it (such as its name and version,
   see     Section     [14X1.4-1[114X).     It    then    creates    two    XML    files
-  [11Xdoc/NAME_OF_YOUR_PACKAGE.xml[111X   and   [11Xdoc/title.xml[111X   insider   the   package
-  directory. Finally, it runs [5XGAPDoc[105X on them to produce a nice initial PDF and
-  HTML version of your fresh manual.[133X
+  [11Xdoc/NAME_OF_YOUR_PACKAGE.xml[111X and [11Xdoc/title.xml[111X inside the package directory.
+  Finally,  it  runs  [5XGAPDoc[105X  on  them  to produce a nice initial PDF and HTML
+  version of your fresh manual.[133X
   
   [33X[0;0YTo  ensure that the [5XGAP[105X help system picks up your package manual, you should
   also add something like the following to your [11XPackageInfo.g[111X:[133X
