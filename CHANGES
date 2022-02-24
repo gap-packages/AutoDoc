@@ -1,5 +1,10 @@
 This file describes changes in the AutoDoc package.
 
+2022.02.24
+  - true/false are keywords, not just code: use K tags
+  - extract examples: do not flush pkgname.tst
+  - remove duplicate entries in autodoc.files
+
 2020.08.11
   - Add support for using the string `]]>` in examples
   - Add support for `DeclareGlobalName` (new in GAP 4.12)
