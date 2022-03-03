@@ -193,7 +193,7 @@ InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
                     author_rec.FirstNames, " ", author_rec.LastName,
                     "<Alt Only=\"LaTeX\"><Br/></Alt>" );
             if IsBound( author_rec.PostalAddress ) then
-                tmp_list := SplitString( author_rec.PostalAddress, "\n" );
+                tmp_list := SplitString( StripBeginEnd( author_rec.PostalAddress, "\n\r" ), "\n" );
                 AUTODOC_APPEND_STRING_ITERATIVE( author_string, "<Address>" );
                 for j in tmp_list do
                     AUTODOC_APPEND_STRING_ITERATIVE( author_string, j, "<Br/>" );
@@ -293,7 +293,7 @@ InstallGlobalFunction( CreateTitlePage,
 
     for i in [ "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon" ] do
         if IsBound( argument_rec.( i ) ) then
-            OutWithTag( i, argument_rec.( i ) );
+            OutWithTag( i, StripBeginEnd( argument_rec.( i ), "\n\r" ) );
         fi;
     od;
 
