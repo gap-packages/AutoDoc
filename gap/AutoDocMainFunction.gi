@@ -170,7 +170,7 @@ InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
   function( pkginfo )
     local title_rec, i, tmp_list, j, author_rec, author_string;
 
-    if IsBound( pkginfo.AutoDoc ) then
+    if IsBound( pkginfo.AutoDoc ) and IsBound( pkginfo.AutoDoc.TitlePage ) then
         title_rec := ShallowCopy( pkginfo.AutoDoc.TitlePage );
     else
         title_rec := rec( );
