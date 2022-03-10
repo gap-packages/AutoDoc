@@ -1,5 +1,9 @@
 This file describes changes in the AutoDoc package.
 
+2022.03.10
+  - Strip trailing newlines in PostalAddress and some TitlePage elements
+  - Allow AutoDoc record in PackageInfo.g to not contain a TitlePage entry
+
 2022.02.24
   - true/false are keywords, not just code: use K tags
   - extract examples: do not flush pkgname.tst
