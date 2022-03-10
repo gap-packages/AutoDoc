@@ -1,6 +1,6 @@
 name: AutoDoc
-version: 2022.02.24
-date: 2022-02-24
+version: 2022.03.10
+date: 2022-03-10
 description: |
     Generate documentation from GAP source code
 
@@ -37,7 +37,7 @@ packageinfo: https://gap-packages.github.io/AutoDoc/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/AutoDoc/releases/download/v2022.02.24/AutoDoc-2022.02.24.tar.gz
+      url: https://github.com/gap-packages/AutoDoc/releases/download/v2022.03.10/AutoDoc-2022.03.10.tar.gz
 
 abstract: |
 

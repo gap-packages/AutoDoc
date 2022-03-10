@@ -6,7 +6,7 @@
   
   [1X4.1-1 AutoDoc[101X
   
-  [33X[1;0Y[29X[2XAutoDoc[102X( [[3XpackageOrDirectory[103X][,] [[3Xoptrec[103X] ) [32X function[133X
+  [33X[1;0Y[29X[2XAutoDoc[102X( [[3XpackageOrDirectory[103X, ][[3Xoptrec[103X] ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ynothing[133X
   
   [33X[0;0YThis  is  the  main  function  of  the  [5XAutoDoc[105X  package. It can perform any
