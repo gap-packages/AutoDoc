@@ -11,7 +11,6 @@ DeclareGlobalFunction( "AUTODOC_AbsolutePath" );
 
 DeclareGlobalFunction( "AUTODOC_OutputTextFile" );
 DeclareGlobalFunction( "AutoDoc_WriteDocEntry" );
-DeclareGlobalFunction( "AutoDoc_MakeGAPDocDoc_WithoutLatex" );
 DeclareGlobalFunction( "AutoDoc_CreatePrintOnceFunction" );
 
 DeclareGlobalFunction( "AUTODOC_Diff" );
