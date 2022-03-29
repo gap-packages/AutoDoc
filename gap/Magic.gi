@@ -73,7 +73,7 @@ function( arg )
           pkgdirstr, docdirstr,
           title_page, tree, is_worksheet,
           position_document_class,
-          makeDocFun, args;
+          args;
 
     if Length( arg ) >= 3 then
         Error( "too many arguments" );
@@ -552,13 +552,6 @@ function( arg )
         GAPDoc2LaTeXProcs.Tail := Concatenation(
             "\\immediate\\write\\pagenrlog{[\"Ind\", 0, 0], \\arabic{page},}\n",
             GAPDoc2LaTeXProcs.Tail );
-        
-        # Choose how we call GAPDoc
-        if Filename( DirectoriesSystemPrograms(), "pdflatex" ) <> fail then
-            makeDocFun := MakeGAPDocDoc;
-        else
-            makeDocFun := AutoDoc_MakeGAPDocDoc_WithoutLatex;
-        fi;
 
         # Process Chunks.xml file, if present
         if IsString(_AUTODOC_GLOBAL_CHUNKS_FILE) then
@@ -567,6 +560,11 @@ function( arg )
 
         # Default parameters for MakeGAPDocDoc
         args := [ doc_dir, gapdoc.main, gapdoc.files, gapdoc.bookname, "MathJax" ];
+
+        # Don't try to generate PDFs if pdflatex is not available
+        if Filename( DirectoriesSystemPrograms(), "pdflatex" ) = fail then
+            Add(args, "nopdf" );
+        fi;
 
         # The global option "relativePath" can be set to ensure the manual
         # is built in such a way that all references to the GAP reference manual
@@ -586,7 +584,7 @@ function( arg )
         fi;
 
         # Finally, invoke GAPDoc
-        CallFuncList( makeDocFun, args );
+        CallFuncList( MakeGAPDocDoc, args );
 
         # NOTE: We cannot just write CopyHTMLStyleFiles(doc_dir) here, as
         # CopyHTMLStyleFiles its argument directly to Directory(), leading
