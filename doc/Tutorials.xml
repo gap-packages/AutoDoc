@@ -393,7 +393,7 @@ Now edit <File>PackageName/PackageInfo.g</File> as follows.
   <List>
   <Item> 
   Delete any <Code>PKGVERSIONDATA</Code> chunk that may be there. 
-  The main reason for converting your manual to use &AutoDoc; is to stop 
+  One reason for converting your manual to use &AutoDoc; is to stop
   using entities such as <Code>PACKAGENAMEVERSION</Code>. 
   </Item>
   <Item> 
@@ -514,13 +514,23 @@ of the <Ref Func="AutoDoc"/> function.
 
 
 <Subsection Label="Tut:PackageInfo">
-<Heading>What data is extracted from <F>PackageInfo.g</F>?</Heading>
+<Heading>What data is used from <F>PackageInfo.g</F>?</Heading>
 
-&AutoDoc; can extract data from <F>PackageInfo.g</F> in order to
+&AutoDoc; can use data from <F>PackageInfo.g</F> in order to
 generate a title page. Specifically, the following components
-of the package info record are looked at:
+of the package info record are taken into account:
 
 <List>
+
+<Mark>PackageName</Mark><Item>
+This is used to set the <C>&lt;Title></C> element of the
+title page.
+</Item>
+
+<Mark>Subtitle</Mark><Item>
+This is used to set the <C>&lt;Subtitle></C> element of the
+title page.
+</Item>
 
 <Mark>Version</Mark><Item>
 This is used to set the <C>&lt;Version></C> element of the
@@ -530,11 +540,6 @@ title page, with the string <Q>Version </Q> prepended.
 <Mark>Date</Mark><Item>
 This is used to set the <C>&lt;Date></C> element of the
 title page.
-</Item>
-
-<Mark>Subtitle</Mark><Item>
-This is used to set the <C>&lt;Subtitle></C> element of the
-title page (the <C>&lt;Title></C> is set to the package name).
 </Item>
 
 <Mark>Persons</Mark><Item>
