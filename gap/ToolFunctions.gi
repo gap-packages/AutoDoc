@@ -304,7 +304,7 @@ function(ws)
         expected := Filename(expecteddir, f);
         actual := Filename(actualdir, f);
         if 0 <> AUTODOC_Diff("-u", expected, actual) then
-            Error("diff detected");
+            Error("diff detected in file ", f);
         fi;
     od;
 end);
