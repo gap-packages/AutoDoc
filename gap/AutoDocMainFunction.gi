@@ -70,8 +70,8 @@ InstallGlobalFunction( CreateDefaultChapterData,
 end );
 
 ##
-InstallGlobalFunction( CreateMainPage,
-  function( book_name, dir, opt )
+InstallGlobalFunction( CreateEntitiesPage,
+    function( book_name, dir, opt )
     local filestream, i, ent, val, entities;
 
     if IsString(dir) then
@@ -95,7 +95,7 @@ InstallGlobalFunction( CreateMainPage,
     elif IsRecord( opt.entities ) then
         entities := opt.entities;
     else
-        Error("CreateMainPage: <opt.entities> must be a list or a record");
+        Error("CreateEntitiesPage: <opt.entities> must be a list or a record");
     fi;
 
     # add book_name unconditionally to the list of entities
@@ -109,11 +109,7 @@ InstallGlobalFunction( CreateMainPage,
     fi;
 
     # open the target XML file
-    filestream := AUTODOC_OutputTextFile( dir, opt.main_xml_file );
-
-    # output the initial file header
-    AppendTo( filestream, AUTODOC_XML_HEADER );
-    AppendTo( filestream, "<!DOCTYPE Book SYSTEM \"gapdoc.dtd\"\n[\n" );
+    filestream := AUTODOC_OutputTextFile( dir, "_entities.xml" );
 
     # output all entities
     for ent in RecNames(entities) do
@@ -126,6 +122,27 @@ InstallGlobalFunction( CreateMainPage,
 
         AppendTo( filestream, "<!ENTITY ", ent, " '", val, "'>\n" );
     od;
+
+    CloseStream( filestream );
+
+end );
+
+##
+InstallGlobalFunction( CreateMainPage,
+  function( book_name, dir, opt )
+    local filestream, i;
+
+    if IsString(dir) then
+        dir := Directory(dir);
+    fi;
+
+    # open the target XML file
+    filestream := AUTODOC_OutputTextFile( dir, opt.main_xml_file );
+
+    # output the initial file header
+    AppendTo( filestream, AUTODOC_XML_HEADER );
+    AppendTo( filestream, "<!DOCTYPE Book SYSTEM \"gapdoc.dtd\"\n[\n" );
+    AppendTo( filestream, "    [<#Include SYSTEM \"_entities.xml\">\n");
     AppendTo( filestream, "]\n>\n" );
 
     # now start the actual book

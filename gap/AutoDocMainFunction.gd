@@ -24,6 +24,10 @@ _AUTODOC_GLOBAL_CHUNKS_FILE := fail;
 DeclareGlobalFunction( "CreateTitlePage" );
 
 ##
+## This function creates _entities.xml, which is included by the default main page
+DeclareGlobalFunction( "CreateEntitiesPage" );
+
+##
 ## This function creates the main page. Do not call it out of context.
 DeclareGlobalFunction( "CreateMainPage" );
 

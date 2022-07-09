@@ -213,7 +213,14 @@ function( arg )
 
     # Merge pkginfo.AutoDoc into scaffold
     if IsBound(scaffold) and IsBound( pkginfo.AutoDoc ) then
-        AUTODOC_MergeRecords( scaffold, pkginfo.AutoDoc );
+        for key in RecNames( pkginfo.AutoDoc ) do
+            if IsBound( scaffold.(key) ) then
+                Print("WARNING: ", key, " specified in both PackageInfo.AutoDoc and opt.scaffold\n");
+            else
+                scaffold.(key) := pkginfo.AutoDoc.(key);
+            fi;
+        od;
+
     fi;
 
     if IsBound( scaffold ) then
@@ -498,6 +505,8 @@ function( arg )
 
             CreateTitlePage( doc_dir, title_page );
         fi;
+
+        CreateEntitiesPage( gapdoc.bookname, doc_dir, scaffold );
 
         if IsBound( scaffold.MainPage ) and scaffold.MainPage <> false then
             CreateMainPage( gapdoc.bookname, doc_dir, scaffold );
