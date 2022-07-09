@@ -1,6 +1,6 @@
 This file describes changes in the AutoDoc package.
 
-NEXT
+2022.07.10
   - Output all entities defined via either the `scaffold.entities` option
     to AutoDoc  (or equivalently via the `AutoDoc.entities` record in
     `PackageInfo.g`) into a file `_entities.xml`, so that they can also
