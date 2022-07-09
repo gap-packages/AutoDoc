@@ -3,8 +3,7 @@
 <!-- This is an automatically generated file. -->
 <!DOCTYPE Book SYSTEM "gapdoc.dtd"
 [
-<!ENTITY see '<Alt Only="LaTeX">$\to$</Alt><Alt Not="LaTeX">--&gt;</Alt>'>
-<!ENTITY Plain_file.autodoc_Test '<Package>Plain_file.autodoc_Test</Package>'>
+    [<#Include SYSTEM "_entities.xml">
 ]
 >
 <Book Name="Plain_file.autodoc_Test">
