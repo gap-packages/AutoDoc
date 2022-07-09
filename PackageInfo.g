@@ -131,6 +131,12 @@ TestFile := "tst/testall.g",
 Keywords := [ "Automatic documentation, GAP, GAPDoc" ],
 
 AutoDoc := rec(
+    entities := rec(
+        VERSION := ~.Version,
+        DATE := ~.Date,
+        io := "<Package>io</Package>",
+        PackageName := "<Package>PackageName</Package>" ,
+    ),
     TitlePage := rec(
         Copyright := Concatenation(
             "&copyright; 2012-2022 by Sebastian Gutsche and Max Horn<P/>\n\n",

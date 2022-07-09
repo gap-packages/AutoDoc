@@ -19,9 +19,5 @@ AutoDoc( rec(
         includes := [ "Tutorials.xml", 
                       "Comments.xml" ],
         bib := "bib.xml", 
-        entities := rec( 
-            io := "<Package>io</Package>", 
-            PackageName := "<Package>PackageName</Package>" 
-        )
     )
 ));
