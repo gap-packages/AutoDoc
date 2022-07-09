@@ -103,11 +103,6 @@ InstallGlobalFunction( CreateEntitiesPage,
         entities.(book_name) := Concatenation( "<Package>", book_name, "</Package>" );
     fi;
 
-    # for backwards compatibility: add &see; entity
-    if not IsBound(entities.see) then
-        entities.see := """<Alt Only="LaTeX">$\to$</Alt><Alt Not="LaTeX">--&gt;</Alt>""";
-    fi;
-
     # open the target XML file
     filestream := AUTODOC_OutputTextFile( dir, "_entities.xml" );
 
