@@ -10,7 +10,7 @@ SetPackageInfo( rec(
 
 PackageName := "AutoDoc",
 Subtitle := "Generate documentation from GAP source code",
-Version := "2022.03.10",
+Version := "2022.07.10",
 
 Date := ~.Version{[ 1 .. 10 ]},
 Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1 .. 4 ]} ),
@@ -110,7 +110,7 @@ AbstractHTML :=
 PackageDoc := rec(
   BookName  := "AutoDoc",
   ArchiveURLSubset := ["doc"],
-  HTMLStart := "doc/chap0.html",
+  HTMLStart := "doc/chap0_mj.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := "Generate documentation from GAP source code",
@@ -131,9 +131,15 @@ TestFile := "tst/testall.g",
 Keywords := [ "Automatic documentation, GAP, GAPDoc" ],
 
 AutoDoc := rec(
+    entities := rec(
+        VERSION := ~.Version,
+        DATE := ~.Date,
+        io := "<Package>io</Package>",
+        PackageName := "<Package>PackageName</Package>" ,
+    ),
     TitlePage := rec(
         Copyright := Concatenation(
-            "&copyright; 2012-2019 by Sebastian Gutsche and Max Horn<P/>\n\n",
+            "&copyright; 2012-2022 by Sebastian Gutsche and Max Horn<P/>\n\n",
             "This package may be distributed under the terms and conditions ", 
             "of the GNU Public License Version 2 or (at your option) any later version.\n"
             ), 

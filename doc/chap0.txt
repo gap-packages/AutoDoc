@@ -6,10 +6,10 @@
                  [1X Generate documentation from [5XGAP[105X source code [101X
   
   
-                                   2022.03.10
+                                   2022.07.10
   
   
-                                 10 March 2022
+                                  10 July 2022
   
   
                                Sebastian Gutsche
@@ -47,7 +47,7 @@
   
   -------------------------------------------------------
   [1XCopyright[101X
-  [33X[0;0Y© 2012-2019 by Sebastian Gutsche and Max Horn[133X
+  [33X[0;0Y© 2012-2022 by Sebastian Gutsche and Max Horn[133X
   
   [33X[0;0YThis  package  may  be distributed under the terms and conditions of the GNU
   Public License Version 2 or (at your option) any later version.[133X
@@ -73,7 +73,7 @@
     1.4 [33X[0;0YScaffolds[133X
       1.4-1 [33X[0;0YGenerating a title page[133X
       1.4-2 [33X[0;0YGenerating the main XML file[133X
-      1.4-3 [33X[0;0YWhat data is extracted from [11XPackageInfo.g[111X?[133X
+      1.4-3 [33X[0;0YWhat data is used from [11XPackageInfo.g[111X?[133X
     1.5 [33X[0;0YAutoDoc worksheets[133X
   2 [33X[0;0Y[5XAutoDoc[105X documentation comments[133X
     2.1 [33X[0;0YDocumenting declarations[133X

@@ -332,9 +332,9 @@
   
   [30X    [33X[0;6YNow edit [11XPackageName/PackageInfo.g[111X as follows.[133X
   
-        [30X    [33X[0;12YDelete  any  [10XPKGVERSIONDATA[110X  chunk  that  may be there. The main
-              reason  for  converting  your  manual  to use [5XAutoDoc[105X is to stop
-              using entities such as [10XPACKAGENAMEVERSION[110X.[133X
+        [30X    [33X[0;12YDelete  any  [10XPKGVERSIONDATA[110X  chunk that may be there. One reason
+              for  converting  your  manual  to  use  [5XAutoDoc[105X is to stop using
+              entities such as [10XPACKAGENAMEVERSION[110X.[133X
   
         [30X    [33X[0;12YCopy the [10XAutoDoc[110X record from [11XAutoDoc/PackageInfo.g[111X to the end of
               your file (just before the final [10X"));"[110X.[133X
@@ -432,11 +432,17 @@
   ([14X4.1-1[114X) function.[133X
   
   
-  [1X1.4-3 [33X[0;0YWhat data is extracted from [11XPackageInfo.g[111X[101X[1X?[133X[101X
+  [1X1.4-3 [33X[0;0YWhat data is used from [11XPackageInfo.g[111X[101X[1X?[133X[101X
   
-  [33X[0;0Y[5XAutoDoc[105X  can  extract  data  from [11XPackageInfo.g[111X in order to generate a title
-  page.  Specifically, the following components of the package info record are
-  looked at:[133X
+  [33X[0;0Y[5XAutoDoc[105X  can  use data from [11XPackageInfo.g[111X in order to generate a title page.
+  Specifically,  the following components of the package info record are taken
+  into account:[133X
+  
+  [8XPackageName[108X
+        [33X[0;6YThis is used to set the [10X<Title>[110X element of the title page.[133X
+  
+  [8XSubtitle[108X
+        [33X[0;6YThis is used to set the [10X<Subtitle>[110X element of the title page.[133X
   
   [8XVersion[108X
         [33X[0;6YThis  is used to set the [10X<Version>[110X element of the title page, with the
@@ -444,10 +450,6 @@
   
   [8XDate[108X
         [33X[0;6YThis is used to set the [10X<Date>[110X element of the title page.[133X
-  
-  [8XSubtitle[108X
-        [33X[0;6YThis  is  used  to  set  the [10X<Subtitle>[110X element of the title page (the
-        [10X<Title>[110X is set to the package name).[133X
   
   [8XPersons[108X
         [33X[0;6YThis  is  used  to  generate  [10X<Author>[110X elements in the generated title

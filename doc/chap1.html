@@ -47,7 +47,7 @@ Checklist for converting an existing <strong class="pkg">GAPDoc</strong> manual 
 </span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7CD72CC780874FD5">1.4-2 <span class="Heading">Generating the main XML file</span></a>
 </span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7A3C8A34806ACF30">1.4-3 <span class="Heading">What data is extracted from <code class="file">PackageInfo.g</code>?</span></a>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X799956EA85D3FC15">1.4-3 <span class="Heading">What data is used from <code class="file">PackageInfo.g</code>?</span></a>
 </span>
 </div></div>
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap1.html#X80ED3C2A78146AD1">1.5 <span class="Heading">AutoDoc worksheets</span></a>
@@ -321,7 +321,7 @@ Checklist for converting an existing <strong class="pkg">GAPDoc</strong> manual 
 
 
 <ul>
-<li><p>Delete any <code class="code">PKGVERSIONDATA</code> chunk that may be there. The main reason for converting your manual to use <strong class="pkg">AutoDoc</strong> is to stop using entities such as <code class="code">PACKAGENAMEVERSION</code>.</p>
+<li><p>Delete any <code class="code">PKGVERSIONDATA</code> chunk that may be there. One reason for converting your manual to use <strong class="pkg">AutoDoc</strong> is to stop using entities such as <code class="code">PACKAGENAMEVERSION</code>.</p>
 
 </li>
 <li><p>Copy the <code class="code">AutoDoc</code> record from <code class="file">AutoDoc/PackageInfo.g</code> to the end of your file (just before the final <code class="code">"));"</code>.</p>
@@ -399,24 +399,28 @@ AutoDoc(rec(
 
 <p>For more information, please consult the documentation of the <code class="func">AutoDoc</code> (<a href="chap4.html#X7CBD8AAF7DCEF352"><span class="RefLink">4.1-1</span></a>) function.</p>
 
-<p><a id="X7A3C8A34806ACF30" name="X7A3C8A34806ACF30"></a></p>
+<p><a id="X799956EA85D3FC15" name="X799956EA85D3FC15"></a></p>
 
-<h5>1.4-3 <span class="Heading">What data is extracted from <code class="file">PackageInfo.g</code>?</span></h5>
+<h5>1.4-3 <span class="Heading">What data is used from <code class="file">PackageInfo.g</code>?</span></h5>
 
-<p><strong class="pkg">AutoDoc</strong> can extract data from <code class="file">PackageInfo.g</code> in order to generate a title page. Specifically, the following components of the package info record are looked at:</p>
+<p><strong class="pkg">AutoDoc</strong> can use data from <code class="file">PackageInfo.g</code> in order to generate a title page. Specifically, the following components of the package info record are taken into account:</p>
 
 
 <dl>
+<dt><strong class="Mark">PackageName</strong></dt>
+<dd><p>This is used to set the <code class="code">&lt;Title&gt;</code> element of the title page.</p>
+
+</dd>
+<dt><strong class="Mark">Subtitle</strong></dt>
+<dd><p>This is used to set the <code class="code">&lt;Subtitle&gt;</code> element of the title page.</p>
+
+</dd>
 <dt><strong class="Mark">Version</strong></dt>
 <dd><p>This is used to set the <code class="code">&lt;Version&gt;</code> element of the title page, with the string "Version " prepended.</p>
 
 </dd>
 <dt><strong class="Mark">Date</strong></dt>
 <dd><p>This is used to set the <code class="code">&lt;Date&gt;</code> element of the title page.</p>
-
-</dd>
-<dt><strong class="Mark">Subtitle</strong></dt>
-<dd><p>This is used to set the <code class="code">&lt;Subtitle&gt;</code> element of the title page (the <code class="code">&lt;Title&gt;</code> is set to the package name).</p>
 
 </dd>
 <dt><strong class="Mark">Persons</strong></dt>
