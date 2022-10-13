@@ -575,7 +575,7 @@ function( arg )
         
         tmp := ValueOption( "relativePath" );
         
-        if IsBound( gapdoc.gap_root_relative_path ) and tmp = fail then ## the option overides the settings in the call.
+        if IsBound( gapdoc.gap_root_relative_path ) and tmp = fail then ## the option overrides the settings in the call.
             tmp := gapdoc.gap_root_relative_path;
         fi;
         

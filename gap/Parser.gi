@@ -512,7 +512,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end;
     end;
     command_function_record := rec(
-        ## HACK: Needed for AutoDoc parser to be scanned savely.
+        ## HACK: Needed for AutoDoc parser to be scanned safely.
         ##       The lines where the AutoDoc comments are
         ##       searched cause problems otherwise.
         @DONT_SCAN_NEXT_LINE := function()

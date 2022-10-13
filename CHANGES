@@ -90,7 +90,7 @@ This file describes changes in the AutoDoc package.
 
 2018.09.20
   - Scan bracket `\[\]` declarations correctly (PR #162)
-  - Removed the hardcoded utf8 option, make it overrideable via gapdoc_latex_option
+  - Removed the hardcoded utf8 option, make it overridable via gapdoc_latex_option
   - Allow AutoDoc() to take absolute dirs and run from any dir (thanks to Glen Whitney)
   - Add a test suite for AutoDoc (thanks to Glen Whitney)
   - Fix documenting DeclareInfoClass

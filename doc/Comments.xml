@@ -42,7 +42,7 @@ or until the declaration is reached.
 <Heading><C>@Returns <A>ret_val</A></C></Heading>
 The string <A>ret_val</A> is added to the documentation, with the text <Q>Returns: </Q>
 put in front of it. This should usually give a brief hint about the type or meaning
-of the value retuned by the documented function.
+of the value returned by the documented function.
 </Subsection>
 
 <Subsection Label="@Arguments">
