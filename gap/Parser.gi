@@ -900,5 +900,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 fi;
             fi;
         od;
+        CloseStream( filestream );
     od;
 end );
