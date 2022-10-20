@@ -38,7 +38,7 @@
   
   [33X[0;0YThe  string  [3Xret_val[103X  is added to the documentation, with the text [21XReturns: [121X
   put  in front of it. This should usually give a brief hint about the type or
-  meaning of the value retuned by the documented function.[133X
+  meaning of the value returned by the documented function.[133X
   
   
   [1X2.1-3 [33X[0;0Y[10X@Arguments [3Xargs[103X[101X[1X[10X[110X[101X[1X[133X[101X
@@ -129,7 +129,7 @@
   explicit  chapter declared in their [5XAutoDoc[105X comment via [10X@ChapterInfo[110X will be
   added to this chapter. Also all text comments, i.e. lines that begin with #!
   without a command, and which do not follow after [10X@Description[110X, will be added
-  to  the chapter as regular text. Additionally, the chapters label wil be set
+  to the chapter as regular text. Additionally, the chapters label will be set
   to [10XChapter_[110X[3Xname[103X. Example:[133X
   
   [4X[32X[104X
