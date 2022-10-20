@@ -1,5 +1,9 @@
 This file describes changes in the AutoDoc package.
 
+2022.10.20
+  - Prevent some file descriptor leaks
+  - Do not try to read non-existing file gap/ContextObject.gd
+
 2022.07.10
   - Output all entities defined via either the `scaffold.entities` option
     to AutoDoc  (or equivalently via the `AutoDoc.entities` record in
