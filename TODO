@@ -28,7 +28,7 @@ Documenting C/C++/C# with AutoDoc:
 Use comments of C/C++/C# before AutoDoc hashes, i.e. // #!.
 You can also begin a whole comment section with /* and then end it with */.
 Please don't put a AutoDoc hash in the same line as /* and */. If using the @AutoDocPlainText command,
-you can get rid of the supersticious hashes. Please do *NOT* use the comment syntax with a asteriks at the
+you can get rid of the supersticious hashes. Please do *NOT* use the comment syntax with an asterisk at the
 beginning of every line, it will mess up the markdown extension!
 
 

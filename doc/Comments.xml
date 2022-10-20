@@ -146,7 +146,7 @@ Sets the active chapter, all subsequent functions which do not have an explicit 
 declared in their &AutoDoc; comment via <C>@ChapterInfo</C> will be added to this chapter.
 Also all text comments, i.e. lines that begin with #! without a command, and which do not
 follow after <C>@Description</C>, will be added to the chapter as regular text. Additionally,
-the chapters label wil be set to <C>Chapter_</C><A>name</A>.
+the chapters label will be set to <C>Chapter_</C><A>name</A>.
 
 Example:
 
