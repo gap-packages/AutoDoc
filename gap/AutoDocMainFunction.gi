@@ -310,6 +310,8 @@ InstallGlobalFunction( CreateTitlePage,
     od;
 
     Out( "</TitlePage>" );
+    
+    CloseStream( filestream );
 end );
 
 InstallGlobalFunction( AUTODOC_PROCESS_INTRO_STRINGS,
@@ -535,6 +537,7 @@ function( pkgname, pkgdir, docdir, main, files, opt )
         od;
         AppendTo(output, "#\n");
         AppendTo(output, "gap> STOP_TEST(\"", basename, "\", 1);\n");
+        CloseStream( output );
         Print("extracted ", Length(ch), " examples\n");
     od;
 end);
