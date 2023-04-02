@@ -583,6 +583,11 @@ function( arg )
             Add( args, tmp );
         fi;
 
+        # don't build PDF docs if the environment variable NOPDF is set
+        if IsBound( GAPInfo.SystemEnvironment.NOPDF ) then
+            Add( args, "nopdf" );
+        fi;
+
         # Finally, invoke GAPDoc
         CallFuncList( MakeGAPDocDoc, args );
 
