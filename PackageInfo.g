@@ -33,7 +33,7 @@ Persons := [
        Place := "Siegen",
        Institution := "Universität Siegen"
   ),
-  
+
   rec( LastName := "Horn",
        FirstNames := "Max",
        IsAuthor := true,
@@ -104,7 +104,7 @@ ArchiveURL      := Concatenation( ~.SourceRepository.URL,
                                  "/", ~.PackageName, "-", ~.Version ),
 ArchiveFormats := ".tar.gz",
 
-AbstractHTML := 
+AbstractHTML :=
   "",
 
 PackageDoc := rec(
@@ -120,8 +120,7 @@ Dependencies := rec(
   GAP := ">= 4.5",
   NeededOtherPackages := [ [ "GAPDoc", ">= 1.6.3" ] ],
   SuggestedOtherPackages := [ ],
-  ExternalConditions := []
-                      
+  ExternalConditions := [],
 ),
 
 AvailabilityTest := ReturnTrue,
@@ -135,25 +134,25 @@ AutoDoc := rec(
         VERSION := ~.Version,
         DATE := ~.Date,
         io := "<Package>io</Package>",
-        PackageName := "<Package>PackageName</Package>" ,
+        PackageName := "<Package>PackageName</Package>",
     ),
     TitlePage := rec(
         Copyright := Concatenation(
             "&copyright; 2012-2022 by Sebastian Gutsche and Max Horn<P/>\n\n",
-            "This package may be distributed under the terms and conditions ", 
+            "This package may be distributed under the terms and conditions ",
             "of the GNU Public License Version 2 or (at your option) any later version.\n"
-            ), 
-        Abstract := Concatenation( 
-            "&AutoDoc; is a &GAP; package whose purpose is to aid ", 
-            "&GAP; package authors in creating and maintaining the ", 
-            "documentation of their packages.\n" 
-            ), 
-        Acknowledgements := Concatenation( 
-            "This documentation was prepared using the ", 
-            "&GAPDoc; package <Cite Key='GAPDoc'/>.\n",  
-            "<P/>\n" 
-            ) 
-    )
+            ),
+        Abstract := Concatenation(
+            "&AutoDoc; is a &GAP; package whose purpose is to aid ",
+            "&GAP; package authors in creating and maintaining the ",
+            "documentation of their packages.\n"
+            ),
+        Acknowledgements := Concatenation(
+            "This documentation was prepared using the ",
+            "&GAPDoc; package <Cite Key='GAPDoc'/>.\n",
+            "<P/>\n"
+            ),
+    ),
 ),
 
 ));
