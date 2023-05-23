@@ -17,9 +17,6 @@ DeclareGlobalFunction( "AutoDocScanFiles" );
 DeclareGlobalVariable( "_AUTODOC_GLOBAL_OPTION_RECORD" );
 
 ##
-_AUTODOC_GLOBAL_CHUNKS_FILE := fail;
-
-##
 ## This function creates a title file. It must be called with the package name and the path to doc files.
 DeclareGlobalFunction( "CreateTitlePage" );
 
