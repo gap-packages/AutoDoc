@@ -516,9 +516,15 @@ function( arg )
     #
     # Write AutoDoc XML files
     #
-    _AUTODOC_GLOBAL_CHUNKS_FILE := fail;
     if IsBound( autodoc ) then
         WriteDocumentation( tree, doc_dir, autodoc.level );
+        if IsBound( gapdoc ) then
+            if IsBound( doc_dir_rel ) then
+                Add( gapdoc.files, "_Chunks.xml" );
+            else
+                Add( gapdoc.files, Filename( doc_dir, "_Chunks.xml" ) );
+            fi;
+        fi;
     fi;
 
 
@@ -552,11 +558,6 @@ function( arg )
         GAPDoc2LaTeXProcs.Tail := Concatenation(
             "\\immediate\\write\\pagenrlog{[\"Ind\", 0, 0], \\arabic{page},}\n",
             GAPDoc2LaTeXProcs.Tail );
-
-        # Process Chunks.xml file, if present
-        if IsString(_AUTODOC_GLOBAL_CHUNKS_FILE) then
-            Add( gapdoc.files, _AUTODOC_GLOBAL_CHUNKS_FILE );
-        fi;
 
         # Default parameters for MakeGAPDocDoc
         args := [ doc_dir, gapdoc.main, gapdoc.files, gapdoc.bookname, "MathJax" ];

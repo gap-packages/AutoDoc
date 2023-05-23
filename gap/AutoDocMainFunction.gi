@@ -436,8 +436,7 @@ end );
 # The following function is based on code by Alexander Konovalov
 BindGlobal("AUTODOC_ExtractMyManualExamples",
 function( pkgname, pkgdir, docdir, main, files, opt )
-    local tst, i, s, basename, name, output, ch, a, location, pos, comment,
-      pkgdirString, absPkgdirString,
+    local tst, i, s, basename, name, output, ch, a, location, pos, comment, pkgdirString,
       nonempty_units_found, number_of_digits, lpkgname, tstdir;
     Print("Extracting manual examples for ", pkgname, " package ...\n" );
 
@@ -450,7 +449,6 @@ function( pkgname, pkgdir, docdir, main, files, opt )
     tst:=ExtractExamples( docdir, main, files, opt.units );
     Print(Length(tst), " ", LowercaseString( opt.units ), "s detected\n");
     pkgdirString := Filename(pkgdir, "");
-    absPkgdirString := AUTODOC_AbsolutePath(pkgdirString);
 
     # ensure the 'tst' directory exists
     tstdir := Filename(pkgdir, "tst");
@@ -510,8 +508,6 @@ function( pkgname, pkgdir, docdir, main, files, opt )
             location := a[2][1];
             if StartsWith(location, pkgdirString) then
                 comment := location{[ Length(pkgdirString)+1 .. Length(location) ]};
-            elif StartsWith(location, absPkgdirString) then
-                comment := location{[ Length(absPkgdirString)+1 .. Length(location) ]};
             else
                 pos := PositionSublist(location, LowercaseString(pkgname));
                 if pos <> fail then

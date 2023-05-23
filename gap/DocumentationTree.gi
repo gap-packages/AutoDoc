@@ -396,7 +396,7 @@ BindGlobal( "WriteChunks",
           current_chunk;
 
     filename := "_Chunks.xml";
-    _AUTODOC_GLOBAL_CHUNKS_FILE := AUTODOC_AbsolutePath( path_to_xmlfiles, filename );
+
     chunks_stream := AUTODOC_OutputTextFile( path_to_xmlfiles, filename );
     chunk_names := RecNames( tree!.chunks );
 

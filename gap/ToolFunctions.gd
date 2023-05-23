@@ -7,7 +7,6 @@
 
 DeclareGlobalFunction( "AUTODOC_CreateDirIfMissing" );
 DeclareGlobalFunction( "AUTODOC_CurrentDirectory" );
-DeclareGlobalFunction( "AUTODOC_AbsolutePath" );
 
 DeclareGlobalFunction( "AUTODOC_OutputTextFile" );
 DeclareGlobalFunction( "AutoDoc_WriteDocEntry" );
