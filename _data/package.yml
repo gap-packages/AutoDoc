@@ -1,6 +1,6 @@
 name: AutoDoc
-version: 2022.10.20
-date: 2022-10-20
+version: 2023.06.19
+date: 2023-06-19
 description: |
     Generate documentation from GAP source code
 
@@ -28,7 +28,7 @@ GAP: ">= 4.5"
 
 needed-pkgs:
     - name: "GAPDoc"
-      version: ">= 1.5"
+      version: ">= 1.6.3"
       url: "http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc"
 
 www: https://gap-packages.github.io/AutoDoc
@@ -37,7 +37,7 @@ packageinfo: https://gap-packages.github.io/AutoDoc/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/AutoDoc/releases/download/v2022.10.20/AutoDoc-2022.10.20.tar.gz
+      url: https://github.com/gap-packages/AutoDoc/releases/download/v2023.06.19/AutoDoc-2023.06.19.tar.gz
 
 abstract: |
 

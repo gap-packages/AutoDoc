@@ -10,7 +10,7 @@ SetPackageInfo( rec(
 
 PackageName := "AutoDoc",
 Subtitle := "Generate documentation from GAP source code",
-Version := "2022.10.20",
+Version := "2023.06.19",
 
 Date := ~.Version{[ 1 .. 10 ]},
 Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1 .. 4 ]} ),
@@ -33,21 +33,21 @@ Persons := [
        Place := "Siegen",
        Institution := "Universität Siegen"
   ),
-  
+
   rec( LastName := "Horn",
        FirstNames := "Max",
        IsAuthor := true,
        IsMaintainer := true,
-       Email := "horn@mathematik.uni-kl.de",
+       Email := "mhorn@rptu.de",
        WWWHome       := "https://www.quendi.de/math",
        PostalAddress := Concatenation(
                "Fachbereich Mathematik\n",
-               "TU Kaiserslautern\n",
+               "RPTU Kaiserslautern-Landau\n",
                "Gottlieb-Daimler-Straße 48\n",
                "67663 Kaiserslautern\n",
                "Germany" ),
        Place         := "Kaiserslautern, Germany",
-       Institution   := "TU Kaiserslautern"
+       Institution   := "RPTU Kaiserslautern-Landau"
      ),
 
   # Contributors:
@@ -104,7 +104,7 @@ ArchiveURL      := Concatenation( ~.SourceRepository.URL,
                                  "/", ~.PackageName, "-", ~.Version ),
 ArchiveFormats := ".tar.gz",
 
-AbstractHTML := 
+AbstractHTML :=
   "",
 
 PackageDoc := rec(
@@ -118,10 +118,9 @@ PackageDoc := rec(
 
 Dependencies := rec(
   GAP := ">= 4.5",
-  NeededOtherPackages := [ [ "GAPDoc", ">= 1.5" ] ],
+  NeededOtherPackages := [ [ "GAPDoc", ">= 1.6.3" ] ],
   SuggestedOtherPackages := [ ],
-  ExternalConditions := []
-                      
+  ExternalConditions := [],
 ),
 
 AvailabilityTest := ReturnTrue,
@@ -135,25 +134,25 @@ AutoDoc := rec(
         VERSION := ~.Version,
         DATE := ~.Date,
         io := "<Package>io</Package>",
-        PackageName := "<Package>PackageName</Package>" ,
+        PackageName := "<Package>PackageName</Package>",
     ),
     TitlePage := rec(
         Copyright := Concatenation(
             "&copyright; 2012-2022 by Sebastian Gutsche and Max Horn<P/>\n\n",
-            "This package may be distributed under the terms and conditions ", 
+            "This package may be distributed under the terms and conditions ",
             "of the GNU Public License Version 2 or (at your option) any later version.\n"
-            ), 
-        Abstract := Concatenation( 
-            "&AutoDoc; is a &GAP; package whose purpose is to aid ", 
-            "&GAP; package authors in creating and maintaining the ", 
-            "documentation of their packages.\n" 
-            ), 
-        Acknowledgements := Concatenation( 
-            "This documentation was prepared using the ", 
-            "&GAPDoc; package <Cite Key='GAPDoc'/>.\n",  
-            "<P/>\n" 
-            ) 
-    )
+            ),
+        Abstract := Concatenation(
+            "&AutoDoc; is a &GAP; package whose purpose is to aid ",
+            "&GAP; package authors in creating and maintaining the ",
+            "documentation of their packages.\n"
+            ),
+        Acknowledgements := Concatenation(
+            "This documentation was prepared using the ",
+            "&GAPDoc; package <Cite Key='GAPDoc'/>.\n",
+            "<P/>\n"
+            ),
+    ),
 ),
 
 ));
