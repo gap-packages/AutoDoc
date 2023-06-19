@@ -1,5 +1,11 @@
 This file describes changes in the AutoDoc package.
 
+2023.06.19
+  - Revise handling of chunks XML file
+  - Remove `AUTODOC_AbsolutePath`
+  - Don't build PDF docs if `NOPDF` environment variable is set
+  - Various janitorial changes
+
 2022.10.20
   - Prevent some file descriptor leaks
   - Do not try to read non-existing file gap/ContextObject.gd
