@@ -2,3 +2,4 @@
 
 <!-- This is an automatically generated file. -->
 <#Include SYSTEM "_Chapter_SomeChapter.xml">
+<#Include SYSTEM "_Chapter_labelChapter.xml">

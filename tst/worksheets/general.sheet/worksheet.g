@@ -191,3 +191,15 @@ fi;
 #! @InsertCode MyCode
 
 #! The text "Hello, world." is inserted right before this.
+
+#! @Chapter Label test chapter
+#! @ChapterLabel labelChapter
+#! This is dummy text
+#!
+#! @Section Label test section
+#! @SectionLabel labelSection
+#! This is dummy text
+#!
+#! @Subsection Label test subsection
+#! @SubsectionLabel labelSubsection
+#! This is dummy text

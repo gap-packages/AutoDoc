@@ -543,7 +543,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
             label_name := ReplacedString( current_command[ 2 ], " ", "_" );
             scope_chapter := ChapterInTree( tree, chapter_info[ 1 ] );
-            scope_chapter!.additional_label := Concatenation( "Chapter_", label_name );
+            SetLabel( scope_chapter, Concatenation( "Chapter_", label_name ) );
         end,
         @ChapterTitle := function()
             local scope_chapter;
@@ -571,7 +571,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
             label_name := ReplacedString( current_command[ 2 ], " ", "_" );
             scope_section := SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] );
-            scope_section!.additional_label := Concatenation( "Section_", label_name );
+            SetLabel( scope_section, Concatenation( "Section_", label_name ) );
         end,
         @SectionTitle := function()
             local scope_section;
@@ -606,7 +606,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
             label_name := ReplacedString( current_command[ 2 ], " ", "_" );
             scope_subsection := SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], chapter_info[ 3 ] );
-            scope_subsection!.additional_label := Concatenation( "Subsection_", label_name );
+            SetLabel( scope_subsection, Concatenation( "Subsection_", label_name ) );
         end,
         @SubsectionTitle := function()
             local scope_subsection;
