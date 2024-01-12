@@ -6,8 +6,9 @@ gap> START_TEST( "worksheets.tst" );
 #
 gap> AUTODOC_TestWorkSheet("general");
 Extracting manual examples for General Test package ...
-1 chapters detected
+2 chapters detected
 Chapter 1 : extracted 2 examples
+Chapter 2 : no examples 
 
 #
 gap> AUTODOC_TestWorkSheet("autoplain");

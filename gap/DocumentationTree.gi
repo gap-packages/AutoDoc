@@ -440,19 +440,13 @@ end );
 ##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForChapterRep, IsStream, IsDirectory, IsInt ],
   function( node, stream, path_to_xmlfiles, level_value )
-    local filename, chapter_stream, label, replaced_name, additional_label;
+    local filename, chapter_stream, replaced_name;
 
     if node!.level > level_value then
         return;
     fi;
     if ForAll( node!.content, IsEmptyNode ) then
         return;
-    fi;
-    label := Label( node );
-    if IsBound( node!.additional_label ) then
-        additional_label := node!.additional_label;
-    else
-        additional_label := label;
     fi;
     
     if IsBound( node!.title_string ) then
@@ -463,13 +457,12 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForChapterRep, Is
 
     # Remove any characters outside of A-Za-z0-9 and -, +, _ from the filename.
     # See issues #77 and #78
-    filename := Filtered( additional_label, x -> x in AUTODOC_IdentifierLetters);
+    filename := Filtered( Label( node ), x -> x in AUTODOC_IdentifierLetters);
     filename := Concatenation( "_", filename, ".xml" );
-
     chapter_stream := AUTODOC_OutputTextFile( path_to_xmlfiles, filename );
     AppendTo( stream, "<#Include SYSTEM \"", filename, "\">\n" );
     AppendTo( chapter_stream, AUTODOC_XML_HEADER );
-    AppendTo( chapter_stream, "<Chapter Label=\"", additional_label ,"\">\n" );
+    AppendTo( chapter_stream, "<Chapter Label=\"", Label( node ) ,"\">\n" );
     AppendTo( chapter_stream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
     WriteDocumentation( node!.content, chapter_stream, level_value );
     AppendTo( chapter_stream, "</Chapter>\n\n" );
@@ -518,18 +511,13 @@ end );
 ##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSectionRep, IsStream, IsInt ],
   function( node, filestream, level_value )
-    local replaced_name, label, additional_label;
+    local replaced_name;
 
     if node!.level > level_value then
         return;
     fi;
     if ForAll( node!.content, IsEmptyNode ) then
         return;
-    fi;
-    if IsBound( node!.additional_label ) then
-        label := node!.additional_label;
-    else
-        label := Label( node );;
     fi;
     
     if IsBound( node!.title_string ) then
@@ -538,7 +526,7 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSectionRep, Is
         replaced_name := ReplacedString( node!.name, "_", " " );
     fi;
     
-    AppendTo( filestream, "<Section Label=\"", label, "\">\n" );
+    AppendTo( filestream, "<Section Label=\"", Label( node ), "\">\n" );
     AppendTo( filestream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
     WriteDocumentation( node!.content, filestream, level_value );
     AppendTo( filestream, "</Section>\n\n" );
@@ -547,18 +535,13 @@ end );
 ##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSubsectionRep, IsStream, IsInt ],
   function( node, filestream, level_value )
-    local replaced_name, label, additional_label;
+    local replaced_name;
 
     if node!.level > level_value then
         return;
     fi;
     if ForAll( node!.content, IsEmptyNode ) then
         return;
-    fi;
-    if IsBound( node!.additional_label ) then
-        label := node!.additional_label;
-    else
-        label := Label( node );
     fi;
     
     if IsBound( node!.title_string ) then
@@ -567,7 +550,7 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSubsectionRep,
         replaced_name := ReplacedString( node!.name, "_", " " );
     fi;
     
-    AppendTo( filestream, "<Subsection Label=\"", label, "\">\n" );
+    AppendTo( filestream, "<Subsection Label=\"", Label( node ), "\">\n" );
     AppendTo( filestream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
     WriteDocumentation( node!.content, filestream, level_value );
     AppendTo( filestream, "</Subsection>\n\n" );

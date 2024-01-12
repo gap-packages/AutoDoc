@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_labelChapter">
+<Heading>Label test chapter</Heading>
+
+ This is dummy text
+<P/>
+<Section Label="Section_labelSection">
+<Heading>Label test section</Heading>
+
+ This is dummy text
+<P/>
+<Subsection Label="Subsection_labelSubsection">
+<Heading>Label test subsection</Heading>
+
+ This is dummy text
+</Subsection>
+
+
+</Section>
+
+
+</Chapter>
+

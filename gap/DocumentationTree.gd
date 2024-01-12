@@ -32,7 +32,7 @@ DeclareCategory( "IsTreeForDocumentationNode", IsObject );
 
 DeclareOperation( "IsEmptyNode", [ IsTreeForDocumentationNode ] );
 DeclareOperation( "IsEmptyNode", [ IsString ] );
-DeclareAttribute( "Label", IsTreeForDocumentationNode );
+DeclareAttribute( "Label", IsTreeForDocumentationNode, "mutable" );
 DeclareAttribute( "ChapterInfo", IsTreeForDocumentationNode );
 DeclareAttribute( "GroupName", IsTreeForDocumentationNode );
 
