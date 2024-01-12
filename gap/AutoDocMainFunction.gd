@@ -6,7 +6,13 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 
-DeclareGlobalVariable( "AUTODOC_XML_HEADER" );
+BindGlobal( "AUTODOC_XML_HEADER",
+    Concatenation(
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n",
+    "<!-- This is an automatically generated file. -->\n"
+    )
+);
+
 DeclareGlobalFunction( "AUTODOC_SetIfMissing" );
 DeclareGlobalFunction( "AUTODOC_APPEND_STRING_ITERATIVE" );
 DeclareGlobalFunction( "AUTODOC_MergeRecords" );
@@ -14,7 +20,8 @@ DeclareGlobalFunction( "AUTODOC_PROCESS_INTRO_STRINGS" );
 DeclareGlobalFunction( "AutoDocScanFiles" );
 
 ## Global option record
-DeclareGlobalVariable( "_AUTODOC_GLOBAL_OPTION_RECORD" );
+BindGlobal( "_AUTODOC_GLOBAL_OPTION_RECORD",
+              rec( AutoDocMainFile := "_AutoDocMainFile.xml" ) );
 
 ##
 ## This function creates a title file. It must be called with the package name and the path to doc files.

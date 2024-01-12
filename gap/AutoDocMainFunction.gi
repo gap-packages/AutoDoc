@@ -5,18 +5,6 @@
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-##
-InstallValue( AUTODOC_XML_HEADER,
-    Concatenation(
-    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n",
-    "<!-- This is an automatically generated file. -->\n"
-    )
-);
-
-InstallValue( _AUTODOC_GLOBAL_OPTION_RECORD,
-              rec( AutoDocMainFile := "_AutoDocMainFile.xml" ) );
-
-
 InstallGlobalFunction( AUTODOC_SetIfMissing,
   function( record, name, val )
     if not IsBound( record.(name) ) then
