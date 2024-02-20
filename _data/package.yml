@@ -1,5 +1,6 @@
 name: AutoDoc
-version: 2023.06.19
+version: "2023.06.19"
+license: "GPL-2.0-or-later"
 date: 2023-06-19
 description: |
     Generate documentation from GAP source code
@@ -44,3 +45,31 @@ abstract: |
 status: deposited
 doc-html: doc/chap0_mj.html
 doc-pdf: doc/manual.pdf
+keywords: |
+    Automatic documentation, GAP, GAPDoc.
+citeas: |
+    <p class='BibEntry'>
+    [<span class='BibKey'>GH23</span>]   <b class='BibAuthor'>Gutsche, S. and Horn, M.</b>,
+     <i class='BibTitle'>AutoDoc, Generate documentation from GAP source code,
+             Version 2023.06.19</i>
+     (<span class='BibYear'>2023</span>)<br />
+    (<span class='BibNote'>GAP package</span>),
+    <span class='BibHowpublished'><a href="https://gap-packages.github.io/AutoDoc">https://gap-packages.github.io/AutoDoc</a></span>.
+    </p>
+    
+
+bibtex: |
+    @misc{ AutoDoc2023.06.19,
+      author =           {Gutsche, S. and Horn, M.},
+      title =            {{AutoDoc},  Generate  documentation  from  GAP  source
+                          code, {V}ersion 2023.06.19},
+      month =            {Jun},
+      year =             {2023},
+      note =             {GAP package},
+      howpublished =     {\href         {https://gap-packages.github.io/AutoDoc}
+                          {\texttt{https://gap-packages.github.io/}\discretionary
+                          {}{}{}\texttt{AutoDoc}}},
+      keywords =         {Automatic documentation, GAP, GAPDoc},
+      printedkey =       {GH23}
+    }
+
