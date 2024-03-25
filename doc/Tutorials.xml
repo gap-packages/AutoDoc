@@ -383,7 +383,7 @@ Edit <File>PackageName/makedoc.g</File> as follows.
   In the <Code>entities</Code> record enter any entities 
   previously stored in <File>manual.xml</File>. 
   (Again, if you have none, you may safely delete this record.) 
-  To illustrate this option the &AutoDoc; file <File>makedoc.g</File> 
+  To illustrate this option the &AutoDoc; file <File>PackageInfo.g</File> 
   defines entities for the names of packages &io; and &PackageName;. 
   </Item> 
   </List>
