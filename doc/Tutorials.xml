@@ -36,7 +36,7 @@ LoadPackage( "AutoDoc" );
 AutoDoc( rec( scaffold := true ) );
 </Listing>
 This first reads the <F>PackageInfo.g</F> file from the current
-directory. It extracts information about package from it
+directory. It extracts information about the package from it
 (such as its name and version, see Section <Ref Sect="Tut:Scaffolds:Title"/>).
 It then creates two XML files <F>doc/NAME_OF_YOUR_PACKAGE.xml</F> and
 <F>doc/title.xml</F> inside the package directory. Finally, it runs
@@ -195,7 +195,7 @@ Even if you already have an existing &GAPDoc; manual, it might be
 interesting for you to use &AutoDoc; for two purposes:
 <P/>
 
-First off, with  &AutoDoc; is very convenient to regenerate your
+First off, with  &AutoDoc; it is very convenient to regenerate your
 documentation.
 <P/>
 
@@ -207,8 +207,8 @@ sync with your <F>PackageInfo.g</F> is fully automated this way
 and so on).
 <P/>
 
-There are various examples of packages using &AutoDoc; for only
-this purpose, e.g. &io; and <Package>orb</Package>.
+There are various examples of packages using &AutoDoc; for
+this purpose only, e.g. &io; and <Package>orb</Package>.
 <P/>
 
 <Subsection Label="Tut:IntegrateExisting:EverythingThere">
@@ -219,14 +219,14 @@ XML files and some documentation for operations distributed over
 all your <F>.g</F>, <F>.gd</F>, and <F>.gi</F> files.
 Suppose the main XML file is named <F>PACKAGENAME.xml</F> and is in the
 <F>/doc</F> subdirectory of your package. Then you can rebuild your manual
-by executing the following two &GAP; commands from a &GAP; sessions started
-started in the root directory of your package:
+by executing the following two &GAP; commands from a &GAP; session started
+in the root directory of your package:
 <Listing>
 LoadPackage( "AutoDoc" );
 AutoDoc( );
 </Listing>
-In contrast, the <Package>RingsForHomalg</Package> currently uses
-essentially the following code in its <F>makedoc.g</F> file to achieve the same result
+In contrast, the <Package>RingsForHomalg</Package> package currently uses
+essentially the following code in its <F>makedoc.g</F> file to achieve the same result:
 <Listing>
 LoadPackage( "GAPDoc" );
 SetGapDocLaTeXOptions( "utf8" );
@@ -378,14 +378,6 @@ Edit <File>PackageName/makedoc.g</File> as follows.
   which may be used to produce
   the &LaTeX; formula <M>f : \bbZ^2 \to \bbZ</M>.
   </Item>
-  <Item> 
-  <Index Key="Entities record in makedoc.g"></Index> 
-  In the <Code>entities</Code> record enter any entities 
-  previously stored in <File>manual.xml</File>. 
-  (Again, if you have none, you may safely delete this record.) 
-  To illustrate this option the &AutoDoc; file <File>PackageInfo.g</File> 
-  defines entities for the names of packages &io; and &PackageName;. 
-  </Item> 
   </List>
 </Item> 
 <Item> 
@@ -409,9 +401,17 @@ Now edit <File>PackageName/PackageInfo.g</File> as follows.
   record with the corresponding material from your <File>manual.xml</File>. 
   (If you do not have an abstract, then delete the 
   <Code>Abstract</Code> field, etc.) 
-  For other introductory components, such as <Code>Colophon</Code>, 
-  consult the file <File>gap/Magic.gd</File>. 
+<!--  For other introductory components, such as <Code>Colophon</Code>, -->
+<!--  consult the file <File>gap/Magic.gd</File>. -->
   </Item>
+  <Item> 
+  <Index Key="Entities record in makedoc.g"></Index> 
+  In the <Code>entities</Code> record enter any entities 
+  previously stored in your <File>manual.xml</File>. 
+  (Again, if you have none, you may safely delete this record.) 
+  To illustrate this option the &AutoDoc; file <File>PackageInfo.g</File> 
+  defines entities for the names of packages &io; and &PackageName;. 
+  </Item> 
   </List> 
 </Item>
 <Item> 
