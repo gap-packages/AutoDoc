@@ -7,7 +7,7 @@
 
 LoadPackage("AutoDoc");
 
-AutoDoc( rec( 
+res:= AutoDoc( rec(
     autodoc := true,
     gapdoc := rec(
         LaTeXOptions := rec( EarlyExtraPreamble := """
@@ -21,3 +21,13 @@ AutoDoc( rec(
         bib := "bib.xml", 
     )
 ));
+
+errors:= Filtered(SplitString( res.GAPDoc_Info, "\n"),
+            x -> StartsWith(x, "#W ") and x <> "#W There are overfull boxes:");
+if Length( errors ) = 0 then
+  QuitGap( true );
+else
+  Print( errors, "\n" );
+  QuitGap( false );
+fi;
+QUIT;

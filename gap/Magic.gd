@@ -265,6 +265,11 @@
 #!         In all other cases (in particular if <A>opt.gapdoc</A> is
 #!         <K>false</K>), this feature is disabled.
 #!         <P/>
+#!         If &GAPDoc; is invoked by <Ref Func="AutoDoc"/> then the returned
+#!         record has a component <C>GAPDoc_Info</C>, whose value is the
+#!         string obtained from collecting the info messages printed by
+#!         the &GAPDoc; functions.
+#!         <P/>
 #!
 #!         If <A>opt.gapdoc</A> is a record, it may contain the following entries.
 #!
@@ -395,12 +400,12 @@
 #! </Item>
 #! </List>
 #!
-#! @Returns nothing
+#! @Returns a record
 #! @Arguments [packageOrDirectory], [optrec]
 DeclareGlobalFunction( "AutoDoc" );
 
 
 #! @Section Examples
 #!
-#! Some basic examples for using <C>AutoDoc</C> were already shown in
+#! Some basic examples for using <Ref Func="AutoDoc"/> were already shown in
 #! Chapter <Ref Label='Tutorials'/>.
