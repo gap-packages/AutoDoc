@@ -677,8 +677,12 @@ function( arg )
     fi;
 
     if IsBound( outputstring ) then
-      return rec( GAPDoc_Info := outputstring );
-    else
-      return rec();
+      # If wanted then set an exit code for GAP.
+      if Number( SplitString( outputstring, "\n" ),
+                 x -> StartsWith( x, "#W " ) and not
+                      StartsWith( x, "#W There are overfull boxes" ) ) > 0 then
+        GapExitCode( false );
+      fi;
     fi;
+    return true;
 end );
