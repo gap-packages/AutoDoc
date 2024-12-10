@@ -377,6 +377,7 @@ Edit <File>PackageName/makedoc.g</File> as follows.
   by <Code>\newcommand{\bbZ}{\mathbb{Z}}</Code>,
   which may be used to produce
   the &LaTeX; formula <M>f : \bbZ^2 \to \bbZ</M>.
+  However, note that this only works in the PDF version of the file.
   </Item>
   </List>
 </Item> 
