@@ -402,5 +402,5 @@ DeclareGlobalFunction( "AutoDoc" );
 
 #! @Section Examples
 #!
-#! Some basic examples for using <C>AutoDoc</C> were already shown in
+#! Some basic examples for using <Ref Func="AutoDoc"/> were already shown in
 #! Chapter <Ref Label='Tutorials'/>.
