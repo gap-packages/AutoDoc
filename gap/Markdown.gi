@@ -25,8 +25,20 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
 
     ## Check for paragraphs by turning an empty string into <P/>
     
+    skipped := false;
     already_inserted_paragraph := false;
     for i in [ 1 ..  Length( string_list ) ] do
+        if PositionSublist( string_list[ i ], "<![CDATA[" ) <> fail then
+            skipped := true;
+        fi;
+        if PositionSublist( string_list[ i ], "]]>" ) <> fail then
+            skipped := false;
+            continue;
+        fi;
+        if skipped = true then
+            continue;
+        fi;
+
         if NormalizedWhitespace( string_list[ i ] ) = "" then
             if already_inserted_paragraph = false then
                 string_list[ i ] := "<P/>";
@@ -35,7 +47,6 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
         else
             already_inserted_paragraph := false;
         fi;
-        i := i + 1;
     od;
 
     ## We need to find lists. Lists are indicated by a beginning
