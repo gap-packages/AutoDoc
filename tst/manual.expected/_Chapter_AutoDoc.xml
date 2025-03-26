@@ -357,6 +357,18 @@
 </ManSection>
 
 
+<ManSection>
+  <InfoClass Name="InfoAutoDoc" />
+ <Description>
+   Info class for the <Package>AutoDoc</Package> package.  Set this to
+   0 to suppress info messages, or 1 to allow them.
+<P/>
+   This can be set by calling, for example,
+   <C>SetInfoLevel(InfoPackageManager, 0)</C>. Default value 1.
+ </Description>
+</ManSection>
+
+
 </Section>
 
 

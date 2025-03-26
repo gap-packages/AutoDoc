@@ -215,7 +215,7 @@ function( arg )
     if IsBound(scaffold) and IsBound( pkginfo.AutoDoc ) then
         for key in RecNames( pkginfo.AutoDoc ) do
             if IsBound( scaffold.(key) ) then
-                Print("WARNING: ", key, " specified in both PackageInfo.AutoDoc and opt.scaffold\n");
+                Info(InfoGAPDoc, 1, key, " specified in both PackageInfo.AutoDoc and opt.scaffold");
             else
                 scaffold.(key) := pkginfo.AutoDoc.(key);
             fi;
@@ -298,7 +298,7 @@ function( arg )
 
         if IsBound( pkginfo.PackageDoc ) and not IsEmpty( pkginfo.PackageDoc ) then
             if Length( pkginfo.PackageDoc ) > 1 then
-                Print("WARNING: Package contains multiple books, only using the first one\n");
+                Info(InfoGAPDoc, 1, "Package contains multiple books, only using the first one");
             fi;
             gapdoc.bookname := pkginfo.PackageDoc[1].BookName;
             gapdoc.SixFile := pkginfo.PackageDoc[1].SixFile;
@@ -307,19 +307,17 @@ function( arg )
             gapdoc.bookname := pkgname;
             gapdoc.SixFile := "doc/manual.six";
 
-            Print("\n");
-            Print("WARNING: PackageInfo.g is missing a PackageDoc entry!\n");
-            Print("Without this, your package manual will not be recognized by the GAP help system.\n");
-            Print("You can correct this by adding the following to your PackageInfo.g:\n");
-            Print("PackageDoc := rec(\n");
-            Print("  BookName  := ~.PackageName,\n");
-            Print("  ArchiveURLSubset := [\"doc\"],\n");
-            Print("  HTMLStart := \"doc/chap0.html\",\n");
-            Print("  PDFFile   := \"doc/manual.pdf\",\n");
-            Print("  SixFile   := \"doc/manual.six\",\n");
-            Print("  LongTitle := ~.Subtitle,\n");
-            Print("),\n");
-            Print("\n");
+            Info(InfoGAPDoc, 1, "WARNING: PackageInfo.g is missing a PackageDoc entry!");
+            Info(InfoGAPDoc, 1, "Without this, your package manual will not be recognized by the GAP help system.");
+            Info(InfoGAPDoc, 1, "You can correct this by adding the following to your PackageInfo.g:");
+            Info(InfoGAPDoc, 1, "PackageDoc := rec(");
+            Info(InfoGAPDoc, 1, "  BookName  := ~.PackageName,");
+            Info(InfoGAPDoc, 1, "  ArchiveURLSubset := [\"doc\"],");
+            Info(InfoGAPDoc, 1, "  HTMLStart := \"doc/chap0.html\",");
+            Info(InfoGAPDoc, 1, "  PDFFile   := \"doc/manual.pdf\",");
+            Info(InfoGAPDoc, 1, "  SixFile   := \"doc/manual.six\",");
+            Info(InfoGAPDoc, 1, "  LongTitle := ~.Subtitle,");
+            Info(InfoGAPDoc, 1, "),");
         fi;
 
         if not IsBound( gapdoc.files ) then
