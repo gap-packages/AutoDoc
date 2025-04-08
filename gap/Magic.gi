@@ -215,7 +215,7 @@ function( arg )
     if IsBound(scaffold) and IsBound( pkginfo.AutoDoc ) then
         for key in RecNames( pkginfo.AutoDoc ) do
             if IsBound( scaffold.(key) ) then
-                Info(InfoGAPDoc, 1, key, " specified in both PackageInfo.AutoDoc and opt.scaffold");
+                Info(InfoGAPDoc, 1, "WARNING: ", key, " specified in both PackageInfo.AutoDoc and opt.scaffold");
             else
                 scaffold.(key) := pkginfo.AutoDoc.(key);
             fi;
@@ -298,7 +298,7 @@ function( arg )
 
         if IsBound( pkginfo.PackageDoc ) and not IsEmpty( pkginfo.PackageDoc ) then
             if Length( pkginfo.PackageDoc ) > 1 then
-                Info(InfoGAPDoc, 1, "Package contains multiple books, only using the first one");
+                Info(InfoGAPDoc, 1, "WARNING: Package contains multiple books, only using the first one");
             fi;
             gapdoc.bookname := pkginfo.PackageDoc[1].BookName;
             gapdoc.SixFile := pkginfo.PackageDoc[1].SixFile;
