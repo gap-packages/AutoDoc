@@ -285,7 +285,7 @@ InstallGlobalFunction( CreateTitlePage,
                 i := List(i, Int);
                 OutWithTag( "Date", AUTODOC_FormatDate(i[1], i[2], i[3]) );
             else
-                Info(InfoGAPDoc, 1, "Warning: could not parse package date '", argument_rec.Date, "'");
+                Info(InfoAutoDoc, 1, "Warning: could not parse package date '", argument_rec.Date, "'");
                 OutWithTag( "Date", argument_rec.Date );
             fi;
         fi;
@@ -426,7 +426,7 @@ BindGlobal("AUTODOC_ExtractMyManualExamples",
 function( pkgname, pkgdir, docdir, main, files, opt )
     local tst, i, s, basename, name, output, ch, a, location, pos, comment, pkgdirString,
       nonempty_units_found, number_of_digits, lpkgname, tstdir;
-    Info(InfoGAPDoc, 1, "Extracting manual examples for ", pkgname, " package ...");
+    Info(InfoAutoDoc, 1, "Extracting manual examples for ", pkgname, " package ...");
 
     lpkgname := LowercaseString(pkgname);
     lpkgname := ReplacedString(lpkgname, " ", "_");
@@ -435,7 +435,7 @@ function( pkgname, pkgdir, docdir, main, files, opt )
         main := Concatenation( main, ".xml" );
     fi;
     tst:=ExtractExamples( docdir, main, files, opt.units );
-    Info(InfoGAPDoc, 1, Length(tst), " ", LowercaseString( opt.units ), "s detected");
+    Info(InfoAutoDoc, 1, Length(tst), " ", LowercaseString( opt.units ), "s detected");
     pkgdirString := Filename(pkgdir, "");
 
     # ensure the 'tst' directory exists
@@ -461,9 +461,9 @@ function( pkgname, pkgdir, docdir, main, files, opt )
         number_of_digits := 2;
     fi;
     for i in [ 1 .. Length(tst) ] do
-        Info(InfoGAPDoc, 1,  opt.units, " ", i, "...");
+        Info(InfoAutoDoc, 1,  opt.units, " ", i, "...");
         if Length( tst[i] ) = 0 then
-            Info(InfoGAPDoc, 1, "no examples");
+            Info(InfoAutoDoc, 1, "no examples");
             continue;
         fi;
         nonempty_units_found := nonempty_units_found + 1;
@@ -522,6 +522,6 @@ function( pkgname, pkgdir, docdir, main, files, opt )
         AppendTo(output, "#\n");
         AppendTo(output, "gap> STOP_TEST(\"", basename, "\", 1);\n");
         CloseStream( output );
-        Info(InfoGAPDoc, 1, "extracted ", Length(ch), " examples");
+        Info(InfoAutoDoc, 1, "extracted ", Length(ch), " examples");
     od;
 end);

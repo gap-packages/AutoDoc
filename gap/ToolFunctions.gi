@@ -139,7 +139,7 @@ function( message )
     x := true;
     return function( )
         if x then
-            Info( InfoGAPDoc, 1, message );
+            Info( InfoAutoDoc, 1, message );
         fi;
         x := false;
     end;
@@ -201,10 +201,10 @@ function(ws)
     filenames := Filtered(filenames, f -> f <> "." and f <> "..");
     filenames := List(filenames, f -> Filename(sheetdir, f));
 
-    old := InfoLevel(InfoGAPDoc);
-    SetInfoLevel(InfoGAPDoc, 0);
+    old := InfoLevel(InfoAutoDoc);
+    SetInfoLevel(InfoAutoDoc, 0);
     AutoDocWorksheet(filenames, rec(dir := actualdir, extract_examples := true));
-    SetInfoLevel(InfoGAPDoc, old);
+    SetInfoLevel(InfoAutoDoc, old);
 
     # Check the results
     filenames := DirectoryContents(expecteddir);
