@@ -201,10 +201,10 @@ function(ws)
     filenames := Filtered(filenames, f -> f <> "." and f <> "..");
     filenames := List(filenames, f -> Filename(sheetdir, f));
 
-    old := InfoLevel(InfoAutoDoc);
-    SetInfoLevel(InfoAutoDoc, 0);
+    old := InfoLevel(InfoGAPDoc);
+    SetInfoLevel(InfoGAPDoc, 0);
     AutoDocWorksheet(filenames, rec(dir := actualdir, extract_examples := true));
-    SetInfoLevel(InfoAutoDoc, old);
+    SetInfoLevel(InfoGAPDoc, old);
 
     # Check the results
     filenames := DirectoryContents(expecteddir);
