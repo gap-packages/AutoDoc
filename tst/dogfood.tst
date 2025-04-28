@@ -31,7 +31,6 @@ true
 
 # regenerate the manual using AutoDoc
 gap> Read("makedoc.g");
-#I  Generating documentation in Directory("/home/mtorpey/.gap/pkg/AutoDoc/doc/")
 
 # restore info levels and current directory
 gap> SetInfoLevel( InfoGAPDoc, oldGAPDocLevel );

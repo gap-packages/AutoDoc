@@ -190,7 +190,7 @@ function( arg )
     # This helps diagnose problems where multiple instances of a package
     # are visible to GAP and the wrong one is used for generating the
     # documentation.
-    Info( InfoAutoDoc, 1, "Generating documentation in ", doc_dir);
+    Info( InfoAutoDoc, 2, "Generating documentation in ", doc_dir);
 
     #
     # Extract scaffolding settings, which can be controlled via
