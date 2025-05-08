@@ -1,5 +1,9 @@
 This file describes changes in the AutoDoc package.
 
+2025.05.09
+  - Add `InfoAutoDoc` info class for messages
+  - Various janitorial changes
+
 2023.06.19
   - Revise handling of chunks XML file
   - Remove `AUTODOC_AbsolutePath`
