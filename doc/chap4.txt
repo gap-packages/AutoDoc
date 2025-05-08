@@ -323,6 +323,17 @@
                     [33X[0;18YA  list  of  strings,  each  one  a command, which will be
                     executed at the beginning of the test file.[133X
   
+  [1X4.1-2 InfoAutoDoc[101X
+  
+  [33X[1;0Y[29X[2XInfoAutoDoc[102X [32X info class[133X
+  
+  [33X[0;0YInfo class for the [5XAutoDoc[105X package. Set this to 0 to suppress info messages,
+  1  to  allow most messages, and 2 to allow all messages including those that
+  contain file paths.[133X
+  
+  [33X[0;0YThis  can  be  set by calling, for example, [10XSetInfoLevel(InfoPackageManager,
+  0)[110X. Default value 1.[133X
+  
   
   [1X4.2 [33X[0;0YExamples[133X[101X
   

@@ -6,10 +6,10 @@
                  [1X Generate documentation from [5XGAP[105X source code [101X
   
   
-                                   2023.06.19
+                                   2025.05.09
   
   
-                                  19 June 2023
+                                   9 May 2025
   
   
                                Sebastian Gutsche
@@ -120,6 +120,7 @@
   4 [33X[0;0YAutoDoc[133X
     4.1 [33X[0;0YThe AutoDoc() function[133X
       4.1-1 AutoDoc
+      4.1-2 InfoAutoDoc
     4.2 [33X[0;0YExamples[133X
   
   

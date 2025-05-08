@@ -34,8 +34,8 @@
   [4X[32X[104X
   
   [33X[0;0YThis  first  reads  the  [11XPackageInfo.g[111X  file  from the current directory. It
-  extracts  information  about  package from it (such as its name and version,
-  see     Section     [14X1.4-1[114X).     It    then    creates    two    XML    files
+  extracts  information  about  the  package  from  it  (such  as its name and
+  version,   see   Section   [14X1.4-1[114X).   It   then   creates   two   XML   files
   [11Xdoc/NAME_OF_YOUR_PACKAGE.xml[111X and [11Xdoc/title.xml[111X inside the package directory.
   Finally,  it  runs  [5XGAPDoc[105X  on  them  to produce a nice initial PDF and HTML
   version of your fresh manual.[133X
@@ -157,7 +157,8 @@
   [33X[0;0YEven  if you already have an existing [5XGAPDoc[105X manual, it might be interesting
   for you to use [5XAutoDoc[105X for two purposes:[133X
   
-  [33X[0;0YFirst off, with [5XAutoDoc[105X is very convenient to regenerate your documentation.[133X
+  [33X[0;0YFirst   off,   with  [5XAutoDoc[105X  it  is  very  convenient  to  regenerate  your
+  documentation.[133X
   
   [33X[0;0YSecondly,  the scaffolding feature which generates a title page with all the
   metadata  of  your  package  in  a  uniform  way is very handy. The somewhat
@@ -165,7 +166,7 @@
   is  fully  automated  this way (including the correct version, release data,
   author information and so on).[133X
   
-  [33X[0;0YThere  are various examples of packages using [5XAutoDoc[105X for only this purpose,
+  [33X[0;0YThere  are various examples of packages using [5XAutoDoc[105X for this purpose only,
   e.g. [5Xio[105X and [5Xorb[105X.[133X
   
   
@@ -175,16 +176,16 @@
   files  and  some  documentation for operations distributed over all your [11X.g[111X,
   [11X.gd[111X,  and  [11X.gi[111X files. Suppose the main XML file is named [11XPACKAGENAME.xml[111X and
   is  in  the  [11X/doc[111X  subdirectory  of  your package. Then you can rebuild your
-  manual  by  executing  the  following  two  [5XGAP[105X commands from a [5XGAP[105X sessions
-  started started in the root directory of your package:[133X
+  manual  by  executing  the  following  two  [5XGAP[105X  commands from a [5XGAP[105X session
+  started in the root directory of your package:[133X
   
   [4X[32X[104X
     [4XLoadPackage( "AutoDoc" );[104X
     [4XAutoDoc( );[104X
   [4X[32X[104X
   
-  [33X[0;0YIn  contrast,  the  [5XRingsForHomalg[105X  currently uses essentially the following
-  code in its [11Xmakedoc.g[111X file to achieve the same result[133X
+  [33X[0;0YIn  contrast,  the  [5XRingsForHomalg[105X  package  currently  uses essentially the
+  following code in its [11Xmakedoc.g[111X file to achieve the same result:[133X
   
   [4X[32X[104X
     [4XLoadPackage( "GAPDoc" );[104X
@@ -323,12 +324,8 @@
               none  you  may  safely  delete  this record.) To illustrate this
               option,  the  [5XAutoDoc[105X file [11Xmakedoc.g[111X defines the command [10X\bbZ[110X by
               [10X\newcommand{\bbZ}{\mathbb{Z}}[110X,  which may be used to produce the
-              LaTeX formula [22Xf : bbZ^2 -> bbZ[122X.[133X
-  
-        [30X    [33X[0;12YIn  the  [10Xentities[110X record enter any entities previously stored in
-              [11Xmanual.xml[111X. (Again, if you have none, you may safely delete this
-              record.)  To  illustrate  this option the [5XAutoDoc[105X file [11Xmakedoc.g[111X
-              defines entities for the names of packages [5Xio[105X and [5XPackageName[105X.[133X
+              LaTeX  formula  [22Xf  :  bbZ^2 -> bbZ[122X. However, note that this only
+              works in the PDF version of the file.[133X
   
   [30X    [33X[0;6YNow edit [11XPackageName/PackageInfo.g[111X as follows.[133X
   
@@ -342,8 +339,13 @@
         [30X    [33X[0;12YReplace  the  [10XCopyright[110X, [10XAbstract[110X and [10XAcknowledgements[110X fields of
               the  [10XTitlePage[110X  record with the corresponding material from your
               [11Xmanual.xml[111X.  (If  you  do  not have an abstract, then delete the
-              [10XAbstract[110X field, etc.) For other introductory components, such as
-              [10XColophon[110X, consult the file [11Xgap/Magic.gd[111X.[133X
+              [10XAbstract[110X field, etc.)[133X
+  
+        [30X    [33X[0;12YIn  the  [10Xentities[110X record enter any entities previously stored in
+              your [11Xmanual.xml[111X. (Again, if you have none, you may safely delete
+              this  record.)  To  illustrate  this  option  the  [5XAutoDoc[105X  file
+              [11XPackageInfo.g[111X  defines entities for the names of packages [5Xio[105X and
+              [5XPackageName[105X.[133X
   
   [30X    [33X[0;6YIf  you are using a GitHub repository, as well as running "[10Xgit add[110X" on
         files [11Xmakedoc.g[111X, [11XPackageInfo.g[111X and [11Xdoc/PackageName.bib[111X, you should run
