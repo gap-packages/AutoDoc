@@ -399,6 +399,15 @@
 #! @Arguments [packageOrDirectory], [optrec]
 DeclareGlobalFunction( "AutoDoc" );
 
+#! @Description
+#!   Info class for the <Package>AutoDoc</Package> package.  Set this to
+#!   0 to suppress info messages, 1 to allow most messages, and 2 to allow all
+#!   messages including those that contain file paths.
+#!
+#!   This can be set by calling, for example,
+#!   <C>SetInfoLevel(InfoPackageManager, 0)</C>. Default value 1.
+DeclareInfoClass("InfoAutoDoc");
+SetInfoLevel(InfoAutoDoc, 1);
 
 #! @Section Examples
 #!

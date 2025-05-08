@@ -133,13 +133,13 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
 end );
 
 InstallGlobalFunction( AutoDoc_CreatePrintOnceFunction,
-  function( message )
+function( message )
     local x;
     
     x := true;
     return function( )
         if x then
-            Print( message, "\n" );
+            Info( InfoAutoDoc, 1, message );
         fi;
         x := false;
     end;
