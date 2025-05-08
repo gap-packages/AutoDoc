@@ -8,7 +8,7 @@ This file describes changes in the AutoDoc package.
 
 2022.10.20
   - Prevent some file descriptor leaks
-  - Do not try to read non-existing file gap/ContextObject.gd
+  - Do not try to read non-existing file `gap/ContextObject.gd`
 
 2022.07.10
   - Output all entities defined via either the `scaffold.entities` option
@@ -19,8 +19,8 @@ This file describes changes in the AutoDoc package.
   - Remove `&see;` entity from the default list of entities
 
 2022.03.10
-  - Strip trailing newlines in PostalAddress and some TitlePage elements
-  - Allow AutoDoc record in PackageInfo.g to not contain a TitlePage entry
+  - Strip trailing newlines in `PostalAddress` and some TitlePage elements
+  - Allow AutoDoc record in `PackageInfo.g` to not contain a TitlePage entry
 
 2022.02.24
   - true/false are keywords, not just code: use K tags
@@ -30,37 +30,37 @@ This file describes changes in the AutoDoc package.
 2020.08.11
   - Add support for using the string `]]>` in examples
   - Add support for `DeclareGlobalName` (new in GAP 4.12)
-  - Add extract_examples.skip_empty_in_numbering option
-  - Enhance extract_examples to remove outdated .tst files (e.g. if chapter
+  - Add `extract_examples.skip_empty_in_numbering` option
+  - Enhance `extract_examples` to remove outdated .tst files (e.g. if chapter
     number changes, we won't leave outdated extracted .tst examples behind)
   - Fix a warning about a missing file `/doc/_Chunks.xml` which appeared
     when building the documentation of some packages
 
 2019.09.04
-  - Deprecate @BeginAutoDoc and @EndAutoDoc; they will be removed in a future
+  - Deprecate `@BeginAutoDoc` and `@EndAutoDoc`; they will be removed in a future
     AutoDoc version
-  - Deprecate @BeginAutoDocPlainText and @EndAutoDocPlainText; they will be
+  - Deprecate `@BeginAutoDocPlainText` and `@EndAutoDocPlainText`; they will be
     removed in a future AutoDoc version
-  - Fix @BeginCode / @EndCode / @InsertCode, which were broken in version 2019.07.03
+  - Fix `@BeginCode` / `@EndCode` / `@InsertCode`, which were broken in version 2019.07.03
 
 2019.07.24
   - Add support for ISO 8601 dates in package metadata (to prepare for GAP adding
     official support for this in the future)
   - Remove undocumented and long-unused support entities specified using a raw
     `<!ENTITY NAME CONTENT>` entity string
-  - Fix the &see; entity we always generate (for legacy support) to display
+  - Fix the `&see;` entity we always generate (for legacy support) to display
     the correct output in LaTeX / PDF mode
   - Fix support for chunks with names / labels that contain spaces (GAPDoc does
     not like these, so we replace the spaces by underscores)
 
 2019.07.17
-  - Fix bug in extract_examples option that could result in invalid .tst files
+  - Fix bug in `extract_examples` option that could result in invalid .tst files
 
 2019.07.03
   - Make Chunks compatible with GAPDoc chunks
   - Tweak two error messages, add two more error checks
   - Check that gapdoc.files is a list of strings
-  - Add @GroupTitle command (thanks to Glen Whitney)
+  - Add `@GroupTitle` command (thanks to Glen Whitney)
   - Make @Begin.../@EndExampleSession respect plain_text_mode (thanks to Glen Whitney)
   - Handle documentation of DeclareCategoryCollection declarations (thanks to Glen Whitney)
   - Repair minor omissions/imprecisions in AutoDoc() function doc (thanks to Glen Whitney)
