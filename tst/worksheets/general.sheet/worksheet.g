@@ -179,6 +179,7 @@ DeclareOperation( "ThirdOperation", [ IsGroup, IsInt ] );
 #! @BeginCode MyCode
 #! Hello, world.
 x := 1 + 1;
+
 if x = 2 then
   Print("1 + 1 = 2 holds, all is good\n");
 else
