@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/gap-packages/AutoDoc/actions/workflows/CI.yml/badge.svg)](https://github.com/gap-packages/AutoDoc/actions/workflows/CI.yml)
+[![CI](https://github.com/gap-packages/AutoDoc/actions/workflows/CI.yml/badge.svg)](https://github.com/gap-packages/AutoDoc/actions/workflows/CI.yml)
 [![Code Coverage](https://codecov.io/github/gap-packages/AutoDoc/coverage.svg?branch=master&token=)](https://codecov.io/gh/gap-packages/AutoDoc)
 
 # AutoDoc: A GAP package to help creating a GAPDoc documentation.
