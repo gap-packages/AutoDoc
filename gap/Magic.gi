@@ -441,16 +441,6 @@ function( arg )
             GAPDoc2LaTeXProcs.Head := StringFile( scaffold.latex_header_file );
         fi;
 
-        # check for legacy gapdoc_latex_options
-        if IsBound( scaffold.gapdoc_latex_options ) then
-            Info( InfoWarning, 1, TextAttr.1,
-                  "WARNING: Please replace the DEPRECATED option <scaffold.gapdoc_latex_options> ",
-                  "by <gapdoc.LaTeXOptions>", TextAttr.reset );
-            if not IsBound( gapdoc.LaTeXOptions ) then
-                gapdoc.LaTeXOptions := scaffold.gapdoc_latex_options;
-            fi;
-        fi;
-
         AUTODOC_SetIfMissing( scaffold, "includes", [ ] );
 
         if IsBound( autodoc ) then
