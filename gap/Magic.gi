@@ -68,7 +68,7 @@ end );
 InstallGlobalFunction( AutoDoc,
 function( arg )
     local pkgname, pkginfo, pkgdir,
-          opt, scaffold, gapdoc, maketest, extract_examples, autodoc, i,
+          opt, scaffold, gapdoc, extract_examples, autodoc, i,
           doc_dir, doc_dir_rel, tmp, key, val, file,
           pkgdirstr, docdirstr,
           title_page, tree, is_worksheet,
@@ -141,7 +141,7 @@ function( arg )
     # Check for user supplied options. If present, they take
     # precedence over any defaults as well as the opt record.
     #
-    for key in [ "dir", "scaffold", "autodoc", "gapdoc", "maketest", "extract_examples" ] do
+    for key in [ "dir", "scaffold", "autodoc", "gapdoc", "extract_examples" ] do
         val := ValueOption( key );
         if val <> fail then
             opt.(key) := val;
@@ -604,26 +604,6 @@ function( arg )
             GAPDocManualLabFromSixFile( gapdoc.bookname, file );
         fi;
 
-    fi;
-
-    #
-    # Handle maketest (deprecated; consider using extract_examples instead)
-    #
-
-    if IsBound( opt.maketest ) then
-        if IsRecord( opt.maketest ) then
-            maketest := opt.maketest;
-        elif opt.maketest = true then
-            maketest := rec( );
-        fi;
-    fi;
-
-    if IsBound( maketest ) then
-    
-        AUTODOC_SetIfMissing( maketest, "filename", "maketest.g" );
-        AUTODOC_SetIfMissing( maketest, "commands", [ ] );
-
-        CreateMakeTest( pkgdir, doc_dir, gapdoc.main, gapdoc.files, maketest );
     fi;
 
     #
