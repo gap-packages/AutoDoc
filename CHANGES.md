@@ -1,5 +1,11 @@
 This file describes changes in the AutoDoc package.
 
+2025.MM.DD
+  - Remove `scaffold.gapdoc_latex_options` -- it was deprecated and
+    replaced by `gapdoc.LaTeXOptions` in 2019
+  - Remove `maketest`, it was deprecated and superseded by
+    `extract_examples` in 2019
+
 2025.05.09
   - Add `InfoAutoDoc` info class for messages
   - Various janitorial changes

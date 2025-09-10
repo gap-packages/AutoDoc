@@ -370,26 +370,6 @@
 #!         </Item>
 #!         </List>
 #!     </Item>
-#!        <Mark><A>maketest</A></Mark>
-#!        <Item>
-#!          <Emph>This option is deprecated. Please use <C>extract_examples</C> instead.</Emph>
-#!          <P/>
-#!          Either <K>true</K> or a record. When it is <K>true</K>,
-#!          a simple <F>maketest.g</F> file is created in the main package directory,
-#!          which can be used to test the examples from the manual. As a record,
-#!          the entry can have the following entries itself, to specify some options.
-#!          <List>
-#!          <Mark>filename</Mark>
-#!          <Item>
-#!            Sets the name of the test file.
-#!          </Item>
-#!          <Mark>commands</Mark>
-#!          <Item>
-#!            A list of strings, each one a command, which
-#!            will be executed at the beginning of the test file.
-#!          </Item>
-#!          </List>
-#!        </Item>
 #!
 #!     </List>
 #! </Item>

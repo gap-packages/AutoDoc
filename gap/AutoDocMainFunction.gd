@@ -42,8 +42,6 @@ DeclareGlobalFunction( "CreateDefaultChapterData" );
 
 DeclareGlobalFunction( "ExtractTitleInfoFromPackageInfo" );
 
-DeclareGlobalFunction( "CreateMakeTest" );
-
 
 
 #! @Chapter AutoDoc worksheets
