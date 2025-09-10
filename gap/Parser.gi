@@ -522,13 +522,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             Reset();
             rest_of_file_skipped := true;
         end,
-        @BeginAutoDoc := deprecated("@BeginAutoDoc", function()
-            autodoc_read_line := fail;
-        end),
-        @AutoDoc := ~.@BeginAutoDoc,
-        @EndAutoDoc := deprecated("@EndAutoDoc", function()
-            autodoc_read_line := false;
-        end),
 
         @Chapter := function()
             local scope_chapter;
@@ -581,14 +574,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             scope_section := SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] );
             scope_section!.title_string := current_command[ 2 ];
         end,
-        @EndSection := deprecated("@EndSection", function()
-            if not IsBound( chapter_info[ 2 ] ) then
-                ErrorWithPos( "found @EndSection with no active section" );
-            fi;
-            Unbind( chapter_info[ 2 ] );
-            Unbind( chapter_info[ 3 ] );
-            current_item := ChapterInTree( tree, chapter_info[ 1 ] );
-        end),
 
         @Subsection := function()
             local scope_subsection;
@@ -616,13 +601,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             scope_subsection := SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], chapter_info[ 3 ] );
             scope_subsection!.title_string := current_command[ 2 ];
         end,
-        @EndSubsection := deprecated("@EndSubsection", function()
-            if not IsBound( chapter_info[ 3 ] ) then
-                ErrorWithPos( "found @EndSubsection with no active subsection" );
-            fi;
-            Unbind( chapter_info[ 3 ] );
-            current_item := SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] );
-        end),
 
         @BeginGroup := function()
             local grp;
@@ -731,11 +709,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
         end,
 
-        @InsertSystem := deprecated("@InsertSystem", ~.@InsertChunk),
-        @System := deprecated("@System", ~.@BeginChunk),
-        @BeginSystem := ~.@System,
-        @EndSystem := deprecated("@EndSystem", ~.@EndChunk),
-
         @BeginCode := function()
             local label_name, tmp_system;
             label_name := ReplacedString( current_command[ 2 ], " ", "_" );
@@ -811,13 +784,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             NormalizeWhitespace( current_command[ 2 ] );
             Add( tree!.worksheet_dependencies, SplitString( current_command[ 2 ], " " ) );
         end,
-        @BeginAutoDocPlainText := deprecated("@BeginAutoDocPlainText", function()
-            plain_text_mode := true;
-        end),
-        @AutoDocPlainText := ~.@BeginAutoDocPlainText,
-        @EndAutoDocPlainText := deprecated("@EndAutoDocPlainText", function()
-            plain_text_mode := false;
-        end),
         @ExampleSession := function()
             local example_node;
             example_node := read_session_example( true, plain_text_mode );

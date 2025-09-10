@@ -1,10 +1,15 @@
 This file describes changes in the AutoDoc package.
 
 2025.MM.DD
-  - Remove `scaffold.gapdoc_latex_options` -- it was deprecated and
-    replaced by `gapdoc.LaTeXOptions` in 2019
-  - Remove `maketest`, it was deprecated and superseded by
-    `extract_examples` in 2019
+  - Remove a bunch of features that were deprecated since 2019:
+    - `AutoDoc` option `scaffold.gapdoc_latex_options` has been
+      replaced by `gapdoc.LaTeXOptions`
+    - `AutoDoc` option `maketest` has been superseded by `extract_examples`
+    - Various AutoDoc commands were removed (see the manual for replacements)
+      - `@EndSection`, `@EndSubsection`
+      - `@AutoDoc`, `@BeginAutoDoc`, `@EndAutoDoc`
+      - `@System`, `@BeginSystem`, `@EndSystem`, `@InsertSystem`
+      - `@AutoDocPlainText`, `@BeginAutoDocPlainText`, `@EndAutoDocPlainText`
 
 2025.05.09
   - Add `InfoAutoDoc` info class for messages
