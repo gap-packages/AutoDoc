@@ -26,6 +26,10 @@ gap> AUTODOC_FormatDate(2019, 3, 1);
 "1 March 2019"
 gap> AUTODOC_FormatDate("2019", "3", "1");
 "1 March 2019"
+gap> AUTODOC_FormatDate("2019-03-01");
+"1 March 2019"
+gap> AUTODOC_FormatDate("01/03/2019");
+"1 March 2019"
 gap> AUTODOC_FormatDate(rec(year:=2019));
 "2019"
 gap> AUTODOC_FormatDate(rec(year:=2019, month:=3));
