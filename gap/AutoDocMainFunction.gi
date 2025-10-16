@@ -274,21 +274,7 @@ InstallGlobalFunction( CreateTitlePage,
         # digit day or month, which is formally not allowed in PackageInfo.g,
         # but happens in a few legacy packages)
         argument_rec.Date := Chomp( argument_rec.Date ); # remove trailing newlines, if present
-        i := SplitString( argument_rec.Date, "/" );
-        if Length( argument_rec.Date ) in [8..10] and Length( i ) = 3 then
-            i := List(i, Int);
-            OutWithTag( "Date", AUTODOC_FormatDate(i[3], i[2], i[1]) );
-        else
-            # try to parse the date in ISO8601 format YYYY-MM-DD (here we are strict)
-            i := SplitString( argument_rec.Date, "-" );
-            if Length( argument_rec.Date ) = 10 and Length( i ) = 3 then
-                i := List(i, Int);
-                OutWithTag( "Date", AUTODOC_FormatDate(i[1], i[2], i[3]) );
-            else
-                Info(InfoAutoDoc, 1, "Warning: could not parse package date '", argument_rec.Date, "'");
-                OutWithTag( "Date", argument_rec.Date );
-            fi;
-        fi;
+        OutWithTag( "Date", AUTODOC_FormatDate(argument_rec.Date) );
     fi;
 
     for i in [ "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon" ] do
