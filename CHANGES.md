@@ -1,6 +1,6 @@
 This file describes changes in the AutoDoc package.
 
-2025.MM.DD
+2025.10.16
   - Make handling `Date` in `PackageInfo.g` more strict (previously some
     malformed variants were accepted to deal with very old packages, but by
     now all packages are compliant)
