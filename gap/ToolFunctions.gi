@@ -234,6 +234,7 @@ BindGlobal("AUTODOC_months", MakeImmutable([
 # The input can be one of the following:
 #  - AUTODOC_FormatDate(rec), where <rec> is a record with entries year, month, day;
 #  - AUTODOC_FormatDate(year[, month[, day]])
+#  - AUTODOC_FormatDate(date_str) where date_str is a string of the form "DD/MM/YYYY" or "YYYY-MM-DD"
 # In each case, the year, month or day may be given as either an
 # integer, or as a string representing an integer.
 InstallGlobalFunction( AUTODOC_FormatDate,
@@ -241,6 +242,25 @@ function(arg)
     local date, key, val, result;
     if Length(arg) = 1 and IsRecord(arg[1]) then
         date := ShallowCopy(arg[1]);
+    elif Length(arg) = 1 and IsString(arg[1]) then
+        if Length(arg[1]) = 10 then
+            date := arg[1];
+            if date{[3,6]} = "//" then
+                date := rec(
+                            day := Int(date{[1,2]}),
+                            month := Int(date{[4,5]}),
+                            year := Int(date{[7..10]}),
+                        );
+            elif date{[5,8]} = "--" then
+                date := rec(
+                            year := Int(date{[1..4]}),
+                            month := Int(date{[6,7]}),
+                            day := Int(date{[9,10]}),
+                        );
+            else
+                Unbind(date);
+            fi;
+        fi;
     elif Length(arg) in [1..3] then
         date := rec();
         date.year := arg[1];

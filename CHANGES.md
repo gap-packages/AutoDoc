@@ -1,6 +1,9 @@
 This file describes changes in the AutoDoc package.
 
 2025.MM.DD
+  - Make handling `Date` in `PackageInfo.g` more strict (previously some
+    malformed variants were accepted to deal with very old packages, but by
+    now all packages are compliant)
   - Remove a bunch of features that were deprecated since 2019:
     - `AutoDoc` option `scaffold.gapdoc_latex_options` has been
       replaced by `gapdoc.LaTeXOptions`
