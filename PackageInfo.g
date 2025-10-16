@@ -1,159 +1,103 @@
-# AutoDoc: Generate documentation from GAP source code
-#
-# Copyright of AutoDoc belongs to its developers.
-# Please refer to the COPYRIGHT file for details.
-#
-# SPDX-License-Identifier: GPL-2.0-or-later
-
+#############################################################################
+##  
+##  Demo PackageInfo.g for the GitHubPagesForGAP
+##
 
 SetPackageInfo( rec(
 
-PackageName := "AutoDoc",
-Subtitle := "Generate documentation from GAP source code",
-Version := "2025.05.09",
+PackageName := "GitHubPagesForGAP",
 
-Date := ~.Version{[ 1 .. 10 ]},
-Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1 .. 4 ]} ),
-License := "GPL-2.0-or-later",
+Subtitle := "A GitHub Pages generator for GAP packages",
+Version := "0.4",
+Date := "10/04/2025", # dd/mm/yyyy format
+License := "0BSD",
 
 Persons := [
   rec(
-    LastName      := "Gutsche",
-    FirstNames    := "Sebastian",
+    LastName      := "Horn",
+    FirstNames    := "Max",
     IsAuthor      := true,
     IsMaintainer  := true,
-    Email         := "gutsche@mathematik.uni-siegen.de",
-    WWWHome       := "https://algebra.mathematik.uni-siegen.de/gutsche/",
-       PostalAddress := Concatenation(
-               "Department Mathematik\n",
-               "Universität Siegen\n",
-               "Walter-Flex-Straße 3\n",
-               "57072 Siegen\n",
-               "Germany" ),
-       Place := "Siegen",
-       Institution := "Universität Siegen"
+    Email         := "mhorn@rptu.de",
+    WWWHome       := "https://www.quendi.de/math",
+    GitHubUsername:= "fingolfin",
+    PostalAddress := Concatenation(
+                       "Fachbereich Mathematik\n",
+                       "RPTU Kaiserslautern-Landau\n",
+                       "Gottlieb-Daimler-Straße 48\n",
+                       "67663 Kaiserslautern\n",
+                       "Germany" ),
+    Place         := "Kaiserslautern, Germany",
+    Institution   := "RPTU Kaiserslautern-Landau"
   ),
 
-  rec( LastName := "Horn",
-       FirstNames := "Max",
-       IsAuthor := true,
-       IsMaintainer := true,
-       Email := "mhorn@rptu.de",
-       WWWHome       := "https://www.quendi.de/math",
-       PostalAddress := Concatenation(
-               "Fachbereich Mathematik\n",
-               "RPTU Kaiserslautern-Landau\n",
-               "Gottlieb-Daimler-Straße 48\n",
-               "67663 Kaiserslautern\n",
-               "Germany" ),
-       Place         := "Kaiserslautern, Germany",
-       Institution   := "RPTU Kaiserslautern-Landau"
-     ),
+  rec(
+    LastName      := "Thor",
+    FirstNames    := "A. U.",
+    IsAuthor      := true,
+    IsMaintainer  := false,
+    #Email         := "author@example.com",
+  ),
 
-  # Contributors:
-  rec( LastName := "Barakat",
-       FirstNames := "Mohamed",
-       IsAuthor := false,
-       IsMaintainer := false,
-     ),
-
-  rec( LastName := "Pfeiffer",
-       FirstNames := "Markus",
-       IsAuthor := false,
-       IsMaintainer := false,
-     ),
-
-  rec( LastName := "Skartsæterhagen",
-       FirstNames := "Øystein",
-       IsAuthor := false,
-       IsMaintainer := false,
-     ),
-
-  rec( LastName := "Wensley",
-       FirstNames := "Chris",
-       IsAuthor := false,
-       IsMaintainer := false,
-     ),
-
-  rec( LastName := "Whitney",
-       FirstNames := "Glen",
-       IsAuthor := false,
-       IsMaintainer := false,
-     ),
-
-  rec( LastName := "Zickgraf",
-       FirstNames := "Fabian",
-       IsAuthor := false,
-       IsMaintainer := false,
-     ),
+  rec(
+    LastName      := "Itor",
+    FirstNames    := "Jan",
+    IsAuthor      := false,
+    IsMaintainer  := true,
+    #Email         := "janitor@example.com",
+  ),
 ],
 
-Status := "deposited",
-PackageWWWHome := "https://gap-packages.github.io/AutoDoc/",
+Status := "other",
 
-SourceRepository := rec(
-    Type := "git",
-    URL := Concatenation( "https://github.com/gap-packages/", ~.PackageName ),
-),
-IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
-PackageWWWHome  := Concatenation( "https://gap-packages.github.io/", ~.PackageName ),
-README_URL      := Concatenation( ~.PackageWWWHome, "/README.md" ),
-PackageInfoURL  := Concatenation( ~.PackageWWWHome, "/PackageInfo.g" ),
-ArchiveURL      := Concatenation( ~.SourceRepository.URL,
-                                 "/releases/download/v", ~.Version,
-                                 "/", ~.PackageName, "-", ~.Version ),
-ArchiveFormats := ".tar.gz",
+# The following are not strictly necessary in your own PackageInfo.g
+# (in the sense that update.g only looks at the usual fields
+# like PackageWWWHome, ArchiveURL etc.). But they are convenient
+# if you use exactly the scheme for your package website that we propose.
+GithubUser := "gap-system",
+GithubRepository := ~.PackageName,
+GithubWWW := Concatenation("https://github.com/", ~.GithubUser, "/", ~.GithubRepository),
 
-AbstractHTML :=
-  "",
+PackageWWWHome := Concatenation("https://", ~.GithubUser, ".github.io/", ~.GithubRepository, "/"),
+README_URL     := Concatenation( ~.PackageWWWHome, "README.md" ),
+PackageInfoURL := Concatenation( ~.PackageWWWHome, "PackageInfo.g" ),
+# The following assumes you are using the Github releases system. If not, adjust
+# it accordingly.
+ArchiveURL     := Concatenation(~.GithubWWW,
+                    "/releases/download/v", ~.Version, "/",
+                    ~.GithubRepository, "-", ~.Version),
+
+ArchiveFormats := ".tar.gz .tar.bz2",
+
+AbstractHTML := 
+  "This is a pseudo package that contains no actual\
+  <span class=\"pkgname\">GAP</span> code. Instead, it is a template for other\
+  GAP packages that allows to quickly setup GitHub Pages.",
 
 PackageDoc := rec(
-  BookName  := "AutoDoc",
+  BookName  := "GitHubPagesForGAP",
   ArchiveURLSubset := ["doc"],
-  HTMLStart := "doc/chap0_mj.html",
+  HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
-  LongTitle := "Generate documentation from GAP source code",
+  LongTitle := "A GitHub Pages generator for GAP packages",
 ),
 
+# The following dependencies are fake and for testing / demo purposes
 Dependencies := rec(
-  GAP := ">= 4.5",
-  NeededOtherPackages := [ [ "GAPDoc", ">= 1.6.3" ] ],
-  SuggestedOtherPackages := [ ],
-  ExternalConditions := [],
+  GAP := ">=4.8.1",
+  NeededOtherPackages := [
+    ["GAPDoc", ">= 1.2"],
+    ["IO", ">= 4.1"],
+  ],
+  SuggestedOtherPackages := [["orb", ">= 4.2"]],
+  ExternalConditions := []
 ),
 
 AvailabilityTest := ReturnTrue,
 
-TestFile := "tst/testall.g",
-
-Keywords := [ "Automatic documentation, GAP, GAPDoc" ],
-
-AutoDoc := rec(
-    entities := rec(
-        VERSION := ~.Version,
-        DATE := ~.Date,
-        io := "<Package>io</Package>",
-        PackageName := "<Package>PackageName</Package>",
-    ),
-    TitlePage := rec(
-        Copyright := Concatenation(
-            "&copyright; 2012-2022 by Sebastian Gutsche and Max Horn<P/>\n\n",
-            "This package may be distributed under the terms and conditions ",
-            "of the GNU Public License Version 2 or (at your option) any later version.\n"
-            ),
-        Abstract := Concatenation(
-            "&AutoDoc; is a &GAP; package whose purpose is to aid ",
-            "&GAP; package authors in creating and maintaining the ",
-            "documentation of their packages.\n"
-            ),
-        Acknowledgements := Concatenation(
-            "This documentation was prepared using the ",
-            "&GAPDoc; package <Cite Key='GAPDoc'/>.\n",
-            "<P/>\n"
-            ),
-    ),
-),
+Keywords := ["GitHub Pages", "GAP"]
 
 ));
+
 
