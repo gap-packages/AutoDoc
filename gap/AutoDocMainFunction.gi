@@ -125,7 +125,7 @@ InstallGlobalFunction( CreateMainPage,
     # output the initial file header
     AppendTo( filestream, AUTODOC_XML_HEADER );
     AppendTo( filestream, "<!DOCTYPE Book SYSTEM \"gapdoc.dtd\"\n[\n" );
-    AppendTo( filestream, "    [<#Include SYSTEM \"_entities.xml\">\n");
+    AppendTo( filestream, "    <#Include SYSTEM \"_entities.xml\">\n");
     AppendTo( filestream, "]\n>\n" );
 
     # now start the actual book
