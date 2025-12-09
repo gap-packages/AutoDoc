@@ -104,6 +104,13 @@ BindGlobal( "TheTypeOfDocumentationTreeExampleNodes",
         NewType( TheFamilyOfDocumentationTreeNodes,
                 IsTreeForDocumentationExampleNodeRep ) );
 
+
+## DeclareRepresentation
+DeclareRepresentation( "IsTreeForDocumentationChunkContentNodeRep", IsTreeForDocumentationNodeRep, [ ] );
+BindGlobal( "TheTypeOfDocumentationTreeChunkContentNodes", NewType( TheFamilyOfDocumentationTreeNodes, IsTreeForDocumentationChunkContentNodeRep ) );
+
+
+
 ###################################
 ##
 ## Tools
@@ -227,6 +234,16 @@ InstallMethod( DocumentationChunk, [ IsTreeForDocumentation, IsString ],
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeChunkNodes,
                               Label, name );
     tree!.chunks.( name ) := node;
+    return node;
+end );
+
+##
+InstallMethod( DocumentationChunkContent, [ IsObject ],
+  function( content )
+    local node;
+
+    node := rec( content := content );
+    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeChunkContentNodes );
     return node;
 end );
 
@@ -586,6 +603,14 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationChunkNodeRep, IsStrea
         return;
     fi;
     WriteDocumentation( Concatenation( "<#Include Label=\"", Label( node ), "\">" ), filestream, level_value );
+end );
+
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationChunkContentNodeRep, IsStream, IsInt ],
+  function( node, filestream, level_value )
+    local s;
+    for s in node!.content do
+        AppendTo( filestream, s );
+    od;
 end );
 
 ##

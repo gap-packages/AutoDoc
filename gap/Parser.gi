@@ -415,7 +415,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         local code, temp_curr_line, comment_pos, before_comment;
         code := [ "<Listing Type=\"Code\"><![CDATA[\n" ];
         while true do
-            temp_curr_line := Chomp( ReadLineWithLineCount( filestream ) );
+            temp_curr_line := ReadLineWithLineCount( filestream );
             if plain_text_mode = false then
                 comment_pos := PositionSublist( temp_curr_line, "#!" );
                 if comment_pos <> fail then
@@ -713,7 +713,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             local label_name, tmp_system;
             label_name := ReplacedString( current_command[ 2 ], " ", "_" );
             tmp_system := DocumentationChunk( tree, label_name );
-            Append( tmp_system!.content, read_code() );
+            Add( tmp_system!.content, DocumentationChunkContent( read_code() ) );
         end,
         @Code := ~.@BeginCode,
         @InsertCode := ~.@InsertChunk,
