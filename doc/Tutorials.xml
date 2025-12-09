@@ -225,28 +225,6 @@ in the root directory of your package:
 LoadPackage( "AutoDoc" );
 AutoDoc( );
 </Listing>
-In contrast, the <Package>RingsForHomalg</Package> package currently uses
-essentially the following code in its <F>makedoc.g</F> file to achieve the same result:
-<Listing>
-LoadPackage( "GAPDoc" );
-SetGapDocLaTeXOptions( "utf8" );
-bib := ParseBibFiles( "doc/RingsForHomalg.bib" );
-WriteBibXMLextFile( "doc/RingsForHomalgBib.xml", bib );
-list := [
-         "../gap/RingsForHomalg.gd",
-         "../gap/RingsForHomalg.gi",
-         "../gap/Singular.gi",
-         "../gap/SingularBasic.gi",
-         "../examples/RingConstructionsExternalGAP.g",
-         "../examples/RingConstructionsSingular.g",
-         "../examples/RingConstructionsMAGMA.g",
-         "../examples/RingConstructionsMacaulay2.g",
-         "../examples/RingConstructionsSage.g",
-         "../examples/RingConstructionsMaple.g",
-         ];
-MakeGAPDocDoc( "doc", "RingsForHomalg", list, "RingsForHomalg" );
-GAPDocManualLab( "RingsForHomalg" );
-</Listing>
 Note that in particular, you do not have to worry about keeping a list of your
 implementation files up-to-date.
 <P/>
