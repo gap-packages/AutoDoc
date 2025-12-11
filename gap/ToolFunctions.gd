@@ -17,3 +17,4 @@ DeclareGlobalFunction( "AUTODOC_Diff" );
 DeclareGlobalFunction( "AUTODOC_TestWorkSheet" );
 
 DeclareGlobalFunction( "AUTODOC_FormatDate" );
+DeclareGlobalFunction( "AUTODOC_ParseDate" );
