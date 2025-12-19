@@ -215,7 +215,7 @@ function( arg )
     if IsBound(scaffold) and IsBound( pkginfo.AutoDoc ) then
         for key in RecNames( pkginfo.AutoDoc ) do
             if IsBound( scaffold.(key) ) then
-                Info(InfoAutoDoc, 1, "WARNING: ", key, " specified in both PackageInfo.AutoDoc and opt.scaffold");
+                AUTODOC_MergeRecords( scaffold.(key), pkginfo.AutoDoc.(key) );
             else
                 scaffold.(key) := pkginfo.AutoDoc.(key);
             fi;
