@@ -6,6 +6,9 @@ This file describes changes in the AutoDoc package.
     slips by GAPDoc; so it caused no problems in practice, but the resulting XML
     was strictly speaking invalid)
   - Predefine entities `VERSION`, `RELEASEYEAR`, `RELEASEDATE`
+  - Allow specifying scaffold settings *simultaneously* in `PackageInfo.g`
+    and `makedoc.g`; the records are merged, with values from `makedoc.g`
+    taken precedence if e.g. the same entity is defined in both places
 
 2025.10.16
   - Make handling `Date` in `PackageInfo.g` more strict (previously some
