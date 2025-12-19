@@ -158,6 +158,24 @@
 #!             This allows you to write <Q>&amp;SomePackage;</Q> and <Q>&amp;RELEASEYEAR;</Q>
 #!             in your documentation, which will be replaced by respective values specified
 #!             in the entities definition.
+#!             <P/>
+#!             Note that &AutoDoc; predefines several entities:
+#!             <List>
+#!             <Mark><A>VERSION</A></Mark>
+#!             <Item>Set to the <C>Version</C> field your package info record.</Item>
+#!             <Mark><A>RELEASEYEAR</A></Mark>
+#!             <Item>Set to a string containing the release year, as derived
+#!                   from the <C>Date</C> field your package info record.</Item>
+#!             <Mark><A>RELEASEDATE</A></Mark>
+#!             <Item>Derived from the <C>Date</C> field your package info record.</Item>
+#!             <Mark><A>SomePackage</A></Mark>
+#!             <Item>
+#!                 The precise name of this entity is derived from the
+#!                 <C>PackageName</C> field your package info record. Note
+#!                 that it is case sensitive. The content is defined as
+#!                 suggested by the example above.
+#!             </Item>
+#!             </List>
 #!         </Item>
 #!
 #!         <Mark><A>TitlePage</A></Mark>

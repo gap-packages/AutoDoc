@@ -10,7 +10,7 @@ SetPackageInfo( rec(
 
 PackageName := "AutoDoc",
 Subtitle := "Generate documentation from GAP source code",
-Version := "2025.10.16",
+Version := "2025.12.19",
 
 Date := ~.Version{[ 1 .. 10 ]},
 Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1 .. 4 ]} ),
