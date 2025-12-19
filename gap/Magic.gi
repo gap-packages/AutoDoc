@@ -494,6 +494,17 @@ function( arg )
             CreateTitlePage( doc_dir, title_page );
         fi;
 
+        # set some default entities
+        AUTODOC_SetIfMissing( scaffold, "entities", rec() );
+        if IsBound( pkginfo.Version ) then
+            AUTODOC_SetIfMissing( scaffold.entities, "VERSION", pkginfo.Version );
+        fi;
+        if IsBound( pkginfo.Date ) then
+            tmp := AUTODOC_ParseDate( pkginfo.Date );
+            AUTODOC_SetIfMissing( scaffold.entities, "RELEASEYEAR", tmp.year );
+            AUTODOC_SetIfMissing( scaffold.entities, "RELEASEDATE", AUTODOC_FormatDate( tmp ) );
+        fi;
+
         CreateEntitiesPage( gapdoc.bookname, doc_dir, scaffold );
 
         if IsBound( scaffold.MainPage ) and scaffold.MainPage <> false then
