@@ -132,8 +132,6 @@ Keywords := [ "Automatic documentation, GAP, GAPDoc" ],
 
 AutoDoc := rec(
     entities := rec(
-        VERSION := ~.Version,
-        DATE := ~.Date,
         io := "<Package>io</Package>",
         PackageName := "<Package>PackageName</Package>",
     ),
