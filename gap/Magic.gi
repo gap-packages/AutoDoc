@@ -73,7 +73,8 @@ function( arg )
           pkgdirstr, docdirstr,
           title_page, tree, is_worksheet,
           position_document_class,
-          args;
+          args,
+          outputstring, outputstream;
 
     if Length( arg ) >= 3 then
         Error( "too many arguments" );
@@ -588,8 +589,18 @@ function( arg )
             Add( args, "nopdf" );
         fi;
 
-        # Finally, invoke GAPDoc
+        # Finally, invoke GAPDoc (and collect info messages)
+        outputstring := "";
+        outputstream := OutputTextString( outputstring, true );
+        SetPrintFormattingStatus( outputstream, false );
+        SetInfoOutput( InfoGAPDoc, outputstream );
+        SetInfoOutput( InfoWarning, outputstream );
         CallFuncList( MakeGAPDocDoc, args );
+        CloseStream( outputstream );
+        UnbindInfoOutput( InfoGAPDoc );
+        UnbindInfoOutput( InfoWarning );
+        Print( outputstring );
+        outputstring := ReplacedString( outputstring, "\c", "" );
 
         # NOTE: We cannot just write CopyHTMLStyleFiles(doc_dir) here, as
         # CopyHTMLStyleFiles its argument directly to Directory(), leading
@@ -644,5 +655,13 @@ function( arg )
         AUTODOC_ExtractMyManualExamples( pkgname, pkgdir, doc_dir, gapdoc.main, gapdoc.files, extract_examples );
     fi;
 
+    if IsBound( outputstring ) then
+      # If wanted then set an exit code for GAP.
+      if Number( SplitString( outputstring, "\n" ),
+                 x -> StartsWith( x, "#W " ) and not
+                      StartsWith( x, "#W There are overfull boxes" ) ) > 0 then
+        GapExitCode( false );
+      fi;
+    fi;
     return true;
 end );
