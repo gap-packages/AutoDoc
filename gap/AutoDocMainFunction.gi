@@ -168,7 +168,7 @@ end );
 ##
 InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
   function( pkginfo )
-    local title_rec, i, tmp_list, j, author_rec, author_string;
+    local title_rec, i, tmp_list, j, author_rec, author_string, max_url_len, no_of_lines, k;
 
     if IsBound( pkginfo.AutoDoc ) and IsBound( pkginfo.AutoDoc.TitlePage ) then
         title_rec := ShallowCopy( pkginfo.AutoDoc.TitlePage );
@@ -204,7 +204,15 @@ InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
                 AUTODOC_APPEND_STRING_ITERATIVE( author_string, "<Email>", author_rec.Email, "</Email>" );
             fi;
             if IsBound( author_rec.WWWHome ) then
-                AUTODOC_APPEND_STRING_ITERATIVE( author_string, "<Homepage>", author_rec.WWWHome, "</Homepage>" );
+                # maximum URL length that still fits on one line in the PDF appears to be 72
+                max_url_len := 72;
+                AUTODOC_APPEND_STRING_ITERATIVE( author_string, "<Homepage><Link>", author_rec.WWWHome, "</Link><LinkText>" );
+                no_of_lines := QuoInt( Length( author_rec.WWWHome ), max_url_len ) + 1;
+                for k in [1.. no_of_lines - 1] do
+                    AUTODOC_APPEND_STRING_ITERATIVE( author_string, author_rec.WWWHome{ [(k-1) * max_url_len + 1 .. k * max_url_len] }, "<Br/>" );
+                od;
+                AUTODOC_APPEND_STRING_ITERATIVE( author_string, 
+                    author_rec.WWWHome{ [(no_of_lines - 1) * max_url_len + 1 .. Length( author_rec.WWWHome )] }, "</LinkText></Homepage>" );
             fi;
             title_rec.Author[ i ] := author_string;
             i := i + 1;
