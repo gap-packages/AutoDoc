@@ -7,7 +7,7 @@
 
 LoadPackage("AutoDoc");
 
-AutoDoc( rec( 
+AutoDoc( rec(
     autodoc := true,
     gapdoc := rec(
         LaTeXOptions := rec( EarlyExtraPreamble := """
