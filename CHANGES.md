@@ -1,5 +1,29 @@
 This file describes changes in the AutoDoc package.
 
+2025.12.19
+  - Don't replace empty lines in `@BeginCode` blocks by `<P/>`
+  - Fix XML header in generated files (it had a syntax error, which somehow also
+    slips by GAPDoc; so it caused no problems in practice, but the resulting XML
+    was strictly speaking invalid)
+  - Predefine entities `VERSION`, `RELEASEYEAR`, `RELEASEDATE`
+  - Allow specifying scaffold settings *simultaneously* in `PackageInfo.g`
+    and `makedoc.g`; the records are merged, with values from `makedoc.g`
+    taken precedence if e.g. the same entity is defined in both places
+
+2025.10.16
+  - Make handling `Date` in `PackageInfo.g` more strict (previously some
+    malformed variants were accepted to deal with very old packages, but by
+    now all packages are compliant)
+  - Remove a bunch of features that were deprecated since 2019:
+    - `AutoDoc` option `scaffold.gapdoc_latex_options` has been
+      replaced by `gapdoc.LaTeXOptions`
+    - `AutoDoc` option `maketest` has been superseded by `extract_examples`
+    - Various AutoDoc commands were removed (see the manual for replacements)
+      - `@EndSection`, `@EndSubsection`
+      - `@AutoDoc`, `@BeginAutoDoc`, `@EndAutoDoc`
+      - `@System`, `@BeginSystem`, `@EndSystem`, `@InsertSystem`
+      - `@AutoDocPlainText`, `@BeginAutoDocPlainText`, `@EndAutoDocPlainText`
+
 2025.05.09
   - Add `InfoAutoDoc` info class for messages
   - Various janitorial changes

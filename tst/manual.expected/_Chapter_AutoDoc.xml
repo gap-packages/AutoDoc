@@ -152,6 +152,24 @@
              This allows you to write <Q>&amp;SomePackage;</Q> and <Q>&amp;RELEASEYEAR;</Q>
              in your documentation, which will be replaced by respective values specified
              in the entities definition.
+             <P/>
+             Note that &AutoDoc; predefines several entities:
+             <List>
+             <Mark><A>VERSION</A></Mark>
+             <Item>Set to the <C>Version</C> field your package info record.</Item>
+             <Mark><A>RELEASEYEAR</A></Mark>
+             <Item>Set to a string containing the release year, as derived
+                   from the <C>Date</C> field your package info record.</Item>
+             <Mark><A>RELEASEDATE</A></Mark>
+             <Item>Derived from the <C>Date</C> field your package info record.</Item>
+             <Mark><A>SomePackage</A></Mark>
+             <Item>
+                 The precise name of this entity is derived from the
+                 <C>PackageName</C> field your package info record. Note
+                 that it is case sensitive. The content is defined as
+                 suggested by the example above.
+             </Item>
+             </List>
          </Item>
          <Mark><A>TitlePage</A></Mark>
          <Item>
@@ -329,26 +347,6 @@
          </Item>
          </List>
      </Item>
-        <Mark><A>maketest</A></Mark>
-        <Item>
-          <Emph>This option is deprecated. Please use <C>extract_examples</C> instead.</Emph>
-          <P/>
-          Either <K>true</K> or a record. When it is <K>true</K>,
-          a simple <F>maketest.g</F> file is created in the main package directory,
-          which can be used to test the examples from the manual. As a record,
-          the entry can have the following entries itself, to specify some options.
-          <List>
-          <Mark>filename</Mark>
-          <Item>
-            Sets the name of the test file.
-          </Item>
-          <Mark>commands</Mark>
-          <Item>
-            A list of strings, each one a command, which
-            will be executed at the beginning of the test file.
-          </Item>
-          </List>
-        </Item>
      </List>
  </Item>
  </List>

@@ -3,7 +3,7 @@
 <!-- This is an automatically generated file. -->
 <!DOCTYPE Book SYSTEM "gapdoc.dtd"
 [
-    [<#Include SYSTEM "_entities.xml">
+    <#Include SYSTEM "_entities.xml">
 ]
 >
 <Book Name="Plain_file.autodoc_Test">

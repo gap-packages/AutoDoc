@@ -14,6 +14,16 @@ gap> r;
 rec( foo := 1 )
 
 #
+# AUTODOC_ParseDate
+#
+gap> AUTODOC_ParseDate("2019-03-01");
+rec( day := 1, month := 3, year := 2019 )
+gap> AUTODOC_ParseDate("01/03/2019");
+rec( day := 1, month := 3, year := 2019 )
+gap> AUTODOC_ParseDate("01.03.2019");
+fail
+
+#
 # AUTODOC_FormatDate
 #
 
@@ -25,6 +35,10 @@ gap> AUTODOC_FormatDate(2019, 3);
 gap> AUTODOC_FormatDate(2019, 3, 1);
 "1 March 2019"
 gap> AUTODOC_FormatDate("2019", "3", "1");
+"1 March 2019"
+gap> AUTODOC_FormatDate("2019-03-01");
+"1 March 2019"
+gap> AUTODOC_FormatDate("01/03/2019");
 "1 March 2019"
 gap> AUTODOC_FormatDate(rec(year:=2019));
 "2019"

@@ -742,8 +742,7 @@ can be important.</E>
 <Section Label="Deprecated">
 <Heading>Deprecated commands</Heading>
 
-The following commands used to be supported, but should not generally be used anymore.
-They will be removed in a future version of &AutoDoc;.
+The following commands used to be supported, but are not anymore.
 
 <List>
 <Mark><C>@EndSection</C></Mark>

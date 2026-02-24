@@ -68,7 +68,7 @@ end );
 InstallGlobalFunction( AutoDoc,
 function( arg )
     local pkgname, pkginfo, pkgdir,
-          opt, scaffold, gapdoc, maketest, extract_examples, autodoc, i,
+          opt, scaffold, gapdoc, extract_examples, autodoc, i,
           doc_dir, doc_dir_rel, tmp, key, val, file,
           pkgdirstr, docdirstr,
           title_page, tree, is_worksheet,
@@ -141,7 +141,7 @@ function( arg )
     # Check for user supplied options. If present, they take
     # precedence over any defaults as well as the opt record.
     #
-    for key in [ "dir", "scaffold", "autodoc", "gapdoc", "maketest", "extract_examples" ] do
+    for key in [ "dir", "scaffold", "autodoc", "gapdoc", "extract_examples" ] do
         val := ValueOption( key );
         if val <> fail then
             opt.(key) := val;
@@ -215,7 +215,7 @@ function( arg )
     if IsBound(scaffold) and IsBound( pkginfo.AutoDoc ) then
         for key in RecNames( pkginfo.AutoDoc ) do
             if IsBound( scaffold.(key) ) then
-                Info(InfoAutoDoc, 1, "WARNING: ", key, " specified in both PackageInfo.AutoDoc and opt.scaffold");
+                AUTODOC_MergeRecords( scaffold.(key), pkginfo.AutoDoc.(key) );
             else
                 scaffold.(key) := pkginfo.AutoDoc.(key);
             fi;
@@ -441,16 +441,6 @@ function( arg )
             GAPDoc2LaTeXProcs.Head := StringFile( scaffold.latex_header_file );
         fi;
 
-        # check for legacy gapdoc_latex_options
-        if IsBound( scaffold.gapdoc_latex_options ) then
-            Info( InfoWarning, 1, TextAttr.1,
-                  "WARNING: Please replace the DEPRECATED option <scaffold.gapdoc_latex_options> ",
-                  "by <gapdoc.LaTeXOptions>", TextAttr.reset );
-            if not IsBound( gapdoc.LaTeXOptions ) then
-                gapdoc.LaTeXOptions := scaffold.gapdoc_latex_options;
-            fi;
-        fi;
-
         AUTODOC_SetIfMissing( scaffold, "includes", [ ] );
 
         if IsBound( autodoc ) then
@@ -502,6 +492,17 @@ function( arg )
             fi;
 
             CreateTitlePage( doc_dir, title_page );
+        fi;
+
+        # set some default entities
+        AUTODOC_SetIfMissing( scaffold, "entities", rec() );
+        if IsBound( pkginfo.Version ) then
+            AUTODOC_SetIfMissing( scaffold.entities, "VERSION", pkginfo.Version );
+        fi;
+        if IsBound( pkginfo.Date ) then
+            tmp := AUTODOC_ParseDate( pkginfo.Date );
+            AUTODOC_SetIfMissing( scaffold.entities, "RELEASEYEAR", tmp.year );
+            AUTODOC_SetIfMissing( scaffold.entities, "RELEASEDATE", AUTODOC_FormatDate( tmp ) );
         fi;
 
         CreateEntitiesPage( gapdoc.bookname, doc_dir, scaffold );
@@ -614,26 +615,6 @@ function( arg )
             GAPDocManualLabFromSixFile( gapdoc.bookname, file );
         fi;
 
-    fi;
-
-    #
-    # Handle maketest (deprecated; consider using extract_examples instead)
-    #
-
-    if IsBound( opt.maketest ) then
-        if IsRecord( opt.maketest ) then
-            maketest := opt.maketest;
-        elif opt.maketest = true then
-            maketest := rec( );
-        fi;
-    fi;
-
-    if IsBound( maketest ) then
-    
-        AUTODOC_SetIfMissing( maketest, "filename", "maketest.g" );
-        AUTODOC_SetIfMissing( maketest, "commands", [ ] );
-
-        CreateMakeTest( pkgdir, doc_dir, gapdoc.main, gapdoc.files, maketest );
     fi;
 
     #

@@ -10,7 +10,7 @@ SetPackageInfo( rec(
 
 PackageName := "AutoDoc",
 Subtitle := "Generate documentation from GAP source code",
-Version := "2025.05.09",
+Version := "2025.12.19",
 
 Date := ~.Version{[ 1 .. 10 ]},
 Date := Concatenation( ~.Date{[ 9, 10 ]}, "/", ~.Date{[ 6, 7 ]}, "/", ~.Date{[ 1 .. 4 ]} ),
@@ -40,6 +40,7 @@ Persons := [
        IsMaintainer := true,
        Email := "mhorn@rptu.de",
        WWWHome       := "https://www.quendi.de/math",
+       GitHubUsername := "fingolfin",
        PostalAddress := Concatenation(
                "Fachbereich Mathematik\n",
                "RPTU Kaiserslautern-Landau\n",
@@ -117,7 +118,7 @@ PackageDoc := rec(
 ),
 
 Dependencies := rec(
-  GAP := ">= 4.5",
+  GAP := ">= 4.11",
   NeededOtherPackages := [ [ "GAPDoc", ">= 1.6.3" ] ],
   SuggestedOtherPackages := [ ],
   ExternalConditions := [],
@@ -131,14 +132,12 @@ Keywords := [ "Automatic documentation, GAP, GAPDoc" ],
 
 AutoDoc := rec(
     entities := rec(
-        VERSION := ~.Version,
-        DATE := ~.Date,
         io := "<Package>io</Package>",
         PackageName := "<Package>PackageName</Package>",
     ),
     TitlePage := rec(
         Copyright := Concatenation(
-            "&copyright; 2012-2022 by Sebastian Gutsche and Max Horn<P/>\n\n",
+            "&copyright; 2012-2025 by Sebastian Gutsche and Max Horn<P/>\n\n",
             "This package may be distributed under the terms and conditions ",
             "of the GNU Public License Version 2 or (at your option) any later version.\n"
             ),

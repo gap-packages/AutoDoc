@@ -218,6 +218,34 @@ function(ws)
     od;
 end);
 
+# Parse a date given as a string. Currently only supports the two formats
+# allowed in PackageInfo.g, namely "DD/MM/YYYY" or "YYYY-MM-DD". Returns a
+# record with entries `year`, `month`, `day` bound to the corresponding
+# integers extracted from the input string.
+#
+# Returns `fail` if the input could not be parsed.
+InstallGlobalFunction( AUTODOC_ParseDate,
+function(date)
+    local day, month, year;
+    if Length(date) <> 10 then
+        return fail;
+    fi;
+    if date{[3,6]} = "//" then
+        day := Int(date{[1,2]});
+        month := Int(date{[4,5]});
+        year := Int(date{[7..10]});
+    elif date{[5,8]} = "--" then
+        day := Int(date{[9,10]});
+        month := Int(date{[6,7]});
+        year := Int(date{[1..4]});
+    else
+        return fail;
+    fi;
+    if day = fail or month = fail or year = fail then
+        return fail;
+    fi;
+    return rec( day := day, month := month, year := year );
+end);
 
 BindGlobal("AUTODOC_months", MakeImmutable([
     "January", "February", "March",
@@ -226,7 +254,6 @@ BindGlobal("AUTODOC_months", MakeImmutable([
     "October", "November", "December"
 ]));
 
-
 # Format a date into a human readable string; a date may consist of only
 # a year; or a year and a month; or a year, month and day. Dates are
 # formatted as "2019", resp. "February 2019" resp. "5 February 2019".
@@ -234,6 +261,7 @@ BindGlobal("AUTODOC_months", MakeImmutable([
 # The input can be one of the following:
 #  - AUTODOC_FormatDate(rec), where <rec> is a record with entries year, month, day;
 #  - AUTODOC_FormatDate(year[, month[, day]])
+#  - AUTODOC_FormatDate(date_str) where date_str is a string of the form "DD/MM/YYYY" or "YYYY-MM-DD"
 # In each case, the year, month or day may be given as either an
 # integer, or as a string representing an integer.
 InstallGlobalFunction( AUTODOC_FormatDate,
@@ -241,6 +269,8 @@ function(arg)
     local date, key, val, result;
     if Length(arg) = 1 and IsRecord(arg[1]) then
         date := ShallowCopy(arg[1]);
+    elif Length(arg) = 1 and IsString(arg[1]) then
+        date := AUTODOC_ParseDate(arg[1]);
     elif Length(arg) in [1..3] then
         date := rec();
         date.year := arg[1];
@@ -251,7 +281,7 @@ function(arg)
             date.day := arg[3];
         fi;
     fi;
-    if not IsBound(date) then
+    if not IsBound(date) or date = fail then
         Error("Invalid arguments");
     fi;
 
