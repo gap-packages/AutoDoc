@@ -85,6 +85,18 @@ gap> AUTODOC_PositionPrefixShebang( "  # ! not-a-shebang" );
 fail
 
 #
+# Scan_for_AutoDoc_Part: robust command splitting
+#
+gap> Scan_for_AutoDoc_Part( "plain text @Section   Intro", true );
+[ "@Section", "Intro" ]
+gap> Scan_for_AutoDoc_Part( "   @Chapter   My Chapter", true );
+[ "@Chapter", "My Chapter" ]
+gap> Scan_for_AutoDoc_Part( "   @NoArg", true );
+[ "@NoArg", "" ]
+gap> Scan_for_AutoDoc_Part( "no command here", true );
+[ "STRING", "no command here" ]
+
+#
 # AutoDoc_Parser_ReadFiles: multiline InstallMethod parsing
 #
 gap> tree := DocumentationTree();;
