@@ -85,4 +85,20 @@ gap> AUTODOC_PositionPrefixShebang( "  # ! not-a-shebang" );
 fail
 
 #
+# AutoDoc_Parser_ReadFiles: multiline InstallMethod parsing
+#
+gap> tree := DocumentationTree();;
+gap> AutoDoc_Parser_ReadFiles( [ "tst/autodoc-parser-installmethod.g" ], tree, rec() );
+gap> section := SectionInTree( tree, "Parser", "InstallMethod" );;
+gap> item := section!.content[ 1 ];;
+gap> item!.item_type;
+"Oper"
+gap> item!.name;
+"\"MyOp\""
+gap> item!.tester_names;
+"for IsInt,IsString"
+gap> item!.arguments;
+"x,y"
+
+#
 gap> STOP_TEST( "misc.tst" );
