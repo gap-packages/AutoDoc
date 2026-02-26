@@ -17,6 +17,8 @@ This file describes changes in the AutoDoc package.
     AutoDoc marker at the start of a line (ignoring leading whitespace)
   - Warn if a chunk is defined (via `@BeginChunk`/`@BeginCode`) but never
     inserted (via `@InsertChunk`/`@InsertCode`)
+  - Warn if a chunk is inserted (via `@InsertChunk`/`@InsertCode`) but never
+    defined (via `@BeginChunk`/`@BeginCode`)
   - Allow using Markdown-style headings `#`/`##`/`###` as aliases for
     `@Chapter`/`@Section`/`@Subsection` in `.autodoc` files and doc comments
 
