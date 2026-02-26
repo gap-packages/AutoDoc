@@ -44,7 +44,7 @@ DeclareGlobalFunction( "ExtractTitleInfoFromPackageInfo" );
 
 
 
-#! @Chapter AutoDoc
+#! @Chapter Reference
 #! @Section AutoDoc worksheets
 #! @SectionLabel AutoDocWorksheet
 

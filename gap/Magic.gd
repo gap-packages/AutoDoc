@@ -5,7 +5,7 @@
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-#! @Chapter AutoDoc
+#! @Chapter Reference
 
 #! @Section The AutoDoc() function
 
@@ -407,8 +407,3 @@ DeclareGlobalFunction( "AutoDoc" );
 #!   <C>SetInfoLevel(InfoAutoDoc, 0)</C>. Default value is 1.
 DeclareInfoClass("InfoAutoDoc");
 SetInfoLevel(InfoAutoDoc, 1);
-
-#! @Section Examples
-#!
-#! Some basic examples for using <C>AutoDoc</C> were already shown in
-#! Chapter <Ref Label='Tutorials'/>.

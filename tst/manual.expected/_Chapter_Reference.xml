@@ -1,10 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- This is an automatically generated file. -->
-<Chapter Label="Chapter_AutoDoc">
-<Heading>AutoDoc</Heading>
+<Chapter Label="Chapter_Reference">
+<Heading>Reference</Heading>
 
-<Section Label="Chapter_AutoDoc_Section_The_AutoDoc_function">
+<Section Label="Section_AutoDocWorksheet">
+<Heading>AutoDoc worksheets</Heading>
+
+<ManSection>
+  <Func Arg="list_of_filenames : options" Name="AutoDocWorksheet" />
+ <Description>
+  The purpose of this function is to create stand-alone PDF and HTML files
+  using &AutoDoc; without associating them with a package.
+  <P/>
+  It uses the same optional record entries as <Ref Func="AutoDoc"/>, but
+  instead of a package name, you pass one filename or a list of filenames
+  containing &AutoDoc; text from which the document is created.
+  <P/>
+  A simple worksheet file can define title-page information and chapter
+  content directly in the source file, including example blocks.
+  If this is stored in <F>worksheet.g</F>, you can generate documentation via
+<Log><![CDATA[
+ AutoDocWorksheet( "worksheet.g" );
+]]></Log>
+
+
+  This creates documentation in a <F>doc</F> subdirectory of the current directory.
+  <P/>
+  Since worksheets do not have a <F>PackageInfo.g</F>, title-page fields are
+  specified directly in the worksheet file.
+ </Description>
+</ManSection>
+
+
+</Section>
+
+
+<Section Label="Chapter_Reference_Section_The_AutoDoc_function">
 <Heading>The AutoDoc() function</Heading>
 
 <ManSection>
@@ -31,14 +63,13 @@
      on the data in your <F>PackageInfo.g</F>.
  </Item>
  <Item>
-     It can scan your package for &AutoDoc; based documentation (by using &AutoDoc;
-     tags and the Autodoc command.
-     This will
-     produce further XML files to be used as part of the package manual.
+     It can scan your package for &AutoDoc; based documentation, using
+     documentation comments and commands. This produces additional XML files
+     to be used as part of the package manual.
  </Item>
  <Item>
      It can use &GAPDoc; to generate PDF, text and HTML (with
-     MathJaX enabled) documentation from the &GAPDoc; XML files it
+     MathJax enabled) documentation from the &GAPDoc; XML files it
      generated as well as additional such files provided by you. For
      this, it invokes <Ref Func='MakeGAPDocDoc' BookName='gapdoc'/>
      to convert the XML sources, and it also instructs &GAPDoc; to copy
@@ -46,6 +77,8 @@
      (see <Ref Func='CopyHTMLStyleFiles' BookName='gapdoc'/>).
  </Item>
  </Enum>
+ These tasks can be enabled independently, so you can use as much or as
+ little of &AutoDoc; as your package currently needs.
  For more information and some examples, please refer to Chapter <Ref Label='Tutorials'/>.
  <P/>
  The parameters have the following meanings:
@@ -69,7 +102,7 @@
      documentation of the correct version is built.
      <P/>
      Note that when using <C>AutoDocWorksheet</C> (see
-     <Ref Sect='Chapter_AutoDoc_worksheets_Section_Worksheets'/>), there is
+     <Ref Sect='Section_AutoDocWorksheet'/>), there is
      no parameter corresponding to <A>packageOrDirectory</A> and so the
      <Q>package directory</Q> is always the current directory, and
      there is no metadata.
@@ -156,16 +189,16 @@
              Note that &AutoDoc; predefines several entities:
              <List>
              <Mark><A>VERSION</A></Mark>
-             <Item>Set to the <C>Version</C> field your package info record.</Item>
+             <Item>Set to the <C>Version</C> field of your package info record.</Item>
              <Mark><A>RELEASEYEAR</A></Mark>
              <Item>Set to a string containing the release year, as derived
-                   from the <C>Date</C> field your package info record.</Item>
+                   from the <C>Date</C> field of your package info record.</Item>
              <Mark><A>RELEASEDATE</A></Mark>
-             <Item>Derived from the <C>Date</C> field your package info record.</Item>
+             <Item>Derived from the <C>Date</C> field of your package info record.</Item>
              <Mark><A>SomePackage</A></Mark>
              <Item>
                  The precise name of this entity is derived from the
-                 <C>PackageName</C> field your package info record. Note
+                 <C>PackageName</C> field of your package info record. Note
                  that it is case sensitive. The content is defined as
                  suggested by the example above.
              </Item>
@@ -177,7 +210,7 @@
              for the package manual with extra information, such as a copyright
              statement or acknowledgments. To this end, the names of the record
              components are used as XML element names, and the values of the
-             components are outputted as content of these XML elements. For
+             components are output as content of these XML elements. For
              example, you could pass the following record to set a custom
              acknowledgements text:
              <Listing><![CDATA[
@@ -322,7 +355,7 @@
          into files <F>tst/PACKAGENAME01.tst</F>,  <F>tst/PACKAGENAME02.tst</F>, ...
          and so on, with one file for each chapter. For chapters with no examples,
          no file is created.<P/>
-         As a record, the entry can have the following entries itself, to specify some options.
+         If set to a record, it may contain the following entries:
          <List>
          <Mark>units</Mark>
          <Item>
@@ -363,20 +396,11 @@
    messages including those that contain file paths.
 <P/>
    This can be set by calling, for example,
-   <C>SetInfoLevel(InfoPackageManager, 0)</C>. Default value 1.
+   <C>SetInfoLevel(InfoAutoDoc, 0)</C>. Default value is 1.
  </Description>
 </ManSection>
 
 
-</Section>
-
-
-<Section Label="Chapter_AutoDoc_Section_Examples">
-<Heading>Examples</Heading>
-
-<P/>
- Some basic examples for using <C>AutoDoc</C> were already shown in
- Chapter <Ref Label='Tutorials'/>.
 </Section>
 
 
