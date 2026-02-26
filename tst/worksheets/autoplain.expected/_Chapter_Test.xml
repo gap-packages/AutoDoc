@@ -6,6 +6,12 @@
 
 Does AutoDoc have a way to allow that header block not to appear in
 the documentation generated from a <F>.autodoc</F> file like this?
+<Section Label="Chapter_Test_Section_First_Section">
+<Heading>First Section</Heading>
+
+<Subsection Label="Chapter_Test_Section_First_Section_Subsection_First_Subsection">
+<Heading>First Subsection</Heading>
+
 <Example><![CDATA[
 gap> S5 := SymmetricGroup(5);
 Sym( [ 1 .. 5 ] )
@@ -24,5 +30,11 @@ gap> Size(A5);
 
 
 And we wrap up with some dummy text
+</Subsection>
+
+
+</Section>
+
+
 </Chapter>
 
