@@ -130,6 +130,12 @@ it documents. Do not place other code between the comment block and the
 DeclareOperation( "ToricVariety", [ IsConvexObject ] );
 ]]></Listing>
 
+In these comment lines, you can freely use normal &GAPDoc; XML markup
+(with the usual exceptions for lines starting with <C>@</C>, which are
+interpreted as &AutoDoc; commands). So, for instance, tags like
+<C>&lt;Ref&gt;</C>, <C>&lt;A&gt;</C>, <C>&lt;K&gt;</C>, <C>&lt;List&gt;</C>, etc. can be written
+directly in <C>#!</C> comment text.
+
 For a thorough description of what you can do with &AutoDoc;
 documentation comments, please refer to chapter <Ref Chap="Comments"/>.
 <P/>

@@ -25,6 +25,18 @@ block and the <C>Declare...</C> statement.
 
 Inside of &AutoDoc; comments, <E>&AutoDoc; commands</E>
 starting with <C>@</C> can be used to control the output &AutoDoc; produces.
+Any comment line that does <E>not</E> start with an &AutoDoc; command is treated
+as regular documentation text and may contain (almost) arbitrary &GAPDoc; XML
+markup, such as <C>&lt;Ref&gt;</C>, <C>&lt;A&gt;</C>, <C>&lt;List&gt;</C>, and similar tags.
+This lets you use the normal &GAPDoc; formatting toolbox directly inside
+&AutoDoc; comments.
+<P/>
+For example:
+<Listing><![CDATA[
+#! @Description
+#!  See <Ref Chap="Tutorials"/> for setup details.
+#!  The argument <A>obj</A> must satisfy <K>IsObject</K>.
+]]></Listing>
 
 <P/>
 As explained in chapter <Ref Chap="Overview"/>, you can combine &AutoDoc;
