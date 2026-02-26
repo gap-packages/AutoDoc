@@ -749,6 +749,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
             label_name := ReplacedString( current_command[ 2 ], " ", "_" );
             current_item := DocumentationChunk( tree, label_name );
+            current_item!.is_defined := true;
         end,
         @Chunk := ~.@BeginChunk,
         @EndChunk := function()
@@ -764,6 +765,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             local label_name, tmp_system;
             label_name := ReplacedString( current_command[ 2 ], " ", "_" );
             tmp_system := DocumentationChunk( tree, label_name );
+            tmp_system!.is_defined := true;
             Add( tmp_system!.content, DocumentationChunkContent( read_code() ) );
         end,
         @Code := ~.@BeginCode,

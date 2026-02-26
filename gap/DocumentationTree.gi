@@ -233,6 +233,8 @@ InstallMethod( DocumentationChunk, [ IsTreeForDocumentation, IsString ],
                  level := tree!.current_level );
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeChunkNodes,
                               Label, name );
+    node!.is_defined := false;
+    node!.is_inserted := false;
     tree!.chunks.( name ) := node;
     return node;
 end );
@@ -419,6 +421,15 @@ BindGlobal( "WriteChunks",
 
     for current_chunk_name in chunk_names do
         current_chunk := tree!.chunks.( current_chunk_name );
+        if current_chunk!.is_defined = true and current_chunk!.is_inserted = false then
+            Info(
+                InfoAutoDoc,
+                1,
+                "WARNING: chunk ",
+                current_chunk_name,
+                " was defined but never inserted"
+            );
+        fi;
         AppendTo( chunks_stream, "<#GAPDoc Label=\"", current_chunk_name, "\">\n" );
         if IsBound( current_chunk!.content ) then
             WriteDocumentation( current_chunk!.content, chunks_stream, level_value );
@@ -602,6 +613,7 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationChunkNodeRep, IsStrea
     if node!.level > level_value then
         return;
     fi;
+    node!.is_inserted := true;
     WriteDocumentation( Concatenation( "<#Include Label=\"", Label( node ), "\">" ), filestream, level_value );
 end );
 
