@@ -827,6 +827,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     ##Now read the files.
     for filename in filename_list do
         Reset();
+        ##Need to set autodoc_read_line to false again since we now look at a new file.
+        autodoc_read_line := false;
         ## FIXME: Is this dangerous?
         if PositionSublist( filename, ".autodoc" ) <> fail then
             plain_text_mode := true;
