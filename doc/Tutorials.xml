@@ -213,6 +213,13 @@ There are various examples of packages using &AutoDoc; for
 this purpose only, e.g. &io; and <Package>orb</Package>.
 <P/>
 
+In particular, this setup works well if you want to keep your existing manual
+structure and only adopt selected &AutoDoc; features first; for example
+automatic title-page data and predefined entities such as
+<C>&amp;VERSION;</C>, <C>&amp;RELEASEYEAR;</C> and <C>&amp;RELEASEDATE;</C>
+(see Section <Ref Sect="Tut:PackageInfo:Entities"/>).
+<P/>
+
 <Subsection Label="Tut:IntegrateExisting:EverythingThere">
   <Heading>Using &AutoDoc; on a complete &GAPDoc; manual</Heading>
 
@@ -260,7 +267,7 @@ it can find inside of your package root directory, and in the subdirectories <F>
 If you keep source files with documentation in other directories,
 you can adjust the list of directories AutoDoc scans via the <C>scan_dirs</C> option.
 The following example illustrates this by instructing &AutoDoc; to only search in the subdirectory <F>package_sources</F>
-of the packages root directory.
+of the package's root directory.
 <Listing>
 LoadPackage( "AutoDoc" );
 AutoDoc( rec( gapdoc := rec( scan_dirs := [ "package_sources" ] ) ) );
@@ -269,7 +276,7 @@ You can also specify an explicit list of files containing documentation,
 which will be searched in addition to any files located within the scan directories:
 <Listing>
 LoadPackage( "AutoDoc" );
-AutoDoc( rec( gapdoc := rec( files := [ "path/to/some/hidden/file.gds" ] ) ) );
+AutoDoc( rec( gapdoc := rec( files := [ "path/to/some/hidden/file.gd" ] ) ) );
 </Listing>
 Giving such a file does not prevent the standard <C>scan_dirs</C> from being scanned for
 other files.
