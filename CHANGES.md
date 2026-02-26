@@ -3,6 +3,8 @@ This file describes changes in the AutoDoc package.
 2026.MM.DD
   - Greatly improve the package manual.
   - Fix `InstallMethod` in first line of GAP source file leading to an error
+  - Fix multiline `InstallMethod` parsing for filter lists and
+    multiline `function(...)` argument lists
   - Make tests work when the package directory is read-only by writing
     generated test output to temporary directories
   - Remove `@DONT_SCAN_NEXT_LINE` parser hack and only treat `#!` as an

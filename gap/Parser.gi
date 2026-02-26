@@ -381,8 +381,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             position_parenthesis := AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' );
             current_line := current_line{[ position_parenthesis + 1 .. Length( current_line ) ]};
             filter_string := "for ";
-            while PositionSublist( current_line, "]" ) = fail do
+            while AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' ) = fail do
                 Append( filter_string, current_line );
+                current_line := Normalized_ReadLine( filestream );
+                if current_line = fail then
+                    ErrorWithPos( "unterminated InstallMethod filter list" );
+                fi;
             od;
             position_parenthesis := AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' );
             Append( filter_string, current_line{[ 1 .. position_parenthesis - 1 ]} );
@@ -403,10 +407,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 if position_parenthesis <> fail then
                     current_line := current_line{[ position_parenthesis + 9 .. Length( current_line ) ]};
                     filter_string := "";
-                    while PositionSublist( current_line, ")" ) = fail do;
+                    while PositionSublist( current_line, ")" ) = fail do
                         current_line := StripBeginEnd( current_line, " " );
                         Append( filter_string, current_line );
-                        current_line := Normalized_ReadLine( current_line );
+                        current_line := Normalized_ReadLine( filestream );
+                        if current_line = fail then
+                            ErrorWithPos( "unterminated argument list in InstallMethod declaration" );
+                        fi;
                     od;
                     position_parenthesis := PositionSublist( current_line, ")" );
                     Append( filter_string, current_line{[ 1 .. position_parenthesis - 1 ]} );
