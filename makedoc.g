@@ -16,7 +16,8 @@ AutoDoc( rec(
         """ )
     ),
     scaffold := rec(
-        includes := [ "Tutorials.xml", 
+        includes := [ "Overview.xml",
+                      "Tutorials.xml", 
                       "Comments.xml" ],
         bib := "bib.xml", 
     )

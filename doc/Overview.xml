@@ -1,0 +1,59 @@
+<Chapter Label="Overview">
+<Heading>What &AutoDoc; offers</Heading>
+
+&AutoDoc; helps you create and maintain package manuals for &GAP;.
+It is built on top of &GAPDoc; and generates the XML input that
+&GAPDoc; consumes.
+So &AutoDoc; complements &GAPDoc; instead of replacing it.
+<P/>
+
+The package is designed for a <Q>mix and match</Q> workflow:
+you can adopt only the parts that help you today, and add more over time.
+<P/>
+
+<Section Label="Overview:Features">
+<Heading>Core features</Heading>
+
+<List>
+<Item>Build package manuals via one reproducible command, usually
+<C>gap makedoc.g</C>.</Item>
+<Item>Generate and maintain a title page from metadata in
+<F>PackageInfo.g</F>.</Item>
+<Item>Generate and maintain a main XML file that includes your chapters.</Item>
+<Item>Extract manual examples into <F>.tst</F> files via
+<C>extract_examples := true</C>.</Item>
+<Item>Document declarations directly in source files via &AutoDoc;
+comments beginning with <C>#!</C>.</Item>
+<Item>Combine &AutoDoc; comments, classic &GAPDoc; source comments,
+and hand-written XML chapters in one manual.</Item>
+</List>
+
+</Section>
+
+<Section Label="Overview:MixAndMatch">
+<Heading>Adopting &AutoDoc; incrementally</Heading>
+
+You do not have to switch everything at once.
+Typical adoption paths include:
+<List>
+<Item>Use only <Ref Func="AutoDoc"/> to rebuild an existing &GAPDoc; manual.</Item>
+<Item>Enable only title-page generation, while keeping your custom main XML.</Item>
+<Item>Keep your existing title page but use generated entities such as
+<C>&amp;VERSION;</C>, <C>&amp;RELEASEYEAR;</C>, and <C>&amp;RELEASEDATE;</C>.</Item>
+<Item>Add &AutoDoc; comments only for new code, and leave old documentation as-is.</Item>
+<Item>Later, gradually move chapters or source documentation to your preferred style.</Item>
+</List>
+
+This flexibility is central: &AutoDoc; should make your current setup better,
+without forcing a full rewrite first.
+</Section>
+
+<Section Label="Overview:WhereNext">
+<Heading>Where to continue</Heading>
+
+For practical setup and migration workflows, continue with chapter
+<Ref Chap="Tutorials"/>. For the command reference of documentation comments,
+see chapter <Ref Chap="Comments"/>.
+
+</Section>
+</Chapter>

@@ -7,12 +7,12 @@
     <name><first>Frank</first><last>Lübeck</last></name>
     <name><first>Max</first><last>Neunhöffer</last></name>
   </author>
-  <title><C>GAPDoc (Version 1.5.1)</C></title>
+  <title><C>GAPDoc (Version 1.6.7)</C></title>
   <organization>RWTH Aachen</organization>
-  <year>2012</year>
+  <year>2024</year>
   <other type="note">
     GAP package, 
-    <URL>http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc/index.html</URL>
+    <URL>https://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc/index.html</URL>
   </other>
 </manual></entry>
 

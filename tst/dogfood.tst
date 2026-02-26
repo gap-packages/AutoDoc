@@ -48,15 +48,9 @@ true
 gap> docdir := Directory(Concatenation(tempdir, "/doc"));;
 gap> ex_dir := DirectoriesPackageLibrary( "AutoDoc", "tst/manual.expected" );;
 
-# check chapter 3
-gap> chap3 := Filename( docdir, "_Chapter_AutoDoc_worksheets.xml" );;
-gap> chap3ref := Filename( ex_dir, "_Chapter_AutoDoc_worksheets.xml" );;
-gap> AUTODOC_Diff("-u", chap3ref, chap3);
-0
-
 # check chapter 4
-gap> chap4 := Filename( docdir, "_Chapter_AutoDoc.xml" );;
-gap> chap4ref := Filename( ex_dir, "_Chapter_AutoDoc.xml" );;
+gap> chap4 := Filename( docdir, "_Chapter_Reference.xml" );;
+gap> chap4ref := Filename( ex_dir, "_Chapter_Reference.xml" );;
 gap> AUTODOC_Diff("-u", chap4ref, chap4);
 0
 
