@@ -113,4 +113,20 @@ gap> item!.arguments;
 "x,y"
 
 #
+# warn about defined-but-never-inserted chunks
+#
+gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-unusedchunk-test");;
+gap> if IsDirectoryPath(tmpdir) then RemoveDirectoryRecursively(tmpdir); fi;
+gap> AUTODOC_CreateDirIfMissing(tmpdir);
+true
+gap> tree2 := DocumentationTree();;
+gap> chunk := DocumentationChunk(tree2, "NeverUsed");;
+gap> chunk!.is_defined := true;;
+gap> Add(chunk!.content, "Some text");;
+gap> WriteDocumentation(tree2, Directory(tmpdir), 0);
+#I  WARNING: chunk NeverUsed was defined but never inserted
+gap> RemoveDirectoryRecursively(tmpdir);
+true
+
+#
 gap> STOP_TEST( "misc.tst" );
