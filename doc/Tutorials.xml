@@ -583,55 +583,12 @@ from <F>makedoc.g</F> take precedence when both define the same key.
 
 </Section>
 
-<Section Label="Tut:AutoDocWorksheet">
-  <Heading>AutoDoc worksheets</Heading>
-&AutoDoc; worksheets can be used to create HTML and PDF documents using AutoDoc syntax and possibly
-including &GAP; examples and implementations without having them associated to a package.
-A file for a worksheet could look like this:
-<Listing>
-#! @Title My first worksheet
-#! @Author Charlie Brown
+<Section Label="Tut:WorksheetsPointer">
+<Heading>Worksheets</Heading>
 
-#! @Chapter Some groups
-
-#! @BeginExample
-S3 := SymmetricGroup( 3 );;
-S4 := SymmetricGroup( 4 );;
-#! @EndExample
-</Listing>
-Now, one can create a PDF and HTML document, like a package documentation out of it. Suppose the document above
-is saved as <F>worksheet.g</F>. Then, when &GAP; is started in the directory of this file, the command
-<Listing>
-AutoDocWorksheet( "worksheet.g" );
-</Listing>
-will create a subdirectory called <F>doc</F> of the current directory in which it will create the documentation.
-There are several options to configure the output of the worksheet command, which are identical to the
-options of the <Ref Func="AutoDoc"/> command. It is even possible to test the examples in the worksheet using the
-<C>extract_examples</C> option of the <Ref Func="AutoDoc"/> command.
-<P/>
-Since the worksheets do not have a <F>PackageInfo.g</F> to extract information, all possible tags that &GAPDoc; supports for
-the title page can be set into the document. A fully typed title page can look like this:
-<Listing>
-#! @Title My first worksheet
-#! @Subtitle Some small examples
-#! @Author Charlie Brown
-
-#! @Version 0.1
-#! @TitleComment Some worksheet
-#! @Date 01/01/2016
-#! @Address TU Kaiserslautern
-#! @Abstract
-#!  A worksheet showing some small examples about groups.
-#! @Copyright 2016 Charlie Brown
-#! @Acknowledgements Woodstock
-#! @Colophon Some colophon
-
-#! @Chapter Some groups
-
-#! @BeginExample
-S3 := SymmetricGroup( 3 );;
-S4 := SymmetricGroup( 4 );;
-#! @EndExample
-</Listing>
+For stand-alone documents that are not tied to a package, use
+<Ref Func="AutoDocWorksheet"/>. Its documentation and examples are in
+Section <Ref Sect="Section_AutoDocWorksheet"/> of chapter
+<Ref Chap="AutoDoc"/>.
 </Section>
 </Chapter>

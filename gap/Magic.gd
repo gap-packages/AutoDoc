@@ -69,7 +69,7 @@
 #!     documentation of the correct version is built.
 #!     <P/>
 #!     Note that when using <C>AutoDocWorksheet</C> (see
-#!     <Ref Sect='Chapter_AutoDoc_worksheets_Section_Worksheets'/>), there is
+#!     <Ref Sect='Section_AutoDocWorksheet'/>), there is
 #!     no parameter corresponding to <A>packageOrDirectory</A> and so the
 #!     <Q>package directory</Q> is always the current directory, and
 #!     there is no metadata.

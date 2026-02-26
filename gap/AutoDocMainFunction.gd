@@ -44,15 +44,27 @@ DeclareGlobalFunction( "ExtractTitleInfoFromPackageInfo" );
 
 
 
-#! @Chapter AutoDoc worksheets
-#! @Section Worksheets
+#! @Chapter AutoDoc
+#! @Section AutoDoc worksheets
+#! @SectionLabel AutoDocWorksheet
 
 #! @Description
-#!  The intention of these function is to create stand-alone pdf and html files
-#!  using AutoDoc without having them associated to a package.
-#!  It uses the same optional records as the &AutoDoc; command itself, but instead of
-#!  a package name there should be a filename or a list of filenames containing AutoDoc
-#!  text from which the documents are created. Please see the &AutoDoc; command for more
-#!  information about this and have a look at <Ref Label="Tut:AutoDocWorksheet"/> for a simple worksheet example.
+#!  The purpose of this function is to create stand-alone PDF and HTML files
+#!  using &AutoDoc; without associating them with a package.
+#!  <P/>
+#!  It uses the same optional record entries as <Ref Func="AutoDoc"/>, but
+#!  instead of a package name, you pass one filename or a list of filenames
+#!  containing &AutoDoc; text from which the document is created.
+#!  <P/>
+#!  A simple worksheet file can define title-page information and chapter
+#!  content directly in the source file, including example blocks.
+#!  If this is stored in <F>worksheet.g</F>, you can generate documentation via
+#!  @BeginLogSession
+#!  AutoDocWorksheet( "worksheet.g" );
+#!  @EndLogSession
+#!  This creates documentation in a <F>doc</F> subdirectory of the current directory.
+#!  <P/>
+#!  Since worksheets do not have a <F>PackageInfo.g</F>, title-page fields are
+#!  specified directly in the worksheet file.
 #! @Arguments list_of_filenames : options
 DeclareGlobalFunction( "AutoDocWorksheet" );
