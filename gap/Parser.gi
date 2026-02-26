@@ -145,7 +145,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     local current_item, flush_and_recover, chapter_info, current_string_list,
           Scan_for_Declaration_part, flush_and_prepare_for_item, current_line, filestream,
           level_scope, scope_group, read_example, command_function_record, autodoc_read_line,
-          current_command, was_declaration, filename, system_scope, groupnumber, rest_of_file_skipped,
+          current_command, filename, system_scope, groupnumber, rest_of_file_skipped,
           context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,
           current_line_unedited, deprecated,
           ReadLineWithLineCount, Normalized_ReadLine, line_number, ErrorWithPos, create_title_item_function,
@@ -699,9 +699,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end,
         @Chunk := ~.@BeginChunk,
         @EndChunk := function()
-            if autodoc_read_line = true then
-                autodoc_read_line := false;
-            fi;
+            autodoc_read_line := false;
             if context_stack <> [ ] then
                 current_item := Remove( context_stack );
             else
@@ -750,9 +748,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
         end,
         @EndLatexOnly := function()
-            if autodoc_read_line = true then
-                autodoc_read_line := false;
-            fi;
+            autodoc_read_line := false;
             Add( current_item, "]]></Alt>" );
         end,
         @LatexOnly := function()
@@ -767,9 +763,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
         end,
         @EndNotLatex := function()
-            if autodoc_read_line = true then
-                autodoc_read_line := false;
-            fi;
+            autodoc_read_line := false;
             Add( current_item, "]]></Alt>" );
         end,
         @NotLatex := function()
@@ -851,9 +845,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             NormalizeWhitespace( current_line );
             current_command := Scan_for_AutoDoc_Part( current_line, plain_text_mode );
             if current_command[ 1 ] <> false then
-                if autodoc_read_line <> fail then
-                    autodoc_read_line := true;
-                fi;
+                autodoc_read_line := true;
                 if not IsBound( command_function_record.(current_command[ 1 ]) ) then
                     ErrorWithPos("unknown AutoDoc command ", current_command[ 1 ]);
                 fi;
@@ -861,11 +853,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 continue;
             fi;
             current_line := current_command[ 2 ];
-            if autodoc_read_line = true or autodoc_read_line = fail then
-                was_declaration := Scan_for_Declaration_part( );
-                if not was_declaration and autodoc_read_line <> fail then
-                    autodoc_read_line := false;
-                fi;
+            if autodoc_read_line and not Scan_for_Declaration_part( ) then
+                autodoc_read_line := false;
             fi;
         od;
         CloseStream( filestream );
