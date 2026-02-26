@@ -2,6 +2,8 @@ This file describes changes in the AutoDoc package.
 
 2026.MM.DD
   - Fix `InstallMethod` in first line of GAP source file leading to an error
+  - Make tests work when the package directory is read-only by writing
+    generated test output to temporary directories
 
 2025.12.19
   - Don't replace empty lines in `@BeginCode` blocks by `<P/>`

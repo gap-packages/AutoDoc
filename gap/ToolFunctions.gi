@@ -161,13 +161,13 @@ end);
 # `tst/worksheets/<ws>.expected` a directory containing the output of
 # AutoDocWorksheet for that worksheet.
 #
-# Then AUTODOC_TestWorkSheet will again run AutoDocWorksheet, put storing the
-# output into `tst/worksheets/<ws>.actual`; it then runs diff on all files in
-# order to find any differences that may have crept in. If no differences
-# exist, it outputs nothing.
+# Then AUTODOC_TestWorkSheet will again run AutoDocWorksheet, storing the
+# output in a temporary directory; it then runs diff on all files in order to
+# find any differences that may have crept in. If no differences exist, it
+# outputs nothing.
 InstallGlobalFunction( AUTODOC_TestWorkSheet,
 function(ws)
-    local wsdir, sheetdir, expecteddir, actualdir, filenames, old, f, expected, actual;
+    local wsdir, sheetdir, expecteddir, actualdir, filenames, old, f, expected, actual, tmpdir;
 
     # check worksheets dir exists
     wsdir := DirectoriesPackageLibrary("AutoDoc", "tst/worksheets");
@@ -190,10 +190,13 @@ function(ws)
     fi;
     expecteddir := Directory(expecteddir);
 
-    # create and clear the output directory
-    actualdir := Filename(wsdir, Concatenation(ws, ".actual"));
-    Exec(Concatenation("rm -rf \"", actualdir, "\""));
-    AUTODOC_CreateDirIfMissing(actualdir);
+    # create and clear the output directory in a writable temporary location
+    tmpdir := Filename(DirectoryTemporary(), Concatenation("autodoc-", ws, ".actual"));
+    if IsDirectoryPath(tmpdir) then
+      RemoveDirectoryRecursively(tmpdir);
+    fi;
+    AUTODOC_CreateDirIfMissing(tmpdir);
+    actualdir := tmpdir;
     actualdir := Directory(actualdir);
 
     # Run the worksheet
@@ -216,6 +219,8 @@ function(ws)
             Error("diff detected in file ", f);
         fi;
     od;
+
+    RemoveDirectoryRecursively(tmpdir);
 end);
 
 # Parse a date given as a string. Currently only supports the two formats
