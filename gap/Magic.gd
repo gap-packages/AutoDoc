@@ -29,14 +29,13 @@
 #!     on the data in your <F>PackageInfo.g</F>.
 #! </Item>
 #! <Item>
-#!     It can scan your package for &AutoDoc; based documentation (by using &AutoDoc;
-#!     tags and the Autodoc command.
-#!     This will
-#!     produce further XML files to be used as part of the package manual.
+#!     It can scan your package for &AutoDoc; based documentation, using
+#!     documentation comments and commands. This produces additional XML files
+#!     to be used as part of the package manual.
 #! </Item>
 #! <Item>
 #!     It can use &GAPDoc; to generate PDF, text and HTML (with
-#!     MathJaX enabled) documentation from the &GAPDoc; XML files it
+#!     MathJax enabled) documentation from the &GAPDoc; XML files it
 #!     generated as well as additional such files provided by you. For
 #!     this, it invokes <Ref Func='MakeGAPDocDoc' BookName='gapdoc'/>
 #!     to convert the XML sources, and it also instructs &GAPDoc; to copy
@@ -44,6 +43,8 @@
 #!     (see <Ref Func='CopyHTMLStyleFiles' BookName='gapdoc'/>).
 #! </Item>
 #! </Enum>
+#! These tasks can be enabled independently, so you can use as much or as
+#! little of &AutoDoc; as your package currently needs.
 #! For more information and some examples, please refer to Chapter <Ref Label='Tutorials'/>.
 #! <P/>
 #! The parameters have the following meanings:
@@ -162,16 +163,16 @@
 #!             Note that &AutoDoc; predefines several entities:
 #!             <List>
 #!             <Mark><A>VERSION</A></Mark>
-#!             <Item>Set to the <C>Version</C> field your package info record.</Item>
+#!             <Item>Set to the <C>Version</C> field of your package info record.</Item>
 #!             <Mark><A>RELEASEYEAR</A></Mark>
 #!             <Item>Set to a string containing the release year, as derived
-#!                   from the <C>Date</C> field your package info record.</Item>
+#!                   from the <C>Date</C> field of your package info record.</Item>
 #!             <Mark><A>RELEASEDATE</A></Mark>
-#!             <Item>Derived from the <C>Date</C> field your package info record.</Item>
+#!             <Item>Derived from the <C>Date</C> field of your package info record.</Item>
 #!             <Mark><A>SomePackage</A></Mark>
 #!             <Item>
 #!                 The precise name of this entity is derived from the
-#!                 <C>PackageName</C> field your package info record. Note
+#!                 <C>PackageName</C> field of your package info record. Note
 #!                 that it is case sensitive. The content is defined as
 #!                 suggested by the example above.
 #!             </Item>
@@ -184,7 +185,7 @@
 #!             for the package manual with extra information, such as a copyright
 #!             statement or acknowledgments. To this end, the names of the record
 #!             components are used as XML element names, and the values of the
-#!             components are outputted as content of these XML elements. For
+#!             components are output as content of these XML elements. For
 #!             example, you could pass the following record to set a custom
 #!             acknowledgements text:
 #!             <Listing><![CDATA[
@@ -363,7 +364,7 @@
 #!         into files <F>tst/PACKAGENAME01.tst</F>,  <F>tst/PACKAGENAME02.tst</F>, ...
 #!         and so on, with one file for each chapter. For chapters with no examples,
 #!         no file is created.<P/>
-#!         As a record, the entry can have the following entries itself, to specify some options.
+#!         If set to a record, it may contain the following entries:
 #!         <List>
 #!         <Mark>units</Mark>
 #!         <Item>
@@ -403,7 +404,7 @@ DeclareGlobalFunction( "AutoDoc" );
 #!   messages including those that contain file paths.
 #!
 #!   This can be set by calling, for example,
-#!   <C>SetInfoLevel(InfoPackageManager, 0)</C>. Default value 1.
+#!   <C>SetInfoLevel(InfoAutoDoc, 0)</C>. Default value is 1.
 DeclareInfoClass("InfoAutoDoc");
 SetInfoLevel(InfoAutoDoc, 1);
 
