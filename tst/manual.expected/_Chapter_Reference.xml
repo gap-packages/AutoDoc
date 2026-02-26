@@ -206,16 +206,18 @@
          </Item>
          <Mark><A>TitlePage</A></Mark>
          <Item>
-             A record whose entries are used to embellish the generated title page
-             for the package manual with extra information, such as a copyright
-             statement or acknowledgments. To this end, the names of the record
-             components are used as XML element names, and the values of the
-             components are output as content of these XML elements. For
-             example, you could pass the following record to set a custom
-             acknowledgements text:
+             A record with extra title-page fields for the generated manual.
+             Field names are interpreted as title-page XML element names, and
+             their values are written as element content. For example, you can
+             set a custom acknowledgements block with
              <Listing><![CDATA[
              rec( Acknowledgements := "Many thanks to ..." )]]></Listing>
-             For a list of valid entries in the title page, please refer to the
+             If this is set in <F>PackageInfo.g</F> as
+             <C>PkgInfo.AutoDoc.TitlePage</C>, it has the same meaning as this
+             option; see subsection <Ref Subsect='Tut:PackageInfo'/> in chapter
+             <Ref Chap='Tutorials'/> for details and an example.
+             <P/>
+             For the list of valid title-page elements, see the
              &GAPDoc; manual, specifically section <Ref Subsect='TitlePage' BookName='gapdoc'/>.
          </Item>
          <Mark><A>MainPage</A></Mark>

@@ -554,17 +554,32 @@ and text versions of the manual.
 </Item>
 
 <Mark>AutoDoc</Mark><Item>
-This is a record which can be used to control the scaffolding performed by
-&AutoDoc;, specifically to provide extra information for the title page. For
-example, you can set <C>AutoDoc.TitlePage.Copyright</C> to a string which will
-then be inserted on the generated title page. Using this method you can
-customize the following title page elements: <C>TitleComment</C>,
-<C>Abstract</C>, <C>Copyright</C>, <C>Acknowledgements</C> and <C>Colophon</C>.
+This record controls extra settings used by &AutoDoc; while generating the
+manual. In particular, <C>PkgInfo.AutoDoc.TitlePage</C> lets you add or
+override title-page elements coming from package metadata.
 
 <P/>
-Note that <C>AutoDoc.TitlePage</C> behaves exactly the same
-as the <C>scaffold.TitlePage</C> parameter of the <Ref Func="AutoDoc"/>
-function.
+Typical fields you may set there include <C>TitleComment</C>,
+<C>Abstract</C>, <C>Copyright</C>, <C>Acknowledgements</C> and <C>Colophon</C>.
+For example, in <F>PackageInfo.g</F>:
+<Listing><![CDATA[
+SetPackageInfo( rec(
+  ...
+  AutoDoc := rec(
+    TitlePage := rec(
+      Copyright := "(C) 2026 Jane Doe",
+      Acknowledgements := "Funded by Example Grant 1234."
+    )
+  )
+) );
+]]></Listing>
+This inserts <C>&lt;Copyright></C> and <C>&lt;Acknowledgements></C> blocks into
+the generated <F>title.xml</F>.
+
+<P/>
+<C>PkgInfo.AutoDoc.TitlePage</C> has exactly the same meaning as
+<C>scaffold.TitlePage</C> in <Ref Func="AutoDoc"/>. The function documentation
+for <C>scaffold.TitlePage</C> points back to this subsection.
 </Item>
 
 </List>
