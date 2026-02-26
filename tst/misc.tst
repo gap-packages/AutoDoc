@@ -95,6 +95,14 @@ gap> Scan_for_AutoDoc_Part( "   @NoArg", true );
 [ "@NoArg", "" ]
 gap> Scan_for_AutoDoc_Part( "no command here", true );
 [ "STRING", "no command here" ]
+gap> Scan_for_AutoDoc_Part( "# Heading chapter", true );
+[ "@Chapter", "Heading chapter" ]
+gap> Scan_for_AutoDoc_Part( "## Heading section", true );
+[ "@Section", "Heading section" ]
+gap> Scan_for_AutoDoc_Part( "### Heading subsection", true );
+[ "@Subsection", "Heading subsection" ]
+gap> Scan_for_AutoDoc_Part( "  #! ## Comment section", false );
+[ "@Section", "Comment section" ]
 
 #
 # AutoDoc_Parser_ReadFiles: multiline InstallMethod parsing

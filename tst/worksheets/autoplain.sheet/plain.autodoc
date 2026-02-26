@@ -1,9 +1,11 @@
 @Title Plain file.autodoc Test
 @Date 2018-08-30
 
-@Chapter Test
+# Test
 Does AutoDoc have a way to allow that header block not to appear in
 the documentation generated from a <F>.autodoc</F> file like this?
+## First Section
+### First Subsection
 @BeginExampleSession
 gap> S5 := SymmetricGroup(5);
 Sym( [ 1 .. 5 ] )

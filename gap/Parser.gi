@@ -20,9 +20,49 @@ BindGlobal( "AUTODOC_PositionPrefixShebang",
 end );
 
 ##
+BindGlobal( "AUTODOC_SplitMarkdownHeading",
+  function( line )
+    local trimmed, level, first_non_hash;
+    trimmed := StripBeginEnd( line, " \t\r\n" );
+    if trimmed = "" or trimmed[ 1 ] <> '#' then
+        return fail;
+    fi;
+
+    level := 1;
+    while level < Length( trimmed ) and trimmed[ level + 1 ] = '#' do
+        level := level + 1;
+    od;
+    if level > 3 then
+        return fail;
+    fi;
+
+    first_non_hash := level + 1;
+    if first_non_hash <= Length( trimmed ) and
+       not ( trimmed[ first_non_hash ] in " \t\r\n" ) then
+        return fail;
+    fi;
+
+    while first_non_hash <= Length( trimmed ) and
+          trimmed[ first_non_hash ] in " \t\r\n" do
+        first_non_hash := first_non_hash + 1;
+    od;
+
+    if level = 1 then
+        return [ "@Chapter", trimmed{ [ first_non_hash .. Length( trimmed ) ] } ];
+    elif level = 2 then
+        return [ "@Section", trimmed{ [ first_non_hash .. Length( trimmed ) ] } ];
+    fi;
+    return [ "@Subsection", trimmed{ [ first_non_hash .. Length( trimmed ) ] } ];
+end );
+
+##
 BindGlobal( "AUTODOC_SplitCommandAndArgument",
   function( line )
-    local command_start, argument_start, command, argument;
+    local command_start, argument_start, command, argument, heading;
+    heading := AUTODOC_SplitMarkdownHeading( line );
+    if heading <> fail then
+        return heading;
+    fi;
     command_start := PositionSublist( line, "@" );
     if command_start = fail then
         return [ "STRING", line ];
