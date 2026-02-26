@@ -1,5 +1,8 @@
 This file describes changes in the AutoDoc package.
 
+2026.MM.DD
+  - Fix `InstallMethod` in first line of GAP source file leading to an error
+
 2025.12.19
   - Don't replace empty lines in `@BeginCode` blocks by `<P/>`
   - Fix XML header in generated files (it had a syntax error, which somehow also
