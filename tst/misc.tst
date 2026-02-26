@@ -106,7 +106,7 @@ gap> item := section!.content[ 1 ];;
 gap> item!.item_type;
 "Oper"
 gap> item!.name;
-"\"MyOp\""
+"MyOp"
 gap> item!.tester_names;
 "for IsInt,IsString"
 gap> item!.arguments;
