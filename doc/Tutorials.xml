@@ -116,6 +116,10 @@ DeclareOperation( "ToricVariety", [ IsConvexObject ] );
 This tiny change is already sufficient to ensure that the operation
 appears in the manual. In general, you will want to add further
 information about the operation, such as in the following example:
+<P/>
+Important: the comment block must be immediately followed by the declaration
+it documents. Do not place other code between the comment block and the
+<C>Declare...</C> statement.
 
 <Listing><![CDATA[
 #! @Arguments conv

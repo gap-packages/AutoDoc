@@ -17,6 +17,12 @@ DeclareOperation( "AnOperation",
 This will produce a manual entry for the operation <C>AnOperation</C>.
 <P/>
 
+For declaration documentation, the associated declaration must appear
+immediately after the &AutoDoc; comment block. In particular, do not insert
+other code (such as <C>if false then</C> or assignments) between the comment
+block and the <C>Declare...</C> statement.
+<P/>
+
 Inside of &AutoDoc; comments, <E>&AutoDoc; commands</E>
 starting with <C>@</C> can be used to control the output &AutoDoc; produces.
 
