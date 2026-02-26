@@ -63,4 +63,26 @@ Error, <year> must be an integer >= 2000, or a string representing such an int\
 eger
 
 #
+# AUTODOC_PositionPrefixShebang
+#
+gap> AUTODOC_PositionPrefixShebang( "#! @Chapter Intro" );
+1
+gap> AUTODOC_PositionPrefixShebang( "   #! @Section One" );
+4
+gap> AUTODOC_PositionPrefixShebang( "\t#! @Subsection Two" );
+2
+gap> AUTODOC_PositionPrefixShebang( "" );
+fail
+gap> AUTODOC_PositionPrefixShebang( "#" );
+fail
+gap> AUTODOC_PositionPrefixShebang( "    " );
+fail
+gap> AUTODOC_PositionPrefixShebang( "x #! @Chapter NotPrefix" );
+fail
+gap> AUTODOC_PositionPrefixShebang( "  x#! @Chapter NotPrefix" );
+fail
+gap> AUTODOC_PositionPrefixShebang( "  # ! not-a-shebang" );
+fail
+
+#
 gap> STOP_TEST( "misc.tst" );

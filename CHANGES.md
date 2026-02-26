@@ -4,6 +4,8 @@ This file describes changes in the AutoDoc package.
   - Fix `InstallMethod` in first line of GAP source file leading to an error
   - Make tests work when the package directory is read-only by writing
     generated test output to temporary directories
+  - Remove `@DONT_SCAN_NEXT_LINE` parser hack and only treat `#!` as an
+    AutoDoc marker at the start of a line (ignoring leading whitespace)
 
 2025.12.19
   - Don't replace empty lines in `@BeginCode` blocks by `<P/>`

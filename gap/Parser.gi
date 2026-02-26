@@ -6,11 +6,24 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 ##
+BindGlobal( "AUTODOC_PositionPrefixShebang",
+  function( line )
+    local position;
+    position := PositionProperty( line, c -> not c in " \t\r\n" );
+    if position = fail or position = Length( line ) then
+        return fail;
+    fi;
+    if line[ position ] = '#' and line[ position + 1 ] = '!' then
+        return position;
+    fi;
+    return fail;
+end );
+
+##
 InstallGlobalFunction( Scan_for_AutoDoc_Part,
   function( line, plain_text_mode )
     local position, whitespace_position, command, argument;
-    #! @DONT_SCAN_NEXT_LINE
-    position := PositionSublist( line, "#!" );
+    position := AUTODOC_PositionPrefixShebang( line );
     if position = fail and plain_text_mode = false then
         return [ false, line ];
     fi;
@@ -417,7 +430,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         while true do
             temp_curr_line := ReadLineWithLineCount( filestream );
             if plain_text_mode = false then
-                comment_pos := PositionSublist( temp_curr_line, "#!" );
+                comment_pos := AUTODOC_PositionPrefixShebang( temp_curr_line );
                 if comment_pos <> fail then
                     before_comment := NormalizedWhitespace( temp_curr_line{ [ 1 .. comment_pos - 1 ] } );
                     if before_comment = "" then
@@ -446,8 +459,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 break;
             fi;
             ##if is comment, simply remove comments.
-            #! @DONT_SCAN_NEXT_LINE
-            temp_pos_comment := PositionSublist( temp_curr_line, "#!" );
+            temp_pos_comment := AUTODOC_PositionPrefixShebang( temp_curr_line );
             if temp_pos_comment <> fail then
                 temp_curr_line := temp_curr_line{[ temp_pos_comment + 3 .. Length( temp_curr_line ) ]};
                 Add( temp_string_list, temp_curr_line );
@@ -487,8 +499,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
             incorporate_this_line := plain_text_mode;
             if not plain_text_mode then
-                #! @DONT_SCAN_NEXT_LINE
-                temp_pos_comment := PositionSublist( temp_curr_line, "#!" );
+                temp_pos_comment := AUTODOC_PositionPrefixShebang( temp_curr_line );
                 if temp_pos_comment <> fail then
                     incorporate_this_line := true;
                     temp_curr_line := temp_curr_line{[ temp_pos_comment + 2 .. Length( temp_curr_line ) ]};
@@ -512,12 +523,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end;
     end;
     command_function_record := rec(
-        ## HACK: Needed for AutoDoc parser to be scanned safely.
-        ##       The lines where the AutoDoc comments are
-        ##       searched cause problems otherwise.
-        @DONT_SCAN_NEXT_LINE := function()
-            ReadLineWithLineCount( filestream );
-        end,
         @DoNotReadRestOfFile := function()
             Reset();
             rest_of_file_skipped := true;
@@ -735,7 +740,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             if not IsBound( current_item ) then
                 return;
             fi;
-            comment_pos := PositionSublist( current_line_unedited, "#!" );
+            comment_pos := AUTODOC_PositionPrefixShebang( current_line_unedited );
             if comment_pos <> fail then
                 current_line_unedited := current_line_unedited{[ comment_pos + 2 .. Length( current_line_unedited ) ]};
             fi;
