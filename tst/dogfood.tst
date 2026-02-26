@@ -23,10 +23,15 @@ gap> oldWarningLevel := InfoLevel( InfoWarning );;
 gap> SetInfoLevel( InfoGAPDoc, 0 );
 gap> SetInfoLevel( InfoWarning, 0 );
 
-# change into the package directory
+# prepare a temporary package copy and run there
 gap> olddir := AUTODOC_CurrentDirectory();;
 gap> pkgdir := DirectoriesPackageLibrary( "AutoDoc", "");;
-gap> ChangeDirectoryCurrent(Filename(pkgdir, ""));
+
+# run in a temporary copy, so the package source tree can stay read-only
+gap> tempdir := Filename(DirectoryTemporary(), "autodoc-dogfood");;
+gap> if IsDirectoryPath(tempdir) then RemoveDirectoryRecursively(tempdir); fi;
+gap> Exec(Concatenation("cp -R \"", Filename(pkgdir, ""), "\" \"", tempdir, "\""));
+gap> ChangeDirectoryCurrent(tempdir);
 true
 
 # regenerate the manual using AutoDoc
@@ -40,7 +45,7 @@ true
 
 # prepare to compare the output to the reference output
 # No point in testing chapters 1 or 2 unless/until they are converted to autodoc
-gap> docdir := DirectoriesPackageLibrary( "AutoDoc", "doc" );;
+gap> docdir := Directory(Concatenation(tempdir, "/doc"));;
 gap> ex_dir := DirectoriesPackageLibrary( "AutoDoc", "tst/manual.expected" );;
 
 # check chapter 3
@@ -54,6 +59,10 @@ gap> chap4 := Filename( docdir, "_Chapter_AutoDoc.xml" );;
 gap> chap4ref := Filename( ex_dir, "_Chapter_AutoDoc.xml" );;
 gap> AUTODOC_Diff("-u", chap4ref, chap4);
 0
+
+#
+gap> RemoveDirectoryRecursively(tempdir);
+true
 
 #
 gap> STOP_TEST( "dogfood.tst" );
