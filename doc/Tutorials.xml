@@ -1,27 +1,25 @@
 <Chapter Label="Tutorials">
 <Heading>Getting started using &AutoDoc;</Heading>
 
-&AutoDoc; is a &GAP; package which is meant to aid &GAP; package
-authors in creating and maintaining the documentation of their packages.
-In this capacity it builds upon the &GAPDoc; package (see
-<URL>https://www.gap-system.org/Packages/gapdoc.html</URL>).
-As such, it is not a replacement for &GAPDoc;, but rather complements it.<P/>
+This chapter gives practical workflows for adding &AutoDoc; to a package.
+For a high-level feature overview and adoption strategy, see
+chapter <Ref Chap="Overview"/>.<P/>
 
-In this chapter we describe how to get started using &AutoDoc; for your
-package. First, we explain in Section <Ref Sect="Tut:Scratch"/> how to write a
-new package manual from scratch.<P/>
+<Section Label="Tut:ChooseWorkflow">
+<Heading>Choose your workflow</Heading>
 
-Then we show in Section <Ref Sect="Tut:IntegrateExisting"/> how you might
-benefit from &AutoDoc; even if you already have a complete manual written
-using &GAPDoc;.<P/>
+You can use &AutoDoc; in several ways, and it is fine to combine them:
+<List>
+<Item>Start a new package manual from scratch (Section <Ref Sect="Tut:Scratch"/>).</Item>
+<Item>Integrate &AutoDoc; into an existing &GAPDoc; manual
+(Section <Ref Sect="Tut:IntegrateExisting"/>).</Item>
+<Item>Use only selected features, such as title-page generation or
+example extraction, while keeping everything else unchanged.</Item>
+</List>
 
-In Section <Ref Sect="Tut:Scaffolds"/>, we explain how you may use &AutoDoc;
-to generate a title page and the main XML file for your manual.
-<P/>
-
-Finally, Section <Ref Sect="Tut:AutoDocWorksheet"/>, explains what
-&AutoDoc; worksheets are and how to use them.
-<P/>
+This incremental approach is encouraged: start with the smallest helpful step,
+then adopt additional features when useful.
+</Section>
 
 <Section Label="Tut:Scratch">
 <Heading>Creating a package manual from scratch</Heading>
@@ -92,10 +90,14 @@ AutoDoc( rec( autodoc := true ) );
 QUIT;
 </Listing>
 Then you can regenerate the package manual from the command line with the
-following command, executed from within in the package directory:
+following command, executed from within the package directory:
 <Listing>
 gap makedoc.g
 </Listing>
+
+If you also want regression tests from your manual examples, enable
+<C>extract_examples := true</C>; this is explained in
+Section <Ref Sect="Tut:IntegrateExisting:EverythingThere"/>.
 
 </Section>
 
@@ -172,12 +174,12 @@ file of your documentation, and insert the line
 &lt;#Include SYSTEM "_AutoDocMainFile.xml">
 </Listing>
 in a suitable place. This means that you can mix &AutoDoc; documentation
-comment freely with your existing documentation; you can even still make
+comments freely with your existing documentation; you can even still make
 use of any existing &GAPDoc; documentation comments in your code.
 
 The following command should be useful for you in this case; it
 still scans the package code for &AutoDoc; documentation comments
-and the runs &GAPDoc; to produce HTML and PDF output, but does not
+and then runs &GAPDoc; to produce HTML and PDF output, but does not
 touch your documentation XML files otherwise.
 <Listing>
 LoadPackage( "AutoDoc" );
@@ -195,7 +197,7 @@ Even if you already have an existing &GAPDoc; manual, it might be
 interesting for you to use &AutoDoc; for two purposes:
 <P/>
 
-First off, with  &AutoDoc; it is very convenient to regenerate your
+First, with &AutoDoc; it is very convenient to regenerate your
 documentation.
 <P/>
 
@@ -550,6 +552,26 @@ function.
 
 </List>
 
+</Subsection>
+
+<Subsection Label="Tut:PackageInfo:Entities">
+<Heading>Entities from <F>PackageInfo.g</F> and scaffold options</Heading>
+
+Besides title-page fields, you can define custom entities in
+<C>AutoDoc.entities</C> inside <F>PackageInfo.g</F>.
+They are written to <F>doc/_entities.xml</F>, so they can be used both by
+generated main files and by hand-written main XML files.
+<P/>
+
+In addition, &AutoDoc; predefines the entities <C>VERSION</C>,
+<C>RELEASEYEAR</C> and <C>RELEASEDATE</C>, derived from package metadata.
+This is useful if you keep a custom title page or custom chapters and still
+want release information to stay synchronized with <F>PackageInfo.g</F>.
+<P/>
+
+You can specify scaffold-related settings in <F>PackageInfo.g</F> and in your
+<F>makedoc.g</F> call at the same time; both records are merged, and values
+from <F>makedoc.g</F> take precedence when both define the same key.
 </Subsection>
 
 </Section>
