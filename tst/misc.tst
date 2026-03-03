@@ -137,4 +137,19 @@ gap> RemoveDirectoryRecursively(tmpdir);
 true
 
 #
+# warn about inserted-but-never-defined chunks
+#
+gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-missingchunk-test");;
+gap> if IsDirectoryPath(tmpdir) then RemoveDirectoryRecursively(tmpdir); fi;
+gap> AUTODOC_CreateDirIfMissing(tmpdir);
+true
+gap> tree3 := DocumentationTree();;
+gap> chunk := DocumentationChunk(tree3, "MissingChunk");;
+gap> chunk!.is_inserted := true;;
+gap> WriteDocumentation(tree3, Directory(tmpdir), 0);
+#I  WARNING: chunk MissingChunk was inserted but never defined
+gap> RemoveDirectoryRecursively(tmpdir);
+true
+
+#
 gap> STOP_TEST( "misc.tst" );

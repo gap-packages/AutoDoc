@@ -429,6 +429,14 @@ BindGlobal( "WriteChunks",
                 current_chunk_name,
                 " was defined but never inserted"
             );
+        elif current_chunk!.is_defined = false and current_chunk!.is_inserted = true then
+            Info(
+                InfoAutoDoc,
+                1,
+                "WARNING: chunk ",
+                current_chunk_name,
+                " was inserted but never defined"
+            );
         fi;
         AppendTo( chunks_stream, "<#GAPDoc Label=\"", current_chunk_name, "\">\n" );
         if IsBound( current_chunk!.content ) then
