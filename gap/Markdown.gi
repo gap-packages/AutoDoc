@@ -21,7 +21,67 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
     local i, current_list, current_string, max_line_length,
           current_position, already_in_list, command_list_with_translation, beginning,
           commands, position_of_command, insert, beginning_whitespaces, temp, string_list_temp, skipped,
-          already_inserted_paragraph, in_list, in_item;
+          already_inserted_paragraph, in_list, in_item, converted_string_list,
+          fence_char, fence_length, trimmed_line, code_block, info_string,
+          fence_element;
+
+    converted_string_list := [ ];
+    i := 1;
+    while i <= Length( string_list ) do
+        trimmed_line := StripBeginEnd( string_list[ i ], " \t\r\n" );
+        if Length( trimmed_line ) >= 3 and
+           ( ForAll( trimmed_line{ [ 1 .. 3 ] }, c -> c = '`' ) or
+             ForAll( trimmed_line{ [ 1 .. 3 ] }, c -> c = '~' ) ) then
+            fence_char := trimmed_line[ 1 ];
+            fence_length := 1;
+            while fence_length < Length( trimmed_line ) and
+                  trimmed_line[ fence_length + 1 ] = fence_char do
+                fence_length := fence_length + 1;
+            od;
+            if fence_length >= 3 then
+                info_string := NormalizedWhitespace(
+                    trimmed_line{ [ fence_length + 1 .. Length( trimmed_line ) ] }
+                );
+                fence_element := "Listing";
+                if info_string = "@example" then
+                    fence_element := "Example";
+                elif info_string = "@log" then
+                    fence_element := "Log";
+                elif info_string = "@listing" then
+                    fence_element := "Listing";
+                fi;
+                Add( converted_string_list,
+                     Concatenation( "<", fence_element, "><![CDATA[" ) );
+                i := i + 1;
+                code_block := false;
+                while i <= Length( string_list ) do
+                    trimmed_line := StripBeginEnd( string_list[ i ], " \t\r\n" );
+                    if Length( trimmed_line ) >= fence_length and
+                       ForAll( trimmed_line{ [ 1 .. fence_length ] }, c -> c = fence_char ) and
+                       ForAll( trimmed_line{ [ fence_length + 1 .. Length( trimmed_line ) ] },
+                               c -> c in " \t\r\n" ) then
+                        code_block := true;
+                        break;
+                    fi;
+                    Add( converted_string_list,
+                         ReplacedString( string_list[ i ], "]]>", "]]]]><![CDATA[>" ) );
+                    i := i + 1;
+                od;
+                if code_block = true then
+                    Add( converted_string_list,
+                         Concatenation( "]]></", fence_element, ">" ) );
+                    i := i + 1;
+                    continue;
+                fi;
+                Add( converted_string_list,
+                     Concatenation( "]]></", fence_element, ">" ) );
+                break;
+            fi;
+        fi;
+        Add( converted_string_list, string_list[ i ] );
+        i := i + 1;
+    od;
+    string_list := converted_string_list;
 
     ## Check for paragraphs by turning an empty string into <P/>
     

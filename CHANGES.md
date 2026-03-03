@@ -24,6 +24,9 @@ This file describes changes in the AutoDoc package.
     defined (via `@BeginChunk`/`@BeginCode`)
   - Allow using Markdown-style headings `#`/`##`/`###` as aliases for
     `@Chapter`/`@Section`/`@Subsection` in `.autodoc` files and doc comments
+  - Support fenced code blocks using triple backticks or tildes in
+    Markdown-like text; `@listing`, `@example`, and `@log` info strings
+    select the corresponding GAPDoc element
 
 2025.12.19
   - Don't replace empty lines in `@BeginCode` blocks by `<P/>`

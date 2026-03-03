@@ -214,7 +214,10 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           current_line_unedited,
           ReadLineWithLineCount, Normalized_ReadLine, line_number, ErrorWithPos, create_title_item_function,
           current_line_positition_for_filter, read_session_example, DeclarationDelimiterPosition,
-          ReadInstallMethodFilterString, ReadInstallMethodArguments;
+          ReadInstallMethodFilterString, ReadInstallMethodArguments,
+          markdown_fence, preserve_shebang_in_fenced_code,
+          AUTODOC_MarkdownFenceFromLine, AUTODOC_IsMatchingMarkdownFence,
+          current_line_fence, current_line_is_fence_delimiter;
     groupnumber := 0;
     level_scope := 0;
     autodoc_read_line := false;
@@ -239,6 +242,44 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         local list;
         list := Concatenation(arg, [ ",\n", "at ", filename, ":", line_number]);
         CallFuncList(Error, list);
+    end;
+    AUTODOC_MarkdownFenceFromLine := function( line )
+        local comment_pos, trimmed_line, fence_char, fence_length;
+        if plain_text_mode then
+            trimmed_line := StripBeginEnd( Chomp( line ), " \t\r\n" );
+        else
+            comment_pos := AUTODOC_PositionPrefixShebang( line );
+            if comment_pos = fail then
+                return fail;
+            fi;
+            trimmed_line := StripBeginEnd(
+                Chomp( line{ [ comment_pos + 2 .. Length( line ) ] } ),
+                " \t\r\n"
+            );
+        fi;
+        if Length( trimmed_line ) < 3 or
+           not ( trimmed_line[ 1 ] in "`~" ) or
+           not ForAll( trimmed_line{ [ 1 .. 3 ] }, c -> c = trimmed_line[ 1 ] ) then
+            return fail;
+        fi;
+        fence_char := trimmed_line[ 1 ];
+        fence_length := 1;
+        while fence_length < Length( trimmed_line ) and
+              trimmed_line[ fence_length + 1 ] = fence_char do
+            fence_length := fence_length + 1;
+        od;
+        return rec(
+            char := fence_char,
+            length := fence_length,
+            remainder := trimmed_line{ [ fence_length + 1 .. Length( trimmed_line ) ] }
+        );
+    end;
+    AUTODOC_IsMatchingMarkdownFence := function( fence, current_line_fence )
+        return current_line_fence <> fail and
+               fence <> fail and
+               current_line_fence.char = fence.char and
+               current_line_fence.length >= fence.length and
+               ForAll( current_line_fence.remainder, c -> c in " \t\r\n" );
     end;
     DeclarationDelimiterPosition := function( line )
         return Minimum( [ PositionSublist( line, "," ), PositionSublist( line, ");" ) ] );
@@ -339,6 +380,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         context_stack := [ ];
         Unbind( current_item );
         plain_text_mode := false;
+        markdown_fence := fail;
     end;
     Scan_for_Declaration_part := function()
         local declare_position, current_type, filter_string, has_filters,
@@ -831,7 +873,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 return;
             fi;
             comment_pos := AUTODOC_PositionPrefixShebang( current_line_unedited );
-            if comment_pos <> fail then
+            if comment_pos <> fail and not preserve_shebang_in_fenced_code then
                 current_line_unedited := current_line_unedited{[ comment_pos + 2 .. Length( current_line_unedited ) ]};
             fi;
             Add( current_item, current_line_unedited );
@@ -938,13 +980,39 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
             current_line_unedited := ShallowCopy( current_line );
             NormalizeWhitespace( current_line );
+            current_line_fence := AUTODOC_MarkdownFenceFromLine( current_line_unedited );
+            current_line_is_fence_delimiter := false;
+            if current_line_fence <> fail then
+                if markdown_fence = fail then
+                    current_line_is_fence_delimiter := true;
+                else
+                    current_line_is_fence_delimiter :=
+                        AUTODOC_IsMatchingMarkdownFence( markdown_fence, current_line_fence );
+                fi;
+            fi;
+            preserve_shebang_in_fenced_code :=
+                markdown_fence <> fail and
+                AUTODOC_PositionPrefixShebang( current_line_unedited ) <> fail and
+                not current_line_is_fence_delimiter;
             current_command := Scan_for_AutoDoc_Part( current_line, plain_text_mode );
+            if current_line_is_fence_delimiter then
+                current_command[ 1 ] := "STRING";
+            elif markdown_fence <> fail and current_command[ 1 ] <> false then
+                current_command[ 1 ] := "STRING";
+            fi;
             if current_command[ 1 ] <> false then
                 autodoc_read_line := true;
                 if not IsBound( command_function_record.(current_command[ 1 ]) ) then
                     ErrorWithPos("unknown AutoDoc command ", current_command[ 1 ]);
                 fi;
                 command_function_record.(current_command[ 1 ])();
+                if current_line_is_fence_delimiter then
+                    if markdown_fence = fail then
+                        markdown_fence := current_line_fence;
+                    else
+                        markdown_fence := fail;
+                    fi;
+                fi;
                 continue;
             fi;
             current_line := current_command[ 2 ];
