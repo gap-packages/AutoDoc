@@ -2,6 +2,8 @@ This file describes changes in the AutoDoc package.
 
 2026.MM.DD
   - Greatly improve the package manual.
+  - Fix a crash when mixing explicit `@Chapter`/`@Section` markup in one
+    file with auto-generated chapter/section placement in another
   - Fix `InstallMethod` in first line of GAP source file leading to an error
   - Fix multiline `InstallMethod` parsing for filter lists and
     multiline `function(...)` argument lists

@@ -298,15 +298,15 @@ end );
 ##
 InstallMethod( DocumentationGroup, [ IsTreeForDocumentation, IsString, IsList ],
   function( tree, group_name, context )
-    local name, group;
+    local name, group, context_node;
 
     name := Concatenation( "GROUP_", group_name );
     if IsBound( tree!.nodes_by_label.( name ) ) then
         return tree!.nodes_by_label.( name );
     fi;
-    context := AUTODOC_LABEL_OF_CONTEXT( context );
+    context_node := StructurePartInTree( tree, context );
     group := DocumentationGroup( tree, group_name );
-    Add( tree!.nodes_by_label.( context ), group );
+    Add( context_node, group );
     group!.is_added := true;
     return group;
 end );
@@ -352,9 +352,8 @@ end );
 ##
 InstallMethod( Add, [ IsTreeForDocumentation, IsTreeForDocumentationNode, IsList ],
   function( tree, node, context )
-    local label, context_node;
-    label := AUTODOC_LABEL_OF_CONTEXT( context );
-    context_node := tree!.nodes_by_label.(label);
+    local context_node;
+    context_node := StructurePartInTree( tree, context );
     Add( context_node, node );
 end );
 
