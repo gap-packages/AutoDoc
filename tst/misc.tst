@@ -152,4 +152,36 @@ gap> RemoveDirectoryRecursively(tmpdir);
 true
 
 #
+# mixed explicit and implicit chapter info with grouped declarations
+# see <https://github.com/gap-packages/AutoDoc/issues/279>
+#
+gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-mixed-context-test");;
+gap> if IsDirectoryPath(tmpdir) then RemoveDirectoryRecursively(tmpdir); fi;
+gap> AUTODOC_CreateDirIfMissing(tmpdir);
+true
+gap> tmpdir_obj := Directory(tmpdir);;
+gap> file1 := Filename(tmpdir_obj, "explicit.gd");;
+gap> stream := OutputTextFile(file1, false);;
+gap> AppendTo(stream, "#! @Chapter Explicit\n");;
+gap> AppendTo(stream, "#! @Section Intro\n");;
+gap> CloseStream(stream);
+gap> file2 := Filename(tmpdir_obj, "implicit.gd");;
+gap> stream := OutputTextFile(file2, false);;
+gap> AppendTo(stream, "#! @BeginGroup grouped\n");;
+gap> AppendTo(stream, "DeclareOperation( \"MixedOp\", [ IsObject ] );\n");;
+gap> CloseStream(stream);
+gap> tree4 := DocumentationTree();;
+gap> AutoDoc_Parser_ReadFiles([file1, file2], tree4, CreateDefaultChapterData("Pkg"));
+gap> auto_section := SectionInTree(tree4,
+>     "Pkg_automatic_generated_documentation",
+>     "Pkg_automatic_generated_documentation_of_methods");;
+gap> group := auto_section!.content[1];;
+gap> Label(group);
+"GROUP_grouped"
+gap> group!.content[1]!.name;
+"MixedOp"
+gap> RemoveDirectoryRecursively(tmpdir);
+true
+
+#
 gap> STOP_TEST( "misc.tst" );
