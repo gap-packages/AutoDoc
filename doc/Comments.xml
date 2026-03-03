@@ -763,6 +763,47 @@ can be important.</E>
 
 </Subsection>
 
+ <Subsection Label="MarkdownExtensionFencedCode">
+   <Heading>Fenced code blocks</Heading>
+
+   One can insert verbatim code blocks by placing the code between lines
+   containing at least three backticks or at least three tildes. The opening
+   fence may optionally be followed by an info string. The values
+   <C>@listing</C>, <C>@example</C>, and <C>@log</C> select the corresponding
+   GAPDoc element; any other value is currently ignored. If nothing is specified
+   the default is to generate <C>&lt;Listing&gt;</C>. Example:
+
+<Listing><![CDATA[
+#! ```@listing
+#! if x = 2 then
+#!   Print("1 + 1 = 2 holds, all is good\n");
+#! fi;
+#! ```
+#! ~~~@example
+#! gap> [ 1 .. 3 ] ^ 2;
+#! [ 1, 4, 9 ]
+#! ~~~
+#! ```@log
+#! #I  some log message
+#! ```
+]]></Listing>
+
+    This produces the following output:<Br/>
+    <Listing><![CDATA[
+if x = 2 then
+  Print("1 + 1 = 2 holds, all is good\n");
+fi;
+]]></Listing>
+    <Example><![CDATA[
+gap> [ 1 .. 3 ] ^ 2;
+[ 1, 4, 9 ]
+]]></Example>
+    <Log><![CDATA[
+#I  some log message
+]]></Log>
+
+</Subsection>
+
 </Section>
 
 <Section Label="Deprecated">
