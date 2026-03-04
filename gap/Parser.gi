@@ -87,12 +87,28 @@ end );
 ##
 InstallGlobalFunction( Scan_for_AutoDoc_Part,
   function( line, plain_text_mode )
-    local position;
+    local position, trimmed, heading;
     position := AUTODOC_PositionPrefixShebang( line );
     if position = fail and plain_text_mode = false then
         return [ false, line ];
     fi;
-    if plain_text_mode <> true then
+    if plain_text_mode = true then
+        trimmed := StripBeginEnd( line, " \t\r\n" );
+        if trimmed = "" then
+            return [ "STRING", line ];
+        fi;
+        if trimmed[ 1 ] = '#' then
+            heading := AUTODOC_SplitMarkdownHeading( trimmed );
+            if heading = fail then
+                return [ "STRING", line ];
+            fi;
+            return heading;
+        fi;
+        if trimmed[ 1 ] <> '@' then
+            return [ "STRING", line ];
+        fi;
+        line := trimmed;
+    else
         line := StripBeginEnd( line{[ position + 2 .. Length( line ) ]}, " " );
     fi;
     return AUTODOC_SplitCommandAndArgument( line );
