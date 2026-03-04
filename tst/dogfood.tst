@@ -44,15 +44,24 @@ gap> ChangeDirectoryCurrent(olddir);
 true
 
 # prepare to compare the output to the reference output
-# No point in testing chapters 1 or 2 unless/until they are converted to autodoc
 gap> docdir := Directory(Concatenation(tempdir, "/doc"));;
 gap> ex_dir := DirectoriesPackageLibrary( "AutoDoc", "tst/manual.expected" );;
+gap> ex_dir := ex_dir[1];;
 
-# check chapter 4
-gap> chap4 := Filename( docdir, "_Chapter_Reference.xml" );;
-gap> chap4ref := Filename( ex_dir, "_Chapter_Reference.xml" );;
-gap> AUTODOC_Diff("-u", chap4ref, chap4);
-0
+# check all expected generated files
+gap> files := DirectoryContents(ex_dir);;
+gap> files := Filtered(files, f -> f <> "." and f <> "..");;
+gap> Sort(files);
+gap> for f in files do
+> expected := Filename(ex_dir, f);;
+> actual := Filename(docdir, f);;
+> if not IsReadableFile(actual) then
+>   Error("missing generated file ", f);
+> fi;
+> if 0 <> AUTODOC_Diff("-u", expected, actual) then
+>   Error("diff detected in file ", f);
+> fi;
+> od;
 
 #
 gap> RemoveDirectoryRecursively(tempdir);

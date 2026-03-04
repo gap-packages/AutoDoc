@@ -95,7 +95,8 @@ InstallGlobalFunction( CreateEntitiesPage,
     filestream := AUTODOC_OutputTextFile( dir, "_entities.xml" );
 
     # output all entities
-    for ent in RecNames(entities) do
+    # (sort the key names to get stable order across all GAP versions)
+    for ent in Set(RecNames(entities)) do
         val := String(entities.(ent));
 
         # escape single quotes, if any

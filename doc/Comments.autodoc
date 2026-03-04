@@ -1,5 +1,6 @@
-<Chapter Label="Comments">
-<Heading>&AutoDoc; documentation comments</Heading>
+@Chapter Comments
+@ChapterTitle &AutoDoc; documentation comments
+
 
 You can document declarations of global functions and variables, operations,
 attributes etc. by inserting <E>&AutoDoc;</E> comments into your sources before these declarations.
@@ -8,20 +9,18 @@ This is also the smallest possible &AutoDoc; command.
 If you want your declaration documented, just write
 <C>#!</C> at the line before the documentation. For example:
 
-<Listing><![CDATA[
+```@listing
 #!
 DeclareOperation( "AnOperation",
                   [ IsList ] );
-]]></Listing>
+```
 
 This will produce a manual entry for the operation <C>AnOperation</C>.
-<P/>
 
 For declaration documentation, the associated declaration must appear
 immediately after the &AutoDoc; comment block. In particular, do not insert
 other code (such as <C>if false then</C> or assignments) between the comment
 block and the <C>Declare...</C> statement.
-<P/>
 
 Inside of &AutoDoc; comments, <E>&AutoDoc; commands</E>
 starting with <C>@</C> can be used to control the output &AutoDoc; produces.
@@ -30,78 +29,76 @@ as regular documentation text and may contain (almost) arbitrary &GAPDoc; XML
 markup, such as <C>&lt;Ref&gt;</C>, <C>&lt;A&gt;</C>, <C>&lt;List&gt;</C>, and similar tags.
 This lets you use the normal &GAPDoc; formatting toolbox directly inside
 &AutoDoc; comments.
-<P/>
+
 For example:
-<Listing><![CDATA[
+```@listing
 #! @Description
-#!  See <Ref Chap="Tutorials"/> for setup details.
+#!  See <Ref Chap="Chapter_Tutorials"/> for setup details.
 #!  The argument <A>obj</A> must satisfy <K>IsObject</K>.
-]]></Listing>
+```
 
-<P/>
-As explained in chapter <Ref Chap="Overview"/>, you can combine &AutoDoc;
+As explained in chapter <Ref Chap="Chapter_Overview"/>, you can combine &AutoDoc;
 comments with hand-written XML and classic &GAPDoc; comments. For practical
-setup and migration workflows, see chapter <Ref Chap="Tutorials"/>.
+setup and migration workflows, see chapter <Ref Chap="Chapter_Tutorials"/>.
 
 
-<Section>
-<Heading>Documenting declarations</Heading>
+@Section Documenting declarations
 
 In the bare form above, the manual entry for <C>AnOperation</C> will not
 contain much more than the name of the operation. In order to change
 this, there are several commands you can put into the &AutoDoc; comment
 before the declaration. Currently, the following commands are provided:
 
-<Subsection Label="@Description">
+@Subsection <C>@Description <A>descr</A></C>
+@SubsectionLabel @Description
+
 <Index Key="@Description"><C>@Description <A>descr</A></C></Index>
-<Heading><C>@Description <A>descr</A></C></Heading>
 Adds the text in the following lines of the &AutoDoc; to the description
 of the declaration in the manual. Lines are until the next &AutoDoc; command
 or until the declaration is reached.
-</Subsection>
 
-<Subsection Label="@Returns">
+@Subsection <C>@Returns <A>ret_val</A></C>
+@SubsectionLabel @Returns
+
 <Index Key="@Returns"><C>@Returns <A>ret_val</A></C></Index>
-<Heading><C>@Returns <A>ret_val</A></C></Heading>
 The string <A>ret_val</A> is added to the documentation, with the text <Q>Returns: </Q>
 put in front of it. This should usually give a brief hint about the type or meaning
 of the value returned by the documented function.
-</Subsection>
 
-<Subsection Label="@Arguments">
+@Subsection <C>@Arguments <A>args</A></C>
+@SubsectionLabel @Arguments
+
 <Index Key="@Arguments"><C>@Arguments <A>args</A></C></Index>
-<Heading><C>@Arguments <A>args</A></C></Heading>
 The string <A>args</A> contains a description of the arguments the
 function expects, including optional parts, which are denoted by square
 brackets. The argument names can be separated by whitespace, commas or
 square brackets for the optional arguments, like <Q>grp[, elm]</Q> or
 <Q>xx[y[z] ]</Q>. If &GAP; options are used, this can be followed by a colon :
 and one or more assignments, like <Q>n[, r]: tries := 100</Q>.
-</Subsection>
 
-<Subsection Label="@Group">
+@Subsection <C>@Group <A>grpname</A></C>
+@SubsectionLabel @Group
+
 <Index Key="@Group"><C>@Group <A>grpname</A></C></Index>
-<Heading><C>@Group <A>grpname</A></C></Heading>
 Adds the following method to a group with the given name.
-See section <Ref Sect="Groups"/> for more information about groups.
-</Subsection>
+See section <Ref Sect="Section_Groups"/> for more information about groups.
 
-<Subsection Label="@Label">
+@Subsection <C>@Label <A>label</A></C>
+@SubsectionLabel @Label
+
 <Index Key="@Label"><C>@Label <A>label</A></C></Index>
-<Heading><C>@Label <A>label</A></C></Heading>
 Adds label to the function as label.
 
 If this is not specified, then for declarations that involve a list of input filters
 (as is the case for <C>DeclareOperation</C>, <C>DeclareAttribute</C>, etc.),
 a default label is generated from this filter list.
-</Subsection>
-
-<Listing><![CDATA[
+```@listing
 #! @Label testlabel
 DeclareProperty( "AProperty",
                  IsObject );
-]]></Listing>
+```
 leads to this:
+```@listing
 <ManSection>
   <Prop Arg="arg" Name="AProperty" Label="testlabel"/>
  <Returns> <K>true</K> or <K>false</K>
@@ -109,13 +106,15 @@ leads to this:
  <Description>
  </Description>
 </ManSection>
+```
 while
-<Listing><![CDATA[
+```@listing
 #!
 DeclareProperty( "AProperty",
                  IsObject );
-]]></Listing>
+```
 leads to this:
+```@listing
 <ManSection>
   <Prop Arg="arg" Name="AProperty" Label="for IsObject"/>
  <Returns> <K>true</K> or <K>false</K>
@@ -123,20 +122,19 @@ leads to this:
  <Description>
  </Description>
 </ManSection>
+```
 
 
-<Subsection Label="@ChapterInfo">
+@Subsection <C>@ChapterInfo <A>chapter</A>, <A>section</A></C>
+@SubsectionLabel @ChapterInfo
+
 <Index Key="@ChapterInfo"><C>@ChapterInfo</C></Index>
-<Heading><C>@ChapterInfo <A>chapter</A>, <A>section</A></C></Heading>
 Adds the entry to the given chapter and section. Here,
 <A>chapter</A> and <A>section</A> are the respective
 titles.
-</Subsection>
-
-
 As an example, a full &AutoDoc; comment with all options could look like this:
 
-<Listing><![CDATA[
+```@listing
 #! @Description
 #! Computes the list of lists of degrees of ordinary characters
 #! associated to the $p$-blocks of the group $G$
@@ -149,22 +147,20 @@ As an example, a full &AutoDoc; comment with all options could look like this:
 #! @ChapterInfo Blocks, Attributes
 DeclareAttribute( "CharacterDegreesOfBlocks",
         IsBrauerTable );
-]]></Listing>
+```
 
-</Section>
-
-<Section>
-<Heading>Other documentation comments</Heading>
+@Section Other documentation comments
 
 There are also some commands which can be used in &AutoDoc; comments
 that are not associated to any declaration. This is useful for additional
 text in your documentation, examples, mathematical chapters, etc.
 
-<Subsection Label="@Chapter">
+@Subsection <C>@Chapter <A>name</A></C>
+@SubsectionLabel @Chapter
+
 <Index Key="@Chapter"><C>@Chapter</C></Index>
 <Index Key="@ChapterLabel"><C>@ChapterLabel</C></Index>
 <Index Key="@ChapterTitle"><C>@ChapterTitle</C></Index>
-<Heading><C>@Chapter <A>name</A></C></Heading>
 Sets the active chapter, all subsequent functions which do not have an explicit chapter
 declared in their &AutoDoc; comment via <C>@ChapterInfo</C> will be added to this chapter.
 Also all text comments, i.e. lines that begin with #! without a command, and which do not
@@ -173,11 +169,11 @@ the chapters label will be set to <C>Chapter_</C><A>name</A>.
 
 Example:
 
-<Listing><![CDATA[
+```@listing
 #! @Chapter My chapter
 #!  This is my chapter.
 #!  I document my stuff in it.
-]]></Listing>
+```
 
 The <C>@ChapterLabel</C> <A>label</A> command
 can be used to set the label of the chapter to <C>Chapter_</C><A>label</A> instead of
@@ -190,27 +186,27 @@ can be used to set a heading for the chapter that is different from <A>name</A>.
 Note that the title does not affect the label.
 
 If you use all three commands, i.e.,
-<Listing><![CDATA[
+```@listing
 #! @Chapter name
 #! @ChapterLabel label
 #! @ChapterTitle title
-]]></Listing>
+```
 <C>title</C> is used for the headline, <C>label</C> for cross-referencing, and <C>name</C>
 for setting the same chapter as active chapter again.
-</Subsection>
 
-<Subsection Label="@Section">
+@Subsection <C>@Section <A>name</A></C>
+@SubsectionLabel @Section
+
 <Index Key="@Section"><C>@Section</C></Index>
 <Index Key="@SectionLabel"><C>@SectionLabel</C></Index>
 <Index Key="@SectionTitle"><C>@SectionTitle</C></Index>
-<Heading><C>@Section <A>name</A></C></Heading>
 Sets an active section like <C>@Chapter</C> sets an active chapter.
 The section automatically ends with the next <C>@Section</C> or <C>@Chapter</C> command.
 
-<Listing><![CDATA[
+```@listing
 #! @Section My first manual section
 #!  In this section I am going to document my first method.
-]]></Listing>
+```
 
 The <C>@SectionLabel</C> <A>label</A> command
 can be used to set the label of the section to <C>Section_</C><A>label</A> instead of
@@ -218,23 +214,23 @@ can be used to set the label of the section to <C>Section_</C><A>label</A> inste
 
 The <C>@SectionTitle</C> <A>title</A> command
 can be used to set a heading for the section that is different from <A>name</A>.
-</Subsection>
 
-<Subsection Label="@Subsection">
+@Subsection <C>@Subsection <A>name</A></C>
+@SubsectionLabel @Subsection
+
 <Index Key="@Subsection"><C>@Subsection</C></Index>
 <Index Key="@SubsectionLabel"><C>@SubsectionLabel</C></Index>
 <Index Key="@SubsectionTitle"><C>@SubsectionTitle</C></Index>
-<Heading><C>@Subsection <A>name</A></C></Heading>
 Sets an active subsection like <C>@Section</C> sets an active section.
 The subsection automatically ends with the next <C>@Subsection</C>,
 <C>@Section</C> or <C>@Chapter</C> command. It also ends with the
 next documented function. Indeed, internally each function <Q>manpage</Q>
 is treated like a subsection.
 
-<Listing><![CDATA[
+```@listing
 #! @Subsection My first manual subsection
 #!  In this subsection I am going to document my first example.
-]]></Listing>
+```
 
 The <C>@SubsectionLabel</C> <A>label</A> command
 can be used to set the label of the subsection to <C>Subsection_</C><A>label</A> instead of
@@ -242,28 +238,27 @@ can be used to set the label of the subsection to <C>Subsection_</C><A>label</A>
 
 The <C>@SubsectionTitle</C> <A>title</A> command
 can be used to set a heading for the subsection that is different from <A>name</A>.
-</Subsection>
 
-<Subsection Label="@BeginGroup">
+@Subsection <C>@BeginGroup <A>[grpname]</A></C>
+@SubsectionLabel @BeginGroup
+
 <Index Key="@BeginGroup"><C>@BeginGroup</C></Index>
-<Heading><C>@BeginGroup <A>[grpname]</A></C></Heading>
 Starts a group. All following documented declarations without an
 explicit <C>@Group</C> command are grouped together in the same group
 with the given name. If no name is given, then a new nameless group is
 generated.
 The effect of this command is ended when an <C>@EndGroup</C> command
 is reached.
-<P/>
 
-See section <Ref Sect="Groups"/> for more information about groups.
-</Subsection>
+See section <Ref Sect="Section_Groups"/> for more information about groups.
 
-<Subsection Label="@EndGroup">
+@Subsection <C>@EndGroup</C>
+@SubsectionLabel @EndGroup
+
 <Index Key="@EndGroup"><C>@EndGroup</C></Index>
-<Heading><C>@EndGroup</C></Heading>
 Ends the current group.
 
-<Listing><![CDATA[
+```@listing
 #! @BeginGroup MyGroup
 #!
 DeclareAttribute( "GroupedAttribute",
@@ -276,41 +271,38 @@ DeclareOperation( "NonGroupedOperation",
 DeclareOperation( "GroupedOperation",
                   [ IsList, IsRubbish ] );
 #! @EndGroup
-]]></Listing>
-</Subsection>
+```
 
-<Subsection Label="@GroupTitle">
+@Subsection @GroupTitle <A>title</A>
+@SubsectionLabel @GroupTitle
+
 <Index Key="@GroupTitle"><C>@GroupTitle</C></Index>
-<Heading>@GroupTitle <A>title</A></Heading>
 Sets the subsection heading for the current group to <A>title</A>. In the
 absence of any <C>@GroupTitle</C> command, the heading will be the name of the
-first entry in the group. See <Ref Sect="Groups" /> for more information.
-</Subsection>
+first entry in the group. See <Ref Sect="Section_Groups"/> for more information.
 
-<Subsection Label="@Level">
+@Subsection <C>@Level <A>lvl</A></C>
+@SubsectionLabel @Level
+
 <Index Key="@Level"><C>@Level</C></Index>
-<Heading><C>@Level <A>lvl</A></C></Heading>
 Sets the current level of the documentation. All items created after this,
 chapters, sections, and items, are given the level <A>lvl</A>,
 until the <C>@ResetLevel</C> command resets the level to 0 or another level
 is set.
-<P/>
 
-See section <Ref Sect="Level"/> for more information about levels.
-</Subsection>
+See section <Ref Sect="Section_Level"/> for more information about levels.
 
-<Subsection Label="@ResetLevel">
+@Subsection <C>@ResetLevel</C>
+@SubsectionLabel @ResetLevel
+
 <Index Key="@ResetLevel"><C>@ResetLevel</C></Index>
-<Heading><C>@ResetLevel</C></Heading>
 Resets the current level to 0.
-<P/>
-</Subsection>
 
+@Subsection <C>@BeginExample</C> and <C>@EndExample</C>
+@SubsectionLabel @BeginExample
 
-<Subsection Label="@BeginExample">
 <Index Key="@BeginExample"><C>@BeginExample</C></Index>
 <Index Key="@EndExample"><C>@EndExample</C></Index>
-<Heading><C>@BeginExample</C> and <C>@EndExample</C></Heading>
 <C>@BeginExample</C> marks the start of an example to be put into the manual.
 It differs from &GAPDoc;'s <C>&lt;Example></C> (see <Ref Subsect="Log" BookName="gapdoc"/>),
 in that it expects actual code (not in a comment) interspersed with comments,
@@ -319,17 +311,16 @@ by &AutoDoc;. To achieve this, &GAP; commands are not preceded by a comment,
 while output has to be preceded by an &AutoDoc; comment.
 The <C>gap&gt;</C> prompt for the display in the manual is added by &AutoDoc;.
 <C>@EndExample</C> ends the example block.
-<P/>
 
 To illustrate this command, consider this input:
-<Listing><![CDATA[
+```@listing
 #! @BeginExample
 S5 := SymmetricGroup(5);
 #! Sym( [ 1 .. 5 ] )
 Order(S5);
 #! 120
 #! @EndExample
-]]></Listing>
+```
 This results in the following output:
 <Example>
 gap> S5 := SymmetricGroup(5);
@@ -340,28 +331,26 @@ gap> Order(S5);
 The &AutoDoc; command <C>@Example</C> is an alias of <C>@BeginExample</C>.
 If you enable <C>extract_examples := true</C> when calling <Ref Func="AutoDoc"/>,
 these examples can also be turned into <F>.tst</F> files (see
-Section <Ref Sect="Tut:IntegrateExisting:EverythingThere"/>).
-</Subsection>
+Section <Ref Sect="Subsection_Tut:IntegrateExisting:EverythingThere"/>).
 
+@Subsection <C>@BeginExampleSession</C> and <C>@EndExampleSession</C>
+@SubsectionLabel @BeginExampleSession
 
-<Subsection Label="@BeginExampleSession">
 <Index Key="@BeginExampleSession"><C>@BeginExampleSession</C></Index>
 <Index Key="@EndExampleSession"><C>@EndExampleSession</C></Index>
-<Heading><C>@BeginExampleSession</C> and <C>@EndExampleSession</C></Heading>
 <C>@BeginExampleSession</C> marks the start of an example to be put into the manual,
 while <C>@EndExampleSession</C> ends the example block.
 It is the direct analog of &GAPDoc;'s <C>&lt;Example></C> (see <Ref Subsect="Log" BookName="gapdoc"/>).
-<P/>
 
 To illustrate this command, consider this input:
-<Listing><![CDATA[
+```@listing
 #! @BeginExampleSession
 #! gap> S5 := SymmetricGroup(5);
 #! Sym( [ 1 .. 5 ] )
 #! gap> Order(S5);
 #! 120
 #! @EndExampleSession
-]]></Listing>
+```
 This results in the following output:
 <Example>
 gap> S5 := SymmetricGroup(5);
@@ -379,48 +368,47 @@ this space will also be removed. There is never more than one space removed.
 To ensure examples are correctly colored in the manual, 
 there should be exactly one space between <C>#!</C> and the <C>gap&gt;</C> prompt.
 The &AutoDoc; command <C>@ExampleSession</C> is an alias of <C>@BeginExampleSession</C>.
-</Subsection>
 
+@Subsection <C>@BeginLog</C> and <C>@EndLog</C>
+@SubsectionLabel @BeginLog
 
-<Subsection Label="@BeginLog">
 <Index Key="@BeginLog"><C>@BeginLog</C></Index>
 <Index Key="@EndLog"><C>@EndLog</C></Index>
-<Heading><C>@BeginLog</C> and <C>@EndLog</C></Heading>
 Works just like the <C>@BeginExample</C> command, but the example
 will not be tested. See the &GAPDoc; manual for more information.
 The &AutoDoc; command <C>@Log</C> is an alias of <C>@BeginLog</C>.
-</Subsection>
 
-<Subsection Label="@BeginLogSession">
+@Subsection <C>@BeginLogSession</C> and <C>@EndLogSession</C>
+@SubsectionLabel @BeginLogSession
+
 <Index Key="@BeginLogSession"><C>@BeginLogSession</C></Index>
 <Index Key="@EndLogSession"><C>@EndLogSession</C></Index>
-<Heading><C>@BeginLogSession</C> and <C>@EndLogSession</C></Heading>
 Works just like the <C>@BeginExampleSession</C> command, but the example
 will not be tested if manual examples are run. It is the direct analog of
 &GAPDoc;'s <C>&lt;Log></C> (see <Ref Subsect="Log" BookName="gapdoc"/>).
 The &AutoDoc; command <C>@LogSession</C> is an alias of <C>@BeginLogSession</C>.
-</Subsection>
 
-<Subsection Label="@DoNotReadRestOfFile">
+@Subsection <C>@DoNotReadRestOfFile</C>
+@SubsectionLabel @DoNotReadRestOfFile
+
 <Index Key="@DoNotReadRestOfFile"><C>@DoNotReadRestOfFile</C></Index>
-<Heading><C>@DoNotReadRestOfFile</C></Heading>
 Prevents the rest of the file from being read by the parser. Useful for
 unfinished or temporary files.
 
-<Listing><![CDATA[
+```@listing
 #! This will appear in the manual
 
 #! @DoNotReadRestOfFile
 
 #! This will not appear in the manual.
-]]></Listing>
-</Subsection>
+```
 
-<Subsection Label="@BeginChunk">
+@Subsection <C>@BeginChunk <A>name</A></C>, <C>@EndChunk</C>, and <C>@InsertChunk <A>name</A></C>
+@SubsectionLabel @BeginChunk
+
 <Index Key="@BeginChunk"><C>@BeginChunk <A>name</A></C></Index>
 <Index Key="@EndChunk"><C>@EndChunk</C></Index>
 <Index Key="@EndChunk"><C>@InsertChunk <A>name</A></C></Index>
-<Heading><C>@BeginChunk <A>name</A></C>, <C>@EndChunk</C>, and <C>@InsertChunk <A>name</A></C></Heading>
 Text inside a <C>@BeginChunk</C> / <C>@EndChunk</C> part will not be inserted into
 the final documentation directly. Instead, the text is stored in an internal buffer.
 
@@ -428,18 +416,18 @@ That chunk of text can then later on be inserted in any other place by using the
 <C>@InsertChunk <A>name</A></C> command.
 
 If you do not provide an <C>@EndChunk</C>, the chunk ends at the end of the file.
-<Listing><![CDATA[
+```@listing
 #! @BeginChunk MyChunk
 #! Hello, world.
 #! @EndChunk
 
 #! @InsertChunk MyChunk
 ## The text "Hello, world." is inserted right before this.
-]]></Listing>
+```
 
 You can use this to define an example like this in one file:
 
-<Listing><![CDATA[
+```@listing
 #! @BeginChunk Example_Symmetric_Group
 #! @BeginExample
 S5 := SymmetricGroup(5);
@@ -448,71 +436,66 @@ Order(S5);
 #! 120
 #! @EndExample
 #! @EndChunk
-]]></Listing>
+```
 
 And then later, insert the example in a different file, like this:
 
-<Listing><![CDATA[
+```@listing
 #! @InsertChunk Example_Symmetric_Group
-]]></Listing>
+```
 
-</Subsection>
+@Subsection <C>@BeginCode <A>name</A></C>, @EndCode, and <C>@InsertCode <A>name</A></C>
+@SubsectionLabel @BeginCode
 
-<Subsection Label="@BeginCode">
 <Index Key="@BeginCode"><C>@BeginCode <A>name</A></C></Index>
 <Index Key="@EndCode"><C>@EndCode</C></Index>
 <Index Key="@InsertCode"><C>@InsertCode <A>name</A></C></Index>
-<Heading><C>@BeginCode <A>name</A></C>, @EndCode, and <C>@InsertCode <A>name</A></C></Heading>
 Inserts the text between <C>@BeginCode</C> and <C>@EndCode</C> verbatim at the point where
 <C>@InsertCode</C> is called. This is useful to insert code excerpts
 directly into the manual.
-<Listing><![CDATA[
+```@listing
 #! @BeginCode Increment
 i := i + 1;
 #! @EndCode
 
 #! @InsertCode Increment
 ## Code is inserted here.
-]]></Listing>
-</Subsection>
+```
 
-<Subsection Label="@LatexOnly">
+@Subsection <C>@LatexOnly <A>text</A></C>, <C>@BeginLatexOnly</C>, and <C>@EndLatexOnly</C>
+@SubsectionLabel @LatexOnly
+
 <Index Key="@LatexOnly"><C>@LatexOnly <A>text</A></C></Index>
 <Index Key="@BeginLatexOnly"><C>@BeginLatexOnly</C></Index>
 <Index Key="@EndLatexOnly"><C>@EndLatexOnly</C></Index>
-<Heading><C>@LatexOnly <A>text</A></C>, <C>@BeginLatexOnly</C>, and <C>@EndLatexOnly</C></Heading>
 Code inserted between <C>@BeginLatexOnly</C> and <C>@EndLatexOnly</C> or after <C>@LatexOnly</C> is only inserted
 in the PDF version of the manual or worksheet. It can hold arbitrary &LaTeX;-commands.
-<Listing><![CDATA[
+```@listing
 #! @BeginLatexOnly
 #! \include{picture.tex}
 #! @EndLatexOnly
 
 #! @LatexOnly \include{picture.tex}
-]]></Listing>
-</Subsection>
+```
 
-<Subsection Label="@NotLatex">
+@Subsection <C>@NotLatex <A>text</A></C>, <C>@BeginNotLatex</C>, and <C>@EndNotLatex</C>
+@SubsectionLabel @NotLatex
+
 <Index Key="@NotLatex"><C>@NotLatex <A>text</A></C></Index>
 <Index Key="@BeginNotLatex"><C>@BeginNotLatex</C></Index>
 <Index Key="@EndNotLatex"><C>@EndNotLatex</C></Index>
-<Heading><C>@NotLatex <A>text</A></C>, <C>@BeginNotLatex</C>, and <C>@EndNotLatex</C></Heading>
 Code inserted between <C>@BeginNotLatex</C> and <C>@EndNotLatex</C> or after <C>@NotLatex</C> is inserted
 in the HTML and text versions of the manual or worksheet, but not in the PDF version.
-<Listing><![CDATA[
+```@listing
 #! @BeginNotLatex
 #! For further information see the PDF version of this manual.
 #! @EndNotLatex
 
 #! @NotLatex For further information see the PDF version of this manual.
-]]></Listing>
-</Subsection>
+```
 
-</Section>
-
-
-<Section Label="TitlepageCommands">
-<Heading>Title page commands</Heading>
+@Section Title page commands
+@SectionLabel TitlepageCommands
 
 The following commands can be used to add corresponding parts to the
 title page of a document generated by &AutoDoc;.
@@ -556,20 +539,18 @@ extracted from <F>PackageInfo.g</F>. If you set them explicitly in comments,
 they override extracted or scaffold-defined values. This is usually most useful
 for worksheets created with <Ref Func="AutoDocWorksheet"/>,
 since worksheets do not have a <F>PackageInfo.g</F> file from which this information could be extracted.
-</Section>
 
-<Section Label="PlainText">
-<Heading>Plain text files</Heading>
+@Section Plain text files
+@SectionLabel PlainText
 
 Files that have the suffix <C>.autodoc</C> and are listed in the
 <C>autodoc.files</C> option of <Ref Func="AutoDoc"/>, resp. are contained in
 one of the directories listed in <C>autodoc.scan_dirs</C>, are treated as
 &AutoDoc; plain text files. These work exactly like &AutoDoc; comments, except
 that lines do not need to (and in fact, should not) start with <C>#!</C>.
-</Section>
 
-<Section Label="Groups">
-<Heading>Grouping</Heading>
+@Section Grouping
+@SectionLabel Groups
 
 In &GAPDoc;, it is possible to make groups of manual items, i.e., when documenting
 a function, operation, etc., it is possible to group them into suitable chunks.
@@ -579,22 +560,18 @@ Then their manual items can be grouped, sharing the same description and return 
 You can give a heading to the group in the manual with the <C>@GroupTitle</C>
 command; if that is not supplied, then the heading of the first  manual item
 in the group will be used as the heading.
-<P/>
 
 Note that group names are globally unique throughout the whole manual.
 That is, groups with the same name are in fact merged into a single group, even if they
 were declared in different source files.
 Thus you can have multiple <C>@BeginGroup</C> / <C>@EndGroup</C> pairs using the
 same group name, in different places, and these all will refer to the same group.
-<P/>
 
 Moreover, this means that you can add items to a group via the <C>@Group</C> command
 in the &AutoDoc; comment of an arbitrary declaration, at any time.
 
-<P/>
-
 The following code
-<Listing><![CDATA[
+```@listing
 #! @BeginGroup Group1
 #! @GroupTitle A family of operations
 
@@ -614,10 +591,11 @@ DeclareOperation( "SecondOperation", [ IsInt, IsGroup ] );
 #!  Third sentence.
 #! @Group Group1
 KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
-]]></Listing>
+```
 
 produces the following:
 
+```@listing
 <ManSection Label="Group1">
 <Heading>A family of operations</Heading>
   <Oper Arg="arg" Name="FirstOperation" Label="for IsInt"/>
@@ -629,19 +607,19 @@ Second sentence.
 Third sentence.
  </Description>
 </ManSection>
+```
 
-</Section>
+@Section Level
+@SectionLabel Level
 
-<Section Label="Level">
-<Heading>Level</Heading>
-  Levels can be set to not write certain parts in the manual by default.
+Levels can be set to not write certain parts in the manual by default.
   Every entry has by default the level 0. The command <C>@Level</C> can
   be used to set the level of the following part to a higher level, for
   example 1, and prevent it from being printed to the manual by default.
   However, if one sets the level to a higher value in the autodoc option of
   &AutoDoc;, the parts will be included in the manual at the specific place.
 
-<Listing><![CDATA[
+```@listing
 #! This text will be printed to the manual.
 #! @Level 1
 #! This text will be printed to the manual if created with level 1 or higher.
@@ -649,26 +627,25 @@ Third sentence.
 #! This text will be printed to the manual if created with level 2 or higher.
 #! @ResetLevel
 #! This text will be printed to the manual.
-]]></Listing>
-</Section>
+```
 
-<Section Label="MarkdownExtension">
-<Heading>Markdown-like formatting of text in &AutoDoc;</Heading>
+@Section Markdown-like formatting of text in &AutoDoc;
+@SectionLabel MarkdownExtension
 
 &AutoDoc; has some convenient ways to insert special format into text, like
 math formulas and lists. The syntax for them are inspired by Markdown and &LaTeX;,
 but do not follow them strictly. Neither are all features of the Markdown language
 supported. The following subsections describe what is possible.
 
-<Subsection Label="MarkdownExtensionList">
-  <Heading>Lists</Heading>
-  
-  One can create lists of items by beginning a new line with *, +, -, followed by one
+@Subsection Lists
+@SubsectionLabel MarkdownExtensionList
+
+One can create lists of items by beginning a new line with *, +, -, followed by one
   space. The first item starts the list. When items are longer than one line, the following lines
   have to be indented by at least two spaces. The list ends when a line which does not start a new
   item is not indented by two spaces. Of course lists can be nested. Here is an example:
 
-<Listing><![CDATA[
+```@listing
 #! The list starts in the next line
 #! * item 1
 #! * item 2
@@ -677,68 +654,49 @@ supported. The following subsections describe what is possible.
 #!   * with two items
 #! * item 3 of the outer list
 #! This does not belong to the list anymore.
-]]></Listing>
+```
 
 This is the output:<Br/>
 The list starts in the next line
-  <List>
-    <Item>
-      item 1
-    </Item>
-    <Item>
-      item 2
-      which is a bit longer
-        <List>
-          <Item>
-            and also contains a nested list
-          </Item>
-          <Item>
-            with two items
-          </Item>
-        </List>
-    </Item>
-    <Item>
-      item 3 of the outer list
-    </Item>
-  </List>
+* item 1
+* item 2
+  which is a bit longer
+  * and also contains a nested list
+  * with two items
+* item 3 of the outer list
 This does not belong to the list anymore.<Br/>
-
 
 The *, -, and + are fully interchangeable and can even be used mixed, but this is not recommended.
 
-</Subsection>
+@Subsection Math modes
+@SubsectionLabel MarkdownExtensionMath
 
- <Subsection Label="MarkdownExtensionMath">
-   <Heading>Math modes</Heading>
+One can start an inline formula with a &#36;, and also end it with &#36;, just like in &LaTeX;. This will translate into
+   &GAPDoc;s inline math environment. For display mode one can use &#36;&#36;, also like &LaTeX;.
    
-   One can start an inline formula with a $, and also end it with $, just like in &LaTeX;. This will translate into
-   &GAPDoc;s inline math environment. For display mode one can use $$, also like &LaTeX;.
-   
-<Listing><![CDATA[
+```@listing
 #! This is an inline formula: $1+1 = 2$.
 #! This is a display formula:
 #! $$ \sum_{i=1}^n i. $$
-]]></Listing>
+```
 
    produces the following output:<Br/>
    This is an inline formula: <Math>1+1 = 2</Math>.
    This is a display formula:
      <Display> \sum_{i=1}^n i. </Display>
      
-</Subsection>
+@Subsection Emphasize
+@SubsectionLabel MarkdownExtensionEmph
 
- <Subsection Label="MarkdownExtensionEmph">
-   <Heading>Emphasize</Heading>
-   
-   One can emphasize text by using two asterisks (**) or two underscores (__) at the
+One can emphasize text by using two asterisks (&#42;&#42;) or two underscores (&#95;&#95;) at the
    beginning and the end of the text which should be emphasized. Example:
    
-<Listing><![CDATA[
+```@listing
 #! **This** is very important.
 #! This is __also important__.
 #! **Naturally, more than one line
 #! can be important.**
-]]></Listing>
+```
 
  This produces the following output:<Br/>
 <E>This</E> is very important.
@@ -746,34 +704,30 @@ This is <E>also important</E>.
 <E>Naturally, more than one line
 can be important.</E>
 
-</Subsection>
+@Subsection Inline code
+@SubsectionLabel MarkdownExtensionInlineCode
 
- <Subsection Label="MarkdownExtensionInlineCode">
-   <Heading>Inline code</Heading>
-
-   One can mark inline code snippets by using backticks (`) at the
+One can mark inline code snippets by using backticks (&#96;) at the
    beginning and the end of the text which should be marked as code. Example:
 
-<Listing><![CDATA[
+```@listing
 #! Call function `foobar()` at the start.
-]]></Listing>
+```
 
     This produces the following output:<Br/>
     Call function <C>foobar()</C> at the start.
 
-</Subsection>
+@Subsection Fenced code blocks
+@SubsectionLabel MarkdownExtensionFencedCode
 
- <Subsection Label="MarkdownExtensionFencedCode">
-   <Heading>Fenced code blocks</Heading>
-
-   One can insert verbatim code blocks by placing the code between lines
+One can insert verbatim code blocks by placing the code between lines
    containing at least three backticks or at least three tildes. The opening
    fence may optionally be followed by an info string. The values
    <C>@listing</C>, <C>@example</C>, and <C>@log</C> select the corresponding
    GAPDoc element; any other value is currently ignored. If nothing is specified
    the default is to generate <C>&lt;Listing&gt;</C>. Example:
 
-<Listing><![CDATA[
+````@listing
 #! ```@listing
 #! if x = 2 then
 #!   Print("1 + 1 = 2 holds, all is good\n");
@@ -786,28 +740,25 @@ can be important.</E>
 #! ```@log
 #! #I  some log message
 #! ```
-]]></Listing>
+````
 
     This produces the following output:<Br/>
-    <Listing><![CDATA[
+```@listing
 if x = 2 then
   Print("1 + 1 = 2 holds, all is good\n");
 fi;
-]]></Listing>
-    <Example><![CDATA[
+```
+~~~@example
 gap> [ 1 .. 3 ] ^ 2;
 [ 1, 4, 9 ]
-]]></Example>
-    <Log><![CDATA[
+~~~
+```@log
 #I  some log message
-]]></Log>
+```
 
-</Subsection>
 
-</Section>
-
-<Section Label="Deprecated">
-<Heading>Deprecated commands</Heading>
+@Section Deprecated commands
+@SectionLabel Deprecated
 
 The following commands used to be supported, but are not supported anymore.
 
@@ -822,11 +773,7 @@ at the start of any new subsection, section or chapter.</Item>
 <Item>It suffices to prepend each declaration that is meant to appear in the
     manual with a minimal &AutoDoc; comment <C>#!</C>.</Item>
 <Mark><C>@BeginSystem <A>name</A></C>, <C>@EndSystem</C>, and <C>@InsertSystem <A>name</A></C></Mark>
-<Item>Please use the chunk commands from subsection <Ref Subsect="@BeginChunk"/> instead.</Item>
+<Item>Please use the chunk commands from subsection <Ref Subsect="Subsection_@BeginChunk"/> instead.</Item>
 <Mark><C>@AutoDocPlainText</C> and <C>@EndAutoDocPlainText</C></Mark>
 <Item>Use <C>.autodoc</C> files or &AutoDoc; comments instead.</Item>
 </List>
-
-</Section>
-
-</Chapter>

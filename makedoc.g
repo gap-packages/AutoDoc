@@ -8,7 +8,11 @@
 LoadPackage("AutoDoc");
 
 AutoDoc( rec( 
-    autodoc := true,
+    autodoc := rec(
+        files := [ "doc/Overview.autodoc",
+                   "doc/Tutorials.autodoc",
+                   "doc/Comments.autodoc" ],
+    ),
     gapdoc := rec(
         LaTeXOptions := rec( EarlyExtraPreamble := """
             \usepackage{a4wide}
@@ -16,9 +20,6 @@ AutoDoc( rec(
         """ )
     ),
     scaffold := rec(
-        includes := [ "Overview.xml",
-                      "Tutorials.xml", 
-                      "Comments.xml" ],
         bib := "bib.xml", 
     )
 ));

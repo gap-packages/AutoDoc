@@ -45,7 +45,7 @@
 #! </Enum>
 #! These tasks can be enabled independently, so you can use as much or as
 #! little of &AutoDoc; as your package currently needs.
-#! For more information and some examples, please refer to Chapter <Ref Label='Tutorials'/>.
+#! For more information and some examples, please refer to Chapter <Ref Label='Chapter_Tutorials'/>.
 #! <P/>
 #! The parameters have the following meanings:
 #! <List>
@@ -189,8 +189,8 @@
 #!             rec( Acknowledgements := "Many thanks to ..." )]]></Listing>
 #!             If this is set in <F>PackageInfo.g</F> as
 #!             <C>PkgInfo.AutoDoc.TitlePage</C>, it has the same meaning as this
-#!             option; see subsection <Ref Subsect='Tut:PackageInfo'/> in chapter
-#!             <Ref Chap='Tutorials'/> for details and an example.
+#!             option; see subsection <Ref Subsect='Subsection_Tut:PackageInfo'/> in chapter
+#!             <Ref Chap='Chapter_Tutorials'/> for details and an example.
 #!             <P/>
 #!             For the list of valid title-page elements, see the
 #!             &GAPDoc; manual, specifically section <Ref Subsect='TitlePage' BookName='gapdoc'/>.

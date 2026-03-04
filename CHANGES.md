@@ -8,6 +8,7 @@ This file describes changes in the AutoDoc package.
     select the corresponding GAPDoc element
   - Allow XML-style comments in `.autodoc` files
   - Greatly improve the package manual.
+  - Convert the hand-written manual chapters from XML to `.autodoc`
   - Fix an unexpected and confusing error when mixing explicit
     `@Chapter`/`@Section` markup in one file with auto-generated
     chapter/section placement in another
