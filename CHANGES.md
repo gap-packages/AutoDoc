@@ -1,6 +1,11 @@
 This file describes changes in the AutoDoc package.
 
 2026.MM.DD
+  - Add Markdown-style headings `#`/`##`/`###` as aliases for
+    `@Chapter`/`@Section`/`@Subsection` in `.autodoc` files and doc comments
+  - Add fenced code blocks using triple backticks or tildes in
+    Markdown-like text; `@listing`, `@example`, and `@log` info strings
+    select the corresponding GAPDoc element
   - Greatly improve the package manual.
   - Fix an unexpected and confusing error when mixing explicit
     `@Chapter`/`@Section` markup in one file with auto-generated
@@ -22,11 +27,6 @@ This file describes changes in the AutoDoc package.
     inserted (via `@InsertChunk`/`@InsertCode`)
   - Warn if a chunk is inserted (via `@InsertChunk`/`@InsertCode`) but never
     defined (via `@BeginChunk`/`@BeginCode`)
-  - Allow using Markdown-style headings `#`/`##`/`###` as aliases for
-    `@Chapter`/`@Section`/`@Subsection` in `.autodoc` files and doc comments
-  - Support fenced code blocks using triple backticks or tildes in
-    Markdown-like text; `@listing`, `@example`, and `@log` info strings
-    select the corresponding GAPDoc element
 
 2025.12.19
   - Don't replace empty lines in `@BeginCode` blocks by `<P/>`
