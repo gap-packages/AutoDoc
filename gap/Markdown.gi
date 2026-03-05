@@ -27,7 +27,19 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
 
     converted_string_list := [ ];
     i := 1;
+    skipped := false;
     while i <= Length( string_list ) do
+        if PositionSublist( string_list[ i ], "<![CDATA[" ) <> fail then
+            skipped := true;
+        fi;
+        if skipped = true then
+            Add( converted_string_list, string_list[ i ] );
+            if PositionSublist( string_list[ i ], "]]>" ) <> fail then
+                skipped := false;
+            fi;
+            i := i + 1;
+            continue;
+        fi;
         trimmed_line := StripBeginEnd( string_list[ i ], " \t\r\n" );
         if Length( trimmed_line ) >= 3 and
            ( ForAll( trimmed_line{ [ 1 .. 3 ] }, c -> c = '`' ) or
