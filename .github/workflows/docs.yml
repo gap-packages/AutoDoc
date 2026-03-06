@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: gap-actions/setup-gap@v3
-      - uses: gap-actions/build-pkg-docs@v2
+      - uses: gap-actions/build-pkg-docs@codex/fail-on-latex-errors
         with:
           use-latex: 'true'
       - name: 'Upload documentation'
