@@ -29,6 +29,7 @@ gap> Size(A5);
 ]]></Example>
 
 
+Also, markdown-like inline <Keyword>true</Keyword> should become a keyword tag.
 And we wrap up with some dummy text
 </Subsection>
 
