@@ -80,14 +80,12 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
                          ReplacedString( string_list[ i ], "]]>", "]]]]><![CDATA[>" ) );
                     i := i + 1;
                 od;
+                Add( converted_string_list,
+                     Concatenation( "]]></", fence_element, ">" ) );
                 if code_block = true then
-                    Add( converted_string_list,
-                         Concatenation( "]]></", fence_element, ">" ) );
                     i := i + 1;
                     continue;
                 fi;
-                Add( converted_string_list,
-                     Concatenation( "]]></", fence_element, ">" ) );
                 break;
             fi;
         fi;
