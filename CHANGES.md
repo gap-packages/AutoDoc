@@ -6,6 +6,7 @@ This file describes changes in the AutoDoc package.
   - Add fenced code blocks using triple backticks or tildes in
     Markdown-like text; `@listing`, `@example`, and `@log` info strings
     select the corresponding GAPDoc element
+  - Allow XML-style comments in `.autodoc` files
   - Greatly improve the package manual.
   - Fix an unexpected and confusing error when mixing explicit
     `@Chapter`/`@Section` markup in one file with auto-generated

@@ -109,6 +109,41 @@ gap> Scan_for_AutoDoc_Part( "  #! ## Comment section", false );
 [ "@Section", "Comment section" ]
 
 #
+# XML comments in .autodoc: pass through verbatim
+#
+gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-xml-comment-test");;
+gap> if IsDirectoryPath(tmpdir) then RemoveDirectoryRecursively(tmpdir); fi;
+gap> AUTODOC_CreateDirIfMissing(tmpdir);
+true
+gap> tmpdir_obj := Directory(tmpdir);;
+gap> file1 := Filename(tmpdir_obj, "xml-comment.autodoc");;
+gap> stream := OutputTextFile(file1, false);;
+gap> AppendTo(stream, "@Chapter XML comments\n");;
+gap> AppendTo(stream, "@Section Intro\n");;
+gap> AppendTo(stream, "<!--\n");;
+gap> AppendTo(stream, "#  <#GAPDoc Label=\"ToricVarietyConst\">\n");;
+gap> AppendTo(stream, "#  <ManSection>\n");;
+gap> AppendTo(stream, "#  <#/GAPDoc>\n");;
+gap> AppendTo(stream, "-->\n");;
+gap> AppendTo(stream, "@Section After\n");;
+gap> CloseStream(stream);
+gap> tree6 := DocumentationTree();;
+gap> AutoDoc_Parser_ReadFiles([file1], tree6, rec());
+gap> WriteDocumentation(tree6, tmpdir_obj, 0);
+gap> files := DirectoryContents(tmpdir_obj);;
+gap> files := Filtered(files, f -> f <> "." and f <> ".." and PositionSublist(f, "_Chapter_") = 1);;
+gap> Sort(files);
+gap> files;
+[ "_Chapter_XML_comments.xml" ]
+gap> xml := StringFile(Filename(tmpdir_obj, "_Chapter_XML_comments.xml"));;
+gap> PositionSublist(xml, "<!--\n#  <#GAPDoc Label=\"ToricVarietyConst\">\n#  <ManSection>\n#  <#/GAPDoc>\n-->") <> fail;
+true
+gap> PositionSublist(xml, "Chapter_<#GAPDoc") = fail;
+true
+gap> RemoveDirectoryRecursively(tmpdir);
+true
+
+#
 # AutoDoc_Parser_ReadFiles: multiline InstallMethod parsing
 #
 gap> tree := DocumentationTree();;
