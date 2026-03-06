@@ -17,6 +17,7 @@ Some text between two examples
 @Index WorksheetAutoplainKeyOnly
 @Index A&B ampersand key
 @Index A<B less-than key
+   @Index "Indented Autoplain" indented command parsing works
 @BeginExampleSession
 gap> A5 := AlternatingGroup(5);
 Alt( [ 1 .. 5 ] )
@@ -28,6 +29,7 @@ plain_mode_value := 6 *
   9;
 #! 54
 @EndExample
+A plain-text line mentioning @Section InlineMention should stay plain text.
 Also, markdown-like inline `true` should become a keyword tag.
 And XML comments should pass through verbatim:
 <!--

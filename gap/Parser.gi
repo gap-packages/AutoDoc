@@ -63,8 +63,8 @@ BindGlobal( "AUTODOC_SplitCommandAndArgument",
     if heading <> fail then
         return heading;
     fi;
-    command_start := PositionSublist( line, "@" );
-    if command_start = fail then
+    command_start := PositionProperty( line, c -> not c in " \t\r\n" );
+    if command_start = fail or line[ command_start ] <> '@' then
         return [ "STRING", line ];
     fi;
     argument_start := command_start + 1;
@@ -109,7 +109,7 @@ InstallGlobalFunction( Scan_for_AutoDoc_Part,
         fi;
         line := trimmed;
     else
-        line := StripBeginEnd( line{[ position + 2 .. Length( line ) ]}, " " );
+        line := StripBeginEnd( line{[ position + 2 .. Length( line ) ]}, " \t\r\n" );
     fi;
     return AUTODOC_SplitCommandAndArgument( line );
  end );
@@ -969,7 +969,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 return;
             fi;
             comment_pos := AUTODOC_PositionPrefixShebang( current_line_unedited );
-            if comment_pos <> fail and not preserve_shebang_in_fenced_code then
+            if comment_pos <> fail then
                 current_line_unedited := current_line_unedited{[ comment_pos + 2 .. Length( current_line_unedited ) ]};
             fi;
             Add( current_item, current_line_unedited );
@@ -1110,10 +1110,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                         AUTODOC_IsMatchingMarkdownFence( markdown_fence, current_line_fence );
                 fi;
             fi;
-            preserve_shebang_in_fenced_code :=
-                markdown_fence <> fail and
-                AUTODOC_PositionPrefixShebang( current_line_unedited ) <> fail and
-                not current_line_is_fence_delimiter;
+            preserve_shebang_in_fenced_code := false;
             current_command := Scan_for_AutoDoc_Part( current_line, plain_text_mode );
             if current_line_is_fence_delimiter then
                 current_command[ 1 ] := "STRING";
