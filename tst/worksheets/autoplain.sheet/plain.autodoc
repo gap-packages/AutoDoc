@@ -19,5 +19,10 @@ Alt( [ 1 .. 5 ] )
 gap> Size(A5);
 60
 @EndExampleSession
+@BeginExample
+plain_mode_value := 6 *
+  9;
+#! 54
+@EndExample
 Also, markdown-like inline `true` should become a keyword tag.
 And we wrap up with some dummy text

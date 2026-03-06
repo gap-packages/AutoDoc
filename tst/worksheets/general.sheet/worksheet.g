@@ -26,6 +26,11 @@ Print( "(Even though we never use it that way.\n" );
 #! gap> [[2]]>[[1]];
 #! true
 #! @EndExampleSession
+#! @BeginExample
+comment_mode_value := 6 *
+  7;
+#! 42
+#! @EndExample
 #! And we wrap up with some dummy text
 
 #############################################################################
