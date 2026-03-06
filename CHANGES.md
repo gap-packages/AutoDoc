@@ -1,6 +1,11 @@
 This file describes changes in the AutoDoc package.
 
 2026.MM.DD
+  - Remove the nonfunctional `@Level`, `@ResetLevel`, and undocumented
+    alias `@SetLevel` commands. They never affected generated output as
+    documented. Since nobody ever reported issues with them, and since
+    no distributed packages uses them, they probably are simply not in
+    use anywhere. Hence the removal instead of trying to fix this.
   - Add Markdown-style headings `#`/`##`/`###` as aliases for
     `@Chapter`/`@Section`/`@Subsection` in `.autodoc` files and doc comments
   - Add fenced code blocks using triple backticks or tildes in

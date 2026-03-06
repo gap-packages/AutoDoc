@@ -224,7 +224,7 @@ end );
 InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
   function( filename_list, tree, default_chapter_data )
     local current_item, chapter_info, Scan_for_Declaration_part, current_line, filestream,
-          level_scope, scope_group, read_example, command_function_record, autodoc_read_line,
+          scope_group, read_example, command_function_record, autodoc_read_line,
           current_command, filename, groupnumber, rest_of_file_skipped,
           context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,
           current_line_unedited,
@@ -236,7 +236,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           current_line_fence, current_line_is_fence_delimiter,
           xml_comment_mode, comment_start_pos;
     groupnumber := 0;
-    level_scope := 0;
     autodoc_read_line := false;
     context_stack := [ ];
     chapter_info := [ ];
@@ -826,15 +825,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end,
         @BREAK := function()
             ErrorWithPos( current_command[ 2 ] );
-        end,
-        @SetLevel := function()
-            level_scope := Int( current_command[ 2 ] );
-        end,
-        @ResetLevel := function()
-            level_scope := 0;
-        end,
-        @Level := function()
-            current_item!.level := Int( current_command[ 2 ] );
         end,
         @Index := function()
             local argument, split_pos, key, entry,

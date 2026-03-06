@@ -337,31 +337,6 @@ first entry in the group. See <Ref Sect="Section_Groups"/> for more information.
 </Subsection>
 
 
-<Subsection Label="Subsection_@Level">
-<Heading><C>@Level <A>lvl</A></C></Heading>
-
-<P/>
-<Index Key="@Level"><Code>@Level</Code></Index>
-Sets the current level of the documentation. All items created after this,
-chapters, sections, and items, are given the level <A>lvl</A>,
-until the <C>@ResetLevel</C> command resets the level to 0 or another level
-is set.
-<P/>
-See section <Ref Sect="Section_Level"/> for more information about levels.
-<P/>
-</Subsection>
-
-
-<Subsection Label="Subsection_@ResetLevel">
-<Heading><C>@ResetLevel</C></Heading>
-
-<P/>
-<Index Key="@ResetLevel"><Code>@ResetLevel</Code></Index>
-Resets the current level to 0.
-<P/>
-</Subsection>
-
-
 <Subsection Label="Subsection_@BeginExample">
 <Heading><C>@BeginExample</C> and <C>@EndExample</C></Heading>
 
@@ -736,30 +711,6 @@ Second sentence.
 Third sentence.
  </Description>
 </ManSection>
-]]></Listing>
-<P/>
-</Section>
-
-
-<Section Label="Section_Level">
-<Heading>Level</Heading>
-
-<P/>
-Levels can be set to not write certain parts in the manual by default.
-  Every entry has by default the level 0. The command <C>@Level</C> can
-  be used to set the level of the following part to a higher level, for
-  example 1, and prevent it from being printed to the manual by default.
-  However, if one sets the level to a higher value in the autodoc option of
-  &AutoDoc;, the parts will be included in the manual at the specific place.
-<P/>
-<Listing><![CDATA[
-#! This text will be printed to the manual.
-#! @Level 1
-#! This text will be printed to the manual if created with level 1 or higher.
-#! @Level 2
-#! This text will be printed to the manual if created with level 2 or higher.
-#! @ResetLevel
-#! This text will be printed to the manual.
 ]]></Listing>
 <P/>
 </Section>
