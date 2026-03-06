@@ -45,7 +45,7 @@
 #! </Enum>
 #! These tasks can be enabled independently, so you can use as much or as
 #! little of &AutoDoc; as your package currently needs.
-#! For more information and some examples, please refer to Chapter <Ref Label='Chapter_Tutorials'/>.
+#! For more information and some examples, please refer to Chapter <Ref Chap='Chapter_Tutorials'/>.
 #! <P/>
 #! The parameters have the following meanings:
 #! <List>
