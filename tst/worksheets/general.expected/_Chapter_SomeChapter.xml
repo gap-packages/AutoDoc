@@ -107,6 +107,11 @@ This is <Keyword>true</Keyword> in a list item.
 </List>
 <P/>
  All of this can <Emph>also</Emph> be <Emph>used</Emph> outside of a <Code>list</Code>.
+ And fenced listings should preserve literal shebang-prefixed lines:
+<Listing><![CDATA[
+#! @Section ThisMustStayLiteral
+#! #! AlsoLiteral
+]]></Listing>
 <Alt Only="LaTeX"><![CDATA[
 This text will only appear in the \LaTeX version.
 ]]></Alt>
