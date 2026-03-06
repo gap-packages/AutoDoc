@@ -22,7 +22,7 @@ Alt( [ 1 .. 5 ] )
 gap> Size(A5);
 60
 
-# _Chapter_Test.xml:32-36
+# _Chapter_Test.xml:36-40
 gap> plain_mode_value := 6 *
 >   9;
 54

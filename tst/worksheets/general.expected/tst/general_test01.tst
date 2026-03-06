@@ -25,7 +25,7 @@ gap> # Test whether ]]> can be used safely
 gap> [[2]]>[[1]];
 true
 
-# _Chapter_SomeChapter.xml:28-32
+# _Chapter_SomeChapter.xml:32-36
 gap> comment_mode_value := 6 *
 >   7;
 42
