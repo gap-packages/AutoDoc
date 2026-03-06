@@ -19,4 +19,5 @@ Alt( [ 1 .. 5 ] )
 gap> Size(A5);
 60
 @EndExampleSession
+Also, markdown-like inline `true` should become a keyword tag.
 And we wrap up with some dummy text

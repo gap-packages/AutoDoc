@@ -55,6 +55,7 @@ DeclareCategoryCollections("MyThingsCollection");
 #! * This is __emphasized__ text in a list item.
 #! * This is also **emphasized** text in a list item.
 #! * This is `inline code` in a list item.
+#! * This is `true` in a list item.
 #!
 #! All of this can **also** be __used__ outside of a `list`.
 

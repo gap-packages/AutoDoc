@@ -23,7 +23,8 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
           commands, position_of_command, insert, beginning_whitespaces, temp, string_list_temp, skipped,
           already_inserted_paragraph, in_list, in_item, converted_string_list,
           fence_char, fence_length, trimmed_line, code_block, info_string,
-          fence_element;
+          fence_element, keyword_set, opening_pos, closing_pos, inline_content,
+          tag_name;
 
     converted_string_list := [ ];
     i := 1;
@@ -210,9 +211,48 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
     ## Find commands
     command_list_with_translation := [ [ "$$", "Display" ],
                                        [ "$", "Math" ],
-                                       [ "`", "Code" ],
                                        [ "**", "Emph" ],
                                        [ "__", "Emph" ] ];
+    keyword_set := Set( ALL_KEYWORDS() );
+
+    skipped := false;
+    for i in [ 1 .. Length( string_list ) ] do
+        if PositionSublist( string_list[ i ], "<![CDATA[" ) <> fail then
+            skipped := true;
+        fi;
+        if PositionSublist( string_list[ i ], "]]>" ) <> fail then
+            skipped := false;
+            continue;
+        fi;
+        if skipped = true then
+            continue;
+        fi;
+
+        while PositionSublist( string_list[ i ], "`" ) <> fail do
+            opening_pos := PositionSublist( string_list[ i ], "`" );
+            closing_pos := PositionSublist( string_list[ i ], "`", opening_pos + 1 );
+            if closing_pos = fail then
+                Error( "did you forget some `" );
+            fi;
+
+            if opening_pos + 1 <= closing_pos - 1 then
+                inline_content := string_list[ i ]{ [ opening_pos + 1 .. closing_pos - 1 ] };
+            else
+                inline_content := "";
+            fi;
+            if inline_content in keyword_set then
+                tag_name := "Keyword";
+            else
+                tag_name := "Code";
+            fi;
+            string_list[ i ] := Concatenation(
+                string_list[ i ]{ [ 1 .. opening_pos - 1 ] },
+                "<", tag_name, ">", inline_content, "</", tag_name, ">",
+                string_list[ i ]{ [ closing_pos + 1 .. Length( string_list[ i ] ) ] }
+            );
+        od;
+    od;
+
     ## special handling for \$
     for i in [ 1 .. Length( string_list ) ] do
         string_list[ i ] := ReplacedString( string_list[ i ], "\\$", "&#36;" );
