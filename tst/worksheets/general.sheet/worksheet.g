@@ -58,6 +58,11 @@ DeclareCategoryCollections("MyThingsCollection");
 #! * This is `true` in a list item.
 #!
 #! All of this can **also** be __used__ outside of a `list`.
+#! And fenced listings should preserve literal shebang-prefixed lines:
+#! ```@listing
+#! @Section ThisMustStayLiteral
+#! #! AlsoLiteral
+#! ```
 
 #! @LatexOnly This text will only appear in the \LaTeX version.
 #! @BeginLatexOnly

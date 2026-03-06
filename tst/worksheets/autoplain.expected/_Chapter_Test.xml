@@ -30,6 +30,12 @@ gap> Size(A5);
 
 
 Also, markdown-like inline <Keyword>true</Keyword> should become a keyword tag.
+And XML comments should pass through verbatim:
+<!--
+#  <#GAPDoc Label="ToricVarietyConst">
+#  <ManSection>
+#  <#/GAPDoc>
+-->
 And we wrap up with some dummy text
 </Subsection>
 
