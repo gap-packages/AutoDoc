@@ -233,7 +233,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           ReadInstallMethodFilterString, ReadInstallMethodArguments,
           markdown_fence, preserve_shebang_in_fenced_code,
           AUTODOC_MarkdownFenceFromLine, AUTODOC_IsMatchingMarkdownFence,
-          current_line_fence, current_line_is_fence_delimiter;
+          current_line_fence, current_line_is_fence_delimiter,
+          xml_comment_mode, comment_start_pos;
     groupnumber := 0;
     level_scope := 0;
     autodoc_read_line := false;
@@ -397,6 +398,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         Unbind( current_item );
         plain_text_mode := false;
         markdown_fence := fail;
+        xml_comment_mode := false;
     end;
     Scan_for_Declaration_part := function()
         local declare_position, current_type, filter_string, has_filters,
@@ -996,6 +998,30 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
             current_line_unedited := ShallowCopy( current_line );
             NormalizeWhitespace( current_line );
+
+            if plain_text_mode then
+                if xml_comment_mode then
+                    current_command := [ "STRING", current_line ];
+                    if PositionSublist( current_line_unedited, "-->" ) <> fail then
+                        xml_comment_mode := false;
+                    fi;
+                    command_function_record.STRING();
+                    continue;
+                fi;
+                comment_start_pos := PositionSublist( current_line_unedited, "<!--" );
+                if comment_start_pos <> fail then
+                    current_command := [ "STRING", current_line ];
+                    if PositionSublist(
+                           current_line_unedited{ [ comment_start_pos + 4 .. Length( current_line_unedited ) ] },
+                           "-->"
+                       ) = fail then
+                        xml_comment_mode := true;
+                    fi;
+                    command_function_record.STRING();
+                    continue;
+                fi;
+            fi;
+
             current_line_fence := AUTODOC_MarkdownFenceFromLine( current_line_unedited );
             current_line_is_fence_delimiter := false;
             if current_line_fence <> fail then
