@@ -1,6 +1,7 @@
 This file describes changes in the AutoDoc package.
 
 2026.MM.DD
+  - DERP
   - Add Markdown-style headings `#`/`##`/`###` as aliases for
     `@Chapter`/`@Section`/`@Subsection` in `.autodoc` files and doc comments
   - Add fenced code blocks using triple backticks or tildes in
