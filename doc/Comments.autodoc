@@ -52,7 +52,7 @@ before the declaration. Currently, the following commands are provided:
 @Subsection <C>@Description <A>descr</A></C>
 @SubsectionLabel @Description
 
-<Index Key="@Description"><C>@Description <A>descr</A></C></Index>
+@Index "@Description" <C>@Description <A>descr</A></C>
 Adds the text in the following lines of the &AutoDoc; to the description
 of the declaration in the manual. Lines are until the next &AutoDoc; command
 or until the declaration is reached.
@@ -60,7 +60,7 @@ or until the declaration is reached.
 @Subsection <C>@Returns <A>ret_val</A></C>
 @SubsectionLabel @Returns
 
-<Index Key="@Returns"><C>@Returns <A>ret_val</A></C></Index>
+@Index "@Returns" <C>@Returns <A>ret_val</A></C>
 The string <A>ret_val</A> is added to the documentation, with the text <Q>Returns: </Q>
 put in front of it. This should usually give a brief hint about the type or meaning
 of the value returned by the documented function.
@@ -68,7 +68,7 @@ of the value returned by the documented function.
 @Subsection <C>@Arguments <A>args</A></C>
 @SubsectionLabel @Arguments
 
-<Index Key="@Arguments"><C>@Arguments <A>args</A></C></Index>
+@Index "@Arguments" <C>@Arguments <A>args</A></C>
 The string <A>args</A> contains a description of the arguments the
 function expects, including optional parts, which are denoted by square
 brackets. The argument names can be separated by whitespace, commas or
@@ -79,14 +79,14 @@ and one or more assignments, like <Q>n[, r]: tries := 100</Q>.
 @Subsection <C>@Group <A>grpname</A></C>
 @SubsectionLabel @Group
 
-<Index Key="@Group"><C>@Group <A>grpname</A></C></Index>
+@Index "@Group" <C>@Group <A>grpname</A></C>
 Adds the following method to a group with the given name.
 See section <Ref Sect="Section_Groups"/> for more information about groups.
 
 @Subsection <C>@Label <A>label</A></C>
 @SubsectionLabel @Label
 
-<Index Key="@Label"><C>@Label <A>label</A></C></Index>
+@Index "@Label" <C>@Label <A>label</A></C>
 Adds label to the function as label.
 
 If this is not specified, then for declarations that involve a list of input filters
@@ -128,7 +128,7 @@ leads to this:
 @Subsection <C>@ChapterInfo <A>chapter</A>, <A>section</A></C>
 @SubsectionLabel @ChapterInfo
 
-<Index Key="@ChapterInfo"><C>@ChapterInfo</C></Index>
+@Index "@ChapterInfo" `@ChapterInfo`
 Adds the entry to the given chapter and section. Here,
 <A>chapter</A> and <A>section</A> are the respective
 titles.
@@ -158,9 +158,9 @@ text in your documentation, examples, mathematical chapters, etc.
 @Subsection <C>@Chapter <A>name</A></C>
 @SubsectionLabel @Chapter
 
-<Index Key="@Chapter"><C>@Chapter</C></Index>
-<Index Key="@ChapterLabel"><C>@ChapterLabel</C></Index>
-<Index Key="@ChapterTitle"><C>@ChapterTitle</C></Index>
+@Index "@Chapter" `@Chapter`
+@Index "@ChapterLabel" `@ChapterLabel`
+@Index "@ChapterTitle" `@ChapterTitle`
 Sets the active chapter, all subsequent functions which do not have an explicit chapter
 declared in their &AutoDoc; comment via <C>@ChapterInfo</C> will be added to this chapter.
 Also all text comments, i.e. lines that begin with #! without a command, and which do not
@@ -197,9 +197,9 @@ for setting the same chapter as active chapter again.
 @Subsection <C>@Section <A>name</A></C>
 @SubsectionLabel @Section
 
-<Index Key="@Section"><C>@Section</C></Index>
-<Index Key="@SectionLabel"><C>@SectionLabel</C></Index>
-<Index Key="@SectionTitle"><C>@SectionTitle</C></Index>
+@Index "@Section" `@Section`
+@Index "@SectionLabel" `@SectionLabel`
+@Index "@SectionTitle" `@SectionTitle`
 Sets an active section like <C>@Chapter</C> sets an active chapter.
 The section automatically ends with the next <C>@Section</C> or <C>@Chapter</C> command.
 
@@ -218,9 +218,9 @@ can be used to set a heading for the section that is different from <A>name</A>.
 @Subsection <C>@Subsection <A>name</A></C>
 @SubsectionLabel @Subsection
 
-<Index Key="@Subsection"><C>@Subsection</C></Index>
-<Index Key="@SubsectionLabel"><C>@SubsectionLabel</C></Index>
-<Index Key="@SubsectionTitle"><C>@SubsectionTitle</C></Index>
+@Index "@Subsection" `@Subsection`
+@Index "@SubsectionLabel" `@SubsectionLabel`
+@Index "@SubsectionTitle" `@SubsectionTitle`
 Sets an active subsection like <C>@Section</C> sets an active section.
 The subsection automatically ends with the next <C>@Subsection</C>,
 <C>@Section</C> or <C>@Chapter</C> command. It also ends with the
@@ -242,7 +242,7 @@ can be used to set a heading for the subsection that is different from <A>name</
 @Subsection <C>@BeginGroup <A>[grpname]</A></C>
 @SubsectionLabel @BeginGroup
 
-<Index Key="@BeginGroup"><C>@BeginGroup</C></Index>
+@Index "@BeginGroup" `@BeginGroup`
 Starts a group. All following documented declarations without an
 explicit <C>@Group</C> command are grouped together in the same group
 with the given name. If no name is given, then a new nameless group is
@@ -255,7 +255,7 @@ See section <Ref Sect="Section_Groups"/> for more information about groups.
 @Subsection <C>@EndGroup</C>
 @SubsectionLabel @EndGroup
 
-<Index Key="@EndGroup"><C>@EndGroup</C></Index>
+@Index "@EndGroup" `@EndGroup`
 Ends the current group.
 
 ```@listing
@@ -276,7 +276,7 @@ DeclareOperation( "GroupedOperation",
 @Subsection @GroupTitle <A>title</A>
 @SubsectionLabel @GroupTitle
 
-<Index Key="@GroupTitle"><C>@GroupTitle</C></Index>
+@Index "@GroupTitle" `@GroupTitle`
 Sets the subsection heading for the current group to <A>title</A>. In the
 absence of any <C>@GroupTitle</C> command, the heading will be the name of the
 first entry in the group. See <Ref Sect="Section_Groups"/> for more information.
@@ -284,7 +284,7 @@ first entry in the group. See <Ref Sect="Section_Groups"/> for more information.
 @Subsection <C>@Level <A>lvl</A></C>
 @SubsectionLabel @Level
 
-<Index Key="@Level"><C>@Level</C></Index>
+@Index "@Level" `@Level`
 Sets the current level of the documentation. All items created after this,
 chapters, sections, and items, are given the level <A>lvl</A>,
 until the <C>@ResetLevel</C> command resets the level to 0 or another level
@@ -295,14 +295,14 @@ See section <Ref Sect="Section_Level"/> for more information about levels.
 @Subsection <C>@ResetLevel</C>
 @SubsectionLabel @ResetLevel
 
-<Index Key="@ResetLevel"><C>@ResetLevel</C></Index>
+@Index "@ResetLevel" `@ResetLevel`
 Resets the current level to 0.
 
 @Subsection <C>@BeginExample</C> and <C>@EndExample</C>
 @SubsectionLabel @BeginExample
 
-<Index Key="@BeginExample"><C>@BeginExample</C></Index>
-<Index Key="@EndExample"><C>@EndExample</C></Index>
+@Index "@BeginExample" `@BeginExample`
+@Index "@EndExample" `@EndExample`
 <C>@BeginExample</C> marks the start of an example to be put into the manual.
 It differs from &GAPDoc;'s <C>&lt;Example></C> (see <Ref Subsect="Log" BookName="gapdoc"/>),
 in that it expects actual code (not in a comment) interspersed with comments,
@@ -336,8 +336,8 @@ Section <Ref Sect="Subsection_Tut:IntegrateExisting:EverythingThere"/>).
 @Subsection <C>@BeginExampleSession</C> and <C>@EndExampleSession</C>
 @SubsectionLabel @BeginExampleSession
 
-<Index Key="@BeginExampleSession"><C>@BeginExampleSession</C></Index>
-<Index Key="@EndExampleSession"><C>@EndExampleSession</C></Index>
+@Index "@BeginExampleSession" `@BeginExampleSession`
+@Index "@EndExampleSession" `@EndExampleSession`
 <C>@BeginExampleSession</C> marks the start of an example to be put into the manual,
 while <C>@EndExampleSession</C> ends the example block.
 It is the direct analog of &GAPDoc;'s <C>&lt;Example></C> (see <Ref Subsect="Log" BookName="gapdoc"/>).
@@ -372,8 +372,8 @@ The &AutoDoc; command <C>@ExampleSession</C> is an alias of <C>@BeginExampleSess
 @Subsection <C>@BeginLog</C> and <C>@EndLog</C>
 @SubsectionLabel @BeginLog
 
-<Index Key="@BeginLog"><C>@BeginLog</C></Index>
-<Index Key="@EndLog"><C>@EndLog</C></Index>
+@Index "@BeginLog" `@BeginLog`
+@Index "@EndLog" `@EndLog`
 Works just like the <C>@BeginExample</C> command, but the example
 will not be tested. See the &GAPDoc; manual for more information.
 The &AutoDoc; command <C>@Log</C> is an alias of <C>@BeginLog</C>.
@@ -381,8 +381,8 @@ The &AutoDoc; command <C>@Log</C> is an alias of <C>@BeginLog</C>.
 @Subsection <C>@BeginLogSession</C> and <C>@EndLogSession</C>
 @SubsectionLabel @BeginLogSession
 
-<Index Key="@BeginLogSession"><C>@BeginLogSession</C></Index>
-<Index Key="@EndLogSession"><C>@EndLogSession</C></Index>
+@Index "@BeginLogSession" `@BeginLogSession`
+@Index "@EndLogSession" `@EndLogSession`
 Works just like the <C>@BeginExampleSession</C> command, but the example
 will not be tested if manual examples are run. It is the direct analog of
 &GAPDoc;'s <C>&lt;Log></C> (see <Ref Subsect="Log" BookName="gapdoc"/>).
@@ -391,7 +391,7 @@ The &AutoDoc; command <C>@LogSession</C> is an alias of <C>@BeginLogSession</C>.
 @Subsection <C>@DoNotReadRestOfFile</C>
 @SubsectionLabel @DoNotReadRestOfFile
 
-<Index Key="@DoNotReadRestOfFile"><C>@DoNotReadRestOfFile</C></Index>
+@Index "@DoNotReadRestOfFile" `@DoNotReadRestOfFile`
 Prevents the rest of the file from being read by the parser. Useful for
 unfinished or temporary files.
 
@@ -406,9 +406,9 @@ unfinished or temporary files.
 @Subsection <C>@BeginChunk <A>name</A></C>, <C>@EndChunk</C>, and <C>@InsertChunk <A>name</A></C>
 @SubsectionLabel @BeginChunk
 
-<Index Key="@BeginChunk"><C>@BeginChunk <A>name</A></C></Index>
-<Index Key="@EndChunk"><C>@EndChunk</C></Index>
-<Index Key="@EndChunk"><C>@InsertChunk <A>name</A></C></Index>
+@Index "@BeginChunk" <C>@BeginChunk <A>name</A></C>
+@Index "@EndChunk" `@EndChunk`
+@Index "@EndChunk" <C>@InsertChunk <A>name</A></C>
 Text inside a <C>@BeginChunk</C> / <C>@EndChunk</C> part will not be inserted into
 the final documentation directly. Instead, the text is stored in an internal buffer.
 
@@ -447,9 +447,9 @@ And then later, insert the example in a different file, like this:
 @Subsection <C>@BeginCode <A>name</A></C>, @EndCode, and <C>@InsertCode <A>name</A></C>
 @SubsectionLabel @BeginCode
 
-<Index Key="@BeginCode"><C>@BeginCode <A>name</A></C></Index>
-<Index Key="@EndCode"><C>@EndCode</C></Index>
-<Index Key="@InsertCode"><C>@InsertCode <A>name</A></C></Index>
+@Index "@BeginCode" <C>@BeginCode <A>name</A></C>
+@Index "@EndCode" `@EndCode`
+@Index "@InsertCode" <C>@InsertCode <A>name</A></C>
 Inserts the text between <C>@BeginCode</C> and <C>@EndCode</C> verbatim at the point where
 <C>@InsertCode</C> is called. This is useful to insert code excerpts
 directly into the manual.
@@ -465,9 +465,9 @@ i := i + 1;
 @Subsection <C>@LatexOnly <A>text</A></C>, <C>@BeginLatexOnly</C>, and <C>@EndLatexOnly</C>
 @SubsectionLabel @LatexOnly
 
-<Index Key="@LatexOnly"><C>@LatexOnly <A>text</A></C></Index>
-<Index Key="@BeginLatexOnly"><C>@BeginLatexOnly</C></Index>
-<Index Key="@EndLatexOnly"><C>@EndLatexOnly</C></Index>
+@Index "@LatexOnly" <C>@LatexOnly <A>text</A></C>
+@Index "@BeginLatexOnly" `@BeginLatexOnly`
+@Index "@EndLatexOnly" `@EndLatexOnly`
 Code inserted between <C>@BeginLatexOnly</C> and <C>@EndLatexOnly</C> or after <C>@LatexOnly</C> is only inserted
 in the PDF version of the manual or worksheet. It can hold arbitrary &LaTeX;-commands.
 ```@listing
@@ -481,9 +481,9 @@ in the PDF version of the manual or worksheet. It can hold arbitrary &LaTeX;-com
 @Subsection <C>@NotLatex <A>text</A></C>, <C>@BeginNotLatex</C>, and <C>@EndNotLatex</C>
 @SubsectionLabel @NotLatex
 
-<Index Key="@NotLatex"><C>@NotLatex <A>text</A></C></Index>
-<Index Key="@BeginNotLatex"><C>@BeginNotLatex</C></Index>
-<Index Key="@EndNotLatex"><C>@EndNotLatex</C></Index>
+@Index "@NotLatex" <C>@NotLatex <A>text</A></C>
+@Index "@BeginNotLatex" `@BeginNotLatex`
+@Index "@EndNotLatex" `@EndNotLatex`
 Code inserted between <C>@BeginNotLatex</C> and <C>@EndNotLatex</C> or after <C>@NotLatex</C> is inserted
 in the HTML and text versions of the manual or worksheet, but not in the PDF version.
 ```@listing
@@ -493,6 +493,19 @@ in the HTML and text versions of the manual or worksheet, but not in the PDF ver
 
 #! @NotLatex For further information see the PDF version of this manual.
 ```
+
+@Subsection <C>@Index <A>key</A> [<A>entry text</A>]</C>
+@SubsectionLabel @Index
+
+@Index "@Index" <C>@Index <A>key</A> [<A>entry text</A>]</C>
+Adds an index entry to the current documentation text.
+The command <C>@Index key entry text</C> generates
+<C>&lt;Index Key="key"&gt;entry text&lt;/Index&gt;</C>.
+If no entry text is provided, then the entry text is empty.
+To use keys containing spaces, wrap the key in double quotes, e.g.
+<C>@Index "my key" entry text</C>.
+The entry text is processed like normal documentation text, so markdown-like
+inline code such as `true` is supported.
 
 @Section Title page commands
 @SectionLabel TitlepageCommands

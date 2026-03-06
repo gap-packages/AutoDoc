@@ -76,7 +76,7 @@ You will probably want to re-run the  <Ref Func="AutoDoc"/> command
 frequently, e.g. whenever you modified your documentation or your
 <F>PackageInfo.g</F>. To make this more convenient and reproducible, we
 recommend putting its invocation into a file <F>makedoc.g</F> in your package
-<Index Key="makedoc.g"><F>makedoc.g</F></Index>
+@Index "makedoc.g" <F>makedoc.g</F>
 directory, with content based on the following example:
 ```@listing
 LoadPackage( "AutoDoc" );
@@ -326,13 +326,13 @@ Edit <File>PackageName/makedoc.g</File> as follows.
   In the <Code>AutoDoc</Code> record delete <Code>autodoc := true;</Code>. 
   </Item>
   <Item> 
-  <Index Key="Scaffold record in makedoc.g"></Index> 
+  @Index "Scaffold record in makedoc.g"
   In the <Code>scaffold</Code> record change the <Code>includes</Code> list 
   to be the list of your <Code>.xml</Code> files that are contained in  
   <File>manual.xml</File>. 
   </Item> 
   <Item>
-  <Index Key="Bibliography field in makedoc.g"></Index> 
+  @Index "Bibliography field in makedoc.g"
   If you do not have a bibliography you may delete the 
   <Code>bib := "bib.xml",</Code> field in the scaffold. 
   Otherwise, edit the file name if you have a different file. 
@@ -341,7 +341,7 @@ Edit <File>PackageName/makedoc.g</File> as follows.
   you should rename this file <File>PackageName.bib</File>. 
   </Item>
   <Item> 
-  <Index Key="LaTeXOptions record in makedoc.g"></Index>
+  @Index "LaTeXOptions record in makedoc.g"
   In the <Code>LaTeXOptions</Code> record,
   which is in the <Code>gapdoc</Code> record, enter any
   &LaTeX; <Code>newcommands</Code> previously in <File>manual.xml</File>. 
@@ -368,9 +368,9 @@ Now edit <File>PackageName/PackageInfo.g</File> as follows.
   to the end of your file (just before the final <Code>"));"</Code>. 
   </Item>
   <Item> 
-  <Index Key="Copyright field in PackageInfo.g"></Index> 
-  <Index Key="Abstract field in PackageInfo.g"></Index> 
-  <Index Key="Acknowledgements field in PackageInfo.g"></Index> 
+  @Index "Copyright field in PackageInfo.g"
+  @Index "Abstract field in PackageInfo.g"
+  @Index "Acknowledgements field in PackageInfo.g"
   Replace the <Code>Copyright</Code>, <Code>Abstract</Code> and 
   <Code>Acknowledgements</Code> fields of the <Code>TitlePage</Code> 
   record with the corresponding material from your <File>manual.xml</File>. 
@@ -380,7 +380,7 @@ Now edit <File>PackageName/PackageInfo.g</File> as follows.
 <!--  consult the file <File>gap/Magic.gd</File>. -->
   </Item>
   <Item> 
-  <Index Key="Entities record in makedoc.g"></Index> 
+  @Index "Entities record in makedoc.g"
   In the <Code>entities</Code> record enter any entities 
   previously stored in your <File>manual.xml</File>. 
   (Again, if you have none, you may safely delete this record.) 

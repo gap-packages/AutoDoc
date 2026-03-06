@@ -21,6 +21,10 @@ gap> Size(S5);
 
 
 Some text between two examples
+<Index Key="Worksheet Autoplain">Plain worksheet index entry with <Keyword>true</Keyword></Index>
+<Index Key="WorksheetAutoplainKeyOnly"></Index>
+<Index Key="A&amp;B">ampersand key</Index>
+<Index Key="A&lt;B">less-than key</Index>
 <Example><![CDATA[
 gap> A5 := AlternatingGroup(5);
 Alt( [ 1 .. 5 ] )
