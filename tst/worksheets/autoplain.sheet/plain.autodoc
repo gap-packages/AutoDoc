@@ -13,6 +13,10 @@ gap> Size(S5);
 120
 @EndExampleSession
 Some text between two examples
+@Index "Worksheet Autoplain" Plain worksheet index entry with `true`
+@Index WorksheetAutoplainKeyOnly
+@Index A&B ampersand key
+@Index A<B less-than key
 @BeginExampleSession
 gap> A5 := AlternatingGroup(5);
 Alt( [ 1 .. 5 ] )

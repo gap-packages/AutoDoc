@@ -16,7 +16,7 @@ Sym( [ 1 .. 5 ] )
 gap> Size(S5);
 120
 
-# _Chapter_SomeChapter.xml:17-25
+# _Chapter_SomeChapter.xml:21-29
 gap> A5 := AlternatingGroup(5);
 Alt( [ 1 .. 5 ] )
 gap> Size(A5);

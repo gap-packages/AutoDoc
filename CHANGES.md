@@ -6,6 +6,7 @@ This file describes changes in the AutoDoc package.
   - Add fenced code blocks using triple backticks or tildes in
     Markdown-like text; `@listing`, `@example`, and `@log` info strings
     select the corresponding GAPDoc element
+  - Add `@Index` command for generating index entries
   - In Markdown-like inline backtick code spans, emit
     `<Keyword>...</Keyword>` for GAP keywords (as returned by
     `ALL_KEYWORDS()`), otherwise as before `<Code>...</Code>`

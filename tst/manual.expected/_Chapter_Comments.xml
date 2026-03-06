@@ -152,7 +152,7 @@ leads to this:
 <Heading><C>@ChapterInfo <A>chapter</A>, <A>section</A></C></Heading>
 
 <P/>
-<Index Key="@ChapterInfo"><C>@ChapterInfo</C></Index>
+<Index Key="@ChapterInfo"><Code>@ChapterInfo</Code></Index>
 Adds the entry to the given chapter and section. Here,
 <A>chapter</A> and <A>section</A> are the respective
 titles.
@@ -191,9 +191,9 @@ text in your documentation, examples, mathematical chapters, etc.
 <Heading><C>@Chapter <A>name</A></C></Heading>
 
 <P/>
-<Index Key="@Chapter"><C>@Chapter</C></Index>
-<Index Key="@ChapterLabel"><C>@ChapterLabel</C></Index>
-<Index Key="@ChapterTitle"><C>@ChapterTitle</C></Index>
+<Index Key="@Chapter"><Code>@Chapter</Code></Index>
+<Index Key="@ChapterLabel"><Code>@ChapterLabel</Code></Index>
+<Index Key="@ChapterTitle"><Code>@ChapterTitle</Code></Index>
 Sets the active chapter, all subsequent functions which do not have an explicit chapter
 declared in their &AutoDoc; comment via <C>@ChapterInfo</C> will be added to this chapter.
 Also all text comments, i.e. lines that begin with #! without a command, and which do not
@@ -234,9 +234,9 @@ for setting the same chapter as active chapter again.
 <Heading><C>@Section <A>name</A></C></Heading>
 
 <P/>
-<Index Key="@Section"><C>@Section</C></Index>
-<Index Key="@SectionLabel"><C>@SectionLabel</C></Index>
-<Index Key="@SectionTitle"><C>@SectionTitle</C></Index>
+<Index Key="@Section"><Code>@Section</Code></Index>
+<Index Key="@SectionLabel"><Code>@SectionLabel</Code></Index>
+<Index Key="@SectionTitle"><Code>@SectionTitle</Code></Index>
 Sets an active section like <C>@Chapter</C> sets an active chapter.
 The section automatically ends with the next <C>@Section</C> or <C>@Chapter</C> command.
 <P/>
@@ -259,9 +259,9 @@ can be used to set a heading for the section that is different from <A>name</A>.
 <Heading><C>@Subsection <A>name</A></C></Heading>
 
 <P/>
-<Index Key="@Subsection"><C>@Subsection</C></Index>
-<Index Key="@SubsectionLabel"><C>@SubsectionLabel</C></Index>
-<Index Key="@SubsectionTitle"><C>@SubsectionTitle</C></Index>
+<Index Key="@Subsection"><Code>@Subsection</Code></Index>
+<Index Key="@SubsectionLabel"><Code>@SubsectionLabel</Code></Index>
+<Index Key="@SubsectionTitle"><Code>@SubsectionTitle</Code></Index>
 Sets an active subsection like <C>@Section</C> sets an active section.
 The subsection automatically ends with the next <C>@Subsection</C>,
 <C>@Section</C> or <C>@Chapter</C> command. It also ends with the
@@ -287,7 +287,7 @@ can be used to set a heading for the subsection that is different from <A>name</
 <Heading><C>@BeginGroup <A>[grpname]</A></C></Heading>
 
 <P/>
-<Index Key="@BeginGroup"><C>@BeginGroup</C></Index>
+<Index Key="@BeginGroup"><Code>@BeginGroup</Code></Index>
 Starts a group. All following documented declarations without an
 explicit <C>@Group</C> command are grouped together in the same group
 with the given name. If no name is given, then a new nameless group is
@@ -304,7 +304,7 @@ See section <Ref Sect="Section_Groups"/> for more information about groups.
 <Heading><C>@EndGroup</C></Heading>
 
 <P/>
-<Index Key="@EndGroup"><C>@EndGroup</C></Index>
+<Index Key="@EndGroup"><Code>@EndGroup</Code></Index>
 Ends the current group.
 <P/>
 <Listing><![CDATA[
@@ -329,7 +329,7 @@ DeclareOperation( "GroupedOperation",
 <Heading>@GroupTitle <A>title</A></Heading>
 
 <P/>
-<Index Key="@GroupTitle"><C>@GroupTitle</C></Index>
+<Index Key="@GroupTitle"><Code>@GroupTitle</Code></Index>
 Sets the subsection heading for the current group to <A>title</A>. In the
 absence of any <C>@GroupTitle</C> command, the heading will be the name of the
 first entry in the group. See <Ref Sect="Section_Groups"/> for more information.
@@ -341,7 +341,7 @@ first entry in the group. See <Ref Sect="Section_Groups"/> for more information.
 <Heading><C>@Level <A>lvl</A></C></Heading>
 
 <P/>
-<Index Key="@Level"><C>@Level</C></Index>
+<Index Key="@Level"><Code>@Level</Code></Index>
 Sets the current level of the documentation. All items created after this,
 chapters, sections, and items, are given the level <A>lvl</A>,
 until the <C>@ResetLevel</C> command resets the level to 0 or another level
@@ -356,7 +356,7 @@ See section <Ref Sect="Section_Level"/> for more information about levels.
 <Heading><C>@ResetLevel</C></Heading>
 
 <P/>
-<Index Key="@ResetLevel"><C>@ResetLevel</C></Index>
+<Index Key="@ResetLevel"><Code>@ResetLevel</Code></Index>
 Resets the current level to 0.
 <P/>
 </Subsection>
@@ -366,8 +366,8 @@ Resets the current level to 0.
 <Heading><C>@BeginExample</C> and <C>@EndExample</C></Heading>
 
 <P/>
-<Index Key="@BeginExample"><C>@BeginExample</C></Index>
-<Index Key="@EndExample"><C>@EndExample</C></Index>
+<Index Key="@BeginExample"><Code>@BeginExample</Code></Index>
+<Index Key="@EndExample"><Code>@EndExample</Code></Index>
 <C>@BeginExample</C> marks the start of an example to be put into the manual.
 It differs from &GAPDoc;'s <C>&lt;Example></C> (see <Ref Subsect="Log" BookName="gapdoc"/>),
 in that it expects actual code (not in a comment) interspersed with comments,
@@ -405,8 +405,8 @@ Section <Ref Sect="Subsection_Tut:IntegrateExisting:EverythingThere"/>).
 <Heading><C>@BeginExampleSession</C> and <C>@EndExampleSession</C></Heading>
 
 <P/>
-<Index Key="@BeginExampleSession"><C>@BeginExampleSession</C></Index>
-<Index Key="@EndExampleSession"><C>@EndExampleSession</C></Index>
+<Index Key="@BeginExampleSession"><Code>@BeginExampleSession</Code></Index>
+<Index Key="@EndExampleSession"><Code>@EndExampleSession</Code></Index>
 <C>@BeginExampleSession</C> marks the start of an example to be put into the manual,
 while <C>@EndExampleSession</C> ends the example block.
 It is the direct analog of &GAPDoc;'s <C>&lt;Example></C> (see <Ref Subsect="Log" BookName="gapdoc"/>).
@@ -445,8 +445,8 @@ The &AutoDoc; command <C>@ExampleSession</C> is an alias of <C>@BeginExampleSess
 <Heading><C>@BeginLog</C> and <C>@EndLog</C></Heading>
 
 <P/>
-<Index Key="@BeginLog"><C>@BeginLog</C></Index>
-<Index Key="@EndLog"><C>@EndLog</C></Index>
+<Index Key="@BeginLog"><Code>@BeginLog</Code></Index>
+<Index Key="@EndLog"><Code>@EndLog</Code></Index>
 Works just like the <C>@BeginExample</C> command, but the example
 will not be tested. See the &GAPDoc; manual for more information.
 The &AutoDoc; command <C>@Log</C> is an alias of <C>@BeginLog</C>.
@@ -458,8 +458,8 @@ The &AutoDoc; command <C>@Log</C> is an alias of <C>@BeginLog</C>.
 <Heading><C>@BeginLogSession</C> and <C>@EndLogSession</C></Heading>
 
 <P/>
-<Index Key="@BeginLogSession"><C>@BeginLogSession</C></Index>
-<Index Key="@EndLogSession"><C>@EndLogSession</C></Index>
+<Index Key="@BeginLogSession"><Code>@BeginLogSession</Code></Index>
+<Index Key="@EndLogSession"><Code>@EndLogSession</Code></Index>
 Works just like the <C>@BeginExampleSession</C> command, but the example
 will not be tested if manual examples are run. It is the direct analog of
 &GAPDoc;'s <C>&lt;Log></C> (see <Ref Subsect="Log" BookName="gapdoc"/>).
@@ -472,7 +472,7 @@ The &AutoDoc; command <C>@LogSession</C> is an alias of <C>@BeginLogSession</C>.
 <Heading><C>@DoNotReadRestOfFile</C></Heading>
 
 <P/>
-<Index Key="@DoNotReadRestOfFile"><C>@DoNotReadRestOfFile</C></Index>
+<Index Key="@DoNotReadRestOfFile"><Code>@DoNotReadRestOfFile</Code></Index>
 Prevents the rest of the file from being read by the parser. Useful for
 unfinished or temporary files.
 <P/>
@@ -492,7 +492,7 @@ unfinished or temporary files.
 
 <P/>
 <Index Key="@BeginChunk"><C>@BeginChunk <A>name</A></C></Index>
-<Index Key="@EndChunk"><C>@EndChunk</C></Index>
+<Index Key="@EndChunk"><Code>@EndChunk</Code></Index>
 <Index Key="@EndChunk"><C>@InsertChunk <A>name</A></C></Index>
 Text inside a <C>@BeginChunk</C> / <C>@EndChunk</C> part will not be inserted into
 the final documentation directly. Instead, the text is stored in an internal buffer.
@@ -537,7 +537,7 @@ And then later, insert the example in a different file, like this:
 
 <P/>
 <Index Key="@BeginCode"><C>@BeginCode <A>name</A></C></Index>
-<Index Key="@EndCode"><C>@EndCode</C></Index>
+<Index Key="@EndCode"><Code>@EndCode</Code></Index>
 <Index Key="@InsertCode"><C>@InsertCode <A>name</A></C></Index>
 Inserts the text between <C>@BeginCode</C> and <C>@EndCode</C> verbatim at the point where
 <C>@InsertCode</C> is called. This is useful to insert code excerpts
@@ -559,8 +559,8 @@ i := i + 1;
 
 <P/>
 <Index Key="@LatexOnly"><C>@LatexOnly <A>text</A></C></Index>
-<Index Key="@BeginLatexOnly"><C>@BeginLatexOnly</C></Index>
-<Index Key="@EndLatexOnly"><C>@EndLatexOnly</C></Index>
+<Index Key="@BeginLatexOnly"><Code>@BeginLatexOnly</Code></Index>
+<Index Key="@EndLatexOnly"><Code>@EndLatexOnly</Code></Index>
 Code inserted between <C>@BeginLatexOnly</C> and <C>@EndLatexOnly</C> or after <C>@LatexOnly</C> is only inserted
 in the PDF version of the manual or worksheet. It can hold arbitrary &LaTeX;-commands.
 <Listing><![CDATA[
@@ -579,8 +579,8 @@ in the PDF version of the manual or worksheet. It can hold arbitrary &LaTeX;-com
 
 <P/>
 <Index Key="@NotLatex"><C>@NotLatex <A>text</A></C></Index>
-<Index Key="@BeginNotLatex"><C>@BeginNotLatex</C></Index>
-<Index Key="@EndNotLatex"><C>@EndNotLatex</C></Index>
+<Index Key="@BeginNotLatex"><Code>@BeginNotLatex</Code></Index>
+<Index Key="@EndNotLatex"><Code>@EndNotLatex</Code></Index>
 Code inserted between <C>@BeginNotLatex</C> and <C>@EndNotLatex</C> or after <C>@NotLatex</C> is inserted
 in the HTML and text versions of the manual or worksheet, but not in the PDF version.
 <Listing><![CDATA[
@@ -590,6 +590,23 @@ in the HTML and text versions of the manual or worksheet, but not in the PDF ver
 <P/>
 #! @NotLatex For further information see the PDF version of this manual.
 ]]></Listing>
+<P/>
+</Subsection>
+
+
+<Subsection Label="Subsection_@Index">
+<Heading><C>@Index <A>key</A> [<A>entry text</A>]</C></Heading>
+
+<P/>
+<Index Key="@Index"><C>@Index <A>key</A> [<A>entry text</A>]</C></Index>
+Adds an index entry to the current documentation text.
+The command <C>@Index key entry text</C> generates
+<C>&lt;Index Key="key"&gt;entry text&lt;/Index&gt;</C>.
+If no entry text is provided, then the entry text is empty.
+To use keys containing spaces, wrap the key in double quotes, e.g.
+<C>@Index "my key" entry text</C>.
+The entry text is processed like normal documentation text, so markdown-like
+inline code such as <Keyword>true</Keyword> is supported.
 <P/>
 </Subsection>
 

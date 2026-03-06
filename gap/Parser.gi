@@ -836,6 +836,84 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @Level := function()
             current_item!.level := Int( current_command[ 2 ] );
         end,
+        @Index := function()
+            local argument, split_pos, key, entry,
+                  escaped_quote_pos, key_string, key_escaped;
+            if not IsBound( current_item ) then
+                ErrorWithPos( "found @Index with no active documentation item" );
+            fi;
+            argument := StripBeginEnd( current_command[ 2 ], " \t\r\n" );
+            if argument = "" then
+                ErrorWithPos( "found @Index without arguments" );
+            fi;
+            entry := "";
+            if argument[ 1 ] = '"' then
+                escaped_quote_pos := 2;
+                while escaped_quote_pos <= Length( argument ) and
+                      argument[ escaped_quote_pos ] <> '"' do
+                    escaped_quote_pos := escaped_quote_pos + 1;
+                od;
+                if escaped_quote_pos > Length( argument ) then
+                    ErrorWithPos( "found @Index with unterminated quoted key" );
+                fi;
+                key := argument{ [ 2 .. escaped_quote_pos - 1 ] };
+                split_pos := escaped_quote_pos + 1;
+                while split_pos <= Length( argument ) and argument[ split_pos ] in " \t\r\n" do
+                    split_pos := split_pos + 1;
+                od;
+                if split_pos <= Length( argument ) then
+                    entry := argument{ [ split_pos .. Length( argument ) ] };
+                fi;
+            else
+                split_pos := PositionProperty( argument, c -> c in " \t\r\n" );
+                if split_pos = fail then
+                    key := argument;
+                else
+                    key := argument{ [ 1 .. split_pos - 1 ] };
+                    while split_pos <= Length( argument ) and argument[ split_pos ] in " \t\r\n" do
+                        split_pos := split_pos + 1;
+                    od;
+                    if split_pos <= Length( argument ) then
+                        entry := argument{ [ split_pos .. Length( argument ) ] };
+                    fi;
+                fi;
+            fi;
+
+            key_string := key;
+            key_escaped := "";
+            while key_string <> "" do
+                split_pos := PositionProperty( key_string, c -> c in "&\"<>" );
+                if split_pos = fail then
+                    key_escaped := Concatenation( key_escaped, key_string );
+                    key_string := "";
+                elif split_pos > 1 then
+                    key_escaped := Concatenation( key_escaped, key_string{ [ 1 .. split_pos - 1 ] } );
+                    key_string := key_string{ [ split_pos .. Length( key_string ) ] };
+                fi;
+                if key_string = "" then
+                    break;
+                fi;
+                if key_string[ 1 ] = '&' then
+                    key_escaped := Concatenation( key_escaped, "&amp;" );
+                elif key_string[ 1 ] = '"' then
+                    key_escaped := Concatenation( key_escaped, "&quot;" );
+                elif key_string[ 1 ] = '<' then
+                    key_escaped := Concatenation( key_escaped, "&lt;" );
+                else
+                    key_escaped := Concatenation( key_escaped, "&gt;" );
+                fi;
+                if Length( key_string ) > 1 then
+                    key_string := key_string{ [ 2 .. Length( key_string ) ] };
+                else
+                    key_string := "";
+                fi;
+            od;
+
+            if key_escaped = "" then
+                ErrorWithPos( "found @Index with empty key" );
+            fi;
+            Add( current_item, Concatenation( "<Index Key=\"", key_escaped, "\">", entry, "</Index>" ) );
+        end,
 
         @InsertChunk := function()
             local label_name;

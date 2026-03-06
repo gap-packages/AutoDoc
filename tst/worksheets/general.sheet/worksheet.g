@@ -17,6 +17,10 @@ Print( "(Even though we never use it that way.\n" );
 #! 120
 #! @EndExampleSession
 #! Some text between two examples
+#! @Index "Worksheet General" General worksheet index entry with `true`
+#! @Index WorksheetGeneralKeyOnly
+#! @Index A>B greater-than key
+#! @Index A"B quote key
 #! @BeginExampleSession
 #! gap> A5 := AlternatingGroup(5);
 #! Alt( [ 1 .. 5 ] )
