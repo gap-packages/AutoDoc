@@ -25,5 +25,10 @@ gap> # Test whether ]]> can be used safely
 gap> [[2]]>[[1]];
 true
 
+# _Chapter_SomeChapter.xml:28-32
+gap> comment_mode_value := 6 *
+>   7;
+42
+
 #
 gap> STOP_TEST("general_test01.tst", 1);

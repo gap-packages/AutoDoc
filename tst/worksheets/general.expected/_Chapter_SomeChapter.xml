@@ -29,6 +29,13 @@ true
 ]]></Example>
 
 
+<Example><![CDATA[
+gap> comment_mode_value := 6 *
+>   7;
+42
+]]></Example>
+
+
  And we wrap up with some dummy text
 <Section Label="Chapter_SomeChapter_Section_Some_categories">
 <Heading>Some categories</Heading>

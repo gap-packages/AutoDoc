@@ -22,5 +22,10 @@ Alt( [ 1 .. 5 ] )
 gap> Size(A5);
 60
 
+# _Chapter_Test.xml:32-36
+gap> plain_mode_value := 6 *
+>   9;
+54
+
 #
 gap> STOP_TEST("plain_file.autodoc_test01.tst", 1);

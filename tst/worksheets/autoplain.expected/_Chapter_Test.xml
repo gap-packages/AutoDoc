@@ -33,6 +33,13 @@ gap> Size(A5);
 ]]></Example>
 
 
+<Example><![CDATA[
+gap> plain_mode_value := 6 *
+>   9;
+54
+]]></Example>
+
+
 Also, markdown-like inline <Keyword>true</Keyword> should become a keyword tag.
 And XML comments should pass through verbatim:
 <!--
