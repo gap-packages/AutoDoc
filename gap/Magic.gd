@@ -261,15 +261,6 @@
 #!             they will not be printed into the manual.
 #!         </Item>
 #!
-#### TODO: Document section_intros later on.
-#### However, note that thanks to the new AutoDoc comment syntax, the only remaining
-#### use for this seems to be the ability to specify the order of chapters and
-#### sections.
-####                 <Mark><A>section_intros</A></Mark>
-####                 <Item>
-####                     TODO.
-####                 </Item>
-#!
 #!         </List>
 #!     </Item>
 #!

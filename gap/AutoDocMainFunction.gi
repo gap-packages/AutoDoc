@@ -289,36 +289,6 @@ InstallGlobalFunction( CreateTitlePage,
     CloseStream( filestream );
 end );
 
-InstallGlobalFunction( AUTODOC_PROCESS_INTRO_STRINGS,
-  function( introduction_list, tree )
-    local intro, intro_string, i;
-
-    for intro in introduction_list do
-        if Length( intro ) = 2 then
-            intro_string := intro[ 2 ];
-            if IsString( intro_string ) then
-                intro_string := [ intro_string ];
-            fi;
-            for i in intro_string do
-                Add( ChapterInTree( tree, ReplacedString( intro[ 1 ], " ", "_" ) ), i );
-            od;
-        elif Length( intro ) = 3 then
-            intro_string := intro[ 3 ];
-            if IsString( intro_string ) then
-                intro_string := [ intro_string ];
-            fi;
-            for i in intro_string do
-                Add( SectionInTree( tree, ReplacedString( intro[ 1 ], " ", "_" ),
-                                          ReplacedString( intro[ 2 ], " ", "_" ) ), i );
-            od;
-        else
-            Error( "wrong format of introduction string list\n" );
-        fi;
-    od;
-
-    return tree;
-end );
-
 ##
 ## Optional argument is PackageName, which creates a
 ## Default chapter record. This is not available for
