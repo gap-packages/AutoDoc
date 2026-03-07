@@ -4,6 +4,7 @@ fi;
 LoadPackage("io", false);
 
 SetInfoLevel(InfoAutoDoc, 1);
+SetInfoLevel(InfoGAPDoc, 0);
 
 AUTODOC_RegenWorkSheetExpected := function(wsdir, ws)
     local sheetdir, expecteddir, filenames, old, f, tstfiles, x;
@@ -53,6 +54,25 @@ AUTODOC_RegenWorkSheetExpected := function(wsdir, ws)
     od;
 end;
 
+AUTODOC_DetectedWorkSheets := function(wsdir)
+    local entries;
+
+    entries := DirectoryContents(wsdir);
+    entries := Filtered(entries, f -> f <> "." and f <> "..");
+    entries := Filtered(entries,
+        f -> IsDirectoryPath(Filename(wsdir, f)) and
+             Length(f) > 6 and
+             PositionSublist(f, ".sheet") = Length(f) - 5);
+    Sort(entries);
+
+    # Ignore empty placeholder directories which are not runnable worksheets.
+    entries := Filtered(entries,
+        f -> Length(Filtered(DirectoryContents(Filename(wsdir, f)),
+                        x -> x <> "." and x <> "..")) > 0);
+
+    return List(entries, f -> f{[1 .. Length(f) - 6]});
+end;
+
 AUTODOC_RegenAllWorkSheetExpected := function()
     local wsdir, ws;
     wsdir := DirectoriesPackageLibrary("AutoDoc", "tst/worksheets");
@@ -61,7 +81,8 @@ AUTODOC_RegenAllWorkSheetExpected := function()
         Error("could not access tst/worksheets/");
     fi;
 
-    for ws in ["general", "autoplain"] do
+    for ws in AUTODOC_DetectedWorkSheets(wsdir) do
+        Print("Now processing sheet tst/worksheets/", ws, ".sheet/\n");
         AUTODOC_RegenWorkSheetExpected(wsdir, ws);
     od;
 end;
@@ -132,4 +153,6 @@ end;
 
 AUTODOC_RegenAllWorkSheetExpected();
 AUTODOC_RegenManualExpected();
+TestDirectory( DirectoriesPackageLibrary("AutoDoc", "tst"), rec(rewriteToFile := true ) );
+
 QUIT_GAP(0);
