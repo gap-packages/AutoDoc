@@ -1,0 +1,44 @@
+@Title Paired Blocks Test
+@Date 2026-03-07
+@Chapter Blocks Chapter
+@Section Primary Blocks Section
+Intro text for the block-oriented worksheet.
+
+@Section Injected Section
+This section exists so the paired structure stays aligned.
+
+@Section Utility Blocks Section
+
+@BeginChunk StoredChunk
+Chunk line one.
+Chunk line two with `inline code`.
+@EndChunk
+
+Text before inserting the stored chunk.
+@InsertChunk StoredChunk
+
+@BeginCode StoredCode
+block_value := 11;
+
+if block_value > 10 then
+  Print("block code reached\n");
+fi;
+@EndCode
+
+Text before inserting the stored code.
+@InsertCode StoredCode
+
+@LatexOnly \textbf{Latex-only inline text.}
+@BeginLatexOnly
+\emph{Latex-only block text.}
+@EndLatexOnly
+
+@NotLatex HTML-and-text inline output.
+@BeginNotLatex
+HTML-and-text block output.
+@EndNotLatex
+
+@Subsection Stop Here
+This text should appear before the parser stops.
+@DoNotReadRestOfFile
+This trailing text should never reach the expected XML.

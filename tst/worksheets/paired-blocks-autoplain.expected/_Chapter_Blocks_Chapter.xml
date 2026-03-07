@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_Blocks_Chapter">
+<Heading>Blocks Chapter</Heading>
+
+<Section Label="Chapter_Blocks_Chapter_Section_Primary_Blocks_Section">
+<Heading>Primary Blocks Section</Heading>
+
+Intro text for the block-oriented worksheet.
+<P/>
+</Section>
+
+
+<Section Label="Chapter_Blocks_Chapter_Section_Injected_Section">
+<Heading>Injected Section</Heading>
+
+This section exists so the paired structure stays aligned.
+<P/>
+</Section>
+
+
+<Section Label="Chapter_Blocks_Chapter_Section_Utility_Blocks_Section">
+<Heading>Utility Blocks Section</Heading>
+
+<P/>
+Text before inserting the stored chunk.
+<#Include Label="StoredChunk">
+
+<P/>
+Text before inserting the stored code.
+<#Include Label="StoredCode">
+
+<P/>
+<Alt Only="LaTeX"><![CDATA[
+\textbf{Latex-only inline text.}
+]]></Alt>
+<Alt Only="LaTeX"><![CDATA[
+\emph{Latex-only block text.}
+]]></Alt>
+<P/>
+<Alt Not="LaTeX"><![CDATA[
+HTML-and-text inline output.
+]]></Alt>
+<Alt Not="LaTeX"><![CDATA[
+HTML-and-text block output.
+]]></Alt>
+<P/>
+<Subsection Label="Chapter_Blocks_Chapter_Section_Utility_Blocks_Section_Subsection_Stop_Here">
+<Heading>Stop Here</Heading>
+
+This text should appear before the parser stops.
+</Subsection>
+
+
+</Section>
+
+
+</Chapter>
+

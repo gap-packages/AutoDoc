@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_Blocks_Chapter">
+<Heading>Blocks Chapter</Heading>
+
+<Section Label="Chapter_Blocks_Chapter_Section_Primary_Blocks_Section">
+<Heading>Primary Blocks Section</Heading>
+
+ Intro text for the block-oriented worksheet.
+<ManSection Label="block-group">
+<Heading>Block Group Title</Heading>
+  <Oper Arg="obj[, flag]: eager := true" Name="GroupedBlockOperation" Label="grouped-operation-label"/>
+  <Attr Arg="arg" Name="GroupedBlockAttribute" Label="for IsObject"/>
+  <Prop Arg="obj" Name="LateJoinedBlockProperty" Label="for IsObject"/>
+ <Returns>an object
+</Returns>
+ <Description>
+ First grouped operation description.
+ Second grouped declaration stays in the implicit group.
+ This property joins the earlier group explicitly.
+ </Description>
+</ManSection>
+
+
+</Section>
+
+
+<Section Label="Chapter_Blocks_Chapter_Section_Injected_Section">
+<Heading>Injected Section</Heading>
+
+ This section exists so @ChapterInfo has a concrete destination.
+<ManSection>
+  <Attr Arg="source" Name="RedirectedBlockAttribute" Label="for IsObject"/>
+ <Returns>a record
+</Returns>
+ <Description>
+ This attribute is redirected into the injected section.
+ </Description>
+</ManSection>
+
+
+</Section>
+
+
+<Section Label="Chapter_Blocks_Chapter_Section_Utility_Blocks_Section">
+<Heading>Utility Blocks Section</Heading>
+
+ Text before inserting the stored chunk.
+<#Include Label="StoredChunk">
+
+ Text before inserting the stored code.
+<#Include Label="StoredCode">
+
+<Alt Only="LaTeX"><![CDATA[
+\textbf{Latex-only inline text.}
+]]></Alt>
+<Alt Only="LaTeX"><![CDATA[
+ \emph{Latex-only block text.}
+]]></Alt>
+<Alt Not="LaTeX"><![CDATA[
+HTML-and-text inline output.
+]]></Alt>
+<Alt Not="LaTeX"><![CDATA[
+ HTML-and-text block output.
+]]></Alt>
+<Subsection Label="Chapter_Blocks_Chapter_Section_Utility_Blocks_Section_Subsection_Stop_Here">
+<Heading>Stop Here</Heading>
+
+ This text should appear before the parser stops.
+</Subsection>
+
+
+</Section>
+
+
+</Chapter>
+

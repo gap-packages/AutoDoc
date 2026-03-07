@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<TitlePage>
+  <Title>
+    Paired Titlepage Test
+  </Title>
+  <Subtitle>
+    Comment mode title coverage
+  </Subtitle>
+  <Version>
+    2.0
+  </Version>
+  <TitleComment>
+    Internal worksheet fixture
+  </TitleComment>
+  <Author>
+    Ada Example
+  </Author>
+  <Date>
+    7 March 2026
+  </Date>
+  <Address>
+    Example Street 7
+  </Address>
+  <Abstract>
+    This worksheet exercises title-page commands in comment mode.
+  </Abstract>
+  <Copyright>
+    2026 Example Authors
+  </Copyright>
+  <Acknowledgements>
+    Thanks to the worksheet harness.
+  </Acknowledgements>
+  <Colophon>
+    Generated for AutoDoc regression coverage.
+  </Colophon>
+  </TitlePage>

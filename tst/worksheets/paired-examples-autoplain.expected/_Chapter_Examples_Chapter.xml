@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_Examples_Chapter">
+<Heading>Examples Chapter</Heading>
+
+<Section Label="Chapter_Examples_Chapter_Section_Examples_Section">
+<Heading>Examples Section</Heading>
+
+This worksheet exercises example and log commands in plain-text mode.
+<P/>
+<Subsection Label="Chapter_Examples_Chapter_Section_Examples_Section_Subsection_Tested_examples">
+<Heading>Tested examples</Heading>
+
+<Example><![CDATA[
+gap> plain_example_value := 2 + 3;
+5
+]]></Example>
+
+
+<P/>
+<Example><![CDATA[
+gap> plain_alias_example := 3 + 4;
+7
+]]></Example>
+
+
+<P/>
+<Example><![CDATA[
+gap> 10 - 3;
+7
+]]></Example>
+
+
+<P/>
+<Example><![CDATA[
+gap> 6 * 7;
+42
+]]></Example>
+
+
+<P/>
+</Subsection>
+
+
+<Subsection Label="Chapter_Examples_Chapter_Section_Examples_Section_Subsection_Untested_logs">
+<Heading>Untested logs</Heading>
+
+<Log><![CDATA[
+gap> plain_log_value := 9;
+9
+]]></Log>
+
+
+<P/>
+<Log><![CDATA[
+gap> plain_alias_log := 11;
+11
+]]></Log>
+
+
+<P/>
+<Log><![CDATA[
+gap> "plain log session";
+"plain log session"
+]]></Log>
+
+
+<P/>
+<Log><![CDATA[
+gap> "plain alias log session";
+"plain alias log session"
+]]></Log>
+
+
+</Subsection>
+
+
+</Section>
+
+
+</Chapter>
+
