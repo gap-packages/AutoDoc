@@ -30,6 +30,13 @@ plain_mode_value := 6 *
 #! 54
 @EndExample
 A plain-text line mentioning @Section InlineMention should stay plain text.
+And an unfenced .autodoc line beginning with #! should stay literal:
+#! PlainAutodocLiteral
+And fenced listings in .autodoc files should also keep would-be comments literal:
+```@listing
+@Section PlainTextFenceLiteral
+#! PlainFenceLiteral
+```
 Also, markdown-like inline `true` should become a keyword tag.
 And XML comments should pass through verbatim:
 <!--

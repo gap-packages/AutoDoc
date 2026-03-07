@@ -87,26 +87,24 @@ fail
 #
 # Scan_for_AutoDoc_Part: robust command splitting
 #
-gap> Scan_for_AutoDoc_Part( "plain text @Section   Intro", true );
+gap> Scan_for_AutoDoc_Part( "plain text @Section   Intro" );
 [ "STRING", "plain text @Section   Intro" ]
-gap> Scan_for_AutoDoc_Part( "   @Chapter   My Chapter", true );
+gap> Scan_for_AutoDoc_Part( "   @Chapter   My Chapter" );
 [ "@Chapter", "My Chapter" ]
-gap> Scan_for_AutoDoc_Part( "   @Section   My Section", true );
+gap> Scan_for_AutoDoc_Part( "   @Section   My Section" );
 [ "@Section", "My Section" ]
-gap> Scan_for_AutoDoc_Part( "   @Subsection   My Subsection", true );
+gap> Scan_for_AutoDoc_Part( "   @Subsection   My Subsection" );
 [ "@Subsection", "My Subsection" ]
-gap> Scan_for_AutoDoc_Part( "   @NoArg", true );
+gap> Scan_for_AutoDoc_Part( "   @NoArg" );
 [ "@NoArg", "" ]
-gap> Scan_for_AutoDoc_Part( "no command here", true );
+gap> Scan_for_AutoDoc_Part( "no command here" );
 [ "STRING", "no command here" ]
-gap> Scan_for_AutoDoc_Part( "# Heading chapter", true );
+gap> Scan_for_AutoDoc_Part( "# Heading chapter" );
 [ "@Chapter", "Heading chapter" ]
-gap> Scan_for_AutoDoc_Part( "## Heading section", true );
+gap> Scan_for_AutoDoc_Part( "## Heading section" );
 [ "@Section", "Heading section" ]
-gap> Scan_for_AutoDoc_Part( "### Heading subsection", true );
+gap> Scan_for_AutoDoc_Part( "### Heading subsection" );
 [ "@Subsection", "Heading subsection" ]
-gap> Scan_for_AutoDoc_Part( "  #! ## Comment section", false );
-[ "@Section", "Comment section" ]
 
 #
 # AutoDoc_Parser_ReadFiles: multiline InstallMethod parsing
