@@ -35,7 +35,7 @@ gap> ChangeDirectoryCurrent(tempdir);
 true
 
 # regenerate the manual using AutoDoc
-gap> Read("makedoc.g");
+gap> Read("makedoc.g" : nopdf);
 
 # restore info levels and current directory
 gap> SetInfoLevel( InfoGAPDoc, oldGAPDocLevel );

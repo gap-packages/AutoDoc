@@ -30,7 +30,7 @@ AUTODOC_RegenWorkSheetExpected := function(wsdir, ws)
 
     old := InfoLevel(InfoGAPDoc);
     SetInfoLevel(InfoGAPDoc, 0);
-    AutoDocWorksheet(filenames, rec(dir := expecteddir, extract_examples := true));
+    AutoDocWorksheet(filenames, rec(dir := expecteddir, extract_examples := true) : nopdf);
     SetInfoLevel(InfoGAPDoc, old);
 
     # Keep only deterministic reference outputs.
@@ -102,7 +102,7 @@ AUTODOC_RegenManualExpected := function()
     SetInfoLevel(InfoGAPDoc, 0);
     SetInfoLevel(InfoWarning, 0);
     ChangeDirectoryCurrent(tempdir);
-    Read("makedoc.g");
+    Read("makedoc.g" : nopdf);
     ChangeDirectoryCurrent(olddir);
     SetInfoLevel(InfoGAPDoc, old_gapdoc_level);
     SetInfoLevel(InfoWarning, old_warning_level);

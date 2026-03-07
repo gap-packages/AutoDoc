@@ -580,7 +580,7 @@ function( arg )
         fi;
 
         # don't build PDF docs if the environment variable NOPDF is set
-        if IsBound( GAPInfo.SystemEnvironment.NOPDF ) then
+        if IsBound( GAPInfo.SystemEnvironment.NOPDF ) or ValueOption( "nopdf" ) = true then
             Add( args, "nopdf" );
         fi;
 
