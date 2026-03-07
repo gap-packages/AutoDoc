@@ -507,7 +507,7 @@ end );
 ##
 InstallMethod( WriteDocumentation, [ IsList, IsStream, IsInt ],
   function( node_list, filestream, level_value )
-    local current_string_list, i, last_position;
+    local current_string_list, i, last_position, in_cdata, line;
 
     i := 1;
     current_string_list := [ ];
@@ -517,7 +517,20 @@ InstallMethod( WriteDocumentation, [ IsList, IsStream, IsInt ],
         else
             if current_string_list <> [ ] then
                 current_string_list := CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML( current_string_list );
-                Perform( current_string_list, function( i ) WriteDocumentation( i, filestream, level_value ); end );
+                in_cdata := false;
+                for line in current_string_list do
+                    if PositionSublist( line, "<![CDATA[" ) <> fail then
+                        in_cdata := true;
+                    fi;
+                    if in_cdata = true then
+                        AppendTo( filestream, Chomp( line ), "\n" );
+                    else
+                        WriteDocumentation( line, filestream, level_value );
+                    fi;
+                    if PositionSublist( line, "]]>" ) <> fail then
+                        in_cdata := false;
+                    fi;
+                od;
                 current_string_list := [ ];
             fi;
             WriteDocumentation( node_list[ i ], filestream, level_value );
@@ -526,7 +539,20 @@ InstallMethod( WriteDocumentation, [ IsList, IsStream, IsInt ],
     od;
     if current_string_list <> [ ] then
         current_string_list := CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML( current_string_list );
-        Perform( current_string_list, function( i ) WriteDocumentation( i, filestream, level_value ); end );
+        in_cdata := false;
+        for line in current_string_list do
+            if PositionSublist( line, "<![CDATA[" ) <> fail then
+                in_cdata := true;
+            fi;
+            if in_cdata = true then
+                AppendTo( filestream, Chomp( line ), "\n" );
+            else
+                WriteDocumentation( line, filestream, level_value );
+            fi;
+            if PositionSublist( line, "]]>" ) <> fail then
+                in_cdata := false;
+            fi;
+        od;
     fi;
 end );
 

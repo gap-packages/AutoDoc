@@ -312,10 +312,10 @@ Ends the current group.
 #!
 DeclareAttribute( "GroupedAttribute",
                   IsList );
-<P/>
+
 DeclareOperation( "NonGroupedOperation",
                   [ IsObject ] );
-<P/>
+
 #!
 DeclareOperation( "GroupedOperation",
                   [ IsList, IsRubbish ] );
@@ -453,9 +453,9 @@ unfinished or temporary files.
 <P/>
 <Listing><![CDATA[
 #! This will appear in the manual
-<P/>
+
 #! @DoNotReadRestOfFile
-<P/>
+
 #! This will not appear in the manual.
 ]]></Listing>
 <P/>
@@ -480,7 +480,7 @@ If you do not provide an <C>@EndChunk</C>, the chunk ends at the end of the file
 #! @BeginChunk MyChunk
 #! Hello, world.
 #! @EndChunk
-<P/>
+
 #! @InsertChunk MyChunk
 ## The text "Hello, world." is inserted right before this.
 ]]></Listing>
@@ -521,7 +521,7 @@ directly into the manual.
 #! @BeginCode Increment
 i := i + 1;
 #! @EndCode
-<P/>
+
 #! @InsertCode Increment
 ## Code is inserted here.
 ]]></Listing>
@@ -542,7 +542,7 @@ in the PDF version of the manual or worksheet. It can hold arbitrary &LaTeX;-com
 #! @BeginLatexOnly
 #! \include{picture.tex}
 #! @EndLatexOnly
-<P/>
+
 #! @LatexOnly \include{picture.tex}
 ]]></Listing>
 <P/>
@@ -562,7 +562,7 @@ in the HTML and text versions of the manual or worksheet, but not in the PDF ver
 #! @BeginNotLatex
 #! For further information see the PDF version of this manual.
 #! @EndNotLatex
-<P/>
+
 #! @NotLatex For further information see the PDF version of this manual.
 ]]></Listing>
 <P/>
@@ -678,19 +678,19 @@ The following code
 <Listing><![CDATA[
 #! @BeginGroup Group1
 #! @GroupTitle A family of operations
-<P/>
+
 #! @Description
 #!  First sentence.
 DeclareOperation( "FirstOperation", [ IsInt ] );
-<P/>
+
 #! @Description
 #!  Second sentence.
 DeclareOperation( "SecondOperation", [ IsInt, IsGroup ] );
-<P/>
+
 #! @EndGroup
-<P/>
+
 ## .. Stuff ..
-<P/>
+
 #! @Description
 #!  Third sentence.
 #! @Group Group1

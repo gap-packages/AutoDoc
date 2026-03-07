@@ -175,6 +175,51 @@ gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
 >   "]]></Log>"
 > ];
 true
+gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
+>   "```@listing",
+>   "#! @BeginCode Increment",
+>   "i := i + 1;",
+>   "#! @EndCode",
+>   "",
+>   "#! @InsertCode Increment",
+>   "## Code is inserted here.",
+>   "```"
+> ]) = [
+>   "<Listing><![CDATA[",
+>   "#! @BeginCode Increment",
+>   "i := i + 1;",
+>   "#! @EndCode",
+>   "",
+>   "#! @InsertCode Increment",
+>   "## Code is inserted here.",
+>   "]]></Listing>"
+> ];
+true
+gap> rendered := "";;
+gap> stream := OutputTextString(rendered, true);;
+gap> SetPrintFormattingStatus(stream, false);
+gap> WriteDocumentation([
+>   "```@listing",
+>   "#! @BeginCode Increment",
+>   "i := i + 1;",
+>   "#! @EndCode",
+>   "",
+>   "#! @InsertCode Increment",
+>   "## Code is inserted here.",
+>   "```"
+> ], stream, 0);
+gap> CloseStream(stream);
+gap> rendered = Concatenation(
+>   "<Listing><![CDATA[\n",
+>   "#! @BeginCode Increment\n",
+>   "i := i + 1;\n",
+>   "#! @EndCode\n",
+>   "\n",
+>   "#! @InsertCode Increment\n",
+>   "## Code is inserted here.\n",
+>   "]]></Listing>\n"
+> );
+true
 
 #
 # warn about defined-but-never-inserted chunks
