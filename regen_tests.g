@@ -4,6 +4,7 @@ fi;
 LoadPackage("io", false);
 
 SetInfoLevel(InfoAutoDoc, 1);
+SetInfoLevel(InfoGAPDoc, 0);
 
 AUTODOC_RegenWorkSheetExpected := function(wsdir, ws)
     local sheetdir, expecteddir, filenames, old, f, tstfiles, x;
@@ -152,4 +153,6 @@ end;
 
 AUTODOC_RegenAllWorkSheetExpected();
 AUTODOC_RegenManualExpected();
+TestDirectory( DirectoriesPackageLibrary("AutoDoc", "tst"), rec(rewriteToFile := true ) );
+
 QUIT_GAP(0);
