@@ -63,8 +63,8 @@ BindGlobal( "AUTODOC_SplitCommandAndArgument",
     if heading <> fail then
         return heading;
     fi;
-    command_start := PositionSublist( line, "@" );
-    if command_start = fail then
+    command_start := PositionProperty( line, c -> not c in " \t\r\n" );
+    if command_start = fail or line[ command_start ] <> '@' then
         return [ "STRING", line ];
     fi;
     argument_start := command_start + 1;
@@ -86,32 +86,23 @@ end );
 
 ##
 InstallGlobalFunction( Scan_for_AutoDoc_Part,
-  function( line, plain_text_mode )
-    local position, trimmed, heading;
-    position := AUTODOC_PositionPrefixShebang( line );
-    if position = fail and plain_text_mode = false then
-        return [ false, line ];
+  function( line )
+    local trimmed, heading;
+    trimmed := StripBeginEnd( line, " \t\r\n" );
+    if trimmed = "" then
+        return [ "STRING", line ];
     fi;
-    if plain_text_mode = true then
-        trimmed := StripBeginEnd( line, " \t\r\n" );
-        if trimmed = "" then
+    if trimmed[ 1 ] = '#' then
+        heading := AUTODOC_SplitMarkdownHeading( trimmed );
+        if heading = fail then
             return [ "STRING", line ];
         fi;
-        if trimmed[ 1 ] = '#' then
-            heading := AUTODOC_SplitMarkdownHeading( trimmed );
-            if heading = fail then
-                return [ "STRING", line ];
-            fi;
-            return heading;
-        fi;
-        if trimmed[ 1 ] <> '@' then
-            return [ "STRING", line ];
-        fi;
-        line := trimmed;
-    else
-        line := StripBeginEnd( line{[ position + 2 .. Length( line ) ]}, " " );
+        return heading;
     fi;
-    return AUTODOC_SplitCommandAndArgument( line );
+    if trimmed[ 1 ] <> '@' then
+        return [ "STRING", line ];
+    fi;
+    return AUTODOC_SplitCommandAndArgument( trimmed );
  end );
 
 ## Scans a string for <element> after <element_not_before_element> appeared.
@@ -227,11 +218,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           level_scope, scope_group, read_example, command_function_record, autodoc_read_line,
           current_command, filename, groupnumber, rest_of_file_skipped,
           context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,
-          current_line_unedited,
+          current_line_unedited, current_line_info, NormalizeInputLine,
           ReadLineWithLineCount, Normalized_ReadLine, line_number, ErrorWithPos, create_title_item_function,
           current_line_positition_for_filter, read_session_example, DeclarationDelimiterPosition,
           ReadInstallMethodFilterString, ReadInstallMethodArguments,
-          markdown_fence, preserve_shebang_in_fenced_code,
+          markdown_fence,
           AUTODOC_MarkdownFenceFromLine, AUTODOC_IsMatchingMarkdownFence,
           current_line_fence, current_line_is_fence_delimiter,
           xml_comment_mode, comment_start_pos;
@@ -260,20 +251,39 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         list := Concatenation(arg, [ ",\n", "at ", filename, ":", line_number]);
         CallFuncList(Error, list);
     end;
-    AUTODOC_MarkdownFenceFromLine := function( line )
-        local comment_pos, trimmed_line, fence_char, fence_length;
+    NormalizeInputLine := function( raw_line )
+        local text, comment_pos;
         if plain_text_mode then
-            trimmed_line := StripBeginEnd( Chomp( line ), " \t\r\n" );
-        else
-            comment_pos := AUTODOC_PositionPrefixShebang( line );
-            if comment_pos = fail then
-                return fail;
-            fi;
-            trimmed_line := StripBeginEnd(
-                Chomp( line{ [ comment_pos + 2 .. Length( line ) ] } ),
-                " \t\r\n"
+            text := raw_line;
+            return rec(
+                raw_text := raw_line,
+                text := text,
+                is_autodoc := true,
+                allows_declaration_scan := false
             );
         fi;
+
+        comment_pos := AUTODOC_PositionPrefixShebang( raw_line );
+        if comment_pos = fail then
+            return rec(
+                raw_text := raw_line,
+                text := raw_line,
+                is_autodoc := false,
+                allows_declaration_scan := false
+            );
+        fi;
+
+        text := raw_line{ [ comment_pos + 2 .. Length( raw_line ) ] };
+        return rec(
+            raw_text := raw_line,
+            text := text,
+            is_autodoc := true,
+            allows_declaration_scan := true
+        );
+    end;
+    AUTODOC_MarkdownFenceFromLine := function( line )
+        local trimmed_line, fence_char, fence_length;
+        trimmed_line := StripBeginEnd( Chomp( line ), " \t\r\n" );
         if Length( trimmed_line ) < 3 or
            not ( trimmed_line[ 1 ] in "`~" ) or
            not ForAll( trimmed_line{ [ 1 .. 3 ] }, c -> c = trimmed_line[ 1 ] ) then
@@ -581,21 +591,18 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         return false;
     end;
     read_code := function( )
-        local code, temp_curr_line, comment_pos, before_comment;
+        local code, temp_curr_line, temp_line_info, temp_command;
         code := [ "<Listing Type=\"Code\"><![CDATA[\n" ];
         while true do
             temp_curr_line := ReadLineWithLineCount( filestream );
-            if plain_text_mode = false then
-                comment_pos := AUTODOC_PositionPrefixShebang( temp_curr_line );
-                if comment_pos <> fail then
-                    before_comment := NormalizedWhitespace( temp_curr_line{ [ 1 .. comment_pos - 1 ] } );
-                    if before_comment = "" then
-                        temp_curr_line := temp_curr_line{[ comment_pos + 2 .. Length( temp_curr_line ) ]};
-                    fi;
+            temp_line_info := NormalizeInputLine( temp_curr_line );
+            if temp_line_info.is_autodoc then
+                temp_command := Scan_for_AutoDoc_Part( temp_line_info.text );
+                if temp_command[ 1 ] = "@EndCode" then
+                    break;
                 fi;
-            fi;
-            if PositionSublist( temp_curr_line, "@EndCode" ) <> fail then
-                break;
+                Add( code, temp_line_info.text );
+                continue;
             fi;
             Add( code, temp_curr_line );
         od;
@@ -964,15 +971,10 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @Log := ~.@BeginLog,
 
         STRING := function()
-            local comment_pos;
             if not IsBound( current_item ) then
                 return;
             fi;
-            comment_pos := AUTODOC_PositionPrefixShebang( current_line_unedited );
-            if comment_pos <> fail and not preserve_shebang_in_fenced_code then
-                current_line_unedited := current_line_unedited{[ comment_pos + 2 .. Length( current_line_unedited ) ]};
-            fi;
-            Add( current_item, current_line_unedited );
+            Add( current_item, current_command[ 2 ] );
         end,
         @BeginLatexOnly := function()
             Add( current_item, "<Alt Only=\"LaTeX\"><![CDATA[" );
@@ -1075,11 +1077,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 break;
             fi;
             current_line_unedited := ShallowCopy( current_line );
+            current_line_info := NormalizeInputLine( current_line_unedited );
             NormalizeWhitespace( current_line );
 
             if plain_text_mode then
                 if xml_comment_mode then
-                    current_command := [ "STRING", current_line ];
+                    current_command := [ "STRING", current_line_unedited ];
                     if PositionSublist( current_line_unedited, "-->" ) <> fail then
                         xml_comment_mode := false;
                     fi;
@@ -1088,7 +1091,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 fi;
                 comment_start_pos := PositionSublist( current_line_unedited, "<!--" );
                 if comment_start_pos <> fail then
-                    current_command := [ "STRING", current_line ];
+                    current_command := [ "STRING", current_line_unedited ];
                     if PositionSublist(
                            current_line_unedited{ [ comment_start_pos + 4 .. Length( current_line_unedited ) ] },
                            "-->"
@@ -1100,7 +1103,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 fi;
             fi;
 
-            current_line_fence := AUTODOC_MarkdownFenceFromLine( current_line_unedited );
+            if current_line_info.is_autodoc then
+                current_line_fence := AUTODOC_MarkdownFenceFromLine( current_line_info.text );
+                current_command := Scan_for_AutoDoc_Part( current_line_info.text );
+            else
+                current_line_fence := fail;
+                current_command := [ false, current_line ];
+            fi;
             current_line_is_fence_delimiter := false;
             if current_line_fence <> fail then
                 if markdown_fence = fail then
@@ -1110,18 +1119,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                         AUTODOC_IsMatchingMarkdownFence( markdown_fence, current_line_fence );
                 fi;
             fi;
-            preserve_shebang_in_fenced_code :=
-                markdown_fence <> fail and
-                AUTODOC_PositionPrefixShebang( current_line_unedited ) <> fail and
-                not current_line_is_fence_delimiter;
-            current_command := Scan_for_AutoDoc_Part( current_line, plain_text_mode );
             if current_line_is_fence_delimiter then
-                current_command[ 1 ] := "STRING";
+                current_command := [ "STRING", current_line_info.text ];
             elif markdown_fence <> fail and current_command[ 1 ] <> false then
-                current_command[ 1 ] := "STRING";
+                current_command := [ "STRING", current_line_info.text ];
             fi;
             if current_command[ 1 ] <> false then
-                autodoc_read_line := true;
+                autodoc_read_line := current_line_info.allows_declaration_scan;
                 if not IsBound( command_function_record.(current_command[ 1 ]) ) then
                     ErrorWithPos("unknown AutoDoc command ", current_command[ 1 ]);
                 fi;

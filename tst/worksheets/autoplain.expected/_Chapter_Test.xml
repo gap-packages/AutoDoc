@@ -25,6 +25,7 @@ Some text between two examples
 <Index Key="WorksheetAutoplainKeyOnly"></Index>
 <Index Key="A&amp;B">ampersand key</Index>
 <Index Key="A&lt;B">less-than key</Index>
+<Index Key="Indented Autoplain">indented command parsing works</Index>
 <Example><![CDATA[
 gap> A5 := AlternatingGroup(5);
 Alt( [ 1 .. 5 ] )
@@ -40,6 +41,14 @@ gap> plain_mode_value := 6 *
 ]]></Example>
 
 
+A plain-text line mentioning @Section InlineMention should stay plain text.
+And an unfenced .autodoc line beginning with #! should stay literal:
+#! PlainAutodocLiteral
+And fenced listings in .autodoc files should also keep would-be comments literal:
+<Listing><![CDATA[
+@Section PlainTextFenceLiteral
+#! PlainFenceLiteral
+]]></Listing>
 Also, markdown-like inline <Keyword>true</Keyword> should become a keyword tag.
 And XML comments should pass through verbatim:
 <!--

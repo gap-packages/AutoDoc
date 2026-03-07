@@ -20,7 +20,7 @@ Print( "(Even though we never use it that way.\n" );
 #! @Index "Worksheet General" General worksheet index entry with `true`
 #! @Index WorksheetGeneralKeyOnly
 #! @Index A>B greater-than key
-#! @Index A"B quote key
+#!	@Index A"B quote key
 #! @BeginExampleSession
 #! gap> A5 := AlternatingGroup(5);
 #! Alt( [ 1 .. 5 ] )
@@ -67,7 +67,7 @@ DeclareCategoryCollections("MyThingsCollection");
 #! * This is `true` in a list item.
 #!
 #! All of this can **also** be __used__ outside of a `list`.
-#! And fenced listings should preserve literal shebang-prefixed lines:
+#! And fenced listings should keep would-be commands literal:
 #! ```@listing
 #! @Section ThisMustStayLiteral
 #! #! AlsoLiteral
