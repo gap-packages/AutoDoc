@@ -1,0 +1,16 @@
+<#GAPDoc Label="StoredChunk">
+ Chunk line one.
+ Chunk line two with <Code>inline code</Code>.
+
+<#/GAPDoc>
+<#GAPDoc Label="StoredCode">
+<Listing Type="Code"><![CDATA[
+block_value := 11;
+
+if block_value > 10 then
+  Print("block code reached\n");
+fi;
+]]></Listing>
+
+
+<#/GAPDoc>

@@ -1,0 +1,20 @@
+#! @Title Paired Structure Test
+#! @Subtitle Comment mode structure coverage
+#! @Version 1.2
+#! @Date 2026-03-07
+
+#! @Chapter Structure Chapter
+#! @ChapterLabel structure-chapter
+#! @ChapterTitle Structure Chapter Title
+#! This chapter text uses **bold**, __emphasis__, and `inline code`.
+#! @Index "Paired structure chapter" Chapter index entry with `true`
+
+#! @Section Structure Section
+#! @SectionLabel structure-section
+#! @SectionTitle Structure Section Title
+#! Section text mentions * plain prose and `keywords`.
+
+#! @Subsection Structure Subsection
+#! @SubsectionLabel structure-subsection
+#! @SubsectionTitle Structure Subsection Title
+#! Subsection text keeps the paired worksheet content aligned.
