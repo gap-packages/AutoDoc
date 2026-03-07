@@ -22,6 +22,8 @@ you can adopt only the parts that help you today, and add more over time.
   <C>extract_examples := true</C>.
 - Document declarations directly in source files via &AutoDoc;
   comments beginning with <C>#!</C>.
+- Organize chapter and section text either in source comments or in
+  standalone <F>.autodoc</F> files.
 - Combine &AutoDoc; comments, classic &GAPDoc; source comments,
   and hand-written XML chapters in one manual.
 
@@ -35,6 +37,8 @@ Typical adoption paths include:
 - Keep your existing title page but use generated entities such as
   <C>&amp;VERSION;</C>, <C>&amp;RELEASEYEAR;</C>, and <C>&amp;RELEASEDATE;</C>.
 - Add &AutoDoc; comments only for new code, and leave old documentation as-is.
+- Keep existing XML chapters, or gradually add source comments and
+  <F>.autodoc</F> files where they fit your preferred workflow.
 - Later, gradually move chapters or source documentation to your preferred style.
 
 This flexibility is central: &AutoDoc; should make your current setup better,
@@ -45,4 +49,4 @@ without forcing a full rewrite first.
 
 For practical setup and migration workflows, continue with chapter
 <Ref Chap="Chapter_Tutorials"/>. For the command reference of documentation comments,
-see chapter <Ref Chap="Chapter_Comments"/>.
+including standalone <F>.autodoc</F> files, see chapter <Ref Chap="Chapter_Comments"/>.

@@ -116,6 +116,14 @@ Section <Ref Sect="Subsection_Tut:IntegrateExisting:EverythingThere"/>.
 <Heading>Documenting code with &AutoDoc;</Heading>
 
 <P/>
+&AutoDoc; supports several equally supported ways to organize your manual text.
+You can put chapter and section material directly into <C>#!</C> comments inside
+<F>.g</F>, <F>.gd</F>, or <F>.gi</F> files, you can put it into standalone
+<F>.autodoc</F> files, and you can mix either style with existing &GAPDoc; XML.
+Which arrangement is best is mostly a matter of taste and convenience.
+The detailed command reference for these styles is in chapter
+<Ref Chap="Chapter_Comments"/>, especially Section <Ref Sect="Section_PlainText"/>.
+<P/>
 To get one of your global functions, operations, attributes
 etc. to appear in the package manual, simply insert an &AutoDoc; comment
 of the form <C>#!</C> directly in front of it. For example:
@@ -146,6 +154,21 @@ In these comment lines, you can freely use normal &GAPDoc; XML markup
 interpreted as &AutoDoc; commands). So, for instance, tags like
 <C>&lt;Ref&gt;</C>, <C>&lt;A&gt;</C>, <C>&lt;K&gt;</C>, <C>&lt;List&gt;</C>, etc. can be written
 directly in <C>#!</C> comment text.
+<P/>
+For chapter text, tutorial material, worked examples, and similar prose, some
+authors prefer to keep the material next to their code using
+<C>#! @Chapter</C>, <C>#! @Section</C>, and related commands, while others prefer
+standalone <F>.autodoc</F> files. In an <F>.autodoc</F> file you write the same
+commands without the <C>#!</C> prefix, and you list the file in
+<C>autodoc.files</C> or place it in a directory scanned via
+<C>autodoc.scan_dirs</C>. AutoDoc itself still uses the source-comment style in
+places, for example in <F>gap/Magic.gd</F>.
+<P/>
+One caveat applies if you decide to keep prose in a standalone
+<F>.autodoc</F> file but want to interrupt it with the documentation of a
+declaration that is written in source comments. Today that requires the chunk
+mechanism, and that workflow is currently limited; see issue <C>#60</C> in the
+AutoDoc issue tracker.
 <P/>
 For a thorough description of what you can do with &AutoDoc;
 documentation comments, please refer to chapter <Ref Chap="Chapter_Comments"/>.
@@ -187,13 +210,13 @@ AutoDoc( rec( scaffold := true,
 <P/>
 If you are not using the scaffolding feature, e.g. because you already
 have an existing &GAPDoc; based manual, then you can still use &AutoDoc;
-documentation comments. Just make sure to first edit the main XML
+documentation comments and standalone <F>.autodoc</F> files. Just make sure to first edit the main XML
 file of your documentation, and insert the line
 <Listing><![CDATA[
 &lt;#Include SYSTEM "_AutoDocMainFile.xml">
 ]]></Listing>
 in a suitable place. This means that you can mix &AutoDoc; documentation
-comments freely with your existing documentation; you can even still make
+comments and <F>.autodoc</F> files freely with your existing documentation; you can even still make
 use of any existing &GAPDoc; documentation comments in your code.
 <P/>
 The following command should be useful for you in this case; it
