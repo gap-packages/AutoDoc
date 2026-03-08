@@ -218,6 +218,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           scope_group, read_example, command_function_record, autodoc_read_line,
           current_command, filename, groupnumber, rest_of_file_skipped,
           context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,
+          single_line_title_item_list, active_title_item_name, active_title_item_is_multiline,
           current_line_unedited, current_line_info, NormalizeInputLine,
           ReadLineWithLineCount, Normalized_ReadLine, line_number, ErrorWithPos, create_title_item_function,
           current_line_positition_for_filter, read_session_example, DeclarationDelimiterPosition,
@@ -231,6 +232,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     context_stack := [ ];
     chapter_info := [ ];
     line_number := 0;
+    active_title_item_name := fail;
+    active_title_item_is_multiline := false;
 
     ReadLineWithLineCount := function( stream )
         line_number := line_number + 1;
@@ -964,6 +967,10 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             if not IsBound( current_item ) then
                 return;
             fi;
+            if active_title_item_name <> fail and
+               active_title_item_is_multiline = false then
+                return;
+            fi;
             Add( current_item, current_command[ 2 ] );
         end,
         @BeginLatexOnly := function()
@@ -1022,13 +1029,17 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     ## information directly into the document.
     title_item_list := [ "Title", "Subtitle", "Version", "TitleComment", "Author",
                          "Date", "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon" ];
-    
+    single_line_title_item_list := [ "Title", "Subtitle", "Version", "Author", "Date" ];
+
     create_title_item_function := function( name )
         return function()
             if not IsBound( tree!.TitlePage.( name ) ) then
                 tree!.TitlePage.( name ) := [ ];
             fi;
             current_item := tree!.TitlePage.( name );
+            active_title_item_name := name;
+            active_title_item_is_multiline :=
+                Position( single_line_title_item_list, name ) = fail;
             Add( current_item, current_command[ 2 ] );
         end;
     end;
@@ -1116,6 +1127,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
             if current_command[ 1 ] <> false then
                 autodoc_read_line := current_line_info.allows_declaration_scan;
+                if Position( title_item_list, current_command[ 1 ]{ [ 2 .. Length( current_command[ 1 ] ) ] } ) = fail and
+                   current_command[ 1 ] <> "STRING" then
+                    active_title_item_name := fail;
+                    active_title_item_is_multiline := false;
+                fi;
                 if not IsBound( command_function_record.(current_command[ 1 ]) ) then
                     ErrorWithPos("unknown AutoDoc command ", current_command[ 1 ]);
                 fi;

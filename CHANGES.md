@@ -16,6 +16,10 @@ This file describes changes in the AutoDoc package.
     `<Keyword>...</Keyword>` for GAP keywords (as returned by
     `ALL_KEYWORDS()`), otherwise as before `<Code>...</Code>`
   - Allow XML-style comments in `.autodoc` files
+  - Ignore trailing blank lines after single-line worksheet title-page
+    commands such as `@Title`, `@Subtitle`, `@Version`, `@Author`, and
+    `@Date`, and trim trailing blank lines from generated title-page
+    content so they no longer leak into filenames or empty author entries
   - Greatly improve the package manual.
   - Convert the hand-written manual chapters from XML to `.autodoc`
   - Fix an unexpected and confusing error when mixing explicit
