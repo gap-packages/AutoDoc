@@ -224,7 +224,7 @@ end );
 InstallGlobalFunction( CreateTitlePage,
   function( dir, argument_rec )
     local indent, tag, names, filestream, entity_list, OutWithTag, Out, i,
-          parsed_date;
+          parsed_date, NormalizeTitlePageContent;
 
     filestream := AUTODOC_OutputTextFile( dir, "title.xml" );
     indent := 0;
@@ -255,19 +255,42 @@ InstallGlobalFunction( CreateTitlePage,
         AppendTo( filestream, s, "</", tag, ">\n" );
     end;
 
+    # Parser state can leave title-page fields as a list of lines. Normalize
+    # them here so trailing blank lines do not leak into output or filenames,
+    # while still preserving intentional internal line breaks for multiline fields.
+    NormalizeTitlePageContent := function( content )
+        local normalized;
+
+        if IsString( content ) then
+            content := [ content ];
+        fi;
+        normalized := List( content, line -> StripBeginEnd( line, "\n\r" ) );
+        while Length( normalized ) > 0 and
+              IsString( normalized[ Length( normalized ) ] ) and
+              StripBeginEnd( normalized[ Length( normalized ) ], " \t\r\n" ) = "" do
+            Remove( normalized );
+        od;
+        if Length( normalized ) = 1 then
+            return normalized[ 1 ];
+        fi;
+        return normalized;
+    end;
+
     Out( AUTODOC_XML_HEADER );
     Out( "<TitlePage>\n" );
     indent := indent + 1;
 
     for i in [ "Title", "Subtitle", "Version", "TitleComment" ] do
         if IsBound( argument_rec.( i ) ) then
-            OutWithTag( i, argument_rec.( i ) );
+            OutWithTag( i, NormalizeTitlePageContent( argument_rec.( i ) ) );
         fi;
     od;
 
     if IsBound( argument_rec.Author ) then
-        for i in argument_rec.Author do
-            OutWithTag( "Author", i );
+        for i in List( argument_rec.Author, NormalizeTitlePageContent ) do
+            if not IsString( i ) or StripBeginEnd( i, " \t\r\n" ) <> "" then
+                OutWithTag( "Author", i );
+            fi;
         od;
     fi;
 
@@ -282,12 +305,12 @@ InstallGlobalFunction( CreateTitlePage,
                 argument_rec.Date := AUTODOC_FormatDate( parsed_date );
             fi;
         fi;
-        OutWithTag( "Date", argument_rec.Date );
+        OutWithTag( "Date", NormalizeTitlePageContent( argument_rec.Date ) );
     fi;
 
     for i in [ "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon" ] do
         if IsBound( argument_rec.( i ) ) then
-            OutWithTag( i, StripBeginEnd( argument_rec.( i ), "\n\r" ) );
+            OutWithTag( i, NormalizeTitlePageContent( argument_rec.( i ) ) );
         fi;
     od;
 
