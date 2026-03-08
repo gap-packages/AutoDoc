@@ -42,6 +42,10 @@ jobs:
       - uses: gap-actions/run-pkg-tests@v4
         with:
           mode: onlyneeded
+      - name: Regenerate tracked test fixtures
+        run: |
+          gap -q --packagedirs . regen_tests.g
+          git diff --exit-code
       - uses: gap-actions/process-coverage@v3
       - uses: codecov/codecov-action@v5
         with:
