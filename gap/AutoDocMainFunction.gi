@@ -223,7 +223,8 @@ end );
 ## separately.
 InstallGlobalFunction( CreateTitlePage,
   function( dir, argument_rec )
-    local indent, tag, names, filestream, entity_list, OutWithTag, Out, i;
+    local indent, tag, names, filestream, entity_list, OutWithTag, Out, i,
+          parsed_date;
 
     filestream := AUTODOC_OutputTextFile( dir, "title.xml" );
     indent := 0;
@@ -271,11 +272,17 @@ InstallGlobalFunction( CreateTitlePage,
     fi;
 
     if IsBound( argument_rec.Date ) then
-        # try to parse the date in format DD/MM/YYYY (we also accept single
-        # digit day or month, which is formally not allowed in PackageInfo.g,
-        # but happens in a few legacy packages)
-        argument_rec.Date := Chomp( argument_rec.Date ); # remove trailing newlines, if present
-        OutWithTag( "Date", AUTODOC_FormatDate(argument_rec.Date) );
+        if IsString( argument_rec.Date ) then
+            argument_rec.Date := Chomp( argument_rec.Date ); # remove trailing newlines, if present
+
+            # PackageInfo.g dates are normalized, but @Date should also allow
+            # free-form text when the input is not one of the supported date formats.
+            parsed_date := AUTODOC_ParseDate( argument_rec.Date );
+            if parsed_date <> fail then
+                argument_rec.Date := AUTODOC_FormatDate( parsed_date );
+            fi;
+        fi;
+        OutWithTag( "Date", argument_rec.Date );
     fi;
 
     for i in [ "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon" ] do
