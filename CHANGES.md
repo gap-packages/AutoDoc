@@ -28,6 +28,10 @@ This file describes changes in the AutoDoc package.
     `@Command` does not start at column 1
   - Normalize parsed `InstallMethod` names by stripping surrounding
     quotes, matching `Declare...` handling
+  - Loosen requirements on `@Date` command: this used to allow free form,
+    but in recent versions was restricted to dates of the form YYYY-MM-DD
+    or DD/MM/YYYY; now we again allow any text, but text in those specific
+    formats is still parsed and formatted (e.g. 2026-03-08 as 8 March 2026)
   - Improve parser robustness by reporting clear EOF errors for
     unterminated declaration headers and filter lists
   - Make tests work when the package directory is read-only by writing
