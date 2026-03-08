@@ -7,7 +7,8 @@ SetInfoLevel(InfoAutoDoc, 1);
 SetInfoLevel(InfoGAPDoc, 0);
 
 AUTODOC_RegenWorkSheetExpected := function(wsdir, ws)
-    local sheetdir, expecteddir, filenames, old, f, tstfiles, x;
+    local sheetdir, expecteddir, tmpdir, actualdir, filenames, old, f,
+          tstfiles, x, actualtstdir, expectedtstdir;
 
     sheetdir := Filename(wsdir, Concatenation(ws, ".sheet"));
     if not IsString(sheetdir) or not IsDirectoryPath(sheetdir) then
@@ -22,6 +23,17 @@ AUTODOC_RegenWorkSheetExpected := function(wsdir, ws)
     AUTODOC_CreateDirIfMissing(expecteddir);
     expecteddir := Directory(expecteddir);
 
+    # Generate worksheet output outside the package tree so GAPDoc resolves
+    # _Chunks.xml relative to the output dir instead of re-prefixing the
+    # package-local path.
+    tmpdir := Filename(DirectoryTemporary(),
+        Concatenation("autodoc-regen-", ws, ".expected"));
+    if IsDirectoryPath(tmpdir) then
+        RemoveDirectoryRecursively(tmpdir);
+    fi;
+    AUTODOC_CreateDirIfMissing(tmpdir);
+    actualdir := Directory(tmpdir);
+
     filenames := DirectoryContents(sheetdir);
     filenames := Filtered(filenames, f -> f <> "." and f <> "..");
     filenames := Filtered(filenames,
@@ -31,27 +43,40 @@ AUTODOC_RegenWorkSheetExpected := function(wsdir, ws)
 
     old := InfoLevel(InfoGAPDoc);
     SetInfoLevel(InfoGAPDoc, 0);
-    AutoDocWorksheet(filenames, rec(dir := expecteddir, extract_examples := true) : nopdf);
+    AutoDocWorksheet(filenames,
+        rec(dir := actualdir, extract_examples := true) : nopdf);
     SetInfoLevel(InfoGAPDoc, old);
 
     # Keep only deterministic reference outputs.
-    filenames := DirectoryContents(expecteddir);
+    filenames := DirectoryContents(actualdir);
     filenames := Filtered(filenames, f -> f <> "." and f <> "..");
     for f in filenames do
         if f = "tst" then
-            tstfiles := DirectoryContents(Filename(expecteddir, "tst"));
+            AUTODOC_CreateDirIfMissing(Filename(expecteddir, "tst"));
+            actualtstdir := Directory(Filename(actualdir, "tst"));
+            expectedtstdir := Directory(Filename(expecteddir, "tst"));
+            tstfiles := DirectoryContents(actualtstdir);
             tstfiles := Filtered(tstfiles, x -> x <> "." and x <> "..");
             for x in tstfiles do
-                if PositionSublist(x, ".tst") <> Length(x) - 3 then
-                    RemoveFile(Filename(Filename(expecteddir, "tst"), x));
+                if PositionSublist(x, ".tst") = Length(x) - 3 then
+                    Exec(Concatenation(
+                        "cp \"", Filename(actualtstdir, x),
+                        "\" \"", Filename(expectedtstdir, x),
+                        "\""
+                    ));
                 fi;
             od;
             continue;
         fi;
-        if PositionSublist(f, ".xml") <> Length(f) - 3 then
-            RemoveFile(Filename(expecteddir, f));
+        if PositionSublist(f, ".xml") = Length(f) - 3 then
+            Exec(Concatenation(
+                "cp \"", Filename(actualdir, f),
+                "\" \"", Filename(expecteddir, f), "\""
+            ));
         fi;
     od;
+
+    RemoveDirectoryRecursively(tmpdir);
 end;
 
 AUTODOC_DetectedWorkSheets := function(wsdir)
