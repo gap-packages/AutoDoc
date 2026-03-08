@@ -8,7 +8,7 @@ Any use of AI tools for preparing code, documentation, tests, commit messages,
 pull requests, issue comments, or reviews for this repository must be
 disclosed. Include a brief note saying which AI tool was used and what kind of
 assistance it provided. Add the AI tool as a Git co-author on all commits
-created by that tool.
+created by that tool (e.g. via an `Co-authored-by: ` line).
 
 ## Repository layout
 
@@ -63,3 +63,10 @@ message body, not in the title.
 Pull requests should follow the same style: a short summary up top, concise
 prose describing the change, issue references when applicable, and an explicit
 AI-disclosure note if AI tools were used.
+
+
+## Changelog
+
+This project keeps a changelog in `CHANGES.md`. Typically new features and
+bug fixes should get a terse entry there. Changes which only refactor things,
+change formatting, clean up stuff etc. usually do not have to be mentioned.
