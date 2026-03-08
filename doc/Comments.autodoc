@@ -542,8 +542,99 @@ since worksheets do not have a <F>PackageInfo.g</F> file from which this informa
 Files that have the suffix <C>.autodoc</C> and are listed in the
 <C>autodoc.files</C> option of <Ref Func="AutoDoc"/>, resp. are contained in
 one of the directories listed in <C>autodoc.scan_dirs</C>, are treated as
-&AutoDoc; plain text files. These work exactly like &AutoDoc; comments, except
-that lines do not need to (and in fact, should not) start with <C>#!</C>.
+standalone &AutoDoc; input files. They are meant for manual text that does not
+belong next to a single declaration: chapters, sections, tutorials, worked
+examples, index entries, chunks, title-page metadata, and similar prose-heavy
+material.
+
+Conceptually, a <F>.autodoc</F> file uses the same parser as &AutoDoc;
+comments, but without the comment marker. In a <F>.autodoc</F> file, lines do
+not need to start with <C>#!</C> and in fact usually should not. This makes
+<F>.autodoc</F> files one convenient way to replace hand-written XML chapters
+when you prefer &AutoDoc;'s command syntax and Markdown-like text features.
+However, it is not the only supported style: chapter and section commands inside
+source comments remain fully supported, and &AutoDoc; itself still uses that
+style in files such as <F>gap/Magic.gd</F>. For the surrounding workflow, see
+Chapter <Ref Chap="Chapter_Tutorials"/>.
+
+The most important difference from declaration comments is that a plain text
+file does <E>not</E> document a declaration by adjacency. There is no following
+<C>Declare...</C> or <C>InstallMethod</C> statement for &AutoDoc; to inspect.
+So commands whose meaning depends on such a declaration only make sense in
+source comments immediately before that declaration.
+
+In practice, this gives the following rule of thumb.
+
+<List>
+  <Item>
+    Use source comments beginning with <C>#!</C> to document declarations.
+    This is the mode for <C>@Description</C>, <C>@Returns</C>,
+    <C>@Arguments</C>, <C>@Label</C>, <C>@Group</C>, and <C>@ChapterInfo</C>.
+  </Item>
+  <Item>
+    Use either <F>.autodoc</F> files or source comments for standalone manual
+    structure and prose. Commands such as <C>@Chapter</C>, <C>@Section</C>,
+    <C>@Subsection</C>, grouping commands, examples and logs, chunks and code
+    insertion, <C>@Index</C>, title-page commands, Markdown-style headings,
+    fenced code blocks, and ordinary &GAPDoc; XML markup work in both styles.
+  </Item>
+</List>
+
+As a concrete example, the following file can serve as a complete chapter
+written in <F>.autodoc</F> format.
+
+```@listing
+@Chapter Test
+@Section First Section
+@Subsection First Subsection
+
+This text belongs directly to the manual chapter.
+It can use XML tags such as <A>arg</A> or <C>&lt;Ref ...&gt;</C>.
+
+@BeginExampleSession
+gap> S5 := SymmetricGroup(5);
+Sym( [ 1 .. 5 ] )
+gap> Size(S5);
+120
+@EndExampleSession
+
+@Index "Worksheet Autoplain" Plain worksheet index entry with `true`
+```
+
+This is essentially the style used in the worksheet fixture
+<F>tst/worksheets/autoplain.sheet/plain.autodoc</F>.
+
+The same structural commands can also be used inside source comments, for
+example:
+
+```@listing
+#! @Chapter Reference
+#! @Section The AutoDoc() function
+#! Some introductory text for this section.
+```
+
+This source-comment style is still fully supported and is used in
+<F>gap/Magic.gd</F>.
+
+The mixed-workflow case is equally common. Suppose an existing manual still has
+a hand-written main XML file and perhaps some hand-written XML chapters. Then
+you can keep those files, include <F>_AutoDocMainFile.xml</F> from the main XML
+file as described in Chapter <Ref Chap="Chapter_Tutorials"/>, and add one or
+more <F>.autodoc</F> files via <C>autodoc.files</C> or <C>autodoc.scan_dirs</C>.
+Those files can provide tutorial chapters or appendices, while declaration
+documentation continues to live in source comments and older XML chapters remain
+unchanged.
+
+One caveat is worth keeping in mind. If you want a standalone
+<F>.autodoc</F> file to pause and resume around declaration documentation that
+is written in source comments, the current workaround is to use chunks. That
+interleaving workflow is currently limited; see issue <C>#60</C> in the
+AutoDoc issue tracker.
+
+So, while <F>.autodoc</F> files and source comments share most of the same text
+syntax, they can be combined freely. The main distinction is simply that
+declaration-bound commands attach metadata to a following declaration, while
+standalone manual text can live wherever you find it most convenient.
 
 @Section Grouping
 @SectionLabel Groups

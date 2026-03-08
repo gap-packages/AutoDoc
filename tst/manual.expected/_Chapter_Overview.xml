@@ -38,6 +38,10 @@ Document declarations directly in source files via &AutoDoc;
   comments beginning with <C>#!</C>.
 </Item>
 <Item>
+Organize chapter and section text either in source comments or in
+  standalone <F>.autodoc</F> files.
+</Item>
+<Item>
 Combine &AutoDoc; comments, classic &GAPDoc; source comments,
   and hand-written XML chapters in one manual.
 </Item>
@@ -67,6 +71,10 @@ Keep your existing title page but use generated entities such as
 Add &AutoDoc; comments only for new code, and leave old documentation as-is.
 </Item>
 <Item>
+Keep existing XML chapters, or gradually add source comments and
+  <F>.autodoc</F> files where they fit your preferred workflow.
+</Item>
+<Item>
 Later, gradually move chapters or source documentation to your preferred style.
 </Item>
 </List>
@@ -83,7 +91,7 @@ without forcing a full rewrite first.
 <P/>
 For practical setup and migration workflows, continue with chapter
 <Ref Chap="Chapter_Tutorials"/>. For the command reference of documentation comments,
-see chapter <Ref Chap="Chapter_Comments"/>.
+including standalone <F>.autodoc</F> files, see chapter <Ref Chap="Chapter_Comments"/>.
 </Section>
 
 
