@@ -622,11 +622,15 @@ end );
 
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationVerbatimNodeRep, IsStream ],
   function( node, filestream )
-    AUTODOC_WriteCDATASection(
-        filestream,
-        node!.element_name,
-        node!.content,
-        node!.attributes,
-        node!.closing_separator
-    );
+    local line, attr_name;
+
+    AppendTo( filestream, "<", node!.element_name );
+    for attr_name in Set( RecNames( node!.attributes ) ) do
+        AppendTo( filestream, " ", attr_name, "=\"", node!.attributes.( attr_name ), "\"" );
+    od;
+    AppendTo( filestream, "><![CDATA[\n" );
+    for line in node!.content do
+        AppendTo( filestream, AUTODOC_EscapeCDATAContent( Chomp( line ) ), "\n" );
+    od;
+    AppendTo( filestream, "]]></", node!.element_name, ">", node!.closing_separator );
 end );

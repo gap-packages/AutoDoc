@@ -50,34 +50,6 @@ function(text)
     return ReplacedString(text, "]]>", "]]]]><![CDATA[>");
 end);
 
-BindGlobal( "AUTODOC_WriteCDATASection",
-function(filestream, tag_name, contents, attrs...)
-    local line, attr_rec, attr_names, attr_name, suffix;
-    if Length( attrs ) > 2 then
-        Error( "expected at most one attribute record and one suffix" );
-    fi;
-    if attrs = [ ] then
-        attr_rec := rec( );
-        suffix := "\n\n";
-    elif Length( attrs ) = 1 then
-        attr_rec := attrs[ 1 ];
-        suffix := "\n\n";
-    else
-        attr_rec := attrs[ 1 ];
-        suffix := attrs[ 2 ];
-    fi;
-    AppendTo( filestream, "<", tag_name );
-    attr_names := SortedList( RecNames( attr_rec ) );
-    for attr_name in attr_names do
-        AppendTo( filestream, " ", attr_name, "=\"", attr_rec.( attr_name ), "\"" );
-    od;
-    AppendTo( filestream, "><![CDATA[\n" );
-    for line in contents do
-        AppendTo( filestream, AUTODOC_EscapeCDATAContent( Chomp( line ) ), "\n" );
-    od;
-    AppendTo( filestream, "]]></", tag_name, ">", suffix );
-end);
-
 
 InstallGlobalFunction( "AUTODOC_OutputTextFile",
 function( dir, filename )
