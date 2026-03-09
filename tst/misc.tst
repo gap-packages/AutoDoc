@@ -224,7 +224,7 @@ gap> verbatim_node := DocumentationVerbatim(
 gap> rendered := "";;
 gap> stream := OutputTextString(rendered, true);;
 gap> SetPrintFormattingStatus(stream, false);
-gap> WriteDocumentation(verbatim_node, stream, 0);
+gap> WriteDocumentation(verbatim_node, stream);
 gap> CloseStream(stream);
 gap> rendered = Concatenation(
 >   "<Listing Type=\"Code\"><![CDATA[\n",
@@ -237,7 +237,7 @@ gap> Add( example_node!.content, "gap> Print(\"]]>\");" );;
 gap> rendered := "";;
 gap> stream := OutputTextString(rendered, true);;
 gap> SetPrintFormattingStatus(stream, false);
-gap> WriteDocumentation(example_node, stream, 0);
+gap> WriteDocumentation(example_node, stream);
 gap> CloseStream(stream);
 gap> rendered = Concatenation(
 >   "<Example><![CDATA[\n",
@@ -257,7 +257,7 @@ gap> WriteDocumentation([
 >   "#! @InsertCode Increment",
 >   "## Code is inserted here.",
 >   "```"
-> ], stream, 0);
+> ], stream);
 gap> CloseStream(stream);
 gap> rendered = Concatenation(
 >   "<Listing><![CDATA[\n",
@@ -282,7 +282,7 @@ gap> tree2 := DocumentationTree();;
 gap> chunk := DocumentationChunk(tree2, "NeverUsed");;
 gap> chunk!.is_defined := true;;
 gap> Add(chunk!.content, "Some text");;
-gap> WriteDocumentation(tree2, Directory(tmpdir), 0);
+gap> WriteDocumentation(tree2, Directory(tmpdir));
 #I  WARNING: chunk NeverUsed was defined but never inserted
 gap> RemoveDirectoryRecursively(tmpdir);
 true
@@ -297,7 +297,7 @@ true
 gap> tree3 := DocumentationTree();;
 gap> chunk := DocumentationChunk(tree3, "MissingChunk");;
 gap> chunk!.is_inserted := true;;
-gap> WriteDocumentation(tree3, Directory(tmpdir), 0);
+gap> WriteDocumentation(tree3, Directory(tmpdir));
 #I  WARNING: chunk MissingChunk was inserted but never defined
 gap> RemoveDirectoryRecursively(tmpdir);
 true
