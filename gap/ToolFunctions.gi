@@ -52,14 +52,19 @@ end);
 
 BindGlobal( "AUTODOC_WriteCDATASection",
 function(filestream, tag_name, contents, attrs...)
-    local line, attr_rec, attr_names, attr_name;
-    if Length( attrs ) > 1 then
-        Error( "expected at most one attribute record" );
+    local line, attr_rec, attr_names, attr_name, suffix;
+    if Length( attrs ) > 2 then
+        Error( "expected at most one attribute record and one suffix" );
     fi;
     if attrs = [ ] then
         attr_rec := rec( );
+        suffix := "\n\n";
+    elif Length( attrs ) = 1 then
+        attr_rec := attrs[ 1 ];
+        suffix := "\n\n";
     else
         attr_rec := attrs[ 1 ];
+        suffix := attrs[ 2 ];
     fi;
     AppendTo( filestream, "<", tag_name );
     attr_names := SortedList( RecNames( attr_rec ) );
@@ -68,9 +73,9 @@ function(filestream, tag_name, contents, attrs...)
     od;
     AppendTo( filestream, "><![CDATA[\n" );
     for line in contents do
-        AppendTo( filestream, AUTODOC_EscapeCDATAContent( line ), "\n" );
+        AppendTo( filestream, AUTODOC_EscapeCDATAContent( Chomp( line ) ), "\n" );
     od;
-    AppendTo( filestream, "]]></", tag_name, ">\n\n" );
+    AppendTo( filestream, "]]></", tag_name, ">", suffix );
 end);
 
 

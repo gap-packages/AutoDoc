@@ -46,7 +46,6 @@ And fenced listings in .autodoc files should also keep would-be comments literal
 @Section PlainTextFenceLiteral
 #! PlainFenceLiteral
 ]]></Listing>
-
 Also, markdown-like inline <Keyword>true</Keyword> should become a keyword tag.
 And XML comments should pass through verbatim:
 <!--

@@ -12,5 +12,4 @@ if block_value > 10 then
 fi;
 ]]></Listing>
 
-
 <#/GAPDoc>

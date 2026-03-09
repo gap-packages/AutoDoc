@@ -209,7 +209,10 @@ end );
 ##
 InstallMethod( DocumentationExample, [ IsTreeForDocumentation, IsString ],
   function( tree, element_name )
-    return DocumentationVerbatim( tree, element_name, rec( ), [ ] );
+    local node;
+    node := DocumentationVerbatim( tree, element_name, rec( ), [ ] );
+    node!.closing_separator := "\n\n";
+    return node;
 end );
 
 ##
@@ -220,6 +223,7 @@ InstallMethod( DocumentationVerbatim, [ IsTreeForDocumentation, IsString, IsReco
     node := rec( element_name := element_name,
                  attributes := StructuralCopy( attributes ),
                  content := ShallowCopy( content ) );
+    node!.closing_separator := "\n";
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeVerbatimNodes );
     return node;
 end );
@@ -232,6 +236,7 @@ InstallMethod( DocumentationVerbatim, [ IsString, IsRecord, IsList ],
     node := rec( element_name := element_name,
                  attributes := StructuralCopy( attributes ),
                  content := ShallowCopy( content ) );
+    node!.closing_separator := "\n";
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeVerbatimNodes );
     return node;
 end );
@@ -621,6 +626,7 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationVerbatimNodeRep, IsSt
         filestream,
         node!.element_name,
         node!.content,
-        node!.attributes
+        node!.attributes,
+        node!.closing_separator
     );
 end );

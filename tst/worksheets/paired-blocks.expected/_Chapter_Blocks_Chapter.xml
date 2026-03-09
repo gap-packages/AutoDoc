@@ -49,21 +49,15 @@
 <Alt Only="LaTeX"><![CDATA[
 \textbf{Latex-only inline text.}
 ]]></Alt>
-
 <Alt Only="LaTeX"><![CDATA[
  \emph{Latex-only block text.}
-
 ]]></Alt>
-
 <Alt Not="LaTeX"><![CDATA[
 HTML-and-text inline output.
 ]]></Alt>
-
 <Alt Not="LaTeX"><![CDATA[
  HTML-and-text block output.
-
 ]]></Alt>
-
 <Subsection Label="Chapter_Blocks_Chapter_Section_Utility_Blocks_Section_Subsection_Stop_Here">
 <Heading>Stop Here</Heading>
 

@@ -229,7 +229,7 @@ gap> CloseStream(stream);
 gap> rendered = Concatenation(
 >   "<Listing Type=\"Code\"><![CDATA[\n",
 >   "gap> Print(\"]]]]><![CDATA[>\");\n",
->   "]]></Listing>\n\n"
+>   "]]></Listing>\n"
 > );
 true
 gap> example_node := DocumentationExample( tree_cdata, "Example" );;
@@ -267,7 +267,7 @@ gap> rendered = Concatenation(
 >   "\n",
 >   "#! @InsertCode Increment\n",
 >   "## Code is inserted here.\n",
->   "]]></Listing>\n\n"
+>   "]]></Listing>\n"
 > );
 true
 
