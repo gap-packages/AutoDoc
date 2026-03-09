@@ -409,6 +409,37 @@ end );
 ##
 #############################################
 
+BindGlobal( "AUTODOC_WriteStructuralNode",
+  function( node, element_name, stream )
+    local heading;
+
+    if ForAll( node!.content, IsEmptyNode ) then
+        return false;
+    fi;
+
+    if IsBound( node!.title_string ) then
+        heading := NormalizedWhitespace( node!.title_string );
+    else
+        heading := ReplacedString( node!.name, "_", " " );
+    fi;
+
+    AppendTo( stream, "<", element_name, " Label=\"", Label( node ), "\">\n" );
+    AppendTo( stream, "<Heading>", heading, "</Heading>\n\n" );
+    WriteDocumentation( node!.content, stream );
+    AppendTo( stream, "</", element_name, ">\n\n" );
+    return true;
+end );
+
+BindGlobal( "AUTODOC_ChapterFilename",
+  function( node )
+    local filename;
+
+    # Remove any characters outside of A-Za-z0-9 and -, +, _ from the filename.
+    # See issues #77 and #78
+    filename := Filtered( Label( node ), x -> x in AUTODOC_IdentifierLetters );
+    return Concatenation( "_", filename, ".xml" );
+end );
+
 BindGlobal( "WriteChunks",
   function( tree, path_to_xmlfiles )
     local chunks_stream, filename, chunk_names, current_chunk_name,
@@ -476,28 +507,17 @@ end );
 ##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForChapterRep, IsStream, IsDirectory ],
   function( node, stream, path_to_xmlfiles )
-    local filename, chapter_stream, replaced_name;
+    local filename, chapter_stream;
+
     if ForAll( node!.content, IsEmptyNode ) then
         return;
     fi;
-    
-    if IsBound( node!.title_string ) then
-        replaced_name := NormalizedWhitespace( node!.title_string );
-    else
-        replaced_name := ReplacedString( node!.name, "_", " " );
-    fi;
 
-    # Remove any characters outside of A-Za-z0-9 and -, +, _ from the filename.
-    # See issues #77 and #78
-    filename := Filtered( Label( node ), x -> x in AUTODOC_IdentifierLetters);
-    filename := Concatenation( "_", filename, ".xml" );
+    filename := AUTODOC_ChapterFilename( node );
     chapter_stream := AUTODOC_OutputTextFile( path_to_xmlfiles, filename );
     AppendTo( stream, "<#Include SYSTEM \"", filename, "\">\n" );
     AppendTo( chapter_stream, AUTODOC_XML_HEADER );
-    AppendTo( chapter_stream, "<Chapter Label=\"", Label( node ) ,"\">\n" );
-    AppendTo( chapter_stream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
-    WriteDocumentation( node!.content, chapter_stream );
-    AppendTo( chapter_stream, "</Chapter>\n\n" );
+    AUTODOC_WriteStructuralNode( node, "Chapter", chapter_stream );
     CloseStream( chapter_stream );
 end );
 
@@ -562,41 +582,13 @@ end );
 ##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSectionRep, IsStream ],
   function( node, filestream )
-    local replaced_name;
-    if ForAll( node!.content, IsEmptyNode ) then
-        return;
-    fi;
-    
-    if IsBound( node!.title_string ) then
-        replaced_name := NormalizedWhitespace( node!.title_string );
-    else
-        replaced_name := ReplacedString( node!.name, "_", " " );
-    fi;
-    
-    AppendTo( filestream, "<Section Label=\"", Label( node ), "\">\n" );
-    AppendTo( filestream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
-    WriteDocumentation( node!.content, filestream );
-    AppendTo( filestream, "</Section>\n\n" );
+    AUTODOC_WriteStructuralNode( node, "Section", filestream );
 end );
 
 ##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSubsectionRep, IsStream ],
   function( node, filestream )
-    local replaced_name;
-    if ForAll( node!.content, IsEmptyNode ) then
-        return;
-    fi;
-    
-    if IsBound( node!.title_string ) then
-        replaced_name := NormalizedWhitespace( node!.title_string );
-    else
-        replaced_name := ReplacedString( node!.name, "_", " " );
-    fi;
-    
-    AppendTo( filestream, "<Subsection Label=\"", Label( node ), "\">\n" );
-    AppendTo( filestream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
-    WriteDocumentation( node!.content, filestream );
-    AppendTo( filestream, "</Subsection>\n\n" );
+    AUTODOC_WriteStructuralNode( node, "Subsection", filestream );
 end );
 
 ##
