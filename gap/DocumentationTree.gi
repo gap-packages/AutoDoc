@@ -201,12 +201,6 @@ InstallMethod( StructurePartInTree, [ IsTreeForDocumentation, IsList ],
 end );
 
 ##
-InstallMethod( DocumentationExample, [ IsTreeForDocumentation ],
-  function( tree )
-    return DocumentationExample( tree, "Example" );
-end );
-
-##
 InstallMethod( DocumentationExample, [ IsTreeForDocumentation, IsString ],
   function( tree, element_name )
     local node;

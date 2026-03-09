@@ -47,7 +47,6 @@ DeclareOperation( "StructurePartInTree", [ IsTreeForDocumentation, IsList ] );
 DeclareOperation( "ChapterInTree", [ IsTreeForDocumentation, IsString ] );
 DeclareOperation( "SectionInTree", [ IsTreeForDocumentation, IsString, IsString ] );
 DeclareOperation( "SubsectionInTree", [ IsTreeForDocumentation, IsString, IsString, IsString ] );
-DeclareOperation( "DocumentationExample", [ IsTreeForDocumentation ] );
 DeclareOperation( "DocumentationExample", [ IsTreeForDocumentation, IsString ] );
 DeclareOperation( "DocumentationVerbatim", [ IsString, IsRecord, IsList ] );
 DeclareOperation( "DocumentationChunk", [ IsTreeForDocumentation, IsString ] );
