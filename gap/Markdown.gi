@@ -100,12 +100,12 @@ BindGlobal( "AUTODOC_ConvertFencedMarkdownBlocks",
     i := 1;
     skipped := false;
     while i <= Length( string_list ) do
-        if PositionSublist( string_list[ i ], "<![CDATA[" ) <> fail then
+        if AUTODOC_LineStartsCDATA( string_list[ i ] ) then
             skipped := true;
         fi;
         if skipped = true then
             Add( converted_string_list, string_list[ i ] );
-            if PositionSublist( string_list[ i ], "]]>" ) <> fail then
+            if AUTODOC_LineEndsCDATA( string_list[ i ] ) then
                 skipped := false;
             fi;
             i := i + 1;
@@ -140,7 +140,7 @@ BindGlobal( "AUTODOC_ConvertFencedMarkdownBlocks",
                         break;
                     fi;
                     Add( converted_string_list,
-                         ReplacedString( string_list[ i ], "]]>", "]]]]><![CDATA[>" ) );
+                         AUTODOC_EscapeCDATAContent( string_list[ i ] ) );
                     i := i + 1;
                 od;
                 Add( converted_string_list,
@@ -175,10 +175,10 @@ InstallGlobalFunction( AUTODOC_ConvertMarkdownToGAPDocXML,
     keyword_set := Set( ALL_KEYWORDS() );
     skipped := false;
     for i in [ 1 .. Length( string_list ) ] do
-        if PositionSublist( string_list[ i ], "<![CDATA[" ) <> fail then
+        if AUTODOC_LineStartsCDATA( string_list[ i ] ) then
             skipped := true;
         fi;
-        if PositionSublist( string_list[ i ], "]]>" ) <> fail then
+        if AUTODOC_LineEndsCDATA( string_list[ i ] ) then
             skipped := false;
             continue;
         fi;
@@ -194,7 +194,7 @@ InstallGlobalFunction( AUTODOC_ConvertMarkdownToGAPDocXML,
     already_inserted_paragraph := false;
     skipped := false;
     for i in [ 1 ..  Length( string_list ) ] do
-        if PositionSublist( string_list[ i ], "<![CDATA[" ) <> fail then
+        if AUTODOC_LineStartsCDATA( string_list[ i ] ) then
             skipped := true;
         fi;
         if skipped = false and NormalizedWhitespace( string_list[ i ] ) = "" then
@@ -205,7 +205,7 @@ InstallGlobalFunction( AUTODOC_ConvertMarkdownToGAPDocXML,
         else
             already_inserted_paragraph := false;
         fi;
-        if PositionSublist( string_list[ i ], "]]>" ) <> fail then
+        if AUTODOC_LineEndsCDATA( string_list[ i ] ) then
             skipped := false;
         fi;
         i := i + 1;
@@ -225,10 +225,10 @@ InstallGlobalFunction( AUTODOC_ConvertMarkdownToGAPDocXML,
 
         ## maybe make the first line marked by definition?
         while i <= Length( string_list ) do
-            if PositionSublist( string_list[ i ], "<![CDATA[" ) <> fail then
+            if AUTODOC_LineStartsCDATA( string_list[ i ] ) then
                 skipped := true;
             fi;
-            if PositionSublist( string_list[ i ], "]]>" ) <> fail then
+            if AUTODOC_LineEndsCDATA( string_list[ i ] ) then
                 skipped := false;
                 i := i + 1;
                 continue;
@@ -323,10 +323,10 @@ InstallGlobalFunction( AUTODOC_ConvertMarkdownToGAPDocXML,
         beginning := true;
         skipped := false;
         for i in [ 1 .. Length( string_list ) ] do
-            if PositionSublist( string_list[ i ], "<![CDATA[" ) <> fail then
+            if AUTODOC_LineStartsCDATA( string_list[ i ] ) then
                 skipped := true;
             fi;
-            if PositionSublist( string_list[ i ], "]]>" ) <> fail then
+            if AUTODOC_LineEndsCDATA( string_list[ i ] ) then
                 skipped := false;
             fi;
             if skipped = true then

@@ -7,6 +7,9 @@
 
 DeclareGlobalFunction( "AUTODOC_CreateDirIfMissing" );
 DeclareGlobalFunction( "AUTODOC_CurrentDirectory" );
+DeclareGlobalFunction( "AUTODOC_LineStartsCDATA" );
+DeclareGlobalFunction( "AUTODOC_LineEndsCDATA" );
+DeclareGlobalFunction( "AUTODOC_EscapeCDATAContent" );
 
 DeclareGlobalFunction( "AUTODOC_OutputTextFile" );
 DeclareGlobalFunction( "AutoDoc_WriteDocEntry" );

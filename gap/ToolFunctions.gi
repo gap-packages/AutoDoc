@@ -33,6 +33,23 @@ function(args...)
     return Chomp(result);
 end);
 
+InstallGlobalFunction( "AUTODOC_LineStartsCDATA",
+function(line)
+    # Phase 1 keeps CDATA encoded as raw strings; Parser.gi still injects such
+    # fragments directly, so other layers must continue to detect them.
+    return PositionSublist(line, "<![CDATA[") <> fail;
+end);
+
+InstallGlobalFunction( "AUTODOC_LineEndsCDATA",
+function(line)
+    return PositionSublist(line, "]]>") <> fail;
+end);
+
+InstallGlobalFunction( "AUTODOC_EscapeCDATAContent",
+function(text)
+    return ReplacedString(text, "]]>", "]]]]><![CDATA[>");
+end);
+
 
 InstallGlobalFunction( "AUTODOC_OutputTextFile",
 function( dir, filename )

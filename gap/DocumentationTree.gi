@@ -507,41 +507,17 @@ end );
 ##
 InstallMethod( WriteDocumentation, [ IsList, IsStream, IsInt ],
   function( node_list, filestream, level_value )
-    local current_string_list, i, last_position, in_cdata, line;
+    local current_string_list, i, last_position, FlushConvertedStrings;
 
-    i := 1;
-    current_string_list := [ ];
-    for i in [ 1 .. Length( node_list ) ] do
-        if IsString( node_list[ i ] ) then
-            Add( current_string_list, ShallowCopy( node_list[ i ] ) );
-        else
-            if current_string_list <> [ ] then
-                current_string_list := AUTODOC_ConvertMarkdownToGAPDocXML( current_string_list );
-                in_cdata := false;
-                for line in current_string_list do
-                    if PositionSublist( line, "<![CDATA[" ) <> fail then
-                        in_cdata := true;
-                    fi;
-                    if in_cdata = true then
-                        AppendTo( filestream, Chomp( line ), "\n" );
-                    else
-                        WriteDocumentation( line, filestream, level_value );
-                    fi;
-                    if PositionSublist( line, "]]>" ) <> fail then
-                        in_cdata := false;
-                    fi;
-                od;
-                current_string_list := [ ];
-            fi;
-            WriteDocumentation( node_list[ i ], filestream, level_value );
-            AppendTo( filestream, "\n" );
+    FlushConvertedStrings := function()
+        local converted_string_list, in_cdata, line;
+        if current_string_list = [ ] then
+            return;
         fi;
-    od;
-    if current_string_list <> [ ] then
-        current_string_list := AUTODOC_ConvertMarkdownToGAPDocXML( current_string_list );
+        converted_string_list := AUTODOC_ConvertMarkdownToGAPDocXML( current_string_list );
         in_cdata := false;
-        for line in current_string_list do
-            if PositionSublist( line, "<![CDATA[" ) <> fail then
+        for line in converted_string_list do
+            if AUTODOC_LineStartsCDATA( line ) then
                 in_cdata := true;
             fi;
             if in_cdata = true then
@@ -549,11 +525,25 @@ InstallMethod( WriteDocumentation, [ IsList, IsStream, IsInt ],
             else
                 WriteDocumentation( line, filestream, level_value );
             fi;
-            if PositionSublist( line, "]]>" ) <> fail then
+            if AUTODOC_LineEndsCDATA( line ) then
                 in_cdata := false;
             fi;
         od;
-    fi;
+        current_string_list := [ ];
+    end;
+
+    i := 1;
+    current_string_list := [ ];
+    for i in [ 1 .. Length( node_list ) ] do
+        if IsString( node_list[ i ] ) then
+            Add( current_string_list, ShallowCopy( node_list[ i ] ) );
+        else
+            FlushConvertedStrings();
+            WriteDocumentation( node_list[ i ], filestream, level_value );
+            AppendTo( filestream, "\n" );
+        fi;
+    od;
+    FlushConvertedStrings();
 end );
 
 ##
@@ -682,7 +672,7 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationExampleNodeRep, IsStr
         # to do this, we concatenate multiple CDATA sections:
         # first we insert ]], then we end the CDATA section, then we start
         # a new CDATA section which starts with >.
-        i := ReplacedString(i, "]]>", "]]]]><![CDATA[>");
+        i := AUTODOC_EscapeCDATAContent( i );
         AppendTo( filestream, i, "\n" );
     od;
     AppendTo( filestream, "]]></", inserted_string, ">\n\n" );

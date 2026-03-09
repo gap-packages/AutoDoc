@@ -130,6 +130,16 @@ gap> AUTODOC_FencedMarkdownElement("@log");
 "Log"
 gap> AUTODOC_FencedMarkdownElement("gap");
 "Listing"
+gap> AUTODOC_LineStartsCDATA("<Example><![CDATA[");
+true
+gap> AUTODOC_LineStartsCDATA("plain text");
+false
+gap> AUTODOC_LineEndsCDATA("]]></Example>");
+true
+gap> AUTODOC_LineEndsCDATA("plain text");
+false
+gap> AUTODOC_EscapeCDATAContent("a]]>b");
+"a]]]]><![CDATA[>b"
 gap> AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "```@example",
 >   "gap> 1 + 1;",
@@ -217,6 +227,21 @@ gap> AUTODOC_ConvertMarkdownToGAPDocXML([
 > ]) = [
 >   "<Code>&lt;Log attr=&quot;x&quot;&gt; &amp; more</Code>"
 > ];
+true
+gap> tree_cdata := DocumentationTree();;
+gap> example_node := DocumentationExample( tree_cdata );;
+gap> example_node!.is_tested_example := true;;
+gap> Add( example_node!.content, "gap> Print(\"]]>\");" );;
+gap> rendered := "";;
+gap> stream := OutputTextString(rendered, true);;
+gap> SetPrintFormattingStatus(stream, false);
+gap> WriteDocumentation(example_node, stream, 0);
+gap> CloseStream(stream);
+gap> rendered = Concatenation(
+>   "<Example><![CDATA[\n",
+>   "gap> Print(\"]]]]><![CDATA[>\");\n",
+>   "]]></Example>\n\n"
+> );
 true
 gap> rendered := "";;
 gap> stream := OutputTextString(rendered, true);;
