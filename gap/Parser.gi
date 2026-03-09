@@ -615,9 +615,10 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         od;
         return code_node;
     end;
-    read_example := function( is_tested_example )
-        local temp_string_list, temp_curr_line, temp_pos_comment, is_following_line, item_temp, example_node;
-        example_node := DocumentationExample( tree, is_tested_example );
+    read_example := function( element_name )
+        local temp_string_list, temp_curr_line, temp_pos_comment, is_following_line,
+              item_temp, example_node;
+        example_node := DocumentationExample( tree, element_name );
         temp_string_list := example_node!.content;
         is_following_line := false;
         while true do
@@ -652,11 +653,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         od;
         return example_node;
     end;
-    read_session_example := function( is_tested_example, plain_text_mode )
+    read_session_example := function( element_name, plain_text_mode )
         local temp_string_list, temp_curr_line, temp_pos_comment,
               is_following_line, item_temp, example_node,
               incorporate_this_line;
-        example_node := DocumentationExample( tree, is_tested_example );
+        example_node := DocumentationExample( tree, element_name );
         temp_string_list := example_node!.content;
         while true do
             temp_curr_line := Chomp( ReadLineWithLineCount( filestream ) );
@@ -953,14 +954,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
 
         @BeginExample := function()
             local example_node;
-            example_node := read_example( true );
+            example_node := read_example( "Example" );
             Add( current_item, example_node );
         end,
 
         @Example := ~.@BeginExample,
         @BeginLog := function()
             local example_node;
-            example_node := read_example( false );
+            example_node := read_example( "Log" );
             Add( current_item, example_node );
         end,
         @Log := ~.@BeginLog,
@@ -1030,13 +1031,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end,
         @ExampleSession := function()
             local example_node;
-            example_node := read_session_example( true, plain_text_mode );
+            example_node := read_session_example( "Example", plain_text_mode );
             Add( current_item, example_node );
         end,
         @BeginExampleSession := ~.@ExampleSession,
         @LogSession := function()
             local example_node;
-            example_node := read_session_example( false, plain_text_mode );
+            example_node := read_session_example( "Log", plain_text_mode );
             Add( current_item, example_node );
         end,
         @BeginLogSession := ~.@LogSession

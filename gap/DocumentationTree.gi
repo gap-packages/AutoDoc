@@ -205,19 +205,12 @@ end );
 ##
 InstallMethod( DocumentationExample, [ IsTreeForDocumentation ],
   function( tree )
-    return DocumentationExample( tree, true );
+    return DocumentationExample( tree, "Example" );
 end );
 
 ##
-InstallMethod( DocumentationExample, [ IsTreeForDocumentation, IsBool ],
-  function( tree, is_tested_example )
-    local element_name;
-
-    if is_tested_example then
-        element_name := "Example";
-    else
-        element_name := "Log";
-    fi;
+InstallMethod( DocumentationExample, [ IsTreeForDocumentation, IsString ],
+  function( tree, element_name )
     return DocumentationVerbatim( tree, element_name, rec( ), [ ] );
 end );
 
