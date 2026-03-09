@@ -201,8 +201,8 @@ InstallMethod( StructurePartInTree, [ IsTreeForDocumentation, IsList ],
 end );
 
 ##
-InstallMethod( DocumentationExample, [ IsTreeForDocumentation, IsString ],
-  function( tree, element_name )
+InstallMethod( DocumentationExample, [ IsString ],
+  function( element_name )
     local node;
     node := DocumentationVerbatim( element_name, rec( ), [ ] );
     node!.closing_separator := "\n\n";

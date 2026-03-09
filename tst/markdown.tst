@@ -112,7 +112,7 @@ gap> rendered = Concatenation(
 >   "]]></Listing>\n"
 > );
 true
-gap> example_node := DocumentationExample( tree_cdata, "Example" );;
+gap> example_node := DocumentationExample( "Example" );;
 gap> Add( example_node!.content, "gap> Print(\"]]>\");" );;
 gap> rendered := "";;
 gap> stream := OutputTextString(rendered, true);;

@@ -617,7 +617,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     read_example := function( element_name )
         local temp_string_list, temp_curr_line, temp_pos_comment, is_following_line,
               item_temp, example_node;
-        example_node := DocumentationExample( tree, element_name );
+        example_node := DocumentationExample( element_name );
         temp_string_list := example_node!.content;
         is_following_line := false;
         while true do
@@ -656,7 +656,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         local temp_string_list, temp_curr_line, temp_pos_comment,
               is_following_line, item_temp, example_node,
               incorporate_this_line;
-        example_node := DocumentationExample( tree, element_name );
+        example_node := DocumentationExample( element_name );
         temp_string_list := example_node!.content;
         while true do
             temp_curr_line := Chomp( ReadLineWithLineCount( filestream ) );
