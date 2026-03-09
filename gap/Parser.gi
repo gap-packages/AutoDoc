@@ -594,6 +594,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     end;
     read_code := function( )
         local code, temp_curr_line, temp_line_info, temp_command;
+        # Phase 2 target: represent verbatim blocks structurally instead of
+        # injecting raw CDATA-shaped strings into the intermediate tree.
         code := [ "<Listing Type=\"Code\"><![CDATA[\n" ];
         while true do
             temp_curr_line := ReadLineWithLineCount( filestream );
@@ -974,6 +976,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             Add( current_item, current_command[ 2 ] );
         end,
         @BeginLatexOnly := function()
+            # Phase 2 target: model Alt blocks structurally and let the writer
+            # own CDATA serialization.
             Add( current_item, "<Alt Only=\"LaTeX\"><![CDATA[" );
             if current_command[ 2 ] <> "" then
                 Add( current_item, current_command[ 2 ] );

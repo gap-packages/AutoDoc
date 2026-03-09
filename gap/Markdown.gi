@@ -160,6 +160,25 @@ BindGlobal( "AUTODOC_ConvertFencedMarkdownBlocks",
 end );
 
 ##
+BindGlobal( "AUTODOC_ForEachNonCDATALine",
+  function( string_list, action )
+    local i, in_cdata;
+
+    in_cdata := false;
+    for i in [ 1 .. Length( string_list ) ] do
+        if AUTODOC_LineStartsCDATA( string_list[ i ] ) then
+            in_cdata := true;
+        fi;
+        if in_cdata = false then
+            action( i );
+        fi;
+        if AUTODOC_LineEndsCDATA( string_list[ i ] ) then
+            in_cdata := false;
+        fi;
+    od;
+end );
+
+##
 InstallGlobalFunction( AUTODOC_ConvertMarkdownToGAPDocXML,
   function( string_list )
     local i, current_list, current_string, max_line_length,
@@ -173,31 +192,16 @@ InstallGlobalFunction( AUTODOC_ConvertMarkdownToGAPDocXML,
     # Convert inline backticks before list detection so literal tags such as
     # `<List>` inside code spans do not look like structural GAPDoc tags.
     keyword_set := Set( ALL_KEYWORDS() );
-    skipped := false;
-    for i in [ 1 .. Length( string_list ) ] do
-        if AUTODOC_LineStartsCDATA( string_list[ i ] ) then
-            skipped := true;
-        fi;
-        if AUTODOC_LineEndsCDATA( string_list[ i ] ) then
-            skipped := false;
-            continue;
-        fi;
-        if skipped = true then
-            continue;
-        fi;
+    AUTODOC_ForEachNonCDATALine( string_list, function( i )
         string_list[ i ] :=
             AUTODOC_ConvertInlineBackticksInLine( string_list[ i ], keyword_set );
-    od;
+    end );
 
     ## Check for paragraphs by turning an empty string into <P/>
     
     already_inserted_paragraph := false;
-    skipped := false;
-    for i in [ 1 ..  Length( string_list ) ] do
-        if AUTODOC_LineStartsCDATA( string_list[ i ] ) then
-            skipped := true;
-        fi;
-        if skipped = false and NormalizedWhitespace( string_list[ i ] ) = "" then
+    AUTODOC_ForEachNonCDATALine( string_list, function( i )
+        if NormalizedWhitespace( string_list[ i ] ) = "" then
             if already_inserted_paragraph = false then
                 string_list[ i ] := "<P/>";
                 already_inserted_paragraph := true;
@@ -205,11 +209,7 @@ InstallGlobalFunction( AUTODOC_ConvertMarkdownToGAPDocXML,
         else
             already_inserted_paragraph := false;
         fi;
-        if AUTODOC_LineEndsCDATA( string_list[ i ] ) then
-            skipped := false;
-        fi;
-        i := i + 1;
-    od;
+    end );
 
     ## We need to find lists. Lists are indicated by a beginning
     ## *, -, or +. Lists can be nested. Save list as list of strings,
@@ -321,18 +321,7 @@ InstallGlobalFunction( AUTODOC_ConvertMarkdownToGAPDocXML,
 
     for commands in command_list_with_translation do
         beginning := true;
-        skipped := false;
-        for i in [ 1 .. Length( string_list ) ] do
-            if AUTODOC_LineStartsCDATA( string_list[ i ] ) then
-                skipped := true;
-            fi;
-            if AUTODOC_LineEndsCDATA( string_list[ i ] ) then
-                skipped := false;
-            fi;
-            if skipped = true then
-                continue;
-            fi;
-
+        AUTODOC_ForEachNonCDATALine( string_list, function( i )
             while PositionSublist( string_list[ i ], commands[ 1 ] ) <> fail do
                 position_of_command := PositionSublist( string_list[ i ], commands[ 1 ] );
                 if beginning = true then
@@ -343,7 +332,7 @@ InstallGlobalFunction( AUTODOC_ConvertMarkdownToGAPDocXML,
                 string_list[ i ] := INSERT_IN_STRING_WITH_REPLACE( string_list[ i ], insert, position_of_command, Length( commands[ 1 ] ) );
                 beginning := not beginning;
             od;
-        od;
+        end );
 
         if beginning = false then
             Error( "did you forget some ", commands[ 1 ] );

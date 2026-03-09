@@ -50,6 +50,16 @@ function(text)
     return ReplacedString(text, "]]>", "]]]]><![CDATA[>");
 end);
 
+BindGlobal( "AUTODOC_WriteCDATASection",
+function(filestream, tag_name, contents)
+    local line;
+    AppendTo( filestream, "<", tag_name, "><![CDATA[\n" );
+    for line in contents do
+        AppendTo( filestream, AUTODOC_EscapeCDATAContent( line ), "\n" );
+    od;
+    AppendTo( filestream, "]]></", tag_name, ">\n\n" );
+end);
+
 
 InstallGlobalFunction( "AUTODOC_OutputTextFile",
 function( dir, filename )
