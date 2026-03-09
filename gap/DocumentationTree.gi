@@ -157,7 +157,7 @@ InstallMethod( DocumentationTree, [ ],
 
     tree := rec(
                   content := [ ],   # a list of nodes
-                  nodes_by_label := rec( ),
+                  cached_nodes_by_label := rec( ),
                   node_name_iterator := 0,
                   TitlePage := rec( ),
                   chunks := rec( ),
@@ -177,8 +177,8 @@ InstallMethod( StructurePartInTree, [ IsTreeForDocumentation, IsList ],
 
     # if the part already exist, use that
     label := AUTODOC_LABEL_OF_CONTEXT( context );
-    if IsBound( tree!.nodes_by_label.( label ) ) then
-        return tree!.nodes_by_label.( label );
+    if IsBound( tree!.cached_nodes_by_label.( label ) ) then
+        return tree!.cached_nodes_by_label.( label );
     fi;
 
     parent := StructurePartInTree( tree, context{[1..Length(context)-1]} );
@@ -195,7 +195,7 @@ InstallMethod( StructurePartInTree, [ IsTreeForDocumentation, IsList ],
     fi;
     ObjectifyWithAttributes( new_node, type, Label, label );
 
-    tree!.nodes_by_label.( label ) := new_node;
+    tree!.cached_nodes_by_label.( label ) := new_node;
     Add( parent!.content, new_node );
     return new_node;
 end );
@@ -242,13 +242,11 @@ end );
 ##
 InstallMethod( DocumentationManItem, [ IsTreeForDocumentation ],
   function( tree )
-    local node, name;
+    local node;
 
     node := rec( description := [ ],
                  return_value := [ ] );
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeNodesForManItem );
-    name := Concatenation( "ManItem_", String( AUTODOC_TREE_NODE_NAME_ITERATOR( tree ) ) );
-    tree!.nodes_by_label.( name ) := node;
     node!.content := node!.description;
     return node;
 end );
@@ -271,13 +269,13 @@ InstallMethod( DocumentationGroup, [ IsTreeForDocumentation, IsString ],
     local group, name;
 
     name := Concatenation( "GROUP_", group_name );
-    if IsBound( tree!.nodes_by_label.( name ) ) then
-        return tree!.nodes_by_label.( name );
+    if IsBound( tree!.cached_nodes_by_label.( name ) ) then
+        return tree!.cached_nodes_by_label.( name );
     fi;
     group := rec( content := [ ] );
     ObjectifyWithAttributes( group, TheTypeOfDocumentationTreeNodesForGroup,
                              Label, name );
-    tree!.nodes_by_label.( name ) := group;
+    tree!.cached_nodes_by_label.( name ) := group;
     group!.is_added := false;
     return group;
 end );
@@ -288,8 +286,8 @@ InstallMethod( DocumentationGroup, [ IsTreeForDocumentation, IsString, IsList ],
     local name, group, context_node;
 
     name := Concatenation( "GROUP_", group_name );
-    if IsBound( tree!.nodes_by_label.( name ) ) then
-        return tree!.nodes_by_label.( name );
+    if IsBound( tree!.cached_nodes_by_label.( name ) ) then
+        return tree!.cached_nodes_by_label.( name );
     fi;
     context_node := StructurePartInTree( tree, context );
     group := DocumentationGroup( tree, group_name );
