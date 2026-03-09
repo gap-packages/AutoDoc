@@ -80,14 +80,21 @@ BindGlobal( "AUTODOC_ConvertInlineBackticksInLine",
 end );
 
 ##
-InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
+BindGlobal( "AUTODOC_FencedMarkdownElement",
+  function( info_string )
+    if info_string = "@example" then
+        return "Example";
+    elif info_string = "@log" then
+        return "Log";
+    fi;
+    return "Listing";
+end );
+
+##
+BindGlobal( "AUTODOC_ConvertFencedMarkdownBlocks",
   function( string_list )
-    local i, current_list, current_string, max_line_length,
-          current_position, already_in_list, command_list_with_translation, beginning,
-          commands, position_of_command, insert, beginning_whitespaces, temp, string_list_temp, skipped,
-          already_inserted_paragraph, in_list, in_item, converted_string_list,
-          fence_char, fence_length, trimmed_line, code_block, info_string,
-          fence_element, keyword_set;
+    local i, converted_string_list, skipped, trimmed_line,
+          fence_char, fence_length, info_string, fence_element, code_block;
 
     converted_string_list := [ ];
     i := 1;
@@ -118,14 +125,7 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
                 info_string := NormalizedWhitespace(
                     trimmed_line{ [ fence_length + 1 .. Length( trimmed_line ) ] }
                 );
-                fence_element := "Listing";
-                if info_string = "@example" then
-                    fence_element := "Example";
-                elif info_string = "@log" then
-                    fence_element := "Log";
-                elif info_string = "@listing" then
-                    fence_element := "Listing";
-                fi;
+                fence_element := AUTODOC_FencedMarkdownElement( info_string );
                 Add( converted_string_list,
                      Concatenation( "<", fence_element, "><![CDATA[" ) );
                 i := i + 1;
@@ -155,7 +155,20 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
         Add( converted_string_list, string_list[ i ] );
         i := i + 1;
     od;
-    string_list := converted_string_list;
+
+    return converted_string_list;
+end );
+
+##
+InstallGlobalFunction( AUTODOC_ConvertMarkdownToGAPDocXML,
+  function( string_list )
+    local i, current_list, current_string, max_line_length,
+          current_position, already_in_list, command_list_with_translation, beginning,
+          commands, position_of_command, insert, beginning_whitespaces, temp, string_list_temp, skipped,
+          already_inserted_paragraph, in_list, in_item, converted_string_list,
+          keyword_set;
+
+    string_list := AUTODOC_ConvertFencedMarkdownBlocks( string_list );
 
     # Convert inline backticks before list detection so literal tags such as
     # `<List>` inside code spans do not look like structural GAPDoc tags.

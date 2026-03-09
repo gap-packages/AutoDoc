@@ -124,7 +124,25 @@ gap> item!.arguments;
 
 # fenced code blocks in Markdown-like text
 #
-gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
+gap> AUTODOC_FencedMarkdownElement("@example");
+"Example"
+gap> AUTODOC_FencedMarkdownElement("@log");
+"Log"
+gap> AUTODOC_FencedMarkdownElement("gap");
+"Listing"
+gap> AUTODOC_ConvertMarkdownToGAPDocXML([
+>   "```@example",
+>   "gap> 1 + 1;",
+>   "2",
+>   "```"
+> ]) = [
+>   "<Example><![CDATA[",
+>   "gap> 1 + 1;",
+>   "2",
+>   "]]></Example>"
+> ];
+true
+gap> AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "Before",
 >   "```gap",
 >   "if x = 2 then",
@@ -142,7 +160,7 @@ gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
 >   "After"
 > ];
 true
-gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
+gap> AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "~~~",
 >   "gap> [[2]]>[[1]];",
 >   "~~~"
@@ -152,7 +170,7 @@ gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
 >   "]]></Listing>"
 > ];
 true
-gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
+gap> AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "```@example",
 >   "gap> 1 + 1;",
 >   "2",
@@ -164,7 +182,7 @@ gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
 >   "]]></Example>"
 > ];
 true
-gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
+gap> AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "```@log",
 >   "#I  some log message",
 >   "```"
@@ -174,7 +192,7 @@ gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
 >   "]]></Log>"
 > ];
 true
-gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
+gap> AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "```@listing",
 >   "#! @BeginCode Increment",
 >   "i := i + 1;",
@@ -194,7 +212,7 @@ gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
 >   "]]></Listing>"
 > ];
 true
-gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
+gap> AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "`<Log attr=\"x\"> & more`"
 > ]) = [
 >   "<Code>&lt;Log attr=&quot;x&quot;&gt; &amp; more</Code>"

@@ -516,7 +516,7 @@ InstallMethod( WriteDocumentation, [ IsList, IsStream, IsInt ],
             Add( current_string_list, ShallowCopy( node_list[ i ] ) );
         else
             if current_string_list <> [ ] then
-                current_string_list := CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML( current_string_list );
+                current_string_list := AUTODOC_ConvertMarkdownToGAPDocXML( current_string_list );
                 in_cdata := false;
                 for line in current_string_list do
                     if PositionSublist( line, "<![CDATA[" ) <> fail then
@@ -538,7 +538,7 @@ InstallMethod( WriteDocumentation, [ IsList, IsStream, IsInt ],
         fi;
     od;
     if current_string_list <> [ ] then
-        current_string_list := CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML( current_string_list );
+        current_string_list := AUTODOC_ConvertMarkdownToGAPDocXML( current_string_list );
         in_cdata := false;
         for line in current_string_list do
             if PositionSublist( line, "<![CDATA[" ) <> fail then
