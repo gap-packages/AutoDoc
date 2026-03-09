@@ -14,15 +14,15 @@ gap> START_TEST("paired_examples_test01.tst");
 gap> plain_example_value := 2 + 3;
 5
 
-# _Chapter_Examples_Chapter.xml:22-25
+# _Chapter_Examples_Chapter.xml:21-24
 gap> plain_alias_example := 3 + 4;
 7
 
-# _Chapter_Examples_Chapter.xml:29-32
+# _Chapter_Examples_Chapter.xml:27-30
 gap> 10 - 3;
 7
 
-# _Chapter_Examples_Chapter.xml:36-39
+# _Chapter_Examples_Chapter.xml:33-36
 gap> 6 * 7;
 42
 

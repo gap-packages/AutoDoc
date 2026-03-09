@@ -32,7 +32,6 @@ This incremental approach is encouraged: start with the smallest helpful step,
 then adopt additional features when useful.
 </Section>
 
-
 <Section Label="Section_Tut:Scratch">
 <Heading>Creating a package manual from scratch</Heading>
 
@@ -46,6 +45,7 @@ one containing the <F>PackageInfo.g</F> file):
 LoadPackage( "AutoDoc" );
 AutoDoc( rec( scaffold := true ) );
 ]]></Listing>
+
 This first reads the <F>PackageInfo.g</F> file from the current
 directory. It extracts information about the package from it
 (such as its name and version, see Section <Ref Sect="Subsection_Tut:Scaffolds:Title"/>).
@@ -67,6 +67,7 @@ PackageDoc := rec(
   LongTitle := ~.Subtitle,
 ),
 ]]></Listing>
+
 <P/>
 Congratulations, your package now has a minimal working manual. Of
 course it will be mostly empty for now, but it already should contain
@@ -99,18 +100,19 @@ LoadPackage( "AutoDoc" );
 AutoDoc( rec( autodoc := true ) );
 QUIT;
 ]]></Listing>
+
 Then you can regenerate the package manual from the command line with the
 following command, executed from within the package directory:
 <Listing><![CDATA[
 gap makedoc.g
 ]]></Listing>
+
 <P/>
 If you also want regression tests from your manual examples, enable
 <C>extract_examples := true</C>; this is explained in
 Section <Ref Sect="Subsection_Tut:IntegrateExisting:EverythingThere"/>.
 <P/>
 </Section>
-
 
 <Section Label="Section_Tut:AdvancedAutoDoc">
 <Heading>Documenting code with &AutoDoc;</Heading>
@@ -131,6 +133,7 @@ of the form <C>#!</C> directly in front of it. For example:
 #!
 DeclareOperation( "ToricVariety", [ IsConvexObject ] );
 ]]></Listing>
+
 <P/>
 This tiny change is already sufficient to ensure that the operation
 appears in the manual. In general, you will want to add further
@@ -148,6 +151,7 @@ it documents. Do not place other code between the comment block and the
 #!  of the convex object <A>conv</A>.
 DeclareOperation( "ToricVariety", [ IsConvexObject ] );
 ]]></Listing>
+
 <P/>
 In these comment lines, you can freely use normal &GAPDoc; XML markup
 (with the usual exceptions for lines starting with <C>@</C>, which are
@@ -207,6 +211,7 @@ LoadPackage( "AutoDoc" );
 AutoDoc( rec( scaffold := true,
               autodoc := true ) );
 ]]></Listing>
+
 <P/>
 If you are not using the scaffolding feature, e.g. because you already
 have an existing &GAPDoc; based manual, then you can still use &AutoDoc;
@@ -215,6 +220,7 @@ file of your documentation, and insert the line
 <Listing><![CDATA[
 &lt;#Include SYSTEM "_AutoDocMainFile.xml">
 ]]></Listing>
+
 in a suitable place. This means that you can mix &AutoDoc; documentation
 comments and <F>.autodoc</F> files freely with your existing documentation; you can even still make
 use of any existing &GAPDoc; documentation comments in your code.
@@ -227,9 +233,9 @@ touch your documentation XML files otherwise.
 LoadPackage( "AutoDoc" );
 AutoDoc( rec( autodoc := true ) );
 ]]></Listing>
+
 <P/>
 </Section>
-
 
 <Section Label="Section_Tut:IntegrateExisting">
 <Heading>Using &AutoDoc; in an existing &GAPDoc; manual</Heading>
@@ -272,6 +278,7 @@ in the root directory of your package:
 LoadPackage( "AutoDoc" );
 AutoDoc( );
 ]]></Listing>
+
 Note that in particular, you do not have to worry about keeping a list of your
 implementation files up-to-date.
 <P/>
@@ -281,12 +288,12 @@ examples in your manual to test your package. This can be achieved via
 LoadPackage( "AutoDoc" );
 AutoDoc( rec( extract_examples := true ) );
 ]]></Listing>
+
 Now files <F>PACKAGENAME01.tst</F>, <F>PACKAGENAME02.tst</F> and so appear in the
 <F>tst/</F> subdirectory of your package, and can be tested as usual using
 <Ref BookName="ref" Func="Test"/> respectively <Ref BookName="ref" Func="TestDirectory"/>.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_Tut:IntegrateExisting:GapDocOptions">
 <Heading>Setting different &GAPDoc; options</Heading>
@@ -301,6 +308,7 @@ Then you can tell &AutoDoc; to use this file as the main XML file via
 LoadPackage( "AutoDoc" );
 AutoDoc( rec( gapdoc := rec( main := "main" ) ) );
 ]]></Listing>
+
 <P/>
 As explained above, by default &AutoDoc; scans all <F>.g</F>, <F>.gd</F> and <F>.gi</F> files
 it can find inside of your package root directory, and in the subdirectories <F>gap</F>,
@@ -313,12 +321,14 @@ of the package's root directory.
 LoadPackage( "AutoDoc" );
 AutoDoc( rec( gapdoc := rec( scan_dirs := [ "package_sources" ] ) ) );
 ]]></Listing>
+
 You can also specify an explicit list of files containing documentation,
 which will be searched in addition to any files located within the scan directories:
 <Listing><![CDATA[
 LoadPackage( "AutoDoc" );
 AutoDoc( rec( gapdoc := rec( files := [ "path/to/some/hidden/file.gd" ] ) ) );
 ]]></Listing>
+
 Giving such a file does not prevent the standard <C>scan_dirs</C> from being scanned for
 other files.
 <P/>
@@ -334,14 +344,15 @@ Then you can enable the relative paths by
 LoadPackage( "AutoDoc" );
 AutoDoc( rec( gapdoc := rec( gap_root_relative_path := "../../.." ) ) );
 ]]></Listing>
+
 or, since <F>../../..</F> is the standard option for <C>gap_root_relative_path</C>, by
 <Listing><![CDATA[
 LoadPackage( "AutoDoc" );
 AutoDoc( rec( gapdoc := rec( gap_root_relative_path := true ) ) );
 ]]></Listing>
+
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_Tut:Checklist">
 <Heading>Checklist for converting an existing &GAPDoc; manual to use &AutoDoc;</Heading>
@@ -456,9 +467,7 @@ in your package root directory.
 <P/>
 </Subsection>
 
-
 </Section>
-
 
 <Section Label="Section_Tut:Scaffolds">
 <Heading>Scaffolds</Heading>
@@ -489,6 +498,7 @@ Date           := "20/01/2015",
 ##  <!ENTITY RELEASEYEAR "2015">
 ##  <#/GAPDoc>
 ]]></Listing>
+
 However, it is still easy to forget both of these versions. And it doesn't
 solve the problem of updating package authors addresses. Neither of these is a
 big issue, of course, but there have been plenty examples in the past where
@@ -505,6 +515,7 @@ information in your <F>PackageInfo.g</F>. The following commands do just that
 LoadPackage( "AutoDoc" );
 AutoDoc( rec( scaffold := rec( MainPage := false ) ) );
 ]]></Listing>
+
 Note that this only outputs <F>doc/title.xml</F> but does not
 touch any other files of your documentation. In particular, you need
 to explicitly include <F>doc/title.xml</F> from your main XML file.
@@ -515,7 +526,6 @@ enable scaffolding; the above example command explicitly told &AutoDoc;
 not to generate a main page. 
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_Tut:Scaffolds:Main">
 <Heading>Generating the main XML file</Heading>
@@ -529,6 +539,7 @@ from &AutoDoc; documentation comments.
 LoadPackage( "AutoDoc" );
 AutoDoc( rec( scaffold := true ) );
 ]]></Listing>
+
 <P/>
 You can instruct &AutoDoc; to include additional XML files by giving it
 a list of filenames, as in the following example:
@@ -540,12 +551,12 @@ AutoDoc(rec(
     )
 ));
 ]]></Listing>
+
 <P/>
 For more information, please consult the documentation
 of the <Ref Func="AutoDoc"/> function.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_Tut:PackageInfo">
 <Heading>What data is used from <F>PackageInfo.g</F>?</Heading>
@@ -602,6 +613,7 @@ SetPackageInfo( rec(
   )
 ) );
 ]]></Listing>
+
 This inserts <Code>&lt;Copyright&gt;</Code> and <Code>&lt;Acknowledgements&gt;</Code> blocks into
 the generated <F>title.xml</F>.
 <P/>
@@ -612,7 +624,6 @@ for <C>scaffold.TitlePage</C> points back to this subsection.
 </List>
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_Tut:PackageInfo:Entities">
 <Heading>Entities from <F>PackageInfo.g</F> and scaffold options</Heading>
@@ -634,9 +645,7 @@ from <F>makedoc.g</F> take precedence when both define the same key.
 <P/>
 </Subsection>
 
-
 </Section>
-
 
 <Section Label="Section_Tut:WorksheetsPointer">
 <Heading>Worksheets</Heading>
@@ -647,7 +656,6 @@ For stand-alone documents that are not tied to a package, use
 Section <Ref Sect="Section_AutoDocWorksheet"/> of chapter
 <Ref Chap="AutoDoc"/>.
 </Section>
-
 
 </Chapter>
 

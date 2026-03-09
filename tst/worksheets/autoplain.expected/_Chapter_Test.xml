@@ -19,7 +19,6 @@ gap> Size(S5);
 120
 ]]></Example>
 
-
 Some text between two examples
 <Index Key="Worksheet Autoplain">Plain worksheet index entry with <Keyword>true</Keyword></Index>
 <Index Key="WorksheetAutoplainKeyOnly"></Index>
@@ -33,13 +32,11 @@ gap> Size(A5);
 60
 ]]></Example>
 
-
 <Example><![CDATA[
 gap> plain_mode_value := 6 *
 >   9;
 54
 ]]></Example>
-
 
 A plain-text line mentioning @Section InlineMention should stay plain text.
 And an unfenced .autodoc line beginning with #! should stay literal:
@@ -49,6 +46,7 @@ And fenced listings in .autodoc files should also keep would-be comments literal
 @Section PlainTextFenceLiteral
 #! PlainFenceLiteral
 ]]></Listing>
+
 Also, markdown-like inline <Keyword>true</Keyword> should become a keyword tag.
 And XML comments should pass through verbatim:
 <!--
@@ -59,9 +57,7 @@ And XML comments should pass through verbatim:
 And we wrap up with some dummy text
 </Subsection>
 
-
 </Section>
-
 
 </Chapter>
 

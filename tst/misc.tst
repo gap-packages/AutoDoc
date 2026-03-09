@@ -140,19 +140,21 @@ gap> AUTODOC_LineEndsCDATA("plain text");
 false
 gap> AUTODOC_EscapeCDATAContent("a]]>b");
 "a]]]]><![CDATA[>b"
-gap> AUTODOC_ConvertMarkdownToGAPDocXML([
+gap> markdown_verbatim := AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "```@example",
 >   "gap> 1 + 1;",
 >   "2",
 >   "```"
-> ]) = [
->   "<Example><![CDATA[",
->   "gap> 1 + 1;",
->   "2",
->   "]]></Example>"
-> ];
+> ]);;
+gap> Length(markdown_verbatim);
+1
+gap> IsTreeForDocumentationNode(markdown_verbatim[1]);
 true
-gap> AUTODOC_ConvertMarkdownToGAPDocXML([
+gap> markdown_verbatim[1]!.element_name;
+"Example"
+gap> markdown_verbatim[1]!.content;
+[ "gap> 1 + 1;", "2" ]
+gap> markdown_verbatim := AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "Before",
 >   "```gap",
 >   "if x = 2 then",
@@ -160,49 +162,40 @@ gap> AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "fi;",
 >   "```",
 >   "After"
-> ]) = [
->   "Before",
->   "<Listing><![CDATA[",
->   "if x = 2 then",
->   "  Print(\"ok\\n\");",
->   "fi;",
->   "]]></Listing>",
->   "After"
-> ];
+> ]);;
+gap> markdown_verbatim[1];
+"Before"
+gap> IsTreeForDocumentationNode(markdown_verbatim[2]);
 true
-gap> AUTODOC_ConvertMarkdownToGAPDocXML([
+gap> markdown_verbatim[2]!.element_name;
+"Listing"
+gap> markdown_verbatim[2]!.content;
+[ "if x = 2 then", "  Print(\"ok\\n\");", "fi;" ]
+gap> markdown_verbatim[3];
+"After"
+gap> markdown_verbatim := AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "~~~",
 >   "gap> [[2]]>[[1]];",
 >   "~~~"
-> ]) = [
->   "<Listing><![CDATA[",
->   "gap> [[2]]]]><![CDATA[>[[1]];",
->   "]]></Listing>"
-> ];
-true
-gap> AUTODOC_ConvertMarkdownToGAPDocXML([
+> ]);;
+gap> markdown_verbatim[1]!.content;
+[ "gap> [[2]]>[[1]];" ]
+gap> markdown_verbatim := AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "```@example",
 >   "gap> 1 + 1;",
 >   "2",
 >   "```"
-> ]) = [
->   "<Example><![CDATA[",
->   "gap> 1 + 1;",
->   "2",
->   "]]></Example>"
-> ];
-true
-gap> AUTODOC_ConvertMarkdownToGAPDocXML([
+> ]);;
+gap> markdown_verbatim[1]!.element_name;
+"Example"
+gap> markdown_verbatim := AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "```@log",
 >   "#I  some log message",
 >   "```"
-> ]) = [
->   "<Log><![CDATA[",
->   "#I  some log message",
->   "]]></Log>"
-> ];
-true
-gap> AUTODOC_ConvertMarkdownToGAPDocXML([
+> ]);;
+gap> markdown_verbatim[1]!.element_name;
+"Log"
+gap> markdown_verbatim := AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "```@listing",
 >   "#! @BeginCode Increment",
 >   "i := i + 1;",
@@ -211,17 +204,10 @@ gap> AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "#! @InsertCode Increment",
 >   "## Code is inserted here.",
 >   "```"
-> ]) = [
->   "<Listing><![CDATA[",
->   "#! @BeginCode Increment",
->   "i := i + 1;",
->   "#! @EndCode",
->   "",
->   "#! @InsertCode Increment",
->   "## Code is inserted here.",
->   "]]></Listing>"
-> ];
-true
+> ]);;
+gap> markdown_verbatim[1]!.content;
+[ "#! @BeginCode Increment", "i := i + 1;", "#! @EndCode", "", 
+  "#! @InsertCode Increment", "## Code is inserted here." ]
 gap> AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "`<Log attr=\"x\"> & more`"
 > ]) = [
@@ -229,8 +215,24 @@ gap> AUTODOC_ConvertMarkdownToGAPDocXML([
 > ];
 true
 gap> tree_cdata := DocumentationTree();;
-gap> example_node := DocumentationExample( tree_cdata );;
-gap> example_node!.is_tested_example := true;;
+gap> verbatim_node := DocumentationVerbatim(
+>   tree_cdata,
+>   "Listing",
+>   rec( Type := "Code" ),
+>   [ "gap> Print(\"]]>\");" ]
+> );;
+gap> rendered := "";;
+gap> stream := OutputTextString(rendered, true);;
+gap> SetPrintFormattingStatus(stream, false);
+gap> WriteDocumentation(verbatim_node, stream, 0);
+gap> CloseStream(stream);
+gap> rendered = Concatenation(
+>   "<Listing Type=\"Code\"><![CDATA[\n",
+>   "gap> Print(\"]]]]><![CDATA[>\");\n",
+>   "]]></Listing>\n\n"
+> );
+true
+gap> example_node := DocumentationExample( tree_cdata, true );;
 gap> Add( example_node!.content, "gap> Print(\"]]>\");" );;
 gap> rendered := "";;
 gap> stream := OutputTextString(rendered, true);;
@@ -265,7 +267,7 @@ gap> rendered = Concatenation(
 >   "\n",
 >   "#! @InsertCode Increment\n",
 >   "## Code is inserted here.\n",
->   "]]></Listing>\n"
+>   "]]></Listing>\n\n"
 > );
 true
 

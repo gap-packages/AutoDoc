@@ -96,18 +96,13 @@ BindGlobal( "TheTypeOfDocumentationTreeChunkNodes",
                 IsTreeForDocumentationChunkNodeRep ) );
 
 ## DeclareRepresentation
-DeclareRepresentation( "IsTreeForDocumentationExampleNodeRep",
+DeclareRepresentation( "IsTreeForDocumentationVerbatimNodeRep",
                        IsTreeForDocumentationNodeRep,
                        [ ] );
 
-BindGlobal( "TheTypeOfDocumentationTreeExampleNodes",
+BindGlobal( "TheTypeOfDocumentationTreeVerbatimNodes",
         NewType( TheFamilyOfDocumentationTreeNodes,
-                IsTreeForDocumentationExampleNodeRep ) );
-
-
-## DeclareRepresentation
-DeclareRepresentation( "IsTreeForDocumentationChunkContentNodeRep", IsTreeForDocumentationNodeRep, [ ] );
-BindGlobal( "TheTypeOfDocumentationTreeChunkContentNodes", NewType( TheFamilyOfDocumentationTreeNodes, IsTreeForDocumentationChunkContentNodeRep ) );
+                IsTreeForDocumentationVerbatimNodeRep ) );
 
 
 
@@ -210,14 +205,45 @@ end );
 ##
 InstallMethod( DocumentationExample, [ IsTreeForDocumentation ],
   function( tree )
-    local node, label;
+    return DocumentationExample( tree, true );
+end );
 
-    node := rec( content := [ ],
+##
+InstallMethod( DocumentationExample, [ IsTreeForDocumentation, IsBool ],
+  function( tree, is_tested_example )
+    local element_name;
+
+    if is_tested_example then
+        element_name := "Example";
+    else
+        element_name := "Log";
+    fi;
+    return DocumentationVerbatim( tree, element_name, rec( ), [ ] );
+end );
+
+##
+InstallMethod( DocumentationVerbatim, [ IsTreeForDocumentation, IsString, IsRecord, IsList ],
+  function( tree, element_name, attributes, content )
+    local node;
+
+    node := rec( element_name := element_name,
+                 attributes := StructuralCopy( attributes ),
+                 content := ShallowCopy( content ),
                  level := tree!.current_level );
-    label := Concatenation( "Example_", String( AUTODOC_TREE_NODE_NAME_ITERATOR( tree ) ) );
-    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeExampleNodes,
-                             Label, label );
-    tree!.nodes_by_label.( label ) := node;
+    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeVerbatimNodes );
+    return node;
+end );
+
+##
+InstallMethod( DocumentationVerbatim, [ IsString, IsRecord, IsList ],
+  function( element_name, attributes, content )
+    local node;
+
+    node := rec( element_name := element_name,
+                 attributes := StructuralCopy( attributes ),
+                 content := ShallowCopy( content ),
+                 level := 0 );
+    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeVerbatimNodes );
     return node;
 end );
 
@@ -236,16 +262,6 @@ InstallMethod( DocumentationChunk, [ IsTreeForDocumentation, IsString ],
     node!.is_defined := false;
     node!.is_inserted := false;
     tree!.chunks.( name ) := node;
-    return node;
-end );
-
-##
-InstallMethod( DocumentationChunkContent, [ IsObject ],
-  function( content )
-    local node;
-
-    node := rec( content := content );
-    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeChunkContentNodes );
     return node;
 end );
 
@@ -507,25 +523,29 @@ end );
 ##
 InstallMethod( WriteDocumentation, [ IsList, IsStream, IsInt ],
   function( node_list, filestream, level_value )
-    local current_string_list, i, last_position, FlushConvertedStrings;
+    local current_string_list, i, FlushConvertedStrings;
 
     FlushConvertedStrings := function()
-        local converted_string_list, in_cdata, line;
+        local converted_string_list, in_cdata, item;
         if current_string_list = [ ] then
             return;
         fi;
         converted_string_list := AUTODOC_ConvertMarkdownToGAPDocXML( current_string_list );
         in_cdata := false;
-        for line in converted_string_list do
-            if AUTODOC_LineStartsCDATA( line ) then
+        for item in converted_string_list do
+            if not IsString( item ) then
+                WriteDocumentation( item, filestream, level_value );
+                continue;
+            fi;
+            if AUTODOC_LineStartsCDATA( item ) then
                 in_cdata := true;
             fi;
             if in_cdata = true then
-                AppendTo( filestream, Chomp( line ), "\n" );
+                AppendTo( filestream, Chomp( item ), "\n" );
             else
-                WriteDocumentation( line, filestream, level_value );
+                WriteDocumentation( item, filestream, level_value );
             fi;
-            if AUTODOC_LineEndsCDATA( line ) then
+            if AUTODOC_LineEndsCDATA( item ) then
                 in_cdata := false;
             fi;
         od;
@@ -540,7 +560,6 @@ InstallMethod( WriteDocumentation, [ IsList, IsStream, IsInt ],
         else
             FlushConvertedStrings();
             WriteDocumentation( node_list[ i ], filestream, level_value );
-            AppendTo( filestream, "\n" );
         fi;
     od;
     FlushConvertedStrings();
@@ -640,30 +659,15 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationChunkNodeRep, IsStrea
     WriteDocumentation( Concatenation( "<#Include Label=\"", Label( node ), "\">" ), filestream, level_value );
 end );
 
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationChunkContentNodeRep, IsStream, IsInt ],
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationVerbatimNodeRep, IsStream, IsInt ],
   function( node, filestream, level_value )
-    local s;
-    for s in node!.content do
-        AppendTo( filestream, s );
-    od;
-end );
-
-##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationExampleNodeRep, IsStream, IsInt ],
-  function( node, filestream, level_value )
-    local contents, tested, inserted_string;
-
     if node!.level > level_value then
         return;
     fi;
-    contents := node!.content;
-    tested := node!.is_tested_example;
-    if tested = true then
-        inserted_string := "Example";
-    elif tested = false then
-        inserted_string := "Log";
-    else
-        Error( "This should not happen!" );
-    fi;
-    AUTODOC_WriteCDATASection( filestream, inserted_string, contents );
+    AUTODOC_WriteCDATASection(
+        filestream,
+        node!.element_name,
+        node!.content,
+        node!.attributes
+    );
 end );

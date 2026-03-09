@@ -17,6 +17,7 @@ If you want your declaration documented, just write
 DeclareOperation( "AnOperation",
                   [ IsList ] );
 ]]></Listing>
+
 <P/>
 This will produce a manual entry for the operation <C>AnOperation</C>.
 <P/>
@@ -39,6 +40,7 @@ For example:
 #!  See <Ref Chap="Chapter_Tutorials"/> for setup details.
 #!  The argument <A>obj</A> must satisfy <K>IsObject</K>.
 ]]></Listing>
+
 <P/>
 As explained in chapter <Ref Chap="Chapter_Overview"/>, you can combine &AutoDoc;
 comments with hand-written XML and classic &GAPDoc; comments. For practical
@@ -64,7 +66,6 @@ or until the declaration is reached.
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_@Returns">
 <Heading><C>@Returns <A>ret val</A></C></Heading>
 
@@ -75,7 +76,6 @@ put in front of it. This should usually give a brief hint about the type or mean
 of the value returned by the documented function.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@Arguments">
 <Heading><C>@Arguments <A>args</A></C></Heading>
@@ -91,7 +91,6 @@ and one or more assignments, like <Q>n[, r]: tries := 100</Q>.
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_@Group">
 <Heading><C>@Group <A>grpname</A></C></Heading>
 
@@ -101,7 +100,6 @@ Adds the following method to a group with the given name.
 See section <Ref Sect="Section_Groups"/> for more information about groups.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@Label">
 <Heading><C>@Label <A>label</A></C></Heading>
@@ -118,6 +116,7 @@ a default label is generated from this filter list.
 DeclareProperty( "AProperty",
                  IsObject );
 ]]></Listing>
+
 leads to this:
 <Listing><![CDATA[
 <ManSection>
@@ -128,12 +127,14 @@ leads to this:
  </Description>
 </ManSection>
 ]]></Listing>
+
 while
 <Listing><![CDATA[
 #!
 DeclareProperty( "AProperty",
                  IsObject );
 ]]></Listing>
+
 leads to this:
 <Listing><![CDATA[
 <ManSection>
@@ -144,9 +145,9 @@ leads to this:
  </Description>
 </ManSection>
 ]]></Listing>
+
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@ChapterInfo">
 <Heading><C>@ChapterInfo <A>chapter</A>, <A>section</A></C></Heading>
@@ -172,12 +173,11 @@ As an example, a full &AutoDoc; comment with all options could look like this:
 DeclareAttribute( "CharacterDegreesOfBlocks",
         IsBrauerTable );
 ]]></Listing>
+
 <P/>
 </Subsection>
 
-
 </Section>
-
 
 <Section Label="Chapter_Comments_Section_Other_documentation_comments">
 <Heading>Other documentation comments</Heading>
@@ -207,6 +207,7 @@ Example:
 #!  This is my chapter.
 #!  I document my stuff in it.
 ]]></Listing>
+
 <P/>
 The <C>@ChapterLabel</C> <A>label</A> command
 can be used to set the label of the chapter to <C>Chapter_</C><A>label</A> instead of
@@ -224,11 +225,11 @@ If you use all three commands, i.e.,
 #! @ChapterLabel label
 #! @ChapterTitle title
 ]]></Listing>
+
 <C>title</C> is used for the headline, <C>label</C> for cross-referencing, and <C>name</C>
 for setting the same chapter as active chapter again.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@Section">
 <Heading><C>@Section <A>name</A></C></Heading>
@@ -244,6 +245,7 @@ The section automatically ends with the next <C>@Section</C> or <C>@Chapter</C> 
 #! @Section My first manual section
 #!  In this section I am going to document my first method.
 ]]></Listing>
+
 <P/>
 The <C>@SectionLabel</C> <A>label</A> command
 can be used to set the label of the section to <C>Section_</C><A>label</A> instead of
@@ -253,7 +255,6 @@ The <C>@SectionTitle</C> <A>title</A> command
 can be used to set a heading for the section that is different from <A>name</A>.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@Subsection">
 <Heading><C>@Subsection <A>name</A></C></Heading>
@@ -272,6 +273,7 @@ is treated like a subsection.
 #! @Subsection My first manual subsection
 #!  In this subsection I am going to document my first example.
 ]]></Listing>
+
 <P/>
 The <C>@SubsectionLabel</C> <A>label</A> command
 can be used to set the label of the subsection to <C>Subsection_</C><A>label</A> instead of
@@ -281,7 +283,6 @@ The <C>@SubsectionTitle</C> <A>title</A> command
 can be used to set a heading for the subsection that is different from <A>name</A>.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@BeginGroup">
 <Heading><C>@BeginGroup <A>[grpname]</A></C></Heading>
@@ -298,7 +299,6 @@ is reached.
 See section <Ref Sect="Section_Groups"/> for more information about groups.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@EndGroup">
 <Heading><C>@EndGroup</C></Heading>
@@ -321,9 +321,9 @@ DeclareOperation( "GroupedOperation",
                   [ IsList, IsRubbish ] );
 #! @EndGroup
 ]]></Listing>
+
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@GroupTitle">
 <Heading>@GroupTitle <A>title</A></Heading>
@@ -335,7 +335,6 @@ absence of any <C>@GroupTitle</C> command, the heading will be the name of the
 first entry in the group. See <Ref Sect="Section_Groups"/> for more information.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@BeginExample">
 <Heading><C>@BeginExample</C> and <C>@EndExample</C></Heading>
@@ -361,6 +360,7 @@ Order(S5);
 #! 120
 #! @EndExample
 ]]></Listing>
+
 This results in the following output:
 <Example>
 gap> S5 := SymmetricGroup(5);
@@ -374,7 +374,6 @@ these examples can also be turned into <F>.tst</F> files (see
 Section <Ref Sect="Subsection_Tut:IntegrateExisting:EverythingThere"/>).
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@BeginExampleSession">
 <Heading><C>@BeginExampleSession</C> and <C>@EndExampleSession</C></Heading>
@@ -395,6 +394,7 @@ To illustrate this command, consider this input:
 #! 120
 #! @EndExampleSession
 ]]></Listing>
+
 This results in the following output:
 <Example>
 gap> S5 := SymmetricGroup(5);
@@ -415,7 +415,6 @@ The &AutoDoc; command <C>@ExampleSession</C> is an alias of <C>@BeginExampleSess
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_@BeginLog">
 <Heading><C>@BeginLog</C> and <C>@EndLog</C></Heading>
 
@@ -427,7 +426,6 @@ will not be tested. See the &GAPDoc; manual for more information.
 The &AutoDoc; command <C>@Log</C> is an alias of <C>@BeginLog</C>.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@BeginLogSession">
 <Heading><C>@BeginLogSession</C> and <C>@EndLogSession</C></Heading>
@@ -441,7 +439,6 @@ will not be tested if manual examples are run. It is the direct analog of
 The &AutoDoc; command <C>@LogSession</C> is an alias of <C>@BeginLogSession</C>.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@DoNotReadRestOfFile">
 <Heading><C>@DoNotReadRestOfFile</C></Heading>
@@ -458,9 +455,9 @@ unfinished or temporary files.
 
 #! This will not appear in the manual.
 ]]></Listing>
+
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@BeginChunk">
 <Heading><C>@BeginChunk <A>name</A></C>, <C>@EndChunk</C>, and <C>@InsertChunk <A>name</A></C></Heading>
@@ -484,6 +481,7 @@ If you do not provide an <C>@EndChunk</C>, the chunk ends at the end of the file
 #! @InsertChunk MyChunk
 ## The text "Hello, world." is inserted right before this.
 ]]></Listing>
+
 <P/>
 You can use this to define an example like this in one file:
 <P/>
@@ -497,15 +495,16 @@ Order(S5);
 #! @EndExample
 #! @EndChunk
 ]]></Listing>
+
 <P/>
 And then later, insert the example in a different file, like this:
 <P/>
 <Listing><![CDATA[
 #! @InsertChunk Example_Symmetric_Group
 ]]></Listing>
+
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@BeginCode">
 <Heading><C>@BeginCode <A>name</A></C>, @EndCode, and <C>@InsertCode <A>name</A></C></Heading>
@@ -525,9 +524,9 @@ i := i + 1;
 #! @InsertCode Increment
 ## Code is inserted here.
 ]]></Listing>
+
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@LatexOnly">
 <Heading><C>@LatexOnly <A>text</A></C>, <C>@BeginLatexOnly</C>, and <C>@EndLatexOnly</C></Heading>
@@ -545,9 +544,9 @@ in the PDF version of the manual or worksheet. It can hold arbitrary &LaTeX;-com
 
 #! @LatexOnly \include{picture.tex}
 ]]></Listing>
+
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@NotLatex">
 <Heading><C>@NotLatex <A>text</A></C>, <C>@BeginNotLatex</C>, and <C>@EndNotLatex</C></Heading>
@@ -565,9 +564,9 @@ in the HTML and text versions of the manual or worksheet, but not in the PDF ver
 
 #! @NotLatex For further information see the PDF version of this manual.
 ]]></Listing>
+
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@Index">
 <Heading><C>@Index <A>key</A> [<A>entry text</A>]</C></Heading>
@@ -585,9 +584,7 @@ inline code such as <Keyword>true</Keyword> is supported.
 <P/>
 </Subsection>
 
-
 </Section>
-
 
 <Section Label="Section_TitlepageCommands">
 <Heading>Title page commands</Heading>
@@ -637,7 +634,6 @@ for worksheets created with <Ref Func="AutoDocWorksheet"/>,
 since worksheets do not have a <F>PackageInfo.g</F> file from which this information could be extracted.
 <P/>
 </Section>
-
 
 <Section Label="Section_PlainText">
 <Heading>Plain text files</Heading>
@@ -704,6 +700,7 @@ gap> Size(S5);
 
 @Index "Worksheet Autoplain" Plain worksheet index entry with `true`
 ]]></Listing>
+
 <P/>
 This is essentially the style used in the worksheet fixture
 <F>tst/worksheets/autoplain.sheet/plain.autodoc</F>.
@@ -716,6 +713,7 @@ example:
 #! @Section The AutoDoc() function
 #! Some introductory text for this section.
 ]]></Listing>
+
 <P/>
 This source-comment style is still fully supported and is used in
 <F>gap/Magic.gd</F>.
@@ -741,7 +739,6 @@ declaration-bound commands attach metadata to a following declaration, while
 standalone manual text can live wherever you find it most convenient.
 <P/>
 </Section>
-
 
 <Section Label="Section_Groups">
 <Heading>Grouping</Heading>
@@ -787,6 +784,7 @@ DeclareOperation( "SecondOperation", [ IsInt, IsGroup ] );
 #! @Group Group1
 KeyDependentOperation( "ThirdOperation", IsGroup, IsInt, "prime );
 ]]></Listing>
+
 <P/>
 produces the following:
 <P/>
@@ -803,9 +801,9 @@ Third sentence.
  </Description>
 </ManSection>
 ]]></Listing>
+
 <P/>
 </Section>
-
 
 <Section Label="Section_MarkdownExtension">
 <Heading>Markdown-like formatting of text in &AutoDoc;</Heading>
@@ -835,6 +833,7 @@ One can create lists of items by beginning a new line with *, +, -, followed by 
 #! * item 3 of the outer list
 #! This does not belong to the list anymore.
 ]]></Listing>
+
 <P/>
 This is the output:<Br/>
 The list starts in the next line
@@ -864,7 +863,6 @@ The *, -, and + are fully interchangeable and can even be used mixed, but this i
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_MarkdownExtensionMath">
 <Heading>Math modes</Heading>
 
@@ -877,6 +875,7 @@ One can start an inline formula with a &#36;, and also end it with &#36;, just l
 #! This is a display formula:
 #! $$ \sum_{i=1}^n i. $$
 ]]></Listing>
+
 <P/>
    produces the following output:<Br/>
    This is an inline formula: <Math>1+1 = 2</Math>.
@@ -884,7 +883,6 @@ One can start an inline formula with a &#36;, and also end it with &#36;, just l
      <Display> \sum_{i=1}^n i. </Display>
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_MarkdownExtensionEmph">
 <Heading>Emphasize</Heading>
@@ -899,6 +897,7 @@ One can emphasize text by using two asterisks (&#42;&#42;) or two underscores (&
 #! **Naturally, more than one line
 #! can be important.**
 ]]></Listing>
+
 <P/>
  This produces the following output:<Br/>
 <E>This</E> is very important.
@@ -907,7 +906,6 @@ This is <E>also important</E>.
 can be important.</E>
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_MarkdownExtensionInlineCode">
 <Heading>Inline code</Heading>
@@ -919,12 +917,12 @@ One can mark inline code snippets by using backticks (&#96;) at the
 <Listing><![CDATA[
 #! Call function `foobar()` at the start.
 ]]></Listing>
+
 <P/>
     This produces the following output:<Br/>
     Call function <C>foobar()</C> at the start.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_MarkdownExtensionFencedCode">
 <Heading>Fenced code blocks</Heading>
@@ -951,6 +949,7 @@ One can insert verbatim code blocks by placing the code between lines
 #! #I  some log message
 #! ```
 ]]></Listing>
+
 <P/>
     This produces the following output:<Br/>
 <Listing><![CDATA[
@@ -958,19 +957,20 @@ if x = 2 then
   Print("1 + 1 = 2 holds, all is good\n");
 fi;
 ]]></Listing>
+
 <Example><![CDATA[
 gap> [ 1 .. 3 ] ^ 2;
 [ 1, 4, 9 ]
 ]]></Example>
+
 <Log><![CDATA[
 #I  some log message
 ]]></Log>
+
 <P/>
 </Subsection>
 
-
 </Section>
-
 
 <Section Label="Section_Deprecated">
 <Heading>Deprecated commands</Heading>
@@ -994,7 +994,6 @@ at the start of any new subsection, section or chapter.</Item>
 <Item>Use <C>.autodoc</C> files or &AutoDoc; comments instead.</Item>
 </List>
 </Section>
-
 
 </Chapter>
 

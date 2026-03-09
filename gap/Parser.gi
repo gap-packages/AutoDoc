@@ -593,10 +593,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         return false;
     end;
     read_code := function( )
-        local code, temp_curr_line, temp_line_info, temp_command;
-        # Phase 2 target: represent verbatim blocks structurally instead of
-        # injecting raw CDATA-shaped strings into the intermediate tree.
-        code := [ "<Listing Type=\"Code\"><![CDATA[\n" ];
+        local code_node, temp_curr_line, temp_line_info, temp_command;
+        code_node := DocumentationVerbatim(
+            tree,
+            "Listing",
+            rec( Type := "Code" ),
+            [ ]
+        );
         while true do
             temp_curr_line := ReadLineWithLineCount( filestream );
             temp_line_info := NormalizeInputLine( temp_curr_line );
@@ -605,18 +608,16 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 if temp_command[ 1 ] = "@EndCode" then
                     break;
                 fi;
-                Add( code, temp_line_info.text );
+                Add( code_node!.content, Chomp( temp_line_info.text ) );
                 continue;
             fi;
-            Add( code, temp_curr_line );
+            Add( code_node!.content, Chomp( temp_curr_line ) );
         od;
-        Add( code, "]]></Listing>\n" );
-        return code;
+        return code_node;
     end;
     read_example := function( is_tested_example )
         local temp_string_list, temp_curr_line, temp_pos_comment, is_following_line, item_temp, example_node;
-        example_node := DocumentationExample( tree );
-        example_node!.is_tested_example := is_tested_example;
+        example_node := DocumentationExample( tree, is_tested_example );
         temp_string_list := example_node!.content;
         is_following_line := false;
         while true do
@@ -655,8 +656,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         local temp_string_list, temp_curr_line, temp_pos_comment,
               is_following_line, item_temp, example_node,
               incorporate_this_line;
-        example_node := DocumentationExample( tree );
-        example_node!.is_tested_example := is_tested_example;
+        example_node := DocumentationExample( tree, is_tested_example );
         temp_string_list := example_node!.content;
         while true do
             temp_curr_line := Chomp( ReadLineWithLineCount( filestream ) );
@@ -946,7 +946,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             label_name := ReplacedString( current_command[ 2 ], " ", "_" );
             tmp_system := DocumentationChunk( tree, label_name );
             tmp_system!.is_defined := true;
-            Add( tmp_system!.content, DocumentationChunkContent( read_code() ) );
+            Add( tmp_system!.content, read_code() );
         end,
         @Code := ~.@BeginCode,
         @InsertCode := ~.@InsertChunk,
@@ -976,36 +976,50 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             Add( current_item, current_command[ 2 ] );
         end,
         @BeginLatexOnly := function()
-            # Phase 2 target: model Alt blocks structurally and let the writer
-            # own CDATA serialization.
-            Add( current_item, "<Alt Only=\"LaTeX\"><![CDATA[" );
+            local alt_node;
+            alt_node := DocumentationVerbatim( tree, "Alt", rec( Only := "LaTeX" ), [ ] );
+            Add( current_item, alt_node );
+            Add( context_stack, current_item );
+            current_item := alt_node!.content;
             if current_command[ 2 ] <> "" then
                 Add( current_item, current_command[ 2 ] );
             fi;
         end,
         @EndLatexOnly := function()
             autodoc_read_line := false;
-            Add( current_item, "]]></Alt>" );
+            current_item := Remove( context_stack );
         end,
         @LatexOnly := function()
-            Add( current_item, "<Alt Only=\"LaTeX\"><![CDATA[" );
-            Add( current_item, current_command[ 2 ] );
-            Add( current_item, "]]></Alt>" );
+            Add( current_item,
+                 DocumentationVerbatim(
+                     tree,
+                     "Alt",
+                     rec( Only := "LaTeX" ),
+                     [ current_command[ 2 ] ]
+                 ) );
         end,
         @BeginNotLatex := function()
-            Add( current_item, "<Alt Not=\"LaTeX\"><![CDATA[" );
+            local alt_node;
+            alt_node := DocumentationVerbatim( tree, "Alt", rec( Not := "LaTeX" ), [ ] );
+            Add( current_item, alt_node );
+            Add( context_stack, current_item );
+            current_item := alt_node!.content;
             if current_command[ 2 ] <> "" then
                 Add( current_item, current_command[ 2 ] );
             fi;
         end,
         @EndNotLatex := function()
             autodoc_read_line := false;
-            Add( current_item, "]]></Alt>" );
+            current_item := Remove( context_stack );
         end,
         @NotLatex := function()
-            Add( current_item, "<Alt Not=\"LaTeX\"><![CDATA[" );
-            Add( current_item, current_command[ 2 ] );
-            Add( current_item, "]]></Alt>" );
+            Add( current_item,
+                 DocumentationVerbatim(
+                     tree,
+                     "Alt",
+                     rec( Not := "LaTeX" ),
+                     [ current_command[ 2 ] ]
+                 ) );
         end,
         @Dependency := function()
             if not IsBound( tree!.worksheet_dependencies ) then

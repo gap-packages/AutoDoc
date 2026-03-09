@@ -16,7 +16,7 @@ Sym( [ 1 .. 5 ] )
 gap> Size(S5);
 120
 
-# _Chapter_SomeChapter.xml:21-29
+# _Chapter_SomeChapter.xml:20-28
 gap> A5 := AlternatingGroup(5);
 Alt( [ 1 .. 5 ] )
 gap> Size(A5);
@@ -25,7 +25,7 @@ gap> # Test whether ]]> can be used safely
 gap> [[2]]>[[1]];
 true
 
-# _Chapter_SomeChapter.xml:32-36
+# _Chapter_SomeChapter.xml:30-34
 gap> comment_mode_value := 6 *
 >   7;
 42

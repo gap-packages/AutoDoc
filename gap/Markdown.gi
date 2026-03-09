@@ -48,14 +48,16 @@ end );
 ##
 BindGlobal( "AUTODOC_ConvertInlineBackticksInLine",
   function( string, keyword_set )
-    local opening_pos, closing_pos, inline_content, tag_name;
+    local opening_pos, closing_pos, inline_content, tag_name, search_string;
 
     while PositionSublist( string, "`" ) <> fail do
         opening_pos := PositionSublist( string, "`" );
-        closing_pos := PositionSublist( string, "`", opening_pos + 1 );
+        search_string := string{ [ opening_pos + 1 .. Length( string ) ] };
+        closing_pos := PositionSublist( search_string, "`" );
         if closing_pos = fail then
             Error( "did you forget some `" );
         fi;
+        closing_pos := opening_pos + closing_pos;
 
         if opening_pos + 1 <= closing_pos - 1 then
             inline_content := string{ [ opening_pos + 1 .. closing_pos - 1 ] };
@@ -94,7 +96,8 @@ end );
 BindGlobal( "AUTODOC_ConvertFencedMarkdownBlocks",
   function( string_list )
     local i, converted_string_list, skipped, trimmed_line,
-          fence_char, fence_length, info_string, fence_element, code_block;
+          fence_char, fence_length, info_string, fence_element, code_block,
+          fence_content;
 
     converted_string_list := [ ];
     i := 1;
@@ -126,10 +129,9 @@ BindGlobal( "AUTODOC_ConvertFencedMarkdownBlocks",
                     trimmed_line{ [ fence_length + 1 .. Length( trimmed_line ) ] }
                 );
                 fence_element := AUTODOC_FencedMarkdownElement( info_string );
-                Add( converted_string_list,
-                     Concatenation( "<", fence_element, "><![CDATA[" ) );
                 i := i + 1;
                 code_block := false;
+                fence_content := [ ];
                 while i <= Length( string_list ) do
                     trimmed_line := StripBeginEnd( string_list[ i ], " \t\r\n" );
                     if Length( trimmed_line ) >= fence_length and
@@ -139,12 +141,11 @@ BindGlobal( "AUTODOC_ConvertFencedMarkdownBlocks",
                         code_block := true;
                         break;
                     fi;
-                    Add( converted_string_list,
-                         AUTODOC_EscapeCDATAContent( string_list[ i ] ) );
+                    Add( fence_content, Chomp( string_list[ i ] ) );
                     i := i + 1;
                 od;
                 Add( converted_string_list,
-                     Concatenation( "]]></", fence_element, ">" ) );
+                     DocumentationVerbatim( fence_element, rec( ), fence_content ) );
                 if code_block = true then
                     i := i + 1;
                     continue;
@@ -179,15 +180,13 @@ BindGlobal( "AUTODOC_ForEachNonCDATALine",
 end );
 
 ##
-InstallGlobalFunction( AUTODOC_ConvertMarkdownToGAPDocXML,
+BindGlobal( "AUTODOC_ConvertMarkdownStringsToGAPDocXML",
   function( string_list )
     local i, current_list, current_string, max_line_length,
           current_position, already_in_list, command_list_with_translation, beginning,
           commands, position_of_command, insert, beginning_whitespaces, temp, string_list_temp, skipped,
           already_inserted_paragraph, in_list, in_item, converted_string_list,
           keyword_set;
-
-    string_list := AUTODOC_ConvertFencedMarkdownBlocks( string_list );
 
     # Convert inline backticks before list detection so literal tags such as
     # `<List>` inside code spans do not look like structural GAPDoc tags.
@@ -340,4 +339,34 @@ InstallGlobalFunction( AUTODOC_ConvertMarkdownToGAPDocXML,
     od;
 
     return string_list;
+end );
+
+##
+InstallGlobalFunction( AUTODOC_ConvertMarkdownToGAPDocXML,
+  function( string_list )
+    local converted_items, current_string_list, item, FlushStringList;
+
+    converted_items := [ ];
+    current_string_list := [ ];
+
+    FlushStringList := function()
+        if current_string_list = [ ] then
+            return;
+        fi;
+        Append( converted_items,
+                AUTODOC_ConvertMarkdownStringsToGAPDocXML( current_string_list ) );
+        current_string_list := [ ];
+    end;
+
+    for item in AUTODOC_ConvertFencedMarkdownBlocks( string_list ) do
+        if IsString( item ) then
+            Add( current_string_list, item );
+        else
+            FlushStringList();
+            Add( converted_items, item );
+        fi;
+    od;
+    FlushStringList();
+
+    return converted_items;
 end );

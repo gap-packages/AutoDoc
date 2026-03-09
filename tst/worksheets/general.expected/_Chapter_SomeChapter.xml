@@ -12,7 +12,6 @@ gap> Size(S5);
 120
 ]]></Example>
 
-
  Some text between two examples
 <Index Key="Worksheet General">General worksheet index entry with <Keyword>true</Keyword></Index>
 <Index Key="WorksheetGeneralKeyOnly"></Index>
@@ -28,13 +27,11 @@ gap> [[2]]]]><![CDATA[>[[1]];
 true
 ]]></Example>
 
-
 <Example><![CDATA[
 gap> comment_mode_value := 6 *
 >   7;
 42
 ]]></Example>
-
 
  And we wrap up with some dummy text
 <Section Label="Chapter_SomeChapter_Section_Some_categories">
@@ -50,7 +47,6 @@ gap> comment_mode_value := 6 *
  </Description>
 </ManSection>
 
-
 <ManSection>
   <Filt Arg="obj" Name="MyThingsCollection" />
  <Returns><K>true</K> or <K>false</K>
@@ -59,7 +55,6 @@ gap> comment_mode_value := 6 *
 <P/>
  </Description>
 </ManSection>
-
 
 <ManSection>
   <Filt Arg="obj" Name="MyThingsCollColl" />
@@ -70,10 +65,8 @@ gap> comment_mode_value := 6 *
  </Description>
 </ManSection>
 
-
  Let's wrap up with something, though.
 </Section>
-
 
 <Section Label="Chapter_SomeChapter_Section_SomeSection">
 <Heading>SomeSection</Heading>
@@ -84,7 +77,6 @@ gap> comment_mode_value := 6 *
 
  This is a subsection!
 </Subsection>
-
 
 <Subsection Label="Chapter_SomeChapter_Section_SomeSection_Subsection_MarkDown_support">
 <Heading>MarkDown support</Heading>
@@ -123,23 +115,28 @@ This is <Keyword>true</Keyword> in a list item.
  @Section ThisMustStayLiteral
  #! AlsoLiteral
 ]]></Listing>
+
 <Alt Only="LaTeX"><![CDATA[
 This text will only appear in the \LaTeX version.
 ]]></Alt>
+
 <Alt Only="LaTeX"><![CDATA[
  This text will only appear in the \LaTeX version, too.
+
 ]]></Alt>
+
 <Alt Not="LaTeX"><![CDATA[
 This text will only appear in the HTML version and the text version.
 ]]></Alt>
+
 <Alt Not="LaTeX"><![CDATA[
  This text will only appear in the HTML version and the text version, too.
+
 ]]></Alt>
+
 </Subsection>
 
-
 </Section>
-
 
 <Section Label="Chapter_SomeChapter_Section_Testing_various_kinds_of_documentation">
 <Heading>Testing various kinds of documentation</Heading>
@@ -153,7 +150,6 @@ This text will only appear in the HTML version and the text version.
  </Description>
 </ManSection>
 
-
 <ManSection>
   <Filt Arg="arg" Name="SomeRepresentation" Label="for IsAttributeStoringRep"/>
  <Returns><K>true</K> or <K>false</K>
@@ -166,14 +162,12 @@ This text will only appear in the HTML version and the text version.
  </Description>
 </ManSection>
 
-
 <ManSection>
   <Attr Arg="arg" Name="SomeAttribute" Label="for IsGroup"/>
  <Description>
  An attribute
  </Description>
 </ManSection>
-
 
 <ManSection>
   <Prop Arg="arg" Name="SomeProperty" Label="for IsGroup"/>
@@ -184,14 +178,12 @@ This text will only appear in the HTML version and the text version.
  </Description>
 </ManSection>
 
-
 <ManSection>
   <Oper Arg="arg1,arg2" Name="SomeOperation" Label="for IsInt, IsGroup"/>
  <Description>
  An operation
  </Description>
 </ManSection>
-
 
 <ManSection>
   <Constr Arg="arg1,arg2" Name="SomeConstructor" Label="for IsGroup, IsInt"/>
@@ -200,14 +192,12 @@ This text will only appear in the HTML version and the text version.
  </Description>
 </ManSection>
 
-
 <ManSection>
   <Func Arg="arg" Name="SomeGlobalFunction" />
  <Description>
  A global function
  </Description>
 </ManSection>
-
 
 <ManSection>
   <Var Name="SomeGlobalVariable" />
@@ -216,14 +206,12 @@ This text will only appear in the HTML version and the text version.
  </Description>
 </ManSection>
 
-
 <ManSection>
   <Var Name="SomeGlobalName" />
  <Description>
  A global name
  </Description>
 </ManSection>
-
 
 <ManSection>
   <Filt Name="SomeFilter" />
@@ -232,14 +220,12 @@ This text will only appear in the HTML version and the text version.
  </Description>
 </ManSection>
 
-
 <ManSection>
   <InfoClass Name="SomeInfoClass" />
  <Description>
  An info class
  </Description>
 </ManSection>
-
 
 <ManSection>
   <Oper Arg="arg1,arg2" Name="SomeKeyDependentOperation" Label="for IsGroup, IsInt"/>
@@ -248,9 +234,7 @@ This text will only appear in the HTML version and the text version.
  </Description>
 </ManSection>
 
-
 </Section>
-
 
 <Section Label="Chapter_SomeChapter_Section_Testing_the_group_commands">
 <Heading>Testing the group commands</Heading>
@@ -267,29 +251,23 @@ This text will only appear in the HTML version and the text version.
  </Description>
 </ManSection>
 
-
 </Section>
-
 
 <Section Label="Chapter_SomeChapter_Section_Testing_chunks">
 <Heading>Testing chunks</Heading>
 
  This test comes after the chunk is declared, but before it is inserted.
 <#Include Label="MyChunk">
-
  The text "Hello, world." is inserted right before this.
 </Section>
-
 
 <Section Label="Chapter_SomeChapter_Section_Testing_code_chunks">
 <Heading>Testing code chunks</Heading>
 
  This test comes after the code chunk is declared, but before it is inserted.
 <#Include Label="MyCode">
-
  The text "Hello, world." is inserted right before this.
 </Section>
-
 
 </Chapter>
 

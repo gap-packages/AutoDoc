@@ -51,9 +51,22 @@ function(text)
 end);
 
 BindGlobal( "AUTODOC_WriteCDATASection",
-function(filestream, tag_name, contents)
-    local line;
-    AppendTo( filestream, "<", tag_name, "><![CDATA[\n" );
+function(filestream, tag_name, contents, attrs...)
+    local line, attr_rec, attr_names, attr_name;
+    if Length( attrs ) > 1 then
+        Error( "expected at most one attribute record" );
+    fi;
+    if attrs = [ ] then
+        attr_rec := rec( );
+    else
+        attr_rec := attrs[ 1 ];
+    fi;
+    AppendTo( filestream, "<", tag_name );
+    attr_names := SortedList( RecNames( attr_rec ) );
+    for attr_name in attr_names do
+        AppendTo( filestream, " ", attr_name, "=\"", attr_rec.( attr_name ), "\"" );
+    od;
+    AppendTo( filestream, "><![CDATA[\n" );
     for line in contents do
         AppendTo( filestream, AUTODOC_EscapeCDATAContent( line ), "\n" );
     od;
