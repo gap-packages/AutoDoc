@@ -380,7 +380,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             Add( context_stack, current_item );
         fi;
 
-        man_item := DocumentationManItem( tree );
+        man_item := DocumentationManItem( );
         if IsBound( scope_group ) then
             SetGroupName( man_item, scope_group );
         fi;

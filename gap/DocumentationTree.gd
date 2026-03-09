@@ -50,7 +50,7 @@ DeclareOperation( "SubsectionInTree", [ IsTreeForDocumentation, IsString, IsStri
 DeclareOperation( "DocumentationExample", [ IsString ] );
 DeclareOperation( "DocumentationVerbatim", [ IsString, IsRecord, IsList ] );
 DeclareOperation( "DocumentationChunk", [ IsTreeForDocumentation, IsString ] );
-DeclareOperation( "DocumentationManItem", [ IsTreeForDocumentation ] );
+DeclareOperation( "DocumentationManItem", [ ] );
 DeclareOperation( "SetManItemToDescription", [ IsTreeForDocumentationNode ] );
 DeclareOperation( "SetManItemToReturnValue", [ IsTreeForDocumentationNode ] );
 DeclareOperation( "DocumentationGroup", [ IsTreeForDocumentation, IsString ] );

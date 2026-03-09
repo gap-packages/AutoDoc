@@ -240,8 +240,8 @@ InstallMethod( DocumentationChunk, [ IsTreeForDocumentation, IsString ],
 end );
 
 ##
-InstallMethod( DocumentationManItem, [ IsTreeForDocumentation ],
-  function( tree )
+InstallMethod( DocumentationManItem, [ ],
+  function( )
     local node;
 
     node := rec( description := [ ],
