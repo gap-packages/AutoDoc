@@ -97,7 +97,6 @@ gap> AUTODOC_ConvertMarkdownToGAPDocXML([
 true
 gap> tree_cdata := DocumentationTree();;
 gap> verbatim_node := DocumentationVerbatim(
->   tree_cdata,
 >   "Listing",
 >   rec( Type := "Code" ),
 >   [ "gap> Print(\"]]>\");" ]

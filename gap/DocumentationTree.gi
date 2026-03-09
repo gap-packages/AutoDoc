@@ -210,21 +210,8 @@ end );
 InstallMethod( DocumentationExample, [ IsTreeForDocumentation, IsString ],
   function( tree, element_name )
     local node;
-    node := DocumentationVerbatim( tree, element_name, rec( ), [ ] );
+    node := DocumentationVerbatim( element_name, rec( ), [ ] );
     node!.closing_separator := "\n\n";
-    return node;
-end );
-
-##
-InstallMethod( DocumentationVerbatim, [ IsTreeForDocumentation, IsString, IsRecord, IsList ],
-  function( tree, element_name, attributes, content )
-    local node;
-
-    node := rec( element_name := element_name,
-                 attributes := StructuralCopy( attributes ),
-                 content := ShallowCopy( content ) );
-    node!.closing_separator := "\n";
-    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeVerbatimNodes );
     return node;
 end );
 

@@ -595,7 +595,6 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     read_code := function( )
         local code_node, temp_curr_line, temp_line_info, temp_command;
         code_node := DocumentationVerbatim(
-            tree,
             "Listing",
             rec( Type := "Code" ),
             [ ]
@@ -978,7 +977,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end,
         @BeginLatexOnly := function()
             local alt_node;
-            alt_node := DocumentationVerbatim( tree, "Alt", rec( Only := "LaTeX" ), [ ] );
+            alt_node := DocumentationVerbatim( "Alt", rec( Only := "LaTeX" ), [ ] );
             Add( current_item, alt_node );
             Add( context_stack, current_item );
             current_item := alt_node!.content;
@@ -992,16 +991,15 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end,
         @LatexOnly := function()
             Add( current_item,
-                 DocumentationVerbatim(
-                     tree,
-                     "Alt",
-                     rec( Only := "LaTeX" ),
-                     [ current_command[ 2 ] ]
+                DocumentationVerbatim(
+                    "Alt",
+                    rec( Only := "LaTeX" ),
+                    [ current_command[ 2 ] ]
                  ) );
         end,
         @BeginNotLatex := function()
             local alt_node;
-            alt_node := DocumentationVerbatim( tree, "Alt", rec( Not := "LaTeX" ), [ ] );
+            alt_node := DocumentationVerbatim( "Alt", rec( Not := "LaTeX" ), [ ] );
             Add( current_item, alt_node );
             Add( context_stack, current_item );
             current_item := alt_node!.content;
@@ -1015,11 +1013,10 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end,
         @NotLatex := function()
             Add( current_item,
-                 DocumentationVerbatim(
-                     tree,
-                     "Alt",
-                     rec( Not := "LaTeX" ),
-                     [ current_command[ 2 ] ]
+                DocumentationVerbatim(
+                    "Alt",
+                    rec( Not := "LaTeX" ),
+                    [ current_command[ 2 ] ]
                  ) );
         end,
         @Dependency := function()
