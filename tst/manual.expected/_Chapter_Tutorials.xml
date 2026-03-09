@@ -152,7 +152,7 @@ DeclareOperation( "ToricVariety", [ IsConvexObject ] );
 In these comment lines, you can freely use normal &GAPDoc; XML markup
 (with the usual exceptions for lines starting with <C>@</C>, which are
 interpreted as &AutoDoc; commands). So, for instance, tags like
-<C>&lt;Ref&gt;</C>, <C>&lt;A&gt;</C>, <C>&lt;K&gt;</C>, <C>&lt;List&gt;</C>, etc. can be written
+<Code>&lt;Ref&gt;</Code>, <Code>&lt;A&gt;</Code>, <Code>&lt;K&gt;</Code>, <Code>&lt;List&gt;</Code>, etc. can be written
 directly in <C>#!</C> comment text.
 <P/>
 For chapter text, tutorial material, worked examples, and similar prose, some
@@ -557,23 +557,23 @@ of the package info record are taken into account:
 <P/>
 <List>
 <Mark>PackageName</Mark><Item>
-This is used to set the <C>&lt;Title></C> element of the
+This is used to set the <Code>&lt;Title&gt;</Code> element of the
 title page.
 </Item>
 <Mark>Subtitle</Mark><Item>
-This is used to set the <C>&lt;Subtitle></C> element of the
+This is used to set the <Code>&lt;Subtitle&gt;</Code> element of the
 title page.
 </Item>
 <Mark>Version</Mark><Item>
-This is used to set the <C>&lt;Version></C> element of the
+This is used to set the <Code>&lt;Version&gt;</Code> element of the
 title page, with the string <Q>Version </Q> prepended.
 </Item>
 <Mark>Date</Mark><Item>
-This is used to set the <C>&lt;Date></C> element of the
+This is used to set the <Code>&lt;Date&gt;</Code> element of the
 title page.
 </Item>
 <Mark>Persons</Mark><Item>
-This is used to generate <C>&lt;Author></C> elements in the
+This is used to generate <Code>&lt;Author&gt;</Code> elements in the
 generated title page.
 </Item>
 <Mark>PackageDoc</Mark><Item>
@@ -602,7 +602,7 @@ SetPackageInfo( rec(
   )
 ) );
 ]]></Listing>
-This inserts <C>&lt;Copyright></C> and <C>&lt;Acknowledgements></C> blocks into
+This inserts <Code>&lt;Copyright&gt;</Code> and <Code>&lt;Acknowledgements&gt;</Code> blocks into
 the generated <F>title.xml</F>.
 <P/>
 <C>PkgInfo.AutoDoc.TitlePage</C> has exactly the same meaning as

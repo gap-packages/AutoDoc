@@ -122,7 +122,6 @@ gap> item!.tester_names;
 gap> item!.arguments;
 "x,y"
 
-#
 # fenced code blocks in Markdown-like text
 #
 gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
@@ -193,6 +192,12 @@ gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
 >   "#! @InsertCode Increment",
 >   "## Code is inserted here.",
 >   "]]></Listing>"
+> ];
+true
+gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
+>   "`<Log attr=\"x\"> & more`"
+> ]) = [
+>   "<Code>&lt;Log attr=&quot;x&quot;&gt; &amp; more</Code>"
 > ];
 true
 gap> rendered := "";;

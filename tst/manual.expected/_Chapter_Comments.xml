@@ -29,7 +29,7 @@ Inside of &AutoDoc; comments, <E>&AutoDoc; commands</E>
 starting with <C>@</C> can be used to control the output &AutoDoc; produces.
 Any comment line that does <E>not</E> start with an &AutoDoc; command is treated
 as regular documentation text and may contain (almost) arbitrary &GAPDoc; XML
-markup, such as <C>&lt;Ref&gt;</C>, <C>&lt;A&gt;</C>, <C>&lt;List&gt;</C>, and similar tags.
+markup, such as <Code>&lt;Ref&gt;</Code>, <Code>&lt;A&gt;</Code>, <Code>&lt;List&gt;</Code>, and similar tags.
 This lets you use the normal &GAPDoc; formatting toolbox directly inside
 &AutoDoc; comments.
 <P/>
@@ -344,7 +344,7 @@ first entry in the group. See <Ref Sect="Section_Groups"/> for more information.
 <Index Key="@BeginExample"><Code>@BeginExample</Code></Index>
 <Index Key="@EndExample"><Code>@EndExample</Code></Index>
 <C>@BeginExample</C> marks the start of an example to be put into the manual.
-It differs from &GAPDoc;'s <C>&lt;Example></C> (see <Ref Subsect="Log" BookName="gapdoc"/>),
+It differs from &GAPDoc;'s <Code>&lt;Example&gt;</Code> (see <Ref Subsect="Log" BookName="gapdoc"/>),
 in that it expects actual code (not in a comment) interspersed with comments,
 to allow for examples files that can be both executed by &GAP;, and parsed
 by &AutoDoc;. To achieve this, &GAP; commands are not preceded by a comment,
@@ -384,7 +384,7 @@ Section <Ref Sect="Subsection_Tut:IntegrateExisting:EverythingThere"/>).
 <Index Key="@EndExampleSession"><Code>@EndExampleSession</Code></Index>
 <C>@BeginExampleSession</C> marks the start of an example to be put into the manual,
 while <C>@EndExampleSession</C> ends the example block.
-It is the direct analog of &GAPDoc;'s <C>&lt;Example></C> (see <Ref Subsect="Log" BookName="gapdoc"/>).
+It is the direct analog of &GAPDoc;'s <Code>&lt;Example&gt;</Code> (see <Ref Subsect="Log" BookName="gapdoc"/>).
 <P/>
 To illustrate this command, consider this input:
 <Listing><![CDATA[
@@ -437,7 +437,7 @@ The &AutoDoc; command <C>@Log</C> is an alias of <C>@BeginLog</C>.
 <Index Key="@EndLogSession"><Code>@EndLogSession</Code></Index>
 Works just like the <C>@BeginExampleSession</C> command, but the example
 will not be tested if manual examples are run. It is the direct analog of
-&GAPDoc;'s <C>&lt;Log></C> (see <Ref Subsect="Log" BookName="gapdoc"/>).
+&GAPDoc;'s <Code>&lt;Log&gt;</Code> (see <Ref Subsect="Log" BookName="gapdoc"/>).
 The &AutoDoc; command <C>@LogSession</C> is an alias of <C>@BeginLogSession</C>.
 <P/>
 </Subsection>
@@ -576,7 +576,7 @@ in the HTML and text versions of the manual or worksheet, but not in the PDF ver
 <Index Key="@Index"><C>@Index <A>key</A> [<A>entry text</A>]</C></Index>
 Adds an index entry to the current documentation text.
 The command <C>@Index key entry text</C> generates
-<C>&lt;Index Key="key"&gt;entry text&lt;/Index&gt;</C>.
+<Code>&lt;Index Key=&quot;key&quot;&gt;entry text&lt;/Index&gt;</Code>.
 If no entry text is provided, then the entry text is empty.
 To use keys containing spaces, wrap the key in double quotes, e.g.
 <C>@Index "my key" entry text</C>.
@@ -693,7 +693,7 @@ written in <F>.autodoc</F> format.
 @Subsection First Subsection
 
 This text belongs directly to the manual chapter.
-It can use XML tags such as <A>arg</A> or <C>&lt;Ref ...&gt;</C>.
+It can use XML tags such as <A>arg</A> or <Ref .../>.
 
 @BeginExampleSession
 gap> S5 := SymmetricGroup(5);
@@ -935,7 +935,7 @@ One can insert verbatim code blocks by placing the code between lines
    fence may optionally be followed by an info string. The values
    <C>@listing</C>, <C>@example</C>, and <C>@log</C> select the corresponding
    GAPDoc element; any other value is currently ignored. If nothing is specified
-   the default is to generate <C>&lt;Listing&gt;</C>. Example:
+   the default is to generate <Code>&lt;Listing&gt;</Code>. Example:
 <P/>
 <Listing><![CDATA[
 #! ```@listing

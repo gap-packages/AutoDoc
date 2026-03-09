@@ -6,13 +6,77 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 ##
-InstallGlobalFunction( INSERT_IN_STRING_WITH_REPLACE,
+BindGlobal( "INSERT_IN_STRING_WITH_REPLACE",
   function( string, new_string, position, nr_letters_to_be_replaced )
     return Concatenation(
                string{[ 1 .. position - 1 ]},
                new_string,
                string{[ position + nr_letters_to_be_replaced .. Length( string ) ]}
            );
+end );
+
+##
+BindGlobal( "AUTODOC_EscapeXMLTextForInlineCode",
+  function( string )
+    local escaped_string, split_pos;
+
+    escaped_string := "";
+    while Length(string) > 0 do
+        split_pos := PositionProperty( string, c -> c in "&\"<>" );
+        if split_pos = fail then
+            Append( escaped_string, string );
+            break;
+        fi;
+        if split_pos > 1 then
+            Append( escaped_string, string{ [ 1 .. split_pos - 1 ] } );
+        fi;
+        if string[ split_pos ] = '&' then
+            Append( escaped_string, "&amp;" );
+        elif string[ split_pos ] = '"' then
+            Append( escaped_string, "&quot;" );
+        elif string[ split_pos ] = '<' then
+            Append( escaped_string, "&lt;" );
+        else
+            Append( escaped_string, "&gt;" );
+        fi;
+        string := string{ [ split_pos + 1 .. Length( string ) ] };
+    od;
+
+    return escaped_string;
+end );
+
+##
+BindGlobal( "AUTODOC_ConvertInlineBackticksInLine",
+  function( string, keyword_set )
+    local opening_pos, closing_pos, inline_content, tag_name;
+
+    while PositionSublist( string, "`" ) <> fail do
+        opening_pos := PositionSublist( string, "`" );
+        closing_pos := PositionSublist( string, "`", opening_pos + 1 );
+        if closing_pos = fail then
+            Error( "did you forget some `" );
+        fi;
+
+        if opening_pos + 1 <= closing_pos - 1 then
+            inline_content := string{ [ opening_pos + 1 .. closing_pos - 1 ] };
+        else
+            inline_content := "";
+        fi;
+        if inline_content in keyword_set then
+            tag_name := "Keyword";
+        else
+            tag_name := "Code";
+        fi;
+        string := Concatenation(
+            string{ [ 1 .. opening_pos - 1 ] },
+            "<", tag_name, ">",
+            AUTODOC_EscapeXMLTextForInlineCode( inline_content ),
+            "</", tag_name, ">",
+            string{ [ closing_pos + 1 .. Length( string ) ] }
+        );
+    od;
+
+    return string;
 end );
 
 ##
@@ -23,8 +87,7 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
           commands, position_of_command, insert, beginning_whitespaces, temp, string_list_temp, skipped,
           already_inserted_paragraph, in_list, in_item, converted_string_list,
           fence_char, fence_length, trimmed_line, code_block, info_string,
-          fence_element, keyword_set, opening_pos, closing_pos, inline_content,
-          tag_name;
+          fence_element, keyword_set;
 
     converted_string_list := [ ];
     i := 1;
@@ -93,6 +156,25 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
         i := i + 1;
     od;
     string_list := converted_string_list;
+
+    # Convert inline backticks before list detection so literal tags such as
+    # `<List>` inside code spans do not look like structural GAPDoc tags.
+    keyword_set := Set( ALL_KEYWORDS() );
+    skipped := false;
+    for i in [ 1 .. Length( string_list ) ] do
+        if PositionSublist( string_list[ i ], "<![CDATA[" ) <> fail then
+            skipped := true;
+        fi;
+        if PositionSublist( string_list[ i ], "]]>" ) <> fail then
+            skipped := false;
+            continue;
+        fi;
+        if skipped = true then
+            continue;
+        fi;
+        string_list[ i ] :=
+            AUTODOC_ConvertInlineBackticksInLine( string_list[ i ], keyword_set );
+    od;
 
     ## Check for paragraphs by turning an empty string into <P/>
     
@@ -218,45 +300,6 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
                                        [ "$", "Math" ],
                                        [ "**", "Emph" ],
                                        [ "__", "Emph" ] ];
-    keyword_set := Set( ALL_KEYWORDS() );
-
-    skipped := false;
-    for i in [ 1 .. Length( string_list ) ] do
-        if PositionSublist( string_list[ i ], "<![CDATA[" ) <> fail then
-            skipped := true;
-        fi;
-        if PositionSublist( string_list[ i ], "]]>" ) <> fail then
-            skipped := false;
-            continue;
-        fi;
-        if skipped = true then
-            continue;
-        fi;
-
-        while PositionSublist( string_list[ i ], "`" ) <> fail do
-            opening_pos := PositionSublist( string_list[ i ], "`" );
-            closing_pos := PositionSublist( string_list[ i ], "`", opening_pos + 1 );
-            if closing_pos = fail then
-                Error( "did you forget some `" );
-            fi;
-
-            if opening_pos + 1 <= closing_pos - 1 then
-                inline_content := string_list[ i ]{ [ opening_pos + 1 .. closing_pos - 1 ] };
-            else
-                inline_content := "";
-            fi;
-            if inline_content in keyword_set then
-                tag_name := "Keyword";
-            else
-                tag_name := "Code";
-            fi;
-            string_list[ i ] := Concatenation(
-                string_list[ i ]{ [ 1 .. opening_pos - 1 ] },
-                "<", tag_name, ">", inline_content, "</", tag_name, ">",
-                string_list[ i ]{ [ closing_pos + 1 .. Length( string_list[ i ] ) ] }
-            );
-        od;
-    od;
 
     ## special handling for \$
     for i in [ 1 .. Length( string_list ) ] do
