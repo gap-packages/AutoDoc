@@ -224,6 +224,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           ReadLineWithLineCount, NormalizedReadLine, line_number, ErrorWithPos, CreateTitleItemFunction,
           current_line_positition_for_filter, ReadSessionExample, DeclarationDelimiterPosition,
           ReadBracketedFilterString, ReadInstallMethodFilterString, ReadInstallMethodArguments,
+          ApplyFilterInfoToCurrentItem, ScanDeclarePart, ScanInstallMethodPart,
           markdown_fence,
           MarkdownFenceFromLine, IsMatchingMarkdownFence,
           current_line_fence, current_line_is_fence_delimiter,
@@ -394,6 +395,38 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         NormalizeWhitespace( argument_string );
         return StripBeginEnd( argument_string, " " );
     end;
+    ApplyFilterInfoToCurrentItem := function( filter_string, has_filters )
+        if IsString( filter_string ) then
+            filter_string := ReplacedString( filter_string, "\"", "" );
+        fi;
+        if filter_string = false then
+            return;
+        fi;
+        if CurrentItem()!.tester_names = fail and StripBeginEnd( filter_string, " " ) <> "for" then
+            CurrentItem()!.tester_names := filter_string;
+        fi;
+        if StripBeginEnd( filter_string, " " ) = "for" then
+            has_filters := "empty_argument_list";
+        fi;
+        if not IsBound( CurrentItem()!.arguments ) then
+            if IsInt( has_filters ) then
+                if has_filters = 1 then
+                    CurrentItem()!.arguments := "arg";
+                else
+                    CurrentItem()!.arguments := JoinStringsWithSeparator( List( [ 1 .. has_filters ], i -> Concatenation( "arg", String( i ) ) ), "," );
+                fi;
+            elif has_filters = "List" then
+                CurrentItem()!.arguments := List( [ 1 .. Length( SplitString( filter_string, "," ) ) ], i -> Concatenation( "arg", String( i ) ) );
+                if Length( CurrentItem()!.arguments ) = 1 then
+                    CurrentItem()!.arguments := "arg";
+                else
+                    CurrentItem()!.arguments := JoinStringsWithSeparator( CurrentItem()!.arguments, "," );
+                fi;
+            elif has_filters = "empty_argument_list" then
+                CurrentItem()!.arguments := "";
+            fi;
+        fi;
+    end;
     CurrentOrNewManItem := function( )
         local man_item;
         if HasCurrentItem() and IsTreeForDocumentationNodeForManItemRep( CurrentItem() ) then
@@ -427,6 +460,123 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         fi;
         Add( tree, man_item );
     end;
+    ScanDeclarePart := function( declare_position )
+        local current_type, filter_string, has_filters, i, name, pos;
+        CurrentOrNewManItem();
+        current_line := current_line{[ declare_position .. Length( current_line ) ]};
+        pos := PositionSublist( current_line, "(" );
+        if pos = fail then
+            ErrorWithPos( "Something went wrong" );
+        fi;
+        current_type := current_line{ [ 1 .. pos - 1 ] };
+        has_filters := AutoDoc_Type_Of_Item( CurrentItem(), current_type, default_chapter_data );
+        if has_filters = fail then
+            ErrorWithPos( "Unrecognized scan type" );
+            return false;
+        fi;
+        current_line := current_line{ [ pos + 1 .. Length( current_line ) ] };
+        while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
+            current_line := NormalizedReadLine( filestream );
+            if current_line = fail then
+                ErrorWithPos( "unterminated declaration header" );
+            fi;
+        od;
+        current_line := StripBeginEnd( current_line, " " );
+        name := current_line{ [ 1 .. DeclarationDelimiterPosition( current_line ) - 1 ] };
+        name := StripBeginEnd( ReplacedString( name, "\"", "" ), " " );
+
+        # Deal with DeclareCategoryCollections: this has some special
+        # rules on how the name of a new category is derived from the
+        # string given to it. Since the code for that is not available in
+        # a separate GAP function, we have to replicate this logic here.
+        # To understand what's going on, please refer to the
+        # DeclareCategoryCollections documentation and implementation.
+        if IsBound(CurrentItem()!.coll_suffix) then
+            if EndsWith(name, "Collection") then
+                name := name{[1..Length(name)-6]};
+            fi;
+            if EndsWith(name, "Coll") then
+                CurrentItem()!.coll_suffix := "Coll";
+            else
+                CurrentItem()!.coll_suffix := "Collection";
+            fi;
+            Append(name, CurrentItem()!.coll_suffix);
+        fi;
+        CurrentItem()!.name := name;
+
+        current_line := current_line{ [ DeclarationDelimiterPosition( current_line ) + 1 .. Length( current_line ) ] };
+        filter_string := "for ";
+        if IsInt( has_filters ) then
+            for i in [ 1 .. has_filters ] do
+                while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
+                    Append( filter_string, StripBeginEnd( current_line, " " ) );
+                    current_line := NormalizedReadLine( filestream );
+                    if current_line = fail then
+                        ErrorWithPos( "unterminated declaration filter list" );
+                    fi;
+                od;
+                current_line_positition_for_filter := DeclarationDelimiterPosition( current_line ) - 1;
+                Append( filter_string, StripBeginEnd( current_line{ [ 1 .. current_line_positition_for_filter ] }, " " ) );
+                current_line := current_line{[ current_line_positition_for_filter + 1 .. Length( current_line ) ]};
+                if current_line[ 1 ] = ',' then
+                    current_line := current_line{[ 2 .. Length( current_line ) ]};
+                elif current_line[ 1 ] = ')' then
+                    current_line := current_line{[ 3 .. Length( current_line ) ]};
+                fi;
+                if has_filters - i > 0 then
+                    Append( filter_string, ", " );
+                fi;
+            od;
+        elif has_filters = "List" then
+            filter_string := ReadBracketedFilterString(
+                "unterminated declaration filter list",
+                true
+            );
+        else
+            filter_string := false;
+        fi;
+        ApplyFilterInfoToCurrentItem( filter_string, has_filters );
+        FinishCurrentManItem();
+        return true;
+    end;
+    ScanInstallMethodPart := function( declare_position )
+        local filter_string, name, pos;
+        CurrentOrNewManItem();
+        CurrentItem()!.item_type := "Oper";
+        pos := PositionSublist( current_line, "(" );
+        current_line := current_line{ [ pos + 1 .. Length( current_line ) ] };
+        name := "";
+        pos := PositionSublist( current_line, "," );
+        while pos = fail do
+            Append( name, current_line );
+            current_line := NormalizedReadLine( filestream );
+            if current_line = fail then
+                ErrorWithPos( "unterminated InstallMethod declaration header" );
+            fi;
+            pos := PositionSublist( current_line, "," );
+        od;
+        Append( name, current_line{[ 1 .. pos - 1 ]} );
+        NormalizeWhitespace( name );
+        name := StripBeginEnd( name, " " );
+        name := ReplacedString( name, "\"", "" );
+        CurrentItem()!.name := name;
+        filter_string := ReadInstallMethodFilterString( );
+        if CurrentItem()!.tester_names = fail then
+            CurrentItem()!.tester_names := ReplacedString( filter_string, "\"", "" );
+        fi;
+        if not IsBound( CurrentItem()!.arguments ) then
+            filter_string := ReadInstallMethodArguments( );
+            if filter_string <> fail then
+                CurrentItem()!.arguments := filter_string;
+            fi;
+        fi;
+        if not IsBound( CurrentItem()!.arguments ) then
+            CurrentItem()!.arguments := Length( SplitString( CurrentItem()!.tester_names, "," ) );
+            CurrentItem()!.arguments := JoinStringsWithSeparator( List( [ 1 .. CurrentItem()!.arguments ], i -> Concatenation( "arg", String( i ) ) ), "," );
+        fi;
+        FinishCurrentManItem();
+        return true;
+    end;
     Reset := function( )
         chapter_info := [ ];
         context_stack := [ ];
@@ -435,169 +585,17 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         xml_comment_mode := false;
     end;
     ScanForDeclarationPart := function()
-        local declare_position, current_type, filter_string, has_filters,
-              i, name, pos;
+        local declare_position;
 
         ## fail is bigger than every integer
         declare_position := Minimum( [ PositionSublist( current_line, "Declare" ), PositionSublist( current_line, "KeyDependentOperation" ) ] );
         if declare_position <> fail then
-            CurrentOrNewManItem();
-            current_line := current_line{[ declare_position .. Length( current_line ) ]};
-            pos := PositionSublist( current_line, "(" );
-            if pos = fail then
-                ErrorWithPos( "Something went wrong" );
-            fi;
-            current_type := current_line{ [ 1 .. pos - 1 ] };
-            has_filters := AutoDoc_Type_Of_Item( CurrentItem(), current_type, default_chapter_data );
-            if has_filters = fail then
-                ErrorWithPos( "Unrecognized scan type" );
-                return false;
-            fi;
-            current_line := current_line{ [ pos + 1 .. Length( current_line ) ] };
-            ## Now the funny part begins:
-            ## try fetching the name:
-            ## Assuming the name is in the same line as its
-            while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
-                current_line := NormalizedReadLine( filestream );
-                if current_line = fail then
-                    ErrorWithPos( "unterminated declaration header" );
-                fi;
-            od;
-            current_line := StripBeginEnd( current_line, " " );
-            name := current_line{ [ 1 .. DeclarationDelimiterPosition( current_line ) - 1 ] };
-            name := StripBeginEnd( ReplacedString( name, "\"", "" ), " " );
-
-            # Deal with DeclareCategoryCollections: this has some special
-            # rules on how the name of a new category is derived from the
-            # string given to it. Since the code for that is not available in
-            # a separate GAP function, we have to replicate this logic here.
-            # To understand what's going on, please refer to the
-            # DeclareCategoryCollections documentation and implementation.
-            if IsBound(CurrentItem()!.coll_suffix) then
-                if EndsWith(name, "Collection") then
-                    name := name{[1..Length(name)-6]};
-                fi;
-                if EndsWith(name, "Coll") then
-                    CurrentItem()!.coll_suffix := "Coll";
-                else
-                    CurrentItem()!.coll_suffix := "Collection";
-                fi;
-                Append(name, CurrentItem()!.coll_suffix);
-            fi;
-            CurrentItem()!.name := name;
-
-            current_line := current_line{ [ DeclarationDelimiterPosition( current_line ) + 1 .. Length( current_line ) ] };
-            filter_string := "for ";
-            ## FIXME: The next two if's can be merged at some point
-            if IsInt( has_filters ) then
-                for i in [ 1 .. has_filters ] do
-                    ## We now search for the filters. A filter is either followed by a ',', if there is more than one,
-                    ## or by ');' if it is the only or last one. So we search for the next delimiter.
-                    while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
-                        Append( filter_string, StripBeginEnd( current_line, " " ) );
-                        current_line := NormalizedReadLine( filestream );
-                        if current_line = fail then
-                            ErrorWithPos( "unterminated declaration filter list" );
-                        fi;
-                    od;
-                    current_line_positition_for_filter := DeclarationDelimiterPosition( current_line ) - 1;
-                    Append( filter_string, StripBeginEnd( current_line{ [ 1 .. current_line_positition_for_filter ] }, " " ) );
-                    current_line := current_line{[ current_line_positition_for_filter + 1 .. Length( current_line ) ]};
-                    if current_line[ 1 ] = ',' then
-                        current_line := current_line{[ 2 .. Length( current_line ) ]};
-                    elif current_line[ 1 ] = ')' then
-                        current_line := current_line{[ 3 .. Length( current_line ) ]};
-                    fi;
-                    ## FIXME: Refactor this whole if IsInt( has_filters ) case!
-                    if has_filters - i > 0 then
-                        Append( filter_string, ", " );
-                    fi;
-                od;
-            elif has_filters = "List" then
-                filter_string := ReadBracketedFilterString(
-                    "unterminated declaration filter list",
-                    true
-                );
-            else
-                filter_string := false;
-            fi;
-            if IsString( filter_string ) then
-                filter_string := ReplacedString( filter_string, "\"", "" );
-            fi;
-            if filter_string <> false then
-                if CurrentItem()!.tester_names = fail and StripBeginEnd( filter_string, " " ) <> "for" then
-                    CurrentItem()!.tester_names := filter_string;
-                fi;
-                if StripBeginEnd( filter_string, " " ) = "for" then
-                    has_filters := "empty_argument_list";
-                fi;
-                ##Adjust arguments
-                if not IsBound( CurrentItem()!.arguments ) then
-                    if IsInt( has_filters ) then
-                        if has_filters = 1 then
-                            CurrentItem()!.arguments := "arg";
-                        else
-                            CurrentItem()!.arguments := JoinStringsWithSeparator( List( [ 1 .. has_filters ], i -> Concatenation( "arg", String( i ) ) ), "," );
-                        fi;
-                    elif has_filters = "List" then
-                        CurrentItem()!.arguments := List( [ 1 .. Length( SplitString( filter_string, "," ) ) ], i -> Concatenation( "arg", String( i ) ) );
-                        if Length( CurrentItem()!.arguments ) = 1 then
-                            CurrentItem()!.arguments := "arg";
-                        else
-                            CurrentItem()!.arguments := JoinStringsWithSeparator( CurrentItem()!.arguments, "," );
-                        fi;
-                    elif has_filters = "empty_argument_list" then
-                        CurrentItem()!.arguments := "";
-                    fi;
-                fi;
-            fi;
-            FinishCurrentManItem();
-            return true;
+            return ScanDeclarePart( declare_position );
         fi;
         declare_position := Minimum( [ PositionSublist( current_line, "InstallMethod" ), PositionSublist( current_line, "InstallOtherMethod" ) ] );
                             ## Fail is larger than every integer.
         if declare_position <> fail then
-            CurrentOrNewManItem();
-            CurrentItem()!.item_type := "Oper";
-            ##Find name
-            pos := PositionSublist( current_line, "(" );
-            current_line := current_line{ [ pos + 1 .. Length( current_line ) ] };
-            ## find next colon
-            name := "";
-            pos := PositionSublist( current_line, "," );
-            while pos = fail do
-                Append( name, current_line );
-                current_line := NormalizedReadLine( filestream );
-                if current_line = fail then
-                    ErrorWithPos( "unterminated InstallMethod declaration header" );
-                fi;
-                pos := PositionSublist( current_line, "," );
-            od;
-            Append( name, current_line{[ 1 .. pos - 1 ]} );
-            NormalizeWhitespace( name );
-            name := StripBeginEnd( name, " " );
-            name := ReplacedString( name, "\"", "" );
-            CurrentItem()!.name := name;
-            filter_string := ReadInstallMethodFilterString( );
-            if IsString( filter_string ) then
-                filter_string := ReplacedString( filter_string, "\"", "" );
-            fi;
-            if CurrentItem()!.tester_names = fail then
-                CurrentItem()!.tester_names := filter_string;
-            fi;
-            ##Maybe find some argument names
-            if not IsBound( CurrentItem()!.arguments ) then
-                filter_string := ReadInstallMethodArguments( );
-                if filter_string <> fail then
-                    CurrentItem()!.arguments := filter_string;
-                fi;
-            fi;
-            if not IsBound( CurrentItem()!.arguments ) then
-                CurrentItem()!.arguments := Length( SplitString( CurrentItem()!.tester_names, "," ) );
-                CurrentItem()!.arguments := JoinStringsWithSeparator( List( [ 1 .. CurrentItem()!.arguments ], i -> Concatenation( "arg", String( i ) ) ), "," );
-            fi;
-            FinishCurrentManItem();
-            return true;
+            return ScanInstallMethodPart( declare_position );
         fi;
         return false;
     end;
