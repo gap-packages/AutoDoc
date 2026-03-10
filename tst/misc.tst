@@ -186,4 +186,53 @@ gap> RemoveDirectoryRecursively(tmpdir);
 true
 
 #
+# context stack drives nested parser targets
+#
+gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-context-stack-test");;
+gap> if IsDirectoryPath(tmpdir) then RemoveDirectoryRecursively(tmpdir); fi;
+gap> AUTODOC_CreateDirIfMissing(tmpdir);
+true
+gap> tmpdir_obj := Directory(tmpdir);;
+gap> file1 := Filename(tmpdir_obj, "context.gd");;
+gap> stream := OutputTextFile(file1, false);;
+gap> AppendTo(stream, "#! @Title Parser Stack Test\n");;
+gap> AppendTo(stream, "#! @Chapter Parser\n");;
+gap> AppendTo(stream, "#! @Section Context Stack\n");;
+gap> AppendTo(stream, "#! Intro before chunk.\n");;
+gap> AppendTo(stream, "#! @BeginChunk Stored\n");;
+gap> AppendTo(stream, "#! chunk line 1\n");;
+gap> AppendTo(stream, "#! @BeginLatexOnly\n");;
+gap> AppendTo(stream, "#! latex only\n");;
+gap> AppendTo(stream, "#! @EndLatexOnly\n");;
+gap> AppendTo(stream, "#! chunk line 2\n");;
+gap> AppendTo(stream, "#! @EndChunk\n");;
+gap> AppendTo(stream, "#! @InsertChunk Stored\n");;
+gap> AppendTo(stream, "#! Outro after chunk.\n");;
+gap> CloseStream(stream);
+gap> tree5 := DocumentationTree();;
+gap> AutoDoc_Parser_ReadFiles([file1], tree5, rec());
+gap> tree5!.TitlePage.Title;
+[ "Parser Stack Test" ]
+gap> section := SectionInTree(tree5, "Parser", "Context_Stack");;
+gap> section!.content[1];
+" Intro before chunk.\n"
+gap> chunk := section!.content[2];;
+gap> HasLabel(chunk);
+true
+gap> chunk!.content[1];
+" chunk line 1\n"
+gap> chunk!.content[2]!.element_name;
+"Alt"
+gap> chunk!.content[2]!.attributes;
+rec( Only := "LaTeX" )
+gap> chunk!.content[2]!.content;
+[ " latex only\n" ]
+gap> chunk!.content[3];
+" chunk line 2\n"
+gap> section!.content[3];
+" Outro after chunk.\n"
+gap> RemoveDirectoryRecursively(tmpdir);
+true
+
+#
 gap> STOP_TEST( "misc.tst" );

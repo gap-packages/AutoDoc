@@ -251,19 +251,6 @@ InstallMethod( DocumentationManItem, [ ],
     return node;
 end );
 
-##
-InstallMethod( SetManItemToDescription, [ IsTreeForDocumentationNodeForManItemRep ],
-  function( node )
-    node!.content := node!.description;
-end );
-
-##
-InstallMethod( SetManItemToReturnValue, [ IsTreeForDocumentationNodeForManItemRep ],
-  function( node )
-    node!.content := node!.return_value;
-end );
-
-##
 InstallMethod( DocumentationGroup, [ IsTreeForDocumentation, IsString ],
   function( tree, group_name )
     local group, name;
