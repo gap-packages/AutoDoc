@@ -214,18 +214,18 @@ end );
 ##
 InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
   function( filename_list, tree, default_chapter_data )
-    local chapter_info, Scan_for_Declaration_part, current_line, filestream,
-          scope_group, read_example, command_function_record, autodoc_read_line,
+    local chapter_info, ScanForDeclarationPart, current_line, filestream,
+          scope_group, ReadExample, command_function_record, autodoc_read_line,
           current_command, filename, groupnumber, rest_of_file_skipped,
           context_stack, HasCurrentItem, CurrentItem, SetCurrentItem,
-          new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,
+          CurrentOrNewManItem, FinishCurrentManItem, Reset, ReadCode, title_item, title_item_list, plain_text_mode,
           single_line_title_item_list, active_title_item_name, active_title_item_is_multiline,
           current_line_unedited, current_line_info, NormalizeInputLine,
-          ReadLineWithLineCount, Normalized_ReadLine, line_number, ErrorWithPos, create_title_item_function,
-          current_line_positition_for_filter, read_session_example, DeclarationDelimiterPosition,
+          ReadLineWithLineCount, NormalizedReadLine, line_number, ErrorWithPos, CreateTitleItemFunction,
+          current_line_positition_for_filter, ReadSessionExample, DeclarationDelimiterPosition,
           ReadBracketedFilterString, ReadInstallMethodFilterString, ReadInstallMethodArguments,
           markdown_fence,
-          AUTODOC_MarkdownFenceFromLine, AUTODOC_IsMatchingMarkdownFence,
+          MarkdownFenceFromLine, IsMatchingMarkdownFence,
           current_line_fence, current_line_is_fence_delimiter,
           xml_comment_mode, comment_start_pos;
     groupnumber := 0;
@@ -240,7 +240,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         line_number := line_number + 1;
         return ReadLine( stream );
     end;
-    Normalized_ReadLine := function( stream )
+    NormalizedReadLine := function( stream )
         local string;
         string := ReadLineWithLineCount( stream );
         if string = fail then
@@ -297,7 +297,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             allows_declaration_scan := true
         );
     end;
-    AUTODOC_MarkdownFenceFromLine := function( line )
+    MarkdownFenceFromLine := function( line )
         local trimmed_line, fence_char, fence_length;
         trimmed_line := StripBeginEnd( Chomp( line ), " \t\r\n" );
         if Length( trimmed_line ) < 3 or
@@ -317,7 +317,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             remainder := trimmed_line{ [ fence_length + 1 .. Length( trimmed_line ) ] }
         );
     end;
-    AUTODOC_IsMatchingMarkdownFence := function( fence, current_line_fence )
+    IsMatchingMarkdownFence := function( fence, current_line_fence )
         return current_line_fence <> fail and
                fence <> fail and
                current_line_fence.char = fence.char and
@@ -331,7 +331,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         local filter_string, pos, part;
         pos := AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' );
         while pos = fail do
-            current_line := Normalized_ReadLine( filestream );
+            current_line := NormalizedReadLine( filestream );
             if current_line = fail then
                 ErrorWithPos( error_message );
             fi;
@@ -346,7 +346,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 part := StripBeginEnd( part, " " );
             fi;
             Append( filter_string, part );
-            current_line := Normalized_ReadLine( filestream );
+            current_line := NormalizedReadLine( filestream );
             if current_line = fail then
                 ErrorWithPos( error_message );
             fi;
@@ -370,7 +370,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     ReadInstallMethodArguments := function( )
         local pos, argument_string;
         while PositionSublist( current_line, "function(" ) = fail and PositionSublist( current_line, ");" ) = fail do
-            current_line := Normalized_ReadLine( filestream );
+            current_line := NormalizedReadLine( filestream );
             if current_line = fail then
                 ErrorWithPos( "unterminated InstallMethod declaration" );
             fi;
@@ -384,7 +384,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         while PositionSublist( current_line, ")" ) = fail do
             current_line := StripBeginEnd( current_line, " " );
             Append( argument_string, current_line );
-            current_line := Normalized_ReadLine( filestream );
+            current_line := NormalizedReadLine( filestream );
             if current_line = fail then
                 ErrorWithPos( "unterminated argument list in InstallMethod declaration" );
             fi;
@@ -394,7 +394,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         NormalizeWhitespace( argument_string );
         return StripBeginEnd( argument_string, " " );
     end;
-    new_man_item := function( )
+    CurrentOrNewManItem := function( )
         local man_item;
         if HasCurrentItem() and IsTreeForDocumentationNodeForManItemRep( CurrentItem() ) then
             return CurrentItem();
@@ -415,7 +415,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         Add( context_stack, man_item );
         return man_item;
     end;
-    add_man_item := function( )
+    FinishCurrentManItem := function( )
         local man_item;
         man_item := CurrentItem();
         Remove( context_stack );
@@ -434,14 +434,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         markdown_fence := fail;
         xml_comment_mode := false;
     end;
-    Scan_for_Declaration_part := function()
+    ScanForDeclarationPart := function()
         local declare_position, current_type, filter_string, has_filters,
               i, name, pos;
 
         ## fail is bigger than every integer
         declare_position := Minimum( [ PositionSublist( current_line, "Declare" ), PositionSublist( current_line, "KeyDependentOperation" ) ] );
         if declare_position <> fail then
-            new_man_item();
+            CurrentOrNewManItem();
             current_line := current_line{[ declare_position .. Length( current_line ) ]};
             pos := PositionSublist( current_line, "(" );
             if pos = fail then
@@ -458,7 +458,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             ## try fetching the name:
             ## Assuming the name is in the same line as its
             while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
-                current_line := Normalized_ReadLine( filestream );
+                current_line := NormalizedReadLine( filestream );
                 if current_line = fail then
                     ErrorWithPos( "unterminated declaration header" );
                 fi;
@@ -495,7 +495,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                     ## or by ');' if it is the only or last one. So we search for the next delimiter.
                     while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
                         Append( filter_string, StripBeginEnd( current_line, " " ) );
-                        current_line := Normalized_ReadLine( filestream );
+                        current_line := NormalizedReadLine( filestream );
                         if current_line = fail then
                             ErrorWithPos( "unterminated declaration filter list" );
                         fi;
@@ -551,13 +551,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                     fi;
                 fi;
             fi;
-            add_man_item();
+            FinishCurrentManItem();
             return true;
         fi;
         declare_position := Minimum( [ PositionSublist( current_line, "InstallMethod" ), PositionSublist( current_line, "InstallOtherMethod" ) ] );
                             ## Fail is larger than every integer.
         if declare_position <> fail then
-            new_man_item();
+            CurrentOrNewManItem();
             CurrentItem()!.item_type := "Oper";
             ##Find name
             pos := PositionSublist( current_line, "(" );
@@ -567,7 +567,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             pos := PositionSublist( current_line, "," );
             while pos = fail do
                 Append( name, current_line );
-                current_line := Normalized_ReadLine( filestream );
+                current_line := NormalizedReadLine( filestream );
                 if current_line = fail then
                     ErrorWithPos( "unterminated InstallMethod declaration header" );
                 fi;
@@ -596,12 +596,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 CurrentItem()!.arguments := Length( SplitString( CurrentItem()!.tester_names, "," ) );
                 CurrentItem()!.arguments := JoinStringsWithSeparator( List( [ 1 .. CurrentItem()!.arguments ], i -> Concatenation( "arg", String( i ) ) ), "," );
             fi;
-            add_man_item();
+            FinishCurrentManItem();
             return true;
         fi;
         return false;
     end;
-    read_code := function( )
+    ReadCode := function( )
         local code_node, temp_curr_line, temp_line_info, temp_command;
         code_node := DocumentationVerbatim(
             "Listing",
@@ -623,7 +623,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         od;
         return code_node;
     end;
-    read_example := function( element_name )
+    ReadExample := function( element_name )
         local temp_string_list, temp_curr_line, temp_pos_comment, is_following_line,
               item_temp, example_node;
         example_node := DocumentationExample( element_name );
@@ -661,7 +661,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         od;
         return example_node;
     end;
-    read_session_example := function( element_name, plain_text_mode )
+    ReadSessionExample := function( element_name, plain_text_mode )
         local temp_string_list, temp_curr_line, temp_pos_comment,
               is_following_line, item_temp, example_node,
               incorporate_this_line;
@@ -787,7 +787,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             Unbind( scope_group );
         end,
         @Description := function()
-            new_man_item();
+            CurrentOrNewManItem();
             CurrentItem()!.content := CurrentItem()!.description;
             NormalizeWhitespace( current_command[ 2 ] );
             if current_command[ 2 ] <> "" then
@@ -795,29 +795,29 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
         end,
         @Returns := function()
-            new_man_item();
+            CurrentOrNewManItem();
             CurrentItem()!.content := CurrentItem()!.return_value;
             if current_command[ 2 ] <> "" then
                 Add( CurrentItem(), current_command[ 2 ] );
             fi;
         end,
         @Arguments := function()
-            new_man_item();
+            CurrentOrNewManItem();
             CurrentItem()!.arguments := current_command[ 2 ];
         end,
         @Label := function()
-            new_man_item();
+            CurrentOrNewManItem();
             CurrentItem()!.tester_names := current_command[ 2 ];
         end,
         @Group := function()
             local group_name;
-            new_man_item();
+            CurrentOrNewManItem();
             group_name := ReplacedString( current_command[ 2 ], " ", "_" );
             SetGroupName( CurrentItem(), group_name );
         end,
         @GroupTitle := function()
             local group_name, chap_info, group_obj;
-            new_man_item();
+            CurrentOrNewManItem();
             if not HasGroupName( CurrentItem() ) then
                 ErrorWithPos( "found @GroupTitle with no Group set" );
             fi;
@@ -839,7 +839,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end,
         @ChapterInfo := function()
             local current_chapter_info;
-            new_man_item();
+            CurrentOrNewManItem();
             current_chapter_info := SplitString( current_command[ 2 ], "," );
             current_chapter_info := List( current_chapter_info, i -> ReplacedString( StripBeginEnd( i, " " ), " ", "_" ) );
             SetChapterInfo( CurrentItem(), current_chapter_info );
@@ -948,21 +948,21 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             label_name := ReplacedString( current_command[ 2 ], " ", "_" );
             tmp_system := DocumentationChunk( tree, label_name );
             tmp_system!.is_defined := true;
-            Add( tmp_system!.content, read_code() );
+            Add( tmp_system!.content, ReadCode() );
         end,
         @Code := ~.@BeginCode,
         @InsertCode := ~.@InsertChunk,
 
         @BeginExample := function()
             local example_node;
-            example_node := read_example( "Example" );
+            example_node := ReadExample( "Example" );
             Add( CurrentItem(), example_node );
         end,
 
         @Example := ~.@BeginExample,
         @BeginLog := function()
             local example_node;
-            example_node := read_example( "Log" );
+            example_node := ReadExample( "Log" );
             Add( CurrentItem(), example_node );
         end,
         @Log := ~.@BeginLog,
@@ -1028,13 +1028,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end,
         @ExampleSession := function()
             local example_node;
-            example_node := read_session_example( "Example", plain_text_mode );
+            example_node := ReadSessionExample( "Example", plain_text_mode );
             Add( CurrentItem(), example_node );
         end,
         @BeginExampleSession := ~.@ExampleSession,
         @LogSession := function()
             local example_node;
-            example_node := read_session_example( "Log", plain_text_mode );
+            example_node := ReadSessionExample( "Log", plain_text_mode );
             Add( CurrentItem(), example_node );
         end,
         @BeginLogSession := ~.@LogSession
@@ -1047,7 +1047,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                          "Date", "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon" ];
     single_line_title_item_list := [ "Title", "Subtitle", "Version", "Author", "Date" ];
 
-    create_title_item_function := function( name )
+    CreateTitleItemFunction := function( name )
         return function()
             if not IsBound( tree!.TitlePage.( name ) ) then
                 tree!.TitlePage.( name ) := [ ];
@@ -1061,12 +1061,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     end;
     
     ## Note that we need to create these functions in the helper function
-    ## create_title_item_function to ensure that the <name> variable is bound properly.
+    ## CreateTitleItemFunction to ensure that the <name> variable is bound properly.
     ## Without this intermediate helper, the wrong closure is taken,
     ## and later, when the function is executed, the value for <name> will be the last
     ## value <title_item> had, i.e., the last entry of <title_item_list>.
     for title_item in title_item_list do
-        command_function_record.( Concatenation( "@", title_item ) ) := create_title_item_function( title_item );
+        command_function_record.( Concatenation( "@", title_item ) ) := CreateTitleItemFunction( title_item );
     od;
 
     rest_of_file_skipped := false;
@@ -1121,7 +1121,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
 
             if current_line_info.is_autodoc then
-                current_line_fence := AUTODOC_MarkdownFenceFromLine( current_line_info.text );
+                current_line_fence := MarkdownFenceFromLine( current_line_info.text );
                 current_command := Scan_for_AutoDoc_Part( current_line_info.text );
             else
                 current_line_fence := fail;
@@ -1133,7 +1133,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                     current_line_is_fence_delimiter := true;
                 else
                     current_line_is_fence_delimiter :=
-                        AUTODOC_IsMatchingMarkdownFence( markdown_fence, current_line_fence );
+                        IsMatchingMarkdownFence( markdown_fence, current_line_fence );
                 fi;
             fi;
             if current_line_is_fence_delimiter then
@@ -1162,7 +1162,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 continue;
             fi;
             current_line := current_command[ 2 ];
-            if autodoc_read_line and not Scan_for_Declaration_part( ) then
+            if autodoc_read_line and not ScanForDeclarationPart( ) then
                 autodoc_read_line := false;
             fi;
         od;
