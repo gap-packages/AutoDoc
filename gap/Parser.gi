@@ -328,42 +328,44 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         return Minimum( [ PositionSublist( line, "," ), PositionSublist( line, ");" ) ] );
     end;
     ReadInstallMethodFilterString := function( )
-        local filter_string, position_parenthesis;
-        while AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' ) = fail do
+        local filter_string, pos;
+        pos := AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' );
+        while pos = fail do
             current_line := Normalized_ReadLine( filestream );
             if current_line = fail then
                 ErrorWithPos( "unterminated InstallMethod filter list" );
             fi;
+            pos := AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' );
         od;
-        position_parenthesis := AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' );
-        current_line := current_line{[ position_parenthesis + 1 .. Length( current_line ) ]};
+        current_line := current_line{[ pos + 1 .. Length( current_line ) ]};
         filter_string := "for ";
-        while AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' ) = fail do
+        pos := AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' );
+        while pos = fail do
             Append( filter_string, current_line );
             current_line := Normalized_ReadLine( filestream );
             if current_line = fail then
                 ErrorWithPos( "unterminated InstallMethod filter list" );
             fi;
+            pos := AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' );
         od;
-        position_parenthesis := AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' );
-        Append( filter_string, current_line{[ 1 .. position_parenthesis - 1 ]} );
-        current_line := current_line{[ position_parenthesis + 1 .. Length( current_line )]};
+        Append( filter_string, current_line{[ 1 .. pos - 1 ]} );
+        current_line := current_line{[ pos + 1 .. Length( current_line )]};
         NormalizeWhitespace( filter_string );
         return filter_string;
     end;
     ReadInstallMethodArguments := function( )
-        local position_parenthesis, argument_string;
+        local pos, argument_string;
         while PositionSublist( current_line, "function(" ) = fail and PositionSublist( current_line, ");" ) = fail do
             current_line := Normalized_ReadLine( filestream );
             if current_line = fail then
                 ErrorWithPos( "unterminated InstallMethod declaration" );
             fi;
         od;
-        position_parenthesis := PositionSublist( current_line, "function(" );
-        if position_parenthesis = fail then
+        pos := PositionSublist( current_line, "function(" );
+        if pos = fail then
             return fail;
         fi;
-        current_line := current_line{[ position_parenthesis + 9 .. Length( current_line ) ]};
+        current_line := current_line{[ pos + 9 .. Length( current_line ) ]};
         argument_string := "";
         while PositionSublist( current_line, ")" ) = fail do
             current_line := StripBeginEnd( current_line, " " );
@@ -373,8 +375,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 ErrorWithPos( "unterminated argument list in InstallMethod declaration" );
             fi;
         od;
-        position_parenthesis := PositionSublist( current_line, ")" );
-        Append( argument_string, current_line{[ 1 .. position_parenthesis - 1 ]} );
+        pos := PositionSublist( current_line, ")" );
+        Append( argument_string, current_line{[ 1 .. pos - 1 ]} );
         NormalizeWhitespace( argument_string );
         return StripBeginEnd( argument_string, " " );
     end;
@@ -420,24 +422,24 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     end;
     Scan_for_Declaration_part := function()
         local declare_position, current_type, filter_string, has_filters,
-              position_parenthesis, i, name;
+              i, name, pos;
 
         ## fail is bigger than every integer
         declare_position := Minimum( [ PositionSublist( current_line, "Declare" ), PositionSublist( current_line, "KeyDependentOperation" ) ] );
         if declare_position <> fail then
             new_man_item();
             current_line := current_line{[ declare_position .. Length( current_line ) ]};
-            position_parenthesis := PositionSublist( current_line, "(" );
-            if position_parenthesis = fail then
+            pos := PositionSublist( current_line, "(" );
+            if pos = fail then
                 ErrorWithPos( "Something went wrong" );
             fi;
-            current_type := current_line{ [ 1 .. position_parenthesis - 1 ] };
+            current_type := current_line{ [ 1 .. pos - 1 ] };
             has_filters := AutoDoc_Type_Of_Item( CurrentItem(), current_type, default_chapter_data );
             if has_filters = fail then
                 ErrorWithPos( "Unrecognized scan type" );
                 return false;
             fi;
-            current_line := current_line{ [ position_parenthesis + 1 .. Length( current_line ) ] };
+            current_line := current_line{ [ pos + 1 .. Length( current_line ) ] };
             ## Now the funny part begins:
             ## try fetching the name:
             ## Assuming the name is in the same line as its
@@ -479,11 +481,10 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                     ## or by ');' if it is the only or last one. So we search for the next delimiter.
                     while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
                         Append( filter_string, StripBeginEnd( current_line, " " ) );
-                        current_line := ReadLineWithLineCount( filestream );
+                        current_line := Normalized_ReadLine( filestream );
                         if current_line = fail then
                             ErrorWithPos( "unterminated declaration filter list" );
                         fi;
-                        NormalizeWhitespace( current_line );
                     od;
                     current_line_positition_for_filter := DeclarationDelimiterPosition( current_line ) - 1;
                     Append( filter_string, StripBeginEnd( current_line{ [ 1 .. current_line_positition_for_filter ] }, " " ) );
@@ -499,23 +500,25 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                     fi;
                 od;
             elif has_filters = "List" then
-                while AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' ) = fail do
-                    current_line := ReadLineWithLineCount( filestream );
+                pos := AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' );
+                while pos = fail do
+                    current_line := Normalized_ReadLine( filestream );
                     if current_line = fail then
                         ErrorWithPos( "unterminated declaration filter list" );
                     fi;
-                    NormalizeWhitespace( current_line );
+                    pos := AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' );
                 od;
-                current_line := current_line{ [ AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' ) + 1 .. Length( current_line ) ] };
-                while AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' ) = fail do
+                current_line := current_line{ [ pos + 1 .. Length( current_line ) ] };
+                pos := AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' );
+                while pos = fail do
                     Append( filter_string, StripBeginEnd( current_line, " " ) );
-                    current_line := ReadLineWithLineCount( filestream );
+                    current_line := Normalized_ReadLine( filestream );
                     if current_line = fail then
                         ErrorWithPos( "unterminated declaration filter list" );
                     fi;
-                    NormalizeWhitespace( current_line );
+                    pos := AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' );
                 od;
-                Append( filter_string, StripBeginEnd( current_line{[ 1 .. AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' ) - 1 ]}, " " ) );
+                Append( filter_string, StripBeginEnd( current_line{[ 1 .. pos - 1 ]}, " " ) );
             else
                 filter_string := false;
             fi;
@@ -558,19 +561,20 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             new_man_item();
             CurrentItem()!.item_type := "Oper";
             ##Find name
-            position_parenthesis := PositionSublist( current_line, "(" );
-            current_line := current_line{ [ position_parenthesis + 1 .. Length( current_line ) ] };
+            pos := PositionSublist( current_line, "(" );
+            current_line := current_line{ [ pos + 1 .. Length( current_line ) ] };
             ## find next colon
             name := "";
-            while PositionSublist( current_line, "," ) = fail do
+            pos := PositionSublist( current_line, "," );
+            while pos = fail do
                 Append( name, current_line );
                 current_line := Normalized_ReadLine( filestream );
                 if current_line = fail then
                     ErrorWithPos( "unterminated InstallMethod declaration header" );
                 fi;
+                pos := PositionSublist( current_line, "," );
             od;
-            position_parenthesis := PositionSublist( current_line, "," );
-            Append( name, current_line{[ 1 .. position_parenthesis - 1 ]} );
+            Append( name, current_line{[ 1 .. pos - 1 ]} );
             NormalizeWhitespace( name );
             name := StripBeginEnd( name, " " );
             name := ReplacedString( name, "\"", "" );
