@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_SourceAPI">
+<Heading>Source API</Heading>
+
+<Section Label="Section_SourceDeclarations">
+<Heading>Declarations</Heading>
+
+ <Code>AutoDocTest_GlobalFunction</Code> is a documented placeholder used by the
+ package-context regression manual.
+<ManSection>
+  <Func Arg="arg" Name="AutoDocTest_GlobalFunction" />
+ <Description>
+<P/>
+ </Description>
+</ManSection>
+
+<P/>
+ <Code>AutoDocTest_Operation</Code> takes an object together with a positive integer
+ and returns that integer unchanged.
+<ManSection>
+  <Oper Arg="arg1,arg2" Name="AutoDocTest_Operation" Label="for IsObject, IsInt"/>
+ <Description>
+<P/>
+ </Description>
+</ManSection>
+
+<P/>
+ <Code>AutoDocTest_Attribute</Code> records a small attribute entry for solvable groups.
+<ManSection>
+  <Attr Arg="arg" Name="AutoDocTest_Attribute" Label="for IsGroup"/>
+ <Description>
+<P/>
+ </Description>
+</ManSection>
+
+<P/>
+ <Code>AutoDocTest_Property</Code> is a tiny property used to exercise method docs.
+<ManSection>
+  <Prop Arg="arg" Name="AutoDocTest_Property" Label="for IsGroup"/>
+ <Returns><K>true</K> or <K>false</K>
+</Returns>
+ <Description>
+<P/>
+ </Description>
+</ManSection>
+
+</Section>
+
+<Section Label="Section_SourceImplementations">
+<Heading>Implementations</Heading>
+
+ The global function prints a stable sentence so it is easy to mention in the
+ mock manual.
+<P/>
+ The method for <Code>AutoDocTest_Operation</Code> returns the second argument.
+<ManSection>
+  <Oper Arg="arg1,arg2" Name="AutoDocTest_Operation" Label="for IsGroup, IsPosInt"/>
+ <Description>
+<P/>
+ </Description>
+</ManSection>
+
+<P/>
+ The attribute method simply returns the group itself.
+<ManSection>
+  <Oper Arg="arg1" Name="AutoDocTest_Attribute" Label="for IsSolvableGroup"/>
+ <Description>
+<P/>
+ </Description>
+</ManSection>
+
+<P/>
+ The property method reuses <Code>IsAbelian</Code> for nilpotent groups.
+<ManSection>
+  <Oper Arg="arg1" Name="AutoDocTest_Property" Label="for IsNilpotentGroup"/>
+ <Description>
+<P/>
+ </Description>
+</ManSection>
+
+</Section>
+
+</Chapter>
+

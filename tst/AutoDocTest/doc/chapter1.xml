@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Chapter Label="Chapter_XMLFixture">
+  <Heading>XML fixture chapter</Heading>
+  <P/>
+  This hand-written XML chapter keeps one explicit include in the
+  <C>AutoDocTest</C> manual and cites the main &GAP; reference
+  <Cite Key="GAP4"/>.
+  <Section Label="Section_XMLFixture_Purpose">
+    <Heading>Purpose</Heading>
+    <P/>
+    The content is intentionally short, but it gives the package-context
+    tests a deterministic chapter to compare against stored reference XML.
+  </Section>
+</Chapter>

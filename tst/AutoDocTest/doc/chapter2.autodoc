@@ -1,0 +1,17 @@
+@Chapter Plain-text fixture chapter
+@ChapterLabel PlainTextFixture
+
+@Section Cross references
+@SectionLabel PlainTextCrossRefs
+
+This `.autodoc` chapter cross-references
+<Ref Func="AutoDocTest_GlobalFunction"/> and mentions
+<C>AutoDocTest_Operation</C>, <C>AutoDocTest_Attribute</C>, and
+<C>AutoDocTest_Property</C>.
+It therefore checks that `makedoc.g` also scans the package source files.
+
+@Section Short example
+@SectionLabel PlainTextExample
+
+The source-backed entries are supplemented by this small plain-text chapter so
+the fixture package covers both hand-written XML and `.autodoc` input.
