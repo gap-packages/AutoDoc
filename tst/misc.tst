@@ -169,6 +169,32 @@ gap> RemoveDirectoryRecursively(tmpdir);
 true
 
 #
+# AutoDoc_Parser_ReadFiles: bare tester label keeps an empty argument list
+#
+gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-empty-args-test");;
+gap> if IsDirectoryPath(tmpdir) then RemoveDirectoryRecursively(tmpdir); fi;
+gap> AUTODOC_CreateDirIfMissing(tmpdir);
+true
+gap> tmpdir_obj := Directory(tmpdir);;
+gap> file := Filename(tmpdir_obj, "emptyargs.gd");;
+gap> stream := OutputTextFile(file, false);;
+gap> AppendTo(stream, "#! @Chapter Parser\n");;
+gap> AppendTo(stream, "#! @Section Empty Arguments\n");;
+gap> AppendTo(stream, "#! @Description\n");;
+gap> AppendTo(stream, "DeclareOperation( \"EmptyArgsOp\", [ ] );\n");;
+gap> CloseStream(stream);
+gap> tree := DocumentationTree();;
+gap> AutoDoc_Parser_ReadFiles( [ file ], tree, rec() );
+gap> section := SectionInTree( tree, "Parser", "Empty Arguments" );;
+gap> item := section!.content[ 1 ];;
+gap> item!.tester_names = fail;
+true
+gap> item!.arguments;
+""
+gap> RemoveDirectoryRecursively(tmpdir);
+true
+
+#
 # warn about defined-but-never-inserted chunks
 #
 gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-unusedchunk-test");;
