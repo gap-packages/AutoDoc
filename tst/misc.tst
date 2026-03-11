@@ -123,6 +123,52 @@ gap> item!.arguments;
 "x,y"
 
 #
+# AutoDoc_Parser_ReadFiles: DeclareGlobalName defaults and overrides
+#
+gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-globalname-test");;
+gap> if IsDirectoryPath(tmpdir) then RemoveDirectoryRecursively(tmpdir); fi;
+gap> AUTODOC_CreateDirIfMissing(tmpdir);
+true
+gap> tmpdir_obj := Directory(tmpdir);;
+gap> file := Filename(tmpdir_obj, "globalname.gd");;
+gap> stream := OutputTextFile(file, false);;
+gap> AppendTo(stream, "#! @Chapter Parser\n");;
+gap> AppendTo(stream, "#! @Section GlobalName\n");;
+gap> AppendTo(stream, "#! @Description\n");;
+gap> AppendTo(stream, "DeclareGlobalName( \"DefaultGlobalName\" );\n");;
+gap> AppendTo(stream, "#! @Description\n");;
+gap> AppendTo(stream, "#! @Arguments x\n");;
+gap> AppendTo(stream, "DeclareGlobalName( \"ArgumentGlobalName\" );\n");;
+gap> AppendTo(stream, "#! @Description\n");;
+gap> AppendTo(stream, "#! @Returns a value\n");;
+gap> AppendTo(stream, "DeclareGlobalName( \"ReturnGlobalName\" );\n");;
+gap> AppendTo(stream, "#! @Description\n");;
+gap> AppendTo(stream, "#! @ItemType Var\n");;
+gap> AppendTo(stream, "DeclareGlobalName( \"VariableGlobalName\" );\n");;
+gap> CloseStream(stream);
+gap> tree := DocumentationTree();;
+gap> AutoDoc_Parser_ReadFiles( [ file ], tree, rec() );
+gap> section := SectionInTree( tree, "Parser", "GlobalName" );;
+gap> section!.content[ 1 ]!.item_type;
+"Var"
+gap> section!.content[ 1 ]!.arguments = fail;
+true
+gap> section!.content[ 2 ]!.item_type;
+"Func"
+gap> section!.content[ 2 ]!.arguments;
+"x"
+gap> section!.content[ 3 ]!.item_type;
+"Func"
+gap> section!.content[ 3 ]!.arguments;
+"arg"
+gap> section!.content[ 4 ]!.item_type;
+"Var"
+gap> section!.content[ 4 ]!.arguments = fail;
+true
+gap> RemoveDirectoryRecursively(tmpdir);
+true
+
+#
 # warn about defined-but-never-inserted chunks
 #
 gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-unusedchunk-test");;

@@ -173,10 +173,19 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         item_rec!.arguments := fail;
         item_rec!.return_value := false;
     elif PositionSublist( type, "DeclareGlobalName" ) <> fail then
-        entries := [ "Var", "global_variables" ];
         has_filters := "No";
-        item_rec!.arguments := fail;
-        item_rec!.return_value := false;
+        if ( IsBound( item_rec!.item_type ) and item_rec!.item_type <> "Var" ) or
+           ( IsBound( item_rec!.declareglobalname_is_function ) and
+             item_rec!.declareglobalname_is_function ) then
+            entries := [ "Func", "global_functions" ];
+            if not IsBound( item_rec!.arguments ) then
+                item_rec!.arguments := "arg";
+            fi;
+        else
+            entries := [ "Var", "global_variables" ];
+            item_rec!.arguments := fail;
+            item_rec!.return_value := false;
+        fi;
     elif PositionSublist( type, "DeclareFilter" ) <> fail then
         entries := [ "Filt", "properties" ];
         has_filters := "No";
@@ -422,13 +431,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     end;
     NormalizeItemType := function( item_type )
         item_type := StripBeginEnd( item_type, " \t\r\n" );
-        if item_type in [ "Func", "Oper", "Attr", "Prop" ] then
+        if item_type in [ "Func", "Oper", "Attr", "Prop", "Var" ] then
             return item_type;
         fi;
         ErrorWithPos(
             Concatenation(
                 "unknown @ItemType ", item_type,
-                "; expected one of Func, Oper, Attr, Prop"
+                "; expected one of Func, Oper, Attr, Prop, Var"
             )
         );
     end;
@@ -806,12 +815,26 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @Returns := function()
             CurrentOrNewManItem();
             CurrentItem()!.content := CurrentItem()!.return_value;
+            if IsBound( CurrentItem()!.item_type ) and CurrentItem()!.item_type = "Var" then
+                CurrentItem()!.item_type := "Func";
+                if not IsBound( CurrentItem()!.arguments ) or CurrentItem()!.arguments = fail then
+                    CurrentItem()!.arguments := "arg";
+                fi;
+                CurrentItem()!.return_value := [ ];
+            elif not IsBound( CurrentItem()!.item_type ) then
+                CurrentItem()!.declareglobalname_is_function := true;
+            fi;
             if current_command[ 2 ] <> "" then
                 Add( CurrentItem(), current_command[ 2 ] );
             fi;
         end,
         @Arguments := function()
             CurrentOrNewManItem();
+            if IsBound( CurrentItem()!.item_type ) and CurrentItem()!.item_type = "Var" then
+                CurrentItem()!.item_type := "Func";
+            elif not IsBound( CurrentItem()!.item_type ) then
+                CurrentItem()!.declareglobalname_is_function := true;
+            fi;
             CurrentItem()!.arguments := current_command[ 2 ];
         end,
         @ItemType := function()
