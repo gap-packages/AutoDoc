@@ -65,7 +65,7 @@
 <P/>
  The attribute method simply returns the group itself.
 <ManSection>
-  <Oper Arg="arg1" Name="AutoDocTest_Attribute" Label="for IsSolvableGroup"/>
+  <Attr Arg="arg1" Name="AutoDocTest_Attribute" Label="for IsSolvableGroup"/>
  <Description>
 <P/>
  </Description>
@@ -74,7 +74,7 @@
 <P/>
  The property method reuses <Code>IsAbelian</Code> for nilpotent groups.
 <ManSection>
-  <Oper Arg="arg1" Name="AutoDocTest_Property" Label="for IsNilpotentGroup"/>
+  <Prop Arg="arg1" Name="AutoDocTest_Property" Label="for IsNilpotentGroup"/>
  <Description>
 <P/>
  </Description>

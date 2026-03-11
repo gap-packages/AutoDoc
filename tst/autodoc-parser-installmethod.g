@@ -1,5 +1,6 @@
 #! @Chapter Parser
 #! @Section InstallMethod
+#! @ItemType Func
 InstallMethod( "MyOp",
                [ IsInt,
                  IsString ],

@@ -216,7 +216,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           ReadLineWithLineCount, NormalizedReadLine, line_number, ErrorWithPos, CreateTitleItemFunction,
           current_line_positition_for_filter, ReadSessionExample, DeclarationDelimiterPosition,
           ReadBracketedFilterString, ReadInstallMethodFilterString, ReadInstallMethodArguments,
-          ApplyFilterInfoToCurrentItem, ScanDeclarePart, ScanInstallMethodPart,
+          ApplyFilterInfoToCurrentItem, NormalizeItemType, ScanDeclarePart,
+          ScanInstallMethodPart,
           markdown_fence,
           MarkdownFenceFromLine, IsMatchingMarkdownFence,
           current_line_fence, current_line_is_fence_delimiter,
@@ -419,6 +420,18 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
         fi;
     end;
+    NormalizeItemType := function( item_type )
+        item_type := StripBeginEnd( item_type, " \t\r\n" );
+        if item_type in [ "Func", "Oper", "Attr", "Prop" ] then
+            return item_type;
+        fi;
+        ErrorWithPos(
+            Concatenation(
+                "unknown @ItemType ", item_type,
+                "; expected one of Func, Oper, Attr, Prop"
+            )
+        );
+    end;
     CurrentOrNewManItem := function( )
         local man_item;
         if HasCurrentItem() and IsTreeForDocumentationNodeForManItemRep( CurrentItem() ) then
@@ -534,7 +547,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     ScanInstallMethodPart := function( declare_position )
         local filter_string, name, pos;
         CurrentOrNewManItem();
-        CurrentItem()!.item_type := "Oper";
+        if not IsBound( CurrentItem()!.item_type ) then
+            CurrentItem()!.item_type := "Oper";
+        else
+            CurrentItem()!.item_type := NormalizeItemType(
+                CurrentItem()!.item_type
+            );
+        fi;
         pos := PositionSublist( current_line, "(" );
         current_line := current_line{ [ pos + 1 .. Length( current_line ) ] };
         name := "";
@@ -794,6 +813,10 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @Arguments := function()
             CurrentOrNewManItem();
             CurrentItem()!.arguments := current_command[ 2 ];
+        end,
+        @ItemType := function()
+            CurrentOrNewManItem();
+            CurrentItem()!.item_type := NormalizeItemType( current_command[ 2 ] );
         end,
         @Label := function()
             CurrentOrNewManItem();
