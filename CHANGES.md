@@ -8,6 +8,9 @@ This file describes changes in the AutoDoc package.
     documented. Since nobody ever reported issues with them, and since
     no distributed packages uses them, they probably are simply not in
     use anywhere. Hence the removal instead of trying to fix this.
+  - Only document the first declaration immediately following an AutoDoc
+    source comment block; later consecutive declarations now require their
+    own `#!` comment block
 
 + **New Features**
   - Add `nopdf` as a global option, and document the existing `NOPDF`

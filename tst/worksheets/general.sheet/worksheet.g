@@ -41,7 +41,9 @@ comment_mode_value := 6 *
 #! @Section Some categories
 #!  Intro text
 DeclareCategory("MyThings", IsObject);
+#! @Description
 DeclareCategoryCollections("MyThings");
+#! @Description
 DeclareCategoryCollections("MyThingsCollection");
 # Now here is some text with a bunch of &!$%*!/ weird things in it. But that
 # should be OK, nothing should end up in a weird place.

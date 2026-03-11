@@ -13,6 +13,13 @@ gap> AUTODOC_TestWorkSheet("general");
 #I  no examples
 
 #
+gap> AUTODOC_TestWorkSheet("consecutive-declarations");
+#I  Extracting manual examples for Consecutive Declarations Test package ...
+#I  1 chapters detected
+#I  Chapter 1...
+#I  no examples
+
+#
 gap> AUTODOC_TestWorkSheet("autoplain");
 #I  Extracting manual examples for Plain file.autodoc Test package ...
 #I  1 chapters detected

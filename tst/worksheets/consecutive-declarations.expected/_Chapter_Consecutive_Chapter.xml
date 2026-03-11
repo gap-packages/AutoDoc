@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_Consecutive_Chapter">
+<Heading>Consecutive Chapter</Heading>
+
+<Section Label="Chapter_Consecutive_Chapter_Section_Consecutive_Section">
+<Heading>Consecutive Section</Heading>
+
+ Worksheet regression for issue #169.
+<ManSection>
+  <Func Arg="arg" Name="FirstConsecutiveFunction" />
+ <Description>
+ First declaration stays documented.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Func Arg="arg" Name="ThirdConsecutiveFunction" />
+ <Description>
+ Third declaration has its own comment block.
+ </Description>
+</ManSection>
+
+</Section>
+
+</Chapter>
+
