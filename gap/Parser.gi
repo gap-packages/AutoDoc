@@ -130,12 +130,12 @@ end );
 ##
 InstallGlobalFunction( AutoDoc_Type_Of_Item,
   function( current_item, type, default_chapter_data )
-    local item_rec, entries, has_filters, ret_val;
+    local item_rec, entries, filter_style, ret_val;
     item_rec := current_item;
     if PositionSublist( type, "DeclareCategoryCollections") <> fail then
         entries := [ "Filt", "categories" ];
         ret_val := "<K>true</K> or <K>false</K>";
-        has_filters := "No";
+        filter_style := "none";
         if not IsBound( item_rec!.arguments ) then
             item_rec!.arguments := "obj";
         fi;
@@ -143,37 +143,37 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
     elif PositionSublist( type, "DeclareCategory" ) <> fail then
         entries := [ "Filt", "categories" ];
         ret_val := "<K>true</K> or <K>false</K>";
-        has_filters := 1;
+        filter_style := "single";
     elif PositionSublist( type, "DeclareRepresentation" ) <> fail then
         entries := [ "Filt", "categories" ];
         ret_val := "<K>true</K> or <K>false</K>";
-        has_filters := 1;
+        filter_style := "single";
     elif PositionSublist( type, "DeclareAttribute" ) <> fail then
         entries := [ "Attr", "attributes" ];
-        has_filters := 1;
+        filter_style := "single";
     elif PositionSublist( type, "DeclareProperty" ) <> fail then
         entries := [ "Prop", "properties" ];
         ret_val := "<K>true</K> or <K>false</K>";
-        has_filters := 1;
+        filter_style := "single";
     elif PositionSublist( type, "DeclareOperation" ) <> fail then
         entries := [ "Oper", "methods" ];
-        has_filters := "List";
+        filter_style := "list";
     elif PositionSublist( type, "DeclareConstructor" ) <> fail then
         entries := [ "Constr", "methods" ];
-        has_filters := "List";
+        filter_style := "list";
     elif PositionSublist( type, "DeclareGlobalFunction" ) <> fail then
         entries := [ "Func", "global_functions" ];
-        has_filters := "No";
+        filter_style := "none";
         if not IsBound( item_rec!.arguments ) then
             item_rec!.arguments := "arg";
         fi;
     elif PositionSublist( type, "DeclareGlobalVariable" ) <> fail then
         entries := [ "Var", "global_variables" ];
-        has_filters := "No";
+        filter_style := "none";
         item_rec!.arguments := fail;
         item_rec!.return_value := false;
     elif PositionSublist( type, "DeclareGlobalName" ) <> fail then
-        has_filters := "No";
+        filter_style := "none";
         if ( IsBound( item_rec!.item_type ) and item_rec!.item_type <> "Var" ) or
            ( IsBound( item_rec!.declareglobalname_is_function ) and
              item_rec!.declareglobalname_is_function ) then
@@ -188,17 +188,17 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
         fi;
     elif PositionSublist( type, "DeclareFilter" ) <> fail then
         entries := [ "Filt", "properties" ];
-        has_filters := "No";
+        filter_style := "none";
         item_rec!.arguments := fail;
         item_rec!.return_value := false;
     elif PositionSublist( type, "DeclareInfoClass" ) <> fail then
         entries := [ "InfoClass", "info_classes" ];
-        has_filters := "No";
+        filter_style := "none";
         item_rec!.arguments := fail;
         item_rec!.return_value := false;
     elif PositionSublist( type, "KeyDependentOperation" ) <> fail then
         entries := [ "Oper", "methods" ];
-        has_filters := 2;
+        filter_style := "pair";
     else
         return fail;
     fi;
@@ -209,7 +209,7 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
     if IsBound( ret_val ) and ( item_rec!.return_value = [ ] or item_rec!.return_value = false ) then
         item_rec!.return_value := [ ret_val ];
     fi;
-    return has_filters;
+    return filter_style;
 end );
 
 ##
@@ -397,7 +397,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         NormalizeWhitespace( argument_string );
         return StripBeginEnd( argument_string, " " );
     end;
-    ApplyFilterInfoToCurrentItem := function( filter_string, has_filters )
+    ApplyFilterInfoToCurrentItem := function( filter_string, filter_style )
+        local filter_count;
         if IsString( filter_string ) then
             filter_string := ReplacedString( filter_string, "\"", "" );
         fi;
@@ -407,25 +408,24 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         if CurrentItem()!.tester_names = fail and StripBeginEnd( filter_string, " " ) <> "for" then
             CurrentItem()!.tester_names := filter_string;
         fi;
-        if StripBeginEnd( filter_string, " " ) = "for" then
-            has_filters := "empty_argument_list";
-        fi;
         if not IsBound( CurrentItem()!.arguments ) then
-            if IsInt( has_filters ) then
-                if has_filters = 1 then
-                    CurrentItem()!.arguments := "arg";
-                else
-                    CurrentItem()!.arguments := JoinStringsWithSeparator( List( [ 1 .. has_filters ], i -> Concatenation( "arg", String( i ) ) ), "," );
-                fi;
-            elif has_filters = "List" then
-                CurrentItem()!.arguments := List( [ 1 .. Length( SplitString( filter_string, "," ) ) ], i -> Concatenation( "arg", String( i ) ) );
-                if Length( CurrentItem()!.arguments ) = 1 then
+            if StripBeginEnd( filter_string, " " ) = "for" then
+                CurrentItem()!.arguments := "";
+            elif filter_style = "single" then
+                CurrentItem()!.arguments := "arg";
+            elif filter_style = "pair" then
+                CurrentItem()!.arguments := "arg1,arg2";
+            elif filter_style = "list" then
+                filter_count := Length( SplitString( filter_string, "," ) );
+                CurrentItem()!.arguments := List(
+                    [ 1 .. filter_count ],
+                    i -> Concatenation( "arg", String( i ) )
+                );
+                if filter_count = 1 then
                     CurrentItem()!.arguments := "arg";
                 else
                     CurrentItem()!.arguments := JoinStringsWithSeparator( CurrentItem()!.arguments, "," );
                 fi;
-            elif has_filters = "empty_argument_list" then
-                CurrentItem()!.arguments := "";
             fi;
         fi;
     end;
@@ -475,7 +475,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         Add( tree, man_item );
     end;
     ScanDeclarePart := function( declare_position )
-        local current_type, filter_string, has_filters, i, name, pos;
+        local current_type, filter_string, filter_style, i, name, pos;
         CurrentOrNewManItem();
         current_line := current_line{[ declare_position .. Length( current_line ) ]};
         pos := PositionSublist( current_line, "(" );
@@ -483,8 +483,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             ErrorWithPos( "Something went wrong" );
         fi;
         current_type := current_line{ [ 1 .. pos - 1 ] };
-        has_filters := AutoDoc_Type_Of_Item( CurrentItem(), current_type, default_chapter_data );
-        if has_filters = fail then
+        filter_style := AutoDoc_Type_Of_Item( CurrentItem(), current_type, default_chapter_data );
+        if filter_style = fail then
             ErrorWithPos( "Unrecognized scan type" );
             return false;
         fi;
@@ -520,8 +520,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
 
         current_line := current_line{ [ DeclarationDelimiterPosition( current_line ) + 1 .. Length( current_line ) ] };
         filter_string := "for ";
-        if IsInt( has_filters ) then
-            for i in [ 1 .. has_filters ] do
+        if filter_style = "single" or filter_style = "pair" then
+            for i in [ 1 .. 2 ] do
+                if filter_style = "single" and i = 2 then
+                    break;
+                fi;
                 while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
                     Append( filter_string, StripBeginEnd( current_line, " " ) );
                     current_line := NormalizedReadLine( filestream );
@@ -537,11 +540,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 elif current_line[ 1 ] = ')' then
                     current_line := current_line{[ 3 .. Length( current_line ) ]};
                 fi;
-                if has_filters - i > 0 then
+                if filter_style = "pair" and i = 1 then
                     Append( filter_string, ", " );
                 fi;
             od;
-        elif has_filters = "List" then
+        elif filter_style = "list" then
             filter_string := ReadBracketedFilterString(
                 "unterminated declaration filter list",
                 true
@@ -549,7 +552,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         else
             filter_string := false;
         fi;
-        ApplyFilterInfoToCurrentItem( filter_string, has_filters );
+        ApplyFilterInfoToCurrentItem( filter_string, filter_style );
         FinishCurrentManItem();
         return true;
     end;
