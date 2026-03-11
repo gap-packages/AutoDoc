@@ -112,14 +112,12 @@ AUTODOC_RegenAllWorkSheetExpected := function()
     od;
 end;
 
-AUTODOC_RegenManualExpected := function()
-    local pkgdir, olddir, tempdir, expecteddir, files, old_gapdoc_level,
+AUTODOC_RegenManualExpected := function(pkgdir)
+    local olddir, tempdir, expecteddir, files, old_gapdoc_level,
           old_warning_level, file, docdir;
 
-    pkgdir := DirectoriesPackageLibrary("AutoDoc", "");
-    pkgdir := pkgdir[1];
     if not IsDirectoryPath(pkgdir) then
-        Error("could not access AutoDoc package directory");
+        Error("could not access package directory");
     fi;
 
     olddir := AUTODOC_CurrentDirectory();
@@ -177,7 +175,8 @@ AUTODOC_RegenManualExpected := function()
 end;
 
 AUTODOC_RegenAllWorkSheetExpected();
-AUTODOC_RegenManualExpected();
+AUTODOC_RegenManualExpected(DirectoriesPackageLibrary("AutoDoc", "")[1]);
+AUTODOC_RegenManualExpected(DirectoriesPackageLibrary("AutoDoc", "tst/AutoDocTest")[1]);
 TestDirectory( DirectoriesPackageLibrary("AutoDoc", "tst"), rec(rewriteToFile := true ) );
 
 QUIT_GAP(0);

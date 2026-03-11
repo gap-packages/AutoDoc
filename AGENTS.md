@@ -18,6 +18,8 @@ created by that tool (e.g. via an `Co-authored-by: ` line).
 - `regen_tests.g`: entry point for regenerating test data.
 - `tst/`: package test suite. Run `tst/testall.g` for the full suite, or a
   single `.tst` file for one test.
+- `tst/AutoDocTest/`: minimal GAP package used as a package-context AutoDoc
+  testbed.
 - `README.md`: top-level package overview.
 
 ## Common commands
@@ -48,6 +50,15 @@ Replace `tst/misc.tst` with any other test file in `tst/` as needed.
 
 ```sh
 gap -q --packagedirs . regen_tests.g
+```
+
+### Work with `tst/AutoDocTest`
+
+Run these commands from inside `tst/AutoDocTest`:
+
+```sh
+gap -q --packagedirs . makedoc.g
+gap -q --packagedirs . tst/testall.g
 ```
 
 ## Commit messages and pull requests

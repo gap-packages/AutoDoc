@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_PlainTextFixture">
+<Heading>Plain-text fixture chapter</Heading>
+
+<P/>
+<Section Label="Section_PlainTextCrossRefs">
+<Heading>Cross references</Heading>
+
+<P/>
+This <Code>.autodoc</Code> chapter cross-references
+<Ref Func="AutoDocTest_GlobalFunction"/> and mentions
+<C>AutoDocTest_Operation</C>, <C>AutoDocTest_Attribute</C>, and
+<C>AutoDocTest_Property</C>.
+It therefore checks that <Code>makedoc.g</Code> also scans the package source files.
+<P/>
+</Section>
+
+<Section Label="Section_PlainTextExample">
+<Heading>Short example</Heading>
+
+<P/>
+The source-backed entries are supplemented by this small plain-text chapter so
+the fixture package covers both hand-written XML and <Code>.autodoc</Code> input.
+</Section>
+
+</Chapter>
+
