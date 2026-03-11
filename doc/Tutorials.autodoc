@@ -313,6 +313,45 @@ LoadPackage( "AutoDoc" );
 AutoDoc( rec( gapdoc := rec( gap_root_relative_path := true ) ) );
 ```
 
+The same behavior is also available via the global option
+`relativePath`. This is particularly convenient in a short
+<F>makedoc.g</F> script, and it overrides `gapdoc.gap_root_relative_path`
+if both are given. Since this is a GAP global option, you can also set it
+outside the eventual <Ref Func="AutoDoc"/> call and let it propagate through
+nested calls; see <Ref Chap="Options Stack" BookName="ref"/> for more
+information about GAP's global options system:
+```@listing
+LoadPackage( "AutoDoc" );
+AutoDoc( rec( autodoc := true ) : relativePath := "../../.." );
+```
+If you pass `relativePath := true`, then &AutoDoc; uses the default
+relative path <F>../../..</F>.
+
+For example, if your <F>makedoc.g</F> reads the manual via
+<Ref Func="AutoDoc"/>, then the following command sets both
+`relativePath` and `nopdf` to `true` for that nested call:
+```@listing
+Read( "makedoc.g" : nopdf, relativePath );
+```
+
+Finally, if you only want HTML and text output, you can suppress PDF
+generation with the global option `nopdf`:
+```@listing
+LoadPackage( "AutoDoc" );
+AutoDoc( rec( autodoc := true ) : nopdf );
+```
+This is useful if `pdflatex` is unavailable, or when you want a faster
+documentation rebuild while editing.
+
+You can also request the same behavior from the shell by setting the
+environment variable `NOPDF` before invoking <F>makedoc.g</F>. For
+example:
+```@listing
+NOPDF=1 gap makedoc.g
+```
+If `NOPDF` is set, &AutoDoc; skips PDF generation even if no
+`nopdf` option is given in the GAP code.
+
 @Subsection Checklist for converting an existing &GAPDoc; manual to use &AutoDoc;
 @SubsectionLabel Tut:Checklist
 

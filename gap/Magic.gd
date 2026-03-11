@@ -350,6 +350,7 @@
 #!
 #!         </List>
 #!     </Item>
+#!
 #!     <Mark><A>extract_examples</A></Mark>
 #!     <Item>
 #!         Either <K>true</K> or a record.
@@ -386,6 +387,49 @@
 #!     </List>
 #! </Item>
 #! </List>
+#!
+#! The function also checks the following GAP global options, i.e. options
+#! supplied via GAP's value-option syntax and visible through nested calls.
+#! These are not entries of <A>optrec</A>. See
+#! <Ref Chap="Options Stack" BookName="ref"/> for more information
+#! about GAP's global options system.
+#! <List>
+#! <Mark><A>nopdf</A></Mark>
+#! <Item>
+#!     If this global option is set to `true`, then &AutoDoc; tells &GAPDoc;
+#!     not to build the PDF version of the manual. HTML and text output are
+#!     still generated.
+#!     <P/>
+#!     This is useful on systems without a working `pdflatex`
+#!     installation, or when you only need the non-PDF outputs while
+#!     iterating on the manual.
+#!     <P/>
+#!     For example:
+#!     <Listing><![CDATA[
+#!     AutoDoc( rec( autodoc := true ) : nopdf );]]></Listing>
+#!     Also, if the environment variable `NOPDF` is set, then &AutoDoc;
+#!     behaves as if the global option <A>nopdf</A> had been enabled.
+#! </Item>
+#! <Mark><A>relativePath</A></Mark>
+#! <Item>
+#!     This has the same effect as <A>gapdoc.gap_root_relative_path</A>, but
+#!     as a GAP global option. It takes precedence over that record entry if
+#!     both are specified.
+#!     <P/>
+#!     If <A>relativePath</A> is `true`, then the default relative path
+#!     <F>../../..</F> is used. If it is a string, then that string is used as
+#!     the relative path from the documentation directory to the GAP root.
+#!     <P/>
+#!     For example:
+#!     <Listing><![CDATA[
+#!     AutoDoc( rec( autodoc := true ) : relativePath := "../../.." );]]></Listing>
+#! </Item>
+#! </List>
+#! In particular, a call such as
+#! <Listing><![CDATA[
+#! Read( "makedoc.g" : nopdf, relativePath );]]></Listing>
+#! sets both global options to `true`, and they remain visible to the
+#! <Ref Func="AutoDoc"/> call inside <F>makedoc.g</F>.
 #!
 #! @Returns nothing
 #! @Arguments [packageOrDirectory], [optrec]
