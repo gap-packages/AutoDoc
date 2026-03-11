@@ -61,6 +61,37 @@ gap -q --packagedirs . makedoc.g
 gap -q --packagedirs . tst/testall.g
 ```
 
+## Tests
+
+All new features and bug fixes should be accompanied by tests. We have the
+following test locations:
+- worksheets `tst/worksheets/*.sheet` which serve as integration tests
+  - some existing fixtures come in pairs, one using XML and one using an
+    `.autodoc` file; if editing one side of an existing `paired-*` fixture
+    (e.g. `paired-examples.sheet`) then usually its partner (here:
+    `paired-examples-autoplain.sheet`) should receive a matching change,
+    unless this is impossible for fundamental reasons (e.g. a feature only
+    exists in one format but not the other),
+  - worksheet tests compare expected output files byte-for-byte, so changes to
+    worksheet input usually also require updating
+    `tst/worksheets/<name>.expected/`,
+- the manual of the `tst/AutoDocTest` package, including its sources in
+  `tst/AutoDocTest/doc/` as well as the GAP program files with AutoDoc
+  comments inside `tst/AutoDocTest/gap`, also can be used to test features,
+  especially features that don't work well in a worksheet or for other reasons
+  require the context of an actual package.
+- unit tests in `tst/*.tst` files (often in `tst/misc.tst`, but additional files
+  can be added if needed / sensible)
+
+In general prefer integration tests that modify one of the worksheets or
+package manuals for end-to-end behavior. Regenerate expected output with
+`gap -q --packagedirs . regen_tests.g` when appropriate.
+
+If specifically unit tests are needed for individual functions, these can and
+should go into a `.tst` file. Temporary test files created from a `.tst` file
+are acceptable when that is the most direct way to exercise unit-level parser
+or helper behavior.
+
 ## Commit messages and pull requests
 
 When writing commit messages, use the title format `component: Brief summary`.
