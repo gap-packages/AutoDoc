@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_Introduction">
+<Heading>Introduction</Heading>
+
+<P/>
+<Section Label="Chapter_Introduction_Section_What_is_GAP?">
+<Heading>What is &GAP;?</Heading>
+
+<P/>
+Entity-driven heading text should stay unchanged.
+<P/>
+</Section>
+
+<Section Label="Section_AB_C_D">
+<Heading>Explicit label section</Heading>
+
+<P/>
+Explicit label text should also stay unchanged.
+</Section>
+
+</Chapter>
+

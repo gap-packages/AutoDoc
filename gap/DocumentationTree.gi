@@ -14,7 +14,13 @@ BindGlobal( "AUTODOC_IsSafeGeneratedLabelCharacter",
     local code;
 
     code := IntChar( c );
-    return code >= 32 and code <> 127 and not c in "/\\";
+    return code >= 32 and code <> 127 and not c in "/\\&<>\";";
+end );
+
+BindGlobal( "AUTODOC_NormalizeGeneratedLabel",
+  function( label )
+    return Filtered( ReplacedString( label, " ", "_" ),
+                     AUTODOC_IsSafeGeneratedLabelCharacter );
 end );
 
 BindGlobal( "AUTODOC_IsSafeGeneratedFilenameCharacter",
@@ -156,8 +162,7 @@ InstallGlobalFunction( AUTODOC_LABEL_OF_CONTEXT,
     else
         Error( "wrong type of context" );
     fi;
-    label := Filtered( label, AUTODOC_IsSafeGeneratedLabelCharacter );
-    return label;
+    return AUTODOC_NormalizeGeneratedLabel( label );
 end );
 
 ###################################
