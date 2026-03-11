@@ -1,0 +1,13 @@
+@Title Label Entities Test
+@Date 2026-03-11
+
+@Chapter Introduction
+
+@Section What is &GAP;?
+
+Entity-driven heading text should stay unchanged.
+
+@Section Explicit label section
+@SectionLabel A&B <C> "D"
+
+Explicit label text should also stay unchanged.

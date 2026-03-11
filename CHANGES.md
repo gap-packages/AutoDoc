@@ -25,6 +25,9 @@ This file describes changes in the AutoDoc package.
   - Relax filtering for auto-generated chapter and section labels and
     chapter XML filenames, preserving more punctuation while still
     stripping characters that are known to cause trouble
+  - Strip XML-special characters from generated chapter, section, and
+    subsection labels so entity names in headings no longer produce
+    invalid XML
   - Greatly improve the package manual.
   - Convert the hand-written manual chapters from XML to `.autodoc`
   - Fix an unexpected and confusing error when mixing explicit

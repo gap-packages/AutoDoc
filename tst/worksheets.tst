@@ -20,6 +20,13 @@ gap> AUTODOC_TestWorkSheet("autoplain");
 #I  extracted 3 examples
 
 #
+gap> AUTODOC_TestWorkSheet("label-entities");
+#I  Extracting manual examples for Label Entities Test package ...
+#I  1 chapters detected
+#I  Chapter 1...
+#I  no examples
+
+#
 gap> AUTODOC_TestWorkSheet("paired-structure");
 #I  Extracting manual examples for Paired Structure Test package ...
 #I  1 chapters detected
