@@ -114,7 +114,7 @@ gap> AutoDoc_Parser_ReadFiles( [ "tst/autodoc-parser-installmethod.g" ], tree, r
 gap> section := SectionInTree( tree, "Parser", "InstallMethod" );;
 gap> item := section!.content[ 1 ];;
 gap> item!.item_type;
-"Oper"
+"Func"
 gap> item!.name;
 "MyOp"
 gap> item!.tester_names;

@@ -18,12 +18,15 @@ end );
 
 #!
 #! The method for `AutoDocTest_Operation` returns the second argument.
+#! @ItemType Oper
 InstallMethod( AutoDocTest_Operation, [ IsGroup, IsPosInt ], { G, n } -> n );
 
 #!
 #! The attribute method simply returns the group itself.
+#! @ItemType Attr
 InstallMethod( AutoDocTest_Attribute, [ IsSolvableGroup ], G -> G );
 
 #!
 #! The property method reuses `IsAbelian` for nilpotent groups.
+#! @ItemType Prop
 InstallMethod( AutoDocTest_Property, [ IsNilpotentGroup ], IsAbelian );

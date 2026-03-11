@@ -25,6 +25,10 @@ immediately after the &AutoDoc; comment block. In particular, do not insert
 other code (such as <C>if false then</C> or assignments) between the comment
 block and the <C>Declare...</C> statement.
 <P/>
+This also works for <C>InstallMethod</C> and <C>InstallOtherMethod</C>.
+In that case, &AutoDoc; uses the installed method's name and filter list to
+create a manual entry for the implemented item.
+<P/>
 Inside of &AutoDoc; comments, <E>&AutoDoc; commands</E>
 starting with <C>@</C> can be used to control the output &AutoDoc; produces.
 Any comment line that does <E>not</E> start with an &AutoDoc; command is treated
@@ -86,6 +90,34 @@ brackets. The argument names can be separated by whitespace, commas or
 square brackets for the optional arguments, like <Q>grp[, elm]</Q> or
 <Q>xx[y[z] ]</Q>. If &GAP; options are used, this can be followed by a colon :
 and one or more assignments, like <Q>n[, r]: tries := 100</Q>.
+<P/>
+</Subsection>
+
+<Subsection Label="Subsection_@ItemType">
+<Heading><C>@ItemType <A>kind</A></C></Heading>
+
+<P/>
+<Index Key="@ItemType"><C>@ItemType <A>kind</A></C></Index>
+Overrides the kind of manual item created for the following declaration or
+installed method. The supported values are <C>Func</C>, <C>Oper</C>,
+<C>Attr</C>, and <C>Prop</C>.
+<P/>
+This is mainly useful for <C>InstallMethod</C>. For a declaration such as
+<C>DeclareAttribute</C> or <C>DeclareProperty</C>, &AutoDoc; already knows the
+correct item type from the declaration itself. But for <C>InstallMethod</C>,
+especially with one argument, the source code alone does not reliably tell
+whether the method belongs to an operation, an attribute, a property, or even
+a plain function. Without an override, such entries default to <C>Oper</C>.
+<P/>
+For example:
+<P/>
+<Listing><![CDATA[
+#! @ItemType Attr
+InstallMethod( SomeAttribute, [ IsGroup ], G -> G );
+]]></Listing>
+<P/>
+This makes &AutoDoc; emit an <C>&lt;Attr .../&gt;</C> manual entry instead of
+the default <C>&lt;Oper .../&gt;</C>.
 <P/>
 </Subsection>
 
