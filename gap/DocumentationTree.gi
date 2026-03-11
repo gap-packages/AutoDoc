@@ -9,6 +9,22 @@
 BindGlobal( "AUTODOC_IdentifierLetters",
             "+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz" );
 
+BindGlobal( "AUTODOC_IsSafeGeneratedLabelCharacter",
+  function( c )
+    local code;
+
+    code := IntChar( c );
+    return code >= 32 and code <> 127 and not c in "/\\";
+end );
+
+BindGlobal( "AUTODOC_IsSafeGeneratedFilenameCharacter",
+  function( c )
+    local code;
+
+    code := IntChar( c );
+    return code >= 32 and code <> 127 and not c in "/\\:";
+end );
+
 DeclareRepresentation( "IsTreeForDocumentationRep",
         IsAttributeStoringRep and IsTreeForDocumentation,
         [ ] );
@@ -140,7 +156,7 @@ InstallGlobalFunction( AUTODOC_LABEL_OF_CONTEXT,
     else
         Error( "wrong type of context" );
     fi;
-    label := Filtered(label, x -> x in AUTODOC_IdentifierLetters);
+    label := Filtered( label, AUTODOC_IsSafeGeneratedLabelCharacter );
     return label;
 end );
 
@@ -405,9 +421,10 @@ BindGlobal( "AUTODOC_ChapterFilename",
   function( node )
     local filename;
 
-    # Remove any characters outside of A-Za-z0-9 and -, +, _ from the filename.
-    # See issues #77 and #78
-    filename := Filtered( Label( node ), x -> x in AUTODOC_IdentifierLetters );
+    # Strip characters that are known to cause trouble in generated filenames.
+    # In particular, GAP rejects ':', '\' and '/' as they are potentially path
+    # separators.
+    filename := Filtered( Label( node ), AUTODOC_IsSafeGeneratedFilenameCharacter );
     return Concatenation( "_", filename, ".xml" );
 end );
 
