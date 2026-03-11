@@ -22,6 +22,9 @@ This file describes changes in the AutoDoc package.
     commands such as `@Title`, `@Subtitle`, `@Version`, `@Author`, and
     `@Date`, and trim trailing blank lines from generated title-page
     content so they no longer leak into filenames or empty author entries
+  - Relax filtering for auto-generated chapter and section labels and
+    chapter XML filenames, preserving more punctuation while still
+    stripping characters that are known to cause trouble
   - Greatly improve the package manual.
   - Convert the hand-written manual chapters from XML to `.autodoc`
   - Fix an unexpected and confusing error when mixing explicit

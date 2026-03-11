@@ -76,5 +76,12 @@ gap> AUTODOC_TestWorkSheet("paired-titlepage-autoplain");
 #I  no examples
 
 #
+gap> AUTODOC_TestWorkSheet("punctuated-filenames");
+#I  Extracting manual examples for Punctuated Filenames Test package ...
+#I  1 chapters detected
+#I  Chapter 1...
+#I  no examples
+
+#
 #
 gap> STOP_TEST( "worksheets.tst" );
