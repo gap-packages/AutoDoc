@@ -663,7 +663,8 @@ since worksheets do not have a <F>PackageInfo.g</F> file from which this informa
 <P/>
 Files that have the suffix <C>.autodoc</C> and are listed in the
 <C>autodoc.files</C> option of <Ref Func="AutoDoc"/>, resp. are contained in
-one of the directories listed in <C>autodoc.scan_dirs</C>, are treated as
+one of the directories listed in <C>autodoc.scan_dirs</C> or one of their
+subdirectories, are treated as
 standalone &AutoDoc; input files. They are meant for manual text that does not
 belong next to a single declaration: chapters, sections, tutorials, worked
 examples, index entries, chunks, title-page metadata, and similar prose-heavy

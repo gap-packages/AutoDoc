@@ -107,6 +107,33 @@ gap> Scan_for_AutoDoc_Part( "### Heading subsection" );
 [ "@Subsection", "Heading subsection" ]
 
 #
+# AUTODOC_FindMatchingFiles: recursive scan_dirs traversal
+#
+gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-findmatchingfiles-test");;
+gap> if IsDirectoryPath(tmpdir) then RemoveDirectoryRecursively(tmpdir); fi;
+gap> AUTODOC_CreateDirIfMissing(tmpdir);
+true
+gap> tmpdir_obj := Directory(tmpdir);;
+gap> AUTODOC_CreateDirIfMissing(Filename(tmpdir_obj, "gap"));
+true
+gap> AUTODOC_CreateDirIfMissing(Filename(tmpdir_obj, "gap/sub"));
+true
+gap> AUTODOC_CreateDirIfMissing(Filename(tmpdir_obj, "lib"));
+true
+gap> stream := OutputTextFile(Filename(tmpdir_obj, "gap/top.gd"), false);;
+gap> CloseStream(stream);
+gap> stream := OutputTextFile(Filename(tmpdir_obj, "gap/sub/nested.gi"), false);;
+gap> CloseStream(stream);
+gap> stream := OutputTextFile(Filename(tmpdir_obj, "lib/extra.g"), false);;
+gap> CloseStream(stream);
+gap> stream := OutputTextFile(Filename(tmpdir_obj, "gap/sub/ignore.txt"), false);;
+gap> CloseStream(stream);
+gap> AUTODOC_FindMatchingFiles(tmpdir_obj, ["gap", "lib"], ["g", "gi", "gd"]);
+[ "gap/sub/nested.gi", "gap/top.gd", "lib/extra.g" ]
+gap> RemoveDirectoryRecursively(tmpdir);
+true
+
+#
 # AutoDoc_Parser_ReadFiles: multiline InstallMethod parsing
 #
 gap> tree := DocumentationTree();;

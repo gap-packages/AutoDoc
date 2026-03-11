@@ -303,7 +303,8 @@ In fact there are two separate scanning steps.
 The option <C>autodoc.scan_dirs</C> controls where it looks for source comments beginning with
 <C>#!</C> and for standalone <F>.autodoc</F> files.
 By default, it scans the package root directory and the subdirectories <F>gap</F>,
-<F>lib</F>, <F>examples</F> and <F>examples/doc</F>.
+<F>lib</F>, <F>examples</F> and <F>examples/doc</F>; the listed subdirectories are
+scanned recursively, while the package root itself is only scanned at top level.
 If you keep that kind of input in other directories, adjust <C>autodoc.scan_dirs</C>.
 The following example instructs &AutoDoc; to only search in the subdirectory
 <F>package_sources</F> of the package's root directory for those files.
