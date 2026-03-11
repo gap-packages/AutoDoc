@@ -122,110 +122,6 @@ gap> item!.tester_names;
 gap> item!.arguments;
 "x,y"
 
-# fenced code blocks in Markdown-like text
-#
-gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
->   "Before",
->   "```gap",
->   "if x = 2 then",
->   "  Print(\"ok\\n\");",
->   "fi;",
->   "```",
->   "After"
-> ]) = [
->   "Before",
->   "<Listing><![CDATA[",
->   "if x = 2 then",
->   "  Print(\"ok\\n\");",
->   "fi;",
->   "]]></Listing>",
->   "After"
-> ];
-true
-gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
->   "~~~",
->   "gap> [[2]]>[[1]];",
->   "~~~"
-> ]) = [
->   "<Listing><![CDATA[",
->   "gap> [[2]]]]><![CDATA[>[[1]];",
->   "]]></Listing>"
-> ];
-true
-gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
->   "```@example",
->   "gap> 1 + 1;",
->   "2",
->   "```"
-> ]) = [
->   "<Example><![CDATA[",
->   "gap> 1 + 1;",
->   "2",
->   "]]></Example>"
-> ];
-true
-gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
->   "```@log",
->   "#I  some log message",
->   "```"
-> ]) = [
->   "<Log><![CDATA[",
->   "#I  some log message",
->   "]]></Log>"
-> ];
-true
-gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
->   "```@listing",
->   "#! @BeginCode Increment",
->   "i := i + 1;",
->   "#! @EndCode",
->   "",
->   "#! @InsertCode Increment",
->   "## Code is inserted here.",
->   "```"
-> ]) = [
->   "<Listing><![CDATA[",
->   "#! @BeginCode Increment",
->   "i := i + 1;",
->   "#! @EndCode",
->   "",
->   "#! @InsertCode Increment",
->   "## Code is inserted here.",
->   "]]></Listing>"
-> ];
-true
-gap> CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML([
->   "`<Log attr=\"x\"> & more`"
-> ]) = [
->   "<Code>&lt;Log attr=&quot;x&quot;&gt; &amp; more</Code>"
-> ];
-true
-gap> rendered := "";;
-gap> stream := OutputTextString(rendered, true);;
-gap> SetPrintFormattingStatus(stream, false);
-gap> WriteDocumentation([
->   "```@listing",
->   "#! @BeginCode Increment",
->   "i := i + 1;",
->   "#! @EndCode",
->   "",
->   "#! @InsertCode Increment",
->   "## Code is inserted here.",
->   "```"
-> ], stream, 0);
-gap> CloseStream(stream);
-gap> rendered = Concatenation(
->   "<Listing><![CDATA[\n",
->   "#! @BeginCode Increment\n",
->   "i := i + 1;\n",
->   "#! @EndCode\n",
->   "\n",
->   "#! @InsertCode Increment\n",
->   "## Code is inserted here.\n",
->   "]]></Listing>\n"
-> );
-true
-
 #
 # warn about defined-but-never-inserted chunks
 #
@@ -237,7 +133,7 @@ gap> tree2 := DocumentationTree();;
 gap> chunk := DocumentationChunk(tree2, "NeverUsed");;
 gap> chunk!.is_defined := true;;
 gap> Add(chunk!.content, "Some text");;
-gap> WriteDocumentation(tree2, Directory(tmpdir), 0);
+gap> WriteDocumentation(tree2, Directory(tmpdir));
 #I  WARNING: chunk NeverUsed was defined but never inserted
 gap> RemoveDirectoryRecursively(tmpdir);
 true
@@ -252,7 +148,7 @@ true
 gap> tree3 := DocumentationTree();;
 gap> chunk := DocumentationChunk(tree3, "MissingChunk");;
 gap> chunk!.is_inserted := true;;
-gap> WriteDocumentation(tree3, Directory(tmpdir), 0);
+gap> WriteDocumentation(tree3, Directory(tmpdir));
 #I  WARNING: chunk MissingChunk was inserted but never defined
 gap> RemoveDirectoryRecursively(tmpdir);
 true
@@ -286,6 +182,55 @@ gap> Label(group);
 "GROUP_grouped"
 gap> group!.content[1]!.name;
 "MixedOp"
+gap> RemoveDirectoryRecursively(tmpdir);
+true
+
+#
+# context stack drives nested parser targets
+#
+gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-context-stack-test");;
+gap> if IsDirectoryPath(tmpdir) then RemoveDirectoryRecursively(tmpdir); fi;
+gap> AUTODOC_CreateDirIfMissing(tmpdir);
+true
+gap> tmpdir_obj := Directory(tmpdir);;
+gap> file1 := Filename(tmpdir_obj, "context.gd");;
+gap> stream := OutputTextFile(file1, false);;
+gap> AppendTo(stream, "#! @Title Parser Stack Test\n");;
+gap> AppendTo(stream, "#! @Chapter Parser\n");;
+gap> AppendTo(stream, "#! @Section Context Stack\n");;
+gap> AppendTo(stream, "#! Intro before chunk.\n");;
+gap> AppendTo(stream, "#! @BeginChunk Stored\n");;
+gap> AppendTo(stream, "#! chunk line 1\n");;
+gap> AppendTo(stream, "#! @BeginLatexOnly\n");;
+gap> AppendTo(stream, "#! latex only\n");;
+gap> AppendTo(stream, "#! @EndLatexOnly\n");;
+gap> AppendTo(stream, "#! chunk line 2\n");;
+gap> AppendTo(stream, "#! @EndChunk\n");;
+gap> AppendTo(stream, "#! @InsertChunk Stored\n");;
+gap> AppendTo(stream, "#! Outro after chunk.\n");;
+gap> CloseStream(stream);
+gap> tree5 := DocumentationTree();;
+gap> AutoDoc_Parser_ReadFiles([file1], tree5, rec());
+gap> tree5!.TitlePage.Title;
+[ "Parser Stack Test" ]
+gap> section := SectionInTree(tree5, "Parser", "Context_Stack");;
+gap> section!.content[1];
+" Intro before chunk.\n"
+gap> chunk := section!.content[2];;
+gap> HasLabel(chunk);
+true
+gap> chunk!.content[1];
+" chunk line 1\n"
+gap> chunk!.content[2]!.element_name;
+"Alt"
+gap> chunk!.content[2]!.attributes;
+rec( Only := "LaTeX" )
+gap> chunk!.content[2]!.content;
+[ " latex only\n" ]
+gap> chunk!.content[3];
+" chunk line 2\n"
+gap> section!.content[3];
+" Outro after chunk.\n"
 gap> RemoveDirectoryRecursively(tmpdir);
 true
 

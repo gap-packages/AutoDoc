@@ -275,9 +275,6 @@ function( arg )
             Error( autodoc.files[ i ], " does not specify an existing file either as an absolute path or relative to the package directory" );
         od;
 
-        if not IsBound( autodoc.level ) then
-            autodoc.level := 0;
-        fi;
     fi;
 
     #
@@ -512,7 +509,7 @@ function( arg )
     # Write AutoDoc XML files
     #
     if IsBound( autodoc ) then
-        WriteDocumentation( tree, doc_dir, autodoc.level );
+        WriteDocumentation( tree, doc_dir );
         if IsBound( gapdoc ) then
             if IsBound( doc_dir_rel ) then
                 Add( gapdoc.files, "_Chunks.xml" );

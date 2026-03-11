@@ -32,7 +32,6 @@ This incremental approach is encouraged: start with the smallest helpful step,
 then adopt additional features when useful.
 </Section>
 
-
 <Section Label="Section_Tut:Scratch">
 <Heading>Creating a package manual from scratch</Heading>
 
@@ -110,7 +109,6 @@ If you also want regression tests from your manual examples, enable
 Section <Ref Sect="Subsection_Tut:IntegrateExisting:EverythingThere"/>.
 <P/>
 </Section>
-
 
 <Section Label="Section_Tut:AdvancedAutoDoc">
 <Heading>Documenting code with &AutoDoc;</Heading>
@@ -230,7 +228,6 @@ AutoDoc( rec( autodoc := true ) );
 <P/>
 </Section>
 
-
 <Section Label="Section_Tut:IntegrateExisting">
 <Heading>Using &AutoDoc; in an existing &GAPDoc; manual</Heading>
 
@@ -287,7 +284,6 @@ Now files <F>PACKAGENAME01.tst</F>, <F>PACKAGENAME02.tst</F> and so appear in th
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_Tut:IntegrateExisting:GapDocOptions">
 <Heading>Setting different &GAPDoc; options</Heading>
 
@@ -341,7 +337,6 @@ AutoDoc( rec( gapdoc := rec( gap_root_relative_path := true ) ) );
 ]]></Listing>
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_Tut:Checklist">
 <Heading>Checklist for converting an existing &GAPDoc; manual to use &AutoDoc;</Heading>
@@ -456,9 +451,7 @@ in your package root directory.
 <P/>
 </Subsection>
 
-
 </Section>
-
 
 <Section Label="Section_Tut:Scaffolds">
 <Heading>Scaffolds</Heading>
@@ -516,7 +509,6 @@ not to generate a main page.
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_Tut:Scaffolds:Main">
 <Heading>Generating the main XML file</Heading>
 
@@ -545,7 +537,6 @@ For more information, please consult the documentation
 of the <Ref Func="AutoDoc"/> function.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_Tut:PackageInfo">
 <Heading>What data is used from <F>PackageInfo.g</F>?</Heading>
@@ -613,7 +604,6 @@ for <C>scaffold.TitlePage</C> points back to this subsection.
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_Tut:PackageInfo:Entities">
 <Heading>Entities from <F>PackageInfo.g</F> and scaffold options</Heading>
 
@@ -634,9 +624,7 @@ from <F>makedoc.g</F> take precedence when both define the same key.
 <P/>
 </Subsection>
 
-
 </Section>
-
 
 <Section Label="Section_Tut:WorksheetsPointer">
 <Heading>Worksheets</Heading>
@@ -647,7 +635,6 @@ For stand-alone documents that are not tied to a package, use
 Section <Ref Sect="Section_AutoDocWorksheet"/> of chapter
 <Ref Chap="AutoDoc"/>.
 </Section>
-
 
 </Chapter>
 

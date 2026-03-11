@@ -24,7 +24,6 @@
  AutoDocWorksheet( "worksheet.g" );
 ]]></Log>
 
-
   This creates documentation in a <F>doc</F> subdirectory of the current directory.
   <P/>
   Since worksheets do not have a <F>PackageInfo.g</F>, title-page fields are
@@ -32,9 +31,7 @@
  </Description>
 </ManSection>
 
-
 </Section>
-
 
 <Section Label="Chapter_Reference_Section_The_AutoDoc_function">
 <Heading>The AutoDoc() function</Heading>
@@ -389,7 +386,6 @@
  </Description>
 </ManSection>
 
-
 <ManSection>
   <InfoClass Name="InfoAutoDoc" />
  <Description>
@@ -402,9 +398,7 @@
  </Description>
 </ManSection>
 
-
 </Section>
-
 
 </Chapter>
 

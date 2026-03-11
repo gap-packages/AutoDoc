@@ -11,7 +11,6 @@ Intro text for the block-oriented worksheet.
 <P/>
 </Section>
 
-
 <Section Label="Chapter_Blocks_Chapter_Section_Injected_Section">
 <Heading>Injected Section</Heading>
 
@@ -19,18 +18,15 @@ This section exists so the paired structure stays aligned.
 <P/>
 </Section>
 
-
 <Section Label="Chapter_Blocks_Chapter_Section_Utility_Blocks_Section">
 <Heading>Utility Blocks Section</Heading>
 
 <P/>
 Text before inserting the stored chunk.
 <#Include Label="StoredChunk">
-
 <P/>
 Text before inserting the stored code.
 <#Include Label="StoredCode">
-
 <P/>
 <Alt Only="LaTeX"><![CDATA[
 \textbf{Latex-only inline text.}
@@ -52,9 +48,7 @@ HTML-and-text block output.
 This text should appear before the parser stops.
 </Subsection>
 
-
 </Section>
-
 
 </Chapter>
 

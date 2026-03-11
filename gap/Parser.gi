@@ -214,17 +214,19 @@ end );
 ##
 InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
   function( filename_list, tree, default_chapter_data )
-    local current_item, chapter_info, Scan_for_Declaration_part, current_line, filestream,
-          scope_group, read_example, command_function_record, autodoc_read_line,
+    local chapter_info, ScanForDeclarationPart, current_line, filestream,
+          scope_group, ReadExample, command_function_record, autodoc_read_line,
           current_command, filename, groupnumber, rest_of_file_skipped,
-          context_stack, new_man_item, add_man_item, Reset, read_code, title_item, title_item_list, plain_text_mode,
+          context_stack, HasCurrentItem, CurrentItem, SetCurrentItem,
+          CurrentOrNewManItem, FinishCurrentManItem, Reset, ReadCode, title_item, title_item_list, plain_text_mode,
           single_line_title_item_list, active_title_item_name, active_title_item_is_multiline,
           current_line_unedited, current_line_info, NormalizeInputLine,
-          ReadLineWithLineCount, Normalized_ReadLine, line_number, ErrorWithPos, create_title_item_function,
-          current_line_positition_for_filter, read_session_example, DeclarationDelimiterPosition,
-          ReadInstallMethodFilterString, ReadInstallMethodArguments,
+          ReadLineWithLineCount, NormalizedReadLine, line_number, ErrorWithPos, CreateTitleItemFunction,
+          current_line_positition_for_filter, ReadSessionExample, DeclarationDelimiterPosition,
+          ReadBracketedFilterString, ReadInstallMethodFilterString, ReadInstallMethodArguments,
+          ApplyFilterInfoToCurrentItem, ScanDeclarePart, ScanInstallMethodPart,
           markdown_fence,
-          AUTODOC_MarkdownFenceFromLine, AUTODOC_IsMatchingMarkdownFence,
+          MarkdownFenceFromLine, IsMatchingMarkdownFence,
           current_line_fence, current_line_is_fence_delimiter,
           xml_comment_mode, comment_start_pos;
     groupnumber := 0;
@@ -239,7 +241,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         line_number := line_number + 1;
         return ReadLine( stream );
     end;
-    Normalized_ReadLine := function( stream )
+    NormalizedReadLine := function( stream )
         local string;
         string := ReadLineWithLineCount( stream );
         if string = fail then
@@ -252,6 +254,19 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         local list;
         list := Concatenation(arg, [ ",\n", "at ", filename, ":", line_number]);
         CallFuncList(Error, list);
+    end;
+    HasCurrentItem := function( )
+        return Length( context_stack ) > 0;
+    end;
+    CurrentItem := function( )
+        return Last( context_stack );
+    end;
+    SetCurrentItem := function( item )
+        if HasCurrentItem() then
+            context_stack[ Length( context_stack ) ] := item;
+        else
+            Add( context_stack, item );
+        fi;
     end;
     NormalizeInputLine := function( raw_line )
         local text, comment_pos;
@@ -283,7 +298,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             allows_declaration_scan := true
         );
     end;
-    AUTODOC_MarkdownFenceFromLine := function( line )
+    MarkdownFenceFromLine := function( line )
         local trimmed_line, fence_char, fence_length;
         trimmed_line := StripBeginEnd( Chomp( line ), " \t\r\n" );
         if Length( trimmed_line ) < 3 or
@@ -303,7 +318,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             remainder := trimmed_line{ [ fence_length + 1 .. Length( trimmed_line ) ] }
         );
     end;
-    AUTODOC_IsMatchingMarkdownFence := function( fence, current_line_fence )
+    IsMatchingMarkdownFence := function( fence, current_line_fence )
         return current_line_fence <> fail and
                fence <> fail and
                current_line_fence.char = fence.char and
@@ -313,89 +328,130 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     DeclarationDelimiterPosition := function( line )
         return Minimum( [ PositionSublist( line, "," ), PositionSublist( line, ");" ) ] );
     end;
-    ReadInstallMethodFilterString := function( )
-        local filter_string, position_parenthesis;
-        while AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' ) = fail do
-            current_line := Normalized_ReadLine( filestream );
+    ReadBracketedFilterString := function( error_message, trim_parts )
+        local filter_string, pos, part;
+        pos := AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' );
+        while pos = fail do
+            current_line := NormalizedReadLine( filestream );
             if current_line = fail then
-                ErrorWithPos( "unterminated InstallMethod filter list" );
+                ErrorWithPos( error_message );
             fi;
+            pos := AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' );
         od;
-        position_parenthesis := AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' );
-        current_line := current_line{[ position_parenthesis + 1 .. Length( current_line ) ]};
+        current_line := current_line{[ pos + 1 .. Length( current_line ) ]};
         filter_string := "for ";
-        while AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' ) = fail do
-            Append( filter_string, current_line );
-            current_line := Normalized_ReadLine( filestream );
-            if current_line = fail then
-                ErrorWithPos( "unterminated InstallMethod filter list" );
+        pos := AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' );
+        while pos = fail do
+            part := current_line;
+            if trim_parts then
+                part := StripBeginEnd( part, " " );
             fi;
+            Append( filter_string, part );
+            current_line := NormalizedReadLine( filestream );
+            if current_line = fail then
+                ErrorWithPos( error_message );
+            fi;
+            pos := AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' );
         od;
-        position_parenthesis := AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' );
-        Append( filter_string, current_line{[ 1 .. position_parenthesis - 1 ]} );
-        current_line := current_line{[ position_parenthesis + 1 .. Length( current_line )]};
+        part := current_line{[ 1 .. pos - 1 ]};
+        if trim_parts then
+            part := StripBeginEnd( part, " " );
+        fi;
+        Append( filter_string, part );
+        current_line := current_line{[ pos + 1 .. Length( current_line ) ]};
         NormalizeWhitespace( filter_string );
         return filter_string;
     end;
+    ReadInstallMethodFilterString := function( )
+        return ReadBracketedFilterString(
+            "unterminated InstallMethod filter list",
+            false
+        );
+    end;
     ReadInstallMethodArguments := function( )
-        local position_parenthesis, argument_string;
+        local pos, argument_string;
         while PositionSublist( current_line, "function(" ) = fail and PositionSublist( current_line, ");" ) = fail do
-            current_line := Normalized_ReadLine( filestream );
+            current_line := NormalizedReadLine( filestream );
             if current_line = fail then
                 ErrorWithPos( "unterminated InstallMethod declaration" );
             fi;
         od;
-        position_parenthesis := PositionSublist( current_line, "function(" );
-        if position_parenthesis = fail then
+        pos := PositionSublist( current_line, "function(" );
+        if pos = fail then
             return fail;
         fi;
-        current_line := current_line{[ position_parenthesis + 9 .. Length( current_line ) ]};
+        current_line := current_line{[ pos + 9 .. Length( current_line ) ]};
         argument_string := "";
         while PositionSublist( current_line, ")" ) = fail do
             current_line := StripBeginEnd( current_line, " " );
             Append( argument_string, current_line );
-            current_line := Normalized_ReadLine( filestream );
+            current_line := NormalizedReadLine( filestream );
             if current_line = fail then
                 ErrorWithPos( "unterminated argument list in InstallMethod declaration" );
             fi;
         od;
-        position_parenthesis := PositionSublist( current_line, ")" );
-        Append( argument_string, current_line{[ 1 .. position_parenthesis - 1 ]} );
+        pos := PositionSublist( current_line, ")" );
+        Append( argument_string, current_line{[ 1 .. pos - 1 ]} );
         NormalizeWhitespace( argument_string );
         return StripBeginEnd( argument_string, " " );
     end;
-    new_man_item := function( )
+    ApplyFilterInfoToCurrentItem := function( filter_string, has_filters )
+        if IsString( filter_string ) then
+            filter_string := ReplacedString( filter_string, "\"", "" );
+        fi;
+        if filter_string = false then
+            return;
+        fi;
+        if CurrentItem()!.tester_names = fail and StripBeginEnd( filter_string, " " ) <> "for" then
+            CurrentItem()!.tester_names := filter_string;
+        fi;
+        if StripBeginEnd( filter_string, " " ) = "for" then
+            has_filters := "empty_argument_list";
+        fi;
+        if not IsBound( CurrentItem()!.arguments ) then
+            if IsInt( has_filters ) then
+                if has_filters = 1 then
+                    CurrentItem()!.arguments := "arg";
+                else
+                    CurrentItem()!.arguments := JoinStringsWithSeparator( List( [ 1 .. has_filters ], i -> Concatenation( "arg", String( i ) ) ), "," );
+                fi;
+            elif has_filters = "List" then
+                CurrentItem()!.arguments := List( [ 1 .. Length( SplitString( filter_string, "," ) ) ], i -> Concatenation( "arg", String( i ) ) );
+                if Length( CurrentItem()!.arguments ) = 1 then
+                    CurrentItem()!.arguments := "arg";
+                else
+                    CurrentItem()!.arguments := JoinStringsWithSeparator( CurrentItem()!.arguments, "," );
+                fi;
+            elif has_filters = "empty_argument_list" then
+                CurrentItem()!.arguments := "";
+            fi;
+        fi;
+    end;
+    CurrentOrNewManItem := function( )
         local man_item;
-        if IsBound( current_item ) and IsTreeForDocumentationNodeForManItemRep( current_item ) then
-            return current_item;
+        if HasCurrentItem() and IsTreeForDocumentationNodeForManItemRep( CurrentItem() ) then
+            return CurrentItem();
         fi;
 
         # implicitly end any subsection
         if IsBound( chapter_info[ 3 ] ) then
             Unbind( chapter_info[ 3 ] );
-            current_item := SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] );
+            SetCurrentItem( SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] ) );
         fi;
 
-        if IsBound( current_item ) then
-            Add( context_stack, current_item );
-        fi;
-
-        man_item := DocumentationManItem( tree );
+        man_item := DocumentationManItem( );
         if IsBound( scope_group ) then
             SetGroupName( man_item, scope_group );
         fi;
         man_item!.chapter_info := ShallowCopy( chapter_info );
         man_item!.tester_names := fail;
+        Add( context_stack, man_item );
         return man_item;
     end;
-    add_man_item := function( )
+    FinishCurrentManItem := function( )
         local man_item;
-        man_item := current_item;
-        if context_stack <> [ ] then
-            current_item := Remove( context_stack );
-        else
-            Unbind( current_item );
-        fi;
+        man_item := CurrentItem();
+        Remove( context_stack );
         if IsBound( man_item!.chapter_info ) then
             SetChapterInfo( man_item, man_item!.chapter_info );
         fi;
@@ -404,197 +460,152 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         fi;
         Add( tree, man_item );
     end;
+    ScanDeclarePart := function( declare_position )
+        local current_type, filter_string, has_filters, i, name, pos;
+        CurrentOrNewManItem();
+        current_line := current_line{[ declare_position .. Length( current_line ) ]};
+        pos := PositionSublist( current_line, "(" );
+        if pos = fail then
+            ErrorWithPos( "Something went wrong" );
+        fi;
+        current_type := current_line{ [ 1 .. pos - 1 ] };
+        has_filters := AutoDoc_Type_Of_Item( CurrentItem(), current_type, default_chapter_data );
+        if has_filters = fail then
+            ErrorWithPos( "Unrecognized scan type" );
+            return false;
+        fi;
+        current_line := current_line{ [ pos + 1 .. Length( current_line ) ] };
+        while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
+            current_line := NormalizedReadLine( filestream );
+            if current_line = fail then
+                ErrorWithPos( "unterminated declaration header" );
+            fi;
+        od;
+        current_line := StripBeginEnd( current_line, " " );
+        name := current_line{ [ 1 .. DeclarationDelimiterPosition( current_line ) - 1 ] };
+        name := StripBeginEnd( ReplacedString( name, "\"", "" ), " " );
+
+        # Deal with DeclareCategoryCollections: this has some special
+        # rules on how the name of a new category is derived from the
+        # string given to it. Since the code for that is not available in
+        # a separate GAP function, we have to replicate this logic here.
+        # To understand what's going on, please refer to the
+        # DeclareCategoryCollections documentation and implementation.
+        if IsBound(CurrentItem()!.coll_suffix) then
+            if EndsWith(name, "Collection") then
+                name := name{[1..Length(name)-6]};
+            fi;
+            if EndsWith(name, "Coll") then
+                CurrentItem()!.coll_suffix := "Coll";
+            else
+                CurrentItem()!.coll_suffix := "Collection";
+            fi;
+            Append(name, CurrentItem()!.coll_suffix);
+        fi;
+        CurrentItem()!.name := name;
+
+        current_line := current_line{ [ DeclarationDelimiterPosition( current_line ) + 1 .. Length( current_line ) ] };
+        filter_string := "for ";
+        if IsInt( has_filters ) then
+            for i in [ 1 .. has_filters ] do
+                while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
+                    Append( filter_string, StripBeginEnd( current_line, " " ) );
+                    current_line := NormalizedReadLine( filestream );
+                    if current_line = fail then
+                        ErrorWithPos( "unterminated declaration filter list" );
+                    fi;
+                od;
+                current_line_positition_for_filter := DeclarationDelimiterPosition( current_line ) - 1;
+                Append( filter_string, StripBeginEnd( current_line{ [ 1 .. current_line_positition_for_filter ] }, " " ) );
+                current_line := current_line{[ current_line_positition_for_filter + 1 .. Length( current_line ) ]};
+                if current_line[ 1 ] = ',' then
+                    current_line := current_line{[ 2 .. Length( current_line ) ]};
+                elif current_line[ 1 ] = ')' then
+                    current_line := current_line{[ 3 .. Length( current_line ) ]};
+                fi;
+                if has_filters - i > 0 then
+                    Append( filter_string, ", " );
+                fi;
+            od;
+        elif has_filters = "List" then
+            filter_string := ReadBracketedFilterString(
+                "unterminated declaration filter list",
+                true
+            );
+        else
+            filter_string := false;
+        fi;
+        ApplyFilterInfoToCurrentItem( filter_string, has_filters );
+        FinishCurrentManItem();
+        return true;
+    end;
+    ScanInstallMethodPart := function( declare_position )
+        local filter_string, name, pos;
+        CurrentOrNewManItem();
+        CurrentItem()!.item_type := "Oper";
+        pos := PositionSublist( current_line, "(" );
+        current_line := current_line{ [ pos + 1 .. Length( current_line ) ] };
+        name := "";
+        pos := PositionSublist( current_line, "," );
+        while pos = fail do
+            Append( name, current_line );
+            current_line := NormalizedReadLine( filestream );
+            if current_line = fail then
+                ErrorWithPos( "unterminated InstallMethod declaration header" );
+            fi;
+            pos := PositionSublist( current_line, "," );
+        od;
+        Append( name, current_line{[ 1 .. pos - 1 ]} );
+        NormalizeWhitespace( name );
+        name := StripBeginEnd( name, " " );
+        name := ReplacedString( name, "\"", "" );
+        CurrentItem()!.name := name;
+        filter_string := ReadInstallMethodFilterString( );
+        if CurrentItem()!.tester_names = fail then
+            CurrentItem()!.tester_names := ReplacedString( filter_string, "\"", "" );
+        fi;
+        if not IsBound( CurrentItem()!.arguments ) then
+            filter_string := ReadInstallMethodArguments( );
+            if filter_string <> fail then
+                CurrentItem()!.arguments := filter_string;
+            fi;
+        fi;
+        if not IsBound( CurrentItem()!.arguments ) then
+            CurrentItem()!.arguments := Length( SplitString( CurrentItem()!.tester_names, "," ) );
+            CurrentItem()!.arguments := JoinStringsWithSeparator( List( [ 1 .. CurrentItem()!.arguments ], i -> Concatenation( "arg", String( i ) ) ), "," );
+        fi;
+        FinishCurrentManItem();
+        return true;
+    end;
     Reset := function( )
         chapter_info := [ ];
         context_stack := [ ];
-        Unbind( current_item );
         plain_text_mode := false;
         markdown_fence := fail;
         xml_comment_mode := false;
     end;
-    Scan_for_Declaration_part := function()
-        local declare_position, current_type, filter_string, has_filters,
-              position_parenthesis, i;
+    ScanForDeclarationPart := function()
+        local declare_position;
 
         ## fail is bigger than every integer
         declare_position := Minimum( [ PositionSublist( current_line, "Declare" ), PositionSublist( current_line, "KeyDependentOperation" ) ] );
         if declare_position <> fail then
-            current_item := new_man_item();
-            current_line := current_line{[ declare_position .. Length( current_line ) ]};
-            position_parenthesis := PositionSublist( current_line, "(" );
-            if position_parenthesis = fail then
-                ErrorWithPos( "Something went wrong" );
-            fi;
-            current_type := current_line{ [ 1 .. position_parenthesis - 1 ] };
-            has_filters := AutoDoc_Type_Of_Item( current_item, current_type, default_chapter_data );
-            if has_filters = fail then
-                ErrorWithPos( "Unrecognized scan type" );
-                return false;
-            fi;
-            current_line := current_line{ [ position_parenthesis + 1 .. Length( current_line ) ] };
-            ## Now the funny part begins:
-            ## try fetching the name:
-            ## Assuming the name is in the same line as its
-            while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
-                current_line := Normalized_ReadLine( filestream );
-                if current_line = fail then
-                    ErrorWithPos( "unterminated declaration header" );
-                fi;
-            od;
-            current_line := StripBeginEnd( current_line, " " );
-            current_item!.name := current_line{ [ 1 .. DeclarationDelimiterPosition( current_line ) - 1 ] };
-            current_item!.name := StripBeginEnd( ReplacedString( current_item!.name, "\"", "" ), " " );
-
-            # Deal with DeclareCategoryCollections: this has some special
-            # rules on how the name of a new category is derived from the
-            # string given to it. Since the code for that is not available in
-            # a separate GAP function, we have to replicate this logic here.
-            # To understand what's going on, please refer to the
-            # DeclareCategoryCollections documentation and implementation.
-            if IsBound(current_item!.coll_suffix) then
-                if EndsWith(current_item!.name, "Collection") then
-                    current_item!.name :=
-                    current_item!.name{[1..Length(current_item!.name)-6]};
-                fi;
-                if EndsWith(current_item!.name, "Coll") then
-                    current_item!.coll_suffix := "Coll";
-                else
-                    current_item!.coll_suffix := "Collection";
-                fi;
-                current_item!.name := Concatenation(current_item!.name,
-                                                    current_item!.coll_suffix);
-            fi;
-
-            current_line := current_line{ [ DeclarationDelimiterPosition( current_line ) + 1 .. Length( current_line ) ] };
-            filter_string := "for ";
-            ## FIXME: The next two if's can be merged at some point
-            if IsInt( has_filters ) then
-                for i in [ 1 .. has_filters ] do
-                    ## We now search for the filters. A filter is either followed by a ',', if there is more than one,
-                    ## or by ');' if it is the only or last one. So we search for the next delimiter.
-                    while PositionSublist( current_line, "," ) = fail and PositionSublist( current_line, ");" ) = fail do
-                        Append( filter_string, StripBeginEnd( current_line, " " ) );
-                        current_line := ReadLineWithLineCount( filestream );
-                        if current_line = fail then
-                            ErrorWithPos( "unterminated declaration filter list" );
-                        fi;
-                        NormalizeWhitespace( current_line );
-                    od;
-                    current_line_positition_for_filter := DeclarationDelimiterPosition( current_line ) - 1;
-                    Append( filter_string, StripBeginEnd( current_line{ [ 1 .. current_line_positition_for_filter ] }, " " ) );
-                    current_line := current_line{[ current_line_positition_for_filter + 1 .. Length( current_line ) ]};
-                    if current_line[ 1 ] = ',' then
-                        current_line := current_line{[ 2 .. Length( current_line ) ]};
-                    elif current_line[ 1 ] = ')' then
-                        current_line := current_line{[ 3 .. Length( current_line ) ]};
-                    fi;
-                    ## FIXME: Refactor this whole if IsInt( has_filters ) case!
-                    if has_filters - i > 0 then
-                        Append( filter_string, ", " );
-                    fi;
-                od;
-            elif has_filters = "List" then
-                while AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' ) = fail do
-                    current_line := ReadLineWithLineCount( filestream );
-                    if current_line = fail then
-                        ErrorWithPos( "unterminated declaration filter list" );
-                    fi;
-                    NormalizeWhitespace( current_line );
-                od;
-                current_line := current_line{ [ AUTODOC_PositionElementIfNotAfter( current_line, '[', '\\' ) + 1 .. Length( current_line ) ] };
-                while AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' ) = fail do
-                    Append( filter_string, StripBeginEnd( current_line, " " ) );
-                    current_line := ReadLineWithLineCount( filestream );
-                    if current_line = fail then
-                        ErrorWithPos( "unterminated declaration filter list" );
-                    fi;
-                    NormalizeWhitespace( current_line );
-                od;
-                Append( filter_string, StripBeginEnd( current_line{[ 1 .. AUTODOC_PositionElementIfNotAfter( current_line, ']', '\\' ) - 1 ]}, " " ) );
-            else
-                filter_string := false;
-            fi;
-            if IsString( filter_string ) then
-                filter_string := ReplacedString( filter_string, "\"", "" );
-            fi;
-            if filter_string <> false then
-                if current_item!.tester_names = fail and StripBeginEnd( filter_string, " " ) <> "for" then
-                    current_item!.tester_names := filter_string;
-                fi;
-                if StripBeginEnd( filter_string, " " ) = "for" then
-                    has_filters := "empty_argument_list";
-                fi;
-                ##Adjust arguments
-                if not IsBound( current_item!.arguments ) then
-                    if IsInt( has_filters ) then
-                        if has_filters = 1 then
-                            current_item!.arguments := "arg";
-                        else
-                            current_item!.arguments := JoinStringsWithSeparator( List( [ 1 .. has_filters ], i -> Concatenation( "arg", String( i ) ) ), "," );
-                        fi;
-                    elif has_filters = "List" then
-                        current_item!.arguments := List( [ 1 .. Length( SplitString( filter_string, "," ) ) ], i -> Concatenation( "arg", String( i ) ) );
-                        if Length( current_item!.arguments ) = 1 then
-                            current_item!.arguments := "arg";
-                        else
-                            current_item!.arguments := JoinStringsWithSeparator( current_item!.arguments, "," );
-                        fi;
-                    elif has_filters = "empty_argument_list" then
-                        current_item!.arguments := "";
-                    fi;
-                fi;
-            fi;
-            add_man_item();
-            return true;
+            return ScanDeclarePart( declare_position );
         fi;
         declare_position := Minimum( [ PositionSublist( current_line, "InstallMethod" ), PositionSublist( current_line, "InstallOtherMethod" ) ] );
                             ## Fail is larger than every integer.
         if declare_position <> fail then
-            current_item := new_man_item();
-            current_item!.item_type := "Oper";
-            ##Find name
-            position_parenthesis := PositionSublist( current_line, "(" );
-            current_line := current_line{ [ position_parenthesis + 1 .. Length( current_line ) ] };
-            ## find next colon
-            current_item!.name := "";
-            while PositionSublist( current_line, "," ) = fail do
-                Append( current_item!.name, current_line );
-                current_line := Normalized_ReadLine( filestream );
-                if current_line = fail then
-                    ErrorWithPos( "unterminated InstallMethod declaration header" );
-                fi;
-            od;
-            position_parenthesis := PositionSublist( current_line, "," );
-            Append( current_item!.name, current_line{[ 1 .. position_parenthesis - 1 ]} );
-            NormalizeWhitespace( current_item!.name );
-            current_item!.name := StripBeginEnd( current_item!.name, " " );
-            current_item!.name := ReplacedString( current_item!.name, "\"", "" );
-            filter_string := ReadInstallMethodFilterString( );
-            if IsString( filter_string ) then
-                filter_string := ReplacedString( filter_string, "\"", "" );
-            fi;
-            if current_item!.tester_names = fail then
-                current_item!.tester_names := filter_string;
-            fi;
-            ##Maybe find some argument names
-            if not IsBound( current_item!.arguments ) then
-                filter_string := ReadInstallMethodArguments( );
-                if filter_string <> fail then
-                    current_item!.arguments := filter_string;
-                fi;
-            fi;
-            if not IsBound( current_item!.arguments ) then
-                current_item!.arguments := Length( SplitString( current_item!.tester_names, "," ) );
-                current_item!.arguments := JoinStringsWithSeparator( List( [ 1 .. current_item!.arguments ], i -> Concatenation( "arg", String( i ) ) ), "," );
-            fi;
-            add_man_item();
-            return true;
+            return ScanInstallMethodPart( declare_position );
         fi;
         return false;
     end;
-    read_code := function( )
-        local code, temp_curr_line, temp_line_info, temp_command;
-        code := [ "<Listing Type=\"Code\"><![CDATA[\n" ];
+    ReadCode := function( )
+        local code_node, temp_curr_line, temp_line_info, temp_command;
+        code_node := DocumentationVerbatim(
+            "Listing",
+            rec( Type := "Code" ),
+            [ ]
+        );
         while true do
             temp_curr_line := ReadLineWithLineCount( filestream );
             temp_line_info := NormalizeInputLine( temp_curr_line );
@@ -603,18 +614,17 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 if temp_command[ 1 ] = "@EndCode" then
                     break;
                 fi;
-                Add( code, temp_line_info.text );
+                Add( code_node!.content, Chomp( temp_line_info.text ) );
                 continue;
             fi;
-            Add( code, temp_curr_line );
+            Add( code_node!.content, Chomp( temp_curr_line ) );
         od;
-        Add( code, "]]></Listing>\n" );
-        return code;
+        return code_node;
     end;
-    read_example := function( is_tested_example )
-        local temp_string_list, temp_curr_line, temp_pos_comment, is_following_line, item_temp, example_node;
-        example_node := DocumentationExample( tree );
-        example_node!.is_tested_example := is_tested_example;
+    ReadExample := function( element_name )
+        local temp_string_list, temp_curr_line, temp_pos_comment, is_following_line,
+              item_temp, example_node;
+        example_node := DocumentationExample( element_name );
         temp_string_list := example_node!.content;
         is_following_line := false;
         while true do
@@ -649,12 +659,11 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         od;
         return example_node;
     end;
-    read_session_example := function( is_tested_example, plain_text_mode )
+    ReadSessionExample := function( element_name, plain_text_mode )
         local temp_string_list, temp_curr_line, temp_pos_comment,
               is_following_line, item_temp, example_node,
               incorporate_this_line;
-        example_node := DocumentationExample( tree );
-        example_node!.is_tested_example := is_tested_example;
+        example_node := DocumentationExample( element_name );
         temp_string_list := example_node!.content;
         while true do
             temp_curr_line := Chomp( ReadLineWithLineCount( filestream ) );
@@ -688,7 +697,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @Chapter := function()
             local scope_chapter;
             scope_chapter := ReplacedString( current_command[ 2 ], " ", "_" );
-            current_item := ChapterInTree( tree, scope_chapter );
+            SetCurrentItem( ChapterInTree( tree, scope_chapter ) );
             chapter_info[ 1 ] := scope_chapter;
         end,
         @ChapterLabel := function()
@@ -715,7 +724,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 ErrorWithPos( "found @Section with no active chapter" );
             fi;
             scope_section := ReplacedString( current_command[ 2 ], " ", "_" );
-            current_item := SectionInTree( tree, chapter_info[ 1 ], scope_section );
+            SetCurrentItem( SectionInTree( tree, chapter_info[ 1 ], scope_section ) );
             Unbind( chapter_info[ 3 ] );
             chapter_info[ 2 ] := scope_section;
         end,
@@ -743,7 +752,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 ErrorWithPos( "found @Subsection with no active section" );
             fi;
             scope_subsection := ReplacedString( current_command[ 2 ], " ", "_" );
-            current_item := SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], scope_subsection );
+            SetCurrentItem( SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], scope_subsection ) );
             chapter_info[ 3 ] := scope_subsection;
         end,
         @SubsectionLabel := function()
@@ -776,46 +785,46 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             Unbind( scope_group );
         end,
         @Description := function()
-            current_item := new_man_item();
-            SetManItemToDescription( current_item );
+            CurrentOrNewManItem();
+            CurrentItem()!.content := CurrentItem()!.description;
             NormalizeWhitespace( current_command[ 2 ] );
             if current_command[ 2 ] <> "" then
-                Add( current_item, current_command[ 2 ] );
+                Add( CurrentItem(), current_command[ 2 ] );
             fi;
         end,
         @Returns := function()
-            current_item := new_man_item();
-            SetManItemToReturnValue( current_item );
+            CurrentOrNewManItem();
+            CurrentItem()!.content := CurrentItem()!.return_value;
             if current_command[ 2 ] <> "" then
-                Add( current_item, current_command[ 2 ] );
+                Add( CurrentItem(), current_command[ 2 ] );
             fi;
         end,
         @Arguments := function()
-            current_item := new_man_item();
-            current_item!.arguments := current_command[ 2 ];
+            CurrentOrNewManItem();
+            CurrentItem()!.arguments := current_command[ 2 ];
         end,
         @Label := function()
-            current_item := new_man_item();
-            current_item!.tester_names := current_command[ 2 ];
+            CurrentOrNewManItem();
+            CurrentItem()!.tester_names := current_command[ 2 ];
         end,
         @Group := function()
             local group_name;
-            current_item := new_man_item();
+            CurrentOrNewManItem();
             group_name := ReplacedString( current_command[ 2 ], " ", "_" );
-            SetGroupName( current_item, group_name );
+            SetGroupName( CurrentItem(), group_name );
         end,
         @GroupTitle := function()
             local group_name, chap_info, group_obj;
-            current_item := new_man_item();
-            if not HasGroupName( current_item ) then
+            CurrentOrNewManItem();
+            if not HasGroupName( CurrentItem() ) then
                 ErrorWithPos( "found @GroupTitle with no Group set" );
             fi;
-            group_name := GroupName( current_item );
+            group_name := GroupName( CurrentItem() );
             chap_info := fail;
-            if HasChapterInfo( current_item ) then
-                chap_info := ChapterInfo( current_item );
-            elif IsBound( current_item!.chapter_info ) then
-                chap_info := current_item!.chapter_info;
+            if HasChapterInfo( CurrentItem() ) then
+                chap_info := ChapterInfo( CurrentItem() );
+            elif IsBound( CurrentItem()!.chapter_info ) then
+                chap_info := CurrentItem()!.chapter_info;
             fi;
             if chap_info = fail or Length( chap_info ) = 0 then
                 chap_info := chapter_info;
@@ -828,10 +837,10 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end,
         @ChapterInfo := function()
             local current_chapter_info;
-            current_item := new_man_item();
+            CurrentOrNewManItem();
             current_chapter_info := SplitString( current_command[ 2 ], "," );
             current_chapter_info := List( current_chapter_info, i -> ReplacedString( StripBeginEnd( i, " " ), " ", "_" ) );
-            SetChapterInfo( current_item, current_chapter_info );
+            SetChapterInfo( CurrentItem(), current_chapter_info );
         end,
         @BREAK := function()
             ErrorWithPos( current_command[ 2 ] );
@@ -839,7 +848,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @Index := function()
             local argument, split_pos, key, entry,
                   escaped_quote_pos, key_string, key_escaped;
-            if not IsBound( current_item ) then
+            if not HasCurrentItem() then
                 ErrorWithPos( "found @Index with no active documentation item" );
             fi;
             argument := StripBeginEnd( current_command[ 2 ], " \t\r\n" );
@@ -912,31 +921,24 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             if key_escaped = "" then
                 ErrorWithPos( "found @Index with empty key" );
             fi;
-            Add( current_item, Concatenation( "<Index Key=\"", key_escaped, "\">", entry, "</Index>" ) );
+            Add( CurrentItem(), Concatenation( "<Index Key=\"", key_escaped, "\">", entry, "</Index>" ) );
         end,
 
         @InsertChunk := function()
             local label_name;
             label_name := ReplacedString( current_command[ 2 ], " ", "_" );
-            Add( current_item, DocumentationChunk( tree, label_name ) );
+            Add( CurrentItem(), DocumentationChunk( tree, label_name ) );
         end,
         @BeginChunk := function()
             local label_name;
-            if IsBound( current_item ) then
-                Add( context_stack, current_item );
-            fi;
             label_name := ReplacedString( current_command[ 2 ], " ", "_" );
-            current_item := DocumentationChunk( tree, label_name );
-            current_item!.is_defined := true;
+            Add( context_stack, DocumentationChunk( tree, label_name ) );
+            CurrentItem()!.is_defined := true;
         end,
         @Chunk := ~.@BeginChunk,
         @EndChunk := function()
             autodoc_read_line := false;
-            if context_stack <> [ ] then
-                current_item := Remove( context_stack );
-            else
-                Unbind( current_item );
-            fi;
+            Remove( context_stack );
         end,
 
         @BeginCode := function()
@@ -944,64 +946,76 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             label_name := ReplacedString( current_command[ 2 ], " ", "_" );
             tmp_system := DocumentationChunk( tree, label_name );
             tmp_system!.is_defined := true;
-            Add( tmp_system!.content, DocumentationChunkContent( read_code() ) );
+            Add( tmp_system!.content, ReadCode() );
         end,
         @Code := ~.@BeginCode,
         @InsertCode := ~.@InsertChunk,
 
         @BeginExample := function()
             local example_node;
-            example_node := read_example( true );
-            Add( current_item, example_node );
+            example_node := ReadExample( "Example" );
+            Add( CurrentItem(), example_node );
         end,
 
         @Example := ~.@BeginExample,
         @BeginLog := function()
             local example_node;
-            example_node := read_example( false );
-            Add( current_item, example_node );
+            example_node := ReadExample( "Log" );
+            Add( CurrentItem(), example_node );
         end,
         @Log := ~.@BeginLog,
 
         STRING := function()
-            if not IsBound( current_item ) then
+            if not HasCurrentItem() then
                 return;
             fi;
             if active_title_item_name <> fail and
                active_title_item_is_multiline = false then
                 return;
             fi;
-            Add( current_item, current_command[ 2 ] );
+            Add( CurrentItem(), current_command[ 2 ] );
         end,
         @BeginLatexOnly := function()
-            Add( current_item, "<Alt Only=\"LaTeX\"><![CDATA[" );
+            local alt_node;
+            alt_node := DocumentationVerbatim( "Alt", rec( Only := "LaTeX" ), [ ] );
+            Add( CurrentItem(), alt_node );
+            Add( context_stack, alt_node!.content );
             if current_command[ 2 ] <> "" then
-                Add( current_item, current_command[ 2 ] );
+                Add( CurrentItem(), current_command[ 2 ] );
             fi;
         end,
         @EndLatexOnly := function()
             autodoc_read_line := false;
-            Add( current_item, "]]></Alt>" );
+            Remove( context_stack );
         end,
         @LatexOnly := function()
-            Add( current_item, "<Alt Only=\"LaTeX\"><![CDATA[" );
-            Add( current_item, current_command[ 2 ] );
-            Add( current_item, "]]></Alt>" );
+            Add( CurrentItem(),
+                DocumentationVerbatim(
+                    "Alt",
+                    rec( Only := "LaTeX" ),
+                    [ current_command[ 2 ] ]
+                 ) );
         end,
         @BeginNotLatex := function()
-            Add( current_item, "<Alt Not=\"LaTeX\"><![CDATA[" );
+            local alt_node;
+            alt_node := DocumentationVerbatim( "Alt", rec( Not := "LaTeX" ), [ ] );
+            Add( CurrentItem(), alt_node );
+            Add( context_stack, alt_node!.content );
             if current_command[ 2 ] <> "" then
-                Add( current_item, current_command[ 2 ] );
+                Add( CurrentItem(), current_command[ 2 ] );
             fi;
         end,
         @EndNotLatex := function()
             autodoc_read_line := false;
-            Add( current_item, "]]></Alt>" );
+            Remove( context_stack );
         end,
         @NotLatex := function()
-            Add( current_item, "<Alt Not=\"LaTeX\"><![CDATA[" );
-            Add( current_item, current_command[ 2 ] );
-            Add( current_item, "]]></Alt>" );
+            Add( CurrentItem(),
+                DocumentationVerbatim(
+                    "Alt",
+                    rec( Not := "LaTeX" ),
+                    [ current_command[ 2 ] ]
+                 ) );
         end,
         @Dependency := function()
             if not IsBound( tree!.worksheet_dependencies ) then
@@ -1012,14 +1026,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         end,
         @ExampleSession := function()
             local example_node;
-            example_node := read_session_example( true, plain_text_mode );
-            Add( current_item, example_node );
+            example_node := ReadSessionExample( "Example", plain_text_mode );
+            Add( CurrentItem(), example_node );
         end,
         @BeginExampleSession := ~.@ExampleSession,
         @LogSession := function()
             local example_node;
-            example_node := read_session_example( false, plain_text_mode );
-            Add( current_item, example_node );
+            example_node := ReadSessionExample( "Log", plain_text_mode );
+            Add( CurrentItem(), example_node );
         end,
         @BeginLogSession := ~.@LogSession
     );
@@ -1031,26 +1045,26 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                          "Date", "Address", "Abstract", "Copyright", "Acknowledgements", "Colophon" ];
     single_line_title_item_list := [ "Title", "Subtitle", "Version", "Author", "Date" ];
 
-    create_title_item_function := function( name )
+    CreateTitleItemFunction := function( name )
         return function()
             if not IsBound( tree!.TitlePage.( name ) ) then
                 tree!.TitlePage.( name ) := [ ];
             fi;
-            current_item := tree!.TitlePage.( name );
+            SetCurrentItem( tree!.TitlePage.( name ) );
             active_title_item_name := name;
             active_title_item_is_multiline :=
                 Position( single_line_title_item_list, name ) = fail;
-            Add( current_item, current_command[ 2 ] );
+            Add( CurrentItem(), current_command[ 2 ] );
         end;
     end;
     
     ## Note that we need to create these functions in the helper function
-    ## create_title_item_function to ensure that the <name> variable is bound properly.
+    ## CreateTitleItemFunction to ensure that the <name> variable is bound properly.
     ## Without this intermediate helper, the wrong closure is taken,
     ## and later, when the function is executed, the value for <name> will be the last
     ## value <title_item> had, i.e., the last entry of <title_item_list>.
     for title_item in title_item_list do
-        command_function_record.( Concatenation( "@", title_item ) ) := create_title_item_function( title_item );
+        command_function_record.( Concatenation( "@", title_item ) ) := CreateTitleItemFunction( title_item );
     od;
 
     rest_of_file_skipped := false;
@@ -1105,7 +1119,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
 
             if current_line_info.is_autodoc then
-                current_line_fence := AUTODOC_MarkdownFenceFromLine( current_line_info.text );
+                current_line_fence := MarkdownFenceFromLine( current_line_info.text );
                 current_command := Scan_for_AutoDoc_Part( current_line_info.text );
             else
                 current_line_fence := fail;
@@ -1117,7 +1131,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                     current_line_is_fence_delimiter := true;
                 else
                     current_line_is_fence_delimiter :=
-                        AUTODOC_IsMatchingMarkdownFence( markdown_fence, current_line_fence );
+                        IsMatchingMarkdownFence( markdown_fence, current_line_fence );
                 fi;
             fi;
             if current_line_is_fence_delimiter then
@@ -1146,7 +1160,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 continue;
             fi;
             current_line := current_command[ 2 ];
-            if autodoc_read_line and not Scan_for_Declaration_part( ) then
+            if autodoc_read_line and not ScanForDeclarationPart( ) then
                 autodoc_read_line := false;
             fi;
         od;

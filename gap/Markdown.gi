@@ -48,14 +48,16 @@ end );
 ##
 BindGlobal( "AUTODOC_ConvertInlineBackticksInLine",
   function( string, keyword_set )
-    local opening_pos, closing_pos, inline_content, tag_name;
+    local opening_pos, closing_pos, inline_content, tag_name, search_string;
 
     while PositionSublist( string, "`" ) <> fail do
         opening_pos := PositionSublist( string, "`" );
-        closing_pos := PositionSublist( string, "`", opening_pos + 1 );
+        search_string := string{ [ opening_pos + 1 .. Length( string ) ] };
+        closing_pos := PositionSublist( search_string, "`" );
         if closing_pos = fail then
             Error( "did you forget some `" );
         fi;
+        closing_pos := opening_pos + closing_pos;
 
         if opening_pos + 1 <= closing_pos - 1 then
             inline_content := string{ [ opening_pos + 1 .. closing_pos - 1 ] };
@@ -80,25 +82,33 @@ BindGlobal( "AUTODOC_ConvertInlineBackticksInLine",
 end );
 
 ##
-InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
+BindGlobal( "AUTODOC_FencedMarkdownElement",
+  function( info_string )
+    if info_string = "@example" then
+        return "Example";
+    elif info_string = "@log" then
+        return "Log";
+    fi;
+    return "Listing";
+end );
+
+##
+BindGlobal( "AUTODOC_ConvertFencedMarkdownBlocks",
   function( string_list )
-    local i, current_list, current_string, max_line_length,
-          current_position, already_in_list, command_list_with_translation, beginning,
-          commands, position_of_command, insert, beginning_whitespaces, temp, string_list_temp, skipped,
-          already_inserted_paragraph, in_list, in_item, converted_string_list,
-          fence_char, fence_length, trimmed_line, code_block, info_string,
-          fence_element, keyword_set;
+    local i, converted_string_list, skipped, trimmed_line,
+          fence_char, fence_length, info_string, fence_element, code_block,
+          fence_content;
 
     converted_string_list := [ ];
     i := 1;
     skipped := false;
     while i <= Length( string_list ) do
-        if PositionSublist( string_list[ i ], "<![CDATA[" ) <> fail then
+        if AUTODOC_LineStartsCDATA( string_list[ i ] ) then
             skipped := true;
         fi;
         if skipped = true then
             Add( converted_string_list, string_list[ i ] );
-            if PositionSublist( string_list[ i ], "]]>" ) <> fail then
+            if AUTODOC_LineEndsCDATA( string_list[ i ] ) then
                 skipped := false;
             fi;
             i := i + 1;
@@ -118,18 +128,10 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
                 info_string := NormalizedWhitespace(
                     trimmed_line{ [ fence_length + 1 .. Length( trimmed_line ) ] }
                 );
-                fence_element := "Listing";
-                if info_string = "@example" then
-                    fence_element := "Example";
-                elif info_string = "@log" then
-                    fence_element := "Log";
-                elif info_string = "@listing" then
-                    fence_element := "Listing";
-                fi;
-                Add( converted_string_list,
-                     Concatenation( "<", fence_element, "><![CDATA[" ) );
+                fence_element := AUTODOC_FencedMarkdownElement( info_string );
                 i := i + 1;
                 code_block := false;
+                fence_content := [ ];
                 while i <= Length( string_list ) do
                     trimmed_line := StripBeginEnd( string_list[ i ], " \t\r\n" );
                     if Length( trimmed_line ) >= fence_length and
@@ -139,12 +141,11 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
                         code_block := true;
                         break;
                     fi;
-                    Add( converted_string_list,
-                         ReplacedString( string_list[ i ], "]]>", "]]]]><![CDATA[>" ) );
+                    Add( fence_content, Chomp( string_list[ i ] ) );
                     i := i + 1;
                 od;
                 Add( converted_string_list,
-                     Concatenation( "]]></", fence_element, ">" ) );
+                     DocumentationVerbatim( fence_element, rec( ), fence_content ) );
                 if code_block = true then
                     i := i + 1;
                     continue;
@@ -155,36 +156,51 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
         Add( converted_string_list, string_list[ i ] );
         i := i + 1;
     od;
-    string_list := converted_string_list;
+
+    return converted_string_list;
+end );
+
+##
+BindGlobal( "AUTODOC_ForEachNonCDATALine",
+  function( string_list, action )
+    local i, in_cdata;
+
+    in_cdata := false;
+    for i in [ 1 .. Length( string_list ) ] do
+        if AUTODOC_LineStartsCDATA( string_list[ i ] ) then
+            in_cdata := true;
+        fi;
+        if in_cdata = false then
+            action( i );
+        fi;
+        if AUTODOC_LineEndsCDATA( string_list[ i ] ) then
+            in_cdata := false;
+        fi;
+    od;
+end );
+
+##
+BindGlobal( "AUTODOC_ConvertMarkdownStringsToGAPDocXML",
+  function( string_list )
+    local i, current_list, current_string, max_line_length,
+          current_position, already_in_list, command_list_with_translation, beginning,
+          commands, position_of_command, insert, beginning_whitespaces, temp, string_list_temp, skipped,
+          already_inserted_paragraph, in_list, in_item, converted_string_list,
+          keyword_set;
 
     # Convert inline backticks before list detection so literal tags such as
     # `<List>` inside code spans do not look like structural GAPDoc tags.
     keyword_set := Set( ALL_KEYWORDS() );
-    skipped := false;
-    for i in [ 1 .. Length( string_list ) ] do
-        if PositionSublist( string_list[ i ], "<![CDATA[" ) <> fail then
-            skipped := true;
-        fi;
-        if PositionSublist( string_list[ i ], "]]>" ) <> fail then
-            skipped := false;
-            continue;
-        fi;
-        if skipped = true then
-            continue;
-        fi;
+    AUTODOC_ForEachNonCDATALine( string_list, function( i )
         string_list[ i ] :=
             AUTODOC_ConvertInlineBackticksInLine( string_list[ i ], keyword_set );
-    od;
+    end );
 
     ## Check for paragraphs by turning an empty string into <P/>
     
     already_inserted_paragraph := false;
-    skipped := false;
-    for i in [ 1 ..  Length( string_list ) ] do
-        if PositionSublist( string_list[ i ], "<![CDATA[" ) <> fail then
-            skipped := true;
-        fi;
-        if skipped = false and NormalizedWhitespace( string_list[ i ] ) = "" then
+    AUTODOC_ForEachNonCDATALine( string_list, function( i )
+        if NormalizedWhitespace( string_list[ i ] ) = "" then
             if already_inserted_paragraph = false then
                 string_list[ i ] := "<P/>";
                 already_inserted_paragraph := true;
@@ -192,11 +208,7 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
         else
             already_inserted_paragraph := false;
         fi;
-        if PositionSublist( string_list[ i ], "]]>" ) <> fail then
-            skipped := false;
-        fi;
-        i := i + 1;
-    od;
+    end );
 
     ## We need to find lists. Lists are indicated by a beginning
     ## *, -, or +. Lists can be nested. Save list as list of strings,
@@ -212,10 +224,10 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
 
         ## maybe make the first line marked by definition?
         while i <= Length( string_list ) do
-            if PositionSublist( string_list[ i ], "<![CDATA[" ) <> fail then
+            if AUTODOC_LineStartsCDATA( string_list[ i ] ) then
                 skipped := true;
             fi;
-            if PositionSublist( string_list[ i ], "]]>" ) <> fail then
+            if AUTODOC_LineEndsCDATA( string_list[ i ] ) then
                 skipped := false;
                 i := i + 1;
                 continue;
@@ -308,18 +320,7 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
 
     for commands in command_list_with_translation do
         beginning := true;
-        skipped := false;
-        for i in [ 1 .. Length( string_list ) ] do
-            if PositionSublist( string_list[ i ], "<![CDATA[" ) <> fail then
-                skipped := true;
-            fi;
-            if PositionSublist( string_list[ i ], "]]>" ) <> fail then
-                skipped := false;
-            fi;
-            if skipped = true then
-                continue;
-            fi;
-
+        AUTODOC_ForEachNonCDATALine( string_list, function( i )
             while PositionSublist( string_list[ i ], commands[ 1 ] ) <> fail do
                 position_of_command := PositionSublist( string_list[ i ], commands[ 1 ] );
                 if beginning = true then
@@ -330,7 +331,7 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
                 string_list[ i ] := INSERT_IN_STRING_WITH_REPLACE( string_list[ i ], insert, position_of_command, Length( commands[ 1 ] ) );
                 beginning := not beginning;
             od;
-        od;
+        end );
 
         if beginning = false then
             Error( "did you forget some ", commands[ 1 ] );
@@ -338,4 +339,34 @@ InstallGlobalFunction( CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML,
     od;
 
     return string_list;
+end );
+
+##
+InstallGlobalFunction( AUTODOC_ConvertMarkdownToGAPDocXML,
+  function( string_list )
+    local converted_items, current_string_list, item, FlushStringList;
+
+    converted_items := [ ];
+    current_string_list := [ ];
+
+    FlushStringList := function()
+        if current_string_list = [ ] then
+            return;
+        fi;
+        Append( converted_items,
+                AUTODOC_ConvertMarkdownStringsToGAPDocXML( current_string_list ) );
+        current_string_list := [ ];
+    end;
+
+    for item in AUTODOC_ConvertFencedMarkdownBlocks( string_list ) do
+        if IsString( item ) then
+            Add( current_string_list, item );
+        else
+            FlushStringList();
+            Add( converted_items, item );
+        fi;
+    od;
+    FlushStringList();
+
+    return converted_items;
 end );

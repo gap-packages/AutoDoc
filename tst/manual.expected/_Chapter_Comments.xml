@@ -64,7 +64,6 @@ or until the declaration is reached.
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_@Returns">
 <Heading><C>@Returns <A>ret val</A></C></Heading>
 
@@ -75,7 +74,6 @@ put in front of it. This should usually give a brief hint about the type or mean
 of the value returned by the documented function.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@Arguments">
 <Heading><C>@Arguments <A>args</A></C></Heading>
@@ -91,7 +89,6 @@ and one or more assignments, like <Q>n[, r]: tries := 100</Q>.
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_@Group">
 <Heading><C>@Group <A>grpname</A></C></Heading>
 
@@ -101,7 +98,6 @@ Adds the following method to a group with the given name.
 See section <Ref Sect="Section_Groups"/> for more information about groups.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@Label">
 <Heading><C>@Label <A>label</A></C></Heading>
@@ -147,7 +143,6 @@ leads to this:
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_@ChapterInfo">
 <Heading><C>@ChapterInfo <A>chapter</A>, <A>section</A></C></Heading>
 
@@ -175,9 +170,7 @@ DeclareAttribute( "CharacterDegreesOfBlocks",
 <P/>
 </Subsection>
 
-
 </Section>
-
 
 <Section Label="Chapter_Comments_Section_Other_documentation_comments">
 <Heading>Other documentation comments</Heading>
@@ -229,7 +222,6 @@ for setting the same chapter as active chapter again.
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_@Section">
 <Heading><C>@Section <A>name</A></C></Heading>
 
@@ -253,7 +245,6 @@ The <C>@SectionTitle</C> <A>title</A> command
 can be used to set a heading for the section that is different from <A>name</A>.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@Subsection">
 <Heading><C>@Subsection <A>name</A></C></Heading>
@@ -282,7 +273,6 @@ can be used to set a heading for the subsection that is different from <A>name</
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_@BeginGroup">
 <Heading><C>@BeginGroup <A>[grpname]</A></C></Heading>
 
@@ -298,7 +288,6 @@ is reached.
 See section <Ref Sect="Section_Groups"/> for more information about groups.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@EndGroup">
 <Heading><C>@EndGroup</C></Heading>
@@ -324,7 +313,6 @@ DeclareOperation( "GroupedOperation",
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_@GroupTitle">
 <Heading>@GroupTitle <A>title</A></Heading>
 
@@ -335,7 +323,6 @@ absence of any <C>@GroupTitle</C> command, the heading will be the name of the
 first entry in the group. See <Ref Sect="Section_Groups"/> for more information.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@BeginExample">
 <Heading><C>@BeginExample</C> and <C>@EndExample</C></Heading>
@@ -374,7 +361,6 @@ these examples can also be turned into <F>.tst</F> files (see
 Section <Ref Sect="Subsection_Tut:IntegrateExisting:EverythingThere"/>).
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@BeginExampleSession">
 <Heading><C>@BeginExampleSession</C> and <C>@EndExampleSession</C></Heading>
@@ -415,7 +401,6 @@ The &AutoDoc; command <C>@ExampleSession</C> is an alias of <C>@BeginExampleSess
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_@BeginLog">
 <Heading><C>@BeginLog</C> and <C>@EndLog</C></Heading>
 
@@ -427,7 +412,6 @@ will not be tested. See the &GAPDoc; manual for more information.
 The &AutoDoc; command <C>@Log</C> is an alias of <C>@BeginLog</C>.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@BeginLogSession">
 <Heading><C>@BeginLogSession</C> and <C>@EndLogSession</C></Heading>
@@ -441,7 +425,6 @@ will not be tested if manual examples are run. It is the direct analog of
 The &AutoDoc; command <C>@LogSession</C> is an alias of <C>@BeginLogSession</C>.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@DoNotReadRestOfFile">
 <Heading><C>@DoNotReadRestOfFile</C></Heading>
@@ -460,7 +443,6 @@ unfinished or temporary files.
 ]]></Listing>
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@BeginChunk">
 <Heading><C>@BeginChunk <A>name</A></C>, <C>@EndChunk</C>, and <C>@InsertChunk <A>name</A></C></Heading>
@@ -506,7 +488,6 @@ And then later, insert the example in a different file, like this:
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_@BeginCode">
 <Heading><C>@BeginCode <A>name</A></C>, @EndCode, and <C>@InsertCode <A>name</A></C></Heading>
 
@@ -528,7 +509,6 @@ i := i + 1;
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_@LatexOnly">
 <Heading><C>@LatexOnly <A>text</A></C>, <C>@BeginLatexOnly</C>, and <C>@EndLatexOnly</C></Heading>
 
@@ -547,7 +527,6 @@ in the PDF version of the manual or worksheet. It can hold arbitrary &LaTeX;-com
 ]]></Listing>
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_@NotLatex">
 <Heading><C>@NotLatex <A>text</A></C>, <C>@BeginNotLatex</C>, and <C>@EndNotLatex</C></Heading>
@@ -568,7 +547,6 @@ in the HTML and text versions of the manual or worksheet, but not in the PDF ver
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_@Index">
 <Heading><C>@Index <A>key</A> [<A>entry text</A>]</C></Heading>
 
@@ -585,9 +563,7 @@ inline code such as <Keyword>true</Keyword> is supported.
 <P/>
 </Subsection>
 
-
 </Section>
-
 
 <Section Label="Section_TitlepageCommands">
 <Heading>Title page commands</Heading>
@@ -637,7 +613,6 @@ for worksheets created with <Ref Func="AutoDocWorksheet"/>,
 since worksheets do not have a <F>PackageInfo.g</F> file from which this information could be extracted.
 <P/>
 </Section>
-
 
 <Section Label="Section_PlainText">
 <Heading>Plain text files</Heading>
@@ -742,7 +717,6 @@ standalone manual text can live wherever you find it most convenient.
 <P/>
 </Section>
 
-
 <Section Label="Section_Groups">
 <Heading>Grouping</Heading>
 
@@ -806,7 +780,6 @@ Third sentence.
 <P/>
 </Section>
 
-
 <Section Label="Section_MarkdownExtension">
 <Heading>Markdown-like formatting of text in &AutoDoc;</Heading>
 
@@ -864,7 +837,6 @@ The *, -, and + are fully interchangeable and can even be used mixed, but this i
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_MarkdownExtensionMath">
 <Heading>Math modes</Heading>
 
@@ -884,7 +856,6 @@ One can start an inline formula with a &#36;, and also end it with &#36;, just l
      <Display> \sum_{i=1}^n i. </Display>
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_MarkdownExtensionEmph">
 <Heading>Emphasize</Heading>
@@ -908,7 +879,6 @@ can be important.</E>
 <P/>
 </Subsection>
 
-
 <Subsection Label="Subsection_MarkdownExtensionInlineCode">
 <Heading>Inline code</Heading>
 
@@ -924,7 +894,6 @@ One can mark inline code snippets by using backticks (&#96;) at the
     Call function <C>foobar()</C> at the start.
 <P/>
 </Subsection>
-
 
 <Subsection Label="Subsection_MarkdownExtensionFencedCode">
 <Heading>Fenced code blocks</Heading>
@@ -968,9 +937,7 @@ gap> [ 1 .. 3 ] ^ 2;
 <P/>
 </Subsection>
 
-
 </Section>
-
 
 <Section Label="Section_Deprecated">
 <Heading>Deprecated commands</Heading>
@@ -994,7 +961,6 @@ at the start of any new subsection, section or chapter.</Item>
 <Item>Use <C>.autodoc</C> files or &AutoDoc; comments instead.</Item>
 </List>
 </Section>
-
 
 </Chapter>
 

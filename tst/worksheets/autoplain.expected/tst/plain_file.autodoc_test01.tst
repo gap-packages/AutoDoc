@@ -16,13 +16,13 @@ Sym( [ 1 .. 5 ] )
 gap> Size(S5);
 120
 
-# _Chapter_Test.xml:29-34
+# _Chapter_Test.xml:28-33
 gap> A5 := AlternatingGroup(5);
 Alt( [ 1 .. 5 ] )
 gap> Size(A5);
 60
 
-# _Chapter_Test.xml:37-41
+# _Chapter_Test.xml:35-39
 gap> plain_mode_value := 6 *
 >   9;
 54

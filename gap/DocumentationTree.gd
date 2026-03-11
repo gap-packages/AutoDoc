@@ -47,12 +47,10 @@ DeclareOperation( "StructurePartInTree", [ IsTreeForDocumentation, IsList ] );
 DeclareOperation( "ChapterInTree", [ IsTreeForDocumentation, IsString ] );
 DeclareOperation( "SectionInTree", [ IsTreeForDocumentation, IsString, IsString ] );
 DeclareOperation( "SubsectionInTree", [ IsTreeForDocumentation, IsString, IsString, IsString ] );
-DeclareOperation( "DocumentationExample", [ IsTreeForDocumentation ] );
+DeclareOperation( "DocumentationExample", [ IsString ] );
+DeclareOperation( "DocumentationVerbatim", [ IsString, IsRecord, IsList ] );
 DeclareOperation( "DocumentationChunk", [ IsTreeForDocumentation, IsString ] );
-DeclareOperation( "DocumentationChunkContent", [ IsObject ] );
-DeclareOperation( "DocumentationManItem", [ IsTreeForDocumentation ] );
-DeclareOperation( "SetManItemToDescription", [ IsTreeForDocumentationNode ] );
-DeclareOperation( "SetManItemToReturnValue", [ IsTreeForDocumentationNode ] );
+DeclareOperation( "DocumentationManItem", [ ] );
 DeclareOperation( "DocumentationGroup", [ IsTreeForDocumentation, IsString ] );
 DeclareOperation( "DocumentationGroup", [ IsTreeForDocumentation, IsString, IsList ] );
 DeclareOperation( "Add", [ IsTreeForDocumentation, IsTreeForDocumentationNode ] );
@@ -69,7 +67,7 @@ DeclareOperation( "Add", [ IsTreeForDocumentation, IsString ] );
 ##
 #######################################
 
-DeclareOperation( "WriteDocumentation", [ IsTreeForDocumentation, IsDirectory, IsInt ] );
-DeclareOperation( "WriteDocumentation", [ IsTreeForDocumentationNode, IsStream, IsInt ] );
-DeclareOperation( "WriteDocumentation", [ IsList, IsStream, IsInt ] );
-DeclareOperation( "WriteDocumentation", [ IsTreeForDocumentationNode, IsStream, IsDirectory, IsInt ] );
+DeclareOperation( "WriteDocumentation", [ IsTreeForDocumentation, IsDirectory ] );
+DeclareOperation( "WriteDocumentation", [ IsTreeForDocumentationNode, IsStream ] );
+DeclareOperation( "WriteDocumentation", [ IsList, IsStream ] );
+DeclareOperation( "WriteDocumentation", [ IsTreeForDocumentationNode, IsStream, IsDirectory ] );

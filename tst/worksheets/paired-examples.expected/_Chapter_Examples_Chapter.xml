@@ -16,27 +16,22 @@ gap> comment_example_value := 2 + 3;
 5
 ]]></Example>
 
-
 <Example><![CDATA[
 gap> comment_alias_example := 3 + 4;
 7
 ]]></Example>
-
 
 <Example><![CDATA[
 gap> 10 - 3;
 7
 ]]></Example>
 
-
 <Example><![CDATA[
 gap> 6 * 7;
 42
 ]]></Example>
 
-
 </Subsection>
-
 
 <Subsection Label="Chapter_Examples_Chapter_Section_Examples_Section_Subsection_Untested_logs">
 <Heading>Untested logs</Heading>
@@ -46,30 +41,24 @@ gap> comment_log_value := 9;
 9
 ]]></Log>
 
-
 <Log><![CDATA[
 gap> comment_alias_log := 11;
 11
 ]]></Log>
-
 
 <Log><![CDATA[
 gap> "comment log session";
 "comment log session"
 ]]></Log>
 
-
 <Log><![CDATA[
 gap> "comment alias log session";
 "comment alias log session"
 ]]></Log>
 
-
 </Subsection>
 
-
 </Section>
-
 
 </Chapter>
 

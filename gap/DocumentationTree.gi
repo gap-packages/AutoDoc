@@ -96,18 +96,13 @@ BindGlobal( "TheTypeOfDocumentationTreeChunkNodes",
                 IsTreeForDocumentationChunkNodeRep ) );
 
 ## DeclareRepresentation
-DeclareRepresentation( "IsTreeForDocumentationExampleNodeRep",
+DeclareRepresentation( "IsTreeForDocumentationVerbatimNodeRep",
                        IsTreeForDocumentationNodeRep,
                        [ ] );
 
-BindGlobal( "TheTypeOfDocumentationTreeExampleNodes",
+BindGlobal( "TheTypeOfDocumentationTreeVerbatimNodes",
         NewType( TheFamilyOfDocumentationTreeNodes,
-                IsTreeForDocumentationExampleNodeRep ) );
-
-
-## DeclareRepresentation
-DeclareRepresentation( "IsTreeForDocumentationChunkContentNodeRep", IsTreeForDocumentationNodeRep, [ ] );
-BindGlobal( "TheTypeOfDocumentationTreeChunkContentNodes", NewType( TheFamilyOfDocumentationTreeNodes, IsTreeForDocumentationChunkContentNodeRep ) );
+                IsTreeForDocumentationVerbatimNodeRep ) );
 
 
 
@@ -162,9 +157,8 @@ InstallMethod( DocumentationTree, [ ],
 
     tree := rec(
                   content := [ ],   # a list of nodes
-                  nodes_by_label := rec( ),
+                  cached_nodes_by_label := rec( ),
                   node_name_iterator := 0,
-                  current_level := 0,
                   TitlePage := rec( ),
                   chunks := rec( ),
             );
@@ -183,14 +177,13 @@ InstallMethod( StructurePartInTree, [ IsTreeForDocumentation, IsList ],
 
     # if the part already exist, use that
     label := AUTODOC_LABEL_OF_CONTEXT( context );
-    if IsBound( tree!.nodes_by_label.( label ) ) then
-        return tree!.nodes_by_label.( label );
+    if IsBound( tree!.cached_nodes_by_label.( label ) ) then
+        return tree!.cached_nodes_by_label.( label );
     fi;
 
     parent := StructurePartInTree( tree, context{[1..Length(context)-1]} );
 
     new_node := rec( content := [ ],
-                     level := tree!.current_level,
                      name := context[ Length( context ) ],
                      chapter_info := context );
     if Length( context ) = 1 then
@@ -202,22 +195,30 @@ InstallMethod( StructurePartInTree, [ IsTreeForDocumentation, IsList ],
     fi;
     ObjectifyWithAttributes( new_node, type, Label, label );
 
-    tree!.nodes_by_label.( label ) := new_node;
+    tree!.cached_nodes_by_label.( label ) := new_node;
     Add( parent!.content, new_node );
     return new_node;
 end );
 
 ##
-InstallMethod( DocumentationExample, [ IsTreeForDocumentation ],
-  function( tree )
-    local node, label;
+InstallMethod( DocumentationExample, [ IsString ],
+  function( element_name )
+    local node;
+    node := DocumentationVerbatim( element_name, rec( ), [ ] );
+    node!.closing_separator := "\n\n";
+    return node;
+end );
 
-    node := rec( content := [ ],
-                 level := tree!.current_level );
-    label := Concatenation( "Example_", String( AUTODOC_TREE_NODE_NAME_ITERATOR( tree ) ) );
-    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeExampleNodes,
-                             Label, label );
-    tree!.nodes_by_label.( label ) := node;
+##
+InstallMethod( DocumentationVerbatim, [ IsString, IsRecord, IsList ],
+  function( element_name, attributes, content )
+    local node;
+
+    node := rec( element_name := element_name,
+                 attributes := StructuralCopy( attributes ),
+                 content := ShallowCopy( content ) );
+    node!.closing_separator := "\n";
+    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeVerbatimNodes );
     return node;
 end );
 
@@ -229,8 +230,7 @@ InstallMethod( DocumentationChunk, [ IsTreeForDocumentation, IsString ],
     if IsBound( tree!.chunks.( name ) ) then
         return tree!.chunks.( name );
     fi;
-    node := rec( content := [ ],
-                 level := tree!.current_level );
+    node := rec( content := [ ] );
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeChunkNodes,
                               Label, name );
     node!.is_defined := false;
@@ -240,57 +240,29 @@ InstallMethod( DocumentationChunk, [ IsTreeForDocumentation, IsString ],
 end );
 
 ##
-InstallMethod( DocumentationChunkContent, [ IsObject ],
-  function( content )
+InstallMethod( DocumentationManItem, [ ],
+  function( )
     local node;
 
-    node := rec( content := content );
-    ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeChunkContentNodes );
-    return node;
-end );
-
-##
-InstallMethod( DocumentationManItem, [ IsTreeForDocumentation ],
-  function( tree )
-    local node, name;
-
     node := rec( description := [ ],
-                 return_value := [ ],
-                 level := tree!.current_level );
+                 return_value := [ ] );
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeNodesForManItem );
-    name := Concatenation( "ManItem_", String( AUTODOC_TREE_NODE_NAME_ITERATOR( tree ) ) );
-    tree!.nodes_by_label.( name ) := node;
     node!.content := node!.description;
     return node;
 end );
 
-##
-InstallMethod( SetManItemToDescription, [ IsTreeForDocumentationNodeForManItemRep ],
-  function( node )
-    node!.content := node!.description;
-end );
-
-##
-InstallMethod( SetManItemToReturnValue, [ IsTreeForDocumentationNodeForManItemRep ],
-  function( node )
-    node!.content := node!.return_value;
-end );
-
-##
 InstallMethod( DocumentationGroup, [ IsTreeForDocumentation, IsString ],
   function( tree, group_name )
     local group, name;
 
     name := Concatenation( "GROUP_", group_name );
-    if IsBound( tree!.nodes_by_label.( name ) ) then
-        return tree!.nodes_by_label.( name );
+    if IsBound( tree!.cached_nodes_by_label.( name ) ) then
+        return tree!.cached_nodes_by_label.( name );
     fi;
-    group := rec( content := [ ],
-                  level := tree!.current_level
-    );
+    group := rec( content := [ ] );
     ObjectifyWithAttributes( group, TheTypeOfDocumentationTreeNodesForGroup,
                              Label, name );
-    tree!.nodes_by_label.( name ) := group;
+    tree!.cached_nodes_by_label.( name ) := group;
     group!.is_added := false;
     return group;
 end );
@@ -301,8 +273,8 @@ InstallMethod( DocumentationGroup, [ IsTreeForDocumentation, IsString, IsList ],
     local name, group, context_node;
 
     name := Concatenation( "GROUP_", group_name );
-    if IsBound( tree!.nodes_by_label.( name ) ) then
-        return tree!.nodes_by_label.( name );
+    if IsBound( tree!.cached_nodes_by_label.( name ) ) then
+        return tree!.cached_nodes_by_label.( name );
     fi;
     context_node := StructurePartInTree( tree, context );
     group := DocumentationGroup( tree, group_name );
@@ -408,8 +380,39 @@ end );
 ##
 #############################################
 
+BindGlobal( "AUTODOC_WriteStructuralNode",
+  function( node, element_name, stream )
+    local heading;
+
+    if ForAll( node!.content, IsEmptyNode ) then
+        return false;
+    fi;
+
+    if IsBound( node!.title_string ) then
+        heading := NormalizedWhitespace( node!.title_string );
+    else
+        heading := ReplacedString( node!.name, "_", " " );
+    fi;
+
+    AppendTo( stream, "<", element_name, " Label=\"", Label( node ), "\">\n" );
+    AppendTo( stream, "<Heading>", heading, "</Heading>\n\n" );
+    WriteDocumentation( node!.content, stream );
+    AppendTo( stream, "</", element_name, ">\n\n" );
+    return true;
+end );
+
+BindGlobal( "AUTODOC_ChapterFilename",
+  function( node )
+    local filename;
+
+    # Remove any characters outside of A-Za-z0-9 and -, +, _ from the filename.
+    # See issues #77 and #78
+    filename := Filtered( Label( node ), x -> x in AUTODOC_IdentifierLetters );
+    return Concatenation( "_", filename, ".xml" );
+end );
+
 BindGlobal( "WriteChunks",
-  function( tree, path_to_xmlfiles, level_value )
+  function( tree, path_to_xmlfiles )
     local chunks_stream, filename, chunk_names, current_chunk_name,
           current_chunk;
 
@@ -439,7 +442,7 @@ BindGlobal( "WriteChunks",
         fi;
         AppendTo( chunks_stream, "<#GAPDoc Label=\"", current_chunk_name, "\">\n" );
         if IsBound( current_chunk!.content ) then
-            WriteDocumentation( current_chunk!.content, chunks_stream, level_value );
+            WriteDocumentation( current_chunk!.content, chunks_stream );
         fi;
         AppendTo( chunks_stream, "\n<#/GAPDoc>\n" );
     od;
@@ -449,8 +452,8 @@ BindGlobal( "WriteChunks",
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentation, IsDirectory, IsInt ],
-  function( tree, path_to_xmlfiles, level_value )
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentation, IsDirectory ],
+  function( tree, path_to_xmlfiles )
     local stream, i;
 
     stream := AUTODOC_OutputTextFile( path_to_xmlfiles, _AUTODOC_GLOBAL_OPTION_RECORD.AutoDocMainFile );
@@ -460,10 +463,10 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentation, IsDirectory, IsInt 
             Error( "this should never happen" );
         fi;
         ## FIXME: If there is anything else than a chapter, this will break!
-        WriteDocumentation( i, stream, path_to_xmlfiles, level_value );
+        WriteDocumentation( i, stream, path_to_xmlfiles );
     od;
 
-    WriteChunks( tree, path_to_xmlfiles, level_value );
+    WriteChunks( tree, path_to_xmlfiles );
 
     # Workaround for issue #65
     if IsEmpty( tree!.content ) then
@@ -473,41 +476,53 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentation, IsDirectory, IsInt 
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForChapterRep, IsStream, IsDirectory, IsInt ],
-  function( node, stream, path_to_xmlfiles, level_value )
-    local filename, chapter_stream, replaced_name;
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForChapterRep, IsStream, IsDirectory ],
+  function( node, stream, path_to_xmlfiles )
+    local filename, chapter_stream;
 
-    if node!.level > level_value then
-        return;
-    fi;
     if ForAll( node!.content, IsEmptyNode ) then
         return;
     fi;
-    
-    if IsBound( node!.title_string ) then
-        replaced_name := NormalizedWhitespace( node!.title_string );
-    else
-        replaced_name := ReplacedString( node!.name, "_", " " );
-    fi;
 
-    # Remove any characters outside of A-Za-z0-9 and -, +, _ from the filename.
-    # See issues #77 and #78
-    filename := Filtered( Label( node ), x -> x in AUTODOC_IdentifierLetters);
-    filename := Concatenation( "_", filename, ".xml" );
+    filename := AUTODOC_ChapterFilename( node );
     chapter_stream := AUTODOC_OutputTextFile( path_to_xmlfiles, filename );
     AppendTo( stream, "<#Include SYSTEM \"", filename, "\">\n" );
     AppendTo( chapter_stream, AUTODOC_XML_HEADER );
-    AppendTo( chapter_stream, "<Chapter Label=\"", Label( node ) ,"\">\n" );
-    AppendTo( chapter_stream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
-    WriteDocumentation( node!.content, chapter_stream, level_value );
-    AppendTo( chapter_stream, "</Chapter>\n\n" );
+    AUTODOC_WriteStructuralNode( node, "Chapter", chapter_stream );
     CloseStream( chapter_stream );
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsList, IsStream, IsInt ],
-  function( node_list, filestream, level_value )
-    local current_string_list, i, last_position, in_cdata, line;
+InstallMethod( WriteDocumentation, [ IsList, IsStream ],
+  function( node_list, filestream )
+    local current_string_list, i, FlushConvertedStrings;
+
+    FlushConvertedStrings := function()
+        local converted_string_list, in_cdata, item;
+        if current_string_list = [ ] then
+            return;
+        fi;
+        converted_string_list := AUTODOC_ConvertMarkdownToGAPDocXML( current_string_list );
+        in_cdata := false;
+        for item in converted_string_list do
+            if not IsString( item ) then
+                WriteDocumentation( item, filestream );
+                continue;
+            fi;
+            if AUTODOC_LineStartsCDATA( item ) then
+                in_cdata := true;
+            fi;
+            if in_cdata = true then
+                AppendTo( filestream, Chomp( item ), "\n" );
+            else
+                WriteDocumentation( item, filestream );
+            fi;
+            if AUTODOC_LineEndsCDATA( item ) then
+                in_cdata := false;
+            fi;
+        od;
+        current_string_list := [ ];
+    end;
 
     i := 1;
     current_string_list := [ ];
@@ -515,50 +530,16 @@ InstallMethod( WriteDocumentation, [ IsList, IsStream, IsInt ],
         if IsString( node_list[ i ] ) then
             Add( current_string_list, ShallowCopy( node_list[ i ] ) );
         else
-            if current_string_list <> [ ] then
-                current_string_list := CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML( current_string_list );
-                in_cdata := false;
-                for line in current_string_list do
-                    if PositionSublist( line, "<![CDATA[" ) <> fail then
-                        in_cdata := true;
-                    fi;
-                    if in_cdata = true then
-                        AppendTo( filestream, Chomp( line ), "\n" );
-                    else
-                        WriteDocumentation( line, filestream, level_value );
-                    fi;
-                    if PositionSublist( line, "]]>" ) <> fail then
-                        in_cdata := false;
-                    fi;
-                od;
-                current_string_list := [ ];
-            fi;
-            WriteDocumentation( node_list[ i ], filestream, level_value );
-            AppendTo( filestream, "\n" );
+            FlushConvertedStrings();
+            WriteDocumentation( node_list[ i ], filestream );
         fi;
     od;
-    if current_string_list <> [ ] then
-        current_string_list := CONVERT_LIST_OF_STRINGS_IN_MARKDOWN_TO_GAPDOC_XML( current_string_list );
-        in_cdata := false;
-        for line in current_string_list do
-            if PositionSublist( line, "<![CDATA[" ) <> fail then
-                in_cdata := true;
-            fi;
-            if in_cdata = true then
-                AppendTo( filestream, Chomp( line ), "\n" );
-            else
-                WriteDocumentation( line, filestream, level_value );
-            fi;
-            if PositionSublist( line, "]]>" ) <> fail then
-                in_cdata := false;
-            fi;
-        od;
-    fi;
+    FlushConvertedStrings();
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsString, IsStream, IsInt ],
-  function( text, filestream, level_value )
+InstallMethod( WriteDocumentation, [ IsString, IsStream ],
+  function( text, filestream )
     ## In case the list is empty, do nothing.
     ## Once the empty string = empty list bug is fixed,
     ## this could be removed.
@@ -570,120 +551,52 @@ InstallMethod( WriteDocumentation, [ IsString, IsStream, IsInt ],
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSectionRep, IsStream, IsInt ],
-  function( node, filestream, level_value )
-    local replaced_name;
-
-    if node!.level > level_value then
-        return;
-    fi;
-    if ForAll( node!.content, IsEmptyNode ) then
-        return;
-    fi;
-    
-    if IsBound( node!.title_string ) then
-        replaced_name := NormalizedWhitespace( node!.title_string );
-    else
-        replaced_name := ReplacedString( node!.name, "_", " " );
-    fi;
-    
-    AppendTo( filestream, "<Section Label=\"", Label( node ), "\">\n" );
-    AppendTo( filestream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
-    WriteDocumentation( node!.content, filestream, level_value );
-    AppendTo( filestream, "</Section>\n\n" );
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSectionRep, IsStream ],
+  function( node, filestream )
+    AUTODOC_WriteStructuralNode( node, "Section", filestream );
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSubsectionRep, IsStream, IsInt ],
-  function( node, filestream, level_value )
-    local replaced_name;
-
-    if node!.level > level_value then
-        return;
-    fi;
-    if ForAll( node!.content, IsEmptyNode ) then
-        return;
-    fi;
-    
-    if IsBound( node!.title_string ) then
-        replaced_name := NormalizedWhitespace( node!.title_string );
-    else
-        replaced_name := ReplacedString( node!.name, "_", " " );
-    fi;
-    
-    AppendTo( filestream, "<Subsection Label=\"", Label( node ), "\">\n" );
-    AppendTo( filestream, Concatenation( [ "<Heading>", replaced_name, "</Heading>\n\n" ] ) );
-    WriteDocumentation( node!.content, filestream, level_value );
-    AppendTo( filestream, "</Subsection>\n\n" );
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForSubsectionRep, IsStream ],
+  function( node, filestream )
+    AUTODOC_WriteStructuralNode( node, "Subsection", filestream );
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForManItemRep, IsStream, IsInt ],
-  function( node, filestream, level_value )
-    if node!.level > level_value then
-        return;
-    fi;
-    AutoDoc_WriteDocEntry( filestream, [ node ], fail, level_value );
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForManItemRep, IsStream ],
+  function( node, filestream )
+    AutoDoc_WriteDocEntry( filestream, [ node ], fail );
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForGroupRep, IsStream, IsInt ],
-  function( node, filestream, level_value )
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForGroupRep, IsStream ],
+  function( node, filestream )
     local heading;
-    if node!.level > level_value then
-        return;
-    fi;
     heading := fail;
     if IsBound( node!.title_string ) then
         heading := node!.title_string;
     fi;
-    AutoDoc_WriteDocEntry( filestream, node!.content, heading, level_value );
+    AutoDoc_WriteDocEntry( filestream, node!.content, heading );
 end );
 
 ##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationChunkNodeRep, IsStream, IsInt ],
-  function( node, filestream, level_value )
-    if node!.level > level_value then
-        return;
-    fi;
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationChunkNodeRep, IsStream ],
+  function( node, filestream )
     node!.is_inserted := true;
-    WriteDocumentation( Concatenation( "<#Include Label=\"", Label( node ), "\">" ), filestream, level_value );
+    WriteDocumentation( Concatenation( "<#Include Label=\"", Label( node ), "\">" ), filestream );
 end );
 
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationChunkContentNodeRep, IsStream, IsInt ],
-  function( node, filestream, level_value )
-    local s;
-    for s in node!.content do
-        AppendTo( filestream, s );
-    od;
-end );
+InstallMethod( WriteDocumentation, [ IsTreeForDocumentationVerbatimNodeRep, IsStream ],
+  function( node, filestream )
+    local line, attr_name;
 
-##
-InstallMethod( WriteDocumentation, [ IsTreeForDocumentationExampleNodeRep, IsStream, IsInt ],
-  function( node, filestream, level_value )
-    local contents, i, tested, inserted_string;
-
-    if node!.level > level_value then
-        return;
-    fi;
-    contents := node!.content;
-    tested := node!.is_tested_example;
-    if tested = true then
-        inserted_string := "Example";
-    elif tested = false then
-        inserted_string := "Log";
-    else
-        Error( "This should not happen!" );
-    fi;
-    AppendTo( filestream, "<", inserted_string, "><![CDATA[\n" );
-    for i in contents do
-        # We wrap the data into a CDATA section; make sure that the content
-        # of the example does not accidentally end the CDATA section prematurely;
-        # to do this, we concatenate multiple CDATA sections:
-        # first we insert ]], then we end the CDATA section, then we start
-        # a new CDATA section which starts with >.
-        i := ReplacedString(i, "]]>", "]]]]><![CDATA[>");
-        AppendTo( filestream, i, "\n" );
+    AppendTo( filestream, "<", node!.element_name );
+    for attr_name in Set( RecNames( node!.attributes ) ) do
+        AppendTo( filestream, " ", attr_name, "=\"", node!.attributes.( attr_name ), "\"" );
     od;
-    AppendTo( filestream, "]]></", inserted_string, ">\n\n" );
+    AppendTo( filestream, "><![CDATA[\n" );
+    for line in node!.content do
+        AppendTo( filestream, AUTODOC_EscapeCDATAContent( Chomp( line ) ), "\n" );
+    od;
+    AppendTo( filestream, "]]></", node!.element_name, ">", node!.closing_separator );
 end );

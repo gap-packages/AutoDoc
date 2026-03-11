@@ -49,7 +49,6 @@ Combine &AutoDoc; comments, classic &GAPDoc; source comments,
 <P/>
 </Section>
 
-
 <Section Label="Section_Overview:MixAndMatch">
 <Heading>Adopting &AutoDoc; incrementally</Heading>
 
@@ -84,7 +83,6 @@ without forcing a full rewrite first.
 <P/>
 </Section>
 
-
 <Section Label="Section_Overview:WhereNext">
 <Heading>Where to continue</Heading>
 
@@ -93,7 +91,6 @@ For practical setup and migration workflows, continue with chapter
 <Ref Chap="Chapter_Tutorials"/>. For the command reference of documentation comments,
 including standalone <F>.autodoc</F> files, see chapter <Ref Chap="Chapter_Comments"/>.
 </Section>
-
 
 </Chapter>
 
