@@ -250,6 +250,10 @@
 #!             A list of subdirectories of the package directory (given as relative paths)
 #!             which &AutoDoc; then scans for .gi, .gd, .g, and .autodoc files; all of these files
 #!             are then scanned for &AutoDoc; documentation comments.
+#!             This controls where &AutoDoc; looks for source comments beginning with <C>#!</C>
+#!             and for standalone <F>.autodoc</F> files.
+#!             It does not affect where &GAPDoc; looks for GAPDoc comments; that is controlled
+#!             separately by <A>gapdoc.scan_dirs</A>.
 #!             <Br/>
 #!             <E>Default value: <C>[ ".", "gap", "lib", "examples", "examples/doc" ]</C>.</E>
 #!         </Item>
@@ -314,6 +318,9 @@
 #!             A list of subdirectories of the package directory (given as relative paths)
 #!             which &AutoDoc; then scans for .gi, .gd and .g files; all of these files
 #!             are then scanned for &GAPDoc; documentation comments.
+#!             This controls only where &GAPDoc; comments are searched for.
+#!             It does not affect where &AutoDoc; looks for source comments beginning with <C>#!</C>
+#!             or for <F>.autodoc</F> files; use <A>autodoc.scan_dirs</A> for that.
 #!             <Br/>
 #!             <E>Default value: <C>[ ".", "gap", "lib", "examples", "examples/doc" ]</C>.</E>
 #!         </Item>

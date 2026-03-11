@@ -298,22 +298,27 @@ LoadPackage( "AutoDoc" );
 AutoDoc( rec( gapdoc := rec( main := "main" ) ) );
 ]]></Listing>
 <P/>
-As explained above, by default &AutoDoc; scans all <F>.g</F>, <F>.gd</F> and <F>.gi</F> files
-it can find inside of your package root directory, and in the subdirectories <F>gap</F>,
-<F>lib</F>, <F>examples</F> and <F>examples/doc</F> as well.
-If you keep source files with documentation in other directories,
-you can adjust the list of directories AutoDoc scans via the <C>scan_dirs</C> option.
-The following example illustrates this by instructing &AutoDoc; to only search in the subdirectory <F>package_sources</F>
-of the package's root directory.
+&AutoDoc; can scan directories for documentation input automatically.
+In fact there are two separate scanning steps.
+The option <C>autodoc.scan_dirs</C> controls where it looks for source comments beginning with
+<C>#!</C> and for standalone <F>.autodoc</F> files.
+By default, it scans the package root directory and the subdirectories <F>gap</F>,
+<F>lib</F>, <F>examples</F> and <F>examples/doc</F>.
+If you keep that kind of input in other directories, adjust <C>autodoc.scan_dirs</C>.
+The following example instructs &AutoDoc; to only search in the subdirectory
+<F>package_sources</F> of the package's root directory for those files.
 <Listing><![CDATA[
 LoadPackage( "AutoDoc" );
-AutoDoc( rec( gapdoc := rec( scan_dirs := [ "package_sources" ] ) ) );
+AutoDoc( rec( autodoc := rec( scan_dirs := [ "package_sources" ] ) ) );
 ]]></Listing>
+The separate option <C>gapdoc.scan_dirs</C> serves a different purpose:
+it controls where &GAPDoc; comments are searched for.
+<P/>
 You can also specify an explicit list of files containing documentation,
 which will be searched in addition to any files located within the scan directories:
 <Listing><![CDATA[
 LoadPackage( "AutoDoc" );
-AutoDoc( rec( gapdoc := rec( files := [ "path/to/some/hidden/file.gd" ] ) ) );
+AutoDoc( rec( autodoc := rec( files := [ "path/to/some/hidden/file.gd" ] ) ) );
 ]]></Listing>
 Giving such a file does not prevent the standard <C>scan_dirs</C> from being scanned for
 other files.
