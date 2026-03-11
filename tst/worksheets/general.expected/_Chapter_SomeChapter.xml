@@ -202,7 +202,14 @@ This text will only appear in the HTML version and the text version.
 <ManSection>
   <Var Name="SomeGlobalName" />
  <Description>
- A global name
+ A global name documented as a variable by default
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Func Arg="x" Name="SomeGlobalNameFunction" />
+ <Description>
+ A global name documented as a function once arguments are given
  </Description>
 </ManSection>
 

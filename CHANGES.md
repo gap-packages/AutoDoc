@@ -37,6 +37,9 @@ This file describes changes in the AutoDoc package.
   - Document `InstallMethod` support in declaration comments and add
     `@ItemType` to override whether an installed method should be
     documented as `Func`, `Oper`, `Attr`, or `Prop`
+  - Improve `DeclareGlobalName` handling: document it as a variable by
+    default, but switch to a function when `@Arguments` or `@Returns`
+    provides function-style documentation
   - Loosen requirements on `@Date` command: this used to allow free form,
     but in recent versions was restricted to dates of the form YYYY-MM-DD
     or DD/MM/YYYY; now we again allow any text, but text in those specific

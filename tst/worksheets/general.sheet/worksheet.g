@@ -135,8 +135,13 @@ DeclareGlobalFunction( "SomeGlobalFunction" );
 DeclareGlobalVariable( "SomeGlobalVariable" );
 
 #! @Description
-#! A global name
+#! A global name documented as a variable by default
 DeclareGlobalName( "SomeGlobalName" );
+
+#! @Description
+#! A global name documented as a function once arguments are given
+#! @Arguments x
+DeclareGlobalName( "SomeGlobalNameFunction" );
 
 #! @Description
 #! A filter
