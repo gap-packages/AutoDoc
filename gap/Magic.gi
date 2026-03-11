@@ -27,39 +27,48 @@ end );
 #  [ "gap/AutoDocMainFunction.gd", "gap/AutoDocMainFunction.gi", ... ]
 BindGlobal( "AUTODOC_FindMatchingFiles",
 function (pkgdir, subdirs, extensions)
-    local d_rel, d, tmp, files, result;
+    local result, JoinRelativePath, AddMatchingFiles, d_rel;
 
     result := [];
 
-    for d_rel in subdirs do
-        # Get the absolute path to the directory in side the package...
-        d := Filename( pkgdir, d_rel );
-        if not IsDirectoryPath( d ) then
-            continue;
+    JoinRelativePath := function( dir, entry )
+        if dir = "" then
+            return entry;
         fi;
-        d := Directory( d );
-        # ... but also keep the relative path (such as "gap")
-        if d_rel = "" or d_rel = "." then
-            d_rel := "";
-        else
-            d_rel := Directory( d_rel );
-        fi;
+        return Concatenation( dir, "/", entry );
+    end;
 
-        files := DirectoryContents( d );
-        Sort( files );
-        for tmp in files do
-            if not AUTODOC_GetSuffix( tmp ) in extensions then
+    AddMatchingFiles := function( abs_dir, rel_dir, recursive )
+        local abs_dir_obj, entries, entry, abs_entry, rel_entry;
+
+        abs_dir_obj := Directory( abs_dir );
+        entries := DirectoryContents( abs_dir_obj );
+        Sort( entries );
+        for entry in entries do
+            if entry = "." or entry = ".." then
                 continue;
             fi;
-            if not IsReadableFile( Filename( d, tmp ) ) then
-                continue;
-            fi;
-            if d_rel = "" then
-                Add( result, tmp );
-            else
-                Add( result, Filename( d_rel, tmp ) );
+            abs_entry := Filename( abs_dir_obj, entry );
+            rel_entry := JoinRelativePath( rel_dir, entry );
+            if IsDirectoryPath( abs_entry ) then
+                if recursive then
+                    AddMatchingFiles( abs_entry, rel_entry, true );
+                fi;
+            elif AUTODOC_GetSuffix( entry ) in extensions and
+                 IsReadableFile( abs_entry ) then
+                Add( result, rel_entry );
             fi;
         od;
+    end;
+
+    for d_rel in subdirs do
+        if d_rel = "" or d_rel = "." then
+            AddMatchingFiles( Filename( pkgdir, "" ), "", false );
+        elif not IsDirectoryPath( Filename( pkgdir, d_rel ) ) then
+            continue;
+        else
+            AddMatchingFiles( Filename( pkgdir, d_rel ), d_rel, true );
+        fi;
     od;
     return result;
 end );

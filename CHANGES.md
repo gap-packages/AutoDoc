@@ -1,6 +1,8 @@
 This file describes changes in the AutoDoc package.
 
 2026.MM.DD
+  - Scan `autodoc.scan_dirs` and `gapdoc.scan_dirs` recursively so
+    nested source directories are picked up automatically
   - Remove the nonfunctional `@Level`, `@ResetLevel`, and undocumented
     alias `@SetLevel` commands. They never affected generated output as
     documented. Since nobody ever reported issues with them, and since
