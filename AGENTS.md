@@ -14,12 +14,14 @@ created by that tool (e.g. via an `Co-authored-by: ` line).
 
 - `PackageInfo.g`: package metadata, including the current version and manual
   settings.
+- `Makefile`: convenience targets for building docs, regenerating fixtures,
+  and running the test suite.
 - `makedoc.g`: entry point for rebuilding the manual.
 - `regen_tests.g`: entry point for regenerating test data.
 - `tst/`: package test suite. Run `tst/testall.g` for the full suite, or a
   single `.tst` file for one test.
 - `tst/AutoDocTest/`: minimal GAP package used as a package-context AutoDoc
-  testbed.
+  testbed, with its own `Makefile` for common doc and test commands.
 - `README.md`: top-level package overview.
 
 ## Common commands
@@ -29,13 +31,19 @@ Run all commands from the repository root.
 ### Build the manual
 
 ```sh
-gap -q --packagedirs . makedoc.g
+make doc
+```
+
+### Build the HTML manual only
+
+```sh
+make html
 ```
 
 ### Run all tests
 
 ```sh
-gap -q --packagedirs . tst/testall.g
+make check
 ```
 
 ### Run one test
@@ -49,7 +57,7 @@ Replace `tst/misc.tst` with any other test file in `tst/` as needed.
 ### Regenerate the tests
 
 ```sh
-gap -q --packagedirs . regen_tests.g
+make regen
 ```
 
 ### Work with `tst/AutoDocTest`
@@ -57,8 +65,9 @@ gap -q --packagedirs . regen_tests.g
 Run these commands from inside `tst/AutoDocTest`:
 
 ```sh
-gap -q --packagedirs . makedoc.g
-gap -q --packagedirs . tst/testall.g
+make doc
+make html
+make check
 ```
 
 ## Tests
@@ -85,7 +94,7 @@ following test locations:
 
 In general prefer integration tests that modify one of the worksheets or
 package manuals for end-to-end behavior. Regenerate expected output with
-`gap -q --packagedirs . regen_tests.g` when appropriate.
+`make regen` when appropriate.
 
 If specifically unit tests are needed for individual functions, these can and
 should go into a `.tst` file. Temporary test files created from a `.tst` file
@@ -94,13 +103,17 @@ or helper behavior.
 
 ## Commit messages and pull requests
 
-When writing commit messages, use the title format `component: Brief summary`.
+When writing commit messages, use the title format `component: Brief summary`
+The title line should not exceed 60 characters.
+
 In the body, give a brief prose summary of the purpose of the change. Do not
 specifically call out added tests, comments, documentation, and similar
 supporting edits unless that is the main purpose of the change. Do not include
 the test plan unless it differs from the instructions in this file. If the
 change fixes one or more issues, add `Fixes #...` at the end of the commit
 message body, not in the title.
+
+Don't write lines into the commit message that are wider than 70 characters.
 
 Pull requests should follow the same style: a short summary up top, concise
 prose describing the change, issue references when applicable, and an explicit
