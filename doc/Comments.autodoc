@@ -90,21 +90,28 @@ function or a variable.
 
 @Index "@ItemType" <C>@ItemType <A>kind</A></C>
 Overrides the kind of manual item created for the following declaration or
-installed method. The supported values are <C>Func</C>, <C>Oper</C>,
-<C>Attr</C>, <C>Prop</C>, and <C>Var</C>.
+installed method. The supported values are <C>Attr</C>, <C>Filt</C>,
+<C>Func</C>, <C>Oper</C>, <C>Prop</C>, and <C>Var</C>.
 
-This is mainly useful for <C>InstallMethod</C>. For a declaration such as
-<C>DeclareAttribute</C> or <C>DeclareProperty</C>, &AutoDoc; already knows the
-correct item type from the declaration itself. But for <C>InstallMethod</C>,
-especially with one argument, the source code alone does not reliably tell
-whether the method belongs to an operation, an attribute, a property, or even
-a plain function. Without an override, such entries default to <C>Oper</C>.
+This is mainly useful for <C>InstallMethod</C>, <C>DeclareGlobalName</C>, and
+<C>DeclareSynonym</C>. For other declarations such as <C>DeclareAttribute</C>
+or <C>DeclareProperty</C>, &AutoDoc; already knows the correct item type from
+the declaration itself.
 
-It is also useful for <C>DeclareGlobalName</C>, because that declaration can
+But for <C>InstallMethod</C>, especially with one argument, the source code
+alone does not reliably tell whether the method belongs to an operation, an
+attribute, a property, or even a plain function. Without an override, such
+entries default to <C>Oper</C>.
+
+It is useful for <C>DeclareGlobalName</C>, because that declaration can
 refer to either a function or a variable. &AutoDoc; defaults such entries to
 <C>Var</C>, but switches to <C>Func</C> as soon as <C>@Arguments</C> or
 <C>@Returns</C> indicates function-style documentation. You can still use
 <C>@ItemType</C> to override this explicitly.
+
+It is useful for <C>DeclareSynonym</C>, because that declaration can
+document a function synonym or a filter synonym. Use <C>@ItemType Filt</C> if
+the synonym should be emitted as a filter-style manual entry.
 
 For example:
 

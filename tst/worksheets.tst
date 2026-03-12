@@ -20,6 +20,13 @@ gap> AUTODOC_TestWorkSheet("consecutive-declarations");
 #I  no examples
 
 #
+gap> AUTODOC_TestWorkSheet("synonyms");
+#I  Extracting manual examples for Synonym Declarations Test package ...
+#I  1 chapters detected
+#I  Chapter 1...
+#I  no examples
+
+#
 gap> AUTODOC_TestWorkSheet("autoplain");
 #I  Extracting manual examples for Plain file.autodoc Test package ...
 #I  1 chapters detected
