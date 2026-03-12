@@ -334,4 +334,35 @@ gap> RemoveDirectoryRecursively(tmpdir);
 true
 
 #
+# only the first declaration after an AutoDoc comment is documented
+# see https://github.com/gap-packages/AutoDoc/issues/169
+#
+gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-consecutive-declarations-test");;
+gap> if IsDirectoryPath(tmpdir) then RemoveDirectoryRecursively(tmpdir); fi;
+gap> AUTODOC_CreateDirIfMissing(tmpdir);
+true
+gap> tmpdir_obj := Directory(tmpdir);;
+gap> file1 := Filename(tmpdir_obj, "consecutive.gd");;
+gap> stream := OutputTextFile(file1, false);;
+gap> AppendTo(stream, "#! @Chapter Parser\n");;
+gap> AppendTo(stream, "#! @Section Consecutive Declarations\n");;
+gap> AppendTo(stream, "#! @Description\n");;
+gap> AppendTo(stream, "#!  Only this declaration should be documented.\n");;
+gap> AppendTo(stream, "DeclareGlobalFunction( \"Foo\" );\n");;
+gap> AppendTo(stream, "DeclareGlobalFunction( \"Bar\" );\n");;
+gap> CloseStream(stream);
+gap> tree6 := DocumentationTree();;
+gap> AutoDoc_Parser_ReadFiles([file1], tree6, rec());
+gap> section := SectionInTree(tree6, "Parser", "Consecutive_Declarations");;
+gap> Length(section!.content);
+1
+gap> item := section!.content[1];;
+gap> item!.name;
+"Foo"
+gap> item!.description;
+[ "  Only this declaration should be documented.\n" ]
+gap> RemoveDirectoryRecursively(tmpdir);
+true
+
+#
 gap> STOP_TEST( "misc.tst" );

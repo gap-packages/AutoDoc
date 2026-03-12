@@ -1201,8 +1201,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 continue;
             fi;
             current_line := current_command[ 2 ];
-            if autodoc_read_line and not ScanForDeclarationPart( ) then
+            if autodoc_read_line then
                 autodoc_read_line := false;
+                ScanForDeclarationPart( );
             fi;
         od;
         CloseStream( filestream );
