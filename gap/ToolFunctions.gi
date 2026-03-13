@@ -158,19 +158,6 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
     AppendTo( filestream, "</ManSection>\n\n" );
 end );
 
-InstallGlobalFunction( AutoDoc_CreatePrintOnceFunction,
-function( message )
-    local x;
-    
-    x := true;
-    return function( )
-        if x then
-            Info( InfoAutoDoc, 1, message );
-        fi;
-        x := false;
-    end;
-end );
-
 InstallGlobalFunction( AUTODOC_Diff,
 function(args...)
     local diff;

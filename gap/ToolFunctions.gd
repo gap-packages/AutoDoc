@@ -13,7 +13,6 @@ DeclareGlobalFunction( "AUTODOC_EscapeCDATAContent" );
 
 DeclareGlobalFunction( "AUTODOC_OutputTextFile" );
 DeclareGlobalFunction( "AutoDoc_WriteDocEntry" );
-DeclareGlobalFunction( "AutoDoc_CreatePrintOnceFunction" );
 
 DeclareGlobalFunction( "AUTODOC_Diff" );
 

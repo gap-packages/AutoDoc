@@ -6,6 +6,24 @@ LoadPackage("io", false);
 SetInfoLevel(InfoAutoDoc, 1);
 SetInfoLevel(InfoGAPDoc, 0);
 
+AUTODOC_IsGeneratedXMLFile := function(path)
+    local content, name;
+
+    if not IsReadableFile(path) or
+       PositionSublist(path, ".xml") <> Length(path) - 3 then
+        return false;
+    fi;
+
+    name := Last(SplitString(path, "/"));
+    if name in [ "_Chunks.xml", "_entities.xml" ] then
+        return true;
+    fi;
+
+    content := StringFile(path);
+    return PositionSublist(content,
+        "This is an automatically generated file") <> fail;
+end;
+
 AUTODOC_RegenWorkSheetExpected := function(wsdir, ws)
     local sheetdir, expecteddir, tmpdir, actualdir, filenames, old, f,
           tstfiles, x, actualtstdir, expectedtstdir;
@@ -135,8 +153,7 @@ AUTODOC_RegenManualExpected := function(pkgdir)
     files := DirectoryContents(docdir);
     files := Filtered(files,
         f -> f <> "." and f <> ".." and
-             Length(f) >= 6 and f[1] = '_' and
-             PositionSublist(f, ".xml") = Length(f) - 3);
+             AUTODOC_IsGeneratedXMLFile(Concatenation(docdir, "/", f)));
     for file in files do
         RemoveFile(Concatenation(docdir, "/", file));
     od;
@@ -161,8 +178,7 @@ AUTODOC_RegenManualExpected := function(pkgdir)
     files := DirectoryContents(docdir);
     files := Filtered(files,
         f -> f <> "." and f <> ".." and
-             Length(f) >= 6 and f[1] = '_' and
-             PositionSublist(f, ".xml") = Length(f) - 3);
+             AUTODOC_IsGeneratedXMLFile(Concatenation(docdir, "/", f)));
     Sort(files);
     for file in files do
         Exec(Concatenation(
