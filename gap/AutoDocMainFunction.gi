@@ -195,8 +195,7 @@ InstallGlobalFunction( ExtractTitleInfoFromPackageInfo,
             fi;
             author_string := "";
             AUTODOC_APPEND_STRING_ITERATIVE( author_string,
-                    author_rec.FirstNames, " ", author_rec.LastName,
-                    "<Alt Only=\"LaTeX\"><Br/></Alt>" );
+                    author_rec.FirstNames, " ", author_rec.LastName );
             if IsBound( author_rec.PostalAddress ) then
                 tmp_list := SplitString( StripBeginEnd( author_rec.PostalAddress, "\n\r" ), "\n" );
                 AUTODOC_APPEND_STRING_ITERATIVE( author_string, "<Address>" );
