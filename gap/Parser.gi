@@ -800,7 +800,17 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             local scope_chapter;
             scope_chapter := ReplacedString( current_command[ 2 ], " ", "_" );
             SetCurrentItem( ChapterInTree( tree, scope_chapter ) );
+            Unbind( chapter_info[ 2 ] );
+            Unbind( chapter_info[ 3 ] );
             chapter_info[ 1 ] := scope_chapter;
+        end,
+        @Appendix := function()
+            local scope_appendix;
+            scope_appendix := ReplacedString( current_command[ 2 ], " ", "_" );
+            SetCurrentItem( AppendixInTree( tree, scope_appendix ) );
+            Unbind( chapter_info[ 2 ] );
+            Unbind( chapter_info[ 3 ] );
+            chapter_info[ 1 ] := scope_appendix;
         end,
         @ChapterLabel := function()
             local scope_chapter, label_name;

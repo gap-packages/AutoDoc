@@ -243,6 +243,23 @@ If you use all three commands, i.e.,
 <C>title</C> is used for the headline, <C>label</C> for cross-referencing, and <C>name</C>
 for setting the same chapter as active chapter again.
 
+@Subsection <C>@Appendix <A>name</A></C>
+@SubsectionLabel @Appendix
+
+@Index "@Appendix" `@Appendix`
+This is analogous to <C>@Chapter</C>, but generates `Appendix`
+elements instead of `Chapter` elements. When scaffolding generates the main
+XML file, appendices created this way are included automatically after any
+files listed in `scaffold.appendix`.
+
+Example:
+
+```@listing
+@Appendix Supplementary material
+
+@Section Additional tables
+```
+
 @Subsection <C>@Section <A>name</A></C>
 @SubsectionLabel @Section
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Appendix Label="Appendix_XMLFixture">
+  <Heading>XML fixture appendix</Heading>
+  <P/>
+  This hand-written XML appendix exercises the existing
+  <C>scaffold.appendix</C> hook alongside generated <C>@Appendix</C>
+  content.
+</Appendix>

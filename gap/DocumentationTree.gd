@@ -45,6 +45,7 @@ DeclareAttribute( "GroupName", IsTreeForDocumentationNode );
 DeclareOperation( "DocumentationTree", [ ] );
 DeclareOperation( "StructurePartInTree", [ IsTreeForDocumentation, IsList ] );
 DeclareOperation( "ChapterInTree", [ IsTreeForDocumentation, IsString ] );
+DeclareOperation( "AppendixInTree", [ IsTreeForDocumentation, IsString ] );
 DeclareOperation( "SectionInTree", [ IsTreeForDocumentation, IsString, IsString ] );
 DeclareOperation( "SubsectionInTree", [ IsTreeForDocumentation, IsString, IsString, IsString ] );
 DeclareOperation( "DocumentationExample", [ IsString ] );

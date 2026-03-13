@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Appendix Label="Appendix_Plain-text_appendix">
+<Heading>Plain-text appendix</Heading>
+
+<P/>
+This appendix is written in <Code>.autodoc</Code> format and is expected to be included
+through <C>scaffold.appendix</C>.
+</Appendix>
+

@@ -19,6 +19,7 @@ This file describes changes in the AutoDoc package.
     environment variable and `relativePath` global option
   - Add Markdown-style headings `#`/`##`/`###` as aliases for
     `@Chapter`/`@Section`/`@Subsection` in `.autodoc` files and doc comments
+  - Add `@Appendix` for generating appendix XML from `.autodoc` input
   - Add support for documenting `DeclareSynonym` and
     `DeclareSynonymAttr` declarations
   - Add `@ItemType` to override the type of a declaration, which is
