@@ -244,22 +244,25 @@ end );
 ##
 InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
   function( filename_list, tree, default_chapter_data )
-    local chapter_info, ScanForDeclarationPart, current_line, filestream,
-          scope_group, ReadExample, command_function_record, autodoc_read_line,
-          current_command, filename, groupnumber, rest_of_file_skipped,
-          context_stack, HasCurrentItem, CurrentItem, SetCurrentItem,
-          CurrentOrNewManItem, FinishCurrentManItem, Reset, ReadCode, title_item, title_item_list, plain_text_mode,
-          single_line_title_item_list, active_title_item_name, active_title_item_is_multiline,
-          current_line_unedited, current_line_info, NormalizeInputLine,
-          ReadLineWithLineCount, NormalizedReadLine, line_number, ErrorWithPos, CreateTitleItemFunction,
-          current_line_positition_for_filter, ReadSessionExample, DeclarationDelimiterPosition,
-          ReadBracketedFilterString, ReadInstallMethodFilterString, ReadInstallMethodArguments,
-          ApplyFilterInfoToCurrentItem, NormalizeItemType, ScanDeclarePart,
-          ScanInstallMethodPart,
-          markdown_fence,
-          MarkdownFenceFromLine, IsMatchingMarkdownFence,
-          current_line_fence, current_line_is_fence_delimiter,
-          xml_comment_mode, comment_start_pos;
+    local ApplyFilterInfoToCurrentItem, CreateTitleItemFunction, CurrentItem,
+          CurrentOrNewManItem, DeclarationDelimiterPosition, ErrorWithPos,
+          FinishCurrentManItem, HasCurrentItem, IsMatchingMarkdownFence,
+          MarkdownFenceFromLine, NormalizeInputLine, NormalizeItemType,
+          NormalizedReadLine, ReadBracketedFilterString, ReadCode,
+          ReadExample, ReadInstallMethodArguments,
+          ReadInstallMethodFilterString, ReadLineWithLineCount,
+          ReadSessionExample, Reset, ScanDeclarePart, ScanForDeclarationPart,
+          ScanInstallMethodPart, SetCurrentItem,
+          #
+          active_title_item_is_multiline, active_title_item_name,
+          autodoc_read_line, chapter_info, command_function_record,
+          comment_start_pos, context_stack, current_command,
+          current_line, current_line_fence, current_line_info,
+          current_line_is_fence_delimiter, current_line_positition_for_filter,
+          current_line_unedited, filename, filestream, groupnumber,
+          line_number, markdown_fence, plain_text_mode, rest_of_file_skipped,
+          scope_group, single_line_title_item_list, title_item,
+          title_item_list, xml_comment_mode;
     groupnumber := 0;
     autodoc_read_line := false;
     context_stack := [ ];
