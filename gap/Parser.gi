@@ -6,7 +6,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 ##
-BindGlobal( "AUTODOC_ITEM_TYPE_INFO", rec(
+InstallValue( AUTODOC_ITEM_TYPE_INFO, rec(
     Attr := rec(
         chapter_bucket := "attributes",
         is_function_like := true

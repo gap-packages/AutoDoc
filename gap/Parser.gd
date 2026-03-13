@@ -7,7 +7,8 @@
 
 DeclareGlobalFunction( "Scan_for_AutoDoc_Part" );
 DeclareGlobalFunction( "AutoDoc_Type_Of_Item" );
-DeclareGlobalName( "AUTODOC_ITEM_TYPE_INFO" );
+
+DeclareGlobalVariable( "AUTODOC_ITEM_TYPE_INFO" );
 
 ## Argument should be a filename
 DeclareGlobalFunction( "AutoDoc_Parser_ReadFiles" );
