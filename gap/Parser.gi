@@ -151,10 +151,39 @@ InstallGlobalFunction( AutoDoc_Type_Of_Item,
     elif PositionSublist( type, "DeclareAttribute" ) <> fail then
         entries := [ "Attr", "attributes" ];
         filter_style := "single";
+    elif PositionSublist( type, "DeclareSynonymAttr" ) <> fail then
+        entries := [ "Attr", "attributes" ];
+        filter_style := "none";
+        if not IsBound( item_rec!.arguments ) then
+            item_rec!.arguments := "arg";
+        fi;
     elif PositionSublist( type, "DeclareProperty" ) <> fail then
         entries := [ "Prop", "properties" ];
         ret_val := "<K>true</K> or <K>false</K>";
         filter_style := "single";
+    elif PositionSublist( type, "DeclareSynonym" ) <> fail then
+        filter_style := "none";
+        if IsBound( item_rec!.item_type ) and item_rec!.item_type = "Attr" then
+            entries := [ "Attr", "attributes" ];
+        elif IsBound( item_rec!.item_type ) and item_rec!.item_type = "Prop" then
+            entries := [ "Prop", "properties" ];
+            ret_val := "<K>true</K> or <K>false</K>";
+        elif IsBound( item_rec!.item_type ) and item_rec!.item_type = "Filt" then
+            entries := [ "Filt", "categories" ];
+            ret_val := "<K>true</K> or <K>false</K>";
+        elif IsBound( item_rec!.item_type ) and item_rec!.item_type = "Oper" then
+            entries := [ "Oper", "methods" ];
+        elif IsBound( item_rec!.item_type ) and item_rec!.item_type = "Var" then
+            entries := [ "Var", "global_variables" ];
+            item_rec!.arguments := fail;
+            item_rec!.return_value := false;
+        else
+            entries := [ "Func", "global_functions" ];
+        fi;
+        if entries[ 1 ] in [ "Func", "Oper", "Attr", "Prop", "Filt" ] and
+           not IsBound( item_rec!.arguments ) then
+            item_rec!.arguments := "arg";
+        fi;
     elif PositionSublist( type, "DeclareOperation" ) <> fail then
         entries := [ "Oper", "methods" ];
         filter_style := "list";
@@ -431,13 +460,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     end;
     NormalizeItemType := function( item_type )
         item_type := StripBeginEnd( item_type, " \t\r\n" );
-        if item_type in [ "Func", "Oper", "Attr", "Prop", "Var" ] then
+        if item_type in [ "Attr", "Filt", "Func", "Oper", "Prop", "Var" ] then
             return item_type;
         fi;
         ErrorWithPos(
             Concatenation(
                 "unknown @ItemType ", item_type,
-                "; expected one of Func, Oper, Attr, Prop, Var"
+                "; expected one of Attr, Filt, Func, Oper, Prop, Var"
             )
         );
     end;

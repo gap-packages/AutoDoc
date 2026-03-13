@@ -17,6 +17,8 @@ This file describes changes in the AutoDoc package.
     environment variable and `relativePath` global option
   - Add Markdown-style headings `#`/`##`/`###` as aliases for
     `@Chapter`/`@Section`/`@Subsection` in `.autodoc` files and doc comments
+  - Add support for documenting `DeclareSynonym` and
+    `DeclareSynonymAttr` declarations
   - Add fenced code blocks using triple backticks or tildes in
     Markdown-like text; `@listing`, `@example`, and `@log` info strings
     select the corresponding GAPDoc element
