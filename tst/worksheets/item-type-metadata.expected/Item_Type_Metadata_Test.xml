@@ -6,7 +6,7 @@
     <#Include SYSTEM "_entities.xml">
 ]
 >
-<Book Name="Synonym_Declarations_Test">
+<Book Name="Item_Type_Metadata_Test">
 <#Include SYSTEM "title.xml">
 <TableOfContents/>
 <Body>

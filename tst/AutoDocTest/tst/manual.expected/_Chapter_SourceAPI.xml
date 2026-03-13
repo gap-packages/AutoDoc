@@ -83,7 +83,7 @@
 <P/>
  A method installation without an itemtype
 <ManSection>
-  <Oper Arg="arg1" Name="AutoDocTest_Method" Label="for IsPerfectGroup"/>
+  <Meth Arg="arg1" Name="AutoDocTest_Method" Label="for IsPerfectGroup"/>
  <Description>
 <P/>
  </Description>

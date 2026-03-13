@@ -89,8 +89,8 @@ gap> ParseFixture( "tst/errorwithpos/installmethod-unterminated-arguments.g" );
 Error, unterminated argument list in InstallMethod declaration,
 at tst/errorwithpos/installmethod-unterminated-arguments.g:4
 gap> ParseFixture( "tst/errorwithpos/itemtype-unknown.g" );
-Error, unknown @ItemType Method; expected one of Attr, Filt, Func, Oper, Prop,\
- Var,
+Error, unknown @ItemType Method; expected one of Attr, Cat, Coll, Constr, Fam,\
+ Filt, Func, InfoClass, Meth, Oper, Prop, Repr, Var,
 at tst/errorwithpos/itemtype-unknown.g:3
 
 #

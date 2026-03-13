@@ -20,8 +20,8 @@ gap> AUTODOC_TestWorkSheet("consecutive-declarations");
 #I  no examples
 
 #
-gap> AUTODOC_TestWorkSheet("synonyms");
-#I  Extracting manual examples for Synonym Declarations Test package ...
+gap> AUTODOC_TestWorkSheet("item-type-metadata");
+#I  Extracting manual examples for Item Type Metadata Test package ...
 #I  1 chapters detected
 #I  Chapter 1...
 #I  no examples
