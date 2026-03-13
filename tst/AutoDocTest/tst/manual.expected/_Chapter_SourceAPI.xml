@@ -46,6 +46,16 @@
  </Description>
 </ManSection>
 
+<P/>
+ <Code>AutoDocTest_Method</Code> is declared separately so the fixture package loads
+ cleanly when building its manual.
+<ManSection>
+  <Oper Arg="arg" Name="AutoDocTest_Method" Label="for IsGroup"/>
+ <Description>
+<P/>
+ </Description>
+</ManSection>
+
 </Section>
 
 <Section Label="Section_SourceImplementations">

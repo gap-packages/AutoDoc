@@ -510,6 +510,10 @@ function( arg )
         CreateEntitiesPage( gapdoc.bookname, doc_dir, scaffold );
 
         if IsBound( scaffold.MainPage ) and scaffold.MainPage <> false then
+            if ForAny( tree!.content,
+                       node -> IsBound( node!.is_appendix ) and node!.is_appendix = true ) then
+                scaffold.autodoc_appendix_file := "_AutoDocAppendicesMainFile.xml";
+            fi;
             CreateMainPage( gapdoc.bookname, doc_dir, scaffold );
         fi;
     fi;

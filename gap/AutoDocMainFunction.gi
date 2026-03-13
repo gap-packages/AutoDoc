@@ -155,6 +155,10 @@ InstallGlobalFunction( CreateMainPage,
             AppendTo( filestream, "<#Include SYSTEM \"", i, "\">\n" );
         od;
     fi;
+    if IsBound( opt.autodoc_appendix_file ) and
+       ( not IsBound( opt.appendix ) or not opt.autodoc_appendix_file in opt.appendix ) then
+        AppendTo( filestream, "<#Include SYSTEM \"", opt.autodoc_appendix_file, "\">\n" );
+    fi;
 
     if IsBound( opt.bib ) and opt.bib <> false then
         AppendTo( filestream, "<Bibliography Databases=\"", opt.bib, "\"/>\n" );

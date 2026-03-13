@@ -1,0 +1,4 @@
+@Appendix Plain-text appendix
+
+This appendix is written in `.autodoc` format and is expected to be included
+through <C>scaffold.appendix</C>.

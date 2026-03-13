@@ -161,7 +161,9 @@
          <Item>
              This entry is similar to <A>opt.scaffold.includes</A> but is used
              to specify files to include after the main body of the manual,
-             i.e. typically appendices.
+             i.e. typically appendices written directly in &GAPDoc; XML.
+             Appendices created with <C>@Appendix</C> are included automatically
+             after these files when scaffolding generates the main XML file.
          </Item>
          <Mark><A>bib</A></Mark>
          <Item>

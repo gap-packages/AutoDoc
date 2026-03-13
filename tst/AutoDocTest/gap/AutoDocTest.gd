@@ -25,3 +25,8 @@ DeclareAttribute( "AutoDocTest_Attribute", IsGroup );
 #!
 #! `AutoDocTest_Property` is a tiny property used to exercise method docs.
 DeclareProperty( "AutoDocTest_Property", IsGroup );
+
+#!
+#! `AutoDocTest_Method` is declared separately so the fixture package loads
+#! cleanly when building its manual.
+DeclareOperation( "AutoDocTest_Method", [ IsGroup ] );

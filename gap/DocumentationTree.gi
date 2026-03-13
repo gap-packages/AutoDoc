@@ -377,10 +377,22 @@ end );
 ##
 ####################################
 
-## 
+##
 InstallMethod( ChapterInTree, [ IsTreeForDocumentation, IsString ],
   function( tree, name )
     return StructurePartInTree( tree, [ name ] );
+end );
+
+##
+InstallMethod( AppendixInTree, [ IsTreeForDocumentation, IsString ],
+  function( tree, name )
+    local node;
+
+    node := ChapterInTree( tree, name );
+    node!.is_appendix := true;
+    SetLabel( node,
+        Concatenation( "Appendix_", AUTODOC_NormalizeGeneratedLabel( name ) ) );
+    return node;
 end );
 
 ##
@@ -476,17 +488,32 @@ end );
 ##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentation, IsDirectory ],
   function( tree, path_to_xmlfiles )
-    local stream, i;
+    local stream, appendix_stream, i;
 
     stream := AUTODOC_OutputTextFile( path_to_xmlfiles, _AUTODOC_GLOBAL_OPTION_RECORD.AutoDocMainFile );
     AppendTo( stream, AUTODOC_XML_HEADER );
+    appendix_stream := fail;
     for i in tree!.content do
-        if not IsTreeForDocumentationNodeForChapterRep( i ) then
+        if IsTreeForDocumentationNodeForChapterRep( i ) then
+            if IsBound( i!.is_appendix ) and i!.is_appendix = true then
+                if appendix_stream = fail then
+                    appendix_stream := AUTODOC_OutputTextFile(
+                        path_to_xmlfiles,
+                        "_AutoDocAppendicesMainFile.xml"
+                    );
+                    AppendTo( appendix_stream, AUTODOC_XML_HEADER );
+                fi;
+                WriteDocumentation( i, appendix_stream, path_to_xmlfiles );
+            else
+                WriteDocumentation( i, stream, path_to_xmlfiles );
+            fi;
+        else
             Error( "this should never happen" );
         fi;
-        ## FIXME: If there is anything else than a chapter, this will break!
-        WriteDocumentation( i, stream, path_to_xmlfiles );
     od;
+    if appendix_stream <> fail then
+        CloseStream( appendix_stream );
+    fi;
 
     WriteChunks( tree, path_to_xmlfiles );
 
@@ -500,7 +527,7 @@ end );
 ##
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForChapterRep, IsStream, IsDirectory ],
   function( node, stream, path_to_xmlfiles )
-    local filename, chapter_stream;
+    local filename, chapter_stream, element_name;
 
     if ForAll( node!.content, IsEmptyNode ) then
         return;
@@ -510,7 +537,11 @@ InstallMethod( WriteDocumentation, [ IsTreeForDocumentationNodeForChapterRep, Is
     chapter_stream := AUTODOC_OutputTextFile( path_to_xmlfiles, filename );
     AppendTo( stream, "<#Include SYSTEM \"", filename, "\">\n" );
     AppendTo( chapter_stream, AUTODOC_XML_HEADER );
-    AUTODOC_WriteStructuralNode( node, "Chapter", chapter_stream );
+    element_name := "Chapter";
+    if IsBound( node!.is_appendix ) and node!.is_appendix = true then
+        element_name := "Appendix";
+    fi;
+    AUTODOC_WriteStructuralNode( node, element_name, chapter_stream );
     CloseStream( chapter_stream );
 end );
 
