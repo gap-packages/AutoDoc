@@ -725,14 +725,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     end;
     ReadExample := function( element_name )
         local temp_string_list, temp_curr_line, temp_pos_comment, is_following_line,
-              item_temp, example_node;
+              item_temp, example_node, end_command;
         example_node := DocumentationExample( element_name );
         temp_string_list := example_node!.content;
+        end_command := Concatenation( "@End", element_name );
         is_following_line := false;
         while true do
             temp_curr_line := Chomp( ReadLineWithLineCount( filestream ) );
-            if PositionSublist( temp_curr_line, "@EndExample" ) <> fail or
-               PositionSublist( temp_curr_line, "@EndLog" ) <> fail then
+            if PositionSublist( temp_curr_line, end_command ) <> fail then
                 break;
             fi;
             ##if is comment, simply remove comments.
@@ -764,13 +764,13 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     ReadSessionExample := function( element_name, plain_text_mode )
         local temp_string_list, temp_curr_line, temp_pos_comment,
               is_following_line, item_temp, example_node,
-              incorporate_this_line;
+              incorporate_this_line, end_command;
         example_node := DocumentationExample( element_name );
         temp_string_list := example_node!.content;
+        end_command := Concatenation( "@End", element_name, "Session" );
         while true do
             temp_curr_line := Chomp( ReadLineWithLineCount( filestream ) );
-            if PositionSublist( temp_curr_line, "@EndExampleSession" ) <> fail or
-               PositionSublist( temp_curr_line, "@EndLogSession" ) <> fail then
+            if PositionSublist( temp_curr_line, end_command ) <> fail then
                 break;
             fi;
             incorporate_this_line := plain_text_mode;
