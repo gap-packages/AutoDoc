@@ -64,30 +64,14 @@ end );
 ##
 InstallGlobalFunction( CreateEntitiesPage,
     function( book_name, dir, opt )
-    local filestream, i, ent, val, entities;
-
-    if IsString(dir) then
-        dir := Directory(dir);
-    fi;
+    local filestream, ent, val, entities;
 
     if not IsBound( opt.entities ) then
         entities := rec();
-    elif IsList( opt.entities ) then
-        entities := rec();
-        for i in opt.entities do
-            if IsString( i ) then
-                ent := i;
-                val := Concatenation("<Package>", ent, "</Package>");
-            else
-                ent := i[2];
-                val := Concatenation("<", i[1], ">", ent, "</", i[1], ">");
-            fi;
-            entities.(ent) := val;
-        od;
     elif IsRecord( opt.entities ) then
         entities := opt.entities;
     else
-        Error("CreateEntitiesPage: <opt.entities> must be a list or a record");
+        Error("CreateEntitiesPage: <opt.entities> must be a record");
     fi;
 
     # add book_name unconditionally to the list of entities
@@ -119,10 +103,6 @@ end );
 InstallGlobalFunction( CreateMainPage,
   function( book_name, dir, opt )
     local filestream, i;
-
-    if IsString(dir) then
-        dir := Directory(dir);
-    fi;
 
     # open the target XML file
     filestream := AUTODOC_OutputTextFile( dir, opt.main_xml_file );

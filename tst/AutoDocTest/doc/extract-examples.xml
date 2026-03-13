@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Chapter Label="Chapter_ExtractExamples">
+  <Heading>Extract examples fixture</Heading>
+  <Section Label="Section_ExtractExamples_Empty">
+    <Heading>Empty section</Heading>
+    <P/>
+    This section intentionally contains no examples, so tests can check
+    <C>skip_empty_in_numbering</C>.
+  </Section>
+  <Section Label="Section_ExtractExamples_First">
+    <Heading>First example section</Heading>
+    <P/>
+    <Example><![CDATA[
+gap> 2 + 3;
+5
+]]></Example>
+  </Section>
+  <Section Label="Section_ExtractExamples_Second">
+    <Heading>Second example section</Heading>
+    <P/>
+    <Example><![CDATA[
+gap> 6 * 7;
+42
+]]></Example>
+  </Section>
+</Chapter>

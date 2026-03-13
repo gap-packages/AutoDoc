@@ -1,0 +1,6 @@
+<!ENTITY AutoDocTest '<Package>AutoDocTest</Package>'>
+<!ENTITY AutoDocTestTag '<Package>RecordEntity</Package>'>
+<!ENTITY RECORDNOTE 'record entity'>
+<!ENTITY RELEASEDATE '11 March 2026'>
+<!ENTITY RELEASEYEAR '2026'>
+<!ENTITY VERSION '0.1'>

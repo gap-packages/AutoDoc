@@ -11,5 +11,9 @@ AutoDoc(rec(
     includes := [ "chapter1.xml" ],
     appendix := [ "appendix1.xml" ],
     bib := "AutoDocTest.bib",
+    entities := rec(
+      AutoDocTestTag := "<Package>RecordEntity</Package>",
+      RECORDNOTE := "record entity",
+    ),
   ),
 ));

@@ -496,8 +496,24 @@ function( arg )
             CreateTitlePage( doc_dir, title_page );
         fi;
 
+        # Normalize legacy list syntax before adding default entities.
+        if not IsBound( scaffold.entities ) then
+            scaffold.entities := rec();
+        elif IsList( scaffold.entities ) then
+            tmp := rec();
+            for i in scaffold.entities do
+                if IsString( i ) then
+                    tmp.( i ) := Concatenation( "<Package>", i, "</Package>" );
+                else
+                    tmp.( i[2] ) := Concatenation( "<", i[1], ">", i[2], "</", i[1], ">" );
+                fi;
+            od;
+            scaffold.entities := tmp;
+        elif not IsRecord( scaffold.entities ) then
+            Error( "CreateEntitiesPage: <opt.entities> must be a list or a record" );
+        fi;
+
         # set some default entities
-        AUTODOC_SetIfMissing( scaffold, "entities", rec() );
         if IsBound( pkginfo.Version ) then
             AUTODOC_SetIfMissing( scaffold.entities, "VERSION", pkginfo.Version );
         fi;
