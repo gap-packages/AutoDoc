@@ -36,6 +36,10 @@ This file describes changes in the AutoDoc package.
     nested source directories are picked up automatically
 
 + **Other Changes**
+  - Don't insert extra newlines after author names for the PDF title
+    pages (this was a workaround for a GAPDoc issue; hopefully a
+    future GAPDoc release will fix this properly; for details, see
+    <https://github.com/frankluebeck/GAPDoc/issues/80>)
   - Improve `DeclareGlobalName` handling: document it as a variable by
     default, but switch to a function when `@Arguments` or `@Returns`
     provides function-style documentation
