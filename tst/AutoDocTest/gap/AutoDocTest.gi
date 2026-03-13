@@ -30,3 +30,7 @@ InstallMethod( AutoDocTest_Attribute, [ IsSolvableGroup ], G -> G );
 #! The property method reuses `IsAbelian` for nilpotent groups.
 #! @ItemType Prop
 InstallMethod( AutoDocTest_Property, [ IsNilpotentGroup ], IsAbelian );
+
+#!
+#! A method installation without an itemtype
+InstallMethod( AutoDocTest_Method, [ IsPerfectGroup ], G -> G );
