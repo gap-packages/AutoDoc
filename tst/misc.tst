@@ -365,4 +365,43 @@ gap> RemoveDirectoryRecursively(tmpdir);
 true
 
 #
+# example and log blocks require matching end markers
+#
+gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-example-end-marker-test");;
+gap> if IsDirectoryPath(tmpdir) then RemoveDirectoryRecursively(tmpdir); fi;
+gap> AUTODOC_CreateDirIfMissing(tmpdir);
+true
+gap> tmpdir_obj := Directory(tmpdir);;
+gap> file1 := Filename(tmpdir_obj, "example-end-markers.gd");;
+gap> stream := OutputTextFile(file1, false);;
+gap> AppendTo(stream, "#! @Chapter Parser\n");;
+gap> AppendTo(stream, "#! @Section End Markers\n");;
+gap> AppendTo(stream, "#! @BeginExample\n");;
+gap> AppendTo(stream, "1 + 1;\n");;
+gap> AppendTo(stream, "#! @EndLog\n");;
+gap> AppendTo(stream, "#! still example output\n");;
+gap> AppendTo(stream, "#! @EndExample\n");;
+gap> AppendTo(stream, "#! @BeginExampleSession\n");;
+gap> AppendTo(stream, "#! gap> 2 + 2;\n");;
+gap> AppendTo(stream, "#! @EndLogSession\n");;
+gap> AppendTo(stream, "#! 4\n");;
+gap> AppendTo(stream, "#! @EndExampleSession\n");;
+gap> CloseStream(stream);
+gap> tree7 := DocumentationTree();;
+gap> AutoDoc_Parser_ReadFiles([file1], tree7, rec());
+gap> section := SectionInTree(tree7, "Parser", "End_Markers");;
+gap> example := section!.content[1];;
+gap> example!.element_name;
+"Example"
+gap> example!.content;
+[ "gap> 1 + 1;", "@EndLog", "still example output" ]
+gap> session_example := section!.content[2];;
+gap> session_example!.element_name;
+"Example"
+gap> session_example!.content;
+[ "gap> 2 + 2;", "@EndLogSession", "4" ]
+gap> RemoveDirectoryRecursively(tmpdir);
+true
+
+#
 gap> STOP_TEST( "misc.tst" );

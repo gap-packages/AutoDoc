@@ -65,6 +65,8 @@ This file describes changes in the AutoDoc package.
     but in recent versions was restricted to dates of the form YYYY-MM-DD
     or DD/MM/YYYY; now we again allow any text, but text in those specific
     formats is still parsed and formatted (e.g. 2026-03-08 as 8 March 2026)
+  - Require `@BeginExample`, `@BeginLog`, `@BeginExampleSession`, and
+    `@BeginLogSession` blocks to use their matching `@End...` markers
   - Improve parser robustness by reporting clear EOF errors for
     unterminated declaration headers and filter lists
   - Make tests work when the package directory is read-only by writing
