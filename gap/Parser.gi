@@ -6,6 +6,68 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 ##
+InstallValue( AUTODOC_ITEM_TYPE_INFO, rec(
+    Attr := rec(
+        chapter_bucket := "attributes",
+        is_function_like := true
+    ),
+    Cat := rec(
+        chapter_bucket := "categories",
+        filter_type := "Category",
+        item_type_override := "Filt",
+        is_function_like := true
+    ),
+    Coll := rec(
+        chapter_bucket := "collections",
+        filter_type := "Collection",
+        item_type_override := "Filt",
+        is_function_like := true
+    ),
+    Constr := rec(
+        chapter_bucket := "methods",
+        is_function_like := true
+    ),
+    Fam := rec(
+        chapter_bucket := "global_variables",
+        is_function_like := false
+    ),
+    Filt := rec(
+        chapter_bucket := "filters",
+        is_function_like := true
+    ),
+    Func := rec(
+        chapter_bucket := "global_functions",
+        is_function_like := true
+    ),
+    InfoClass := rec(
+        chapter_bucket := "info_classes",
+        is_function_like := false
+    ),
+    Meth := rec(
+        chapter_bucket := "methods",
+        is_function_like := true
+    ),
+    Oper := rec(
+        chapter_bucket := "methods",
+        is_function_like := true
+    ),
+    Prop := rec(
+        chapter_bucket := "properties",
+        is_function_like := true
+    ),
+    Repr := rec(
+        chapter_bucket := "representations",
+        filter_type := "Representation",
+        item_type_override := "Filt",
+        is_function_like := true
+    ),
+    Var := rec(
+        chapter_bucket := "global_variables",
+        is_function_like := false
+    )
+));
+
+##
 BindGlobal( "AUTODOC_PositionPrefixShebang",
   function( line )
     local position;
@@ -130,113 +192,93 @@ end );
 ##
 InstallGlobalFunction( AutoDoc_Type_Of_Item,
   function( current_item, type, default_chapter_data )
-    local item_rec, entries, filter_style, ret_val;
+    local item_rec, filter_style, default_type, item_type, item_type_info,
+          default_boolean_return;
     item_rec := current_item;
+    default_boolean_return := "<K>true</K> or <K>false</K>";
     if PositionSublist( type, "DeclareCategoryCollections") <> fail then
-        entries := [ "Filt", "categories" ];
-        ret_val := "<K>true</K> or <K>false</K>";
+        default_type := "Coll";
         filter_style := "none";
         if not IsBound( item_rec!.arguments ) then
             item_rec!.arguments := "obj";
         fi;
         item_rec!.coll_suffix := true;
     elif PositionSublist( type, "DeclareCategory" ) <> fail then
-        entries := [ "Filt", "categories" ];
-        ret_val := "<K>true</K> or <K>false</K>";
+        default_type := "Cat";
         filter_style := "single";
     elif PositionSublist( type, "DeclareRepresentation" ) <> fail then
-        entries := [ "Filt", "categories" ];
-        ret_val := "<K>true</K> or <K>false</K>";
+        default_type := "Repr";
         filter_style := "single";
     elif PositionSublist( type, "DeclareAttribute" ) <> fail then
-        entries := [ "Attr", "attributes" ];
+        default_type := "Attr";
         filter_style := "single";
     elif PositionSublist( type, "DeclareSynonymAttr" ) <> fail then
-        entries := [ "Attr", "attributes" ];
+        default_type := "Attr";
         filter_style := "none";
-        if not IsBound( item_rec!.arguments ) then
-            item_rec!.arguments := "arg";
-        fi;
     elif PositionSublist( type, "DeclareProperty" ) <> fail then
-        entries := [ "Prop", "properties" ];
-        ret_val := "<K>true</K> or <K>false</K>";
+        default_type := "Prop";
         filter_style := "single";
     elif PositionSublist( type, "DeclareSynonym" ) <> fail then
+        default_type := "Func";
         filter_style := "none";
-        if IsBound( item_rec!.item_type ) and item_rec!.item_type = "Attr" then
-            entries := [ "Attr", "attributes" ];
-        elif IsBound( item_rec!.item_type ) and item_rec!.item_type = "Prop" then
-            entries := [ "Prop", "properties" ];
-            ret_val := "<K>true</K> or <K>false</K>";
-        elif IsBound( item_rec!.item_type ) and item_rec!.item_type = "Filt" then
-            entries := [ "Filt", "categories" ];
-            ret_val := "<K>true</K> or <K>false</K>";
-        elif IsBound( item_rec!.item_type ) and item_rec!.item_type = "Oper" then
-            entries := [ "Oper", "methods" ];
-        elif IsBound( item_rec!.item_type ) and item_rec!.item_type = "Var" then
-            entries := [ "Var", "global_variables" ];
-            item_rec!.arguments := fail;
-            item_rec!.return_value := false;
-        else
-            entries := [ "Func", "global_functions" ];
-        fi;
-        if entries[ 1 ] in [ "Func", "Oper", "Attr", "Prop", "Filt" ] and
-           not IsBound( item_rec!.arguments ) then
-            item_rec!.arguments := "arg";
-        fi;
     elif PositionSublist( type, "DeclareOperation" ) <> fail then
-        entries := [ "Oper", "methods" ];
+        default_type := "Oper";
         filter_style := "list";
     elif PositionSublist( type, "DeclareConstructor" ) <> fail then
-        entries := [ "Constr", "methods" ];
+        default_type := "Constr";
         filter_style := "list";
     elif PositionSublist( type, "DeclareGlobalFunction" ) <> fail then
-        entries := [ "Func", "global_functions" ];
+        default_type := "Func";
         filter_style := "none";
-        if not IsBound( item_rec!.arguments ) then
-            item_rec!.arguments := "arg";
-        fi;
     elif PositionSublist( type, "DeclareGlobalVariable" ) <> fail then
-        entries := [ "Var", "global_variables" ];
+        default_type := "Var";
         filter_style := "none";
-        item_rec!.arguments := fail;
-        item_rec!.return_value := false;
     elif PositionSublist( type, "DeclareGlobalName" ) <> fail then
+        default_type := "Var";
         filter_style := "none";
-        if ( IsBound( item_rec!.item_type ) and item_rec!.item_type <> "Var" ) or
-           ( IsBound( item_rec!.declareglobalname_is_function ) and
-             item_rec!.declareglobalname_is_function ) then
-            entries := [ "Func", "global_functions" ];
-            if not IsBound( item_rec!.arguments ) then
-                item_rec!.arguments := "arg";
-            fi;
-        else
-            entries := [ "Var", "global_variables" ];
-            item_rec!.arguments := fail;
-            item_rec!.return_value := false;
+        if IsBound( item_rec!.declaration_is_function ) and
+           item_rec!.declaration_is_function then
+            default_type := "Func";
         fi;
     elif PositionSublist( type, "DeclareFilter" ) <> fail then
-        entries := [ "Filt", "properties" ];
+        default_type := "Filt";
         filter_style := "none";
-        item_rec!.arguments := fail;
-        item_rec!.return_value := false;
     elif PositionSublist( type, "DeclareInfoClass" ) <> fail then
-        entries := [ "InfoClass", "info_classes" ];
+        default_type := "InfoClass";
         filter_style := "none";
-        item_rec!.arguments := fail;
-        item_rec!.return_value := false;
     elif PositionSublist( type, "KeyDependentOperation" ) <> fail then
-        entries := [ "Oper", "methods" ];
+        default_type := "Oper";
         filter_style := "pair";
     else
         return fail;
     fi;
-    item_rec!.item_type := entries[ 1 ];
-    if not IsBound( item_rec!.chapter_info ) or item_rec!.chapter_info = [ ] then
-        item_rec!.chapter_info := default_chapter_data.( entries[ 2 ] );
+
+    if IsBound( item_rec!.item_type ) then
+        item_type := StripBeginEnd( item_rec!.item_type, " \t\r\n" );
+    else
+        item_type := default_type;
     fi;
-    if IsBound( ret_val ) and ( item_rec!.return_value = [ ] or item_rec!.return_value = false ) then
-        item_rec!.return_value := [ ret_val ];
+    if not IsBound( AUTODOC_ITEM_TYPE_INFO.( item_type ) ) then
+        return fail;
+    fi;
+    item_type_info := AUTODOC_ITEM_TYPE_INFO.( item_type );
+    item_rec!.item_type := item_type;
+
+    if not IsBound( item_rec!.chapter_info ) or item_rec!.chapter_info = [ ] then
+        item_rec!.chapter_info :=
+            default_chapter_data.( item_type_info.chapter_bucket );
+    fi;
+
+    if item_type in [ "Cat", "Coll", "Filt", "Prop", "Repr" ] and
+       ( item_rec!.return_value = [ ] or item_rec!.return_value = false ) then
+        item_rec!.return_value := [ default_boolean_return ];
+    fi;
+    if filter_style = "none" and item_type_info.is_function_like and
+       not IsBound( item_rec!.arguments ) then
+        item_rec!.arguments := "arg";
+    elif filter_style = "none" and not item_type_info.is_function_like then
+        item_rec!.arguments := fail;
+        item_rec!.return_value := false;
     fi;
     return filter_style;
 end );
@@ -462,14 +504,19 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         fi;
     end;
     NormalizeItemType := function( item_type )
+        local supported_types;
         item_type := StripBeginEnd( item_type, " \t\r\n" );
-        if item_type in [ "Attr", "Filt", "Func", "Oper", "Prop", "Var" ] then
+        if IsBound( AUTODOC_ITEM_TYPE_INFO.( item_type ) ) then
             return item_type;
         fi;
+        supported_types := JoinStringsWithSeparator(
+            Set( RecNames( AUTODOC_ITEM_TYPE_INFO ) ),
+            ", "
+        );
         ErrorWithPos(
             Concatenation(
                 "unknown @ItemType ", item_type,
-                "; expected one of Attr, Filt, Func, Oper, Prop, Var"
+                "; expected one of ", supported_types
             )
         );
     end;
@@ -592,7 +639,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         local filter_string, name, pos;
         CurrentOrNewManItem();
         if not IsBound( CurrentItem()!.item_type ) then
-            CurrentItem()!.item_type := "Oper";
+            CurrentItem()!.item_type := "Meth";
         else
             CurrentItem()!.item_type := NormalizeItemType(
                 CurrentItem()!.item_type
@@ -857,7 +904,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 fi;
                 CurrentItem()!.return_value := [ ];
             elif not IsBound( CurrentItem()!.item_type ) then
-                CurrentItem()!.declareglobalname_is_function := true;
+                CurrentItem()!.declaration_is_function := true;
             fi;
             if current_command[ 2 ] <> "" then
                 Add( CurrentItem(), current_command[ 2 ] );
@@ -868,7 +915,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             if IsBound( CurrentItem()!.item_type ) and CurrentItem()!.item_type = "Var" then
                 CurrentItem()!.item_type := "Func";
             elif not IsBound( CurrentItem()!.item_type ) then
-                CurrentItem()!.declareglobalname_is_function := true;
+                CurrentItem()!.declaration_is_function := true;
             fi;
             CurrentItem()!.arguments := current_command[ 2 ];
         end,

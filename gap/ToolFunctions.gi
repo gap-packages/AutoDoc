@@ -63,7 +63,8 @@ end );
 ##
 InstallGlobalFunction( AutoDoc_WriteDocEntry,
   function( filestream, list_of_records, heading )
-    local return_value, description, current_description, labels, i;
+    local return_value, description, current_description, labels, i,
+          item_type_info;
 
     # look for a good return value (it should be the same everywhere)
     for i in list_of_records do
@@ -122,9 +123,17 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
 
     # Function headers
     for i in list_of_records do
-         AppendTo( filestream, "  <", i!.item_type, " " );
-        if i!.arguments <> fail and i!.item_type <> "Var" then
+        item_type_info := AUTODOC_ITEM_TYPE_INFO.( i!.item_type );
+        if IsBound( item_type_info.item_type_override ) then
+            AppendTo( filestream, "  <", item_type_info.item_type_override, " " );
+        else
+            AppendTo( filestream, "  <", i!.item_type, " " );
+        fi;
+        if item_type_info.is_function_like and i!.arguments <> fail then
             AppendTo( filestream, "Arg=\"", i!.arguments, "\" " );
+        fi;
+        if IsBound( item_type_info.filter_type ) then
+            AppendTo( filestream, "Type=\"", item_type_info.filter_type, "\" " );
         fi;
         AppendTo( filestream, "Name=\"", i!.name, "\" " );
         if i!.tester_names <> fail and i!.tester_names <> "" then

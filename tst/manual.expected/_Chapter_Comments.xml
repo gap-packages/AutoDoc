@@ -104,18 +104,19 @@ function or a variable.
 <P/>
 <Index Key="@ItemType"><C>@ItemType <A>kind</A></C></Index>
 Overrides the kind of manual item created for the following declaration or
-installed method. The supported values are <C>Attr</C>, <C>Filt</C>,
-<C>Func</C>, <C>Oper</C>, <C>Prop</C>, and <C>Var</C>.
+installed method. The supported values are <C>Attr</C>, <C>Cat</C>,
+<C>Coll</C>, <C>Constr</C>, <C>Fam</C>, <C>Filt</C>, <C>Func</C>,
+<C>InfoClass</C>, <C>Meth</C>, <C>Oper</C>, <C>Prop</C>, <C>Repr</C>,
+and <C>Var</C>.
 <P/>
-This is mainly useful for <C>InstallMethod</C>, <C>DeclareGlobalName</C>, and
-<C>DeclareSynonym</C>. For other declarations such as <C>DeclareAttribute</C>
-or <C>DeclareProperty</C>, &AutoDoc; already knows the correct item type from
-the declaration itself.
+The values <C>Cat</C>, <C>Coll</C>, and <C>Repr</C> are &AutoDoc;-specific
+aliases. They emit <C>Filt</C> entries with the corresponding &GAPDoc; filter
+type.
 <P/>
-But for <C>InstallMethod</C>, especially with one argument, the source code
-alone does not reliably tell whether the method belongs to an operation, an
-attribute, a property, or even a plain function. Without an override, such
-entries default to <C>Oper</C>.
+This is useful when the source code alone does not determine which manual item
+kind should be emitted. For many declarations such as <C>DeclareAttribute</C>
+or <C>DeclareProperty</C>, &AutoDoc; already knows the intended type from the
+declaration itself.
 <P/>
 It is useful for <C>DeclareGlobalName</C>, because that declaration can
 refer to either a function or a variable. &AutoDoc; defaults such entries to
@@ -124,18 +125,19 @@ refer to either a function or a variable. &AutoDoc; defaults such entries to
 <C>@ItemType</C> to override this explicitly.
 <P/>
 It is useful for <C>DeclareSynonym</C>, because that declaration can
-document a function synonym or a filter synonym. Use <C>@ItemType Filt</C> if
-the synonym should be emitted as a filter-style manual entry.
+document a function synonym or one of several filter-like synonyms. Use
+<C>@ItemType Filt</C>, <C>Cat</C>, <C>Coll</C>, or <C>Repr</C> to control which
+kind of filter entry should be emitted.
 <P/>
 For example:
 <P/>
 <Listing><![CDATA[
-#! @ItemType Attr
-InstallMethod( SomeAttribute, [ IsGroup ], G -> G );
+#! @ItemType Repr
+DeclareSynonym( "IsSomethingRep", IsComponentObjectRep );
 ]]></Listing>
 <P/>
-This makes &AutoDoc; emit an <C>&lt;Attr .../&gt;</C> manual entry instead of
-the default <C>&lt;Oper .../&gt;</C>.
+This makes &AutoDoc; emit a
+<C>&lt;Filt Type="Representation" .../&gt;</C> manual entry.
 <P/>
 </Subsection>
 

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_Item_Types_Chapter">
+<Heading>Item Types Chapter</Heading>
+
+<Section Label="Chapter_Item_Types_Chapter_Section_Type_Overrides">
+<Heading>Type Overrides</Heading>
+
+ Worksheet regression for item-type metadata and issue #174.
+<ManSection>
+  <Func Arg="arg" Name="SomeFunctionAlias" />
+ <Description>
+ A synonym documented as a function by default.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Filt Arg="arg" Name="IsSomeFilterAlias" />
+ <Returns><K>true</K> or <K>false</K>
+</Returns>
+ <Description>
+ A synonym documented as a filter.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Filt Arg="arg" Type="Category" Name="IsSomeCategoryAlias" />
+ <Returns><K>true</K> or <K>false</K>
+</Returns>
+ <Description>
+ A synonym documented as a category.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Filt Arg="arg" Type="Collection" Name="IsSomeCollectionAlias" />
+ <Returns><K>true</K> or <K>false</K>
+</Returns>
+ <Description>
+ A synonym documented as a collection.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Filt Arg="arg" Type="Representation" Name="IsSomeRepresentationAlias" />
+ <Returns><K>true</K> or <K>false</K>
+</Returns>
+ <Description>
+ A synonym documented as a representation.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Fam Name="SomeFamilyAlias" />
+ <Description>
+ A family-like global name.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <InfoClass Name="SomeInfoClassAlias" />
+ <Description>
+ An info class-like global name.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Meth Arg="obj, n" Name="SomeInstalledMethod" Label="for IsObject, IsInt"/>
+ <Description>
+ A method documented as a method by default.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Constr Arg="obj" Name="SomeInstalledConstructor" Label="for IsObject"/>
+ <Description>
+ A method documented as a constructor.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Meth Arg="obj" Name="SomeExplicitMethod" Label="for IsObject"/>
+ <Description>
+ An explicit method override.
+ </Description>
+</ManSection>
+
+<ManSection>
+  <Attr Arg="arg" Name="SomeAttributeAlias" />
+ <Description>
+ A synonym attribute.
+ </Description>
+</ManSection>
+
+</Section>
+
+</Chapter>
+

@@ -39,7 +39,7 @@ gap> comment_mode_value := 6 *
 
   Intro text
 <ManSection>
-  <Filt Arg="arg" Name="MyThings" Label="for IsObject"/>
+  <Filt Arg="arg" Type="Category" Name="MyThings" Label="for IsObject"/>
  <Returns><K>true</K> or <K>false</K>
 </Returns>
  <Description>
@@ -48,7 +48,7 @@ gap> comment_mode_value := 6 *
 </ManSection>
 
 <ManSection>
-  <Filt Arg="obj" Name="MyThingsCollection" />
+  <Filt Arg="obj" Type="Collection" Name="MyThingsCollection" />
  <Returns><K>true</K> or <K>false</K>
 </Returns>
  <Description>
@@ -57,7 +57,7 @@ gap> comment_mode_value := 6 *
 </ManSection>
 
 <ManSection>
-  <Filt Arg="obj" Name="MyThingsCollColl" />
+  <Filt Arg="obj" Type="Collection" Name="MyThingsCollColl" />
  <Returns><K>true</K> or <K>false</K>
 </Returns>
  <Description>
@@ -135,7 +135,7 @@ This text will only appear in the HTML version and the text version.
 <Heading>Testing various kinds of documentation</Heading>
 
 <ManSection>
-  <Filt Arg="arg" Name="SomeCategory" Label="for IsObject"/>
+  <Filt Arg="arg" Type="Category" Name="SomeCategory" Label="for IsObject"/>
  <Returns><K>true</K> or <K>false</K>
 </Returns>
  <Description>
@@ -144,7 +144,7 @@ This text will only appear in the HTML version and the text version.
 </ManSection>
 
 <ManSection>
-  <Filt Arg="arg" Name="SomeRepresentation" Label="for IsAttributeStoringRep"/>
+  <Filt Arg="arg" Type="Representation" Name="SomeRepresentation" Label="for IsAttributeStoringRep"/>
  <Returns><K>true</K> or <K>false</K>
 </Returns>
  <Description>
@@ -214,7 +214,9 @@ This text will only appear in the HTML version and the text version.
 </ManSection>
 
 <ManSection>
-  <Filt Name="SomeFilter" />
+  <Filt Arg="arg" Name="SomeFilter" />
+ <Returns><K>true</K> or <K>false</K>
+</Returns>
  <Description>
  A filter
  </Description>

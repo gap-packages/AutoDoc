@@ -11,6 +11,8 @@ This file describes changes in the AutoDoc package.
   - Only document the first declaration immediately following an AutoDoc
     source comment block; later consecutive declarations now require their
     own `#!` comment block
+  - When documenting an `InstallMethod`, we now use the item type `Meth`
+    instead of `Oper`
 
 + **New Features**
   - Add `nopdf` as a global option, and document the existing `NOPDF`
@@ -19,6 +21,8 @@ This file describes changes in the AutoDoc package.
     `@Chapter`/`@Section`/`@Subsection` in `.autodoc` files and doc comments
   - Add support for documenting `DeclareSynonym` and
     `DeclareSynonymAttr` declarations
+  - Add `@ItemType` to override the type of a declaration, which is
+    especially useful for `DeclareSynonym` or `DeclareGlobalName`
   - Add fenced code blocks using triple backticks or tildes in
     Markdown-like text; `@listing`, `@example`, and `@log` info strings
     select the corresponding GAPDoc element
@@ -31,6 +35,9 @@ This file describes changes in the AutoDoc package.
     nested source directories are picked up automatically
 
 + **Other Changes**
+  - Improve `DeclareGlobalName` handling: document it as a variable by
+    default, but switch to a function when `@Arguments` or `@Returns`
+    provides function-style documentation
   - Ignore trailing blank lines after single-line worksheet title-page
     commands such as `@Title`, `@Subtitle`, `@Version`, `@Author`, and
     `@Date`, and trim trailing blank lines from generated title-page
@@ -53,12 +60,7 @@ This file describes changes in the AutoDoc package.
     `@Command` does not start at column 1
   - Normalize parsed `InstallMethod` names by stripping surrounding
     quotes, matching `Declare...` handling
-  - Document `InstallMethod` support in declaration comments and add
-    `@ItemType` to override whether an installed method should be
-    documented as `Func`, `Oper`, `Attr`, or `Prop`
-  - Improve `DeclareGlobalName` handling: document it as a variable by
-    default, but switch to a function when `@Arguments` or `@Returns`
-    provides function-style documentation
+  - Document `InstallMethod` support in declaration comments
   - Loosen requirements on `@Date` command: this used to allow free form,
     but in recent versions was restricted to dates of the form YYYY-MM-DD
     or DD/MM/YYYY; now we again allow any text, but text in those specific
