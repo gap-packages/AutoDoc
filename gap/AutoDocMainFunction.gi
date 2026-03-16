@@ -253,8 +253,8 @@ InstallGlobalFunction( CreateTitlePage,
         fi;
         normalized := List( content, line -> StripBeginEnd( line, "\n\r" ) );
         while Length( normalized ) > 0 and
-              IsString( normalized[ Length( normalized ) ] ) and
-              StripBeginEnd( normalized[ Length( normalized ) ], " \t\r\n" ) = "" do
+              IsString( Last( normalized ) ) and
+              StripBeginEnd( Last( normalized ), " \t\r\n" ) = "" do
             Remove( normalized );
         od;
         if Length( normalized ) = 1 then
@@ -366,7 +366,7 @@ function( pkgname, pkgdir, docdir, main, files, opt )
     lpkgname := ReplacedString(lpkgname, " ", "_");
 
     if not EndsWith(main, ".xml") then
-        main := Concatenation( main, ".xml" );
+        Append( main, ".xml" );
     fi;
     tst:=ExtractExamples( docdir, main, files, opt.units );
     Info(InfoAutoDoc, 1, Length(tst), " ", LowercaseString( opt.units ), "s detected");

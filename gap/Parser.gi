@@ -1023,23 +1023,23 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             while key_string <> "" do
                 split_pos := PositionProperty( key_string, c -> c in "&\"<>" );
                 if split_pos = fail then
-                    key_escaped := Concatenation( key_escaped, key_string );
+                    Append( key_escaped, key_string );
                     key_string := "";
                 elif split_pos > 1 then
-                    key_escaped := Concatenation( key_escaped, key_string{ [ 1 .. split_pos - 1 ] } );
+                    Append( key_escaped, key_string{ [ 1 .. split_pos - 1 ] } );
                     key_string := key_string{ [ split_pos .. Length( key_string ) ] };
                 fi;
                 if key_string = "" then
                     break;
                 fi;
                 if key_string[ 1 ] = '&' then
-                    key_escaped := Concatenation( key_escaped, "&amp;" );
+                    Append( key_escaped, "&amp;" );
                 elif key_string[ 1 ] = '"' then
-                    key_escaped := Concatenation( key_escaped, "&quot;" );
+                    Append( key_escaped, "&quot;" );
                 elif key_string[ 1 ] = '<' then
-                    key_escaped := Concatenation( key_escaped, "&lt;" );
+                    Append( key_escaped, "&lt;" );
                 else
-                    key_escaped := Concatenation( key_escaped, "&gt;" );
+                    Append( key_escaped, "&gt;" );
                 fi;
                 if Length( key_string ) > 1 then
                     key_string := key_string{ [ 2 .. Length( key_string ) ] };
