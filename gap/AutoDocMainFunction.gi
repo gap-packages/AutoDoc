@@ -372,8 +372,11 @@ function( pkgname, pkgdir, docdir, main, files, opt )
     Info(InfoAutoDoc, 1, Length(tst), " ", LowercaseString( opt.units ), "s detected");
     pkgdirString := Filename(pkgdir, "");
 
-    # ensure the 'tst' directory exists
-    tstdir := Filename(pkgdir, "tst");
+    if IsDirectory( opt.subdir ) then
+        tstdir := Filename( opt.subdir, "" );
+    else
+        tstdir := Filename( pkgdir, opt.subdir );
+    fi;
     AUTODOC_CreateDirIfMissing(tstdir);
     tstdir := Directory(tstdir);
 
