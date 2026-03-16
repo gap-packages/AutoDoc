@@ -1,0 +1,7 @@
+<!ENTITY AutoDocTest '<Package>AutoDocTest</Package>'>
+<!ENTITY Legacy_Package '<Package>Legacy Package</Package>'>
+<!ENTITY LegacyListEntity '<Package>LegacyListEntity</Package>'>
+<!ENTITY RELEASEDATE '11 March 2026'>
+<!ENTITY RELEASEYEAR '2026'>
+<!ENTITY VERSION '0.1'>
+<!ENTITY legacy_list_entity '<Phrase>legacy list entity</Phrase>'>

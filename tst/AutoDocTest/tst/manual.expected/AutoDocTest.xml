@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<!DOCTYPE Book SYSTEM "gapdoc.dtd"
+[
+    <#Include SYSTEM "_entities.xml">
+]
+>
+<Book Name="AutoDocTest">
+<#Include SYSTEM "title.xml">
+<TableOfContents/>
+<Body>
+<#Include SYSTEM "chapter1.xml">
+<#Include SYSTEM "_AutoDocMainFile.xml">
+</Body>
+<#Include SYSTEM "appendix1.xml">
+<#Include SYSTEM "_AutoDocAppendicesMainFile.xml">
+<Bibliography Databases="AutoDocTest.bib"/>
+<TheIndex/>
+</Book>

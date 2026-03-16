@@ -66,6 +66,8 @@ This file describes changes in the AutoDoc package.
   - Normalize parsed `InstallMethod` names by stripping surrounding
     quotes, matching `Declare...` handling
   - Document `InstallMethod` support in declaration comments
+  - Fix legacy list-style `scaffold.entities` handling so it receives
+    the standard default entities and works end-to-end again
   - Loosen requirements on `@Date` command: this used to allow free form,
     but in recent versions was restricted to dates of the form YYYY-MM-DD
     or DD/MM/YYYY; now we again allow any text, but text in those specific
@@ -82,6 +84,8 @@ This file describes changes in the AutoDoc package.
     inserted (via `@InsertChunk`/`@InsertCode`)
   - Warn if a chunk is inserted (via `@InsertChunk`/`@InsertCode`) but never
     defined (via `@BeginChunk`/`@BeginCode`)
+  - Expand package-manual fixture coverage for `AutoDoc()` invocation
+    variants and `extract_examples` settings
 
 ## 2025.12.19
   - Don't replace empty lines in `@BeginCode` blocks by `<P/>`

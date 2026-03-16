@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<TitlePage>
+  <Title>
+    AutoDocTest
+  </Title>
+  <Subtitle>
+    A minimal &GAP; package for testing AutoDoc features
+  </Subtitle>
+  <Version>
+    0.1
+  </Version>
+  <Author>
+    Active Author
+<Email>a.author@AutoDocTest.gap-system.org</Email>
+<Homepage>https://AutoDocTest.gap-system.org/~author</Homepage>
+  </Author>
+  <Author>
+    Retired Author
+<Email>r.author@AutoDocTest.gap-system.org</Email>
+  </Author>
+  <Date>
+    11 March 2026
+  </Date>
+  </TitlePage>
