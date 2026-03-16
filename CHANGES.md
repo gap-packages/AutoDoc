@@ -17,6 +17,8 @@ This file describes changes in the AutoDoc package.
 + **New Features**
   - Add `nopdf` as a global option, and document the existing `NOPDF`
     environment variable and `relativePath` global option
+  - Add a sub-option `subdir` for `extract_examples` to place generated
+    `.tst` files in a subdirectory such as `tst/generated`
   - Add Markdown-style headings `#`/`##`/`###` as aliases for
     `@Chapter`/`@Section`/`@Subsection` in `.autodoc` files and doc comments
   - Add `@Appendix` for generating appendix XML from `.autodoc` input

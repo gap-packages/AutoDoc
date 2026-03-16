@@ -107,6 +107,44 @@ gap> Scan_for_AutoDoc_Part( "### Heading subsection" );
 [ "@Subsection", "Heading subsection" ]
 
 #
+# AUTODOC_CreateDirIfMissing: nested paths and `..` normalization
+#
+gap> LoadPackage("io", false);
+true
+gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-createdir-test");;
+gap> if IsDirectoryPath(tmpdir) then RemoveDirectoryRecursively(tmpdir); fi;
+gap> AUTODOC_CreateDirIfMissing(tmpdir);
+true
+gap> tmpdir_obj := Directory(tmpdir);;
+gap> AUTODOC_CreateDirIfMissing(Filename(tmpdir_obj, "alpha/beta/gamma"));
+true
+gap> IsDirectoryPath(Filename(tmpdir_obj, "alpha"));
+true
+gap> IsDirectoryPath(Filename(tmpdir_obj, "alpha/beta"));
+true
+gap> IsDirectoryPath(Filename(tmpdir_obj, "alpha/beta/gamma"));
+true
+gap> AUTODOC_CreateDirIfMissing(Filename(tmpdir_obj, "one/two/../three"));
+true
+gap> IsDirectoryPath(Filename(tmpdir_obj, "one/three"));
+true
+gap> IsDirectoryPath(Filename(tmpdir_obj, "one/two"));
+false
+gap> AUTODOC_CreateDirIfMissing(Filename(tmpdir_obj, "work/current"));
+true
+gap> olddir := AUTODOC_CurrentDirectory();;
+gap> ChangeDirectoryCurrent(Filename(tmpdir_obj, "work/current"));
+true
+gap> AUTODOC_CreateDirIfMissing("../sibling/nested");
+true
+gap> ChangeDirectoryCurrent(olddir);
+true
+gap> IsDirectoryPath(Filename(tmpdir_obj, "work/sibling/nested"));
+true
+gap> RemoveDirectoryRecursively(tmpdir);
+true
+
+#
 # AUTODOC_FindMatchingFiles: recursive scan_dirs traversal
 #
 gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-findmatchingfiles-test");;

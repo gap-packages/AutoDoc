@@ -262,6 +262,14 @@ Now files <F>PACKAGENAME01.tst</F>, <F>PACKAGENAME02.tst</F> and so appear in th
 <F>tst/</F> subdirectory of your package, and can be tested as usual using
 <Ref BookName="ref" Func="Test"/> respectively <Ref BookName="ref" Func="TestDirectory"/>.
 
+If you prefer to keep generated tests in a separate location, set
+<C>extract_examples.subdir</C> to a path relative to the package root:
+```@listing
+LoadPackage( "AutoDoc" );
+AutoDoc( rec( extract_examples := rec( subdir := "tst/generated" ) ) );
+```
+This writes the extracted examples into <F>tst/generated/</F> instead.
+
 @Subsection Setting different &GAPDoc; options
 @SubsectionLabel Tut:IntegrateExisting:GapDocOptions
 

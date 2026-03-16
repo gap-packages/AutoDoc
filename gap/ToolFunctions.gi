@@ -5,18 +5,49 @@
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-# Check whether the given directory exists, and if not, attempt
-# to create it.
+# Ensure that the directory named by the given path string exists, creating any
+# missing parent directories on the way. Relative paths are accepted and `.` /
+# `..` components are normalized before creating directories.
 InstallGlobalFunction( "AUTODOC_CreateDirIfMissing",
 function(d)
-    local tmp;
+    local tmp, components, normalized, current, component;
     if not IsDirectoryPath(d) then
-        tmp := CreateDir(d); # Note: CreateDir is currently undocumented
-        if tmp = fail then
-            Error("Cannot create directory ", d, "\n",
-                  "Error message: ", LastSystemError().message, "\n");
-            return false;
+        components := SplitString( d, "/" );
+        normalized := [ ];
+        for component in components do
+            if component = "" or component = "." then
+                continue;
+            elif component = ".." then
+                if StartsWith( d, "/" ) then
+                    if Length( normalized ) > 0 then
+                        Remove( normalized );
+                    fi;
+                elif Length( normalized ) > 0 and Last( normalized ) <> ".." then
+                    Remove( normalized );
+                else
+                    Add( normalized, component );
+                fi;
+            else
+                Add( normalized, component );
+            fi;
+        od;
+
+        current := "";
+        if StartsWith( d, "/" ) then
+            current := "/";
         fi;
+        for component in normalized do
+            Append( current, component );
+            Append( current, "/" );
+            if not IsDirectoryPath( current ) then
+                tmp := CreateDir( current ); # Note: CreateDir is currently undocumented
+                if tmp = fail then
+                    Error("Cannot create directory ", current, "\n",
+                          "Error message: ", LastSystemError().message, "\n");
+                    return false;
+                fi;
+            fi;
+        od;
     fi;
     return true;
 end );
@@ -169,18 +200,62 @@ function(args...)
 end);
 
 # AUTODOC_TestWorkSheet is used by AutoDocs test suite to test the worksheets
-# feature. Its single argument <ws> should be a string, and then
+# feature. Its first argument <ws> should be a string, and then
 # `tst/worksheets/<ws>` should be a directory containing a worksheet, and
 # `tst/worksheets/<ws>.expected` a directory containing the output of
-# AutoDocWorksheet for that worksheet.
+# AutoDocWorksheet for that worksheet. An optional second argument can be used
+# to override the options passed to AutoDocWorksheet for a single test case.
 #
 # Then AUTODOC_TestWorkSheet will again run AutoDocWorksheet, storing the
-# output in a temporary directory; it then runs diff on all files in order to
-# find any differences that may have crept in. If no differences exist, it
-# outputs nothing.
+# output in a temporary directory; it recursively compares all files present in
+# the expected output tree so worksheet fixtures can cover nested generated
+# output as well. If no differences exist, it outputs nothing.
 InstallGlobalFunction( AUTODOC_TestWorkSheet,
-function(ws)
-    local wsdir, sheetdir, expecteddir, actualdir, filenames, old, f, expected, actual, tmpdir;
+function(arg...)
+    local ws, options, wsdir, sheetdir, expecteddir, actualdir, filenames, old,
+          tmpdir, compare_files, worksheet_options, key;
+
+    if Length( arg ) = 0 or Length( arg ) > 2 then
+        Error("usage: AUTODOC_TestWorkSheet( <worksheet>[, <options>] )");
+    fi;
+    ws := arg[1];
+    if Length( arg ) = 2 then
+        options := arg[2];
+    else
+        options := rec( );
+    fi;
+
+    # Recurse into expected subdirectories so worksheet fixtures can verify
+    # nested output trees such as generated test files below `tst/generated`.
+    compare_files := function(expected, actual)
+        local names, f, expected_path, actual_path;
+        if IsDirectoryPath(expected) then
+            if not IsDirectoryPath(actual) then
+                Error("expected directory ", actual);
+            fi;
+            expected := Directory(expected);
+            actual := Directory(actual);
+            names := DirectoryContents(expected);
+            names := Filtered(names, f -> f <> "." and f <> "..");
+            Sort(names);
+            for f in names do
+                expected_path := Filename(expected, f);
+                actual_path := Filename(actual, f);
+                if not IsDirectoryPath(actual_path) and not IsReadableFile(actual_path) then
+                    Error("missing generated file ", actual_path);
+                fi;
+                compare_files(expected_path, actual_path);
+            od;
+            return;
+        fi;
+
+        if not IsReadableFile(actual) then
+            Error("missing generated file ", actual);
+        fi;
+        if 0 <> AUTODOC_Diff("-u", expected, actual) then
+            Error("diff detected in file ", actual);
+        fi;
+    end;
 
     # check worksheets dir exists
     wsdir := DirectoriesPackageLibrary("AutoDoc", "tst/worksheets");
@@ -219,19 +294,20 @@ function(ws)
 
     old := InfoLevel(InfoGAPDoc);
     SetInfoLevel(InfoGAPDoc, 0);
-    AutoDocWorksheet(filenames, rec(dir := actualdir, extract_examples := true) : nopdf);
+    # Start from the standard worksheet test options, then apply any
+    # per-test overrides supplied by the caller.
+    worksheet_options := rec(
+        dir := actualdir,
+        extract_examples := true
+    );
+    for key in RecNames( options ) do
+        worksheet_options.( key ) := options.( key );
+    od;
+    AutoDocWorksheet(filenames, worksheet_options : nopdf);
     SetInfoLevel(InfoGAPDoc, old);
 
     # Check the results
-    filenames := DirectoryContents(expecteddir);
-    filenames := Filtered(filenames, f -> f <> "." and f <> "..");
-    for f in filenames do
-        expected := Filename(expecteddir, f);
-        actual := Filename(actualdir, f);
-        if 0 <> AUTODOC_Diff("-u", expected, actual) then
-            Error("diff detected in file ", f);
-        fi;
-    od;
+    compare_files(expecteddir, actualdir);
 
     RemoveDirectoryRecursively(tmpdir);
 end);

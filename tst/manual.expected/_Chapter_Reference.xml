@@ -369,6 +369,13 @@
          no file is created.<P/>
          If set to a record, it may contain the following entries:
          <List>
+         <Mark>subdir</Mark>
+         <Item>
+             A string or <C>Directory()</C> object selecting where the generated
+             <F>.tst</F> files are written. The default is <F>tst</F>. If a string is
+             given, it is interpreted relative to the package directory, so values
+             such as <F>tst/generated</F> are supported.
+         </Item>
          <Mark>units</Mark>
          <Item>
              This controls how examples are grouped into files. Recognized values are

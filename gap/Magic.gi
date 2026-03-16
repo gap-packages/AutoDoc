@@ -657,6 +657,12 @@ function( arg )
             # it is useful for our "dogfood" test suite
             pkgdir := doc_dir;
         fi;
+        if not IsBound( extract_examples.subdir ) then
+            extract_examples.subdir := "tst";
+        elif not IsString( extract_examples.subdir ) and
+             not IsDirectory( extract_examples.subdir ) then
+            Error( "extract_examples.subdir must be a string or Directory()" );
+        fi;
         if not IsBound( extract_examples.units ) then
             extract_examples.units := "Chapter";
         fi;
