@@ -62,9 +62,8 @@ InstallGlobalFunction( CreateEntitiesPage,
     function( book_name, dir, opt )
     local filestream, ent, val, entities;
 
-    if not IsBound( opt.entities ) then
-        entities := rec();
-    else
+    entities := rec();
+    if IsBound( opt.entities ) then
         entities := opt.entities;
     fi;
 
