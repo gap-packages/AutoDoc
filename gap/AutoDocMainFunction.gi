@@ -41,10 +41,6 @@ InstallGlobalFunction( CreateDefaultChapterData,
   function( pkgname )
     local chapter_name, default_chapter_record, list_of_types, i;
 
-    if not IsString( pkgname ) then
-        Error( "CreateDefaultChapterData must be called with a possible package name\n" );
-    fi;
-
     chapter_name := Concatenation( pkgname, "_automatic_generated_documentation" );
     default_chapter_record := rec();
     list_of_types := Set(
@@ -68,10 +64,8 @@ InstallGlobalFunction( CreateEntitiesPage,
 
     if not IsBound( opt.entities ) then
         entities := rec();
-    elif IsRecord( opt.entities ) then
-        entities := opt.entities;
     else
-        Error("CreateEntitiesPage: <opt.entities> must be a record");
+        entities := opt.entities;
     fi;
 
     # add book_name unconditionally to the list of entities
