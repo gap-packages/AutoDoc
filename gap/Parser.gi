@@ -976,7 +976,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             ErrorWithPos( current_command[ 2 ] );
         end,
         @Index := function()
-            local argument, split_pos, key, entry,
+            local argument, split_pos, key, entry, c,
                   escaped_quote_pos, key_string, key_escaped;
             if not HasCurrentItem() then
                 ErrorWithPos( "found @Index with no active documentation item" );
@@ -1024,27 +1024,20 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 split_pos := PositionProperty( key_string, c -> c in "&\"<>" );
                 if split_pos = fail then
                     Append( key_escaped, key_string );
-                    key_string := "";
+                    break;
                 elif split_pos > 1 then
                     Append( key_escaped, key_string{ [ 1 .. split_pos - 1 ] } );
                     key_string := key_string{ [ split_pos .. Length( key_string ) ] };
                 fi;
-                if key_string = "" then
-                    break;
-                fi;
-                if key_string[ 1 ] = '&' then
+                c := Remove(key_string, 1);
+                if c = '&' then
                     Append( key_escaped, "&amp;" );
-                elif key_string[ 1 ] = '"' then
+                elif c = '"' then
                     Append( key_escaped, "&quot;" );
-                elif key_string[ 1 ] = '<' then
+                elif c = '<' then
                     Append( key_escaped, "&lt;" );
-                else
+                else # c = '>'
                     Append( key_escaped, "&gt;" );
-                fi;
-                if Length( key_string ) > 1 then
-                    key_string := key_string{ [ 2 .. Length( key_string ) ] };
-                else
-                    key_string := "";
                 fi;
             od;
 
