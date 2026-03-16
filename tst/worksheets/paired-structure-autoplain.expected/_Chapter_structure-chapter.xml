@@ -2,18 +2,18 @@
 
 <!-- This is an automatically generated file. -->
 <Chapter Label="Chapter_structure-chapter">
-<Heading>Structure Chapter Title</Heading>
+<Heading>Structure Chapter Title <Math>a^2</Math></Heading>
 
 This chapter text uses <Emph>bold</Emph>, <Emph>emphasis</Emph>, and <Code>inline code</Code>.
 <Index Key="Paired structure chapter">Chapter index entry with <Keyword>true</Keyword></Index>
 <P/>
 <Section Label="Section_structure-section">
-<Heading>Structure Section Title</Heading>
+<Heading>Structure Section Title <Math>b^2</Math></Heading>
 
 Section text mentions * plain prose and <Code>keywords</Code>.
 <P/>
 <Subsection Label="Subsection_structure-subsection">
-<Heading>Structure Subsection Title</Heading>
+<Heading>Structure Subsection Title <Math>c^2</Math></Heading>
 
 Subsection text keeps the paired worksheet content aligned.
 </Subsection>
