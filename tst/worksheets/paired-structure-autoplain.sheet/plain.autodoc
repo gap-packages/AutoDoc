@@ -5,16 +5,16 @@
 
 @Chapter Structure Chapter
 @ChapterLabel structure-chapter
-@ChapterTitle Structure Chapter Title
+@ChapterTitle Structure Chapter Title $a^2$
 This chapter text uses **bold**, __emphasis__, and `inline code`.
 @Index "Paired structure chapter" Chapter index entry with `true`
 
 @Section Structure Section
 @SectionLabel structure-section
-@SectionTitle Structure Section Title
+@SectionTitle Structure Section Title $b^2$
 Section text mentions * plain prose and `keywords`.
 
 @Subsection Structure Subsection
 @SubsectionLabel structure-subsection
-@SubsectionTitle Structure Subsection Title
+@SubsectionTitle Structure Subsection Title $c^2$
 Subsection text keeps the paired worksheet content aligned.

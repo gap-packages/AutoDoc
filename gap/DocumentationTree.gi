@@ -413,6 +413,20 @@ end );
 ##
 #############################################
 
+BindGlobal( "AUTODOC_ConvertHeadingToGAPDocXML",
+  function( heading )
+    local converted_heading;
+
+    converted_heading :=
+        AUTODOC_ConvertMarkdownToGAPDocXML( [ NormalizedWhitespace( heading ) ] );
+    if not ForAll( converted_heading, IsString ) then
+        Error( "headings must convert to inline GAPDoc XML" );
+    fi;
+    converted_heading := Filtered( converted_heading,
+        piece -> piece <> "" and piece <> "<P/>" );
+    return JoinStringsWithSeparator( converted_heading, "" );
+end );
+
 BindGlobal( "AUTODOC_WriteStructuralNode",
   function( node, element_name, stream )
     local heading;
@@ -426,6 +440,7 @@ BindGlobal( "AUTODOC_WriteStructuralNode",
     else
         heading := ReplacedString( node!.name, "_", " " );
     fi;
+    heading := AUTODOC_ConvertHeadingToGAPDocXML( heading );
 
     AppendTo( stream, "<", element_name, " Label=\"", Label( node ), "\">\n" );
     AppendTo( stream, "<Heading>", heading, "</Heading>\n\n" );
