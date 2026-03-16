@@ -253,8 +253,8 @@ InstallGlobalFunction( CreateTitlePage,
         fi;
         normalized := List( content, line -> StripBeginEnd( line, "\n\r" ) );
         while Length( normalized ) > 0 and
-              IsString( normalized[ Length( normalized ) ] ) and
-              StripBeginEnd( normalized[ Length( normalized ) ], " \t\r\n" ) = "" do
+              IsString( Last( normalized ) ) and
+              StripBeginEnd( Last( normalized ), " \t\r\n" ) = "" do
             Remove( normalized );
         od;
         if Length( normalized ) = 1 then

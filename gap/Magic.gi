@@ -89,7 +89,7 @@ function( arg )
     fi;
 
     # check whether the last argument is an options record
-    if Length( arg ) > 0 and IsRecord( arg[Length(arg)] ) then
+    if Length( arg ) > 0 and IsRecord( Last( arg ) ) then
         opt := Remove( arg );
     else
         opt := rec();
@@ -389,7 +389,7 @@ function( arg )
 
             # Remove everything before the last '/'
             tmp := SplitString(tmp, "/");
-            tmp := tmp[Length(tmp)];
+            tmp := Last(tmp);
 
             # Remove everything after the first '.'
             tmp := SplitString(tmp, ".");

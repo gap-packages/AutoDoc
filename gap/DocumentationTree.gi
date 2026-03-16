@@ -205,7 +205,7 @@ InstallMethod( StructurePartInTree, [ IsTreeForDocumentation, IsList ],
     parent := StructurePartInTree( tree, context{[1..Length(context)-1]} );
 
     new_node := rec( content := [ ],
-                     name := context[ Length( context ) ],
+                     name := Last( context ),
                      chapter_info := context );
     if Length( context ) = 1 then
         type := TheTypeOfDocumentationTreeNodesForChapter;
