@@ -366,7 +366,7 @@ function( pkgname, pkgdir, docdir, main, files, opt )
     lpkgname := ReplacedString(lpkgname, " ", "_");
 
     if not EndsWith(main, ".xml") then
-        Append( main, ".xml" );
+        main := Concatenation( main, ".xml" );
     fi;
     tst:=ExtractExamples( docdir, main, files, opt.units );
     Info(InfoAutoDoc, 1, Length(tst), " ", LowercaseString( opt.units ), "s detected");
