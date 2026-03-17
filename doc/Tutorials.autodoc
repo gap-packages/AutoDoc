@@ -33,7 +33,7 @@ AutoDoc( rec( scaffold := true ) );
 This first reads the <F>PackageInfo.g</F> file from the current
 directory. It extracts information about the package from it
 (such as its name and version, see Section <Ref Sect="Subsection_Tut:Scaffolds:Title"/>).
-It then creates two XML files <F>doc/NAME_OF_YOUR_PACKAGE.xml</F> and
+It then creates two XML files <F>doc/_main.xml</F> and
 <F>doc/title.xml</F> inside the package directory. Finally, it runs
 &GAPDoc; on them to produce a nice initial PDF and HTML version of your
 fresh manual.
@@ -377,7 +377,7 @@ We assume that the manual is currently built by reading a file
 is named <File>manual.xml</File>. 
 
 The files <File>PackageInfo.g</File>, <File>makedoc.g</File>, 
-<File>doc/title.xml</File> and <File>doc/PackageName.xml</File> 
+<File>doc/title.xml</File> and <File>doc/_main.xml</File>
 (if it exists) will be altered by this procedure, 
 so it may be wise to keep backup copies. 
 

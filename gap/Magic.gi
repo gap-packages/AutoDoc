@@ -299,8 +299,17 @@ function( arg )
     fi;
 
     if IsBound( gapdoc ) then
-        
-        AUTODOC_SetIfMissing( gapdoc, "main", pkgname );
+        # When scaffolding also generates the main XML file, the default
+        # GAPDoc entry point must match that scaffolded filename. However,
+        # packages with scaffold.MainPage := false may rely on a handwritten
+        # PACKAGENAME.xml main file while still using scaffolded title pages,
+        # so in that case we keep the historical default.
+        if IsBound( scaffold ) and not is_worksheet and
+           ( not IsBound( scaffold.MainPage ) or scaffold.MainPage <> false ) then
+            AUTODOC_SetIfMissing( gapdoc, "main", "_main" );
+        else
+            AUTODOC_SetIfMissing( gapdoc, "main", pkgname );
+        fi;
 
         if IsBound( pkginfo.PackageDoc ) and not IsEmpty( pkginfo.PackageDoc ) then
             if Length( pkginfo.PackageDoc ) > 1 then
@@ -471,14 +480,6 @@ function( arg )
 
         AUTODOC_SetIfMissing( scaffold, "index", true );
 
-        if IsBound( gapdoc ) then
-            if AUTODOC_GetSuffix( gapdoc.main ) = "xml" then
-                scaffold.main_xml_file := gapdoc.main;
-            else
-                scaffold.main_xml_file := Concatenation( gapdoc.main, ".xml" );
-            fi;
-        fi;
-
         if IsBound( scaffold.TitlePage ) and scaffold.TitlePage <> false then
             title_page := ShallowCopy( scaffold.TitlePage );
 
@@ -530,7 +531,7 @@ function( arg )
                        node -> IsBound( node!.is_appendix ) and node!.is_appendix = true ) then
                 scaffold.autodoc_appendix_file := "_AutoDocAppendicesMainFile.xml";
             fi;
-            CreateMainPage( gapdoc.bookname, doc_dir, scaffold );
+            CreateMainPage( gapdoc.bookname, gapdoc.main, doc_dir, scaffold );
         fi;
     fi;
 
