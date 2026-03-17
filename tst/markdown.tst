@@ -26,7 +26,7 @@ gap> markdown_verbatim := AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "gap> 1 + 1;",
 >   "2",
 >   "```"
-> ]);;
+> ], fail);;
 gap> Length(markdown_verbatim);
 1
 gap> IsTreeForDocumentationNode(markdown_verbatim[1]);
@@ -43,7 +43,7 @@ gap> markdown_verbatim := AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "fi;",
 >   "```",
 >   "After"
-> ]);;
+> ], fail);;
 gap> markdown_verbatim[1];
 "Before"
 gap> IsTreeForDocumentationNode(markdown_verbatim[2]);
@@ -58,7 +58,7 @@ gap> markdown_verbatim := AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "~~~",
 >   "gap> [[2]]>[[1]];",
 >   "~~~"
-> ]);;
+> ], fail);;
 gap> markdown_verbatim[1]!.content;
 [ "gap> [[2]]>[[1]];" ]
 gap> markdown_verbatim := AUTODOC_ConvertMarkdownToGAPDocXML([
@@ -66,14 +66,14 @@ gap> markdown_verbatim := AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "gap> 1 + 1;",
 >   "2",
 >   "```"
-> ]);;
+> ], fail);;
 gap> markdown_verbatim[1]!.element_name;
 "Example"
 gap> markdown_verbatim := AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "```@log",
 >   "#I  some log message",
 >   "```"
-> ]);;
+> ], fail);;
 gap> markdown_verbatim[1]!.element_name;
 "Log"
 gap> markdown_verbatim := AUTODOC_ConvertMarkdownToGAPDocXML([
@@ -85,13 +85,13 @@ gap> markdown_verbatim := AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "#! @InsertCode Increment",
 >   "## Code is inserted here.",
 >   "```"
-> ]);;
+> ], fail);;
 gap> markdown_verbatim[1]!.content;
 [ "#! @BeginCode Increment", "i := i + 1;", "#! @EndCode", "", 
   "#! @InsertCode Increment", "## Code is inserted here." ]
 gap> AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "`<Log attr=\"x\"> & more`"
-> ]) = [
+> ], fail) = [
 >   "<Code>&lt;Log attr=&quot;x&quot;&gt; &amp; more</Code>"
 > ];
 true

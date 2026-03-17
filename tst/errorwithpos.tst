@@ -11,6 +11,22 @@ gap> ParseFixture := function( arg )
 > AutoDoc_Parser_ReadFiles( [ arg[ 1 ] ], tree, default_chapter_data );
 > return tree;
 > end;;
+gap> RenderFixtureDescription := function( file, item_name )
+> local tree, section, item, rendered, stream;
+> tree := ParseFixture( file );
+> section := SectionInTree( tree, "Parser", "Markdown_errors" );
+> item := First( section!.content,
+>     x -> IsBound( x!.name ) and x!.name = item_name );
+> rendered := "";
+> stream := OutputTextString( rendered, true );
+> SetPrintFormattingStatus( stream, false );
+> AUTODOC_WriteStringListWithSource(
+>     item!.description,
+>     item!.description_source_positions,
+>     stream );
+> CloseStream( stream );
+> return rendered;
+> end;;
 
 #
 # control: valid parser input still works
@@ -120,3 +136,17 @@ at tst/errorwithpos/break.g:1
 gap> ParseFixture( "tst/errorwithpos/unknown-command.g" );
 Error, unknown AutoDoc command @NotACommand,
 at tst/errorwithpos/unknown-command.g:1
+
+#
+# markdown syntax errors should also report file and line
+#
+gap> RenderFixtureDescription(
+>   "tst/errorwithpos/markdown-backtick-unbalanced.g",
+>   "BacktickOp" );
+Error, did you forget some `,
+at tst/errorwithpos/markdown-backtick-unbalanced.g:3
+gap> RenderFixtureDescription(
+>   "tst/errorwithpos/markdown-emph-unbalanced.g",
+>   "EmphOp" );
+Error, did you forget some **,
+at tst/errorwithpos/markdown-emph-unbalanced.g:3

@@ -287,13 +287,14 @@ end );
 InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
   function( filename_list, tree, default_chapter_data )
     local ApplyFilterInfoToCurrentItem, CreateTitleItemFunction, CurrentItem,
-          CurrentOrNewManItem, DeclarationDelimiterPosition, ErrorWithPos,
+          CurrentOrNewManItem, CurrentSourcePosition,
+          DeclarationDelimiterPosition, ErrorWithPos,
           FinishCurrentManItem, HasCurrentItem, IsMatchingMarkdownFence,
           MarkdownFenceFromLine, NormalizeInputLine, NormalizeItemType,
           NormalizedReadLine, ReadBracketedFilterString, ReadCode,
           ReadExample, ReadInstallMethodArguments,
           ReadInstallMethodFilterString, ReadLineWithLineCount,
-          ReadSessionExample, Reset, ScanDeclarePart, ScanForDeclarationPart,
+          ReadSessionExample, RecordStringSourcePosition, Reset, ScanDeclarePart, ScanForDeclarationPart,
           ScanInstallMethodPart, SetCurrentItem,
           #
           active_title_item_is_multiline, active_title_item_name,
@@ -330,6 +331,26 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         local list;
         list := Concatenation(arg, [ ",\n", "at ", filename, ":", line_number]);
         CallFuncList(Error, list);
+    end;
+    CurrentSourcePosition := function()
+        return rec( filename := filename, line := line_number );
+    end;
+    RecordStringSourcePosition := function( item )
+        local source_field;
+        if not ( IsRecord( item ) or IsTreeForDocumentationNode( item ) ) then
+            return;
+        fi;
+        if IsBound( item!.content_source_field ) then
+            source_field := item!.content_source_field;
+        elif IsBound( item!.content_source_positions ) then
+            source_field := "content_source_positions";
+        else
+            return;
+        fi;
+        if not IsBound( item!.( source_field ) ) then
+            item!.( source_field ) := [ ];
+        fi;
+        Add( item!.( source_field ), CurrentSourcePosition() );
     end;
     HasCurrentItem := function( )
         return Length( context_stack ) > 0;
@@ -828,6 +849,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
             scope_chapter := ChapterInTree( tree, chapter_info[ 1 ] );
             scope_chapter!.title_string := current_command[ 2 ];
+            scope_chapter!.title_string_source_position := CurrentSourcePosition();
         end,
 
         @Section := function()
@@ -856,6 +878,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
             scope_section := SectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ] );
             scope_section!.title_string := current_command[ 2 ];
+            scope_section!.title_string_source_position := CurrentSourcePosition();
         end,
 
         @Subsection := function()
@@ -883,6 +906,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
             scope_subsection := SubsectionInTree( tree, chapter_info[ 1 ], chapter_info[ 2 ], chapter_info[ 3 ] );
             scope_subsection!.title_string := current_command[ 2 ];
+            scope_subsection!.title_string_source_position := CurrentSourcePosition();
         end,
 
         @BeginGroup := function()
@@ -899,25 +923,30 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @Description := function()
             CurrentOrNewManItem();
             CurrentItem()!.content := CurrentItem()!.description;
+            CurrentItem()!.content_source_field := "description_source_positions";
             NormalizeWhitespace( current_command[ 2 ] );
             if current_command[ 2 ] <> "" then
                 Add( CurrentItem(), current_command[ 2 ] );
+                RecordStringSourcePosition( CurrentItem() );
             fi;
         end,
         @Returns := function()
             CurrentOrNewManItem();
             CurrentItem()!.content := CurrentItem()!.return_value;
+            CurrentItem()!.content_source_field := "return_value_source_positions";
             if IsBound( CurrentItem()!.item_type ) and CurrentItem()!.item_type = "Var" then
                 CurrentItem()!.item_type := "Func";
                 if not IsBound( CurrentItem()!.arguments ) or CurrentItem()!.arguments = fail then
                     CurrentItem()!.arguments := "arg";
                 fi;
                 CurrentItem()!.return_value := [ ];
+                CurrentItem()!.return_value_source_positions := [ ];
             elif not IsBound( CurrentItem()!.item_type ) then
                 CurrentItem()!.declaration_is_function := true;
             fi;
             if current_command[ 2 ] <> "" then
                 Add( CurrentItem(), current_command[ 2 ] );
+                RecordStringSourcePosition( CurrentItem() );
             fi;
         end,
         @Arguments := function()
@@ -964,6 +993,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             fi;
             group_obj := DocumentationGroup( tree, group_name, chap_info );
             group_obj!.title_string := current_command[ 2 ];
+            group_obj!.title_string_source_position := CurrentSourcePosition();
         end,
         @ChapterInfo := function()
             local current_chapter_info;
@@ -1097,6 +1127,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 return;
             fi;
             Add( CurrentItem(), current_command[ 2 ] );
+            RecordStringSourcePosition( CurrentItem() );
         end,
         @BeginLatexOnly := function()
             local alt_node;

@@ -12,6 +12,8 @@ DeclareGlobalFunction( "AUTODOC_LineEndsCDATA" );
 DeclareGlobalFunction( "AUTODOC_EscapeCDATAContent" );
 
 DeclareGlobalFunction( "AUTODOC_OutputTextFile" );
+DeclareGlobalFunction( "AUTODOC_WriteDocumentationListWithSource" );
+DeclareGlobalFunction( "AUTODOC_WriteStringListWithSource" );
 DeclareGlobalFunction( "AutoDoc_WriteDocEntry" );
 
 DeclareGlobalFunction( "AUTODOC_Diff" );
