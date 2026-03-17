@@ -1,4 +1,4 @@
-.PHONY: doc html regen check
+.PHONY: doc html clean check regen
 
 GAP ?= gap
 GAP_ARGS = -q --quitonbreak --packagedirs .
@@ -9,8 +9,11 @@ doc:
 html:
 	NOPDF=1 $(GAP) $(GAP_ARGS) makedoc.g -c 'QUIT;'
 
-regen:
-	$(GAP) $(GAP_ARGS) regen_tests.g
+clean:
+	cd doc && ./clean
 
 check:
 	$(GAP) $(GAP_ARGS) tst/testall.g
+
+regen:
+	$(GAP) $(GAP_ARGS) regen_tests.g
