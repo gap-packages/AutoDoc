@@ -94,7 +94,8 @@ end );
 ##
 InstallGlobalFunction( AutoDoc_WriteDocEntry,
   function( filestream, list_of_records, heading )
-    local return_value, description, current_description, labels, i,
+    local return_value, return_value_sources, description,
+          description_sources, current_description, labels, i,
           item_type_info;
 
     # look for a good return value (it should be the same everywhere)
@@ -102,9 +103,11 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
         if IsBound( i!.return_value ) then
             if IsList( i!.return_value ) and Length( i!.return_value ) > 0 then
                 return_value := i!.return_value;
+                return_value_sources := i!.return_value_source_positions;
                 break;
             elif IsBool( i!.return_value ) then
                 return_value := i!.return_value;
+                return_value_sources := [ ];
                 break;
             fi;
         fi;
@@ -112,6 +115,7 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
 
     if not IsBound( return_value ) then
         return_value := false;
+        return_value_sources := [ ];
     fi;
 
     if IsList( return_value ) and ( not IsString( return_value ) ) and return_value <> "" then
@@ -120,12 +124,14 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
 
     # collect description (for readability not in the loop above)
     description := [ ];
+    description_sources := [ ];
     for i in list_of_records do
         current_description := i!.description;
         if IsString( current_description ) then
             current_description := [ current_description ];
         fi;
-        description := Concatenation( description, current_description );
+        Append( description, current_description );
+        Append( description_sources, i!.description_source_positions );
     od;
 
     labels := [ ];
@@ -178,15 +184,86 @@ InstallGlobalFunction( AutoDoc_WriteDocEntry,
             return_value := [ return_value ];
         fi;
         AppendTo( filestream, " <Returns>" );
-        WriteDocumentation( return_value, filestream );
+        AUTODOC_WriteDocumentationListWithSource(
+            return_value,
+            return_value_sources,
+            filestream
+        );
         AppendTo( filestream, "</Returns>\n" );
     fi;
 
     AppendTo( filestream, " <Description>\n" );
-    WriteDocumentation( description, filestream );
+    AUTODOC_WriteDocumentationListWithSource(
+        description,
+        description_sources,
+        filestream
+    );
     AppendTo( filestream, " </Description>\n" );
 
     AppendTo( filestream, "</ManSection>\n\n" );
+end );
+
+InstallGlobalFunction( AUTODOC_WriteDocumentationListWithSource,
+  function( node_list, source_positions, filestream )
+    local current_source_positions, current_string_list, i, next_source_index,
+          FlushConvertedStrings;
+
+    FlushConvertedStrings := function()
+        AUTODOC_WriteStringListWithSource(
+            current_string_list,
+            current_source_positions,
+            filestream
+        );
+        current_string_list := [ ];
+        current_source_positions := [ ];
+    end;
+
+    current_string_list := [ ];
+    current_source_positions := [ ];
+    next_source_index := 1;
+    for i in [ 1 .. Length( node_list ) ] do
+        if IsString( node_list[ i ] ) then
+            Add( current_string_list, ShallowCopy( node_list[ i ] ) );
+            if source_positions = fail or next_source_index > Length( source_positions ) then
+                Add( current_source_positions, fail );
+            else
+                Add( current_source_positions, source_positions[ next_source_index ] );
+            fi;
+            next_source_index := next_source_index + 1;
+        else
+            FlushConvertedStrings();
+            WriteDocumentation( node_list[ i ], filestream );
+        fi;
+    od;
+    FlushConvertedStrings();
+end );
+
+InstallGlobalFunction( AUTODOC_WriteStringListWithSource,
+  function( string_list, source_positions, filestream )
+    local converted_string_list, in_cdata, item;
+
+    if string_list = [ ] then
+        return;
+    fi;
+    converted_string_list := AUTODOC_ConvertMarkdownToGAPDocXML( string_list, source_positions );
+    in_cdata := false;
+    for item in converted_string_list do
+        if not IsString( item ) then
+            WriteDocumentation( item, filestream );
+            continue;
+        fi;
+        if AUTODOC_LineStartsCDATA( item ) then
+            in_cdata := true;
+        fi;
+        if in_cdata = true then
+            AppendTo( filestream, Chomp( item ), "\n" );
+        else
+            WriteDocumentation( item, filestream );
+        fi;
+        if AUTODOC_LineEndsCDATA( item ) then
+            in_cdata := false;
+        fi;
+    od;
 end );
 
 InstallGlobalFunction( AUTODOC_Diff,

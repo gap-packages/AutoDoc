@@ -251,7 +251,8 @@ InstallMethod( DocumentationChunk, [ IsTreeForDocumentation, IsString ],
     if IsBound( tree!.chunks.( name ) ) then
         return tree!.chunks.( name );
     fi;
-    node := rec( content := [ ] );
+    node := rec( content := [ ],
+                 content_source_positions := [ ] );
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeChunkNodes,
                               Label, name );
     node!.is_defined := false;
@@ -266,9 +267,12 @@ InstallMethod( DocumentationManItem, [ ],
     local node;
 
     node := rec( description := [ ],
-                 return_value := [ ] );
+                 description_source_positions := [ ],
+                 return_value := [ ],
+                 return_value_source_positions := [ ] );
     ObjectifyWithAttributes( node, TheTypeOfDocumentationTreeNodesForManItem );
     node!.content := node!.description;
+    node!.content_source_field := "description_source_positions";
     return node;
 end );
 
@@ -280,7 +284,8 @@ InstallMethod( DocumentationGroup, [ IsTreeForDocumentation, IsString ],
     if IsBound( tree!.cached_nodes_by_label.( name ) ) then
         return tree!.cached_nodes_by_label.( name );
     fi;
-    group := rec( content := [ ] );
+    group := rec( content := [ ],
+                  content_source_positions := [ ] );
     ObjectifyWithAttributes( group, TheTypeOfDocumentationTreeNodesForGroup,
                              Label, name );
     tree!.cached_nodes_by_label.( name ) := group;
@@ -414,11 +419,13 @@ end );
 #############################################
 
 BindGlobal( "AUTODOC_ConvertHeadingToGAPDocXML",
-  function( heading )
+  function( heading, source_position )
     local converted_heading;
 
-    converted_heading :=
-        AUTODOC_ConvertMarkdownToGAPDocXML( [ NormalizedWhitespace( heading ) ] );
+    converted_heading := AUTODOC_ConvertMarkdownToGAPDocXML(
+        [ NormalizedWhitespace( heading ) ],
+        [ source_position ]
+    );
     if not ForAll( converted_heading, IsString ) then
         Error( "headings must convert to inline GAPDoc XML" );
     fi;
@@ -429,7 +436,7 @@ end );
 
 BindGlobal( "AUTODOC_WriteStructuralNode",
   function( node, element_name, stream )
-    local heading;
+    local heading, title_source_position;
 
     if ForAll( node!.content, IsEmptyNode ) then
         return false;
@@ -437,10 +444,12 @@ BindGlobal( "AUTODOC_WriteStructuralNode",
 
     if IsBound( node!.title_string ) then
         heading := NormalizedWhitespace( node!.title_string );
+        title_source_position := node!.title_string_source_position;
     else
         heading := ReplacedString( node!.name, "_", " " );
+        title_source_position := fail;
     fi;
-    heading := AUTODOC_ConvertHeadingToGAPDocXML( heading );
+    heading := AUTODOC_ConvertHeadingToGAPDocXML( heading, title_source_position );
 
     AppendTo( stream, "<", element_name, " Label=\"", Label( node ), "\">\n" );
     AppendTo( stream, "<Heading>", heading, "</Heading>\n\n" );
@@ -491,7 +500,11 @@ BindGlobal( "WriteChunks",
         fi;
         AppendTo( chunks_stream, "<#GAPDoc Label=\"", current_chunk_name, "\">\n" );
         if IsBound( current_chunk!.content ) then
-            WriteDocumentation( current_chunk!.content, chunks_stream );
+            AUTODOC_WriteDocumentationListWithSource(
+                current_chunk!.content,
+                current_chunk!.content_source_positions,
+                chunks_stream
+            );
         fi;
         AppendTo( chunks_stream, "\n<#/GAPDoc>\n" );
     od;
@@ -566,29 +579,14 @@ InstallMethod( WriteDocumentation, [ IsList, IsStream ],
     local current_string_list, i, FlushConvertedStrings;
 
     FlushConvertedStrings := function()
-        local converted_string_list, in_cdata, item;
         if current_string_list = [ ] then
             return;
         fi;
-        converted_string_list := AUTODOC_ConvertMarkdownToGAPDocXML( current_string_list );
-        in_cdata := false;
-        for item in converted_string_list do
-            if not IsString( item ) then
-                WriteDocumentation( item, filestream );
-                continue;
-            fi;
-            if AUTODOC_LineStartsCDATA( item ) then
-                in_cdata := true;
-            fi;
-            if in_cdata = true then
-                AppendTo( filestream, Chomp( item ), "\n" );
-            else
-                WriteDocumentation( item, filestream );
-            fi;
-            if AUTODOC_LineEndsCDATA( item ) then
-                in_cdata := false;
-            fi;
-        od;
+        AUTODOC_WriteStringListWithSource(
+            current_string_list,
+            fail,
+            filestream
+        );
         current_string_list := [ ];
     end;
 
