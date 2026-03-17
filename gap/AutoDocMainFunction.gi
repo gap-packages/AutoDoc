@@ -134,7 +134,11 @@ InstallGlobalFunction( CreateMainPage,
     fi;
 
     if IsBound( opt.bib ) and opt.bib <> false then
-        AppendTo( filestream, "<Bibliography Databases=\"", opt.bib, "\"/>\n" );
+        AppendTo( filestream, "<Bibliography Databases=\"", opt.bib, "\"" );
+        if IsBound( opt.bibstyle ) then
+            AppendTo( filestream, " Style=\"", opt.bibstyle, "\"" );
+        fi;
+        AppendTo( filestream, "/>\n" );
     fi;
 
     if IsBound( opt.index ) and opt.index = true then

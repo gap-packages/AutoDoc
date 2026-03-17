@@ -11,6 +11,7 @@ AutoDoc(rec(
     includes := [ "chapter1.xml" ],
     appendix := [ "appendix1.xml" ],
     bib := "AutoDocTest.bib",
+    bibstyle := "alphaurl",
     entities := [
       "Legacy Package",
       [ "Package", "LegacyListEntity" ],
