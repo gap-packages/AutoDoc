@@ -1,6 +1,6 @@
 This file describes changes in the AutoDoc package.
 
-## 2026.MM.DD
+## 2026.03.17
 
 + **Breaking changes**
   - Remove the nonfunctional `@Level`, `@ResetLevel`, and undocumented

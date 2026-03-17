@@ -1,6 +1,6 @@
 <!ENTITY AutoDoc '<Package>AutoDoc</Package>'>
 <!ENTITY PackageName '<Package>PackageName</Package>'>
-<!ENTITY RELEASEDATE '16 March 2026'>
+<!ENTITY RELEASEDATE '17 March 2026'>
 <!ENTITY RELEASEYEAR '2026'>
-<!ENTITY VERSION '2026.03.16-DEV'>
+<!ENTITY VERSION '2026.03.17'>
 <!ENTITY io '<Package>io</Package>'>
