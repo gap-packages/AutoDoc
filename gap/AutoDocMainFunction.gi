@@ -94,11 +94,15 @@ end );
 
 ##
 InstallGlobalFunction( CreateMainPage,
-  function( book_name, dir, opt )
+  function( book_name, main_xml_file, dir, opt )
     local filestream, i;
 
+    if not EndsWith( main_xml_file, ".xml" ) then
+        main_xml_file := Concatenation( main_xml_file, ".xml" );
+    fi;
+
     # open the target XML file
-    filestream := AUTODOC_OutputTextFile( dir, opt.main_xml_file );
+    filestream := AUTODOC_OutputTextFile( dir, main_xml_file );
 
     # output the initial file header
     AppendTo( filestream, AUTODOC_XML_HEADER );

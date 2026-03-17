@@ -39,6 +39,9 @@ This file describes changes in the AutoDoc package.
     nested source directories are picked up automatically
 
 + **Other Changes**
+  - Scaffold-generated package manual main files now default to
+    `_main.xml` instead of `PACKAGENAME.xml`; packages that need a
+    different name can continue to set `gapdoc.main`
   - Don't insert extra newlines after author names for the PDF title
     pages (this was a workaround for a GAPDoc issue; hopefully a
     future GAPDoc release will fix this properly; for details, see

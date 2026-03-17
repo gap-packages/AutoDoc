@@ -53,13 +53,13 @@ gap> AUTODOC_RunPackageScenario( pkgdir, olddir, rec(
 >   name := "title-main",
 >   makedoc := "makedoc-title-main.g",
 >   stub_gapdoc := true,
->   doc_present := [ "_entities.xml", "AutoDocTest.xml", "title.xml" ],
+>   doc_present := [ "_entities.xml", "_main.xml", "title.xml" ],
 > ) );
 gap> AUTODOC_RunPackageScenario( pkgdir, olddir, rec(
 >   name := "notitle-main",
 >   makedoc := "makedoc-notitle-main.g",
 >   stub_gapdoc := true,
->   doc_present := [ "_entities.xml", "AutoDocTest.xml" ],
+>   doc_present := [ "_entities.xml", "_main.xml" ],
 >   doc_absent := [ "title.xml" ],
 > ) );
 gap> AUTODOC_RunPackageScenario( pkgdir, olddir, rec(
@@ -67,14 +67,14 @@ gap> AUTODOC_RunPackageScenario( pkgdir, olddir, rec(
 >   makedoc := "makedoc-title-nomain.g",
 >   stub_gapdoc := true,
 >   doc_present := [ "_entities.xml", "title.xml" ],
->   doc_absent := [ "AutoDocTest.xml" ],
+>   doc_absent := [ "_main.xml" ],
 > ) );
 gap> AUTODOC_RunPackageScenario( pkgdir, olddir, rec(
 >   name := "notitle-nomain",
 >   makedoc := "makedoc-notitle-nomain.g",
 >   stub_gapdoc := true,
 >   doc_present := [ "_entities.xml" ],
->   doc_absent := [ "AutoDocTest.xml", "title.xml" ],
+>   doc_absent := [ "_main.xml", "title.xml" ],
 > ) );
 
 # extract_examples variants
