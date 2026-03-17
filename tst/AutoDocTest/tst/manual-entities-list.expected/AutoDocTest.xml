@@ -15,6 +15,6 @@
 </Body>
 <#Include SYSTEM "appendix1.xml">
 <#Include SYSTEM "_AutoDocAppendicesMainFile.xml">
-<Bibliography Databases="AutoDocTest.bib"/>
+<Bibliography Databases="AutoDocTest.bib" Style="alphaurl"/>
 <TheIndex/>
 </Book>

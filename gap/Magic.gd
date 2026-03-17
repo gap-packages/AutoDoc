@@ -148,6 +148,15 @@
 #!             then it is assumed that you want to use this as your bibliography.
 #!         </Item>
 #!
+#!         <Mark><A>bibstyle</A></Mark>
+#!         <Item>
+#!             Overrides the bibliography style used for LaTeX output.
+#!             This is written as the <C>Style</C> attribute of the generated
+#!             <C>&lt;Bibliography .../&gt;</C> element, so valid values are the
+#!             bibliography style names understood by &GAPDoc; and BibTeX, such
+#!             as <C>alpha</C>, <C>alphaurl</C>, or <C>plain</C>.
+#!         </Item>
+#!
 #!         <Mark><A>entities</A></Mark>
 #!         <Item>
 #!             A record whose keys are taken as entity names, set to the corresponding

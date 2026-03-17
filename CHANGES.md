@@ -30,6 +30,7 @@ This file describes changes in the AutoDoc package.
     Markdown-like text; `@listing`, `@example`, and `@log` info strings
     select the corresponding GAPDoc element
   - Add `@Index` command for generating index entries
+  - Allow overriding the LaTeX bibliography style via `scaffold.bibstyle`
   - In Markdown-like inline backtick code spans, emit
     `<Keyword>...</Keyword>` for GAP keywords (as returned by
     `ALL_KEYWORDS()`), otherwise as before `<Code>...</Code>`
