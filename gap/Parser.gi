@@ -167,27 +167,23 @@ InstallGlobalFunction( Scan_for_AutoDoc_Part,
     return AUTODOC_SplitCommandAndArgument( trimmed );
  end );
 
-## Scans a string for <element> after <element_not_before_element> appeared.
+## Scans a string for <char> after <not_before_char> appeared.
 ## This is necessary to scan the filter list for method declarations
 ## that contain \[\]. 
 BindGlobal( "AUTODOC_PositionElementIfNotAfter",
-  function( list, element, element_not_before_element )
-    local current_pos;
-    if not IsList( list ) then
-        Error( "<list> must be a list" );
-    fi;
-    if Length( list ) > 0 and list[ 1 ] = element then
+  function( str, char, not_before_char )
+    local pos;
+    if Length( str ) > 0 and str[ 1 ] = char then
         return 1;
     fi;
  
-    for current_pos in [ 2 .. Length( list ) ] do
-        if list[ current_pos ] = element and list[ current_pos - 1 ] <> element_not_before_element then
-            return current_pos;
+    for pos in [ 2 .. Length( str ) ] do
+        if str[ pos ] = char and str[ pos - 1 ] <> not_before_char then
+            return pos;
         fi;
     od;
     return fail;
 end );
-
 
 ##
 InstallGlobalFunction( AutoDoc_Type_Of_Item,
