@@ -53,19 +53,16 @@
 #! <Item>
 #!     The purpose of this parameter is twofold: to determine the package
 #!     directory in which &AutoDoc; will operate, and to find the metadata
-#!     concerning the package being documented. The parameter is either a
-#!     string, an <C>IsDirectory</C> object, or omitted.
-#!     If it is a string, &AutoDoc; interprets it as the name of a
-#!     package, uses the metadata of the first package known to &GAP;
-#!     with that name, and uses the <C>InstallationPath</C> specified in that
-#!     metadata as the package directory. If <A>packageOrDirectory</A> is
-#!     an <C>IsDirectory</C> object, this is used as package directory;
-#!     if the argument is omitted, then the current directory is used.
-#!     In the last two cases, the specified directory must contain a
+#!     concerning the package being documented. The parameter is either an
+#!     <C>IsDirectory</C> object or omitted. If
+#!     <A>packageOrDirectory</A> is an <C>IsDirectory</C> object, this is used
+#!     as package directory; if the argument is omitted, then the current
+#!     directory is used. In both cases, the specified directory must contain a
 #!     <F>PackageInfo.g</F> file, and &AutoDoc; extracts all needed metadata
 #!     from that. The <C>IsDirectory</C> form is for example useful if you
 #!     have multiple versions of the package around and want to make sure the
 #!     documentation of the correct version is built.
+#!     Passing a package name string is no longer supported.
 #!     <P/>
 #!     Note that when using <C>AutoDocWorksheet</C> (see
 #!     <Ref Sect='Section_AutoDocWorksheet'/>), there is
@@ -238,9 +235,7 @@
 #!         The value should be either <K>true</K>, <K>false</K> or a
 #!         record. If it is a record or <K>true</K> (the latter is
 #!         equivalent to specifying an empty record), then this feature is
-#!         enabled. It is also enabled if <A>opt.autodoc</A> is missing but the
-#!         package depends (directly) on the &AutoDoc; package.
-#!         In all other cases (in particular if <A>opt.autodoc</A> is
+#!         enabled. In all other cases (in particular if <A>opt.autodoc</A> is
 #!         <K>false</K>), this feature is disabled.
 #!         <P/>
 #!

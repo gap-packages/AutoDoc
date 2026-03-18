@@ -323,37 +323,52 @@ end );
 ##
 InstallGlobalFunction( AutoDocWorksheet,
   function( arg )
-    local autodoc_rec, scaffold_rec;
+    local filenames, opt, key, val, used_legacy_value_options;
 
-    if Length( arg ) = 1 then
-        arg[ 2 ] := rec( );
-    fi;
+    filenames := [ ];
+    opt := rec( );
 
-    scaffold_rec := ValueOption( "scaffold" );
-    if scaffold_rec = fail then
-        scaffold_rec := rec( );
-    fi;
-    AUTODOC_SetIfMissing( scaffold_rec, "index", false );
-
-    if Length( arg ) = 2 then
-        autodoc_rec := ValueOption( "autodoc" );
-        if autodoc_rec = fail then
-            autodoc_rec := rec( );
+    if Length( arg ) > 2 then
+        Error("too many arguments");
+    elif Length( arg ) > 0 then
+        if IsString( First( arg ) ) then
+            filenames := [ First( arg ) ];
+        elif IsList( First( arg ) ) then
+            filenames := First( arg );
         fi;
-        if IsString( arg[ 1 ] ) then
-            arg[ 1 ] := [ arg[ 1 ] ];
+        if IsRecord( Last( arg ) ) then
+            opt := StructuralCopy( Last( arg ) );
         fi;
-        if IsBound( autodoc_rec.files ) then
-            Append( autodoc_rec.files, arg[ 1 ] );
-        else
-            autodoc_rec.files := arg[ 1 ];
-        fi;
-        AutoDoc( "AutoDocWorksheet", arg[ 2 ] : autodoc := autodoc_rec, scaffold := scaffold_rec );
     fi;
 
-    if Length( arg ) = 0 then
-        AutoDoc( "AutoDocWorksheet" : scaffold := scaffold_rec );
+    # Backwards compatibility: worksheet callers historically passed the
+    # normal AutoDoc option-record entries via GAP value options.
+    used_legacy_value_options := false;
+    for key in [ "dir", "scaffold", "autodoc", "gapdoc", "extract_examples" ] do
+        val := ValueOption( key );
+        if val <> fail then
+            opt.( key ) := val;
+            used_legacy_value_options := true;
+        fi;
+    od;
+
+    if used_legacy_value_options then
+        Print(
+            "#W AutoDocWorksheet: legacy ':' syntax is deprecated; ",
+            "use optrec instead\n"
+        );
     fi;
+
+    AUTODOC_SetIfMissing( opt, "scaffold", rec( ) );
+    AUTODOC_SetIfMissing( opt.scaffold, "index", false );
+
+    if Length( filenames ) > 0 then
+        AUTODOC_SetIfMissing( opt, "autodoc", rec( ) );
+        AUTODOC_SetIfMissing( opt.autodoc, "files", [ ] );
+        Append( opt.autodoc.files, filenames );
+    fi;
+
+    AutoDoc( "AutoDocWorksheet", opt );
 end );
 
 # The following function is based on code by Alexander Konovalov
