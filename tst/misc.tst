@@ -174,9 +174,16 @@ true
 #
 # AutoDoc_Parser_ReadFiles: multiline InstallMethod parsing
 #
+gap> autodoc_pkgroot := Filename( DirectoriesPackageLibrary( "AutoDoc", "" ), "" );;
+gap> if not StartsWith( autodoc_pkgroot, "/" ) then
+>   autodoc_pkgroot := Filename(
+>       Directory( AUTODOC_CurrentDirectory() ),
+>       autodoc_pkgroot
+>   );
+> fi;
 gap> parser_fixture := rec(
 >     path := Filename(
->         DirectoriesPackageLibrary("AutoDoc", ""),
+>         Directory( autodoc_pkgroot ),
 >         "tst/autodoc-parser-installmethod.g"
 >     ),
 >     display := "tst/autodoc-parser-installmethod.g"
