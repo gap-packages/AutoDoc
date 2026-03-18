@@ -298,8 +298,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           comment_start_pos, context_stack, current_command,
           current_line, current_line_fence, current_line_info,
           current_line_is_fence_delimiter, current_line_positition_for_filter,
-          current_line_unedited, filename, filestream, groupnumber,
-          line_number, markdown_fence, plain_text_mode, rest_of_file_skipped,
+          current_line_unedited, display_filename, filename,
+          filestream, groupnumber, line_number,
+          markdown_fence, plain_text_mode, rest_of_file_skipped,
           scope_group, single_line_title_item_list, title_item,
           title_item_list, xml_comment_mode;
     groupnumber := 0;
@@ -325,11 +326,14 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     end;
     ErrorWithPos := function(arg)
         local list;
-        list := Concatenation(arg, [ ",\n", "at ", filename, ":", line_number]);
+        list := Concatenation(
+            arg,
+            [ ",\n", "at ", display_filename, ":", line_number ]
+        );
         CallFuncList(Error, list);
     end;
     CurrentSourcePosition := function()
-        return rec( filename := filename, line := line_number );
+        return rec( filename := display_filename, line := line_number );
     end;
     RecordStringSourcePosition := function( item )
         local source_field;
@@ -1220,6 +1224,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
     rest_of_file_skipped := false;
     ##Now read the files.
     for filename in filename_list do
+        if IsString( filename ) then
+            display_filename := filename;
+        else
+            display_filename := filename.display;
+            filename := filename.path;
+        fi;
         Reset();
         ##Need to set autodoc_read_line to false again since we now look at a new file.
         autodoc_read_line := false;
