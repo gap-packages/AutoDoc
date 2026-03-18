@@ -1,14 +1,25 @@
 #
 # test parser error reporting with ErrorWithPos
+gap> autodoc_pkgroot := Filename( DirectoriesPackageLibrary( "AutoDoc", "" ), "" );;
+gap> if not StartsWith( autodoc_pkgroot, "/" ) then
+>   autodoc_pkgroot := Filename(
+>       Directory( AUTODOC_CurrentDirectory() ),
+>       autodoc_pkgroot
+>   );
+> fi;
 gap> ParseFixture := function( arg )
-> local tree, default_chapter_data;
+> local tree, default_chapter_data, file;
 > tree := DocumentationTree();
 > if Length( arg ) > 1 then
 >   default_chapter_data := arg[ 2 ];
 > else
 >   default_chapter_data := CreateDefaultChapterData( "Pkg" );
 > fi;
-> AutoDoc_Parser_ReadFiles( [ arg[ 1 ] ], tree, default_chapter_data );
+> file := rec(
+>     path := Filename( Directory( autodoc_pkgroot ), arg[ 1 ] ),
+>     display := arg[ 1 ]
+> );
+> AutoDoc_Parser_ReadFiles( [ file ], tree, default_chapter_data );
 > return tree;
 > end;;
 gap> RenderFixtureDescription := function( file, item_name )

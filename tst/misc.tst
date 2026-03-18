@@ -174,8 +174,43 @@ true
 #
 # AutoDoc_Parser_ReadFiles: multiline InstallMethod parsing
 #
+gap> autodoc_pkgroot := Filename( DirectoriesPackageLibrary( "AutoDoc", "" ), "" );;
+gap> if not StartsWith( autodoc_pkgroot, "/" ) then
+>   autodoc_pkgroot := Filename(
+>       Directory( AUTODOC_CurrentDirectory() ),
+>       autodoc_pkgroot
+>   );
+> fi;
+gap> parser_fixture := rec(
+>     path := Filename(
+>         Directory( autodoc_pkgroot ),
+>         "tst/autodoc-parser-installmethod.g"
+>     ),
+>     display := "tst/autodoc-parser-installmethod.g"
+> );;
 gap> tree := DocumentationTree();;
-gap> AutoDoc_Parser_ReadFiles( [ "tst/autodoc-parser-installmethod.g" ], tree, rec() );
+gap> AutoDoc_Parser_ReadFiles( [ parser_fixture ], tree, rec() );
+gap> section := SectionInTree( tree, "Parser", "InstallMethod" );;
+gap> item := section!.content[ 1 ];;
+gap> item!.item_type;
+"Func"
+gap> item!.name;
+"MyOp"
+gap> item!.tester_names;
+"for IsInt,IsString"
+gap> item!.arguments;
+"x,y"
+gap> olddir := Filename(DirectoryCurrent(), "");;
+gap> ChangeDirectoryCurrent(Filename(DirectoryTemporary(), ""));
+true
+gap> tree := DocumentationTree();;
+gap> AutoDoc_Parser_ReadFiles(
+>     [ parser_fixture ],
+>     tree,
+>     rec()
+> );
+gap> ChangeDirectoryCurrent(olddir);
+true
 gap> section := SectionInTree( tree, "Parser", "InstallMethod" );;
 gap> item := section!.content[ 1 ];;
 gap> item!.item_type;

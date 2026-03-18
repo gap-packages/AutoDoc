@@ -1,5 +1,9 @@
 This file describes changes in the AutoDoc package.
 
+## 2026.03.18
+  - Fix running the test suite via `TestPackage("AutoDoc")` when the
+    current working directory is not the package root
+
 ## 2026.03.17
 
 + **Breaking changes**
