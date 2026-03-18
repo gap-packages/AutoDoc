@@ -31,6 +31,10 @@ AUTODOC_RunPackageScenario := function( pkgdir, olddir, scenario )
     Exec( Concatenation( "cp -R \"", pkgdir, "\" \"", tempdir, "\"" ) );
     ChangeDirectoryCurrent( tempdir );
 
+    if IsBound( scenario.prepare ) then
+        scenario.prepare( tempdir );
+    fi;
+
     docdir := Directory( Concatenation( tempdir, "/doc" ) );
     # Keep only handwritten fixture inputs in doc/. Any pre-existing generated
     # output would otherwise make presence/absence checks depend on stale files

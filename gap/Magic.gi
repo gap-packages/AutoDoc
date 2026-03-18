@@ -67,27 +67,8 @@ function( arg )
         pkgdir := DirectoryCurrent( );
 
     else
-        is_worksheet := false;
-        pkginfo := PackageInfo( pkgname );
-        if IsEmpty( pkginfo ) then
-            Error( "Could not find package ", pkgname );
-        elif Length( pkginfo ) > 1 then
-            Info( InfoWarning, 1, "multiple versions of package ", pkgname, " are present, using the first one" );
-        fi;
-        pkginfo := pkginfo[ 1 ];
-        pkgdir := Directory( pkginfo.InstallationPath );
+        Error("Invoking 'AutoDoc' with a package name as argument is no longer supported");
     fi;
-
-    #
-    # Check for user supplied options. If present, they take
-    # precedence over any defaults as well as the opt record.
-    #
-    for key in [ "dir", "scaffold", "autodoc", "gapdoc", "extract_examples" ] do
-        val := ValueOption( key );
-        if val <> fail then
-            opt.(key) := val;
-        fi;
-    od;
 
     #
     # Setup the output directory
@@ -173,18 +154,9 @@ function( arg )
     #
     # Extract AutoDoc settings
     #
-    if not IsBound(opt.autodoc) and not is_worksheet then
-        # Enable AutoDoc support if the package depends on AutoDoc.
-        tmp := Concatenation( pkginfo.Dependencies.NeededOtherPackages,
-                              pkginfo.Dependencies.SuggestedOtherPackages );
-        ## Empty entries are allowed in Dependencies
-        tmp := Filtered( tmp, i -> i <> [ ] );
-        if ForAny( tmp, x -> LowercaseString(x[1]) = "autodoc" ) then
-            autodoc := rec();
-        fi;
-    elif IsRecord(opt.autodoc) then
+    if IsBound( opt.autodoc ) and IsRecord( opt.autodoc ) then
         autodoc := opt.autodoc;
-    elif IsBool(opt.autodoc) and opt.autodoc = true then
+    elif IsBound( opt.autodoc ) and IsBool( opt.autodoc ) and opt.autodoc = true then
         autodoc := rec();
     fi;
 
