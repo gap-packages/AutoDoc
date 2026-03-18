@@ -9,7 +9,7 @@
     Generate documentation from &GAP; source code
   </Subtitle>
   <Version>
-    2026.03.17
+    2026.03.18
   </Version>
   <Author>
     Sebastian Gutsche
@@ -36,7 +36,7 @@ Germany<Br/>
 <Homepage>https://www.quendi.de/math</Homepage>
   </Author>
   <Date>
-    17 March 2026
+    18 March 2026
   </Date>
   <Abstract>
     &AutoDoc; is a &GAP; package whose purpose is to aid &GAP; package authors in creating and maintaining the documentation of their packages.
