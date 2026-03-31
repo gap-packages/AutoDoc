@@ -47,6 +47,6 @@ jobs:
           gap -q --packagedirs . regen_tests.g
           git diff --exit-code
       - uses: gap-actions/process-coverage@v3
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
