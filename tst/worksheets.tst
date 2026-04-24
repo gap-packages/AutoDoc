@@ -117,6 +117,63 @@ gap> RemoveDirectoryRecursively(tmpdir);
 true
 
 #
+gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-worksheet-optrec-files");;
+gap> if IsDirectoryPath(tmpdir) then RemoveDirectoryRecursively(tmpdir); fi;
+gap> AUTODOC_CreateDirIfMissing(tmpdir);
+true
+gap> tmpdir_obj := Directory(tmpdir);;
+gap> old := InfoLevel(InfoAutoDoc);;
+gap> oldgapdoc := InfoLevel(InfoGAPDoc);;
+gap> SetInfoLevel(InfoAutoDoc, 0);
+gap> SetInfoLevel(InfoGAPDoc, 0);
+gap> AutoDocWorksheet(
+>   rec(
+>     dir := tmpdir_obj,
+>     autodoc := rec( files := filenames ),
+>     extract_examples := rec(subdir := "tst/generated")
+>   ) : nopdf
+> );
+gap> SetInfoLevel(InfoAutoDoc, old);
+gap> SetInfoLevel(InfoGAPDoc, oldgapdoc);
+gap> actual := Filename(tmpdir_obj, "tst/generated/paired_examples_test01.tst");;
+gap> if not IsReadableFile(actual) then
+>   Error("missing generated file ", actual);
+> fi;
+gap> if IsReadableFile(Filename(tmpdir_obj, "tst/paired_examples_test01.tst")) then
+>   Error("generated file was written to tst/ instead of the configured subdir");
+> fi;
+gap> if 0 <> AUTODOC_Diff("-u", expected, actual) then
+>   Error("diff detected in generated file ", actual);
+> fi;
+gap> RemoveDirectoryRecursively(tmpdir);
+true
+
+#
+gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-worksheet-warning");;
+gap> if IsDirectoryPath(tmpdir) then RemoveDirectoryRecursively(tmpdir); fi;
+gap> AUTODOC_CreateDirIfMissing(tmpdir);
+true
+gap> tmpdir_obj := Directory(tmpdir);;
+gap> old := InfoLevel(InfoAutoDoc);;
+gap> oldgapdoc := InfoLevel(InfoGAPDoc);;
+gap> oldwarning := InfoLevel(InfoWarning);;
+gap> SetInfoLevel(InfoAutoDoc, 0);
+gap> SetInfoLevel(InfoGAPDoc, 0);
+gap> SetInfoLevel(InfoWarning, 1);
+gap> AutoDocWorksheet(
+>   rec(
+>     dir := tmpdir_obj,
+>     extract_examples := rec(subdir := "tst/generated")
+>   ) : autodoc := rec( files := filenames ), nopdf
+> );
+#W AutoDocWorksheet: legacy ':' syntax is deprecated; use optrec instead
+gap> SetInfoLevel(InfoAutoDoc, old);
+gap> SetInfoLevel(InfoGAPDoc, oldgapdoc);
+gap> SetInfoLevel(InfoWarning, oldwarning);
+gap> RemoveDirectoryRecursively(tmpdir);
+true
+
+#
 gap> AUTODOC_TestWorkSheet("paired-examples-autoplain");
 #I  Extracting manual examples for Paired Examples Test package ...
 #I  1 chapters detected

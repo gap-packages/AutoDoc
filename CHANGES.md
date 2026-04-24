@@ -1,5 +1,19 @@
 This file describes changes in the AutoDoc package.
 
+## 2026.MM.DD
+
++ **Breaking changes**
+  - Remove support for calling `AutoDoc()` with a package name argument
+  - Remove support for controlling `AutoDoc()` via GAP global options
+    corresponding to regular option-record entries such as `dir`,
+    `scaffold`, `autodoc`, `gapdoc`, and `extract_examples`
+  - Remove support for implicitly enabling `opt.autodoc` when a
+    package merely declares a dependency on AutoDoc
+  - Keep the documented `relativePath` and `nopdf` global options,
+    and keep the legacy option-record override syntax for
+    `AutoDocWorksheet()` for backwards compatibility while no longer
+    recommending it
+
 ## 2026.03.18
   - Fix running the test suite via `TestPackage("AutoDoc")` when the
     current working directory is not the package root

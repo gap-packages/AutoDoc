@@ -35,6 +35,26 @@ gap> AUTODOC_RunPackageScenario( pkgdir, olddir, rec(
 >   makedoc := "makedoc.g",
 >   doc_expected := "tst/manual.expected",
 > ) );
+gap> AUTODOC_RunPackageScenario( pkgdir, olddir, rec(
+>   name := "no-autodoc-dependency-fallback",
+>   makedoc := "makedoc-no-autodoc.g",
+>   stub_gapdoc := true,
+>   prepare := function( tempdir )
+>     local file, text, out;
+>     file := Concatenation( tempdir, "/PackageInfo.g" );
+>     text := StringFile( file );
+>     text := ReplacedString(
+>       text,
+>       "  NeededOtherPackages := [ ],",
+>       "  NeededOtherPackages := [ [ \"AutoDoc\", \">= 0\" ] ],"
+>     );
+>     out := OutputTextFile( file, false );
+>     WriteAll( out, text );
+>     CloseStream( out );
+>   end,
+>   doc_present := [ "_entities.xml", "_main.xml", "title.xml" ],
+>   doc_absent := [ "_Chapter_SourceAPI.xml", "_Chapter_PlainTextFixture.xml", "_Chunks.xml" ],
+> ) );
 
 # entities option variants
 gap> AUTODOC_RunPackageScenario( pkgdir, olddir, rec(
