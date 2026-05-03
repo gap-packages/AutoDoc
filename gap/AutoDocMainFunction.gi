@@ -323,37 +323,39 @@ end );
 ##
 InstallGlobalFunction( AutoDocWorksheet,
   function( arg )
-    local autodoc_rec, scaffold_rec;
-
-    if Length( arg ) = 1 then
-        arg[ 2 ] := rec( );
-    fi;
-
-    scaffold_rec := ValueOption( "scaffold" );
-    if scaffold_rec = fail then
-        scaffold_rec := rec( );
-    fi;
-    AUTODOC_SetIfMissing( scaffold_rec, "index", false );
+    local opt, val;
 
     if Length( arg ) = 2 then
-        autodoc_rec := ValueOption( "autodoc" );
-        if autodoc_rec = fail then
-            autodoc_rec := rec( );
+        opt := Remove( arg );
+    else
+        opt := rec( );
+    fi;
+
+    val := ValueOption( "scaffold" );
+    if val <> fail then
+        opt.scaffold := val;
+    elif not IsBound(opt.scaffold) then
+        opt.scaffold := rec();
+    fi;
+    AUTODOC_SetIfMissing( opt.scaffold, "index", false );
+
+    if Length( arg ) = 1 then
+        val := ValueOption( "autodoc" );
+        if val <> fail then
+            opt.autodoc := val;
+        elif not IsBound(opt.autodoc) then
+            opt.autodoc := rec();
         fi;
         if IsString( arg[ 1 ] ) then
             arg[ 1 ] := [ arg[ 1 ] ];
         fi;
-        if IsBound( autodoc_rec.files ) then
-            Append( autodoc_rec.files, arg[ 1 ] );
+        if IsBound( opt.autodoc.files ) then
+            Append( opt.autodoc.files, arg[ 1 ] );
         else
-            autodoc_rec.files := arg[ 1 ];
+            opt.autodoc.files := arg[ 1 ];
         fi;
-        AutoDoc( "AutoDocWorksheet", arg[ 2 ] : autodoc := autodoc_rec, scaffold := scaffold_rec );
     fi;
-
-    if Length( arg ) = 0 then
-        AutoDoc( "AutoDocWorksheet" : scaffold := scaffold_rec );
-    fi;
+    AutoDoc_INTERN( true, "AutoDocWorksheet", rec( ), DirectoryCurrent( ), opt );
 end );
 
 # The following function is based on code by Alexander Konovalov
