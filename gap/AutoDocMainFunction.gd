@@ -51,9 +51,11 @@ DeclareGlobalFunction( "ExtractTitleInfoFromPackageInfo" );
 #!  The purpose of this function is to create stand-alone PDF and HTML files
 #!  using &AutoDoc; without associating them with a package.
 #!  <P/>
-#!  It uses the same optional record entries as <Ref Func="AutoDoc"/>, but
-#!  instead of a package name, you pass one filename or a list of filenames
-#!  containing &AutoDoc; text from which the document is created.
+#!  Instead of a package directory, you pass one filename or a list of
+#!  filenames containing &AutoDoc; text from which the document is created.
+#!  Settings are supplied via an optional record using the same entries as
+#!  the <A>optrec</A> argument of <Ref Func="AutoDoc"/>. Alternatively, you may
+#!  omit <A>filenames</A> and specify the files via <C>optrec.autodoc.files</C>.
 #!  <P/>
 #!  A simple worksheet file can define title-page information and chapter
 #!  content directly in the source file, including example blocks.
@@ -65,5 +67,11 @@ DeclareGlobalFunction( "ExtractTitleInfoFromPackageInfo" );
 #!  <P/>
 #!  Since worksheets do not have a <F>PackageInfo.g</F>, title-page fields are
 #!  specified directly in the worksheet file.
-#! @Arguments list_of_filenames : options
+#!  <P/>
+#!  For backwards compatibility, worksheet calls still accept GAP global
+#!  options for specifying the option-record entries such as
+#!  <C>dir</C>, <C>scaffold</C>, <C>autodoc</C>, <C>gapdoc</C>, and
+#!  <C>extract_examples</C>.
+#!  However, this feature is deprecated.
+#! @Arguments [filenames,] [optrec]
 DeclareGlobalFunction( "AutoDocWorksheet" );
