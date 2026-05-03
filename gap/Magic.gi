@@ -8,7 +8,8 @@
 #
 InstallGlobalFunction( AutoDoc,
 function( arg )
-    local pkgname, pkginfo, pkgdir, opt, file;
+    local pkgname, pkginfo, pkgdir, opt, file,
+          input_filename, path_positions;
 
     if Length( arg ) >= 3 then
         Error( "too many arguments" );
@@ -23,7 +24,21 @@ function( arg )
 
     # check the first argument
     if Length(arg) = 0 then
-        pkgdir := DirectoryCurrent( );
+        input_filename := INPUT_FILENAME();
+        if IsString( input_filename ) and
+           input_filename <> "*stdin*" and
+           IsReadableFile( input_filename ) then
+            path_positions := PositionsProperty( input_filename, x -> x = '/' );
+            if IsEmpty( path_positions ) then
+                pkgdir := DirectoryCurrent( );
+            else
+                pkgdir := Directory(
+                    input_filename{ [ 1 .. Last( path_positions ) - 1 ] }
+                );
+            fi;
+        else
+            pkgdir := DirectoryCurrent( );
+        fi;
     elif IsString( arg[1] ) then
         pkgname := Remove( arg, 1 );
     elif IsDirectory( arg[1] ) then

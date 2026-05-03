@@ -1,5 +1,9 @@
 This file describes changes in the AutoDoc package.
 
+## 2026.05.03
+  - Make `AutoDoc()` infer the package directory from `INPUT_FILENAME()`
+    when called from a `makedoc.g` file outside the package root
+
 ## 2026.03.18
   - Fix running the test suite via `TestPackage("AutoDoc")` when the
     current working directory is not the package root

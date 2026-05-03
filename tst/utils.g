@@ -7,6 +7,7 @@
 #   olddir   caller's original working directory, restored on exit
 #   scenario record describing the scenario to run; it must contain
 #            `name` and `makedoc`, and may additionally specify:
+#            - `workdir := "subdir"` to run Read(makedoc) from a nested cwd
 #            - `stub_gapdoc := true` to skip the expensive GAPDoc post-pass
 #            - `doc_expected := "tst/...expected"` for full doc-file diffs
 #            - `tst_expected := "tst/...expected"` for extracted-test diffs
@@ -16,7 +17,7 @@ AUTODOC_RunPackageScenario := function( pkgdir, olddir, scenario )
     local tempdir, docdir, tstdir, ex_dir, files, expected, actual,
           old_makegapdocdoc, old_copyhtmlstylefiles, old_manuallab,
           old_autodoc_level, old_gapdoc_level, old_warning_level, f,
-          source_doc_files, source_tst_files;
+          source_doc_files, source_tst_files, workdir;
 
     tempdir := Filename(
         DirectoryTemporary(),
@@ -88,6 +89,11 @@ AUTODOC_RunPackageScenario := function( pkgdir, olddir, scenario )
     SetInfoLevel( InfoAutoDoc, 0 );
     SetInfoLevel( InfoGAPDoc, 0 );
     SetInfoLevel( InfoWarning, 0 );
+    if IsBound( scenario.workdir ) then
+        workdir := Filename( Directory( tempdir ), scenario.workdir );
+        AUTODOC_CreateDirIfMissing( workdir );
+        ChangeDirectoryCurrent( workdir );
+    fi;
     Read( scenario.makedoc : nopdf );
     SetInfoLevel( InfoAutoDoc, old_autodoc_level );
     SetInfoLevel( InfoGAPDoc, old_gapdoc_level );
