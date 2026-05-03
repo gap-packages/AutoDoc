@@ -106,7 +106,7 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
     od;
 
     if used_legacy_value_options then
-        Print("#W passing options via GAP's global options system is deprecated; use optrec instead\n");
+        Print("#W passing options via GAP's global options system is deprecated; use an option record instead\n");
     fi;
 
     #
