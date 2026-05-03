@@ -464,6 +464,8 @@
 #! @Arguments [packageOrDirectory], [optrec]
 DeclareGlobalFunction( "AutoDoc" );
 
+DeclareGlobalFunction( "AutoDoc_INTERN" );
+
 #! @Description
 #!   Info class for the <Package>AutoDoc</Package> package.  Set this to
 #!   0 to suppress info messages, 1 to allow most messages, and 2 to allow all
