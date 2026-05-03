@@ -8,7 +8,7 @@
 #
 InstallGlobalFunction( AutoDoc,
 function( arg )
-    local pkgname, pkginfo, pkgdir, opt, is_worksheet, file;
+    local pkgname, pkginfo, pkgdir, opt, file;
 
     if Length( arg ) >= 3 then
         Error( "too many arguments" );
@@ -36,7 +36,6 @@ function( arg )
     fi;
 
     if IsBound( pkgdir ) then
-        is_worksheet := false;
         file := Filename( pkgdir, "PackageInfo.g" );
         if not IsExistingFile( file ) then
             Error( "no package name given and no PackageInfo.g file found" );
@@ -54,14 +53,7 @@ function( arg )
         fi;
         pkgname := pkginfo.PackageName;
 
-    elif pkgname = "AutoDocWorksheet" then
-        # For internal use only -- for details, refer to the AutoDocWorksheet() function.
-        is_worksheet := true;
-        pkginfo := rec( );
-        pkgdir := DirectoryCurrent( );
-
     else
-        is_worksheet := false;
         pkginfo := PackageInfo( pkgname );
         if IsEmpty( pkginfo ) then
             Error( "Could not find package ", pkgname );
@@ -72,7 +64,7 @@ function( arg )
         pkgdir := Directory( pkginfo.InstallationPath );
     fi;
 
-    return AutoDoc_INTERN( is_worksheet, pkgname, pkginfo, pkgdir, opt );
+    return AutoDoc_INTERN( false, pkgname, pkginfo, pkgdir, opt );
 end );
 
 InstallGlobalFunction( AutoDoc_INTERN,
