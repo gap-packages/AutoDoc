@@ -38,15 +38,16 @@ then adopt additional features when useful.
 <P/>
 Suppose your package is already up and running, but so far has no
 manual. Then you can rapidly generate a <Q>scaffold</Q> for a package manual
-using the <Ref Func="AutoDoc"/> command like this,
-while running &GAP; from within your package's directory (the
-one containing the <F>PackageInfo.g</F> file):
+using the <Ref Func="AutoDoc"/> command like this:
 <Listing><![CDATA[
 LoadPackage( "AutoDoc" );
 AutoDoc( rec( scaffold := true ) );
 ]]></Listing>
-This first reads the <F>PackageInfo.g</F> file from the current
-directory. It extracts information about the package from it
+When called from a file such as <F>makedoc.g</F>, &AutoDoc; uses the
+directory containing that file as the package directory. Otherwise, it
+falls back to the current directory. In either case it then reads the
+<F>PackageInfo.g</F> file from that package directory. It extracts information
+about the package from it
 (such as its name and version, see Section <Ref Sect="Subsection_Tut:Scaffolds:Title"/>).
 It then creates two XML files <F>doc/_main.xml</F> and
 <F>doc/title.xml</F> inside the package directory. Finally, it runs
@@ -99,7 +100,7 @@ AutoDoc( rec( autodoc := true ) );
 QUIT;
 ]]></Listing>
 Then you can regenerate the package manual from the command line with the
-following command, executed from within the package directory:
+following command:
 <Listing><![CDATA[
 gap makedoc.g
 ]]></Listing>

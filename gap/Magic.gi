@@ -8,7 +8,8 @@
 #
 InstallGlobalFunction( AutoDoc,
 function( arg )
-    local pkgname, pkginfo, pkgdir, opt, file;
+    local pkgname, pkginfo, pkgdir, opt, file,
+          input_filename, path_positions;
 
     if Length( arg ) >= 3 then
         Error( "too many arguments" );
@@ -23,9 +24,24 @@ function( arg )
 
     # check the first argument
     if Length(arg) = 0 then
-        pkgdir := DirectoryCurrent( );
+        input_filename := INPUT_FILENAME();
+        if IsString( input_filename ) and
+           input_filename <> "*stdin*" and
+           IsReadableFile( input_filename ) then
+            path_positions := PositionsProperty( input_filename, x -> x = '/' );
+            if IsEmpty( path_positions ) then
+                pkgdir := DirectoryCurrent( );
+            else
+                pkgdir := Directory(
+                    input_filename{ [ 1 .. Last( path_positions ) - 1 ] }
+                );
+            fi;
+        else
+            pkgdir := DirectoryCurrent( );
+        fi;
     elif IsString( arg[1] ) then
         pkgname := Remove( arg, 1 );
+        Print("#W AutoDoc: passing pkgname as first argument to AutoDoc is deprecated");
     elif IsDirectory( arg[1] ) then
         pkgdir := Remove( arg, 1 );
     fi;
@@ -74,18 +90,24 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
           pkgdirstr, docdirstr,
           title_page, tree,
           position_document_class,
-          args;
+          args, used_legacy_value_options;
 
     #
-    # Check for user supplied options. If present, they take
-    # precedence over any defaults as well as the opt record.
+    # Deprecated feature: Check for user supplied global options. If present,
+    # they take precedence over any defaults as well as the opt record.
     #
+    used_legacy_value_options := false;
     for key in [ "dir", "scaffold", "autodoc", "gapdoc", "extract_examples" ] do
         val := ValueOption( key );
         if val <> fail then
             opt.(key) := val;
+            used_legacy_value_options := true;
         fi;
     od;
+
+    if used_legacy_value_options then
+        Print("#W passing options via GAP's global options system is deprecated; use an option record instead\n");
+    fi;
 
     #
     # Setup the output directory

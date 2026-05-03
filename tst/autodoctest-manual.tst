@@ -35,6 +35,12 @@ gap> AUTODOC_RunPackageScenario( pkgdir, olddir, rec(
 >   makedoc := "makedoc.g",
 >   doc_expected := "tst/manual.expected",
 > ) );
+gap> AUTODOC_RunPackageScenario( pkgdir, olddir, rec(
+>   name := "manual-parent-relative",
+>   makedoc := "../../makedoc.g",
+>   workdir := "doc/build",
+>   doc_expected := "tst/manual.expected",
+> ) );
 
 # entities option variants
 gap> AUTODOC_RunPackageScenario( pkgdir, olddir, rec(
