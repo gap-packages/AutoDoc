@@ -228,11 +228,11 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
         # Make sure all of the files exist, making the file names absolute if
         # necessary
         for i in [ 1 .. Length( autodoc.files ) ] do
-            if IsExistingFile( autodoc.files[ i ] ) then continue; fi;
             if IsExistingFile( Filename( pkgdir, autodoc.files[ i ] ) ) then
                 autodoc.files[ i ] := Filename( pkgdir, autodoc.files[ i ] );
                 continue;
             fi;
+            if IsExistingFile( autodoc.files[ i ] ) then continue; fi;
             Error( autodoc.files[ i ], " does not specify an existing file either as an absolute path or relative to the package directory" );
         od;
 
