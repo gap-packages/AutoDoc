@@ -1,5 +1,12 @@
 This file describes changes in the AutoDoc package.
 
+## YYYY.MM.DD
+  - Fix an issue when running a `makedoc.g` from outside its package's
+    directory: if one e.g. did `gap ../somePackage/makedoc.g` and this tried
+    to load a file `lib/file.g`, then AutoDoc first attempt to resolve that
+    relative to the current working directory (and not relative to
+    `../somePackage/`), which could lead to the wrong file being used.
+
 ## 2026.05.03
   - Make `AutoDoc()` infer the package directory from `INPUT_FILENAME()`
     when called from a `makedoc.g` file outside the package root
