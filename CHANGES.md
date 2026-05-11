@@ -1,6 +1,6 @@
 This file describes changes in the AutoDoc package.
 
-## YYYY.MM.DD
+## 2026.05.11
   - Fix an issue when running a `makedoc.g` from outside its package's
     directory: if one e.g. did `gap ../somePackage/makedoc.g` and this tried
     to load a file `lib/file.g`, then AutoDoc first attempt to resolve that
