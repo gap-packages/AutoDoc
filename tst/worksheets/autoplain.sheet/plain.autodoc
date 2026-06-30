@@ -44,4 +44,11 @@ And XML comments should pass through verbatim:
 #  <ManSection>
 #  <#/GAPDoc>
 -->
+And XML CDATA blocks should also keep would-be commands literal:
+<Listing><![CDATA[
+# PlainCDATAHeading
+## PlainCDATASection
+@Section PlainCDATACommand
+#! PlainCDATAComment
+]]></Listing>
 And we wrap up with some dummy text

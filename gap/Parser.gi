@@ -302,7 +302,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           filestream, groupnumber, line_number,
           markdown_fence, plain_text_mode, rest_of_file_skipped,
           scope_group, single_line_title_item_list, title_item,
-          title_item_list, xml_comment_mode;
+          title_item_list, xml_comment_mode, cdata_mode;
     groupnumber := 0;
     autodoc_read_line := false;
     context_stack := [ ];
@@ -366,13 +366,24 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         fi;
     end;
     NormalizeInputLine := function( raw_line )
-        local text, comment_pos;
+        local text, comment_pos, line_starts_cdata, line_ends_cdata,
+              is_cdata_line;
         if plain_text_mode then
             text := raw_line;
+            line_starts_cdata := AUTODOC_LineStartsCDATA( raw_line );
+            line_ends_cdata := AUTODOC_LineEndsCDATA( raw_line );
+            is_cdata_line := cdata_mode or line_starts_cdata;
+            if line_starts_cdata then
+                cdata_mode := true;
+            fi;
+            if line_ends_cdata then
+                cdata_mode := false;
+            fi;
             return rec(
                 raw_text := raw_line,
                 text := text,
                 is_autodoc := true,
+                scan_for_autodoc_commands := not is_cdata_line,
                 allows_declaration_scan := false
             );
         fi;
@@ -383,6 +394,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 raw_text := raw_line,
                 text := raw_line,
                 is_autodoc := false,
+                scan_for_autodoc_commands := false,
                 allows_declaration_scan := false
             );
         fi;
@@ -392,6 +404,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             raw_text := raw_line,
             text := text,
             is_autodoc := true,
+            scan_for_autodoc_commands := true,
             allows_declaration_scan := true
         );
     end;
@@ -706,6 +719,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         plain_text_mode := false;
         markdown_fence := fail;
         xml_comment_mode := false;
+        cdata_mode := false;
     end;
     ScanForDeclarationPart := function()
         local declare_position;
@@ -1278,9 +1292,12 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 fi;
             fi;
 
-            if current_line_info.is_autodoc then
+            if current_line_info.scan_for_autodoc_commands then
                 current_line_fence := MarkdownFenceFromLine( current_line_info.text );
                 current_command := Scan_for_AutoDoc_Part( current_line_info.text );
+            elif current_line_info.is_autodoc then
+                current_line_fence := fail;
+                current_command := [ "STRING", current_line_info.text ];
             else
                 current_line_fence := fail;
                 current_command := [ false, current_line ];
