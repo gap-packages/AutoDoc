@@ -479,6 +479,29 @@ BindGlobal( "WriteChunks",
     chunks_stream := AUTODOC_OutputTextFile( path_to_xmlfiles, filename );
     chunk_names := RecNames( tree!.chunks );
 
+    # Write out every chunk first. Writing a chunk whose body contains a
+    # nested @InsertChunk marks the inserted chunk as inserted, so all chunk
+    # bodies must be written before we can decide which chunks were never
+    # inserted -- otherwise a chunk used only from within a later-written
+    # chunk is spuriously flagged, depending on iteration order.
+    for current_chunk_name in chunk_names do
+        current_chunk := tree!.chunks.( current_chunk_name );
+        AppendTo( chunks_stream, "<#GAPDoc Label=\"", current_chunk_name, "\">\n" );
+        if IsBound( current_chunk!.content ) then
+            AUTODOC_WriteDocumentationListWithSource(
+                current_chunk!.content,
+                current_chunk!.content_source_positions,
+                chunks_stream
+            );
+        fi;
+        AppendTo( chunks_stream, "\n<#/GAPDoc>\n" );
+    od;
+
+    CloseStream( chunks_stream );
+
+    # Now that every insertion (including those nested inside other chunks)
+    # has been resolved, warn about chunks that are defined but never inserted,
+    # or inserted but never defined.
     for current_chunk_name in chunk_names do
         current_chunk := tree!.chunks.( current_chunk_name );
         if current_chunk!.is_defined = true and current_chunk!.is_inserted = false then
@@ -498,18 +521,7 @@ BindGlobal( "WriteChunks",
                 " was inserted but never defined"
             );
         fi;
-        AppendTo( chunks_stream, "<#GAPDoc Label=\"", current_chunk_name, "\">\n" );
-        if IsBound( current_chunk!.content ) then
-            AUTODOC_WriteDocumentationListWithSource(
-                current_chunk!.content,
-                current_chunk!.content_source_positions,
-                chunks_stream
-            );
-        fi;
-        AppendTo( chunks_stream, "\n<#/GAPDoc>\n" );
     od;
-
-    CloseStream( chunks_stream );
 
 end );
 
