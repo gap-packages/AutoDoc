@@ -121,6 +121,7 @@ Dependencies := rec(
   GAP := ">= 4.11",
   NeededOtherPackages := [ [ "GAPDoc", ">= 1.6.3" ] ],
   SuggestedOtherPackages := [ ],
+  TestPackages := [ [ "io", ">= 4.7.0" ] ],
   ExternalConditions := [],
 ),
 
