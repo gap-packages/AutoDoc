@@ -358,7 +358,7 @@ InstallGlobalFunction( AutoDocWorksheet,
     AutoDoc_INTERN( true, "AutoDocWorksheet", rec( ), DirectoryCurrent( ), opt );
 end );
 
-# The following function is based on code by Alexander Konovalov
+# The following function is based on code by Olexandr Konovalov
 BindGlobal("AUTODOC_ExtractMyManualExamples",
 function( pkgname, pkgdir, docdir, main, files, opt )
     local tst, i, s, basename, name, output, ch, a, location, pos, comment, pkgdirString,
