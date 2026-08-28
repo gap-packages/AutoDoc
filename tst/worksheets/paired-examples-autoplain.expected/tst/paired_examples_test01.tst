@@ -10,19 +10,19 @@
 #
 gap> START_TEST("paired_examples_test01.tst");
 
-# _Chapter_Examples_Chapter.xml:15-18
+# tst/worksheets/paired-examples-autoplain.sheet/plain.autodoc:8-11
 gap> plain_example_value := 2 + 3;
 5
 
-# _Chapter_Examples_Chapter.xml:21-24
+# tst/worksheets/paired-examples-autoplain.sheet/plain.autodoc:13-16
 gap> plain_alias_example := 3 + 4;
 7
 
-# _Chapter_Examples_Chapter.xml:27-30
+# tst/worksheets/paired-examples-autoplain.sheet/plain.autodoc:18-21
 gap> 10 - 3;
 7
 
-# _Chapter_Examples_Chapter.xml:33-36
+# tst/worksheets/paired-examples-autoplain.sheet/plain.autodoc:23-26
 gap> 6 * 7;
 42
 

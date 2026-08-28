@@ -22,6 +22,7 @@
   A simple worksheet file can define title-page information and chapter
   content directly in the source file, including example blocks.
   If this is stored in <F>worksheet.g</F>, you can generate documentation via
+<!--AutoDocSource gap/AutoDocMainFunction.gd:63-65-->
 <Log><![CDATA[
  AutoDocWorksheet( "worksheet.g" );
 ]]></Log>
@@ -36,6 +37,44 @@
   <C>dir</C>, <C>scaffold</C>, <C>autodoc</C>, <C>gapdoc</C>, and
   <C>extract_examples</C>.
   However, this feature is deprecated.
+ </Description>
+</ManSection>
+
+</Section>
+
+<Section Label="Chapter_Reference_Section_Extracting_manual_examples">
+<Heading>Extracting manual examples</Heading>
+
+<ManSection>
+  <Func Arg="pkg[, makedoc]" Name="AutoDocExtractExamples" />
+ <Returns>a directory
+</Returns>
+ <Description>
+  Extracts the examples from the manual of the package <A>pkg</A> and
+  returns the directory holding the resulting <F>.tst</F> files.
+<P/>
+  <A>pkg</A> is either the name of a package or a directory object pointing
+  at one. The optional argument <A>makedoc</A> names the script to read,
+  and defaults to <F>makedoc.g</F>.
+<P/>
+  The package's own <F>makedoc.g</F> is used as-is, so the settings which
+  describe the manual — its source files, scaffolding and
+  <A>extract_examples</A> options — are not duplicated. Only the parts of
+  the manual needed to collect the examples are built, no HTML or PDF is
+  produced, and everything is written to a temporary directory, so this
+  works even when the package directory is read-only.
+<P/>
+  This is meant to be used from a package's <F>tst/testall.g</F>, so that
+  extracted tests need not be committed to the repository:
+  <Listing><![CDATA[
+  LoadPackage( "mypkg" );
+  dirs := DirectoriesPackageLibrary( "mypkg", "tst" );
+  Add( dirs, AutoDocExtractExamples( "mypkg" ) );
+  TestDirectory( dirs, rec( exitGAP := true ) );]]></Listing>
+<P/>
+  Note that <F>makedoc.g</F> is read in the usual way, so any other work it
+  performs still happens; and a script ending in <C>QUIT</C> cannot be used
+  this way.
  </Description>
 </ManSection>
 
@@ -442,6 +481,23 @@
      AutoDoc( rec( autodoc := true ) : nopdf );]]></Listing>
      Also, if the environment variable <Code>NOPDF</Code> is set, then &AutoDoc;
      behaves as if the global option <A>nopdf</A> had been enabled.
+ </Item>
+ <Mark><A>AutoDocExtractOnly</A></Mark>
+ <Item>
+     If this global option is set, &AutoDoc; builds only as much of the
+     manual as is needed to collect its examples: no HTML, PDF or manual
+     index is produced, and all output is written below the given scratch
+     directory instead of the package. The extracted tests end up in its
+     <F>tst</F> subdirectory.
+     <P/>
+     The value is a directory, or <Keyword>true</Keyword> to have one chosen automatically.
+     If the environment variable <Code>AUTODOC_EXTRACT_ONLY</Code> is set, &AutoDoc;
+     behaves as if this option had been given; that is useful for a
+     <F>makedoc.g</F> which ends in <C>QUIT</C> and therefore has to be run
+     as a separate process.
+     <P/>
+     Rather than setting this by hand, use
+     <Ref Func="AutoDocExtractExamples"/>.
  </Item>
  <Mark><A>relativePath</A></Mark>
  <Item>

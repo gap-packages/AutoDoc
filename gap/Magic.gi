@@ -90,7 +90,7 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
           pkgdirstr, docdirstr,
           title_page, tree,
           position_document_class,
-          args, used_legacy_value_options;
+          args, used_legacy_value_options, extract_only, extract_roots;
 
     #
     # Deprecated feature: Check for user supplied global options. If present,
@@ -108,6 +108,12 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
     if used_legacy_value_options then
         Print("#W passing options via GAP's global options system is deprecated; use an option record instead\n");
     fi;
+
+    #
+    # Extract-only mode: build just enough of the manual, in a scratch
+    # directory, to collect its examples. See AutoDocExtractExamples.
+    #
+    extract_only := AUTODOC_ExtractOnlyDirectory();
 
     #
     # Setup the output directory
@@ -142,6 +148,20 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
             doc_dir_rel :=
             Directory( docdirstr{[(Length(pkgdirstr)+1)..Length(docdirstr)]} );
         fi;
+    fi;
+
+    if extract_only <> fail then
+        # ComposedDocument resolves relative <#Include SYSTEM ...> against a
+        # single directory, and handwritten doc files routinely include
+        # generated ones by relative name. So stage the whole documentation
+        # directory and generate into the copy; the package directory is then
+        # never written to, and may even be read-only.
+        AUTODOC_StageDirectory( doc_dir, Directory( Filename( extract_only, "doc" ) ) );
+        doc_dir := Directory( Filename( extract_only, "doc" ) );
+
+        # doc_dir no longer lies below pkgdir, so paths relative to it would
+        # be wrong; fall back to the absolute-path branches further down.
+        Unbind( doc_dir_rel );
     fi;
 
     # Ensure the output directory exists, create it if necessary
@@ -333,7 +353,13 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
     tree := DocumentationTree( );
 
     if IsBound( autodoc ) then
-        AutoDocScanFiles( autodoc.files, pkgname, tree );
+        # Hand the parser both the real path and a reproducible name to
+        # report positions under; the latter ends up in generated files.
+        AutoDocScanFiles(
+            List( autodoc.files,
+                  f -> rec( path := f,
+                            display := AUTODOC_RelativeSourcePath( f, pkgdir ) ) ),
+            pkgname, tree );
     fi;
 
     if is_worksheet then
@@ -564,30 +590,36 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
         fi;
 
         # Finally, invoke GAPDoc
-        CallFuncList( MakeGAPDocDoc, args );
+        if extract_only <> fail then
+            # Only the composed XML matters here; producing HTML, PDF and the
+            # manual index would be wasted work.
+            Info( InfoAutoDoc, 1, "Skipping manual generation, extracting examples only" );
+        else
+            CallFuncList( MakeGAPDocDoc, args );
 
-        # NOTE: We cannot just write CopyHTMLStyleFiles(doc_dir) here, as
-        # CopyHTMLStyleFiles its argument directly to Directory(), leading
-        # to an error in all GAP versions up to and including 4.8.6. This
-        # will be fixed with GAP 4.9, where Directory() is made idempotent.
-        CopyHTMLStyleFiles( Filename( doc_dir, "" ) );
+            # NOTE: We cannot just write CopyHTMLStyleFiles(doc_dir) here, as
+            # CopyHTMLStyleFiles its argument directly to Directory(), leading
+            # to an error in all GAP versions up to and including 4.8.6. This
+            # will be fixed with GAP 4.9, where Directory() is made idempotent.
+            CopyHTMLStyleFiles( Filename( doc_dir, "" ) );
 
-        # The following (undocumented) API is there for compatibility
-        # with old-style gapmacro.tex based package manuals. It
-        # produces a manual.lab file which those packages can use if
-        # they wish to link to things in the manual we are currently
-        # generating. This can probably be removed eventually, but for
-        # now, doing it does not hurt.
+            # The following (undocumented) API is there for compatibility
+            # with old-style gapmacro.tex based package manuals. It
+            # produces a manual.lab file which those packages can use if
+            # they wish to link to things in the manual we are currently
+            # generating. This can probably be removed eventually, but for
+            # now, doing it does not hurt.
 
-        # FIXME: It seems that this command does not work if pdflatex
-        #        is not present. Maybe we should remove it.
+            # FIXME: It seems that this command does not work if pdflatex
+            #        is not present. Maybe we should remove it.
 
-        if IsBound( gapdoc.SixFile ) then
-            file := Filename(pkgdir, gapdoc.SixFile);
-            if file = fail or not IsReadableFile(file) then
-                Error("could not open `", file, "' for package `", pkgname, "'.\n");
+            if IsBound( gapdoc.SixFile ) then
+                file := Filename(pkgdir, gapdoc.SixFile);
+                if file = fail or not IsReadableFile(file) then
+                    Error("could not open `", file, "' for package `", pkgname, "'.\n");
+                fi;
+                GAPDocManualLabFromSixFile( gapdoc.bookname, file );
             fi;
-            GAPDocManualLabFromSixFile( gapdoc.bookname, file );
         fi;
 
     fi;
@@ -602,6 +634,16 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
         elif opt.extract_examples = true then
             extract_examples := rec( );
         fi;
+    fi;
+
+    if extract_only <> fail and IsBound( gapdoc ) then
+        # Extracting is the whole point here, so do it even for packages whose
+        # makedoc.g does not ask for it, and collect the result outside the
+        # package. Without GAPDoc there is no document to extract from.
+        if not IsBound( extract_examples ) then
+            extract_examples := rec( );
+        fi;
+        extract_examples.subdir := Directory( Filename( extract_only, "tst" ) );
     fi;
 
     if IsBound( extract_examples ) then
@@ -622,7 +664,15 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
         if not IsBound( extract_examples.skip_empty_in_numbering ) then
             extract_examples.skip_empty_in_numbering := true;
         fi;
-        AUTODOC_ExtractMyManualExamples( pkgname, pkgdir, doc_dir, gapdoc.main, gapdoc.files, extract_examples );
+        if extract_only <> fail then
+            # Sources were staged below the scratch directory, mirroring the
+            # package layout, so report them relative to it.
+            extract_roots := [ extract_only ];
+        else
+            extract_roots := [ ];
+        fi;
+        AUTODOC_ExtractMyManualExamples( pkgname, pkgdir, doc_dir, gapdoc.main,
+                                         gapdoc.files, extract_examples, extract_roots );
     fi;
 
     return true;

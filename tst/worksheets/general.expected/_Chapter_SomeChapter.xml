@@ -5,6 +5,7 @@
 <Heading>SomeChapter</Heading>
 
  This is dummy text
+<!--AutoDocSource tst/worksheets/general.sheet/worksheet.g:13-18-->
 <Example><![CDATA[
 gap> S5 := SymmetricGroup(5);
 Sym( [ 1 .. 5 ] )
@@ -17,6 +18,7 @@ gap> Size(S5);
 <Index Key="WorksheetGeneralKeyOnly"></Index>
 <Index Key="A&gt;B">greater-than key</Index>
 <Index Key="A&quot;B">quote key</Index>
+<!--AutoDocSource tst/worksheets/general.sheet/worksheet.g:24-32-->
 <Example><![CDATA[
 gap> A5 := AlternatingGroup(5);
 Alt( [ 1 .. 5 ] )
@@ -27,6 +29,7 @@ gap> [[2]]]]><![CDATA[>[[1]];
 true
 ]]></Example>
 
+<!--AutoDocSource tst/worksheets/general.sheet/worksheet.g:33-37-->
 <Example><![CDATA[
 gap> comment_mode_value := 6 *
 >   7;

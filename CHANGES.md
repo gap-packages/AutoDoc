@@ -3,6 +3,14 @@ This file describes changes in the AutoDoc package.
 ## unreleased
   - Fix a spurious "chunk ... was defined but never inserted" warning for
     chunks that are only inserted from within the body of another chunk
+  - Add `AutoDocExtractExamples`, which extracts the manual examples of a
+    package into a temporary directory by running its `makedoc.g` without
+    building the manual. This allows running the examples from
+    `tst/testall.g` without storing generated `.tst` files in the
+    repository, and works from a read-only package directory
+  - Report the true origin of an extracted example: generated `.tst` files
+    now point at the `.autodoc` file or AutoDoc comment the example was
+    written in, instead of the intermediate XML file generated from it
 
 ## 2026.06.30
   - Fix a regression in `.autodoc` parsing where Markdown-style headings

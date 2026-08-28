@@ -10,19 +10,19 @@
 #
 gap> START_TEST("plain_file.autodoc_test01.tst");
 
-# _Chapter_Test.xml:15-20
+# tst/worksheets/autoplain.sheet/plain.autodoc:9-14
 gap> S5 := SymmetricGroup(5);
 Sym( [ 1 .. 5 ] )
 gap> Size(S5);
 120
 
-# _Chapter_Test.xml:28-33
+# tst/worksheets/autoplain.sheet/plain.autodoc:21-26
 gap> A5 := AlternatingGroup(5);
 Alt( [ 1 .. 5 ] )
 gap> Size(A5);
 60
 
-# _Chapter_Test.xml:35-39
+# tst/worksheets/autoplain.sheet/plain.autodoc:27-31
 gap> plain_mode_value := 6 *
 >   9;
 54

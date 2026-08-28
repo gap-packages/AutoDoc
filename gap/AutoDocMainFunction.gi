@@ -360,9 +360,10 @@ end );
 
 # The following function is based on code by Olexandr Konovalov
 BindGlobal("AUTODOC_ExtractMyManualExamples",
-function( pkgname, pkgdir, docdir, main, files, opt )
-    local tst, i, s, basename, name, output, ch, a, location, pos, comment, pkgdirString,
-      nonempty_units_found, number_of_digits, lpkgname, tstdir;
+function( pkgname, pkgdir, docdir, main, files, opt, roots )
+    local tst, i, s, basename, name, output, ch, a, location, pos, comment,
+      nonempty_units_found, number_of_digits, lpkgname, tstdir, composed,
+      prefixes, prefix;
     Info(InfoAutoDoc, 1, "Extracting manual examples for ", pkgname, " package ...");
 
     lpkgname := LowercaseString(pkgname);
@@ -371,9 +372,20 @@ function( pkgname, pkgdir, docdir, main, files, opt )
     if not EndsWith(main, ".xml") then
         main := Concatenation( main, ".xml" );
     fi;
-    tst:=ExtractExamples( docdir, main, files, opt.units );
+    # This is GAPDoc's ExtractExamples, with a pass over the origin list added
+    # so that examples AutoDoc generated report the file they came from rather
+    # than the intermediate XML file.
+    composed := ComposedDocument( "GAPDoc", docdir, main, files, true );
+    AUTODOC_RemapSourcePositions( composed[1], composed[2] );
+    tst := ExtractExamplesXMLTree(
+        ParseTreeXMLString( composed[1], composed[2] ), opt.units );
     Info(InfoAutoDoc, 1, Length(tst), " ", LowercaseString( opt.units ), "s detected");
-    pkgdirString := Filename(pkgdir, "");
+    # Directories a source file may live under, most specific first. Locations
+    # are reported relative to whichever matches, so that generated .tst files
+    # do not depend on where the package is installed.
+    prefixes := Concatenation( roots, [ pkgdir,
+                                        Directory(AUTODOC_CurrentDirectory()) ] );
+    prefixes := List( prefixes, d -> Filename( d, "" ) );
 
     if IsDirectory( opt.subdir ) then
         tstdir := Filename( opt.subdir, "" );
@@ -434,9 +446,20 @@ function( pkgname, pkgdir, docdir, main, files, opt )
         AppendTo(output, "gap> START_TEST(\"", basename, "\");\n\n");
         for a in ch do
             location := a[2][1];
-            if StartsWith(location, pkgdirString) then
-                comment := location{[ Length(pkgdirString)+1 .. Length(location) ]};
+            if not StartsWith(location, "/") then
+                # Already reproducible: AutoDoc recorded this position itself,
+                # or GAPDoc resolved it relative to the documentation dir.
+                comment := location;
             else
+                comment := fail;
+                for prefix in prefixes do
+                    if StartsWith(location, prefix) then
+                        comment := location{[ Length(prefix)+1 .. Length(location) ]};
+                        break;
+                    fi;
+                od;
+            fi;
+            if comment = fail then
                 pos := PositionSublist(location, LowercaseString(pkgname));
                 if pos <> fail then
                     comment := location{[ pos+Length(pkgname)+1 .. Length(location) ]};
@@ -445,7 +468,10 @@ function( pkgname, pkgdir, docdir, main, files, opt )
                     if pos <> fail then
                         comment := location{[ pos+2 .. Length(location) ]};
                     else
-                        Error("oops");
+                        # Sources outside all of the above, e.g. worksheet
+                        # inputs. The bare filename is still more useful than
+                        # an absolute path, and keeps the output reproducible.
+                        comment := Last( SplitString( location, "/" ) );
                     fi;
                 fi;
             fi;

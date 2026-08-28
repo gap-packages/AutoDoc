@@ -15,4 +15,6 @@ ReadPackage( "AutoDoc", "gap/AutoDocMainFunction.gi" );
 
 ReadPackage( "AutoDoc", "gap/Magic.gi" );
 
+ReadPackage( "AutoDoc", "gap/Examples.gi" );
+
 ReadPackage( "AutoDoc", "gap/Markdown.gi" );

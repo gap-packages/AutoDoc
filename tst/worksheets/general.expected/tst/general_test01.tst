@@ -10,13 +10,13 @@
 #
 gap> START_TEST("general_test01.tst");
 
-# _Chapter_SomeChapter.xml:8-13
+# tst/worksheets/general.sheet/worksheet.g:13-18
 gap> S5 := SymmetricGroup(5);
 Sym( [ 1 .. 5 ] )
 gap> Size(S5);
 120
 
-# _Chapter_SomeChapter.xml:20-28
+# tst/worksheets/general.sheet/worksheet.g:24-32
 gap> A5 := AlternatingGroup(5);
 Alt( [ 1 .. 5 ] )
 gap> Size(A5);
@@ -25,7 +25,7 @@ gap> # Test whether ]]> can be used safely
 gap> [[2]]>[[1]];
 true
 
-# _Chapter_SomeChapter.xml:30-34
+# tst/worksheets/general.sheet/worksheet.g:33-37
 gap> comment_mode_value := 6 *
 >   7;
 42

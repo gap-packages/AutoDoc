@@ -107,7 +107,7 @@ BindGlobal( "AUTODOC_ConvertFencedMarkdownBlocks",
     local converted_source_positions, converted_string_list, i, skipped,
           string_list, trimmed_line,
           fence_char, fence_length, info_string, fence_element, code_block,
-          fence_content, source_positions;
+          fence_content, fence_node, fence_position, source_positions;
 
     string_list := arg[ 1 ];
     if Length( arg ) > 1 then
@@ -163,9 +163,18 @@ BindGlobal( "AUTODOC_ConvertFencedMarkdownBlocks",
                     Add( fence_content, Chomp( string_list[ i ] ) );
                     i := i + 1;
                 od;
-                Add( converted_string_list,
-                     DocumentationVerbatim( fence_element, rec( ), fence_content ) );
-                Add( converted_source_positions, source_positions[ i - Length( fence_content ) - 1 ] );
+                fence_node := DocumentationVerbatim( fence_element, rec( ), fence_content );
+                # The opening fence sits one line above the collected content.
+                fence_position := source_positions[ i - Length( fence_content ) - 1 ];
+                if fence_position <> fail then
+                    fence_node!.source_position := fence_position;
+                    fence_node!.source_end_position := rec(
+                        filename := fence_position.filename,
+                        line := fence_position.line + Length( fence_content ) + 1
+                    );
+                fi;
+                Add( converted_string_list, fence_node );
+                Add( converted_source_positions, fence_position );
                 if code_block = true then
                     i := i + 1;
                     continue;

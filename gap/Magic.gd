@@ -441,6 +441,23 @@
 #!     Also, if the environment variable `NOPDF` is set, then &AutoDoc;
 #!     behaves as if the global option <A>nopdf</A> had been enabled.
 #! </Item>
+#! <Mark><A>AutoDocExtractOnly</A></Mark>
+#! <Item>
+#!     If this global option is set, &AutoDoc; builds only as much of the
+#!     manual as is needed to collect its examples: no HTML, PDF or manual
+#!     index is produced, and all output is written below the given scratch
+#!     directory instead of the package. The extracted tests end up in its
+#!     <F>tst</F> subdirectory.
+#!     <P/>
+#!     The value is a directory, or `true` to have one chosen automatically.
+#!     If the environment variable `AUTODOC_EXTRACT_ONLY` is set, &AutoDoc;
+#!     behaves as if this option had been given; that is useful for a
+#!     <F>makedoc.g</F> which ends in <C>QUIT</C> and therefore has to be run
+#!     as a separate process.
+#!     <P/>
+#!     Rather than setting this by hand, use
+#!     <Ref Func="AutoDocExtractExamples"/>.
+#! </Item>
 #! <Mark><A>relativePath</A></Mark>
 #! <Item>
 #!     This has the same effect as <A>gapdoc.gap_root_relative_path</A>, but
