@@ -1,5 +1,9 @@
 This file describes changes in the AutoDoc package.
 
+## unreleased
+  - Fix a spurious "chunk ... was defined but never inserted" warning for
+    chunks that are only inserted from within the body of another chunk
+
 ## 2026.06.30
   - Fix a regression in `.autodoc` parsing where Markdown-style headings
     and AutoDoc commands were interpreted inside XML CDATA blocks instead
