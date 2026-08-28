@@ -326,6 +326,26 @@ gap> RemoveDirectoryRecursively(tmpdir);
 true
 
 #
+# do not warn about a chunk that is only inserted from within another chunk,
+# regardless of the order in which the chunks were defined
+#
+gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-nestedchunk-test");;
+gap> if IsDirectoryPath(tmpdir) then RemoveDirectoryRecursively(tmpdir); fi;
+gap> AUTODOC_CreateDirIfMissing(tmpdir);
+true
+gap> tree4 := DocumentationTree();;
+gap> inner := DocumentationChunk(tree4, "Inner");;
+gap> inner!.is_defined := true;;
+gap> Add(inner!.content, "Some text");;
+gap> outer := DocumentationChunk(tree4, "Outer");;
+gap> outer!.is_defined := true;;
+gap> outer!.is_inserted := true;;
+gap> Add(outer!.content, inner);;
+gap> WriteDocumentation(tree4, Directory(tmpdir));
+gap> RemoveDirectoryRecursively(tmpdir);
+true
+
+#
 # mixed explicit and implicit chapter info with grouped declarations
 # see <https://github.com/gap-packages/AutoDoc/issues/279>
 #
