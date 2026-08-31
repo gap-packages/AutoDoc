@@ -34,11 +34,6 @@
 #!  Note that <F>makedoc.g</F> is read in the usual way, so any other work it
 #!  performs still happens; and a script ending in <C>QUIT</C> cannot be used
 #!  this way.
-#!
-#!  The script is read with the package directory as the working directory,
-#!  which requires &GAP; 4.13 or newer, or the <Package>io</Package> package
-#!  on older versions. Without either, the script is still found and read, but
-#!  one which reads further files by relative path will not find them.
 #! @Returns a directory
 #! @Arguments pkg[, makedoc]
 DeclareGlobalFunction( "AutoDocExtractExamples" );

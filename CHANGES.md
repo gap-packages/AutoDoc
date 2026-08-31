@@ -1,6 +1,7 @@
 This file describes changes in the AutoDoc package.
 
 ## unreleased
+  - Require GAP 4.13 or newer
   - Fix a spurious "chunk ... was defined but never inserted" warning for
     chunks that are only inserted from within the body of another chunk
   - Add `AutoDocExtractExamples`, which extracts the manual examples of a

@@ -1,7 +1,6 @@
 if fail = LoadPackage("AutoDoc") then
     Error("failed to load AutoDoc package");
 fi;
-LoadPackage("io", false);
 
 SetInfoLevel(InfoAutoDoc, 1);
 SetInfoLevel(InfoGAPDoc, 0);

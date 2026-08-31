@@ -48,7 +48,7 @@ end );
 ##
 InstallGlobalFunction( "AutoDocExtractExamples",
 function( pkg, makedoc... )
-    local pkgdir, script, scratch, olddir, chdir;
+    local pkgdir, script, scratch, olddir;
 
     if Length( makedoc ) > 0 then
         script := makedoc[ 1 ];
@@ -78,28 +78,10 @@ function( pkg, makedoc... )
     # AutoDoc() with no arguments picks up PackageInfo.g from the working
     # directory, and makedoc.g scripts name their inputs relative to the
     # package, so run the script from there.
-    #
-    # ChangeDirectoryCurrent needs GAP >= 4.13, or the io package on older
-    # versions; look it up by name so that reading this file does not warn
-    # about an unbound global where it is missing. Passing <script> as an
-    # absolute path still lets AutoDoc locate the package without it.
-    chdir := fail;
-    if IsBoundGlobal( "ChangeDirectoryCurrent" ) then
-        chdir := ValueGlobal( "ChangeDirectoryCurrent" );
-    fi;
-
-    if chdir = fail then
-        Info( InfoAutoDoc, 1,
-              "cannot change the working directory: if ", script,
-              " reads further files by relative path, those reads will fail; ",
-              "load the io package, or use GAP 4.13 or newer" );
-        Read( script : AutoDocExtractOnly := scratch, nopdf );
-    else
-        olddir := AUTODOC_CurrentDirectory();
-        chdir( Filename( pkgdir, "" ) );
-        Read( script : AutoDocExtractOnly := scratch, nopdf );
-        chdir( olddir );
-    fi;
+    olddir := AUTODOC_CurrentDirectory();
+    ChangeDirectoryCurrent( Filename( pkgdir, "" ) );
+    Read( script : AutoDocExtractOnly := scratch, nopdf );
+    ChangeDirectoryCurrent( olddir );
 
     return Directory( Filename( scratch, "tst" ) );
 end );

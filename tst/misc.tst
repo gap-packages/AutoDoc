@@ -109,8 +109,6 @@ gap> Scan_for_AutoDoc_Part( "### Heading subsection" );
 #
 # AUTODOC_CreateDirIfMissing: nested paths and `..` normalization
 #
-gap> LoadPackage("io", false);
-true
 gap> tmpdir := Filename(DirectoryTemporary(), "autodoc-createdir-test");;
 gap> if IsDirectoryPath(tmpdir) then RemoveDirectoryRecursively(tmpdir); fi;
 gap> AUTODOC_CreateDirIfMissing(tmpdir);
