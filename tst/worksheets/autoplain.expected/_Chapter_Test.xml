@@ -12,7 +12,7 @@ the documentation generated from a <F>.autodoc</F> file like this?
 <Subsection Label="Chapter_Test_Section_First_Section_Subsection_First_Subsection">
 <Heading>First Subsection</Heading>
 
-<!--AutoDocSource tst/worksheets/autoplain.sheet/plain.autodoc:9-14-->
+<!--AutoDocSource plain.autodoc:9-14-->
 <Example><![CDATA[
 gap> S5 := SymmetricGroup(5);
 Sym( [ 1 .. 5 ] )
@@ -26,7 +26,7 @@ Some text between two examples
 <Index Key="A&amp;B">ampersand key</Index>
 <Index Key="A&lt;B">less-than key</Index>
 <Index Key="Indented Autoplain">indented command parsing works</Index>
-<!--AutoDocSource tst/worksheets/autoplain.sheet/plain.autodoc:21-26-->
+<!--AutoDocSource plain.autodoc:21-26-->
 <Example><![CDATA[
 gap> A5 := AlternatingGroup(5);
 Alt( [ 1 .. 5 ] )
@@ -34,7 +34,7 @@ gap> Size(A5);
 60
 ]]></Example>
 
-<!--AutoDocSource tst/worksheets/autoplain.sheet/plain.autodoc:27-31-->
+<!--AutoDocSource plain.autodoc:27-31-->
 <Example><![CDATA[
 gap> plain_mode_value := 6 *
 >   9;

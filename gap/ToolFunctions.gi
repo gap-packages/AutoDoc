@@ -554,6 +554,40 @@ function(arg)
     return result;
 end);
 
+# Return the deepest directory containing all of the given paths, as a string
+# ending in "/", or fail if they share none. This is derived purely from the
+# given strings, so unlike the working directory it is unaffected by where a
+# command was started or by symlinks on the way to the files.
+InstallGlobalFunction( "AUTODOC_CommonParentDirectory",
+function( paths )
+    local components, common, i, n;
+
+    if IsEmpty( paths ) then
+        return fail;
+    fi;
+
+    # keep the directory components, dropping the file name
+    components := List( paths,
+                        p -> SplitString( p, "/" ) );
+    components := List( components, c -> c{[ 1 .. Length( c ) - 1 ]} );
+
+    common := components[1];
+    for i in [ 2 .. Length( components ) ] do
+        n := 0;
+        while n < Length( common ) and n < Length( components[i] )
+              and common[ n + 1 ] = components[i][ n + 1 ] do
+            n := n + 1;
+        od;
+        common := common{[ 1 .. n ]};
+    od;
+
+    if IsEmpty( common ) then
+        return fail;
+    fi;
+
+    return Concatenation( JoinStringsWithSeparator( common, "/" ), "/" );
+end );
+
 # Render a source file path for display and for recording in generated files:
 # relative to the package directory when it lies below it, else relative to
 # the working directory, else the bare filename. Absolute paths would make

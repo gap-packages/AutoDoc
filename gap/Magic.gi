@@ -88,7 +88,7 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
     local scaffold, gapdoc, extract_examples, autodoc, i,
           doc_dir, doc_dir_rel, tmp, key, val, file,
           pkgdirstr, docdirstr,
-          title_page, tree,
+          title_page, tree, source_anchor,
           position_document_class,
           args, used_legacy_value_options, extract_only, extract_roots;
 
@@ -355,10 +355,22 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
     if IsBound( autodoc ) then
         # Hand the parser both the real path and a reproducible name to
         # report positions under; the latter ends up in generated files.
+        source_anchor := pkgdir;
+        if is_worksheet then
+            # A worksheet has no package directory: pkgdir is merely the
+            # working directory, which would make the recorded paths depend on
+            # where AutoDocWorksheet was called from, and on whether the inputs
+            # were reached through a symlink. Anchor on the directory the input
+            # files share instead.
+            tmp := AUTODOC_CommonParentDirectory( autodoc.files );
+            if tmp <> fail then
+                source_anchor := Directory( tmp );
+            fi;
+        fi;
         AutoDocScanFiles(
             List( autodoc.files,
                   f -> rec( path := f,
-                            display := AUTODOC_RelativeSourcePath( f, pkgdir ) ) ),
+                            display := AUTODOC_RelativeSourcePath( f, source_anchor ) ) ),
             pkgname, tree );
     fi;
 

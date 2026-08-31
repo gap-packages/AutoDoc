@@ -6,6 +6,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 DeclareGlobalFunction( "AUTODOC_CreateDirIfMissing" );
+DeclareGlobalFunction( "AUTODOC_CommonParentDirectory" );
 DeclareGlobalFunction( "AUTODOC_RelativeSourcePath" );
 DeclareGlobalFunction( "AUTODOC_StageDirectory" );
 DeclareGlobalFunction( "AUTODOC_SourceMarker" );

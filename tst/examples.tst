@@ -27,10 +27,10 @@ gap> lines := SplitString(StringFile(
 # The four examples start on lines 8, 13, 18 and 23 of worksheet.g.
 gap> Perform(Filtered(lines,
 >   l -> StartsWith(l, "# ") and PositionSublist(l, ":") <> fail), Display);
-# tst/worksheets/paired-examples.sheet/worksheet.g:8-11
-# tst/worksheets/paired-examples.sheet/worksheet.g:13-16
-# tst/worksheets/paired-examples.sheet/worksheet.g:18-21
-# tst/worksheets/paired-examples.sheet/worksheet.g:23-26
+# worksheet.g:8-11
+# worksheet.g:13-16
+# worksheet.g:18-21
+# worksheet.g:23-26
 
 # No location may name a generated file.
 gap> ForAny(lines, l -> PositionSublist(l, "_Chapter_") <> fail);
