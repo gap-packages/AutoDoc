@@ -172,4 +172,53 @@ gap> Last( src );
 [ 82, "_Chapter_Generated.xml", 6 ]
 
 #
+# AUTODOC_CommonParentDirectory anchors recorded paths on the inputs alone.
+#
+gap> AUTODOC_CommonParentDirectory( [ "/a/b/c.g", "/a/b/d.g" ] );
+"/a/b/"
+gap> AUTODOC_CommonParentDirectory( [ "/a/b/c.g", "/a/x/d.g" ] );
+"/a/"
+gap> AUTODOC_CommonParentDirectory( [ "/a/b/c.g" ] );
+"/a/b/"
+
+# Inputs sharing no directory have no anchor, and neither has no input at all.
+gap> AUTODOC_CommonParentDirectory( [ "c.g", "d.g" ] );
+fail
+gap> AUTODOC_CommonParentDirectory( [ ] );
+fail
+
+#
+# AUTODOC_ExtractOnlyDirectory decides whether to build the manual normally.
+#
+gap> AUTODOC_ExtractOnlyDirectory();
+fail
+gap> AUTODOC_ExtractOnlyDirectory( : AutoDocExtractOnly := false );
+fail
+gap> IsDirectory( AUTODOC_ExtractOnlyDirectory( : AutoDocExtractOnly := true ) );
+true
+gap> IsDirectory( AUTODOC_ExtractOnlyDirectory( : AutoDocExtractOnly := "1" ) );
+true
+gap> scratch := Filename( DirectoryTemporary(), "autodoc-extract-only" );;
+gap> AUTODOC_ExtractOnlyDirectory( : AutoDocExtractOnly := scratch ) =
+>    Directory( scratch );
+true
+gap> IsDirectoryPath( scratch );
+true
+gap> AUTODOC_ExtractOnlyDirectory( : AutoDocExtractOnly := Directory( scratch ) ) =
+>    Directory( scratch );
+true
+gap> AUTODOC_ExtractOnlyDirectory( : AutoDocExtractOnly := 42 );
+Error, AutoDocExtractOnly must be true, a path, or a directory object
+
+#
+# AutoDocExtractExamples rejects what it cannot turn into a package.
+#
+gap> AutoDocExtractExamples( 42 );
+Error, pkg must be a package name or a directory object
+gap> AutoDocExtractExamples( "no-such-package-here" );
+Error, could not locate package no-such-package-here
+gap> AutoDocExtractExamples( Directory( "tst" ), "no-such-script.g" );
+Error, could not read tst/no-such-script.g
+
+#
 gap> STOP_TEST( "examples.tst" );
