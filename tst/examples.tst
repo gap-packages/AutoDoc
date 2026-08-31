@@ -210,6 +210,10 @@ true
 gap> AUTODOC_ExtractOnlyDirectory( : AutoDocExtractOnly := 42 );
 Error, AutoDocExtractOnly must be true, a path, or a directory object
 
+# An error raised inside a call does not always pop the options stack, which
+# would leak the option above into every later test in this session.
+gap> if not IsEmpty( OptionsStack ) then ResetOptionsStack(); fi;
+
 #
 # AutoDocExtractExamples rejects what it cannot turn into a package.
 #
