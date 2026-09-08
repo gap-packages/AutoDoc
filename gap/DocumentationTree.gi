@@ -666,7 +666,12 @@ end );
 
 InstallMethod( WriteDocumentation, [ IsTreeForDocumentationVerbatimNodeRep, IsStream ],
   function( node, filestream )
-    local line, attr_name;
+    local line, attr_name, marker;
+
+    marker := AUTODOC_SourceMarker( node );
+    if marker <> fail then
+        AppendTo( filestream, marker, "\n" );
+    fi;
 
     AppendTo( filestream, "<", node!.element_name );
     for attr_name in Set( RecNames( node!.attributes ) ) do

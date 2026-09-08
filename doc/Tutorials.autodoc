@@ -271,6 +271,21 @@ AutoDoc( rec( extract_examples := rec( subdir := "tst/generated" ) ) );
 ```
 This writes the extracted examples into <F>tst/generated/</F> instead.
 
+Either way the generated <F>.tst</F> files have to be regenerated whenever the
+manual changes, which tempts one into committing them. To avoid that, extract
+them when the tests run, using <Ref Func="AutoDocExtractExamples"/> in your
+<F>tst/testall.g</F>:
+```@listing
+LoadPackage( "mypkg" );
+dirs := DirectoriesPackageLibrary( "mypkg", "tst" );
+Add( dirs, AutoDocExtractExamples( "mypkg" ) );
+TestDirectory( dirs, rec( exitGAP := true ) );
+```
+This reads your <F>makedoc.g</F>, so the settings describing the manual are not
+duplicated, but skips building the manual itself. Everything is written to a
+temporary directory, so the extracted tests need not be committed and the tests
+also run from a read-only package directory.
+
 @Subsection Setting different &GAPDoc; options
 @SubsectionLabel Tut:IntegrateExisting:GapDocOptions
 

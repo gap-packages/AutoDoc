@@ -8,10 +8,6 @@
 
 gap> START_TEST( "autodoctest-manual.tst" );
 
-# need IO package for ChangeDirectoryCurrent
-gap> LoadPackage("io", false);
-true
-
 # temporarily change info levels to suppress all GAPDoc output
 gap> oldGAPDocLevel := InfoLevel( InfoGAPDoc );;
 gap> oldWarningLevel := InfoLevel( InfoWarning );;

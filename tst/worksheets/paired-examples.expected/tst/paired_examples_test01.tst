@@ -10,19 +10,19 @@
 #
 gap> START_TEST("paired_examples_test01.tst");
 
-# _Chapter_Examples_Chapter.xml:14-17
+# worksheet.g:8-11
 gap> comment_example_value := 2 + 3;
 5
 
-# _Chapter_Examples_Chapter.xml:19-22
+# worksheet.g:13-16
 gap> comment_alias_example := 3 + 4;
 7
 
-# _Chapter_Examples_Chapter.xml:24-27
+# worksheet.g:18-21
 gap> 10 - 3;
 7
 
-# _Chapter_Examples_Chapter.xml:29-32
+# worksheet.g:23-26
 gap> 6 * 7;
 42
 

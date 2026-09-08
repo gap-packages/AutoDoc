@@ -15,4 +15,6 @@ ReadPackage( "AutoDoc", "gap/ToolFunctions.gd" );
 
 ReadPackage( "AutoDoc", "gap/Magic.gd" );
 
+ReadPackage( "AutoDoc", "gap/Examples.gd" );
+
 ReadPackage( "AutoDoc", "gap/Markdown.gd" );

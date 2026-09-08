@@ -762,6 +762,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         local temp_string_list, temp_curr_line, temp_pos_comment, is_following_line,
               item_temp, example_node, end_command;
         example_node := DocumentationExample( element_name );
+        example_node!.source_position := CurrentSourcePosition();
         temp_string_list := example_node!.content;
         end_command := Concatenation( "@End", element_name );
         is_following_line := false;
@@ -794,6 +795,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 continue;
             fi;
         od;
+        example_node!.source_end_position := CurrentSourcePosition();
         return example_node;
     end;
     ReadSessionExample := function( element_name, plain_text_mode )
@@ -801,6 +803,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
               is_following_line, item_temp, example_node,
               incorporate_this_line, end_command;
         example_node := DocumentationExample( element_name );
+        example_node!.source_position := CurrentSourcePosition();
         temp_string_list := example_node!.content;
         end_command := Concatenation( "@End", element_name, "Session" );
         while true do
@@ -823,6 +826,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 Add( temp_string_list, temp_curr_line );
             fi;
         od;
+        example_node!.source_end_position := CurrentSourcePosition();
         return example_node;
     end;
     command_function_record := rec(

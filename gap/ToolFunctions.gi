@@ -553,3 +553,245 @@ function(arg)
     fi;
     return result;
 end);
+
+# Return the deepest directory containing all of the given paths, as a string
+# ending in "/", or fail if they share none. This is derived purely from the
+# given strings, so unlike the working directory it is unaffected by where a
+# command was started or by symlinks on the way to the files.
+InstallGlobalFunction( "AUTODOC_CommonParentDirectory",
+function( paths )
+    local components, common, i, n;
+
+    if IsEmpty( paths ) then
+        return fail;
+    fi;
+
+    # keep the directory components, dropping the file name
+    components := List( paths,
+                        p -> SplitString( p, "/" ) );
+    components := List( components, c -> c{[ 1 .. Length( c ) - 1 ]} );
+
+    common := components[1];
+    for i in [ 2 .. Length( components ) ] do
+        n := 0;
+        while n < Length( common ) and n < Length( components[i] )
+              and common[ n + 1 ] = components[i][ n + 1 ] do
+            n := n + 1;
+        od;
+        common := common{[ 1 .. n ]};
+    od;
+
+    if IsEmpty( common ) then
+        return fail;
+    fi;
+
+    return Concatenation( JoinStringsWithSeparator( common, "/" ), "/" );
+end );
+
+# Render a source file path for display and for recording in generated files:
+# relative to the package directory when it lies below it, else relative to
+# the working directory, else the bare filename. Absolute paths would make
+# generated output depend on where the package happens to live.
+InstallGlobalFunction( "AUTODOC_RelativeSourcePath",
+function( path, pkgdir )
+    local prefix, candidate;
+
+    for candidate in [ pkgdir, Directory( AUTODOC_CurrentDirectory() ) ] do
+        prefix := Filename( candidate, "" );
+        if prefix <> fail and Length( prefix ) > 1 and StartsWith( path, prefix ) then
+            return path{ [ Length( prefix ) + 1 .. Length( path ) ] };
+        fi;
+    od;
+
+    return Last( SplitString( path, "/" ) );
+end );
+
+# Elements whose content is a manual example, i.e. those GAPDoc's
+# ExtractExamplesXMLTree collects. Only these are worth annotating.
+BindGlobal( "AUTODOC_EXAMPLE_ELEMENTS", [ "Example", "Log" ] );
+
+BindGlobal( "AUTODOC_SOURCE_MARKER_PREFIX", "<!--AutoDocSource " );
+BindGlobal( "AUTODOC_SOURCE_MARKER_SUFFIX", "-->" );
+BindGlobal( "AUTODOC_CDATA_CLOSE", "]]></" );
+
+# Render the provenance of an example node as an XML comment, e.g.
+#   <!--AutoDocSource gap/Foo.gd:137-141-->
+# GAPDoc parses these into XMLCOMMENT nodes which every output backend
+# ignores, so they are invisible in the built manual; AutoDoc reads them back
+# in AUTODOC_RemapSourcePositions to report the true origin of an example.
+#
+# Returns fail if the node carries no position, is not an example, or if the
+# path cannot be represented in an XML comment.
+InstallGlobalFunction( "AUTODOC_SourceMarker",
+function( node )
+    local position, end_position, text;
+
+    if not IsBound( node!.element_name ) or
+       not node!.element_name in AUTODOC_EXAMPLE_ELEMENTS or
+       not IsBound( node!.source_position ) or
+       node!.source_position = fail then
+        return fail;
+    fi;
+
+    position := node!.source_position;
+    if IsBound( node!.source_end_position ) and node!.source_end_position <> fail then
+        end_position := node!.source_end_position;
+    else
+        end_position := position;
+    fi;
+
+    # XML forbids "--" inside comments, and ">" would end ours early. Rather
+    # than mangle the path, drop the marker and fall back to reporting the
+    # generated XML file, as AutoDoc did before markers existed.
+    if PositionSublist( position.filename, "--" ) <> fail or
+       '>' in position.filename then
+        Info( InfoAutoDoc, 1, "WARNING: cannot record source position for ",
+              position.filename, ", path is not valid inside an XML comment" );
+        return fail;
+    fi;
+
+    text := Concatenation(
+        AUTODOC_SOURCE_MARKER_PREFIX,
+        position.filename, ":",
+        String( position.line ), "-", String( end_position.line ),
+        AUTODOC_SOURCE_MARKER_SUFFIX
+    );
+    return text;
+end );
+
+# Rewrite GAPDoc's origin list in place so that text AutoDoc generated is
+# attributed to the file it was generated *from*.
+#
+# `str` is a composed document as returned by ComposedDocument, and `src` the
+# accompanying list of [position, filename, line] triples which
+# OriginalPositionDocument searches. Each marker claims the element that
+# follows it, up to and including the line closing its CDATA block. Within
+# that region we report the recorded start line, except for the closing line,
+# which gets the recorded end line. ExtractExamplesXMLTree only ever looks up
+# the start and stop of an example, so both of its lookups land exactly.
+#
+#   <!--AutoDocSource gap/Foo.gd:137-141-->   <- marker at position p
+#   <Example><![CDATA[                        <- reported as gap/Foo.gd:137
+#   gap> 1+1;
+#   2
+#   ]]></Example>                             <- reported as gap/Foo.gd:141
+InstallGlobalFunction( "AUTODOC_RemapSourcePositions",
+function( str, src )
+    local marker_start, marker_end, region_start, region_end, colon, dash,
+          body, filename, start_line, end_line, first, last, i;
+
+    marker_start := PositionSublist( str, AUTODOC_SOURCE_MARKER_PREFIX );
+
+    while marker_start <> fail do
+        marker_end := PositionSublist( str, AUTODOC_SOURCE_MARKER_SUFFIX, marker_start );
+        if marker_end = fail then
+            break;
+        fi;
+        marker_end := marker_end + Length( AUTODOC_SOURCE_MARKER_SUFFIX ) - 1;
+        region_start := marker_start;
+
+        body := str{ [ marker_start + Length( AUTODOC_SOURCE_MARKER_PREFIX )
+                       .. marker_end - Length( AUTODOC_SOURCE_MARKER_SUFFIX ) ] };
+
+        # Split "path/to/file.gd:137-141" from the right, so that paths
+        # containing ':' or '-' survive.
+        colon := Length( body );
+        while colon > 0 and body[ colon ] <> ':' do colon := colon - 1; od;
+        dash := Length( body );
+        while dash > colon and body[ dash ] <> '-' do dash := dash - 1; od;
+
+        marker_start := PositionSublist( str, AUTODOC_SOURCE_MARKER_PREFIX, marker_end );
+
+        if colon = 0 or dash <= colon then
+            continue;
+        fi;
+
+        filename := body{ [ 1 .. colon - 1 ] };
+        start_line := Int( body{ [ colon + 1 .. dash - 1 ] } );
+        end_line := Int( body{ [ dash + 1 .. Length( body ) ] } );
+        if start_line = fail or end_line = fail then
+            continue;
+        fi;
+
+        # The marker describes exactly one element, which AutoDoc always
+        # writes CDATA-wrapped, so its closing line is the first one holding
+        # "]]></". Everything after that belongs to unrelated generated text
+        # and keeps its own origin.
+        region_end := PositionSublist( str, AUTODOC_CDATA_CLOSE, marker_end );
+        if region_end = fail or ( marker_start <> fail and region_end > marker_start ) then
+            continue;
+        fi;
+        region_end := Position( str, '\n', region_end );
+        if region_end = fail then
+            region_end := Length( str );
+        fi;
+
+        first := PositionSorted( src, [ region_start ] );
+        last := PositionSorted( src, [ region_end ] ) - 1;
+        for i in [ first .. last ] do
+            if not IsBound( src[ i ] ) then
+                continue;
+            fi;
+            src[ i ][ 2 ] := filename;
+            if i = last then
+                src[ i ][ 3 ] := end_line;
+            else
+                src[ i ][ 3 ] := start_line;
+            fi;
+        od;
+    od;
+end );
+
+# Output of a previous manual build. Staging a documentation directory copies
+# its inputs only; these are large, regenerated anyway, and never read back.
+# Kept in sync with the `clean` target of the Makefile.
+BindGlobal( "AUTODOC_BUILD_ARTIFACT_EXTENSIONS",
+  [ "aux", "bbl", "blg", "brf", "css", "dvi", "html", "idx", "ilg", "ind",
+    "js", "lab", "log", "out", "pdf", "pnr", "ps", "six", "tex", "toc",
+    "txt" ] );
+
+# Recursively copy the contents of directory `src` into directory `dst`,
+# skipping build artifacts.
+#
+# GAP has no CopyFile, so this goes through StringFile/FileString. Those read
+# and write raw bytes, so binary inputs such as images survive.
+InstallGlobalFunction( "AUTODOC_StageDirectory",
+function( src, dst )
+    local entry, entries, source_path, target_path, contents;
+
+    AUTODOC_CreateDirIfMissing( Filename( dst, "" ) );
+
+    entries := DirectoryContents( src );
+    if entries = fail then
+        # Nothing to stage; a package may not have a doc directory yet.
+        return;
+    fi;
+
+    for entry in entries do
+        if entry = "." or entry = ".." then
+            continue;
+        fi;
+
+        source_path := Filename( src, entry );
+
+        if IsDirectoryPath( source_path ) then
+            AUTODOC_StageDirectory( Directory( source_path ),
+                                    Directory( Filename( dst, entry ) ) );
+            continue;
+        fi;
+
+        if AUTODOC_GetSuffix( entry ) in AUTODOC_BUILD_ARTIFACT_EXTENSIONS then
+            continue;
+        fi;
+
+        contents := StringFile( source_path );
+        if contents = fail then
+            continue;
+        fi;
+
+        target_path := Filename( dst, entry );
+        if FileString( target_path, contents ) = fail then
+            Error( "failed to stage ", source_path, " to ", target_path );
+        fi;
+    od;
+end );
