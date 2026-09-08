@@ -1,6 +1,6 @@
 This file describes changes in the AutoDoc package.
 
-## unreleased
+## 2026.09.09
   - Require GAP 4.13 or newer
   - Fix a spurious "chunk ... was defined but never inserted" warning for
     chunks that are only inserted from within the body of another chunk
