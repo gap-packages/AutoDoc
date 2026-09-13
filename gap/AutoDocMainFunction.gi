@@ -446,7 +446,7 @@ function( pkgname, pkgdir, docdir, main, files, opt, roots )
         AppendTo(output, "gap> START_TEST(\"", basename, "\");\n\n");
         for a in ch do
             location := a[2][1];
-            if not StartsWith(location, "/") then
+            if not AUTODOC_IsAbsolutePath(location) then
                 # Already reproducible: AutoDoc recorded this position itself,
                 # or GAPDoc resolved it relative to the documentation dir.
                 comment := location;

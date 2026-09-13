@@ -74,7 +74,7 @@ function( pkg, makedoc... )
     fi;
 
     # a relative path would no longer resolve after the directory change below
-    if not StartsWith( script, "/" ) then
+    if not AUTODOC_IsAbsolutePath( script ) then
         script := Concatenation( AUTODOC_CurrentDirectory(), "/", script );
     fi;
 
