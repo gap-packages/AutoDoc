@@ -120,17 +120,22 @@ function(d)
     return true;
 end );
 
+# Not DirectoryCurrent: its cached value goes stale when the directory is
+# changed other than by ChangeDirectoryCurrent. Not the `pwd` program either,
+# which under MSYS2 prints a path native Windows programs cannot use.
 InstallGlobalFunction( "AUTODOC_CurrentDirectory",
 function(args...)
-    local pwd, result;
-    pwd := Filename( DirectoriesSystemPrograms(), "pwd" );
-    if pwd = fail then
-        Error("failed to locate 'pwd' tool");
-    fi;
-    result := "";
-    Process(DirectoryCurrent(), pwd, InputTextNone(), OutputTextString(result, true), []);
-    return Chomp(result);
+    return GAP_getcwd();
 end);
+
+# Whether <path> is absolute: it starts with a slash, or on Windows with a
+# drive, as in `C:/`.
+InstallGlobalFunction( "AUTODOC_IsAbsolutePath",
+function( path )
+    return StartsWith( path, "/" ) or
+           ( ARCH_IS_WINDOWS() and Length( path ) >= 3 and
+             path[2] = ':' and path[3] in "/\\" );
+end );
 
 InstallGlobalFunction( "AUTODOC_LineStartsCDATA",
 function(line)

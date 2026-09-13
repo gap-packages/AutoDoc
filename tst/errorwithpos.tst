@@ -1,7 +1,7 @@
 #
 # test parser error reporting with ErrorWithPos
 gap> autodoc_pkgroot := Filename( DirectoriesPackageLibrary( "AutoDoc", "" ), "" );;
-gap> if not StartsWith( autodoc_pkgroot, "/" ) then
+gap> if not AUTODOC_IsAbsolutePath( autodoc_pkgroot ) then
 >   autodoc_pkgroot := Filename(
 >       Directory( AUTODOC_CurrentDirectory() ),
 >       autodoc_pkgroot
