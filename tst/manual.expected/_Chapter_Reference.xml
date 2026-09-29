@@ -124,7 +124,10 @@
  little of &AutoDoc; as your package currently needs.
  For more information and some examples, please refer to Chapter <Ref Chap='Chapter_Tutorials'/>.
  <P/>
- The parameters have the following meanings:
+ If exactly one parameter is given, it is interpreted as <C>optrec</C> if it is a record,
+ and as <C>pkgdir</C> otherwise.
+ <P/>
+ The parameters have the following meaning:
  <List>
  <Mark><A>pkgdir</A></Mark>
  <Item>
@@ -160,9 +163,9 @@
      <Mark><A>dir</A></Mark>
      <Item>
          This should either be a string, in which case it must be a path
-         <E>relative</E> to the specified package directory, or a
-         <C>Directory()</C> object. (Thus, the only way to designate an
-         absolute directory is with a <C>Directory()</C> object.) This
+         <E>relative</E> to the specified package directory, or an
+         <C>IsDirectory</C> object. (Thus, the only way to designate an
+         absolute directory is with an <C>IsDirectory</C> object.) This
          option specifies where the package documentation
          (e.g. the &GAPDoc; XML or the manual PDF, etc.) files are stored
          and/or will be generated.
@@ -177,22 +180,23 @@
          The value should be either <K>true</K>, <K>false</K> or a
          record. If it is a record or <K>true</K> (the latter is
          equivalent to specifying an empty record), then this feature is
-         enabled. It is also enabled if <A>opt.scaffold</A> is missing but the
+         enabled. It is also enabled if <A>optrec.scaffold</A> is missing but the
          package's info record in <F>PackageInfo.g</F> has an <C>AutoDoc</C> entry.
-         In all other cases (in particular if <A>opt.scaffold</A> is
+         In all other cases (in particular if <A>optrec.scaffold</A> is
          <K>false</K>), scaffolding is disabled.
          <P/>
-         If scaffolding is enabled, and <A>PackageInfo.AutoDoc</A> exists, then it is
+         If scaffolding is enabled, and <C>PackageInfo.AutoDoc</C> exists, then it is
          assumed to be a record, and its contents are used as default values for
          the scaffold settings.
          <P/>
 <P/>
-         If <A>opt.scaffold</A> is a record, it may contain the following entries.
+         If <A>optrec.scaffold</A> is a record, it may contain the following entries.
 <P/>
          <List>
          <Mark><A>includes</A></Mark>
          <Item>
              A list of XML files to be included in the body of the main XML file.
+             They are included in the order in which they are given.
              If you specify this list and also are using &AutoDoc; to document
              your operations with &AutoDoc; comments,
              you can add <F>_AutoDocMainFile.xml</F> to this list
@@ -318,14 +322,20 @@
          <Item>
              A list of files (given by paths relative to the package directory)
              to be scanned for &AutoDoc; documentation comments.
-             Usually it is more convenient to use <A>autodoc.scan_dirs</A>, see below.
+             They are scanned in the order in which they are given, and always
+             before the files scanned by <A>autodoc.scan_dirs</A>.
+             Unless the order of files is important,
+             it is usually more convenient to use <A>autodoc.scan_dirs</A>, see below.
          </Item>
          <Mark><A>scan_dirs</A></Mark>
          <Item>
              A list of subdirectories of the package directory (given as relative paths)
              which &AutoDoc; then scans recursively for .gi, .gd, .g, and
              .autodoc files; all of these files are then scanned for
-             &AutoDoc; documentation comments. The special entries <C>"."</C>
+             &AutoDoc; documentation comments. 
+             The directories are scanned in the order in which they are given,
+             and the files in each directory are scanned in lexicographic order.
+             The special entries <C>"."</C>
              and <C>""</C> still only scan the package root itself.
              This controls where &AutoDoc; looks for source comments beginning with <C>#!</C>
              and for standalone <F>.autodoc</F> files.
