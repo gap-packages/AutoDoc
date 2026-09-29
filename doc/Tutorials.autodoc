@@ -614,7 +614,10 @@ and text versions of the manual.
 
 <Mark>AutoDoc</Mark><Item>
 This record controls extra settings used by &AutoDoc; while generating the
-manual. In particular, <C>PkgInfo.AutoDoc.TitlePage</C> lets you add or
+manual.
+Specifically, its entries are used as default values for the entries of
+<C>optrec.scaffold</C> in <Ref Func="AutoDoc"/>.
+In particular, <C>PkgInfo.AutoDoc.TitlePage</C> lets you add or
 override title-page elements coming from package metadata.
 
 Typical fields you may set there include <C>TitleComment</C>,
@@ -663,5 +666,4 @@ from <F>makedoc.g</F> take precedence when both define the same key.
 
 For stand-alone documents that are not tied to a package, use
 <Ref Func="AutoDocWorksheet"/>. Its documentation and examples are in
-Section <Ref Sect="Section_AutoDocWorksheet"/> of chapter
-<Ref Chap="AutoDoc"/>.
+Section <Ref Sect="Section_AutoDocWorksheet"/>.
