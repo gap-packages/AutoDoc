@@ -19,7 +19,7 @@ gap> olddir := AUTODOC_CurrentDirectory();;
 gap> pkgdir := DirectoriesPackageLibrary( "AutoDoc", "tst/AutoDocTest" );;
 gap> pkgdir := pkgdir[1];;
 gap> pkgdir := Filename( pkgdir, "" );;
-gap> if not StartsWith( pkgdir, "/" ) then
+gap> if not AUTODOC_IsAbsolutePath( pkgdir ) then
 >   pkgdir := Concatenation( olddir, "/", pkgdir );
 > fi;
 gap> ReadPackage( "AutoDoc", "tst/utils.g" );
