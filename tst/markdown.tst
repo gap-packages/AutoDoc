@@ -21,6 +21,8 @@ gap> AUTODOC_LineEndsCDATA("plain text");
 false
 gap> AUTODOC_EscapeCDATAContent("a]]>b");
 "a]]]]><![CDATA[>b"
+gap> AUTODOC_EscapeCDATAContent("<#Include SYSTEM \"main.xml\">");
+"<]]><![CDATA[#Include SYSTEM \"main.xml\">"
 gap> markdown_verbatim := AUTODOC_ConvertMarkdownToGAPDocXML([
 >   "```@example",
 >   "gap> 1 + 1;",
