@@ -28,6 +28,32 @@ block and the <C>Declare...</C> statement.
 This also works for <C>InstallMethod</C> and <C>InstallOtherMethod</C>.
 In that case, &AutoDoc; uses the installed method's name and filter list to
 create a manual entry for the implemented item.
+For example,
+<P/>
+<Listing><![CDATA[
+#! @Description
+#!  Returns the number of elements of <A>L</A>.
+#! @Arguments L
+#! @Returns a nonnegative integer
+InstallMethod( CountElements, "for a list", [ IsList ],
+    L -> Length( L ) );
+]]></Listing>
+<P/>
+leads to this:
+<P/>
+<Listing><![CDATA[
+<ManSection>
+  <Meth Arg="L" Name="CountElements" Label="for IsList"/>
+ <Returns>a nonnegative integer
+</Returns>
+ <Description>
+  Returns the number of elements of <A>L</A>.
+ </Description>
+</ManSection>
+]]></Listing>
+<P/>
+The label is derived from the filter list; the method's description string
+<C>"for a list"</C> is not used.
 <P/>
 Inside of &AutoDoc; comments, <E>&AutoDoc; commands</E>
 starting with <C>@</C> can be used to control the output &AutoDoc; produces.
@@ -66,6 +92,13 @@ Adds the text in the following lines of the &AutoDoc; to the description
 of the declaration in the manual. Lines are until the next &AutoDoc; command
 or until the declaration is reached.
 <P/>
+<Listing><![CDATA[
+#! @Description
+#!  Returns the largest entry of the list <A>L</A>.
+#!  The list must not be empty.
+DeclareOperation( "LargestEntry", [ IsList ] );
+]]></Listing>
+<P/>
 </Subsection>
 
 <Subsection Label="Subsection_@Returns">
@@ -76,6 +109,11 @@ or until the declaration is reached.
 The string <A>ret_val</A> is added to the documentation, with the text <Q>Returns: </Q>
 put in front of it. This should usually give a brief hint about the type or meaning
 of the value returned by the documented function.
+<P/>
+<Listing><![CDATA[
+#! @Returns a positive integer
+DeclareAttribute( "Exponent", IsGroup );
+]]></Listing>
 <P/>
 </Subsection>
 
@@ -90,6 +128,11 @@ brackets. The argument names can be separated by whitespace, commas or
 square brackets for the optional arguments, like <Q>grp[, elm]</Q> or
 <Q>xx[y[z] ]</Q>. If &GAP; options are used, this can be followed by a colon :
 and one or more assignments, like <Q>n[, r]: tries := 100</Q>.
+<P/>
+<Listing><![CDATA[
+#! @Arguments G[, n]: tries := 100
+DeclareGlobalFunction( "RandomGenerators" );
+]]></Listing>
 <P/>
 For <C>DeclareGlobalName</C>, using <C>@Arguments</C> or <C>@Returns</C> also
 makes &AutoDoc; document the item as a function. This is useful because
@@ -148,6 +191,20 @@ This makes &AutoDoc; emit a
 <Index Key="@Group"><C>@Group <A>grpname</A></C></Index>
 Adds the following method to a group with the given name.
 See section <Ref Sect="Section_Groups"/> for more information about groups.
+<P/>
+<Listing><![CDATA[
+#! @Description
+#!  The width of <A>obj</A>.
+#! @Arguments obj
+#! @Group Dimensions
+DeclareAttribute( "Width", IsObject );
+
+#! @Arguments obj
+#! @Group Dimensions
+DeclareAttribute( "Height", IsObject );
+]]></Listing>
+<P/>
+Both attributes end up in one manual entry, with the description given once.
 <P/>
 </Subsection>
 
@@ -316,6 +373,15 @@ can be used to set the label of the section to <C>Section_</C><A>label</A> inste
 The <C>@SectionTitle</C> <A>title</A> command
 can be used to set a heading for the section that is different from <A>name</A>.
 <P/>
+<Listing><![CDATA[
+#! @Section A rather long section name
+#! @SectionLabel ShortSec
+#! @SectionTitle A short heading
+]]></Listing>
+<P/>
+Other parts of the manual can now refer to this section via
+<C>&lt;Ref Sect="Section_ShortSec"/&gt;</C>.
+<P/>
 </Subsection>
 
 <Subsection Label="Subsection_@Subsection">
@@ -342,6 +408,14 @@ can be used to set the label of the subsection to <C>Subsection_</C><A>label</A>
 <P/>
 The <C>@SubsectionTitle</C> <A>title</A> command
 can be used to set a heading for the subsection that is different from <A>name</A>.
+<P/>
+<Listing><![CDATA[
+#! @Subsection Details on the input
+#! @SubsectionLabel Input
+#! @SubsectionTitle Input
+]]></Listing>
+<P/>
+This subsection is referred to via <C>&lt;Ref Subsect="Subsection_Input"/&gt;</C>.
 <P/>
 </Subsection>
 
@@ -393,6 +467,11 @@ DeclareOperation( "GroupedOperation",
 Sets the subsection heading for the current group to <A>title</A>. In the
 absence of any <C>@GroupTitle</C> command, the heading will be the name of the
 first entry in the group. See <Ref Sect="Section_Groups"/> for more information.
+<P/>
+<Listing><![CDATA[
+#! @BeginGroup Dimensions
+#! @GroupTitle Width and height
+]]></Listing>
 <P/>
 </Subsection>
 
@@ -483,6 +562,13 @@ Works just like the <C>@BeginExample</C> command, but the example
 will not be tested. See the &GAPDoc; manual for more information.
 The &AutoDoc; command <C>@Log</C> is an alias of <C>@BeginLog</C>.
 <P/>
+<Listing><![CDATA[
+#! @BeginLog
+Runtime();
+#! 1234
+#! @EndLog
+]]></Listing>
+<P/>
 </Subsection>
 
 <Subsection Label="Subsection_@BeginLogSession">
@@ -495,6 +581,13 @@ Works just like the <C>@BeginExampleSession</C> command, but the example
 will not be tested if manual examples are run. It is the direct analog of
 &GAPDoc;'s <Code>&lt;Log&gt;</Code> (see <Ref Subsect="Log" BookName="gapdoc"/>).
 The &AutoDoc; command <C>@LogSession</C> is an alias of <C>@BeginLogSession</C>.
+<P/>
+<Listing><![CDATA[
+#! @BeginLogSession
+#! gap> Runtime();
+#! 1234
+#! @EndLogSession
+]]></Listing>
 <P/>
 </Subsection>
 
@@ -633,6 +726,16 @@ To use keys containing spaces, wrap the key in double quotes, e.g.
 The entry text is processed like normal documentation text, so markdown-like
 inline code such as <Keyword>true</Keyword> is supported.
 <P/>
+<Listing><![CDATA[
+#! @Index "coset enumeration" Coset enumeration, see `ToddCoxeter`
+]]></Listing>
+<P/>
+generates
+<P/>
+<Listing><![CDATA[
+<Index Key="coset enumeration">Coset enumeration, see <Code>ToddCoxeter</Code></Index>
+]]></Listing>
+<P/>
 </Subsection>
 
 </Section>
@@ -683,6 +786,21 @@ extracted from <F>PackageInfo.g</F>. If you set them explicitly in comments,
 they override extracted or scaffold-defined values. This is usually most useful
 for worksheets created with <Ref Func="AutoDocWorksheet"/>,
 since worksheets do not have a <F>PackageInfo.g</F> file from which this information could be extracted.
+<P/>
+For example, a worksheet could start like this:
+<P/>
+<Listing><![CDATA[
+#! @Title Groups made easy
+#! @Subtitle A worked example
+#! @Author Jane Doe
+#! @Date 2026-11-07
+#! @Abstract
+#!  This worksheet shows how to set title page data.
+]]></Listing>
+<P/>
+<C>@Title</C>, <C>@Subtitle</C>, <C>@Version</C>, <C>@Author</C>, and
+<C>@Date</C> take only the rest of their line; the others also take all
+following text lines up to the next command.
 <P/>
 </Section>
 
