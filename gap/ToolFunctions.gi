@@ -146,7 +146,10 @@ end);
 
 InstallGlobalFunction( "AUTODOC_EscapeCDATAContent",
 function(text)
-    return ReplacedString(text, "]]>", "]]]]><![CDATA[>");
+    text := ReplacedString(text, "]]>", "]]]]><![CDATA[>");
+    # ComposedDocument expands "<#Include" even inside CDATA; splitting the
+    # section keeps the rendered text but hides it from that text search.
+    return ReplacedString(text, "<#Include", "<]]><![CDATA[#Include");
 end);
 
 

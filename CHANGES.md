@@ -1,5 +1,10 @@
 This file describes changes in the AutoDoc package.
 
+## unreleased
+
+  - Fix `<#Include ...>` lines inside code blocks being expanded by
+    GAPDoc, which could make the manual build recurse without end
+
 ## 2026.09.09 (2026-09-09)
 
   - Require GAP 4.13 or newer
