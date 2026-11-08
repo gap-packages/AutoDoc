@@ -3,8 +3,9 @@
 PKGNAME = AutoDoc
 TESTFILE = tst/testall.g
 
-# directory containing this Makefile, so 'make -f path/to/Makefile' works too
-PKGDIR := $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
+# directory containing this Makefile, so 'make -f path/to/Makefile' works too;
+# the shell resolves it to an absolute path, as make functions split on spaces
+PKGDIR := $(shell cd "$(patsubst %/,%,$(dir $(lastword $(MAKEFILE_LIST))))" && pwd)
 
 GAP ?= gap
 GAP_ARGS = -q --quitonbreak --packagedirs "$(PKGDIR)"

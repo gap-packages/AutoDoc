@@ -4,6 +4,8 @@ This file describes changes in the AutoDoc package.
 
   - Fix `<#Include ...>` lines inside code blocks being expanded by
     GAPDoc, which could make the manual build recurse without end
+  - Fix `AutoDocExtractExamples` for a package directory given as a
+    relative path, e.g. via `gap --packagedirs .`
 
 ## 2026.09.09 (2026-09-09)
 

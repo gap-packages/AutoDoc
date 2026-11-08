@@ -130,6 +130,20 @@ gap> RemoveDirectoryRecursively(frozen);
 true
 
 #
+# A package directory given relative to the working directory, as with
+# 'gap --packagedirs .'.
+#
+gap> olddir := AUTODOC_CurrentDirectory();;
+gap> ChangeDirectoryCurrent( Filename( pkgdir, ".." ) );;
+gap> SetInfoLevel(InfoAutoDoc, 0); SetInfoLevel(InfoGAPDoc, 0);
+gap> tstdir := AutoDocExtractExamples( Directory( "AutoDocTest" ),
+>                                      "makedoc-examples-chapter.g" );;
+gap> SetInfoLevel(InfoAutoDoc, old); SetInfoLevel(InfoGAPDoc, oldgapdoc);
+gap> ChangeDirectoryCurrent( olddir );;
+gap> AUTODOC_Diff( "-u", expected, Filename( tstdir, "autodoctest01.tst" ) );
+0
+
+#
 # AUTODOC_SourceMarker renders an example's provenance, and declines when it
 # cannot: "--" may not appear inside an XML comment.
 #
