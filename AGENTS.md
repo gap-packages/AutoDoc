@@ -6,9 +6,13 @@ This repository contains the GAP package `AutoDoc`.
 
 Any use of AI tools for preparing code, documentation, tests, commit messages,
 pull requests, issue comments, or reviews for this repository must be
-disclosed. Include a brief note saying which AI tool was used and what kind of
-assistance it provided. Add the AI tool as a Git co-author on all commits
-created by that tool (e.g. via an `Co-authored-by: ` line).
+disclosed. In pull requests, issue comments, and reviews, include a brief note
+saying which AI tool was used and what kind of assistance it provided.
+
+End every commit in which an AI tool wrote or changed code or text with the
+trailer `Assisted-by: Generative AI`, exactly in this form, without naming the
+tool, the vendor, or the model. Do not add the tool as a co-author via a
+`Co-authored-by:` line.
 
 ## Repository layout
 
