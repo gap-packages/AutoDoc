@@ -72,6 +72,176 @@ comments with hand-written XML and classic &GAPDoc; comments. For practical
 setup and migration workflows, see chapter <Ref Chap="Chapter_Tutorials"/>.
 
 
+@Section Structuring the documentation
+
+The commands in this section create chapters, appendices, sections and
+subsections, and select where subsequent text and manual entries go.
+
+@Subsection <C>@Chapter <A>name</A></C>
+@SubsectionLabel @Chapter
+
+@Index "@Chapter" `@Chapter`
+@Index "@ChapterLabel" `@ChapterLabel`
+@Index "@ChapterTitle" `@ChapterTitle`
+Sets the active chapter, all subsequent functions which do not have an explicit chapter
+declared in their &AutoDoc; comment via <C>@ChapterInfo</C> will be added to this chapter.
+Also all text comments, i.e. lines that begin with #! without a command, and which do not
+follow after <C>@Description</C>, will be added to the chapter as regular text; see
+<Ref Subsect="Subsection_PlainTextPlacement"/> for the details. Additionally,
+the chapters label will be set to <C>Chapter_</C><A>name</A>.
+
+Example:
+
+```@listing
+#! @Chapter My chapter
+#!  This is my chapter.
+#!  I document my stuff in it.
+```
+
+The <C>@ChapterLabel</C> <A>label</A> command
+can be used to set the label of the chapter to <C>Chapter_</C><A>label</A> instead of
+<C>Chapter_</C><A>name</A>.
+
+Additionally, the chapter will be stored as <C>_Chapter_</C><A>label</A><C>.xml</C>.
+
+The <C>@ChapterTitle</C> <A>title</A> command
+can be used to set a heading for the chapter that is different from <A>name</A>.
+Note that the title does not affect the label.
+
+If you use all three commands, i.e.,
+```@listing
+#! @Chapter name
+#! @ChapterLabel label
+#! @ChapterTitle title
+```
+<C>title</C> is used for the headline, <C>label</C> for cross-referencing, and <C>name</C>
+for setting the same chapter as active chapter again.
+
+@Subsection <C>@Appendix <A>name</A></C>
+@SubsectionLabel @Appendix
+
+@Index "@Appendix" `@Appendix`
+This is analogous to <C>@Chapter</C>, but generates `Appendix`
+elements instead of `Chapter` elements. When scaffolding generates the main
+XML file, appendices created this way are included automatically after any
+files listed in `scaffold.appendix`.
+
+Example:
+
+```@listing
+@Appendix Supplementary material
+
+@Section Additional tables
+```
+
+@Subsection <C>@Section <A>name</A></C>
+@SubsectionLabel @Section
+
+@Index "@Section" `@Section`
+@Index "@SectionLabel" `@SectionLabel`
+@Index "@SectionTitle" `@SectionTitle`
+Sets an active section like <C>@Chapter</C> sets an active chapter.
+The section automatically ends with the next <C>@Section</C> or <C>@Chapter</C> command.
+
+```@listing
+#! @Section My first manual section
+#!  In this section I am going to document my first method.
+```
+
+The <C>@SectionLabel</C> <A>label</A> command
+can be used to set the label of the section to <C>Section_</C><A>label</A> instead of
+<C>Chapter_chaptername_Section_</C><A>name</A>.
+
+The <C>@SectionTitle</C> <A>title</A> command
+can be used to set a heading for the section that is different from <A>name</A>.
+
+```@listing
+#! @Section A rather long section name
+#! @SectionLabel ShortSec
+#! @SectionTitle A short heading
+```
+
+Other parts of the manual can now refer to this section via
+<C>&lt;Ref Sect="Section_ShortSec"/&gt;</C>.
+
+@Subsection <C>@Subsection <A>name</A></C>
+@SubsectionLabel @Subsection
+
+@Index "@Subsection" `@Subsection`
+@Index "@SubsectionLabel" `@SubsectionLabel`
+@Index "@SubsectionTitle" `@SubsectionTitle`
+Sets an active subsection like <C>@Section</C> sets an active section.
+The subsection automatically ends with the next <C>@Subsection</C>,
+<C>@Section</C> or <C>@Chapter</C> command. It also ends with the
+next documented function. Indeed, internally each function <Q>manpage</Q>
+is treated like a subsection.
+
+```@listing
+#! @Subsection My first manual subsection
+#!  In this subsection I am going to document my first example.
+```
+
+The <C>@SubsectionLabel</C> <A>label</A> command
+can be used to set the label of the subsection to <C>Subsection_</C><A>label</A> instead of
+<C>Chapter_chaptername_Section_sectionname_Subsection_</C><A>name</A>.
+
+The <C>@SubsectionTitle</C> <A>title</A> command
+can be used to set a heading for the subsection that is different from <A>name</A>.
+
+```@listing
+#! @Subsection Details on the input
+#! @SubsectionLabel Input
+#! @SubsectionTitle Input
+```
+
+This subsection is referred to via <C>&lt;Ref Subsect="Subsection_Input"/&gt;</C>.
+
+@Subsection Where plain text goes
+@SubsectionLabel PlainTextPlacement
+
+A <E>plain text line</E> is a line of an &AutoDoc; comment, or of a
+<F>.autodoc</F> file, that is neither an &AutoDoc; command nor part of the
+documentation of a declaration (such as the text after <C>@Description</C>),
+an example, a chunk or a similar block. Such a line is appended to the active
+subsection, or if there is none to the active section, or else to the active
+chapter. In detail:
+
+- Files are read one after another, in the order described for the
+  <C>autodoc.files</C> and <C>autodoc.scan_dirs</C> options of
+  <Ref Func="AutoDoc"/>. Each file starts with no active chapter, section or
+  subsection.
+- Text read while no chapter is active is discarded, and &AutoDoc; prints a
+  warning.
+- Activating a chapter, section or subsection that already exists, for
+  example by repeating <C>@Chapter</C> <A>name</A> in another file, appends to
+  its end.
+- A documented declaration ends the active subsection. Text after it is
+  added to the section, after the manual entry.
+- Text appended to a chapter after one of its sections, or to a section
+  after one of its subsections, is placed after that section resp.
+  subsection. As &GAPDoc; marks where a section begins but not where it ends,
+  readers see this text as part of the last section resp. subsection, so
+  &AutoDoc; prints a warning.
+
+For example, if one file contains
+
+```@listing
+#! @Chapter Intro
+#! @Section Basics
+#! Some basic facts.
+```
+
+and a file read later contains
+
+```@listing
+#! @Chapter Intro
+#! More introductory text.
+```
+
+then <Q>More introductory text.</Q> appears at the end of section
+<Q>Basics</Q>. To avoid this, put all text that introduces a chapter
+before its first section, or move it into a section of its own.
+
 @Section Documenting declarations
 
 In the bare form above, the manual entry for <C>AnOperation</C> will not
@@ -260,124 +430,6 @@ DeclareAttribute( "CharacterDegreesOfBlocks",
 There are also some commands which can be used in &AutoDoc; comments
 that are not associated to any declaration. This is useful for additional
 text in your documentation, examples, mathematical chapters, etc.
-
-@Subsection <C>@Chapter <A>name</A></C>
-@SubsectionLabel @Chapter
-
-@Index "@Chapter" `@Chapter`
-@Index "@ChapterLabel" `@ChapterLabel`
-@Index "@ChapterTitle" `@ChapterTitle`
-Sets the active chapter, all subsequent functions which do not have an explicit chapter
-declared in their &AutoDoc; comment via <C>@ChapterInfo</C> will be added to this chapter.
-Also all text comments, i.e. lines that begin with #! without a command, and which do not
-follow after <C>@Description</C>, will be added to the chapter as regular text. Additionally,
-the chapters label will be set to <C>Chapter_</C><A>name</A>.
-
-Example:
-
-```@listing
-#! @Chapter My chapter
-#!  This is my chapter.
-#!  I document my stuff in it.
-```
-
-The <C>@ChapterLabel</C> <A>label</A> command
-can be used to set the label of the chapter to <C>Chapter_</C><A>label</A> instead of
-<C>Chapter_</C><A>name</A>.
-
-Additionally, the chapter will be stored as <C>_Chapter_</C><A>label</A><C>.xml</C>.
-
-The <C>@ChapterTitle</C> <A>title</A> command
-can be used to set a heading for the chapter that is different from <A>name</A>.
-Note that the title does not affect the label.
-
-If you use all three commands, i.e.,
-```@listing
-#! @Chapter name
-#! @ChapterLabel label
-#! @ChapterTitle title
-```
-<C>title</C> is used for the headline, <C>label</C> for cross-referencing, and <C>name</C>
-for setting the same chapter as active chapter again.
-
-@Subsection <C>@Appendix <A>name</A></C>
-@SubsectionLabel @Appendix
-
-@Index "@Appendix" `@Appendix`
-This is analogous to <C>@Chapter</C>, but generates `Appendix`
-elements instead of `Chapter` elements. When scaffolding generates the main
-XML file, appendices created this way are included automatically after any
-files listed in `scaffold.appendix`.
-
-Example:
-
-```@listing
-@Appendix Supplementary material
-
-@Section Additional tables
-```
-
-@Subsection <C>@Section <A>name</A></C>
-@SubsectionLabel @Section
-
-@Index "@Section" `@Section`
-@Index "@SectionLabel" `@SectionLabel`
-@Index "@SectionTitle" `@SectionTitle`
-Sets an active section like <C>@Chapter</C> sets an active chapter.
-The section automatically ends with the next <C>@Section</C> or <C>@Chapter</C> command.
-
-```@listing
-#! @Section My first manual section
-#!  In this section I am going to document my first method.
-```
-
-The <C>@SectionLabel</C> <A>label</A> command
-can be used to set the label of the section to <C>Section_</C><A>label</A> instead of
-<C>Chapter_chaptername_Section_</C><A>name</A>.
-
-The <C>@SectionTitle</C> <A>title</A> command
-can be used to set a heading for the section that is different from <A>name</A>.
-
-```@listing
-#! @Section A rather long section name
-#! @SectionLabel ShortSec
-#! @SectionTitle A short heading
-```
-
-Other parts of the manual can now refer to this section via
-<C>&lt;Ref Sect="Section_ShortSec"/&gt;</C>.
-
-@Subsection <C>@Subsection <A>name</A></C>
-@SubsectionLabel @Subsection
-
-@Index "@Subsection" `@Subsection`
-@Index "@SubsectionLabel" `@SubsectionLabel`
-@Index "@SubsectionTitle" `@SubsectionTitle`
-Sets an active subsection like <C>@Section</C> sets an active section.
-The subsection automatically ends with the next <C>@Subsection</C>,
-<C>@Section</C> or <C>@Chapter</C> command. It also ends with the
-next documented function. Indeed, internally each function <Q>manpage</Q>
-is treated like a subsection.
-
-```@listing
-#! @Subsection My first manual subsection
-#!  In this subsection I am going to document my first example.
-```
-
-The <C>@SubsectionLabel</C> <A>label</A> command
-can be used to set the label of the subsection to <C>Subsection_</C><A>label</A> instead of
-<C>Chapter_chaptername_Section_sectionname_Subsection_</C><A>name</A>.
-
-The <C>@SubsectionTitle</C> <A>title</A> command
-can be used to set a heading for the subsection that is different from <A>name</A>.
-
-```@listing
-#! @Subsection Details on the input
-#! @SubsectionLabel Input
-#! @SubsectionTitle Input
-```
-
-This subsection is referred to via <C>&lt;Ref Subsect="Subsection_Input"/&gt;</C>.
 
 @Subsection <C>@BeginGroup <A>[grpname]</A></C>
 @SubsectionLabel @BeginGroup

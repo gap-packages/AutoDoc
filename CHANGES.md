@@ -2,6 +2,9 @@ This file describes changes in the AutoDoc package.
 
 ## unreleased
 
+  - Warn about plain text that is discarded because no chapter is
+    active, or that appears inside the preceding section or subsection
+    because it follows its end
   - Fix `<#Include ...>` lines inside code blocks being expanded by
     GAPDoc, which could make the manual build recurse without end
   - Fix `AutoDocExtractExamples` for a package directory given as a

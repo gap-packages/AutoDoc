@@ -291,7 +291,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           ReadExample, ReadInstallMethodArguments,
           ReadInstallMethodFilterString, ReadLineWithLineCount,
           ReadSessionExample, RecordStringSourcePosition, Reset, ScanDeclarePart, ScanForDeclarationPart,
-          ScanInstallMethodPart, SetCurrentItem,
+          ScanInstallMethodPart, SetCurrentItem, WarnAboutText,
           #
           active_title_item_is_multiline, active_title_item_name,
           autodoc_read_line, chapter_info, command_function_record,
@@ -302,7 +302,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
           filestream, groupnumber, line_number,
           markdown_fence, plain_text_mode, rest_of_file_skipped,
           scope_group, single_line_title_item_list, title_item,
-          title_item_list, xml_comment_mode, cdata_mode;
+          title_item_list, xml_comment_mode, cdata_mode,
+          current_line_in_xml_comment, text_warning_issued;
     groupnumber := 0;
     autodoc_read_line := false;
     context_stack := [ ];
@@ -331,6 +332,17 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             [ ",\n", "at ", display_filename, ":", line_number ]
         );
         CallFuncList(Error, list);
+    end;
+    # Warn about the first line of a block of plain text that does not end up
+    # where it appears to belong.
+    WarnAboutText := function( message )
+        if text_warning_issued or current_line_in_xml_comment or
+           NormalizedWhitespace( current_command[ 2 ] ) = "" then
+            return;
+        fi;
+        text_warning_issued := true;
+        Info( InfoAutoDoc, 1, "WARNING: ", message,
+              ", at ", display_filename, ":", line_number );
     end;
     CurrentSourcePosition := function()
         return rec( filename := display_filename, line := line_number );
@@ -714,6 +726,7 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         return true;
     end;
     Reset := function( )
+        text_warning_issued := false;
         chapter_info := [ ];
         context_stack := [ ];
         plain_text_mode := false;
@@ -1137,12 +1150,37 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
         @Log := ~.@BeginLog,
 
         STRING := function()
+            local item, last, kind, heading;
             if not HasCurrentItem() then
+                WarnAboutText( "ignoring text outside of any chapter" );
                 return;
             fi;
             if active_title_item_name <> fail and
                active_title_item_is_multiline = false then
                 return;
+            fi;
+
+            # GAPDoc renders text that follows a section or subsection as
+            # part of it, as there is no closing heading
+            item := CurrentItem();
+            if IsTreeForDocumentationNode( item ) and IsBound( item!.content ) then
+                last := Last( item!.content,
+                    x -> not IsString( x ) or NormalizedWhitespace( x ) <> "" );
+                kind := fail;
+                if IsTreeForDocumentationNodeForSectionRep( last ) then
+                    kind := "section";
+                elif IsTreeForDocumentationNodeForSubsectionRep( last ) then
+                    kind := "subsection";
+                fi;
+                if kind <> fail then
+                    if IsBound( last!.title_string ) then
+                        heading := last!.title_string;
+                    else
+                        heading := ReplacedString( last!.name, "_", " " );
+                    fi;
+                    WarnAboutText( Concatenation( "text after ", kind, " ",
+                                   heading, " appears inside it" ) );
+                fi;
             fi;
             Add( CurrentItem(), current_command[ 2 ] );
             RecordStringSourcePosition( CurrentItem() );
@@ -1273,8 +1311,10 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
             current_line_info := NormalizeInputLine( current_line_unedited );
             NormalizeWhitespace( current_line );
 
+            current_line_in_xml_comment := false;
             if plain_text_mode then
                 if xml_comment_mode then
+                    current_line_in_xml_comment := true;
                     current_command := [ "STRING", current_line_unedited ];
                     if PositionSublist( current_line_unedited, "-->" ) <> fail then
                         xml_comment_mode := false;
@@ -1284,6 +1324,8 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 fi;
                 comment_start_pos := PositionSublist( current_line_unedited, "<!--" );
                 if comment_start_pos <> fail then
+                    current_line_in_xml_comment :=
+                        StartsWith( StripBeginEnd( current_line_unedited, " \t" ), "<!--" );
                     current_command := [ "STRING", current_line_unedited ];
                     if PositionSublist(
                            current_line_unedited{ [ comment_start_pos + 4 .. Length( current_line_unedited ) ] },
@@ -1319,6 +1361,9 @@ InstallGlobalFunction( AutoDoc_Parser_ReadFiles,
                 current_command := [ "STRING", current_line_info.text ];
             elif markdown_fence <> fail and current_command[ 1 ] <> false then
                 current_command := [ "STRING", current_line_info.text ];
+            fi;
+            if current_command[ 1 ] <> "STRING" then
+                text_warning_issued := false;
             fi;
             if current_command[ 1 ] <> false then
                 autodoc_read_line := current_line_info.allows_declaration_scan;

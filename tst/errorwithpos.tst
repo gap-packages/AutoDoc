@@ -88,6 +88,7 @@ gap> ParseFixture( "tst/errorwithpos/declaration-outside-section.g",
 >         global_functions := [ ],
 >         global_variables := [ ],
 >         info_classes := [ ] ) );
+#I  WARNING: ignoring text outside of any chapter, at tst/errorwithpos/declaration-outside-section.g:1
 Error, declarations must be documented within a section,
 at tst/errorwithpos/declaration-outside-section.g:2
 gap> ParseFixture( "tst/errorwithpos/declaration-unterminated-header.g" );
