@@ -73,6 +73,11 @@ function( pkg, makedoc... )
         Error( "could not read ", script );
     fi;
 
+    # a relative path would no longer resolve after the directory change below
+    if not StartsWith( script, "/" ) then
+        script := Concatenation( AUTODOC_CurrentDirectory(), "/", script );
+    fi;
+
     scratch := DirectoryTemporary();
 
     # AutoDoc() with no arguments picks up PackageInfo.g from the working
