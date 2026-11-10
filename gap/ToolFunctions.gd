@@ -12,6 +12,8 @@ DeclareGlobalFunction( "AUTODOC_StageDirectory" );
 DeclareGlobalFunction( "AUTODOC_SourceMarker" );
 DeclareGlobalFunction( "AUTODOC_RemapSourcePositions" );
 DeclareGlobalFunction( "AUTODOC_CurrentDirectory" );
+DeclareGlobalFunction( "AUTODOC_PathRoot" );
+DeclareGlobalFunction( "AUTODOC_IsAbsolutePath" );
 DeclareGlobalFunction( "AUTODOC_LineStartsCDATA" );
 DeclareGlobalFunction( "AUTODOC_LineEndsCDATA" );
 DeclareGlobalFunction( "AUTODOC_EscapeCDATAContent" );

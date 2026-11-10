@@ -6,6 +6,8 @@ This file describes changes in the AutoDoc package.
     GAPDoc, which could make the manual build recurse without end
   - Fix `AutoDocExtractExamples` for a package directory given as a
     relative path, e.g. via `gap --packagedirs .`
+  - Fix handling of Windows paths such as `C:/gap` when running a
+    native Windows build of GAP
 
 ## 2026.09.09 (2026-09-09)
 

@@ -78,15 +78,16 @@ end );
 # `..` components are normalized before creating directories.
 InstallGlobalFunction( "AUTODOC_CreateDirIfMissing",
 function(d)
-    local tmp, components, normalized, current, component;
+    local tmp, root, components, normalized, current, component;
     if not IsDirectoryPath(d) then
-        components := SplitString( d, "/" );
+        root := AUTODOC_PathRoot( d );
+        components := SplitString( d{ [ Length( root ) + 1 .. Length( d ) ] }, "/" );
         normalized := [ ];
         for component in components do
             if component = "" or component = "." then
                 continue;
             elif component = ".." then
-                if StartsWith( d, "/" ) then
+                if root <> "" then
                     if Length( normalized ) > 0 then
                         Remove( normalized );
                     fi;
@@ -100,10 +101,7 @@ function(d)
             fi;
         od;
 
-        current := "";
-        if StartsWith( d, "/" ) then
-            current := "/";
-        fi;
+        current := ShallowCopy( root );
         for component in normalized do
             Append( current, component );
             Append( current, "/" );
@@ -120,17 +118,35 @@ function(d)
     return true;
 end );
 
+# Not DirectoryCurrent: its cached value goes stale when the directory is
+# changed other than by ChangeDirectoryCurrent. Not the `pwd` program either,
+# which under MSYS2 prints a path native Windows programs cannot use.
 InstallGlobalFunction( "AUTODOC_CurrentDirectory",
 function(args...)
-    local pwd, result;
-    pwd := Filename( DirectoriesSystemPrograms(), "pwd" );
-    if pwd = fail then
-        Error("failed to locate 'pwd' tool");
+    local cwd;
+    cwd := GAP_getcwd();
+    if cwd = fail then
+        Error( "cannot determine the current directory: ",
+               LastSystemError().message );
     fi;
-    result := "";
-    Process(DirectoryCurrent(), pwd, InputTextNone(), OutputTextString(result, true), []);
-    return Chomp(result);
+    return cwd;
 end);
+
+# The root prefix of <path>: "/", a Windows drive such as "C:/", or "" for a
+# relative path. ARCH_IS_WINDOWS comes last as on Cygwin it checks for files.
+InstallGlobalFunction( "AUTODOC_PathRoot",
+function( path )
+    if StartsWith( path, "/" ) then
+        return "/";
+    elif Length( path ) >= 3 and path[2] = ':' and path[3] in "/\\" and
+         ARCH_IS_WINDOWS() then
+        return path{ [ 1 .. 3 ] };
+    fi;
+    return "";
+end );
+
+InstallGlobalFunction( "AUTODOC_IsAbsolutePath",
+    path -> AUTODOC_PathRoot( path ) <> "" );
 
 InstallGlobalFunction( "AUTODOC_LineStartsCDATA",
 function(line)
