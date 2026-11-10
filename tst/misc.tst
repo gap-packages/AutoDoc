@@ -139,6 +139,35 @@ gap> ChangeDirectoryCurrent(olddir);
 true
 gap> IsDirectoryPath(Filename(tmpdir_obj, "work/sibling/nested"));
 true
+
+#
+# AUTODOC_IsAbsolutePath, and `..` at the root of a Windows drive path.
+# ARCH_IS_WINDOWS is stubbed so the drive cases also run on other systems,
+# where `C:` is an ordinary directory name.
+#
+gap> AUTODOC_IsAbsolutePath("/a");
+true
+gap> AUTODOC_IsAbsolutePath("a/b");
+false
+gap> AUTODOC_CreateDirIfMissing(Concatenation(tmpdir, "/work/current/C:"));
+true
+gap> MakeReadWriteGlobal("ARCH_IS_WINDOWS");
+gap> old_arch_is_windows := ARCH_IS_WINDOWS;;
+gap> ARCH_IS_WINDOWS := ReturnTrue;;
+gap> List(["C:/x", "C:\\x", "C:x", "C:", "x"], AUTODOC_IsAbsolutePath);
+[ true, true, false, false, false ]
+gap> ChangeDirectoryCurrent(Filename(tmpdir_obj, "work/current"));
+true
+gap> AUTODOC_CreateDirIfMissing("C:/../drive");
+true
+gap> ChangeDirectoryCurrent(olddir);
+true
+gap> ARCH_IS_WINDOWS := old_arch_is_windows;;
+gap> MakeReadOnlyGlobal("ARCH_IS_WINDOWS");
+gap> IsDirectoryPath(Concatenation(tmpdir, "/work/current/C:/drive"));
+true
+gap> IsDirectoryPath(Filename(tmpdir_obj, "work/current/drive"));
+false
 gap> RemoveDirectoryRecursively(tmpdir);
 true
 
