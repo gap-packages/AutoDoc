@@ -616,7 +616,8 @@ and text versions of the manual.
 This record controls extra settings used by &AutoDoc; while generating the
 manual.
 Specifically, its entries are used as default values for the entries of
-<C>optrec.scaffold</C> in <Ref Func="AutoDoc"/>.
+<C>optrec.scaffold</C> in <Ref Func="AutoDoc"/>
+(see <Ref Subsect='Subsection_AutoDoc:scaffold'/>).
 In particular, <C>PkgInfo.AutoDoc.TitlePage</C> lets you add or
 override title-page elements coming from package metadata.
 
@@ -638,8 +639,9 @@ This inserts `<Copyright>` and `<Acknowledgements>` blocks into
 the generated <F>title.xml</F>.
 
 <C>PkgInfo.AutoDoc.TitlePage</C> has exactly the same meaning as
-<C>scaffold.TitlePage</C> in <Ref Func="AutoDoc"/>. The function documentation
-for <C>scaffold.TitlePage</C> points back to this subsection.
+<C>scaffold.TitlePage</C> in <Ref Func="AutoDoc"/>
+(see <Ref Subsect='Subsection_AutoDoc:scaffold'/>), which points back
+to this subsection.
 </Item>
 
 </List>

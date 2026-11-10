@@ -99,216 +99,270 @@
 #!     </Item>
 #!     <Mark><A>scaffold</A></Mark>
 #!     <Item>
-#!         This controls whether and how to generate scaffold XML files
-#!         for the package documentation.
-#!         <P/>
-#!         The value should be either <K>true</K>, <K>false</K> or a
-#!         record. If it is a record or <K>true</K> (the latter is
-#!         equivalent to specifying an empty record), then this feature is
-#!         enabled. It is also enabled if <A>optrec.scaffold</A> is missing but the
-#!         package's info record in <F>PackageInfo.g</F> has an <C>AutoDoc</C> entry.
-#!         In all other cases (in particular if <A>optrec.scaffold</A> is
-#!         <K>false</K>), scaffolding is disabled.
-#!         <P/>
-#!         If scaffolding is enabled, and <C>PackageInfo.AutoDoc</C> exists, then it is
-#!         assumed to be a record, and its contents are used as default values for
-#!         the scaffold settings.
-#!         <P/>
-#!
-#!         If <A>optrec.scaffold</A> is a record, it may contain the following entries.
-#!
-#!         <List>
-#!
-#!         <Mark><A>includes</A></Mark>
-#!         <Item>
-#!             A list of XML files to be included in the body of the main XML file.
-#!             They are included in the order in which they are given.
-#!             If you specify this list and also are using &AutoDoc; to document
-#!             your operations with &AutoDoc; comments,
-#!             you can add <F>_AutoDocMainFile.xml</F> to this list
-#!             to control at which point the documentation produced by &AutoDoc;
-#!             is inserted. If you do not do this, it will be added after the last
-#!             of your own XML files.
-#!         </Item>
-#!
-#!         <Mark><A>index</A></Mark>
-#!         <Item>
-#!             By default, the scaffold creates an index. If you do not want an index,
-#!             set this to <K>false</K>.
-#!         </Item>
-#!
-#!         <Mark><A>appendix</A></Mark>
-#!         <Item>
-#!             This entry is similar to <A>opt.scaffold.includes</A> but is used
-#!             to specify files to include after the main body of the manual,
-#!             i.e. typically appendices written directly in &GAPDoc; XML.
-#!             Appendices created with <C>@Appendix</C> are included automatically
-#!             after these files when scaffolding generates the main XML file.
-#!         </Item>
-#!
-#!         <Mark><A>bib</A></Mark>
-#!         <Item>
-#!             The name of a bibliography file, in BibTeX or XML format.
-#!             If this key is not set, but there is a file <F>doc/PACKAGENAME.bib</F>
-#!             then it is assumed that you want to use this as your bibliography.
-#!         </Item>
-#!
-#!         <Mark><A>bibstyle</A></Mark>
-#!         <Item>
-#!             Overrides the bibliography style used for LaTeX output.
-#!             This is written as the <C>Style</C> attribute of the generated
-#!             <C>&lt;Bibliography .../&gt;</C> element, so valid values are the
-#!             bibliography style names understood by &GAPDoc; and BibTeX, such
-#!             as <C>alpha</C>, <C>alphaurl</C>, or <C>plain</C>.
-#!         </Item>
-#!
-#!         <Mark><A>entities</A></Mark>
-#!         <Item>
-#!             A record whose keys are taken as entity names, set to the corresponding
-#!             (string) values. For example, if you pass the record <Q>SomePackage</Q>,
-#!             <Listing><![CDATA[
-#!             rec( SomePackage := "<Package>SomePackage</Package>",
-#!                  RELEASEYEAR := "2015" )]]></Listing>
-#!             then the following entity definitions are added to the XML preamble:
-#!             <Listing><![CDATA[<!ENTITY SomePackage '<Package>SomePackage</Package>'>
-#!             <!ENTITY RELEASEYEAR '2015'>]]></Listing>
-#!             This allows you to write <Q>&amp;SomePackage;</Q> and <Q>&amp;RELEASEYEAR;</Q>
-#!             in your documentation, which will be replaced by respective values specified
-#!             in the entities definition.
-#!             <P/>
-#!             Note that &AutoDoc; predefines several entities:
-#!             <List>
-#!             <Mark><A>VERSION</A></Mark>
-#!             <Item>Set to the <C>Version</C> field of your package info record.</Item>
-#!             <Mark><A>RELEASEYEAR</A></Mark>
-#!             <Item>Set to a string containing the release year, as derived
-#!                   from the <C>Date</C> field of your package info record.</Item>
-#!             <Mark><A>RELEASEDATE</A></Mark>
-#!             <Item>Derived from the <C>Date</C> field of your package info record.</Item>
-#!             <Mark><A>SomePackage</A></Mark>
-#!             <Item>
-#!                 The precise name of this entity is derived from the
-#!                 <C>PackageName</C> field of your package info record. Note
-#!                 that it is case sensitive. The content is defined as
-#!                 suggested by the example above.
-#!             </Item>
-#!             </List>
-#!         </Item>
-#!
-#!         <Mark><A>TitlePage</A></Mark>
-#!         <Item>
-#!             A record with extra title-page fields for the generated manual.
-#!             Field names are interpreted as title-page XML element names, and
-#!             their values are written as element content. For example, you can
-#!             set a custom acknowledgements block with
-#!             <Listing><![CDATA[
-#!             rec( Acknowledgements := "Many thanks to ..." )]]></Listing>
-#!             If this is set in <F>PackageInfo.g</F> as
-#!             <C>PkgInfo.AutoDoc.TitlePage</C>, it has the same meaning as this
-#!             option; see subsection <Ref Subsect='Subsection_Tut:PackageInfo'/> in chapter
-#!             <Ref Chap='Chapter_Tutorials'/> for details and an example.
-#!             <P/>
-#!             For the list of valid title-page elements, see the
-#!             &GAPDoc; manual, specifically section <Ref Subsect='TitlePage' BookName='gapdoc'/>.
-#!         </Item>
-#!         <Mark><A>MainPage</A></Mark>
-#!         <Item>
-#!             If scaffolding is enabled, by default a main XML file is generated (this
-#!             is the file which contains the XML doctype and more). If you do not
-#!             want this (e.g. because you have a handwritten main XML file), but
-#!             still want &AutoDoc; to generate a title page for you, you can set this
-#!             option to <K>false</K>
-#!         </Item>
-#!         <Mark><A>document_class</A></Mark>
-#!         <Item>
-#!             Sets the document class of the resulting PDF. The value can either be a string
-#!             which has to be the name of the new document class, a list containing this string, or
-#!             a list of two strings. Then the first one has to be the document class name, the second one
-#!             the option string ( contained in [ ] ) in &LaTeX;.
-#!         </Item>
-#!         <Mark><A>latex_header_file</A></Mark>
-#!         <Item>
-#!             Replaces the standard header from &GAPDoc; completely with the header in this &LaTeX; file.
-#!             Please be careful here, and look at &GAPDoc;'s <F>latexheader.tex</F> file for an example.
-#!         </Item>
-#!
-#!         </List>
+#!         Controls whether and how to generate scaffold XML files
+#!         for the package documentation;
+#!         see <Ref Subsect='Subsection_AutoDoc:scaffold'/>.
 #!     </Item>
-#!
-#!
 #!     <Mark><A>autodoc</A></Mark>
 #!     <Item>
-#!         This controls whether and how to generate additional XML documentation files
-#!         by scanning for &AutoDoc; documentation comments.
-#!         <P/>
-#!         The value should be either <K>true</K>, <K>false</K> or a
-#!         record. If it is a record or <K>true</K> (the latter is
-#!         equivalent to specifying an empty record), then this feature is
-#!         enabled. It is also enabled if <A>opt.autodoc</A> is missing but the
-#!         package depends (directly) on the &AutoDoc; package.
-#!         In all other cases (in particular if <A>opt.autodoc</A> is
-#!         <K>false</K>), this feature is disabled.
-#!         <P/>
-#!
-#!         If <A>opt.autodoc</A> is a record, it may contain the following entries.
-#!
-#!         <List>
-#!
-#!         <Mark><A>files</A></Mark>
-#!         <Item>
-#!             A list of files (given by paths relative to the package directory)
-#!             to be scanned for &AutoDoc; documentation comments.
-#!             They are scanned in the order in which they are given, and always
-#!             before the files scanned by <A>autodoc.scan_dirs</A>.
-#!             Unless the order of files is important,
-#!             it is usually more convenient to use <A>autodoc.scan_dirs</A>, see below.
-#!         </Item>
-#!
-#!         <Mark><A>scan_dirs</A></Mark>
-#!         <Item>
-#!             A list of subdirectories of the package directory (given as relative paths)
-#!             which &AutoDoc; then scans recursively for .gi, .gd, .g, and
-#!             .autodoc files; all of these files are then scanned for
-#!             &AutoDoc; documentation comments. 
-#!             The directories are scanned in the order in which they are given,
-#!             and the files in each directory are scanned in lexicographic order.
-#!             The special entries <C>"."</C>
-#!             and <C>""</C> still only scan the package root itself.
-#!             This controls where &AutoDoc; looks for source comments beginning with <C>#!</C>
-#!             and for standalone <F>.autodoc</F> files.
-#!             It does not affect where &GAPDoc; looks for GAPDoc comments; that is controlled
-#!             separately by <A>gapdoc.scan_dirs</A>.
-#!             <Br/>
-#!             <E>Default value: <C>[ ".", "gap", "lib", "examples", "examples/doc" ]</C>.</E>
-#!         </Item>
-#!
-#!         <Mark><A>level</A></Mark>
-#!         <Item>
-#!             This defines the level of the created documentation. The default value is 0.
-#!             When parts of the manual are declared with a higher value
-#!             they will not be printed into the manual.
-#!         </Item>
-#!
-#!         </List>
+#!         Controls whether and how to generate additional XML documentation files
+#!         by scanning for &AutoDoc; documentation comments;
+#!         see <Ref Subsect='Subsection_AutoDoc:autodoc'/>.
 #!     </Item>
-#!
-#!
 #!     <Mark><A>gapdoc</A></Mark>
 #!     <Item>
-#!         This controls whether and how to invoke &GAPDoc; to create HTML, PDF and text
-#!         files from your various XML files.
-#!         <P/>
-#!         The value should be either <K>true</K>, <K>false</K> or a
-#!         record. If it is a record or <K>true</K> (the latter is
-#!         equivalent to specifying an empty record), then this feature is
-#!         enabled. It is also enabled if <A>opt.gapdoc</A> is missing.
-#!         In all other cases (in particular if <A>opt.gapdoc</A> is
-#!         <K>false</K>), this feature is disabled.
-#!         <P/>
+#!         Controls whether and how to invoke &GAPDoc; to create HTML, PDF and text
+#!         files from your various XML files;
+#!         see <Ref Subsect='Subsection_AutoDoc:gapdoc'/>.
+#!     </Item>
+#!     <Mark><A>extract_examples</A></Mark>
+#!     <Item>
+#!         Controls whether and how to extract the manual examples into test files;
+#!         see <Ref Subsect='Subsection_AutoDoc:extract_examples'/>.
+#!     </Item>
+#!     </List>
+#! </Item>
+#! </List>
 #!
-#!         If <A>opt.gapdoc</A> is a record, it may contain the following entries.
+#! The function also checks some GAP global options, which are not entries
+#! of <A>optrec</A>; see <Ref Subsect='Subsection_AutoDoc:GlobalOptions'/>.
 #!
-#!         <List>
+#! @Returns nothing
+#! @Arguments [pkgdir], [optrec]
+DeclareGlobalFunction( "AutoDoc" );
+
+DeclareGlobalFunction( "AutoDoc_INTERN" );
+
+# InfoAutoDoc must precede the first @Subsection below, otherwise it would be
+# placed inside that subsection.
+
+#! @Description
+#!   Info class for the <Package>AutoDoc</Package> package.  Set this to
+#!   0 to suppress info messages, 1 to allow most messages, and 2 to allow all
+#!   messages including those that contain file paths.
+#!
+#!   This can be set by calling, for example,
+#!   <C>SetInfoLevel(InfoAutoDoc, 0)</C>. Default value is 1.
+DeclareInfoClass("InfoAutoDoc");
+SetInfoLevel(InfoAutoDoc, 1);
+
+
+#! @Subsection Scaffold options
+#! @SubsectionLabel AutoDoc:scaffold
+#!
+#! The entry <A>optrec.scaffold</A> of <Ref Func="AutoDoc"/> controls whether
+#! and how to generate scaffold XML files for the package documentation.
+#! <P/>
+#! The value should be either <K>true</K>, <K>false</K> or a
+#! record. If it is a record or <K>true</K> (the latter is
+#! equivalent to specifying an empty record), then this feature is
+#! enabled. It is also enabled if <A>optrec.scaffold</A> is missing but the
+#! package's info record in <F>PackageInfo.g</F> has an <C>AutoDoc</C> entry.
+#! In all other cases (in particular if <A>optrec.scaffold</A> is
+#! <K>false</K>), scaffolding is disabled.
+#! <P/>
+#! If scaffolding is enabled, and <C>PackageInfo.AutoDoc</C> exists, then it is
+#! assumed to be a record, and its contents are used as default values for
+#! the scaffold settings.
+#! <P/>
+#! If <A>optrec.scaffold</A> is a record, it may contain the following entries.
+#!
+#! <List>
+#!
+#! <Mark><A>includes</A></Mark>
+#! <Item>
+#!     A list of XML files to be included in the body of the main XML file.
+#!     They are included in the order in which they are given.
+#!     If you specify this list and also are using &AutoDoc; to document
+#!     your operations with &AutoDoc; comments,
+#!     you can add <F>_AutoDocMainFile.xml</F> to this list
+#!     to control at which point the documentation produced by &AutoDoc;
+#!     is inserted. If you do not do this, it will be added after the last
+#!     of your own XML files.
+#! </Item>
+#!
+#! <Mark><A>index</A></Mark>
+#! <Item>
+#!     By default, the scaffold creates an index. If you do not want an index,
+#!     set this to <K>false</K>.
+#! </Item>
+#!
+#! <Mark><A>appendix</A></Mark>
+#! <Item>
+#!     This entry is similar to <A>optrec.scaffold.includes</A> but is used
+#!     to specify files to include after the main body of the manual,
+#!     i.e. typically appendices written directly in &GAPDoc; XML.
+#!     Appendices created with <C>@Appendix</C> are included automatically
+#!     after these files when scaffolding generates the main XML file.
+#! </Item>
+#!
+#! <Mark><A>bib</A></Mark>
+#! <Item>
+#!     The name of a bibliography file, in BibTeX or XML format.
+#!     If this key is not set, but there is a file <F>doc/PACKAGENAME.bib</F>
+#!     then it is assumed that you want to use this as your bibliography.
+#! </Item>
+#!
+#! <Mark><A>bibstyle</A></Mark>
+#! <Item>
+#!     Overrides the bibliography style used for LaTeX output.
+#!     This is written as the <C>Style</C> attribute of the generated
+#!     <C>&lt;Bibliography .../&gt;</C> element, so valid values are the
+#!     bibliography style names understood by &GAPDoc; and BibTeX, such
+#!     as <C>alpha</C>, <C>alphaurl</C>, or <C>plain</C>.
+#! </Item>
+#!
+#! <Mark><A>entities</A></Mark>
+#! <Item>
+#!     A record defining additional XML entities;
+#!     see <Ref Subsect='Subsection_AutoDoc:entities'/>.
+#! </Item>
+#!
+#! <Mark><A>TitlePage</A></Mark>
+#! <Item>
+#!     A record with extra title-page fields for the generated manual.
+#!     Field names are interpreted as title-page XML element names, and
+#!     their values are written as element content. For example, you can
+#!     set a custom acknowledgements block with
+#!     <Listing><![CDATA[
+#!     rec( Acknowledgements := "Many thanks to ..." )]]></Listing>
+#!     If this is set in <F>PackageInfo.g</F> as
+#!     <C>PkgInfo.AutoDoc.TitlePage</C>, it has the same meaning as this
+#!     option; see subsection <Ref Subsect='Subsection_Tut:PackageInfo'/> in chapter
+#!     <Ref Chap='Chapter_Tutorials'/> for details and an example.
+#!     <P/>
+#!     For the list of valid title-page elements, see the
+#!     &GAPDoc; manual, specifically section <Ref Subsect='TitlePage' BookName='gapdoc'/>.
+#! </Item>
+#!
+#! <Mark><A>MainPage</A></Mark>
+#! <Item>
+#!     If scaffolding is enabled, by default a main XML file is generated (this
+#!     is the file which contains the XML doctype and more). If you do not
+#!     want this (e.g. because you have a handwritten main XML file), but
+#!     still want &AutoDoc; to generate a title page for you, you can set this
+#!     option to <K>false</K>
+#! </Item>
+#!
+#! <Mark><A>document_class</A></Mark>
+#! <Item>
+#!     Sets the document class of the resulting PDF. The value can either be a string
+#!     which has to be the name of the new document class, a list containing this string, or
+#!     a list of two strings. Then the first one has to be the document class name, the second one
+#!     the option string ( contained in [ ] ) in &LaTeX;.
+#! </Item>
+#!
+#! <Mark><A>latex_header_file</A></Mark>
+#! <Item>
+#!     Replaces the standard header from &GAPDoc; completely with the header in this &LaTeX; file.
+#!     Please be careful here, and look at &GAPDoc;'s <F>latexheader.tex</F> file for an example.
+#! </Item>
+#!
+#! </List>
+
+
+#! @Subsection Scaffold entities
+#! @SubsectionLabel AutoDoc:entities
+#!
+#! The entry <A>optrec.scaffold.entities</A> of <Ref Func="AutoDoc"/> is a
+#! record whose keys are taken as entity names, set to the corresponding
+#! (string) values. For example, if you pass the record
+#! <Listing><![CDATA[
+#! rec( SomePackage := "<Package>SomePackage</Package>",
+#!      RELEASEYEAR := "2015" )]]></Listing>
+#! then the following entity definitions are added to the XML preamble:
+#! <Listing><![CDATA[<!ENTITY SomePackage '<Package>SomePackage</Package>'>
+#! <!ENTITY RELEASEYEAR '2015'>]]></Listing>
+#! This allows you to write <Q>&amp;SomePackage;</Q> and <Q>&amp;RELEASEYEAR;</Q>
+#! in your documentation, which will be replaced by respective values specified
+#! in the entities definition.
+#! <P/>
+#! Note that &AutoDoc; predefines several entities:
+#! <List>
+#! <Mark><A>VERSION</A></Mark>
+#! <Item>Set to the <C>Version</C> field of your package info record.</Item>
+#! <Mark><A>RELEASEYEAR</A></Mark>
+#! <Item>Set to a string containing the release year, as derived
+#!       from the <C>Date</C> field of your package info record.</Item>
+#! <Mark><A>RELEASEDATE</A></Mark>
+#! <Item>Derived from the <C>Date</C> field of your package info record.</Item>
+#! <Mark><A>SomePackage</A></Mark>
+#! <Item>
+#!     The precise name of this entity is derived from the
+#!     <C>PackageName</C> field of your package info record. Note
+#!     that it is case sensitive. The content is defined as
+#!     suggested by the example above.
+#! </Item>
+#! </List>
+
+
+#! @Subsection Options for scanning AutoDoc comments
+#! @SubsectionLabel AutoDoc:autodoc
+#!
+#! The entry <A>optrec.autodoc</A> of <Ref Func="AutoDoc"/> controls whether
+#! and how to generate additional XML documentation files by scanning for
+#! &AutoDoc; documentation comments.
+#! <P/>
+#! The value should be either <K>true</K>, <K>false</K> or a
+#! record. If it is a record or <K>true</K> (the latter is
+#! equivalent to specifying an empty record), then this feature is
+#! enabled. It is also enabled if <A>optrec.autodoc</A> is missing but the
+#! package depends (directly) on the &AutoDoc; package.
+#! In all other cases (in particular if <A>optrec.autodoc</A> is
+#! <K>false</K>), this feature is disabled.
+#! <P/>
+#! If <A>optrec.autodoc</A> is a record, it may contain the following entries.
+#!
+#! <List>
+#!
+#! <Mark><A>files</A></Mark>
+#! <Item>
+#!     A list of files (given by paths relative to the package directory)
+#!     to be scanned for &AutoDoc; documentation comments.
+#!     They are scanned in the order in which they are given, and always
+#!     before the files scanned by <A>autodoc.scan_dirs</A>.
+#!     Unless the order of files is important,
+#!     it is usually more convenient to use <A>autodoc.scan_dirs</A>, see below.
+#! </Item>
+#!
+#! <Mark><A>scan_dirs</A></Mark>
+#! <Item>
+#!     A list of subdirectories of the package directory (given as relative paths)
+#!     which &AutoDoc; then scans recursively for .gi, .gd, .g, and
+#!     .autodoc files; all of these files are then scanned for
+#!     &AutoDoc; documentation comments.
+#!     The directories are scanned in the order in which they are given,
+#!     and the files in each directory are scanned in lexicographic order.
+#!     The special entries <C>"."</C>
+#!     and <C>""</C> still only scan the package root itself.
+#!     This controls where &AutoDoc; looks for source comments beginning with <C>#!</C>
+#!     and for standalone <F>.autodoc</F> files.
+#!     It does not affect where &GAPDoc; looks for GAPDoc comments; that is controlled
+#!     separately by <A>gapdoc.scan_dirs</A>.
+#!     <Br/>
+#!     <E>Default value: <C>[ ".", "gap", "lib", "examples", "examples/doc" ]</C>.</E>
+#! </Item>
+#!
+#! </List>
+
+
+#! @Subsection Options for GAPDoc
+#! @SubsectionLabel AutoDoc:gapdoc
+#!
+#! The entry <A>optrec.gapdoc</A> of <Ref Func="AutoDoc"/> controls whether
+#! and how to invoke &GAPDoc; to create HTML, PDF and text files from your
+#! various XML files.
+#! <P/>
+#! The value should be either <K>true</K>, <K>false</K> or a
+#! record. If it is a record or <K>true</K> (the latter is
+#! equivalent to specifying an empty record), then this feature is
+#! enabled. It is also enabled if <A>optrec.gapdoc</A> is missing.
+#! In all other cases (in particular if <A>optrec.gapdoc</A> is
+#! <K>false</K>), this feature is disabled.
+#! <P/>
+#! If <A>optrec.gapdoc</A> is a record, it may contain the following entries.
+#!
+#! <List>
 #!
 #!
 #### Note: 'main' is strictly speaking also used for the scaffold.
@@ -320,116 +374,117 @@
 ####
 #### This explains why we only allow specifying gapdoc.main.
 #### The scaffolding code will still honor it, though, just in case.
-#!         <Mark><A>main</A></Mark>
-#!         <Item>
-#!             The name of the main XML file of the package manual.
-#!             This exists primarily to support packages with existing manual
-#!             which use a filename here which differs from the default.
-#!             In particular, specifying this is unnecessary when using scaffolding.
-#!             <Br/>
-#!             <E>Default value: <C>_main.xml</C> when scaffolding is enabled for
-#!             package manuals, otherwise <C>PACKAGENAME.xml</C>.</E>
-#!         </Item>
+#! <Mark><A>main</A></Mark>
+#! <Item>
+#!     The name of the main XML file of the package manual.
+#!     This exists primarily to support packages with existing manual
+#!     which use a filename here which differs from the default.
+#!     In particular, specifying this is unnecessary when using scaffolding.
+#!     <Br/>
+#!     <E>Default value: <C>_main.xml</C> when scaffolding is enabled for
+#!     package manuals, otherwise <C>PACKAGENAME.xml</C>.</E>
+#! </Item>
 #!
-#!         <Mark><A>files</A></Mark>
-#!         <Item>
-#!             A list of files (given by paths relative to the package directory)
-#!             to be scanned for &GAPDoc; documentation comments.
-#!             Usually it is more convenient to use <A>gapdoc.scan_dirs</A>, see below.
-#!         </Item>
+#! <Mark><A>files</A></Mark>
+#! <Item>
+#!     A list of files (given by paths relative to the package directory)
+#!     to be scanned for &GAPDoc; documentation comments.
+#!     Usually it is more convenient to use <A>gapdoc.scan_dirs</A>, see below.
+#! </Item>
 #!
-#!         <Mark><A>scan_dirs</A></Mark>
-#!         <Item>
-#!             A list of subdirectories of the package directory (given as relative paths)
-#!             which &AutoDoc; then scans recursively for .gi, .gd and .g
-#!             files; all of these files are then scanned for &GAPDoc;
-#!             documentation comments. The special entries <C>"."</C> and
-#!             <C>""</C> still only scan the package root itself.
-#!             This controls only where &GAPDoc; comments are searched for.
-#!             It does not affect where &AutoDoc; looks for source comments beginning with <C>#!</C>
-#!             or for <F>.autodoc</F> files; use <A>autodoc.scan_dirs</A> for that.
-#!             <Br/>
-#!             <E>Default value: <C>[ ".", "gap", "lib", "examples", "examples/doc" ]</C>.</E>
-#!         </Item>
+#! <Mark><A>scan_dirs</A></Mark>
+#! <Item>
+#!     A list of subdirectories of the package directory (given as relative paths)
+#!     which &AutoDoc; then scans recursively for .gi, .gd and .g
+#!     files; all of these files are then scanned for &GAPDoc;
+#!     documentation comments. The special entries <C>"."</C> and
+#!     <C>""</C> still only scan the package root itself.
+#!     This controls only where &GAPDoc; comments are searched for.
+#!     It does not affect where &AutoDoc; looks for source comments beginning with <C>#!</C>
+#!     or for <F>.autodoc</F> files; use <A>autodoc.scan_dirs</A> for that.
+#!     <Br/>
+#!     <E>Default value: <C>[ ".", "gap", "lib", "examples", "examples/doc" ]</C>.</E>
+#! </Item>
 #!
-#!         <Mark><A>LaTeXOptions</A></Mark>
-#!         <Item>
-#!             Must be a record with entries which can be understood by
-#!             <Ref Func='SetGapDocLaTeXOptions' BookName='gapdoc'/>. Each entry can be a
-#!             string, which will be given to &GAPDoc; directly, or a list containing of
-#!             two entries: The first one must be the string "file", the second one a
-#!             filename. This file will be read and then its content is passed to &GAPDoc;
-#!             as option with the name of the entry.
-#!         </Item>
+#! <Mark><A>LaTeXOptions</A></Mark>
+#! <Item>
+#!     Must be a record with entries which can be understood by
+#!     <Ref Func='SetGapDocLaTeXOptions' BookName='gapdoc'/>. Each entry can be a
+#!     string, which will be given to &GAPDoc; directly, or a list containing of
+#!     two entries: The first one must be the string "file", the second one a
+#!     filename. This file will be read and then its content is passed to &GAPDoc;
+#!     as option with the name of the entry.
+#! </Item>
 #!
-#!         <Mark><A>gap_root_relative_path</A></Mark>
-#!         <Item>
-#!             Either a boolean, or a string containing a relative path.
-#!             By default (if this option is not set, or is set to <K>false</K>),
-#!             references in the generated documentation referring to external documentation
-#!             (such as the &GAP; manual) are encoded using absolute paths.
-#!             This is fine as long as the documentation stays on only a single
-#!             computer, but is problematic when preparing documentation that should be
-#!             used on multiple computers, e.g., when creating a distribution archive of
-#!             a &GAP; package.<Br/>
-#!             Thus, if a relative path is provided via this option (or if it is set to <K>true</K>,
-#!             in which case the relative path <F>../../..</F> is used), then &AutoDoc;
-#!             and &GAPDoc; attempt to replace all absolute paths in references to &GAP;
-#!             manuals by paths based on this relative path.<P/>
-#!             
-#!             On a technical level, &AutoDoc; passes the relative path to the
-#!             <A>gaproot</A> parameter of <Ref Func='MakeGAPDocDoc'
-#!             BookName='gapdoc'/><P/>
-#!         </Item>
+#! <Mark><A>gap_root_relative_path</A></Mark>
+#! <Item>
+#!     Either a boolean, or a string containing a relative path.
+#!     By default (if this option is not set, or is set to <K>false</K>),
+#!     references in the generated documentation referring to external documentation
+#!     (such as the &GAP; manual) are encoded using absolute paths.
+#!     This is fine as long as the documentation stays on only a single
+#!     computer, but is problematic when preparing documentation that should be
+#!     used on multiple computers, e.g., when creating a distribution archive of
+#!     a &GAP; package.<Br/>
+#!     Thus, if a relative path is provided via this option (or if it is set to <K>true</K>,
+#!     in which case the relative path <F>../../..</F> is used), then &AutoDoc;
+#!     and &GAPDoc; attempt to replace all absolute paths in references to &GAP;
+#!     manuals by paths based on this relative path.<P/>
 #!
-#!         </List>
-#!     </Item>
+#!     On a technical level, &AutoDoc; passes the relative path to the
+#!     <A>gaproot</A> parameter of <Ref Func='MakeGAPDocDoc'
+#!     BookName='gapdoc'/><P/>
+#! </Item>
 #!
-#!     <Mark><A>extract_examples</A></Mark>
-#!     <Item>
-#!         Either <K>true</K> or a record.
-#!         If set to <K>true</K>, then all manual examples are extracted and placed
-#!         into files <F>tst/PACKAGENAME01.tst</F>,  <F>tst/PACKAGENAME02.tst</F>, ...
-#!         and so on, with one file for each chapter. For chapters with no examples,
-#!         no file is created.<P/>
-#!         If set to a record, it may contain the following entries:
-#!         <List>
-#!         <Mark>subdir</Mark>
-#!         <Item>
-#!             A string or <C>Directory()</C> object selecting where the generated
-#!             <F>.tst</F> files are written. The default is <F>tst</F>. If a string is
-#!             given, it is interpreted relative to the package directory, so values
-#!             such as <F>tst/generated</F> are supported.
-#!         </Item>
-#!         <Mark>units</Mark>
-#!         <Item>
-#!             This controls how examples are grouped into files. Recognized values are
-#!             "Chapter" (default), "Section", "Subsection" or "Single". Depending on the value,
-#!             one file is created for each chapter, each section, each subsection or each example.
-#!             For all other values only a single file is created.
-#!             
-#!             On a technical level, &AutoDoc; passes the value to the
-#!             <A>units</A> parameter of <Ref Func='ExtractExamples' BookName='gapdoc'/>.
-#!         </Item>
-#!         <Mark>skip_empty_in_numbering</Mark>
-#!         <Item>
-#!             If set to <K>true</K> (the default), the generated files use
-#!             filenames with strictly sequential numbering; that means that
-#!             if chapter 1 (or whatever units are being used) contains no
-#!             examples but chapter 2 does, then the examples for chapter 2
-#!             are put into the file <F>tst/PACKAGENAME01.tst</F>. If this
-#!             option is set to <K>false</K>, then the chapter numbers are
-#!             used to generate the filenames; so the examples for chapter 2
-#!             would be put into the file <F>tst/PACKAGENAME02.tst</F>.
-#!         </Item>
-#!         </List>
-#!     </Item>
+#! </List>
+
+
+#! @Subsection Options for extracting examples
+#! @SubsectionLabel AutoDoc:extract_examples
 #!
-#!     </List>
+#! The entry <A>optrec.extract_examples</A> of <Ref Func="AutoDoc"/> must be
+#! either <K>true</K> or a record.
+#! If set to <K>true</K>, then all manual examples are extracted and placed
+#! into files <F>tst/PACKAGENAME01.tst</F>,  <F>tst/PACKAGENAME02.tst</F>, ...
+#! and so on, with one file for each chapter. For chapters with no examples,
+#! no file is created.<P/>
+#! If set to a record, it may contain the following entries:
+#! <List>
+#! <Mark>subdir</Mark>
+#! <Item>
+#!     A string or <C>Directory()</C> object selecting where the generated
+#!     <F>.tst</F> files are written. The default is <F>tst</F>. If a string is
+#!     given, it is interpreted relative to the package directory, so values
+#!     such as <F>tst/generated</F> are supported.
+#! </Item>
+#! <Mark>units</Mark>
+#! <Item>
+#!     This controls how examples are grouped into files. Recognized values are
+#!     "Chapter" (default), "Section", "Subsection" or "Single". Depending on the value,
+#!     one file is created for each chapter, each section, each subsection or each example.
+#!     For all other values only a single file is created.
+#!
+#!     On a technical level, &AutoDoc; passes the value to the
+#!     <A>units</A> parameter of <Ref Func='ExtractExamples' BookName='gapdoc'/>.
+#! </Item>
+#! <Mark>skip_empty_in_numbering</Mark>
+#! <Item>
+#!     If set to <K>true</K> (the default), the generated files use
+#!     filenames with strictly sequential numbering; that means that
+#!     if chapter 1 (or whatever units are being used) contains no
+#!     examples but chapter 2 does, then the examples for chapter 2
+#!     are put into the file <F>tst/PACKAGENAME01.tst</F>. If this
+#!     option is set to <K>false</K>, then the chapter numbers are
+#!     used to generate the filenames; so the examples for chapter 2
+#!     would be put into the file <F>tst/PACKAGENAME02.tst</F>.
 #! </Item>
 #! </List>
+
+
+#! @Subsection Global options
+#! @SubsectionLabel AutoDoc:GlobalOptions
 #!
-#! The function also checks the following GAP global options, i.e. options
+#! <Ref Func="AutoDoc"/> also checks the following GAP global options, i.e. options
 #! supplied via GAP's value-option syntax and visible through nested calls.
 #! These are not entries of <A>optrec</A>. See
 #! <Ref Chap="Options Stack" BookName="ref"/> for more information
@@ -488,19 +543,3 @@
 #! Read( "makedoc.g" : nopdf, relativePath );]]></Listing>
 #! sets both global options to `true`, and they remain visible to the
 #! <Ref Func="AutoDoc"/> call inside <F>makedoc.g</F>.
-#!
-#! @Returns nothing
-#! @Arguments [pkgdir], [optrec]
-DeclareGlobalFunction( "AutoDoc" );
-
-DeclareGlobalFunction( "AutoDoc_INTERN" );
-
-#! @Description
-#!   Info class for the <Package>AutoDoc</Package> package.  Set this to
-#!   0 to suppress info messages, 1 to allow most messages, and 2 to allow all
-#!   messages including those that contain file paths.
-#!
-#!   This can be set by calling, for example,
-#!   <C>SetInfoLevel(InfoAutoDoc, 0)</C>. Default value is 1.
-DeclareInfoClass("InfoAutoDoc");
-SetInfoLevel(InfoAutoDoc, 1);

@@ -8,6 +8,8 @@ This file describes changes in the AutoDoc package.
     relative path, e.g. via `gap --packagedirs .`
   - Fix handling of Windows paths such as `C:/gap` when running a
     native Windows build of GAP
+  - Split the documentation of the `AutoDoc()` options into separate
+    subsections, and drop the nonfunctional `autodoc.level` option from it
 
 ## 2026.09.09 (2026-09-09)
 
