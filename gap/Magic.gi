@@ -41,7 +41,7 @@ function( arg )
         fi;
     elif IsString( arg[1] ) then
         pkgname := Remove( arg, 1 );
-        Print("#W AutoDoc: passing pkgname as first argument to AutoDoc is deprecated");
+        Info(InfoAutoDoc, 1, "passing pkgname as first argument to AutoDoc is deprecated");
     elif IsDirectory( arg[1] ) then
         pkgdir := Remove( arg, 1 );
     fi;
@@ -106,7 +106,8 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
     od;
 
     if used_legacy_value_options then
-        Print("#W passing options via GAP's global options system is deprecated; use an option record instead\n");
+        Info(InfoAutoDoc, 1, "passing options via GAP's global options system is deprecated");
+        Info(InfoAutoDoc, 1, "use an option record instead");
     fi;
 
     #
