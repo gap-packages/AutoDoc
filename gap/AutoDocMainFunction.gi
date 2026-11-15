@@ -337,7 +337,12 @@ InstallGlobalFunction( AutoDocWorksheet,
     elif not IsBound(opt.scaffold) then
         opt.scaffold := rec();
     fi;
-    AUTODOC_SetIfMissing( opt.scaffold, "index", false );
+    if opt.scaffold = true then
+        opt.scaffold := rec();
+    fi;
+    if IsRecord( opt.scaffold ) then
+        AUTODOC_SetIfMissing( opt.scaffold, "index", false );
+    fi;
 
     if Length( arg ) = 1 then
         val := ValueOption( "autodoc" );

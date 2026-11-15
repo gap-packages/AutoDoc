@@ -90,7 +90,8 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
           pkgdirstr, docdirstr,
           title_page, tree, source_anchor,
           position_document_class,
-          args, used_legacy_value_options, extract_only, extract_roots;
+          args, used_legacy_value_options, extract_only, extract_roots,
+          bookname, main;
 
     #
     # Deprecated feature: Check for user supplied global options. If present,
@@ -271,28 +272,36 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
         gapdoc := rec();
     fi;
 
+    # The book name and main XML file, which the scaffold needs even if
+    # GAPDoc is not run. When scaffolding also generates the main XML file,
+    # the default GAPDoc entry point must match that scaffolded filename.
+    # However, packages with scaffold.MainPage := false may rely on a
+    # handwritten PACKAGENAME.xml main file while still using scaffolded
+    # title pages, so in that case we keep the historical default.
+    if IsBound( scaffold ) and not is_worksheet and
+       ( not IsBound( scaffold.MainPage ) or scaffold.MainPage <> false ) then
+        main := "_main";
+    else
+        main := pkgname;
+    fi;
+    if IsBound( pkginfo.PackageDoc ) and not IsEmpty( pkginfo.PackageDoc ) then
+        bookname := pkginfo.PackageDoc[1].BookName;
+    else
+        # Default: book name = package name
+        bookname := pkgname;
+    fi;
+
     if IsBound( gapdoc ) then
-        # When scaffolding also generates the main XML file, the default
-        # GAPDoc entry point must match that scaffolded filename. However,
-        # packages with scaffold.MainPage := false may rely on a handwritten
-        # PACKAGENAME.xml main file while still using scaffolded title pages,
-        # so in that case we keep the historical default.
-        if IsBound( scaffold ) and not is_worksheet and
-           ( not IsBound( scaffold.MainPage ) or scaffold.MainPage <> false ) then
-            AUTODOC_SetIfMissing( gapdoc, "main", "_main" );
-        else
-            AUTODOC_SetIfMissing( gapdoc, "main", pkgname );
-        fi;
+        AUTODOC_SetIfMissing( gapdoc, "main", main );
+        main := gapdoc.main;
+        gapdoc.bookname := bookname;
 
         if IsBound( pkginfo.PackageDoc ) and not IsEmpty( pkginfo.PackageDoc ) then
             if Length( pkginfo.PackageDoc ) > 1 then
                 Info(InfoAutoDoc, 1, "WARNING: Package contains multiple books, only using the first one");
             fi;
-            gapdoc.bookname := pkginfo.PackageDoc[1].BookName;
             gapdoc.SixFile := pkginfo.PackageDoc[1].SixFile;
         elif not is_worksheet then
-            # Default: book name = package name
-            gapdoc.bookname := pkgname;
             gapdoc.SixFile := "doc/manual.six";
 
             Info(InfoAutoDoc, 1, "WARNING: PackageInfo.g is missing a PackageDoc entry!");
@@ -376,15 +385,14 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
     fi;
 
     if is_worksheet then
-        # FIXME: We use scaffold and autodoc here without checking whether
-        # they are bound. Does that mean worksheets always use them?
-        if IsBound( scaffold.TitlePage.Title ) then
+        if IsBound( scaffold ) and IsBound( scaffold.TitlePage.Title ) then
             pkgname := scaffold.TitlePage.Title;
 
         elif IsBound( tree!.TitlePage.Title ) then
             pkgname := tree!.TitlePage.Title;
 
-        elif IsBound( autodoc.files ) and Length( autodoc.files ) > 0  then
+        elif IsBound( autodoc ) and IsBound( autodoc.files ) and
+             Length( autodoc.files ) > 0 then
             tmp := autodoc.files[ 1 ];
 
             # Remove everything before the last '/'
@@ -405,8 +413,12 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
             pkgname := JoinStringsWithSeparator( pkgname, " " );
         fi;
 
-        gapdoc.main := ReplacedString( pkgname, " ", "_" );
-        gapdoc.bookname := ReplacedString( pkgname, " ", "_" );
+        bookname := ReplacedString( pkgname, " ", "_" );
+        main := bookname;
+        if IsBound( gapdoc ) then
+            gapdoc.main := main;
+            gapdoc.bookname := bookname;
+        fi;
     fi;
 
     #
@@ -515,14 +527,14 @@ function( is_worksheet, pkgname, pkginfo, pkgdir, opt )
             AUTODOC_SetIfMissing( scaffold.entities, "RELEASEDATE", AUTODOC_FormatDate( tmp ) );
         fi;
 
-        CreateEntitiesPage( gapdoc.bookname, doc_dir, scaffold );
+        CreateEntitiesPage( bookname, doc_dir, scaffold );
 
         if IsBound( scaffold.MainPage ) and scaffold.MainPage <> false then
             if ForAny( tree!.content,
                        node -> IsBound( node!.is_appendix ) and node!.is_appendix = true ) then
                 scaffold.autodoc_appendix_file := "_AutoDocAppendicesMainFile.xml";
             fi;
-            CreateMainPage( gapdoc.bookname, gapdoc.main, doc_dir, scaffold );
+            CreateMainPage( bookname, main, doc_dir, scaffold );
         fi;
     fi;
 

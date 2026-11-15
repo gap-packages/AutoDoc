@@ -2,6 +2,9 @@ This file describes changes in the AutoDoc package.
 
 ## unreleased
 
+  - Fix errors when calling `AutoDoc` with `gapdoc := false` and
+    scaffolding enabled, and `AutoDocWorksheet` with `gapdoc := false`
+    or with `scaffold` set to `true` or `false`
   - Warn about plain text that is discarded because no chapter is
     active, or that appears inside the preceding section or subsection
     because it follows its end
