@@ -1,6 +1,6 @@
 This file describes changes in the AutoDoc package.
 
-## unreleased
+## 2026.11.15 (2026-11-15)
 
   - Fix errors when calling `AutoDoc` with `gapdoc := false` and
     scaffolding enabled, and `AutoDocWorksheet` with `gapdoc := false`
@@ -16,6 +16,10 @@ This file describes changes in the AutoDoc package.
     native Windows build of GAP
   - Split the documentation of the `AutoDoc()` options into separate
     subsections, and drop the nonfunctional `autodoc.level` option from it
+  - Add examples for more AutoDoc commands to the manual
+  - Print the deprecation warnings for passing a package name or GAP
+    global options to `AutoDoc()` via `InfoAutoDoc`, so they can be
+    silenced, and end them with a newline
 
 ## 2026.09.09 (2026-09-09)
 
